@@ -196,6 +196,7 @@ You MUST commit all documentation and manual test changes before assigning to `p
   - **Verification:** For each entry, verify if the bug still exists in the code.
   - **Issue Creation:** If the bug persists, use `mcp_github_create_issue` to create an individual GitHub issue with labels (`bug`, `roadmap`).
   - **Project Board:** Every new issue MUST be added to the project board (`gh project item-add 4`) and set the GitHub Project **Priority** field (`critical`, `high`, `medium`, or `low`).
+  - **Constraint:** GitHub issue labels are strictly for classification (e.g., `feature`, `bug`, `roadmap`, `security`, `telemetry`). NEVER add priority labels (e.g., `high-priority`, `low-priority`) to GitHub issues; all priority management must be handled exclusively via the project board's Priority field.
   - **Cleanup:** Clear all processed entries from `.gemini_incidental_observations.json` after logging.
 - **Constraints:** Technical, structured, and emoji-free documentation.
 

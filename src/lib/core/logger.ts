@@ -2,11 +2,18 @@ import fs from 'fs';
 import path from 'path';
 
 const LOG_FILE = path.join(process.cwd(), 'src/tmp/app.log');
+const IS_VERCEL = !!process.env.VERCEL;
 
-// Ensure the directory exists
-const logDir = path.dirname(LOG_FILE);
-if (!fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir, { recursive: true });
+// Ensure the directory exists (Skip on Vercel as it's a read-only filesystem)
+if (!IS_VERCEL) {
+  const logDir = path.dirname(LOG_FILE);
+  if (!fs.existsSync(logDir)) {
+    try {
+      fs.mkdirSync(logDir, { recursive: true });
+    } catch (err) {
+      console.error('❌ Failed to create log directory:', err);
+    }
+  }
 }
 
 export const logger = {
@@ -17,11 +24,13 @@ export const logger = {
     // 1. Print to console for real-time visibility
     console.log(`[INFO] ${message}`, ...args);
     
-    // 2. Append to file for persistence
-    try {
-      fs.appendFileSync(LOG_FILE, formattedMessage);
-    } catch (err) {
-      console.error('❌ Failed to write to app.log:', err);
+    // 2. Append to file for persistence (Skip on Vercel)
+    if (!IS_VERCEL) {
+      try {
+        fs.appendFileSync(LOG_FILE, formattedMessage);
+      } catch (err) {
+        console.error('❌ Failed to write to app.log:', err);
+      }
     }
   },
 
@@ -49,11 +58,13 @@ export const logger = {
       });
     }
     
-    // 3. Append to file
-    try {
-      fs.appendFileSync(LOG_FILE, formattedMessage);
-    } catch (err) {
-      console.error('❌ Failed to write to app.log:', err);
+    // 3. Append to file (Skip on Vercel)
+    if (!IS_VERCEL) {
+      try {
+        fs.appendFileSync(LOG_FILE, formattedMessage);
+      } catch (err) {
+        console.error('❌ Failed to write to app.log:', err);
+      }
     }
   },
 
@@ -64,11 +75,13 @@ export const logger = {
     // 1. Print to console
     console.warn(`⚠️ [WARN] ${message}`, ...args);
     
-    // 2. Append to file
-    try {
-      fs.appendFileSync(LOG_FILE, formattedMessage);
-    } catch (err) {
-      console.error('❌ Failed to write to app.log:', err);
+    // 2. Append to file (Skip on Vercel)
+    if (!IS_VERCEL) {
+      try {
+        fs.appendFileSync(LOG_FILE, formattedMessage);
+      } catch (err) {
+        console.error('❌ Failed to write to app.log:', err);
+      }
     }
   }
 };

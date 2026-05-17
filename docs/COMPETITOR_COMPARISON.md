@@ -105,20 +105,24 @@ To beat the incumbents, SocialStudio will prioritize these high-value workflow f
 ## 🎯 Universal Platform Target (SocialStudio North Star)
 The union of all competitor integrations, sorted by popularity (ascending MAU). SocialStudio aims to support **all** of these:
 
-| Rank | Platform | Popularity (Approx. MAU) | SocialStudio Status |
-| :--- | :--- | :--- | :--- |
-| 1 | **Mastodon** | ~10M+ | Registry / Future |
-| 2 | **Bluesky** | ~20M+ | Registry / Future |
-| 3 | **Twitch** | ~140M | Registry / Future |
-| 4 | **Threads** | ~200M+ | Registry / Future |
-| 5 | **Pinterest** | ~550M | Registry / Future |
-| 6 | **X (Twitter)** | ~580M | Registry / Future |
-| 7 | **Reddit** | ~700M | Registry / Future |
-| 8 | **LinkedIn** | ~930M | Registry / Future |
-| 9 | **TikTok** | ~1.5B | **[CORE] Active** |
-| 10 | **Instagram** | ~2B+ | **[CORE] Active** |
-| 11 | **YouTube** | ~2.5B | **[CORE] Active** |
-| 12 | **Facebook** | ~3B+ | **[CORE] Active** |
+| Rank | Platform | Category | API Status | SocialStudio Status |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | **Mastodon** | Community | High | Registry / Future |
+| 2 | **Bluesky** | Community | High | Registry / Future |
+| 3 | **Twitch** | Broadcast | High | Registry / Future |
+| 4 | **Threads** | Text/Micro | Medium | Registry / Future |
+| 5 | **Pinterest** | Distribution | High | Registry / Future |
+| 6 | **X (Twitter)** | Text/Micro | Medium | Registry / Future |
+| 7 | **Reddit** | Community | Medium | Registry / Future |
+| 8 | **LinkedIn** | Professional | Medium | Registry / Future |
+| 9 | **Discord** | Community | High | Registry / Future |
+| 10 | **Telegram** | Community | Very High | Registry / Future |
+| 11 | **WhatsApp Channels** | Broadcast | High | Registry / Future |
+| 12 | **Snapchat** | Distribution | Low (Closed) | Registry / Future |
+| 13 | **TikTok** | Distribution | Medium | **[CORE] Active** |
+| 14 | **Instagram** | Distribution | Medium | **[CORE] Active** |
+| 15 | **YouTube** | Distribution | Medium | **[CORE] Active** |
+| 16 | **Facebook** | Distribution | Medium | **[CORE] Active** |
 
 > [!TIP]
 > **Priority Endpoints:** we will also target non-social distribution channels like **Google Business Profile (GBP)** for local SEO and **WordPress** for blog/news distribution.
