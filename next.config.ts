@@ -22,9 +22,12 @@ const nextConfig: NextConfig = {
 // Check if we should skip Sentry during build to save memory (useful for 1GB RAM VPS)
 const shouldSkipSentry = process.env.SKIP_SENTRY_BUILD === "true";
 
-export default shouldSkipSentry 
-  ? nextConfig 
-  : withSentryConfig(nextConfig, {
+// Only wrap with Sentry if we have the necessary environment variables.
+// This prevents noisy warnings during build when tokens are missing.
+const useSentry = !shouldSkipSentry && !!process.env.SENTRY_AUTH_TOKEN;
+
+export default useSentry 
+  ? withSentryConfig(nextConfig, {
       // For all available options, see:
       // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
@@ -54,4 +57,5 @@ export default shouldSkipSentry
           removeDebugLogging: true,
         },
       },
-    });
+    })
+  : nextConfig;
