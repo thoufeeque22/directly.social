@@ -2,7 +2,9 @@
 
 import { useEffect } from 'react';
 import { Button, Typography, Box } from '@mui/material';
+import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
 import * as Sentry from '@sentry/nextjs';
+import { GlassCard } from './GlassCard';
 
 interface ErrorBoundaryProps {
   error: Error & { digest?: string };
@@ -15,35 +17,31 @@ export default function ErrorBoundary({ error, reset }: ErrorBoundaryProps) {
   }, [error]);
 
   return (
-    <Box
-      data-testid="error-boundary-ui"
-      sx={{
-        p: 4,
-        borderRadius: 2,
-        backdropFilter: 'blur(10px)',
-        bgcolor: 'rgba(255, 255, 255, 0.05)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        textAlign: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: 2,
-      }}
-    >
-      <Typography variant="h5" color="error">
-        Something went wrong
-      </Typography>
-      <Typography variant="body1" color="text.secondary">
-        {error.message || 'An unexpected error occurred. Please try again later.'}
-      </Typography>
-      <Button
-        variant="contained"
-        onClick={reset}
-        sx={{ mt: 2 }}
-        data-testid="error-reset-button"
-      >
-        Try again
-      </Button>
-    </Box>
+    <GlassCard style={{ maxWidth: '500px', width: '100%', padding: '3rem', textAlign: 'center' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+        <ErrorOutlinedIcon sx={{ fontSize: 64, color: 'error.main', opacity: 0.8 }} />
+        <Typography variant="h5" sx={{ fontWeight: 600, color: 'error.main' }}>
+          Something went wrong
+        </Typography>
+        <Typography variant="body1" sx={{ color: 'text.secondary', mb: 2 }}>
+          {error.message || 'An unexpected error occurred. Please try again later.'}
+        </Typography>
+        <Button
+          variant="contained"
+          onClick={reset}
+          fullWidth
+          sx={{ 
+            py: 1.5, 
+            borderRadius: '0.75rem', 
+            fontWeight: 600,
+            textTransform: 'none',
+            fontSize: '1rem'
+          }}
+          data-testid="error-reset-button"
+        >
+          Try again
+        </Button>
+      </Box>
+    </GlassCard>
   );
 }

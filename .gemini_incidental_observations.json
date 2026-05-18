@@ -1,1 +1,1 @@
-[{"category": "bug", "severity": "HIGH", "description": "The test route /test-error causes build failure due to intentional render error during prerendering.", "suggestion": "Add export const dynamic = \"force-dynamic\"; to src/app/test-error/page.tsx or move the error to useEffect."}]
+[]
