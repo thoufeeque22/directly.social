@@ -18,6 +18,9 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import XIcon from '@mui/icons-material/X';
+import KeyIcon from '@mui/icons-material/Key';
+import Link from 'next/link';
+import { Button } from '@mui/material';
 
 const SettingsPage = () => {
   const { accounts, preferences, isLoading, togglePlatform, disconnectAccount } = useAccounts();
@@ -70,6 +73,25 @@ const SettingsPage = () => {
           Manage your saved descriptions, credits, and links for quick insertion.
         </p>
         <TemplateManager />
+      </section>
+
+      <section className={styles.section} style={{ marginTop: '3rem' }}>
+        <h2 className={styles.sectionTitle}>
+          <KeyIcon sx={{ fontSize: 24, marginRight: '8px', verticalAlign: 'middle' }} /> Power User Features
+        </h2>
+        <p style={{ fontSize: '0.85rem', color: 'hsl(var(--muted-foreground))', marginBottom: '1.5rem', marginTop: '-0.5rem' }}>
+          Bring Your Own Key (BYOK) for dedicated API quotas and custom platform integrations.
+        </p>
+        <Button 
+          component={Link} 
+          href="/settings/byok" 
+          variant="outlined" 
+          color="primary"
+          startIcon={<KeyIcon />}
+          sx={{ borderRadius: '0.75rem', textTransform: 'none' }}
+        >
+          Manage BYOK Integrations
+        </Button>
       </section>
 
       <section className={styles.section} style={{ marginTop: '3rem' }}>

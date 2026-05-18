@@ -46,7 +46,11 @@
   - **Main Agent (Gemini CLI):** Responsible for analyzing the context and routing the task to the next specialized agent.
   - **Discovery Gate:** For any task involving New Features or Roadmap items, the Main Agent is FORBIDDEN from invoking `dev-agent` until `discovery-agent` has provided a verified `TECHNICAL SPECS` block. Bypassing Discovery is a CRITICAL pipeline failure.
   - **Visual Integrity Mandate:** All UI changes MUST be verified not just for functional logic, but for visual accessibility (contrast, visibility, spacing). QA-agent MUST include specific Playwright tests that check for the visibility of critical controls (e.g., navigation arrows, labels).
-  - **Inception Rule:** When a new ticket ID (URL) is provided, the Main Agent MUST immediately switch to the `main` branch and pull the latest changes before invoking any specialized agent (including `discovery-agent`).
+  - **Inception Rule:** When a new ticket ID (URL or number) is provided, the Main Agent MUST:
+  1. Immediately switch to the `main` branch and pull the latest changes.
+  2. Fetch the ticket details (title and description/body) from GitHub using `gh issue view <id> --json title,body`.
+  3. Initialize `.gemini_agent_context.json` with these details in the `ticket_goal` and a new `ticket_description` field before invoking any specialized agent (including `discovery-agent`).
+  4. Bypassing this step is a CRITICAL pipeline failure.
 - **Model Selection:** 
   - Use **Gemini 1.5 Pro** for complex reasoning (Discovery, Dev, Review, QA).
   - Use **Gemini 1.5 Flash** (or **Gemini 3 Flash Preview**) for execution, documentation, and simple triage.
