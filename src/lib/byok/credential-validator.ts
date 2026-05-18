@@ -12,6 +12,12 @@ export const validateCredentials = async (
   platform: string,
   credentials: ByokCredential
 ): Promise<{ success: boolean; message: string }> => {
+  // Validate with Zod first
+  const validation = byokCredentialSchema.safeParse(credentials);
+  if (!validation.success) {
+    return { success: false, message: validation.error.issues[0].message };
+  }
+
   // Mock validation logic - replace with actual platform-specific health checks
   return new Promise((resolve) => {
     setTimeout(() => {

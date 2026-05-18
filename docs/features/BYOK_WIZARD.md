@@ -9,9 +9,23 @@ By default, Social Studio uses its own managed API keys to facilitate uploads. H
 - **Enhanced Privacy:** Maintain full control over your API credentials.
 - **Developer Flexibility:** Test integrations with personal developer accounts.
 
-## How It Works
+## User Interface (UX Redesign)
 
-The wizard is located at `/settings/byok` and provides a multi-step setup process for each supported platform.
+The wizard features a premium **GlassCard** interface with a structured 2-step flow to guide users through the complex setup process.
+
+### Step 1: Get Your Keys
+Users are provided with direct links to the relevant developer portals (e.g., Google Cloud Console for YouTube, TikTok for Developers).
+- **Direct Portal Access:** Quick-action buttons to open the correct developer console.
+- **Platform-Specific Instructions:** Concise guidance on what to do in each portal.
+
+### Step 2: Configure Credentials
+A clean, focused input area for providing the generated secrets.
+- **Input Masking:** Client secrets are masked (password type) for security.
+- **Contextual Help:** Helper text for fields like Redirect URI to reduce configuration errors.
+
+## Technical Implementation
+
+The wizard is located at `/settings/byok` and uses a responsive grid layout.
 
 ### 1. Credential Input
 Users provide the following credentials:
@@ -20,12 +34,14 @@ Users provide the following credentials:
 - **Redirect URI:** The authorized callback URL for OAuth flows.
 
 ### 2. Real-time Validation
-Before saving, the system performs a real-time validation check using the `validateCredentials` utility. This ensures the keys are correctly formatted (via Zod) and can successfully communicate with the platform's authentication endpoints.
+Before saving, the system performs a real-time validation check using the `validateCredentials` utility. 
+- **Rich Feedback:** Uses Material UI `Alert` components with `AlertTitle` for clear Success/Error states.
+- **Loading States:** Integrated `CircularProgress` indicates background validation.
 
 ### 3. Client-Side Storage
-To maximize security and privacy, BYOK credentials are **never stored on the Social Studio servers**. Instead:
+To maximize security and privacy, BYOK credentials are **never stored on the Social Studio servers**.
 - Keys are persisted in the browser's `localStorage` (e.g., `byok_YouTube`).
-- The server only ever interacts with these keys if the user's browser transmits them during a distribution session (if applicable) or they are used strictly on the client-side for OAuth initiation.
+- The server only ever interacts with these keys if the user's browser transmits them during a session.
 
 ## Security Model
 

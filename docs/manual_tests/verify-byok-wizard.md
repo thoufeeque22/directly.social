@@ -16,57 +16,70 @@ This test plan verifies the functionality, validation, and persistence of the Pl
   3. Click on the **BYOK Settings** link/button.
 - **Expected Results:**
   - The URL should be `/settings/byok`.
-  - The page should display "BYOK Settings" title.
-  - Wizards for "YouTube" and "TikTok" (or other supported platforms) should be visible.
-  - Input fields (Client ID, Secret, Redirect URI) should be empty.
+  - The page should display "BYOK Integrations" title.
+  - A "Back to Settings" button should be visible at the top.
+  - Wizards for "YouTube" and "TikTok" should be visible in a grid layout.
+  - Each wizard should be enclosed in a `GlassCard` with a platform-specific icon.
+  - Step 1 (Get Your Keys) and Step 2 (Configure Credentials) should be clearly demarcated.
 
-### 2. Validation: Empty Fields
+### 2. External Portal Links
+- **Steps:**
+  1. Locate the YouTube wizard.
+  2. Click the **Go to Developer Portal** button.
+- **Expected Results:**
+  - A new browser tab should open to `https://console.cloud.google.com/`.
+
+### 3. Validation: Empty Fields
 - **Steps:**
   1. On the YouTube BYOK wizard, leave all fields empty.
-  2. Click **Save Credentials**.
+  2. Click **Validate & Save Credentials**.
 - **Expected Results:**
-  - Validation error "Client ID is required" (or similar) should appear.
-  - No success message should be shown.
+  - A red `Alert` should appear with the title "Validation Failed".
+  - The message should indicate that Client ID is required.
 
-### 3. Validation: Invalid URL
+### 4. Validation: Invalid URL
 - **Steps:**
   1. Enter "valid" for Client ID and Client Secret.
   2. Enter "not-a-url" for Redirect URI.
-  3. Click **Save Credentials**.
+  3. Click **Validate & Save Credentials**.
 - **Expected Results:**
-  - Validation error "Invalid Redirect URI" should appear.
+  - A red `Alert` should appear indicating "Invalid Redirect URI".
 
-### 4. Successful Credential Save (Happy Path)
+### 5. Successful Credential Save (Happy Path)
 - **Steps:**
   1. Enter "valid" for Client ID.
   2. Enter any value for Client Secret.
   3. Enter `https://socialstudio.ai/api/auth/callback/youtube` for Redirect URI.
-  4. Click **Save Credentials**.
+  4. Click **Validate & Save Credentials**.
 - **Expected Results:**
-  - A loading spinner should briefly appear.
-  - Success message "Credentials saved successfully!" should be displayed.
+  - A loading spinner should appear inside the button.
+  - A green `Alert` should appear with the title "Connection Successful".
+  - Message: "Your YouTube BYOK credentials have been saved securely."
 
-### 5. Persistence Check
+### 6. Persistence Check
 - **Steps:**
-  1. After successful save in Test Case 4, refresh the page.
+  1. After successful save in Test Case 5, refresh the page.
   2. Open Browser Developer Tools -> Application -> Local Storage.
   3. Locate the key `byok_YouTube`.
 - **Expected Results:**
   - The `byok_YouTube` key should exist in Local Storage.
   - The value should be a JSON string containing the entered credentials.
 
-### 6. Mock Validation Failure
+### 7. Mock Validation Failure
 - **Steps:**
   1. Enter "invalid" for Client ID.
   2. Enter any values for other fields.
-  3. Click **Save Credentials**.
+  3. Click **Validate & Save Credentials**.
 - **Expected Results:**
-  - Error message "Invalid credentials for YouTube" should appear (based on mock validator logic).
+  - A red `Alert` with "Validation Failed" should appear.
+  - Error message "Invalid credentials for YouTube" should be visible.
 
 ## Visual Verification
 
 Verify that the UI matches the design standards:
-- Material UI components are used.
-- Spacing is consistent.
-- Loading states and error/success colors (Red/Green) are correctly applied.
-- Compare against artifacts in `verification/byok-wizard-*.png`.
+- Material UI components are used exclusively.
+- **GlassCard** effect is visible (translucency/blur if implemented).
+- Icons (YouTube, MusicNote, OpenInNew) are correctly colored and sized.
+- Spacing is clean and consistent (using MUI `Stack` and `Box` padding).
+- Button hover states show subtle elevation/shadow changes.
+- Compare against screenshots in `verification/`.
