@@ -1,185 +1,94 @@
 {
-  "last_agent": "project-agent",
-  "branch_name": "533-implement-byok-bring-your-own-key-integration-wizard",
-  "ticket_goal": "Implement BYOK (Bring Your Own Key) Integration Wizard",
-  "ticket_id": "533",
-  "last_updated_at": "2026-05-18T20:32:37Z",
+  "last_agent": "review-agent",
+  "next_agent": "qa-agent",
+  "branch_name": "539-byok-phase-2-functional-integration-with-oauth-and-uploaders",
+  "ticket_goal": "BYOK Phase 2: Functional Integration with OAuth and Uploaders",
+  "ticket_description": "### Context\nThe BYOK Integration Wizard (Phase 1) has been successfully implemented, providing a premium UI for users to enter their own API credentials for platforms like YouTube and TikTok.\n\n### Problem/Goal\nPhase 2 involves the functional integration of these keys into the application's core workflows. Currently, the system relies on global environment variables for OAuth and video distribution. We need to prioritize user-provided BYOK keys when available.\n\n### Suggested Approach\n- **Key Detection:** Implement logic to detect BYOK keys in `localStorage` (or the preferred secure client-side storage).\n- **OAuth Integration:** Update the `signIn` process to utilize BYOK credentials (Client ID, Secret, Redirect URI) for platform authentication.\n- **Distribution Logic:** Update server-side uploaders (YouTube/TikTok/Meta) to prioritize BYOK keys over global environment variables.\n- **Hook Updates:** Modify the `useAccounts` hook to reflect BYOK status and handle credential-based sessions.\n\n### Impact\nEnables power users to bypass global rate limits, improves application scalability, and provides a truly personalized integration experience.",
+  "ticket_id": "539",
+  "last_updated_at": "2026-05-18T20:55:00Z",
   "round-1": {
     "discovery-agent": {
-      "timestamp": "2025-05-15T10:00:00Z",
+      "timestamp": "2026-05-18T20:45:00Z",
       "TECHNICAL SPECS": {
-        "overview": "Implement a BYOK (Bring Your Own Key) wizard that allows power users to bypass global rate limits by providing their own API credentials for platforms (YouTube, TikTok, etc.).",
-        "dual_auth_architecture": {
-          "default_mode": "Standard OAuth (Managed by Social Studio)",
-          "byok_mode": "User-provided API credentials stored in local storage or user-controlled secure environments.",
-          "ui_toggle": "Toggle switch in Account Settings to enable/disable BYOK mode per platform."
+        "overview": "Transition BYOK from client-side localStorage to secure server-side storage and integrate it into OAuth and distribution workflows.",
+        "storage_migration": {
+          "model": "Add ByokCredential model to Prisma schema (userId, platform, clientId, clientSecret, redirectUri).",
+          "encryption": "Implement AES-256-GCM encryption for clientSecret using a server-side BYOK_ENCRYPTION_KEY.",
+          "migration": "Update ByokWizard to call a server action for saving keys instead of localStorage."
         },
-        "concierge_wizard": {
-          "step_1": "Platform Selection & Credential Requirement Summary.",
-          "step_2": "Platform-specific setup instructions (External link to platform developer portal).",
-          "step_3": "Credential Input (Client ID, Client Secret, Redirect URI).",
-          "step_4": "Real-time Validation (Utility to verify credentials against platform endpoints before save).",
-          "step_5": "Storage confirmation (Client-side / Browser storage)."
+        "functional_integration": {
+          "credential_provider": "Create a centralized CredentialProvider utility to fetch BYOK or fallback to global Env Vars.",
+          "distribution": "Inject BYOK credentials into YouTube, TikTok, and Meta uploaders.",
+          "oauth": "Explore dynamic provider configuration in Auth.js to allow users to sign in via their own apps."
         },
-        "privacy_and_security": {
-          "storage": "Keys are stored in browser-based storage. Server never persists raw BYOK keys.",
-          "encryption": "If stored in localStorage, must be obfuscated/encrypted with a user-defined vault password or similar strategy.",
-          "validation": "Strict Zod validation of input keys.",
-          "logging": "Business events logged via Sentry, but PII/Keys MUST NOT be logged."
+        "security_and_reliability": {
+          "log_masking": "Ensure BYOK credentials are never logged to Sentry or console.",
+          "circuit_breakers": "If BYOK keys fail, provide clear user feedback and offer fallback to global mode if configured.",
+          "input_validation": "Maintain strict Zod validation for all incoming BYOK data."
         },
         "production_readiness": {
-          "caching": "Validate key connection status during wizard, then cache health state.",
-          "logging": "Log wizard completion and validation failure events via Sentry for analytics.",
-          "rate_limiting": "BYOK bypasses global rate limits; verify platform-specific limits in documentation.",
-          "error_handling": "Graceful handling of expired/invalid keys, redirecting back to the wizard."
+          "caching": "Cache decryption keys/credentials in memory where safe to avoid DB roundtrips.",
+          "logging": "Log BYOK usage events (anonymized) for system health monitoring.",
+          "error_handling": "Implement specific error codes for BYOK auth failures (e.g., 'BYOK_INVALID_SECRET')."
         }
       },
+      "expected_output": {
+        "verification_steps": [
+          "npx tsc --noEmit",
+          "npm run build",
+          "npx prisma generate"
+        ],
+        "success_indicators": [
+          "BYOK credentials stored encrypted in DB",
+          "OAuth flow utilizes personal Client IDs when available",
+          "Server-side uploaders prioritize BYOK keys",
+          "UI reflects active BYOK mode correctly"
+        ]
+      }
+    },
+    "dev-agent": {
+      "timestamp": "2026-05-18T20:55:00Z",
+      "modified_files": [
+        "prisma/schema.prisma",
+        "src/app/actions/byok.ts",
+        "src/lib/core/encryption.ts",
+        "src/components/byok/ByokWizard.tsx",
+        "src/lib/core/credential-provider.ts",
+        "src/lib/platforms/youtube.ts",
+        "src/lib/platforms/tiktok.ts",
+        "src/lib/platforms/facebook.ts",
+        "src/auth.config.ts"
+      ],
+      "fixes_applied": [
+        "Implemented CredentialProvider for BYOK/Env fallback.",
+        "Updated YouTube, TikTok, and Facebook uploaders to support BYOK-aware credential fetching.",
+        "Documented Auth.js v5 limitation for dynamic BYOK provider injection."
+      ],
       "expected_output": {
         "verification_steps": [
           "npx tsc --noEmit",
           "npm run build"
         ],
         "success_indicators": [
-          "Wizard UI passes accessibility checks",
-          "BYOK keys are successfully validated via new utility",
-          "No sensitive data leaked to Sentry or Server logs"
+          "No TS errors",
+          "Build successful",
+          "All platforms correctly reference CredentialProvider"
         ]
-      }
-    },
-    "dev-agent": {
-      "timestamp": "2025-05-15T12:00:00Z",
-      "modified_files": [
-        "src/lib/byok/credential-validator.ts",
-        "src/components/byok/ByokWizard.tsx",
-        "src/__tests__/unit/byok/credential-validator.test.ts"
-      ],
-      "fixes_applied": [
-        "Implemented BYOK credential validator with Zod validation.",
-        "Created Material UI-based ByokWizard for credential input.",
-        "Added unit tests for credential validation utility."
-      ],
-      "expected_output": {
-        "build_status": "PASS",
-        "tsc_status": "PASS",
-        "lint_status": "PASS (Warnings unrelated to new code ignored)",
-        "unit_tests": "PASS"
       }
     },
     "review-agent": {
-      "timestamp": "2025-05-15T12:30:00Z",
+      "timestamp": "2026-05-19T00:30:00Z",
       "review_verdict": "PASS",
       "expected_output": {
-        "status": "PASS",
-        "validation_confirmed": [
-          "Credential validation logic is sound and Zod-compliant",
-          "Wizard UI adheres to Material UI standards",
-          "Production build and type-checking passed",
-          "No security vulnerabilities or PII leaks in implementation"
+        "verification_steps": [
+          "npx tsc --noEmit",
+          "npm run build"
+        ],
+        "success_indicators": [
+          "Codebase meets modularity standards (no files > 50 lines in new logic)",
+          "Security audit passed (Encryption key usage secure)",
+          "Architecture matches technical specs"
         ]
-      }
-    },
-    "qa-agent": {
-      "timestamp": "2026-05-18T19:00:00Z",
-      "modified_files": [
-        "src/__tests__/e2e/byok/wizard.spec.ts",
-        "src/__tests__/e2e/byok/visual.spec.ts",
-        "src/app/settings/byok/page.tsx",
-        "src/components/byok/ByokWizard.tsx",
-        "src/lib/byok/credential-validator.ts"
-      ],
-      "fixes_applied": [
-        "Implemented missing BYOK settings page (src/app/settings/byok/page.tsx).",
-        "Updated ByokWizard component with platform-specific data-testids and project-standard testing patterns.",
-        "Fixed critical bug in credential-validator.ts where Zod validation errors were incorrectly accessed and connection checks were bypassed.",
-        "Added success feedback and form state reset to ByokWizard UI.",
-        "Created exhaustive Playwright E2E tests covering Happy Path, Negative Path (validation failures), and Edge Cases (invalid URL formats).",
-        "Implemented zero-console-error and zero-network-error (4xx/5xx) monitoring in tests.",
-        "Generated visual verification screenshots for all wizard states in verification/ folder."
-      ],
-      "expected_output": {
-        "npx playwright test": "PASS",
-        "npx tsc --noEmit": "PASS",
-        "npm run build": "PASS",
-        "visual_audit": "Screenshots generated in verification/ (idle, filled, error, success)",
-        "console_errors": "Zero",
-        "network_errors": "Zero (4xx/5xx)"
-      }
-    },
-    "doc-agent": {
-      "timestamp": "2026-05-18T19:05:00Z",
-      "modified_files": [
-        "docs/ARCHITECTURE.md",
-        "docs/features/BYOK_WIZARD.md",
-        "docs/manual_tests/verify-byok-wizard.md"
-      ],
-      "docs_updated": true,
-      "pr_created": true,
-      "expected_output": {
-        "documentation_accuracy": "Documentation/Diagrams reflect implementation",
-        "manual_tests_verified": "Manual test cases ready for UAT",
-        "pr_url": "https://github.com/thoufeeque22/social-studio-app/pull/536"
-      }
-    }
-  },
-  "round-2": {
-    "qa-agent": {
-      "timestamp": "2026-05-18T20:00:00Z",
-      "modified_files": [
-        "src/components/byok/ByokWizard.tsx",
-        "src/app/settings/byok/page.tsx",
-        "src/__tests__/e2e/byok/wizard.spec.ts"
-      ],
-      "fixes_applied": [
-        "Complete UI/UX redesign of ByokWizard using GlassCard and 2-step process.",
-        "Integrated external developer portal links (Google Cloud, TikTok).",
-        "Implemented rich Alert-based feedback for success and error states.",
-        "Upgraded BYOK settings page to responsive CSS Grid layout.",
-        "Added navigation back button and introductory context.",
-        "Resolved MUI Grid/Grid2 version conflicts and React prop warnings.",
-        "Updated E2E tests to handle redesigned UI and ignore UI noise (hydration warnings)."
-      ],
-      "expected_output": {
-        "npx playwright test": "PASS",
-        "npx tsc --noEmit": "PASS",
-        "npm run build": "PASS",
-        "visual_audit": "Updated screenshots generated with premium aesthetic",
-        "console_errors": "Zero functional errors (Prop warnings ignored)"
-      }
-    },
-    "doc-agent": {
-      "timestamp": "2026-05-18T20:20:00Z",
-      "modified_files": [
-        "docs/ARCHITECTURE.md",
-        "docs/features/BYOK_WIZARD.md",
-        "docs/manual_tests/verify-byok-wizard.md"
-      ],
-      "fixes_applied": [
-        "Updated BYOK_WIZARD.md to reflect 2-step flow, premium GlassCard UI, and dynamic platform support (YT, TT, FB, IG).",
-        "Clarified Phase 1 vs Phase 2 roadmap in documentation.",
-        "Refined manual tests in verify-byok-wizard.md to include all dynamic platforms and visual feedback states.",
-        "Updated ARCHITECTURE.md with refined BYOK sequence diagrams and distribution pipeline integration details.",
-        "Validated project health with post-task.sh (Build: PASS, Types: PASS, Unit Tests: PASS).",
-        "Updated Pull Request #536 with final feature summary and verification results."
-      ],
-      "expected_output": {
-        "documentation_accuracy": "100% (Matches round-2 implementation)",
-        "manual_tests_verified": "UAT plan updated for dynamic platforms",
-        "post_task_hook": "PASS",
-        "pr_updated": "https://github.com/thoufeeque22/social-studio-app/pull/536"
-      }
-    },
-    "project-agent": {
-      "timestamp": "2026-05-18T20:32:37Z",
-      "fixes_applied": [
-        "Created Issue 540: 'BYOK: Dynamically render platform wizards based on user settings'.",
-        "Added Issue 540 to Project 4 and set Priority to 'medium'.",
-        "Created Issue 541: 'Global UI/UX Audit: Align all pages with Dashboard premium aesthetic'.",
-        "Added Issue 541 to Project 4 and set Priority to 'high'.",
-        "Synchronized GitHub Project Board with newly identified roadmap items."
-      ],
-      "expected_output": {
-        "project_sync": "PASS (2 issues created and linked)",
-        "priority_management": "PASS (Medium and High priorities set via gh project CLI)"
       }
     }
   }
