@@ -251,6 +251,32 @@ sequenceDiagram
     API-->>U: Render Results
 ```
 
+### 6. Platform BYOK (Bring Your Own Key)
+
+The BYOK Integration Wizard allows power users to provide their own platform API credentials (Client ID, Secret, Redirect URI), bypassing global application-level rate limits.
+
+```mermaid
+sequenceDiagram
+    participant U as User (UI)
+    participant W as ByokWizard (Component)
+    participant V as Validator (Utility)
+    participant LS as localStorage (Client-side)
+    participant P as Platform APIs
+
+    U->>W: Enter Credentials
+    W->>V: validateCredentials(platform, creds)
+    V->>P: Health Check / Auth Verification
+    P-->>V: Validation Result
+    V-->>W: Return Status
+    
+    alt Success
+        W->>LS: Store encrypted/obfuscated keys
+        W-->>U: Show Success Message
+    else Failure
+        W-->>U: Show Error Message
+    }
+```
+
 ## Platform Integrations
 
 Platform-specific logic is encapsulated in `src/lib/platforms/`.
