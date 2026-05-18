@@ -255,6 +255,11 @@ sequenceDiagram
 
 The BYOK Integration Wizard allows power users to provide their own platform API credentials (Client ID, Secret, Redirect URI), bypassing global application-level rate limits.
 
+- **Storage:** Credentials are persisted exclusively in the browser's `localStorage` (e.g., `byok_YouTube`) to ensure privacy and eliminate server-side storage risks.
+- **Validation:** A client-side utility performs real-time health checks against platform endpoints before saving.
+- **UI Architecture:** Uses a premium **GlassCard** component with a 2-step guided flow (Get Keys -> Configure).
+- **Integration (Phase 2):** The distribution pipeline (`Server Distributor`) will be designed to check for the presence of these local keys. If found, they will be used for the OAuth handshake and subsequent API calls, allowing the user to leverage their own API quota.
+
 ```mermaid
 sequenceDiagram
     participant U as User (UI)
@@ -263,18 +268,20 @@ sequenceDiagram
     participant LS as localStorage (Client-side)
     participant P as Platform APIs
 
-    U->>W: Enter Credentials
+    U->>W: Select Platform
+    W->>U: Show Step 1: Links to Dev Portals
+    U->>W: Step 2: Enter Credentials
     W->>V: validateCredentials(platform, creds)
     V->>P: Health Check / Auth Verification
     P-->>V: Validation Result
     V-->>W: Return Status
     
     alt Success
-        W->>LS: Store encrypted/obfuscated keys
-        W-->>U: Show Success Message
+        W->>LS: Store credentials
+        W-->>U: Show Success Alert
     else Failure
-        W-->>U: Show Error Message
-    }
+        W-->>U: Show Error Alert
+    end
 ```
 
 ## Platform Integrations

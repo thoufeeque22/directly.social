@@ -18,16 +18,19 @@ This test plan verifies the functionality, validation, and persistence of the Pl
   - The URL should be `/settings/byok`.
   - The page should display "BYOK Integrations" title.
   - A "Back to Settings" button should be visible at the top.
-  - Wizards for "YouTube" and "TikTok" should be visible in a grid layout.
-  - Each wizard should be enclosed in a `GlassCard` with a platform-specific icon.
+  - Wizards for **YouTube**, **TikTok**, **Facebook**, and **Instagram** should be visible in a responsive grid layout.
+  - Each wizard should be enclosed in a `GlassCard` with a platform-specific icon (YouTube: Red, TikTok: Black Music Note, Facebook: Blue, Instagram: Gradient/Pink).
   - Step 1 (Get Your Keys) and Step 2 (Configure Credentials) should be clearly demarcated.
 
 ### 2. External Portal Links
 - **Steps:**
-  1. Locate the YouTube wizard.
-  2. Click the **Go to Developer Portal** button.
+  1. Locate the YouTube wizard and click **Go to Developer Portal**.
+  2. Locate the TikTok wizard and click **Go to Developer Portal**.
+  3. Locate the Facebook/Instagram wizards and click **Go to Developer Portal**.
 - **Expected Results:**
-  - A new browser tab should open to `https://console.cloud.google.com/`.
+  - YouTube: Opens Google Cloud Console.
+  - TikTok: Opens TikTok for Developers console.
+  - Facebook/Instagram: Opens Meta for Developers portal.
 
 ### 3. Validation: Empty Fields
 - **Steps:**

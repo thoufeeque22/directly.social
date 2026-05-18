@@ -9,19 +9,30 @@ By default, Social Studio uses its own managed API keys to facilitate uploads. H
 - **Enhanced Privacy:** Maintain full control over your API credentials.
 - **Developer Flexibility:** Test integrations with personal developer accounts.
 
+The system dynamically supports credentials for:
+- **YouTube** (via Google Cloud Console)
+- **TikTok** (via TikTok for Developers)
+- **Facebook** (via Meta for Developers)
+- **Instagram** (via Meta for Developers)
+
 ## User Interface (UX Redesign)
 
 The wizard features a premium **GlassCard** interface with a structured 2-step flow to guide users through the complex setup process.
 
 ### Step 1: Get Your Keys
-Users are provided with direct links to the relevant developer portals (e.g., Google Cloud Console for YouTube, TikTok for Developers).
-- **Direct Portal Access:** Quick-action buttons to open the correct developer console.
+Users are provided with direct links to the relevant developer portals.
+- **Direct Portal Access:** Quick-action buttons to open the correct developer console (e.g., Google Cloud, TikTok Console).
 - **Platform-Specific Instructions:** Concise guidance on what to do in each portal.
 
 ### Step 2: Configure Credentials
 A clean, focused input area for providing the generated secrets.
 - **Input Masking:** Client secrets are masked (password type) for security.
 - **Contextual Help:** Helper text for fields like Redirect URI to reduce configuration errors.
+
+## Roadmap & Phases
+
+- **Phase 1 (Current):** Focuses on credential capture and validation. The wizard allows users to enter, validate (connectivity check), and persist their keys in secure client-side storage.
+- **Phase 2 (Future):** Integration with the core distribution pipeline. The server-side distributor and OAuth flows will be updated to prioritize user-provided BYOK keys over the global managed keys if enabled.
 
 ## Technical Implementation
 
