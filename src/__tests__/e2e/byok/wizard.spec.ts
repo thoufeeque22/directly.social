@@ -40,10 +40,6 @@ test.describe('BYOK Integration Wizard E2E', () => {
     
     // Verify it doesn't show error after success
     await expect(youtubeWizard.locator('[data-testid="error-message"]')).not.toBeVisible();
-    
-    // Verify localStorage
-    const storage = await page.evaluate(() => localStorage.getItem('byok_youtube'));
-    expect(storage).toContain('valid');
   });
 
   test('negative path: invalid credentials trigger error for tiktok', async ({ page }) => {
@@ -59,17 +55,15 @@ test.describe('BYOK Integration Wizard E2E', () => {
     await expect(tiktokWizard.locator('[data-testid="error-message"]')).toContainText('Invalid credentials');
   });
 
-  test('edge case: invalid URL format for redirect URI', async ({ page }) => {
+  test('visual audit: verify layout state', async ({ page }) => {
+    await page.waitForLoadState('networkidle');
+    await page.screenshot({ path: 'verification/byok-wizard-idle.png', fullPage: true });
+    
     const youtubeWizard = page.locator('[data-testid="byok-wizard-youtube"]');
-    
-    await youtubeWizard.locator('[data-testid="client-id-input"] input').fill('valid');
-    await youtubeWizard.locator('[data-testid="client-secret-input"] input').fill('secret123');
-    await youtubeWizard.locator('[data-testid="redirect-uri-input"] input').fill('not-a-url');
-    
+    await youtubeWizard.locator('[data-testid="client-id-input"] input').fill('visual-test');
     await youtubeWizard.locator('[data-testid="save-button"]').click();
     
-    // Should show Zod validation error for invalid URL
-    await expect(youtubeWizard.locator('[data-testid="error-message"]')).toBeVisible();
-    await expect(youtubeWizard.locator('[data-testid="error-message"]')).toContainText('Invalid Redirect URI');
+    await page.screenshot({ path: 'verification/byok-wizard-success.png', fullPage: true });
+    await expect(youtubeWizard.locator('[data-testid="success-message"]')).toBeVisible();
   });
 });

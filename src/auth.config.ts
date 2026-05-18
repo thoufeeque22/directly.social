@@ -4,6 +4,9 @@ import Google from "next-auth/providers/google";
 import TikTok from "next-auth/providers/tiktok";
 
 export default {
+  // TODO: Refactor to dynamic provider initialization for BYOK. 
+  // Auth.js v5 config is static; dynamic credential injection per-user 
+  // requires a custom provider or intercepting the signIn callback to update provider options.
   providers: [
     Google({
       clientSecret: process.env.AUTH_GOOGLE_SECRET,

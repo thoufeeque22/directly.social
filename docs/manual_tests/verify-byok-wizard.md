@@ -62,11 +62,12 @@ This test plan verifies the functionality, validation, and persistence of the Pl
 ### 6. Persistence Check
 - **Steps:**
   1. After successful save in Test Case 5, refresh the page.
-  2. Open Browser Developer Tools -> Application -> Local Storage.
-  3. Locate the key `byok_YouTube`.
+  2. Log in with the same user on a different browser or clear browser cache.
+  3. Navigate back to **Settings -> BYOK Settings**.
 - **Expected Results:**
-  - The `byok_YouTube` key should exist in Local Storage.
-  - The value should be a JSON string containing the entered credentials.
+  - The wizard for YouTube should show that credentials are saved (e.g., fields populated or a "Manage" state if implemented, or simply no "Validation Failed" on refresh).
+  - Check the database (if possible via `npx prisma studio`) to verify a record exists in the `ByokCredential` table for the user.
+  - **Verification:** The `byok_YouTube` key should NOT be present in Local Storage (as it was migrated to server-side).
 
 ### 7. Mock Validation Failure
 - **Steps:**
