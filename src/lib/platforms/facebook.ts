@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/core/prisma";
 import { logTokenEvent } from "@/lib/core/audit";
+import { getPlatformCredentials } from "@/lib/core/credential-provider";
 import { promises as fs } from "fs";
 import fsSync from "fs";
 
@@ -20,6 +21,9 @@ export const getFacebookPageAccount = async (userId: string, accountId?: string)
     provider: "facebook",
     reason: "Initializing Facebook/Page client"
   });
+
+  // Fetch BYOK credentials if available for OAuth flows
+  const _credentials = await getPlatformCredentials(userId, "facebook");
 
   // Fetch the list of pages the user manages
   const pagesUrl = `https://graph.facebook.com/v22.0/me/accounts?fields=name,access_token&access_token=${account.access_token}`;

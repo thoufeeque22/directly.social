@@ -1,6 +1,7 @@
 import { google } from "googleapis";
 import { prisma } from "@/lib/core/prisma";
 import { logTokenEvent } from "@/lib/core/audit";
+import { getPlatformCredentials } from "@/lib/core/credential-provider";
 import fs from "fs";
 
 export const getYouTubeClient = async (userId: string, accountId?: string) => {
@@ -22,9 +23,12 @@ export const getYouTubeClient = async (userId: string, accountId?: string) => {
     reason: "Initializing YouTube client"
   });
 
+  const credentials = await getPlatformCredentials(userId, "google");
+
   const auth = new google.auth.OAuth2(
-    process.env.AUTH_GOOGLE_ID,
-    process.env.AUTH_GOOGLE_SECRET
+    credentials.clientId,
+    credentials.clientSecret,
+    credentials.redirectUri
   );
 
   auth.setCredentials({

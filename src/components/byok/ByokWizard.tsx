@@ -19,6 +19,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import { validateCredentials, ByokCredential } from '../../lib/byok/credential-validator';
 import { GlassCard } from '../ui/GlassCard';
+import { saveByokCredential } from '../../app/actions/byok';
 
 interface ByokWizardProps {
   platform: string;
@@ -82,7 +83,7 @@ export const ByokWizard = ({ platform }: ByokWizardProps) => {
       if (!result.success) {
         setError(result.message);
       } else {
-        localStorage.setItem(`byok_${platform}`, JSON.stringify(credentials));
+        await saveByokCredential({ platform, ...credentials });
         setSuccess(true);
       }
     } catch (err) {

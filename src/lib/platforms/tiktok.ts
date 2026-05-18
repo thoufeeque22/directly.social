@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/core/prisma";
 import { logTokenEvent } from "@/lib/core/audit";
+import { getPlatformCredentials } from "@/lib/core/credential-provider";
 import { promises as fs } from "fs";
 
 interface PublishTikTokParams {
@@ -26,6 +27,10 @@ export const getTikTokAccount = async (userId: string, accountId?: string) => {
     provider: "tiktok",
     reason: "Initializing TikTok client"
   });
+
+  // Note: TikTok API interactions typically require access_token. 
+  // BYOK logic for TikTok would involve client-side OAuth flow using these credentials.
+  const _credentials = await getPlatformCredentials(userId, "tiktok");
 
   return account;
 };

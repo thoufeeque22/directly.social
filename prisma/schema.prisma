@@ -22,12 +22,27 @@ model User {
   preferredAIStyle     String               @default("Manual")
   role                 Role                 @default(USER)
   accounts             Account[]
+  byokCredentials      ByokCredential[]
   galleryAssets        GalleryAsset[]
   metadataTemplates    MetadataTemplate[]
   platformPreferences  PlatformPreference[]
   postHistories        PostHistory[]
   sessions             Session[]
   tokenAuditLogs       TokenAuditLog[]
+}
+
+model ByokCredential {
+  id           String   @id @default(cuid())
+  userId       String
+  platform     String
+  clientId     String
+  clientSecret String
+  redirectUri  String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, platform])
 }
 
 model MetadataTemplate {
