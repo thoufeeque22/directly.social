@@ -31,8 +31,8 @@ A clean, focused input area for providing the generated secrets.
 
 ## Roadmap & Phases
 
-- **Phase 1 (Current):** Focuses on credential capture and validation. The wizard allows users to enter, validate (connectivity check), and persist their keys in secure client-side storage.
-- **Phase 2 (Future):** Integration with the core distribution pipeline. The server-side distributor and OAuth flows will be updated to prioritize user-provided BYOK keys over the global managed keys if enabled.
+- **Phase 1 (Completed):** Focused on credential capture and validation UI. 
+- **Phase 2 (Completed):** Functional integration with the core distribution pipeline. Credentials are now stored securely on the server, and the `CredentialProvider` ensures that platform uploaders (YouTube, TikTok, Meta) prioritize user-provided BYOK keys over global managed keys.
 
 ## Technical Implementation
 
@@ -45,20 +45,22 @@ Users provide the following credentials:
 - **Redirect URI:** The authorized callback URL for OAuth flows.
 
 ### 2. Real-time Validation
-Before saving, the system performs a real-time validation check using the `validateCredentials` utility. 
+Before saving, the system performs a real-time validation check using server actions.
 - **Rich Feedback:** Uses Material UI `Alert` components with `AlertTitle` for clear Success/Error states.
 - **Loading States:** Integrated `CircularProgress` indicates background validation.
 
-### 3. Client-Side Storage
-To maximize security and privacy, BYOK credentials are **never stored on the Social Studio servers**.
-- Keys are persisted in the browser's `localStorage` (e.g., `byok_YouTube`).
-- The server only ever interacts with these keys if the user's browser transmits them during a session.
+### 3. Server-Side Encrypted Storage
+To ensure both security and cross-device availability, BYOK credentials are stored in the database.
+- **Encryption at Rest:** Client secrets are encrypted using AES-256-GCM before being persisted.
+- **UserId Isolation:** Credentials are strictly linked to the authenticated user.
+- **Resolution Logic:** The `CredentialProvider` utility dynamically selects the correct credentials during the distribution process, falling back to global environment variables if BYOK is not configured for a specific platform.
 
 ## Security Model
 
-- **No Server Persistence:** Your secrets never touch our database.
+- **Encrypted Persistence:** Secrets are never stored in plain text.
+- **Server-Side Validation:** Validation logic runs on the server to prevent exposure of validation routines.
 - **Zod Validation:** Strict runtime validation prevents malformed data from being saved.
-- **Local Isolation:** Credentials are local to the browser/device where they were entered.
+- **Input Masking:** Secrets are masked in the UI to prevent shoulder surfing.
 
 ## Benefits for Power Users
 
