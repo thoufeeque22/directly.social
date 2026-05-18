@@ -44,6 +44,7 @@
 - **Orchestration Rules:**
   - **Worker Agents:** MUST NOT invoke other agents. They MUST update `.gemini_agent_context.json` via tools and return their status.
   - **Main Agent (Gemini CLI):** Responsible for analyzing the context and routing the task to the next specialized agent.
+  - **End of Workflow:** At the conclusion of the entire pipeline (when the task is completed and control returns to the Main Agent), the Main Agent MUST ensure that `.gemini_agent_context.json` is committed and pushed to the remote branch to persist the final state.
   - **Discovery Gate:** For any task involving New Features or Roadmap items, the Main Agent is FORBIDDEN from invoking `dev-agent` until `discovery-agent` has provided a verified `TECHNICAL SPECS` block. Bypassing Discovery is a CRITICAL pipeline failure.
   - **Visual Integrity Mandate:** All UI changes MUST be verified not just for functional logic, but for visual accessibility (contrast, visibility, spacing). QA-agent MUST include specific Playwright tests that check for the visibility of critical controls (e.g., navigation arrows, labels).
   - **Inception Rule:** When a new ticket ID (URL or number) is provided, the Main Agent MUST:
