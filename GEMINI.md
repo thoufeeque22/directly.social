@@ -50,7 +50,7 @@
   - **Inception Rule:** When a new ticket ID (URL or number) is provided, the Main Agent MUST:
   1. Immediately switch to the `main` branch and pull the latest changes.
   2. Fetch the ticket details (title and description/body) from GitHub using `gh issue view <id> --json title,body`.
-  3. Initialize `.gemini_agent_context.json` with these details in the `ticket_goal` and a new `ticket_description` field before invoking any specialized agent (including `discovery-agent`).
+  3. **Context Reset:** CLEAN UP the existing `.gemini_agent_context.json`. Initialize it FRESH with the new ticket details in the `ticket_goal` and `ticket_description` fields, starting exclusively with a new `round-1`. Historical rounds from previous tickets MUST be discarded to maintain context efficiency.
   4. Bypassing this step is a CRITICAL pipeline failure.
 - **Model Selection:** 
   - Use **Gemini 1.5 Pro** for complex reasoning (Discovery, Dev, Review, QA).

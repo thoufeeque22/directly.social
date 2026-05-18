@@ -289,6 +289,17 @@ sequenceDiagram
     end
 ```
 
+### 7. Graceful Error Handling
+
+The application implements a hierarchical error handling strategy to ensure graceful degradation and high observability.
+
+- **Standardized API Errors:** Server-side errors are managed using a custom `AppError` class and a centralized `handleApiError` utility. This ensures consistent error responses (message + code) and automatic Sentry reporting for unexpected failures.
+- **Hierarchical Boundaries:** 
+  - **Global Boundary (`global-error.tsx`):** The final safety net for root-level failures.
+  - **Route Boundary (`error.tsx`):** Isolates failures to specific segments, keeping the layout interactive.
+  - **Glass Aesthetic:** All error states use a shared `ErrorBoundary` component that follows the project's premium glass aesthetic, featuring blur effects and high-contrast typography.
+- **Recovery:** Error boundaries provide a "Try again" mechanism that triggers a segment re-render, allowing users to recover from transient issues without a full page refresh.
+
 ## Platform Integrations
 
 Platform-specific logic is encapsulated in `src/lib/platforms/`.
