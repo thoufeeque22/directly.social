@@ -1,8 +1,1 @@
-[
-  {
-    "category": "meta",
-    "severity": "CRITICAL",
-    "description": "Playwright tests failed because the Neon database has exceeded its compute time quota. Error: 'Your account or project has exceeded the compute time quota. Upgrade your plan to increase limits.'",
-    "suggestion": "Manual intervention required: Upgrade the Neon database plan or provision a new dev database."
-  }
-]
+[]
