@@ -4,6 +4,9 @@ import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 import { App } from "@capacitor/app";
 import { Browser } from "@capacitor/browser";
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { theme } from '@/theme';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -59,5 +62,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  return <SessionProvider>{children}</SessionProvider>;
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <SessionProvider>{children}</SessionProvider>
+    </ThemeProvider>
+  );
 }
