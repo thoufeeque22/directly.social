@@ -8,6 +8,7 @@ import { DistributionGrid } from '@/components/settings/DistributionGrid';
 import { ConnectionSection } from '@/components/settings/ConnectionSection';
 import { TemplateManager } from '@/components/settings/TemplateManager';
 import { PLATFORMS } from '@/lib/core/constants';
+import { GlassCard } from '@/components/ui/GlassCard';
 import styles from './Settings.module.css';
 
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -65,7 +66,7 @@ const SettingsPage = () => {
         onToggle={handlePlatformToggle} 
       />
 
-      <section className={styles.section} style={{ marginTop: '3rem' }}>
+      <GlassCard className={styles.section} style={{ marginTop: '3rem' }}>
         <h2 className={styles.sectionTitle}>
           <BookmarkIcon sx={{ fontSize: 24, marginRight: '8px', verticalAlign: 'middle' }} /> Reusable Snippets
         </h2>
@@ -73,9 +74,9 @@ const SettingsPage = () => {
           Manage your saved descriptions, credits, and links for quick insertion.
         </p>
         <TemplateManager />
-      </section>
+      </GlassCard>
 
-      <section className={styles.section} style={{ marginTop: '3rem' }}>
+      <GlassCard className={styles.section} style={{ marginTop: '3rem' }}>
         <h2 className={styles.sectionTitle}>
           <KeyIcon sx={{ fontSize: 24, marginRight: '8px', verticalAlign: 'middle' }} /> Power User Features
         </h2>
@@ -92,9 +93,9 @@ const SettingsPage = () => {
         >
           Manage BYOK Integrations
         </Button>
-      </section>
+      </GlassCard>
 
-      <section className={styles.section} style={{ marginTop: '3rem' }}>
+      <GlassCard className={styles.section} style={{ marginTop: '3rem' }}>
         <h2 className={styles.sectionTitle}>
           <LinkIcon sx={{ fontSize: 24, marginRight: '8px', verticalAlign: 'middle' }} /> Platform Connections
         </h2>
@@ -183,7 +184,7 @@ const SettingsPage = () => {
             />
           )}
         </div>
-      </section>
+      </GlassCard>
     </div>
   );
 };

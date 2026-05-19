@@ -4,6 +4,7 @@ const authFile = '.auth/user.json';
 
 setup('authenticate', async ({ page }) => {
   console.log('[E2E Setup] Starting authentication...');
+  page.on('console', msg => console.log('BROWSER CONSOLE:', msg.text()));
   
   // Navigate to login
   await page.goto('/login');

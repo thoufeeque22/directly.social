@@ -74,8 +74,8 @@ const PLATFORM_META: Record<string, { icon: React.ReactNode; label: string; clas
   youtube:   { icon: <YouTubeIcon sx={{ fontSize: 18, color: '#FF0000' }} />, label: 'YouTube',   className: styles.platformYoutube },
   instagram: { icon: <InstagramIcon sx={{ fontSize: 18, color: '#E4405F' }} />, label: 'Instagram', className: styles.platformInstagram },
   facebook:  { icon: <FacebookIcon sx={{ fontSize: 18, color: '#1877F2' }} />, label: 'Facebook',  className: styles.platformFacebook },
-  tiktok:    { icon: <MusicNoteIcon sx={{ fontSize: 18, color: '#000000' }} />, label: 'TikTok',    className: styles.platformTiktok },
-  local:     { icon: <ComputerIcon sx={{ fontSize: 18, color: '#757575' }} />, label: 'Local Dev',  className: styles.platformLocal },
+  tiktok:    { icon: <MusicNoteIcon sx={{ fontSize: 18, color: 'text.primary' }} />, label: 'TikTok',    className: styles.platformTiktok },
+  local:     { icon: <ComputerIcon sx={{ fontSize: 18, color: 'text.secondary' }} />, label: 'Local Dev',  className: styles.platformLocal },
 };
 
 function formatRelativeDate(dateStr: string): string {
@@ -665,10 +665,8 @@ function HistoryContent() {
             <button 
               className={styles.pillActionButton} 
               onClick={(e) => handleCancelPlatform(e, p.id, p.platform, post.id)}
-              title="Stop Platform Upload"
-              style={{ color: '#EF4444' }}
             >
-              <StopIcon sx={{ fontSize: 14 }} />
+              <StopIcon sx={{ fontSize: 14, color: 'error.main' }} />
             </button>
           )}
           {isCancelled && (
@@ -766,14 +764,14 @@ function HistoryContent() {
         <input type="file" ref={fileInputRef} style={{ display: 'none' }} accept="video/*" />
       </div>
 
-      <SearchField 
-        value={searchQuery}
-        onChange={setSearchQuery}
-        placeholder="Search history by title or description..."
-      />
+      <GlassCard style={{ padding: '2rem' }}>
+        <SearchField 
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search history by title or description..."
+        />
 
-      {reconciledPosts.length === 0 ? (
-        <GlassCard>
+        {reconciledPosts.length === 0 ? (
           <div className={styles.emptyState}>
             <div className={styles.emptyIcon}>
               <HistoryIcon sx={{ fontSize: 48, opacity: 0.5 }} />
@@ -783,9 +781,8 @@ function HistoryContent() {
               {searchQuery ? `We couldn't find any posts matching "${searchQuery}"` : 'Upload a video from the dashboard to see its distribution status here.'}
             </p>
           </div>
-        </GlassCard>
-      ) : (
-        <div className={styles.timeline}>
+        ) : (
+          <div className={styles.timeline}>
           {reconciledPosts.map((post) => {
             const isOptimistic = post.isOptimistic;
             
@@ -914,8 +911,9 @@ function HistoryContent() {
               {loadingMore ? 'Loading...' : 'Load More'}
             </button>
           )}
-        </div>
-      )}
+          </div>
+        )}
+      </GlassCard>
     </div>
   );
 }

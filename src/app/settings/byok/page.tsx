@@ -1,5 +1,6 @@
 'use client';
 
+import { GlassCard } from '@/components/ui/GlassCard';
 import { ByokWizard } from '@/components/byok/ByokWizard';
 import { Container, Typography, Box } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -25,15 +26,16 @@ export default function ByokSettingsPage() {
           Back to Settings
         </Button>
         
-        <Box sx={{ mb: 5 }}>
-          <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-            BYOK Integrations
-          </Typography>
-          <Typography variant="body1" sx={{ color: 'text.secondary', maxWidth: '600px' }}>
-            Bring Your Own Key (BYOK) allows you to use your own dedicated API quotas, 
-            ensuring maximum reliability and bypassing global rate limits.
-          </Typography>
-        </Box>
+        <GlassCard style={{ padding: '2rem' }}>
+          <Box sx={{ mb: 5 }}>
+            <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>
+              BYOK Integrations
+            </Typography>
+            <Typography variant="body1" sx={{ color: 'text.secondary', maxWidth: '600px' }}>
+              Bring Your Own Key (BYOK) allows you to use your own dedicated API quotas, 
+              ensuring maximum reliability and bypassing global rate limits.
+            </Typography>
+          </Box>
         
         <Box 
           sx={{ 
@@ -46,6 +48,7 @@ export default function ByokSettingsPage() {
             <ByokWizard key={platform.id} platform={platform.id} />
           ))}
         </Box>
+        </GlassCard>
       </Box>
     </Container>
   );
