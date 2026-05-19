@@ -2,7 +2,7 @@
   "cookies": [
     {
       "name": "authjs.csrf-token",
-      "value": "9aed45dca7bf1549a2bd05e56cd2e3b2b10c61044cf4246b5729dd7561d17294%7Cd961b6cb699a96883c51a2243a53d61fd92e83b28fa1ed743863e1580d7663b4",
+      "value": "5c0f1a5a30780213b017cd10d1c6c4201ec5c1b4162028dad70c6fe43c35e518%7C59ad004577d7c074c8d7559a70d283398ba87decc1c422c68623f472ec196b1d",
       "domain": "localhost",
       "path": "/",
       "expires": -1,
@@ -22,10 +22,10 @@
     },
     {
       "name": "authjs.session-token",
-      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..-XozlL6k3mK9JYOfzBTJnA.ZHfkLx4LhZeuoqwZ8KvjYsxsmHXIuhSW0kywCXnwoqMCoYrv2trAZ6O8jpDPu0bK4b6Z2c_VlO5C6LEam04FzQSc2O0nfNsVtfPjUdIzK3Lo3nqsxoWLgQvrTOEr_kJh0eTv86mkCy0l4n-3BC94ZNb__qAbWAAkqXZKMMLygAqjdlpJOOX7ucLHepaVx0v5gsVTtNhD0DNr2r4XcDlqszgH5XxYnEaa9El0dxuFeN6_tw1rNLRXi4vM6zSHIzwbGMQN5UsUjMV81WfGjkjntrvATBR6to8r75YEQ-A6t5Q.-UyiehlCRbdOBzED0NcvrIuJcWthAjfRsxirJnzjqwM",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..K8q5MxSxPNNMqjoC7_kbCA.abpmcibHGoLxCWOrPcHK7Zb3AaB5ZFfEN40Qv48rA1ukClJmOrRz5wINi1SadiOOOkpIzfshDlia7TI_R7nsKo-i-8voJIXsISQA-6UX6dyVAvEPpW6YCB1VTlMbQfwUo6FV9dBxa7hmmWZy4UvDmp6aTGwMwEj2YG2TraVqbmqZ4ig2XILaGUUXUOHcq3hHa7QV_R4ZKuyJUtWc1lEnxpk-HqbYf3wroNy8GMU6NupHGk0FoKyiYrnKfFgL_spNQ3hN_rj0PDIw2-B3TQMWF0ox23kffxOyNrRhNy6dp98.WvppipNX8KP15TMXf2QTe8qi0Xhp3ZJBJKxcN7oSP8I",
       "domain": "localhost",
       "path": "/",
-      "expires": 1781720612.060953,
+      "expires": 1781817673.591572,
       "httpOnly": true,
       "secure": false,
       "sameSite": "Lax"
@@ -37,7 +37,7 @@
       "localStorage": [
         {
           "name": "SS_SELECTED_PLATFORMS",
-          "value": "[\"cmoyws01d00009bz8pp5qp2fd\",\"cmoyws01d00019bz8e1zi5f2g\",\"local-dev-1\",\"local-dev-2\",\"local-dev-3\"]"
+          "value": "[\"local-dev-1\",\"local-dev-2\",\"local-dev-3\"]"
         }
       ]
     }
