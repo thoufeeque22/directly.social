@@ -1,41 +1,10 @@
 {
   "last_agent": "main-agent",
-  "next_agent": null,
-  "branch_name": "541-global-uiux-audit-align-all-pages-with-dashboard-premium-aesthetic",
-  "ticket_id": "541",
-  "ticket_goal": "Global UI/UX Audit: Align all pages with Dashboard Premium Aesthetic",
-  "last_updated_at": "2026-05-19T21:23:00Z",
-  "round-1": {
-    "dev-agent": {
-      "status": "COMPLETED",
-      "fixes_applied": [
-        "Replaced legacy Tailwind UI with custom GlassCard styling across /history and /settings pages",
-        "Applied standard spacing and semantic colors using MUI",
-        "Configured Supabase IPv4 Pooler URL for database connection",
-        "Configured NextAuth E2E configuration and environment variables"
-      ],
-      "modified_files": [
-        "src/app/history/page.tsx",
-        "src/app/history/history.module.css",
-        "src/app/settings/page.tsx",
-        "src/app/settings/byok/page.tsx",
-        "src/__tests__/e2e/visual-audit-541.spec.ts",
-        ".env",
-        "prisma/schema.prisma"
-      ]
-    },
-    "review-agent": {
-      "status": "COMPLETED",
-      "review_verdict": "PASS"
-    },
-    "qa-agent": {
-      "status": "COMPLETED",
-      "qa_verdict": "PASS",
-      "expected_output": {
-        "status": "PASS",
-        "playwright_results": "4 passed (12.2s)",
-        "visual_artifacts": "Generated in verification/ directory"
-      }
-    }
-  }
+  "next_agent": "discovery-agent",
+  "branch_name": "main",
+  "ticket_id": "373",
+  "ticket_goal": "Multi-Provider AI Strategy (Groq/Vercel AI SDK)",
+  "ticket_description": "Refactor the AI layer to support multiple LLM providers (Gemini, Groq, Ollama) via environment variables using a unified interface.\\n\\n### Technical Tasks\\n- **Vercel AI SDK:** Integrate the SDK to provide a consistent API for interacting with different LLMs.\\n- **Multi-Provider Support:** Enable support for Gemini (primary), Groq (high-speed), and Ollama (local fallback).\\n- **Configuration:** Implement an environment-based switching mechanism for the active AI provider.\\n- **Fallback Logic:** Develop logic to automatically switch to a secondary provider if the primary fails.",
+  "last_updated_at": "2026-05-19T21:32:00Z",
+  "round-1": {}
 }

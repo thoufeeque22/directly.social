@@ -1,0 +1,119 @@
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { createGroq } from '@ai-sdk/groq';
+import { createOllama } from 'ai-sdk-ollama';
+import { generateObject, LanguageModel } from 'ai';
+import { ModelMessage } from '@ai-sdk/provider-utils';
+import { z } from 'zod';
+import { logger } from './logger';
+import { OLLAMA_DEFAULT_BASE_URL, OLLAMA_DEFAULT_MODEL } from './constants';
+
+export type AIProvider = 'gemini' | 'groq' | 'ollama';
+
+// Initialize providers lazily via factory functions
+const google = createGoogleGenerativeAI({
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY || 'no-key',
+});
+
+const groq = createGroq({
+  apiKey: process.env.GROQ_API_KEY || 'no-key',
+});
+
+const ollama = createOllama({
+  baseURL: process.env.OLLAMA_BASE_URL || OLLAMA_DEFAULT_BASE_URL,
+});
+
+/**
+ * Returns the configured Language Model instance based on the provider string.
+ */
+export function getAIModel(provider: AIProvider, modelId?: string): LanguageModel {
+  switch (provider) {
+    case 'groq':
+      return groq(modelId || 'llama3-8b-8192');
+    case 'ollama':
+      return ollama(modelId || process.env.OLLAMA_MODEL || OLLAMA_DEFAULT_MODEL);
+    case 'gemini':
+    default:
+      return google(modelId || 'gemini-1.5-flash-latest');
+  }
+}
+
+/**
+ * Returns the ordered fallback chain based on the primary provider.
+ */
+function getFallbackChain(primary: AIProvider): AIProvider[] {
+  if (primary === 'groq') return ['groq', 'gemini', 'ollama'];
+  if (primary === 'ollama') return ['ollama'];
+  return ['gemini', 'groq', 'ollama'];
+}
+
+export interface FallbackOptions<T> {
+  systemPrompt: string;
+  userPrompt: string;
+  schema: z.ZodSchema<T>;
+  modelIdOverride?: string;
+  visualData?: string[];
+}
+
+/**
+ * Executes structured object generation with automatic provider fallback.
+ * Uses the Vercel AI SDK `generateObject` under the hood.
+ */
+export async function generateObjectWithFallback<T>(options: FallbackOptions<T>): Promise<T> {
+  const primaryProvider = (process.env.ACTIVE_AI_PROVIDER as AIProvider) || 'gemini';
+  const fallbackChain = getFallbackChain(primaryProvider);
+
+  let lastError: Error | null = null;
+
+  for (const provider of fallbackChain) {
+    try {
+      logger.info(`Attempting AI generation with provider: ${provider}`);
+      const model = getAIModel(provider, options.modelIdOverride);
+
+      // Build messages array for multi-modal support
+      const messages: ModelMessage[] = [];
+
+      if (options.visualData && options.visualData.length > 0) {
+        const parts: UserMessageContentPart[] = [
+          { type: 'text' as const, text: options.userPrompt }
+        ];
+
+        options.visualData.forEach(base64 => {
+          const base64Data = base64.includes(';base64,')
+            ? base64.split(';base64,')[1]
+            : base64;
+          parts.push({
+            type: 'file' as const,
+            data: base64Data,
+            mediaType: 'image/jpeg',
+          });
+        });
+
+        messages.push({ role: 'user', content: parts });
+      } else {
+        messages.push({ role: 'user', content: [{ type: 'text', text: options.userPrompt }] });
+      }
+
+      const result = await generateObject({
+        model,
+        system: options.systemPrompt,
+        messages,
+        schema: options.schema,
+        temperature: 0.7,
+      });
+
+      logger.info(`AI generation succeeded with provider: ${provider}`);
+      return result.object;
+    } catch (error: unknown) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      logger.warn(`AI Provider '${provider}' failed: ${lastError.message}`);
+    }
+  }
+
+  logger.error('All AI providers failed in fallback chain', { lastError });
+  throw lastError ?? new Error('All AI providers failed.');
+}
+
+// Internal type for building multi-modal user message content
+type UserMessageContentPart =
+  | { type: 'text'; text: string }
+  | { type: 'file'; data: string; mediaType: string };

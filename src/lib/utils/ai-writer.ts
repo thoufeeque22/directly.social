@@ -1,10 +1,9 @@
+import { z } from 'zod';
 import { 
   AITier, 
-  StyleMode, 
-  GEMINI_FALLBACK_MODELS,
-  OLLAMA_DEFAULT_BASE_URL,
-  OLLAMA_DEFAULT_MODEL
+  StyleMode,
 } from '../core/constants';
+import { generateObjectWithFallback } from '../core/ai';
 
 export type Platform = 'youtube' | 'instagram' | 'tiktok' | 'facebook' | 'linkedin' | 'twitter';
 
@@ -14,26 +13,20 @@ export interface AIWriteResult {
   hashtags: string[];
 }
 
-interface Part {
-  text?: string;
-  inline_data?: {
-    mime_type: string;
-    data: string;
-  };
-}
+// Zod schema to strictly enforce the output format for all models
+const resultSchema = z.object({
+  title: z.string().describe("The generated title for the social media post"),
+  description: z.string().describe("The main body text or description for the post"),
+  hashtags: z.array(z.string()).describe("An array of 5 relevant hashtags, including the # symbol"),
+});
 
 function buildSystemPrompt(platform: Platform, tier: AITier, mode: StyleMode, hasVisualData: boolean, customStyleText?: string): string {
-  let prompt = `You are a social media copywriter expert. 
+  let prompt = `You are an elite social media copywriter. 
 Target Platform: ${(platform || "general").toUpperCase()}.
 AI Strategy: ${(tier || "generate").toUpperCase()} mode.
-Task: Write a title, description, and hashtags.
-Output must be ONLY valid JSON in this format:
-{
-  "title": "Your Title",
-  "description": "Your Description",
-  "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5"]
-}
-Always generate exactly 5 hashtags by default.`;
+Task: Write a title, description, and exactly 5 hashtags.
+
+You MUST respond strictly with valid JSON data matching the requested schema.`;
 
   if (hasVisualData) {
     prompt += `\nContext: You have been provided with frames from the video. Analyze the VISUAL content to generate the most accurate and engaging title and description.`;
@@ -90,8 +83,8 @@ Always generate exactly 5 hashtags by default.`;
   }
 
   const styleConstraints: Record<StyleMode, string> = {
-    Smart: `\nStyle: PLATFORM-OPTIMIZED. You are in 'Smart Mode'. Switch your strategy dynamically to the absolute best cultural fit for ${platform}.`,
-    "Gen-Z": `\nStyle: ADRENALINE & AUTHENTICITY. Use a 'pattern interrupt' hook to stop the scroll. Use lowercase, ironical detachment, and specific slang like 'no cap', 'bet', or 'fr'. High energy, trendy, and raw.`,
+    Smart: `\nStyle: PLATFORM-OPTIMIZED. Switch your strategy dynamically to the absolute best cultural fit for ${platform}.`,
+    "Gen-Z": `\nStyle: ADRENALINE & AUTHENTICITY. Use a 'pattern interrupt' hook to stop the scroll. Use specific slang like 'no cap', 'bet', or 'fr'. High energy and raw.`,
     SEO: `\nStyle: DISCOVERABILITY. Focus on semantic keywords and phrases that people actually type into search bars. Structure content logically for search intent.`,
     Story: `\nStyle: NARRATIVE. Use the 'Hero's Journey' or a simple 'Problem-Agitation-Solution' framework. Focus on building a human connection.`,
     Custom: `\nStyle: USER-DEFINED. Use the following specific tone and style as your primary constraint: ${customStyleText || 'Be helpful and engaging.'}`
@@ -104,87 +97,9 @@ Always generate exactly 5 hashtags by default.`;
   return prompt;
 }
 
-async function fetchFromOllama(systemPrompt: string, prompt: string): Promise<AIWriteResult> {
-  const baseUrl = process.env.OLLAMA_BASE_URL || OLLAMA_DEFAULT_BASE_URL;
-  const model = process.env.OLLAMA_MODEL || OLLAMA_DEFAULT_MODEL;
-
-  try {
-    const res = await fetch(`${baseUrl}/api/generate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: model,
-        prompt: `${systemPrompt}\n\n${prompt}`,
-        format: "json",
-        stream: false,
-        options: {
-          temperature: 0.7,
-        }
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error(`Ollama API returned ${res.status}`);
-    }
-
-    const data = await res.json();
-    const resultText = data.response;
-    
-    if (resultText) {
-      const parsed = JSON.parse(resultText);
-      return {
-        title: parsed.title,
-        description: parsed.description,
-        hashtags: parsed.hashtags || [],
-      };
-    }
-    throw new Error("Invalid response structure from Ollama");
-  } catch (err) {
-    console.error("Ollama Fallback Error:", err);
-    throw err;
-  }
-}
-
-async function fetchWithFallback(apiKey: string, requestBody: string): Promise<Response> {
-  let response: Response | null = null;
-  let lastError: Error | null = null;
-
-  for (const model of GEMINI_FALLBACK_MODELS) {
-    try {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: requestBody,
-      });
-
-      if (res.ok) {
-        response = res;
-        console.log(`Successfully generated content using model: ${model}`);
-        break;
-      } else if (res.status === 401 || res.status === 403) {
-        throw new Error("Invalid or expired GEMINI_API_KEY. Check your dashboard.");
-      } else if (res.status === 429) {
-        throw new Error("API Rate Limit Exceeded. Please wait a minute before trying again.");
-      } else {
-        console.warn(`Model ${model} failed with status: ${res.status}`);
-        lastError = new Error(`LLM API returned ${res.status} for model ${model}`);
-      }
-    } catch (err: unknown) {
-      console.warn(`Model ${model} encountered an error:`, err);
-      lastError = err instanceof Error ? err : new Error(String(err));
-    }
-  }
-
-  if (!response) {
-    throw lastError || new Error("All LLM fallback models failed.");
-  }
-
-  return response;
-}
-
 /**
  * AI Vibe-Writer
- * Generates platform-specific metadata using an LLM based on video context, AI tier, and style mode.
+ * Generates platform-specific metadata using a unified LLM layer with automatic provider fallback.
  */
 export async function generatePostContent(
   tier: AITier,
@@ -195,7 +110,6 @@ export async function generatePostContent(
   visualData?: string[],
   customStyleText?: string
 ): Promise<AIWriteResult> {
-  const isProduction = process.env.NODE_ENV === 'production';
   if (tier === 'Manual') {
     return {
       title: rawText || 'Untitled Video',
@@ -204,85 +118,16 @@ export async function generatePostContent(
     };
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
   const systemPrompt = buildSystemPrompt(platform, tier, mode, !!visualData && visualData.length > 0, customStyleText);
-  const prompt = tier === 'Enrich' 
+  const userPrompt = tier === 'Enrich' 
     ? `Draft Title: ${rawText}\nDraft Description: ${videoContext}`
     : `User Prompt: ${rawText}\nAdditional Context: ${videoContext}`;
 
-  // IF NO API KEY, TRY OLLAMA IMMEDIATELY
-  if (!apiKey) {
-    if (isProduction) {
-      throw new Error("GEMINI_API_KEY is not configured for production use.");
-    }
-    console.warn("GEMINI_API_KEY missing, attempting Ollama directly.");
-    return await fetchFromOllama(systemPrompt, prompt);
-  }
-
-  try {
-    const parts: Part[] = [{ text: `${systemPrompt}\n\n${prompt}` }];
-    
-    if (visualData && visualData.length > 0) {
-      visualData.forEach(base64 => {
-        // Ensure we only send the base64 part, removing the data URI prefix
-        const base64Data = base64.includes(';base64,') 
-          ? base64.split(';base64,')[1] 
-          : base64;
-
-        parts.push({
-          inline_data: {
-            mime_type: 'image/jpeg',
-            data: base64Data
-          }
-        });
-      });
-    }
-
-    const requestBody = JSON.stringify({
-      contents: [{ role: "user", parts }],
-      generationConfig: {
-        responseMimeType: "application/json",
-        temperature: 0.7,
-      }
-    });
-
-    try {
-      const response = await fetchWithFallback(apiKey, requestBody);
-      const data = await response.json();
-      const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      
-      if (resultText) {
-        const parsed = JSON.parse(resultText);
-        return {
-          title: parsed.title,
-          description: parsed.description,
-          hashtags: parsed.hashtags || [],
-        };
-      }
-    } catch (fallbackError) {
-      if (isProduction) {
-        throw fallbackError;
-      }
-      console.warn("Gemini Failed, attempting Ollama fallback:", fallbackError);
-      return await fetchFromOllama(systemPrompt, prompt);
-    }
-    
-    throw new Error("Invalid response structure from LLM");
-  } catch (error) {
-    if (isProduction) {
-      throw error;
-    }
-    // If we've already tried Ollama and it failed, or if anything else went wrong
-    if (error instanceof Error && error.message.includes("Ollama API")) {
-       throw error;
-    }
-    
-    console.warn("AI Generation encountered an issue, trying one last time with Ollama...");
-    try {
-      return await fetchFromOllama(systemPrompt, prompt);
-    } catch (ollamaError) {
-      console.error("AI Generation Critical Failure (Gemini & Ollama failed):", error);
-      throw error;
-    }
-  }
+  // Execute using the unified SDK fallback layer
+  return await generateObjectWithFallback<AIWriteResult>({
+    systemPrompt,
+    userPrompt,
+    schema: resultSchema,
+    visualData: visualData,
+  });
 }
