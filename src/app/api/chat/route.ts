@@ -1,5 +1,3 @@
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { createOllama } from 'ai-sdk-ollama';
 import { streamText, tool, convertToModelMessages } from 'ai';
 import { z } from 'zod';
 import { auth } from '@/auth';
@@ -13,17 +11,7 @@ import {
   updatePostTool, 
   cancelPostTool 
 } from '@/lib/actions/ai-chat';
-import { OLLAMA_DEFAULT_BASE_URL, OLLAMA_DEFAULT_MODEL } from '@/lib/core/constants';
-
-// Initialize Google provider
-const google = createGoogleGenerativeAI({
-  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY || 'no-key',
-});
-
-// Initialize Ollama provider
-const ollama = createOllama({
-  baseURL: process.env.OLLAMA_BASE_URL || OLLAMA_DEFAULT_BASE_URL,
-});
+import { getAIModel, AIProvider } from '@/lib/core/ai';
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -49,11 +37,10 @@ export async function POST(req: Request) {
     const modelMessages = await convertToModelMessages(messages);
 
     // 2. Determine which model to use
-    const useOllama = process.env.USE_OLLAMA === 'true' || !process.env.GOOGLE_API_KEY;
-    const modelId = useOllama ? (process.env.OLLAMA_MODEL || OLLAMA_DEFAULT_MODEL) : 'gemini-1.5-flash-latest';
-    const model = useOllama ? ollama(modelId) : google(modelId);
+    const primaryProvider = (process.env.ACTIVE_AI_PROVIDER as AIProvider) || 'gemini';
+    const model = getAIModel(primaryProvider);
 
-    logger.info("Starting AI chat session", { userId, useOllama, modelId });
+    logger.info("Starting AI chat session", { userId, primaryProvider });
 
     // 3. Initialize streaming with Vercel AI SDK
     const result = streamText({
