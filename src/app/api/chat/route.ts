@@ -11,7 +11,6 @@ import {
   updatePostTool, 
   cancelPostTool 
 } from '@/lib/actions/ai-chat';
-import { OLLAMA_DEFAULT_BASE_URL, OLLAMA_DEFAULT_MODEL } from '@/lib/core/constants';
 import { getAIModel, AIProvider } from '@/lib/core/ai';
 
 // Allow streaming responses up to 30 seconds
