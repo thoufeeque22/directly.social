@@ -1,4 +1,3 @@
-'use server';
 
 import { prisma } from '@/lib/core/prisma';
 import { auth } from '@/auth';
@@ -7,7 +6,8 @@ export async function getUnseenUpdates() {
   const session = await auth();
   if (!session?.user?.id) return [];
 
-  return prisma.updateLog.findMany({
+  // Fetch updates and map them to the format expected by the hook.
+  const updates = await prisma.updateLog.findMany({
     where: {
       seenBy: {
         none: {
@@ -17,6 +17,13 @@ export async function getUnseenUpdates() {
     },
     orderBy: { createdAt: 'desc' },
   });
+
+  return updates.map(u => ({
+    id: u.id,
+    title: u.title,
+    description: u.description,
+    date: u.createdAt.toISOString(), // Map createdAt to date string
+  }));
 }
 
 export async function markUpdateAsSeen(updateId: string) {

@@ -32,12 +32,7 @@ export const AIChatbot = () => {
   const { configs: byokConfigs } = useAiByok();
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { messages, sendMessage, status, error } = useChat({
-    api: '/api/chat',
-    body: {
-      byokConfigs
-    }
-  } as any);
+  const { messages, sendMessage, status, error } = useChat({});
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const isLoading = status === 'submitted' || status === 'streaming';
