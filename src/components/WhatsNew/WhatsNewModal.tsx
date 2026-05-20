@@ -22,13 +22,13 @@ export function WhatsNewModal({ open, onClose, updates, onUpdateSeen }: {
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={onClose} data-testid="whats-new-modal">
       <Box sx={{ p: 4, bgcolor: 'background.paper', m: 'auto', mt: 10, maxWidth: 400 }}>
-        <Typography variant="h6">What's New</Typography>
+        <Typography variant="h6">What&apos;s New</Typography>
         <List>
           {updates.map((update) => (
             <ListItem key={update.id} secondaryAction={
-              <Button onClick={() => handleClose(update.id)}>Got it</Button>
+              <Button data-testid="whats-new-modal-close" onClick={() => handleClose(update.id)}>Got it</Button>
             }>
               <ListItemText primary={update.title} secondary={update.description} />
             </ListItem>

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Sidebar from "@/components/layout/Sidebar";
-import Header from "@/components/layout/Header";
+import { Header } from "@/components/layout/Header";
 import { AIChatbot } from "@/components/chat/AIChatbot";
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {

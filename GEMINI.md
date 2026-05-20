@@ -43,9 +43,11 @@
   - Main Agent (Manual Approval) → `project-agent`
   - `project-agent` → End of Task/Main Agent
 - **Orchestration Rules:**
+  - **Context Preservation Mandate:** Every update to `.gemini_agent_context.json` MUST be a non-destructive merge. Agents are FORBIDDEN from overwriting the entire file with only their namespaced data. You MUST read the current file, parse the JSON, update only your specific namespace (e.g., `"round-N"`) and relevant root keys (e.g., `last_agent`, `next_agent`), and write the complete merged object back. Deleting historical rounds, root keys, or other agents' data is a CRITICAL pipeline failure.
   - **Subagent Isolation Rule:** The Main Agent MUST NOT simulate worker agents internally. It MUST invoke distinct subagents (e.g., via `invoke_subagent` tools) to execute `dev-agent`, `review-agent`, etc. This enforces memory isolation, guaranteeing that each agent must independently read from and write to `.gemini_agent_context.json` upon handoff.
-  - **Worker Agents:** MUST NOT invoke other agents. They MUST update `.gemini_agent_context.json` via tools and return their status.
-  - **Main Agent (Gemini CLI):** Responsible for analyzing the context and routing the task to the next specialized agent.
+  - **Worker Agents:** MUST NOT invoke other agents. They MUST update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**) via tools and return their status. **After each worker agent finishes, the pipeline MUST stop and wait for a manual user command to proceed.**
+  - **Main Agent (Gemini CLI):** Responsible for analyzing the context and reporting status. **The Main Agent MUST NOT automatically invoke the next agent in the pipeline.** It must present the current state and wait for an explicit user directive (e.g., "Invoke dev-agent") before proceeding to the next step.
+  - **Manual Intervention Mandate:** The transition between any two agents (e.g., `discovery-agent` to `dev-agent`) is NOT automatic. The Main Agent must pause after every agent handoff and require the user to manually trigger the next agent.
   - **End of Workflow:** At the conclusion of the entire pipeline (when the task is completed and control returns to the Main Agent), the Main Agent MUST ensure that `.gemini_agent_context.json` is committed and pushed to the remote branch to persist the final state.
   - **Discovery Gate:** For any task involving New Features or Roadmap items, the Main Agent is FORBIDDEN from invoking `dev-agent` until `discovery-agent` has provided a verified `TECHNICAL SPECS` block. Bypassing Discovery is a CRITICAL pipeline failure.
   - **Visual Integrity Mandate:** All UI changes MUST be verified not just for functional logic, but for visual accessibility (contrast, visibility, spacing). QA-agent MUST include specific Playwright tests that check for the visibility of critical controls (e.g., navigation arrows, labels).
@@ -91,15 +93,16 @@ This system is designed to evolve. All agents are responsible for maintaining th
   - **Persona B (The Skeptic):** Focus on security risks, technical debt, edge cases, and "Negative Path" reliability.
   - **Synthesis:** The `discovery-agent` (primary) must synthesize both perspectives into a single `TECHNICAL SPECS` block in `.gemini_agent_context.json`.
 - **GitHub Integration:** Use `gh issue view <id>` for tickets.
-- **Release Scope Guardianship (The "Brains" Check):** Before any technical planning, you MUST perform a Socratic audit of the request. Do not just read the ticket; analyze if the feature is a logical next step for the *current* release or if it introduces premature complexity (e.g., complex analytics before stable distribution). You are the primary filter: if a feature is architectural 'noise' for the current phase, you MUST invoke the [PARKED] protocol, even if the ticket isn't explicitly marked as 'On-Hold'.
+- **Release Scope Guardianship (The "Brains" Check):** Before any technical planning, you MUST perform a Socratic audit of the request. Analyze if the feature is a logical next step for the *current* release or if it introduces premature complexity. You MUST document in the `TECHNICAL SPECS` block of the context file why the feature is important/required, and explicitly assess if it is safe to skip/defer. You are the primary filter: if a feature is architectural 'noise' for the current phase, you MUST invoke the [PARKED] protocol and provide a clear rationale for deferral in the context file.
 - **Roadmap Alignment:** Cross-reference with `docs/REQUIREMENTS.md`. If a feature is scoped for a later phase (e.g., Phase 2), it is an automatic [PARKED] verdict.
 - **Ambiguity Check:** STOP and ask follow-up questions if requirements are vague.
 - **Impact Radius:** Map dependencies and existing patterns before proposing changes.
-- **Handoff:** Update `.gemini_agent_context.json` with technical specs and an `expected_output` block confirming:
+- **Handoff:** Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**) with technical specs and an `expected_output` block confirming:
   1. Synthesis of Advocate/Skeptic perspectives.
-  2. Production Readiness assessment (Caching/Logging/Security).
-  3. Dependency impact radius verification.
-If the task is feasible and required, assign to `dev-agent`.
+  2. Strategic Importance (Why it's required and impact of skipping/deferring).
+  3. Production Readiness assessment (Caching/Logging/Security).
+  4. Dependency impact radius verification.
+If the task is feasible and required, assign to `dev-agent`. If [PARKED], provide the rationale in the context file and assign to `project-agent`.
 - **Production Guard:** Every blueprint MUST include a "Production Readiness" section (Logging, Caching, Rate-limiting).
 - **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini_incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
 - **Constraints:** Never modify source code. Stick to blueprints. English only. PLN/ISO units.
@@ -141,7 +144,7 @@ If the task is feasible and required, assign to `dev-agent`.
   - Prisma: If schema changed, run `npx prisma generate`.
   - Build: Must pass `tsc --noEmit` and `npm run build`.
   - Lint: Must be 100% clean of warnings/errors.
-- **Handoff:** Update `.gemini_agent_context.json`. Set `last_agent: "review-agent"` and store `review_verdict` (PASS/FAIL/REQUEST CHANGES) and `failure_details` inside a `"review-agent"` key. You MUST include an `expected_output` block confirming:
+- **Handoff:** Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**). Set `last_agent: "review-agent"` and store `review_verdict` (PASS/FAIL/REQUEST CHANGES) and `failure_details` inside a `"review-agent"` key. You MUST include an `expected_output` block confirming:
   1. Successful validation of all `fixes_applied`.
   2. Adherence to `docs/` and API contracts.
   3. No security vulnerabilities found in diff.
@@ -169,7 +172,7 @@ You MUST commit any review artifacts before assigning. If issues found, assign t
   - **Console Monitoring:** You MUST monitor the browser console for `error` or `warning` (especially deprecations) and mark as `[FAIL]` if any are detected.
   - **Verification:** UI must use **PLN** currency, **Metric** units, and **English** language.
 - **Fail Criteria:** If UI lacks `data-testid`, mark `[FAIL]` and instruct Dev to add them.
-- **Handoff:** Update `.gemini_agent_context.json` with `last_agent: "qa-agent"` and verdict details. You MUST include an `expected_output` block confirming:
+- **Handoff:** Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**) with `last_agent: "qa-agent"` and verdict details. You MUST include an `expected_output` block confirming:
   1. `npx playwright test` success report.
   2. New or updated Playwright tests committed to `src/__tests__/e2e/`.
   3. Exhaustive coverage (Happy/Edge/Negative) verified and documented.
@@ -187,7 +190,7 @@ You MUST commit all test changes before assigning to the next agent. If tests fa
   - **PR Management:** Use `gh pr create --fill --body "Resolves #<id>"` and `gh issue close <id>`.
   - **System Optimization:** When processing incidental observations, you MUST specifically analyze entries with `category: "meta"`. You are responsible for synthesizing these into proposed updates for `GEMINI.md` or `AGENTS.md`. Proactively suggest **pruning** redundant rules, merging overlapping agents, or removing obsolete documentation to maintain a lean system.
   - **Constraints:** Documentation MUST match code reality. Never modify source code.
-- `handoff`: Update `.gemini_agent_context.json`. Set `last_agent: "doc-agent"` and store status (e.g., `docs_updated: true`, `pr_created: true`) inside a `"doc-agent"` key. You MUST include an `expected_output` block confirming:
+- `handoff`: Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**). Set `last_agent: "doc-agent"` and store status (e.g., `docs_updated: true`, `pr_created: true`) inside a `"doc-agent"` key. You MUST include an `expected_output` block confirming:
   1. Documentation/Diagrams accurately reflect implementation.
   2. Manual test cases verified for clarity.
   3. Pull Request created and linked to issue.
@@ -240,12 +243,12 @@ You MUST commit all documentation and manual test changes before assigning to **
     - **Debt Tracking:** Large legacy files must be registered in `docs/ARCHITECTURE.md` with an assigned "debt priority" (Critical/High/Medium).
 
 ## Global Handoff Protocol
-- **Handoff:** Update `.gemini_agent_context.json`. You MUST set `last_agent: "<your-agent-name>"` and `next_agent: "<target-agent-name>"` as the task is passed to the next role. You MUST include an `expected_output` block confirming:
+- **Handoff:** Update `.gemini_agent_context.json` (adhering strictly to the **Context Preservation Mandate**). You MUST set `last_agent: "<your-agent-name>"` and `next_agent: "<target-agent-name>"` as the task is passed to the next role. **Every handoff triggers a mandatory system pause.** You MUST include an `expected_output` block confirming:
   1. `npx tsc --noEmit` success.
   2. `npm run build` success.
   3. All unit/integration tests passed.
   4. Linter clean of errors.
-Append to `modified_files` (unique list) and `fixes_applied` (running history) inside this key. Clear the `"review-agent"` and `"qa-agent"` keys to reset the review cycle. Assign to the appropriate next agent once all validation steps pass.
+Append to `modified_files` (unique list) and `fixes_applied` (running history) inside this key. Clear the `"review-agent"` and `"qa-agent"` keys to reset the review cycle. **STOP and wait for manual user invocation of the `next_agent`.**
 
 ## Routing
   - Vague/New Features → discovery-agent
