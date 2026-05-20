@@ -1,28 +1,37 @@
 {
-  "last_agent": "project-agent",
-  "next_agent": null,
-  "ticket_id": "386",
-  "ticket_goal": "Dashboard Stats Integration",
-  "status": "[PARKED]",
-  "reasoning": "The 'Dashboard Stats Integration' feature (Issue 386) is classified under 'Advanced Analytics' in section 5 of the REQUIREMENTS.md. This functionality is explicitly scoped for Phase 2, which includes complex cross-platform data aggregation and visualization. Commencing development now would violate the current development roadmap and architectural priorities. Following the [PARKED] protocol, this task is deferred to ensure alignment with the established project constraints.",
-  "processed_at": "2026-05-22T15:30:00Z",
+  "last_agent": "discovery-agent",
+  "next_agent": "dev-agent",
+  "branch_name": "main",
+  "ticket_goal": "What's New Notification",
+  "ticket_description": "Automatically notify users when new features or changes are deployed to the platform.\n\nImplementation details:\n- \"What's New\" badge on navigation or settings.\n- Optional modal/popup for major updates.\n- Centralized changelog or feature highlight list.\n\nLabels: roadmap, status:pending, priority:medium",
+  "ticket_id": "398",
+  "last_updated_at": "2026-05-20T10:00:00Z",
   "round-1": {
     "discovery-agent": {
-      "timestamp": "2026-05-22T14:00:00Z",
-      "findings": "Verified requirement mapping; confirms feature is Phase 2 scope. Task flagged for parking.",
+      "timestamp": "2026-05-20T10:05:00Z",
+      "technical_specs": {
+        "summary": "Implement a What's New Notification system to inform users of feature updates.",
+        "advocate_perspective": "Boosts user engagement by surfacing new capabilities directly in their workflow. Enhances retention by demonstrating ongoing product evolution. Easy-to-use notification badge on the settings menu provides non-intrusive visibility.",
+        "skeptic_perspective": "Risk of alert fatigue. Need to ensure robust tracking of seen updates per-user to avoid annoying persistent modals. Privacy concerns: must not store unnecessary tracking data. Impact on performance: minimize re-renders in the main layout/navigation.",
+        "implementation_blueprint": {
+          "storage": "Create a new model 'UpdateLog' (id, title, content, publishedAt) and 'UserSeenUpdate' (id, userId, updateId, seenAt).",
+          "components": "Create 'WhatsNewBadge' in components/ui, and 'WhatsNewModal' for major highlights.",
+          "data_access": "Create server actions to fetch latest unseen updates and mark updates as seen."
+        },
+        "production_readiness": {
+          "logging": "Log event 'whats_new_viewed' and 'whats_new_modal_closed' to analytics.",
+          "caching": "Use Next.js data cache for the list of updates to minimize DB hits.",
+          "security": "Validate 'seen' update IDs using Zod schema to prevent unauthorized modifications."
+        }
+      },
       "expected_output": {
-        "status": "[PARKED]",
-        "next_step": "project-agent-parking"
+        "verification_steps": [
+          "npx tsc --noEmit",
+          "npm run build",
+          "Playwright: Verify 'WhatsNewBadge' visibility on the Header.",
+          "Playwright: Verify 'WhatsNewModal' appears for new update and persists 'seen' state."
+        ]
       }
-    },
-    "project-agent": {
-      "timestamp": "2026-05-22T15:00:00Z",
-      "actions": [
-        "Added 'phase:2' label to Issue 386.",
-        "Set Project Board (Project 4) status to 'Hold' for Issue 386.",
-        "Added Socratic reasoning comment to Issue 386 explaining the deferral to Phase 2."
-      ],
-      "verdict": "PARKED"
     }
   }
 }
