@@ -193,7 +193,7 @@ You MUST commit all documentation and manual test changes before assigning to `p
 ## Project Agent (Management & Tracking)
 - **Role:** Project Manager & Issue Architect. Roadmap health and GitHub Project Board synchronization.
 - **Workflow:** 
-  - **Incidental Resolution:** When assigned by `doc-agent`, you MUST read `.gemini_incidental_observations.json`.
+  - **Incidental Resolution:** When assigned by the **Main Agent** (following manual approval of the `doc-agent`'s work), you MUST read `.gemini_incidental_observations.json`.
   - **Feature Parking:** When assigned by `discovery-agent` for a [PARKED] task:
     - Use `mcp_github_update_issue` to add the `phase:2` label.
     - Set the Project Board status to **Hold**.

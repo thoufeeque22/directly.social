@@ -16,6 +16,7 @@ import { useDraftFile } from '@/hooks/dashboard/useDraftFile';
 import { usePlatformSelection } from '@/hooks/dashboard/usePlatformSelection';
 import { useDistributionEngine } from '@/hooks/dashboard/useDistributionEngine';
 import { useUploadStatus } from '@/hooks/useUploadStatus';
+import { useAiByok } from '@/hooks/useAiByok';
 import StopIcon from '@mui/icons-material/Stop';
 
 interface ReviewContext {
@@ -52,6 +53,7 @@ export default function DashboardClient({
 
   // 1. MODULAR LOGIC: Hooks handle the heavy lifting
   const { accounts, isLoading, preferences } = useAccounts(initialAccounts, initialPreferences);
+  const { configs: byokConfigs } = useAiByok();
 
   // Inject Local Simulator for Dev Env
   const devAccounts = React.useMemo(() => {
@@ -313,7 +315,8 @@ export default function DashboardClient({
           contentMode, 
           targetPlatformNames, 
           [], 
-          customStyleText
+          customStyleText,
+          byokConfigs
         );
 
         setAiPreviews(previews);
@@ -407,7 +410,7 @@ export default function DashboardClient({
       const frames = await extractVideoFrames(file);
       const platforms = preferences.filter(p => p.isEnabled);
       const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
-      const previews = await getMultiPlatformAIPreviews('', '', 'Generate', contentMode, platforms.map(p => p.platformId), frames, customStyleText);
+      const previews = await getMultiPlatformAIPreviews('', '', 'Generate', contentMode, platforms.map(p => p.platformId), frames, customStyleText, byokConfigs);
       setAiPreviews(previews);
       setIsReviewing(true);
     } catch (err) { console.error(err); } 

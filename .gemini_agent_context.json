@@ -1,36 +1,72 @@
 {
-  "last_agent": "project-agent",
-  "next_agent": null,
-  "branch_name": "373-multi-provider-ai-strategy-groqvercel-ai-sdk",
-  "ticket_id": "373",
-  "ticket_goal": "Multi-Provider AI Strategy (Groq/Vercel AI SDK)",
-  "last_updated_at": "2026-05-19T21:55:00Z",
+  "ticket_id": "537",
+  "ticket_goal": "UX: Implement BYOK for AI (AI Provider API Keys)",
+  "ticket_description": "Implement a 'BYOK for AI' feature in the Settings page to allow users to provide their own API keys for providers like OpenAI, Anthropic, and Google Gemini. This bypasses global rate limits and allows for granular model selection.",
+  "branch_name": "537-ux-implement-byok-for-ai-ai-provider-api-keys",
+  "last_updated_at": "2026-05-20T16:56:36.544Z",
+  "last_agent": "dev-agent",
+  "next_agent": "review-agent",
   "round-1": {
+    "discovery-agent": {
+      "TECHNICAL_SPECS": {
+        "UI_UX": "Refactor `SettingsPage` to use MUI Tabs ('General', 'Connections', 'BYOK / AI'). Separate Social Platforms and AI Providers under the BYOK tab. Create a dedicated `AIBYOKWizard` component using Material UI to input Provider, API Key, and Preferred Model.",
+        "Security": "Store keys in LocalStorage (client-only) accepting the inherent XSS risk for BYOK. Validate user-provided URLs strictly to prevent SSRF if custom endpoints (like Ollama) are supported.",
+        "Architecture": "Add `@ai-sdk/openai` and `@ai-sdk/anthropic` to the project. Refactor `src/lib/core/ai.ts` to support dynamic instantiation of providers without caching them globally, avoiding cross-tenant leaks. Implement a custom hook `useAiByok` to manage LocalStorage keys.",
+        "Execution": "Create a new validation route `/api/ai/validate-key` for key health checking before save. Update the AI execution paths (`/api/chat/route.ts` and `getMultiPlatformAIPreviews`) to explicitly accept and use injected BYOK keys from the client.",
+        "Edge_Cases": "If a user key fails due to auth or quota limits, throw a clear error demanding key update instead of silently falling back to the system quota. Handle validation drift for keys that become invalid after saving."
+      },
+      "expected_output": {
+        "verification_commands": [
+          "npm run build",
+          "npx tsc --noEmit"
+        ],
+        "success_indicators": [
+          "All tests pass",
+          "No linter errors",
+          "MUI Tabs present in Settings",
+          "No global caching of AI providers",
+          "Strict SSRF validation"
+        ]
+      }
+    },
     "dev-agent": {
-      "timestamp": "2026-05-19T21:49:29Z",
-      "status": "COMPLETED"
-    },
-    "review-agent": {
-      "timestamp": "2026-05-19T21:51:00Z",
-      "status": "COMPLETED",
-      "review_verdict": "PASS"
-    },
-    "qa-agent": {
-      "timestamp": "2026-05-19T21:54:09Z",
-      "status": "COMPLETED",
-      "qa_verdict": "PASS",
-      "notes": "Backend-only refactor - no UI changes. Unit tests 5/5 passed. Full suite: 37/40 pass (3 pre-existing). Zero new regressions."
-    },
-    "doc-agent": {
-      "timestamp": "2026-05-19T21:54:30Z",
-      "status": "COMPLETED",
-      "docs_updated": true,
-      "pr_created": true
-    },
-    "project-agent": {
-      "timestamp": "2026-05-19T21:55:00Z",
-      "status": "COMPLETED",
-      "incidental_observations_processed": true
+      "timestamp": "2026-05-20T16:56:36.544Z",
+      "modified_files": [
+        "src/lib/core/ai.ts",
+        "src/app/api/ai/validate-key/route.ts",
+        "src/hooks/useAiByok.ts",
+        "src/components/AIBYOKWizard.tsx",
+        "src/app/settings/page.tsx",
+        "src/lib/utils/ai-writer.ts",
+        "src/app/actions/ai.ts",
+        "src/app/api/chat/route.ts",
+        "src/components/dashboard/DashboardClient.tsx",
+        "src/app/history/page.tsx",
+        "src/app/schedule/page.tsx",
+        "src/components/chat/AIChatbot.tsx"
+      ],
+      "fixes_applied": [
+        "Refactored ai.ts to accept byokConfigs and dynamically instantiate providers.",
+        "Created /api/ai/validate-key/route.ts for key validation.",
+        "Created useAiByok hook for localStorage management.",
+        "Created AIBYOKWizard component using MUI.",
+        "Updated settings/page.tsx to use a tabbed layout.",
+        "Updated AI action routes and caller components to propagate byokConfigs.",
+        "Fixed ESLint and TypeScript issues."
+      ],
+      "expected_output": {
+        "verification_commands": [
+          "npm run build",
+          "npx tsc --noEmit",
+          "npx eslint src"
+        ],
+        "success_indicators": [
+          "npx tsc --noEmit success.",
+          "npm run build success.",
+          "All unit/integration tests passed.",
+          "Linter clean of errors."
+        ]
+      }
     }
   }
 }

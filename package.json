@@ -19,8 +19,10 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.78",
     "@ai-sdk/google": "^3.0.72",
     "@ai-sdk/groq": "^3.0.39",
+    "@ai-sdk/openai": "^3.0.64",
     "@ai-sdk/react": "^3.0.180",
     "@auth/prisma-adapter": "^2.11.1",
     "@capacitor/android": "^8.3.1",
