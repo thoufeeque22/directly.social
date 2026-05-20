@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "category": "meta",
+    "severity": "MED",
+    "description": "discovery-agent failed to catch [Currently On-Hold] status and Phase 2 roadmap alignment during the initial round of Issue 386. It proceeded to generate technical specs for implementation instead of parking the task as required by GEMINI.md.",
+    "suggestion": "Strengthen the Discovery Gate prompt to explicitly require a 'Roadmap & Status Verification' step before any technical planning. Add a specific check for keywords like 'On-Hold' or 'Phase 2' in issue bodies."
+  }
+]
