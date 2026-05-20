@@ -1,8 +1,1 @@
-[
-  {
-    "category": "meta",
-    "severity": "HIGH",
-    "description": "discovery-agent failed to exercise architectural judgment during Issue 386. It functioned as a passive 'ticket translator' rather than a 'Release Scope Guardian'. It missed that complex real-time analytics are premature for a system still stabilizing its core distribution primitives, regardless of whether the ticket was explicitly marked [On-Hold].",
-    "suggestion": "Pivot Discovery instructions from mechanical 'Roadmap Checks' to 'Release Scope Guardianship'. The agent must be trained to identify and reject 'Architectural Noise'—features that add non-critical complexity to the current release phase."
-  }
-]
+[]
