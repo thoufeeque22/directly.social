@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import { prisma } from '@/lib/core/prisma';
 import { protectedAction, revalidateDashboard } from '@/lib/core/action-utils';

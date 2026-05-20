@@ -1,4 +1,6 @@
 
+"use server";
+
 import { prisma } from '@/lib/core/prisma';
 import { auth } from '@/auth';
 
