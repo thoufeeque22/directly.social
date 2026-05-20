@@ -1,15 +1,30 @@
 {
-  "last_agent": "Main Agent",
-  "next_agent": "dev-agent",
+  "last_agent": "dev-agent",
+  "next_agent": "review-agent",
   "branch_name": "398-whats-new-notification",
   "ticket_id": "398",
-  "ticket_goal": "What's New Notification (Fix E2E Auth & Rate Limit)",
-  "last_updated_at": "2026-05-21T00:05:00Z",
-  "round-7": {
-    "status": "FAILED",
-    "reason": "QA-Agent failed due to E2E auth setup and 429 Too Many Requests."
-  },
-  "round-8": {
-    "status": "In Progress"
+  "ticket_goal": "What's New Notification (Fix Prisma Leak)",
+  "last_updated_at": "2026-05-21T02:00:00Z",
+  "round-9": {
+    "dev-agent": {
+      "timestamp": "2026-05-21T02:00:00Z",
+      "fixes_applied": [
+        "Added 'use server'; directive to src/app/actions/whats-new.ts",
+        "Added 'use server'; directive to src/app/actions/byok.ts",
+        "Added 'use server'; directive to src/app/actions/history.ts",
+        "Added 'use server'; directive to src/app/actions/metadata.ts"
+      ],
+      "modified_files": [
+        "src/app/actions/whats-new.ts",
+        "src/app/actions/byok.ts",
+        "src/app/actions/history.ts",
+        "src/app/actions/metadata.ts"
+      ],
+      "expected_output": {
+        "tsc": "passed",
+        "build": "passed",
+        "prisma_leak": "resolved"
+      }
+    }
   }
 }
