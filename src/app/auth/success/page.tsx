@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createSyncSession } from "@/lib/actions/auth";
 
 export default function AuthSuccessPage() {
-  const [status, setStatus] = useState("Crafting your space...");
+  const [status, setStatus] = useState("Securing session...");
   const [debugToken, setDebugToken] = useState<string | null>(null);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function AuthSuccessPage() {
 
         if (result.token) {
           setDebugToken(result.token);
-          setStatus("Welcoming you home...");
+          setStatus("Redirecting back to app...");
 
           const token = result.token;
 
@@ -38,11 +38,11 @@ export default function AuthSuccessPage() {
           }, 1500);
 
         } else {
-          setStatus("Something went wrong. Let us try that again.");
+          setStatus("Authentication failed. Please try again.");
         }
       } catch (err) {
         console.error("Sync error:", err);
-        setStatus("A gentle hiccup occurred during synchronization.");
+        setStatus("An error occurred during sync.");
       }
     }
 
@@ -62,9 +62,9 @@ export default function AuthSuccessPage() {
       alignItems: 'center',
       justifyContent: 'center',
       height: '100vh',
-      backgroundColor: 'hsl(var(--background))',
-      color: 'hsl(var(--foreground))',
-      fontFamily: 'Inter, sans-serif',
+      backgroundColor: '#0F172A',
+      color: 'white',
+      fontFamily: 'sans-serif',
       textAlign: 'center',
       padding: '20px'
     }}>
@@ -77,14 +77,14 @@ export default function AuthSuccessPage() {
           onClick={manualRedirect}
           style={{
             padding: '16px 32px',
-            backgroundColor: 'hsl(var(--primary))',
-            borderRadius: '1.25rem',
-            color: 'hsl(var(--primary-foreground))',
+            backgroundColor: '#6366F1',
+            borderRadius: '12px',
+            color: 'white',
             border: 'none',
             fontSize: '16px',
             fontWeight: 'bold',
             cursor: 'pointer',
-            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)'
+            boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)'
           }}
         >
           Open Social Studio
