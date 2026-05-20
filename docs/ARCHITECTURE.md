@@ -32,6 +32,8 @@ erDiagram
     User ||--o{ GalleryAsset : "uploads"
     User ||--o{ TokenAuditLog : "logs"
     User ||--o{ MetadataTemplate : "saves"
+    User ||--o{ UserSeenUpdate : "tracks"
+    UpdateLog ||--o{ UserSeenUpdate : "logs"
 
     Account ||--o{ TokenAuditLog : "audited by"
 
@@ -118,6 +120,21 @@ erDiagram
         json metadata
         datetime expiresAt
         datetime createdAt
+    }
+
+    UpdateLog {
+        string id PK
+        string version
+        string title
+        string description
+        datetime createdAt
+    }
+
+    UserSeenUpdate {
+        string id PK
+        string userId FK
+        string updateId FK
+        datetime seenAt
     }
 ```
 
@@ -299,6 +316,37 @@ The application implements a hierarchical error handling strategy to ensure grac
   - **Route Boundary (`error.tsx`):** Isolates failures to specific segments, keeping the layout interactive.
   - **Glass Aesthetic:** All error states use a shared `ErrorBoundary` component that follows the project's premium glass aesthetic, featuring blur effects and high-contrast typography.
 - **Recovery:** Error boundaries provide a "Try again" mechanism that triggers a segment re-render, allowing users to recover from transient issues without a full page refresh.
+
+### 8. What's New Notifications
+
+Users are notified of new application updates via a badge in the header.
+
+```mermaid
+sequenceDiagram
+    participant U as User (UI)
+    participant B as WhatsNewBadge (Component)
+    participant M as WhatsNewModal (Component)
+    participant A as Server Action (whats-new.ts)
+    participant DB as Database (Prisma)
+
+    B->>A: getUnseenCount()
+    A->>DB: Query UpdateLog count NOT in UserSeenUpdate
+    DB-->>A: Unseen Count (e.g., 2)
+    A-->>B: Return Count
+    B->>B: Render "New" Badge
+
+    U->>B: Click Badge
+    B->>M: Open Modal
+    M->>A: getUpdates()
+    A->>DB: Fetch All UpdateLogs
+    DB-->>A: List of Updates
+    A-->>M: Return List
+    M->>A: markUpdatesAsSeen()
+    A->>DB: Upsert UserSeenUpdate for all current IDs
+    DB-->>A: Success
+    M-->>U: Show Updates
+    B->>B: Clear Badge
+```
 
 ## Platform Integrations
 
