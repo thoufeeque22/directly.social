@@ -1,8 +1,8 @@
 [
   {
     "category": "meta",
-    "severity": "MED",
-    "description": "discovery-agent failed to catch [Currently On-Hold] status and Phase 2 roadmap alignment during the initial round of Issue 386. It proceeded to generate technical specs for implementation instead of parking the task as required by GEMINI.md.",
-    "suggestion": "Strengthen the Discovery Gate prompt to explicitly require a 'Roadmap & Status Verification' step before any technical planning. Add a specific check for keywords like 'On-Hold' or 'Phase 2' in issue bodies."
+    "severity": "HIGH",
+    "description": "discovery-agent failed to exercise architectural judgment during Issue 386. It functioned as a passive 'ticket translator' rather than a 'Release Scope Guardian'. It missed that complex real-time analytics are premature for a system still stabilizing its core distribution primitives, regardless of whether the ticket was explicitly marked [On-Hold].",
+    "suggestion": "Pivot Discovery instructions from mechanical 'Roadmap Checks' to 'Release Scope Guardianship'. The agent must be trained to identify and reject 'Architectural Noise'—features that add non-critical complexity to the current release phase."
   }
 ]

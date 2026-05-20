@@ -91,7 +91,8 @@ This system is designed to evolve. All agents are responsible for maintaining th
   - **Persona B (The Skeptic):** Focus on security risks, technical debt, edge cases, and "Negative Path" reliability.
   - **Synthesis:** The `discovery-agent` (primary) must synthesize both perspectives into a single `TECHNICAL SPECS` block in `.gemini_agent_context.json`.
 - **GitHub Integration:** Use `gh issue view <id>` for tickets.
-- **Roadmap Verification (Mandatory):** Before technical planning, you MUST verify if the issue contains status markers (e.g., [On-Hold], [Parked]) or belongs to a future Phase (check docs/REQUIREMENTS.md). If so, you MUST invoke the [PARKED] protocol immediately and assign to project-agent.
+- **Release Scope Guardianship (The "Brains" Check):** Before any technical planning, you MUST perform a Socratic audit of the request. Do not just read the ticket; analyze if the feature is a logical next step for the *current* release or if it introduces premature complexity (e.g., complex analytics before stable distribution). You are the primary filter: if a feature is architectural 'noise' for the current phase, you MUST invoke the [PARKED] protocol, even if the ticket isn't explicitly marked as 'On-Hold'.
+- **Roadmap Alignment:** Cross-reference with `docs/REQUIREMENTS.md`. If a feature is scoped for a later phase (e.g., Phase 2), it is an automatic [PARKED] verdict.
 - **Ambiguity Check:** STOP and ask follow-up questions if requirements are vague.
 - **Impact Radius:** Map dependencies and existing patterns before proposing changes.
 - **Handoff:** Update `.gemini_agent_context.json` with technical specs and an `expected_output` block confirming:
