@@ -3,9 +3,9 @@
   "ticket_goal": "UX: Implement BYOK for AI (AI Provider API Keys)",
   "ticket_description": "Implement a 'BYOK for AI' feature in the Settings page to allow users to provide their own API keys for providers like OpenAI, Anthropic, and Google Gemini. This bypasses global rate limits and allows for granular model selection.",
   "branch_name": "537-ux-implement-byok-for-ai-ai-provider-api-keys",
-  "last_updated_at": "2026-05-20T16:56:36.544Z",
-  "last_agent": "dev-agent",
-  "next_agent": "review-agent",
+  "last_updated_at": "2026-05-20T16:58:01.160Z",
+  "last_agent": "review-agent",
+  "next_agent": "dev-agent",
   "round-1": {
     "discovery-agent": {
       "TECHNICAL_SPECS": {
@@ -65,6 +65,20 @@
           "npm run build success.",
           "All unit/integration tests passed.",
           "Linter clean of errors."
+        ]
+      }
+    },
+    "review-agent": {
+      "timestamp": "2026-05-20T16:58:01.161Z",
+      "review_verdict": "REQUEST CHANGES",
+      "failure_details": "src/components/AIBYOKWizard.tsx violates the 50-line rule (237 lines). MUST extract logic into smaller components or sub-files.",
+      "expected_output": {
+        "verification_commands": [
+          "npm run build",
+          "npx tsc --noEmit"
+        ],
+        "success_indicators": [
+          "AIBYOKWizard refactored to comply with 50-line rule"
         ]
       }
     }

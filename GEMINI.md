@@ -39,7 +39,8 @@
   - `dev-agent` → `review-agent`
   - `review-agent` → `qa-agent` (on PASS) or `dev-agent` (on FAIL)
   - `qa-agent` → `doc-agent` (on PASS) or `dev-agent` (on FAIL)
-  - `doc-agent` → `project-agent` (on PASS) or `dev-agent` (on FAIL)
+  - `doc-agent` → Main Agent (for manual review) or `dev-agent` (on FAIL)
+  - Main Agent (Manual Approval) → `project-agent`
   - `project-agent` → End of Task/Main Agent
 - **Orchestration Rules:**
   - **Worker Agents:** MUST NOT invoke other agents. They MUST update `.gemini_agent_context.json` via tools and return their status.
@@ -187,7 +188,7 @@ You MUST commit all test changes before assigning to the next agent. If tests fa
   1. Documentation/Diagrams accurately reflect implementation.
   2. Manual test cases verified for clarity.
   3. Pull Request created and linked to issue.
-You MUST commit all documentation and manual test changes before assigning to `project-agent`.
+You MUST commit all documentation and manual test changes before assigning to **Main Agent** for manual review and approval. Once approved, the Main Agent will assign the task to `project-agent`.
 - **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini_incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
 
 ## Project Agent (Management & Tracking)
