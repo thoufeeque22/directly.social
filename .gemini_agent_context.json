@@ -1,5 +1,6 @@
 {
   "last_agent": "dev-agent",
+  "next_agent": "review-agent",
   "branch_name": "fix/humanize-ui-ux-420",
   "ticket_goal": "Humanize UI/UX Design & Copy",
   "ticket_id": 420,
