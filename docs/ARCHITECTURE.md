@@ -329,23 +329,25 @@ sequenceDiagram
     participant A as Server Action (whats-new.ts)
     participant DB as Database (Prisma)
 
-    B->>A: getUnseenCount()
-    A->>DB: Query UpdateLog count NOT in UserSeenUpdate
-    DB-->>A: Unseen Count (e.g., 2)
-    A-->>B: Return Count
-    B->>B: Render "New" Badge
+    B->>A: getUnseenUpdates()
+    A->>DB: Query UpdateLog entries NOT in UserSeenUpdate
+    DB-->>A: List of Updates
+    A-->>B: Return Updates
+    B->>B: Render "New" Badge (count = list.length)
 
     U->>B: Click Badge
-    B->>M: Open Modal
-    M->>A: getUpdates()
-    A->>DB: Fetch All UpdateLogs
-    DB-->>A: List of Updates
-    A-->>M: Return List
-    M->>A: markUpdatesAsSeen()
-    A->>DB: Upsert UserSeenUpdate for all current IDs
+    B->>M: Open Modal(updates)
+    
+    U->>M: Click "Got it" for an update
+    M->>A: markUpdateAsSeen(updateId)
+    A->>DB: Create UserSeenUpdate record
     DB-->>A: Success
-    M-->>U: Show Updates
-    B->>B: Clear Badge
+    A-->>M: Success
+    M->>M: Remove update from local state
+    opt If no more updates
+        M->>M: Close Modal
+    end
+    B->>B: Update Badge count
 ```
 
 ## Platform Integrations

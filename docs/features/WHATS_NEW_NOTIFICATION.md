@@ -1,51 +1,57 @@
-# "What's New" Notification System
+# What's New Notification System
 
-The "What's New" notification system provides a mechanism to inform users about new features, improvements, and bug fixes directly within the application. It uses a non-intrusive badge in the header and a detailed modal for presenting update logs.
+The "What's New" notification system keeps users informed about the latest features, improvements, and bug fixes in Social Studio. It uses a non-intrusive badge in the header and a modal to display update details.
 
 ## Overview
 
-- **UpdateLog Model:** Stores the version, title, and description of each update.
-- **UserSeenUpdate Model:** Tracks which updates a user has already viewed to prevent repetitive notifications.
-- **WhatsNewBadge:** A UI component in the header that displays a notification dot when new updates are available.
-- **WhatsNewModal:** A modal that displays the list of updates and marks them as "seen" once opened.
+- **Update Tracking:** New updates are stored in the `UpdateLog` table.
+- **Personalized Status:** The system tracks which updates each user has seen using the `UserSeenUpdate` table.
+- **Visual Cues:** A red badge appears over a "New Releases" icon in the header when there are unseen updates.
+- **Dismissal:** Users can dismiss updates individually by clicking "Got it" in the modal.
 
-## Data Model
+## Data Models
 
-### UpdateLog
-| Field | Type | Description |
-| :--- | :--- | :--- |
-| `id` | String | Unique identifier (CUID). |
-| `version` | String | Semantic version or release name. |
-| `title` | String | Summary of the update. |
-| `description` | String | Detailed markdown-supported description of changes. |
-| `createdAt` | DateTime | When the update was logged. |
+### `UpdateLog`
+Stores the content of the updates.
+- `version`: The version string (e.g., "1.2.0").
+- `title`: Short summary of the update.
+- `description`: Detailed explanation.
+- `createdAt`: When the update was announced.
 
-### UserSeenUpdate
-| Field | Type | Description |
-| :--- | :--- | :--- |
-| `id` | String | Unique identifier (CUID). |
-| `userId` | String | Foreign key to the User model. |
-| `updateId` | String | Foreign key to the UpdateLog model. |
-| `seenAt` | DateTime | Timestamp of when the user viewed the update. |
+### `UserSeenUpdate`
+Tracks the relationship between users and updates they have acknowledged.
+- `userId`: Reference to the user.
+- `updateId`: Reference to the update.
+- `seenAt`: Timestamp of acknowledgement.
+
+## Components
+
+### `WhatsNewBadge`
+Located in the global `Header`. It polls (on mount) for unseen updates for the current user.
+- **Test ID:** `whats-new-badge`
+
+### `WhatsNewModal`
+Triggered by clicking the badge. Displays a list of unseen updates.
+- **Test ID:** `whats-new-modal`
+- **Dismiss Button Test ID:** `whats-new-modal-close`
 
 ## Server Actions (`src/app/actions/whats-new.ts`)
 
-- `getUpdates()`: Fetches all available update logs from the database, sorted by `createdAt`.
-- `getUnseenCount()`: Returns the number of updates the current user has not yet seen.
-- `markUpdatesAsSeen()`: Records the current user as having seen all currently available updates.
+- `getUnseenUpdates()`: Fetches all `UpdateLog` entries that do not have a corresponding `UserSeenUpdate` for the current user.
+- `markUpdateAsSeen(updateId: string)`: Creates a `UserSeenUpdate` record for the user and the specified update.
 
-## UI Components
+## Administration
 
-### `WhatsNewBadge.tsx`
-Located in the header. It calls `getUnseenCount()` on mount and displays a "New" badge (MUI Chip) if the count is greater than zero. Clicking the badge opens the `WhatsNewModal`.
+Currently, updates are added to the `UpdateLog` table via database migrations or direct database access (e.g., Prisma Studio). Future iterations may include an admin UI for posting updates.
 
-### `WhatsNewModal.tsx`
-Displays the full history of updates fetched via `getUpdates()`. When opened, it triggers `markUpdatesAsSeen()` to clear the notification badge.
-
-## Integration
-
-The system is integrated into the `Header` component, making it accessible from any page within the application.
-
-## Admin Usage
-
-Currently, updates must be seeded or manually added to the `UpdateLog` table in the database. A dedicated admin UI for managing updates is planned for a future phase.
+### Example Seed Script
+To add a new update via a script:
+```typescript
+await prisma.updateLog.create({
+  data: {
+    version: "1.1.0",
+    title: "New Feature: Global Search",
+    description: "You can now search through your post history and media assets from anywhere."
+  }
+});
+```
