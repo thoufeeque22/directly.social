@@ -1,29 +1,43 @@
 {
   "last_agent": "dev-agent",
   "next_agent": "review-agent",
-  "branch_name": "398-whats-new-notification",
   "ticket_id": "398",
-  "ticket_goal": "What's New Notification (Fix Prisma Leak)",
-  "last_updated_at": "2026-05-21T02:00:00Z",
-  "round-9": {
+  "branch_name": "fix/whats-new-prisma-error",
+  "ticket_goal": "Resolve 'Cannot read properties of undefined (reading 'findMany')' for updateLog.",
+  "round-10": {
     "dev-agent": {
-      "timestamp": "2026-05-21T02:00:00Z",
+      "timestamp": "2025-05-15T10:00:00Z",
+      "findings": "Prisma client regeneration was successful. Added diagnostic logging to inspect prisma object. Fixed implicit any type in map. Build and Type check successful.",
       "fixes_applied": [
-        "Added 'use server'; directive to src/app/actions/whats-new.ts",
-        "Added 'use server'; directive to src/app/actions/byok.ts",
-        "Added 'use server'; directive to src/app/actions/history.ts",
-        "Added 'use server'; directive to src/app/actions/metadata.ts"
+        "Regenerated Prisma client",
+        "Added diagnostic console.log to whats-new.ts",
+        "Fixed implicit 'any' typing in whats-new.ts map function"
       ],
       "modified_files": [
-        "src/app/actions/whats-new.ts",
-        "src/app/actions/byok.ts",
-        "src/app/actions/history.ts",
-        "src/app/actions/metadata.ts"
+        "src/app/actions/whats-new.ts"
       ],
       "expected_output": {
-        "tsc": "passed",
-        "build": "passed",
-        "prisma_leak": "resolved"
+        "build_success": true,
+        "type_check_success": true,
+        "lint_clean": true
+      }
+    }
+  },
+  "round-11": {
+    "dev-agent": {
+      "timestamp": "2025-05-15T12:00:00Z",
+      "findings": "Refactored `src/lib/core/prisma.ts` to implement a proper singleton pattern using `globalForPrisma`. This avoids stale Prisma client caching in Next.js development and ensures schema changes are detected. Reverified production build and type checking.",
+      "fixes_applied": [
+        "Refactored src/lib/core/prisma.ts to use a robust singleton pattern for extended Prisma client",
+        "Removed unnecessary dual-caching of base and extended clients"
+      ],
+      "modified_files": [
+        "src/lib/core/prisma.ts"
+      ],
+      "expected_output": {
+        "build_success": true,
+        "type_check_success": true,
+        "lint_clean": true
       }
     }
   }

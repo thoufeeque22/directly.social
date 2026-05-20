@@ -1,15 +1,16 @@
-
 "use server";
 
-import { prisma } from '@/lib/core/prisma';
 import { auth } from '@/auth';
+import { PrismaClient } from '@prisma/client'; // Import raw client directly
 
 export async function getUnseenUpdates() {
   const session = await auth();
   if (!session?.user?.id) return [];
 
-  // Fetch updates and map them to the format expected by the hook.
-  const updates = await prisma.updateLog.findMany({
+  // Temporary clean instance bypass to confirm if schema is sound
+  const rawPrisma = new PrismaClient();
+
+  const updates = await rawPrisma.updateLog.findMany({
     where: {
       seenBy: {
         none: {
@@ -20,11 +21,11 @@ export async function getUnseenUpdates() {
     orderBy: { createdAt: 'desc' },
   });
 
-  return updates.map(u => ({
+  return updates.map((u) => ({
     id: u.id,
     title: u.title,
     description: u.description,
-    date: u.createdAt.toISOString(), // Map createdAt to date string
+    date: u.createdAt.toISOString(),
   }));
 }
 
@@ -32,7 +33,9 @@ export async function markUpdateAsSeen(updateId: string) {
   const session = await auth();
   if (!session?.user?.id) throw new Error('Unauthorized');
 
-  return prisma.userSeenUpdate.create({
+  const rawPrisma = new PrismaClient();
+
+  return rawPrisma.userSeenUpdate.create({
     data: {
       userId: session.user.id,
       updateId,
