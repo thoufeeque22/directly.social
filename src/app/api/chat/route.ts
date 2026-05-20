@@ -33,12 +33,13 @@ export async function POST(req: Request) {
     // 1. Rate Limiting check
     await checkRateLimit(aiRateLimit, userId, "Chat limit reached. Please wait a minute.");
 
-    const { messages } = await req.json();
+    const { messages, byokConfigs } = await req.json();
     const modelMessages = await convertToModelMessages(messages);
 
     // 2. Determine which model to use
     const primaryProvider = (process.env.ACTIVE_AI_PROVIDER as AIProvider) || 'gemini';
-    const model = getAIModel(primaryProvider);
+    const byok = byokConfigs?.[primaryProvider];
+    const model = getAIModel(primaryProvider, byok ? byok.modelId : undefined, byok ? byok.apiKey : undefined);
 
     logger.info("Starting AI chat session", { userId, primaryProvider });
 

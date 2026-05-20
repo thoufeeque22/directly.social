@@ -39,9 +39,11 @@
   - `dev-agent` → `review-agent`
   - `review-agent` → `qa-agent` (on PASS) or `dev-agent` (on FAIL)
   - `qa-agent` → `doc-agent` (on PASS) or `dev-agent` (on FAIL)
-  - `doc-agent` → `project-agent` (on PASS) or `dev-agent` (on FAIL)
+  - `doc-agent` → Main Agent (for manual review) or `dev-agent` (on FAIL)
+  - Main Agent (Manual Approval) → `project-agent`
   - `project-agent` → End of Task/Main Agent
 - **Orchestration Rules:**
+  - **Subagent Isolation Rule:** The Main Agent MUST NOT simulate worker agents internally. It MUST invoke distinct subagents (e.g., via `invoke_subagent` tools) to execute `dev-agent`, `review-agent`, etc. This enforces memory isolation, guaranteeing that each agent must independently read from and write to `.gemini_agent_context.json` upon handoff.
   - **Worker Agents:** MUST NOT invoke other agents. They MUST update `.gemini_agent_context.json` via tools and return their status.
   - **Main Agent (Gemini CLI):** Responsible for analyzing the context and routing the task to the next specialized agent.
   - **End of Workflow:** At the conclusion of the entire pipeline (when the task is completed and control returns to the Main Agent), the Main Agent MUST ensure that `.gemini_agent_context.json` is committed and pushed to the remote branch to persist the final state.
@@ -187,13 +189,13 @@ You MUST commit all test changes before assigning to the next agent. If tests fa
   1. Documentation/Diagrams accurately reflect implementation.
   2. Manual test cases verified for clarity.
   3. Pull Request created and linked to issue.
-You MUST commit all documentation and manual test changes before assigning to `project-agent`.
+You MUST commit all documentation and manual test changes before assigning to **Main Agent** for manual review and approval. Once approved, the Main Agent will assign the task to `project-agent`.
 - **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini_incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
 
 ## Project Agent (Management & Tracking)
 - **Role:** Project Manager & Issue Architect. Roadmap health and GitHub Project Board synchronization.
 - **Workflow:** 
-  - **Incidental Resolution:** When assigned by `doc-agent`, you MUST read `.gemini_incidental_observations.json`.
+  - **Incidental Resolution:** When assigned by the **Main Agent** (following manual approval of the `doc-agent`'s work), you MUST read `.gemini_incidental_observations.json`.
   - **Feature Parking:** When assigned by `discovery-agent` for a [PARKED] task:
     - Use `mcp_github_update_issue` to add the `phase:2` label.
     - Set the Project Board status to **Hold**.

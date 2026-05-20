@@ -12,6 +12,7 @@ import {
 import { usePolling } from '@/hooks/usePolling';
 import { AIContentReview } from '@/components/dashboard/AIContentReview';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
+import { useAiByok } from '@/hooks/useAiByok';
 
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
@@ -57,6 +58,7 @@ const PLATFORM_ICONS: Record<string, React.ReactNode> = {
 
 function ScheduleContent() {
   const searchParams = useSearchParams();
+  const { configs: byokConfigs } = useAiByok();
   const targetId = searchParams.get('id');
   
   const [posts, setPosts] = useState<PostHistoryEntry[]>([]);
@@ -219,7 +221,7 @@ function ScheduleContent() {
       const currentDesc = formData?.get('description') as string || editingPost.description || '';
 
       const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
-      const previews = await getMultiPlatformAIPreviews(currentTitle, currentDesc, 'Enrich', 'Smart', pNames);
+      const previews = await getMultiPlatformAIPreviews(currentTitle, currentDesc, 'Enrich', 'Smart', pNames, [], undefined, byokConfigs);
       
       if (previews) {
         setAiPreviews(previews);

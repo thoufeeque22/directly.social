@@ -28,7 +28,8 @@ export async function getMultiPlatformAIPreviews(
   mode: StyleMode,
   platforms: string[],
   visualData?: string[],
-  customStyleText?: string
+  customStyleText?: string,
+  byokConfigs?: Record<string, { apiKey: string; modelId: string }>
 ) {
   return protectedAction(async (userId) => {
     // 1. Runtime Validation
@@ -69,7 +70,8 @@ export async function getMultiPlatformAIPreviews(
           description,
           platform as Platform,
           visualData,
-          customStyleText
+          customStyleText,
+          byokConfigs
         );
         results.push({ platform, result });
       } catch (err: unknown) {
@@ -92,3 +94,4 @@ export async function getMultiPlatformAIPreviews(
     }, {} as Record<string, AIWriteResult>);
   });
 }
+

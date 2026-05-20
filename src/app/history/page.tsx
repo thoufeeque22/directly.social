@@ -21,6 +21,7 @@ import { usePolling } from '@/hooks/usePolling';
 import { useUploadStatus } from '@/hooks/useUploadStatus';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
 import { AITier, StyleMode } from '@/lib/core/constants';
+import { useAiByok } from '@/hooks/useAiByok';
 import styles from './history.module.css';
 import { z } from 'zod';
 
@@ -132,6 +133,8 @@ function HistoryContent() {
   const searchParams = useSearchParams();
   const stagingStatus = useUploadStatus();
   
+  const { configs: byokConfigs } = useAiByok();
+
   useEffect(() => {
     const raw = localStorage.getItem('SS_PENDING_POST');
     if (raw) {
@@ -318,7 +321,8 @@ function HistoryContent() {
           post.contentMode || 'Smart', 
           targetPlatformNames, 
           [], 
-          post.customStyleText
+          post.customStyleText,
+          byokConfigs
         );
         
         const { updatePlatformResultsAction } = await import('@/app/actions/history');
@@ -335,7 +339,7 @@ function HistoryContent() {
         setActiveResumingId(null);
       }, 5000);
     }
-  }, [accounts, fetchHistory, executeCockpitDistribution]);
+  }, [accounts, fetchHistory, executeCockpitDistribution, byokConfigs]);
 
   useEffect(() => {
     const url = new URL(globalThis.window?.location.href || '');

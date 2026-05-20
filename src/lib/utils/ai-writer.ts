@@ -108,7 +108,8 @@ export async function generatePostContent(
   videoContext: string,
   platform: Platform,
   visualData?: string[],
-  customStyleText?: string
+  customStyleText?: string,
+  byokConfigs?: Record<string, { apiKey: string; modelId: string }>
 ): Promise<AIWriteResult> {
   if (tier === 'Manual') {
     return {
@@ -129,5 +130,6 @@ export async function generatePostContent(
     userPrompt,
     schema: resultSchema,
     visualData: visualData,
+    byokConfigs,
   });
 }
