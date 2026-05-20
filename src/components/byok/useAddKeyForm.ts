@@ -5,7 +5,7 @@ import { PROVIDERS } from './Providers';
 export function useAddKeyForm(onSave: (provider: AIProvider, apiKey: string, modelId: string) => Promise<boolean>) {
   const [selectedProvider, setSelectedProvider] = useState<AIProvider>('openai');
   const [apiKey, setApiKey] = useState('');
-  const [selectedModel, setSelectedModel] = useState('gpt-4o-mini');
+  const [selectedModel, setSelectedModel] = useState('gpt-5.5-instant');
   const [showPassword, setShowPassword] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [error, setError] = useState<string | null>(null);

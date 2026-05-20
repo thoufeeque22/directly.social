@@ -33,13 +33,13 @@ export function getAIModel(provider: AIProvider, modelId?: string, byokKey?: str
     // Dynamic instantiation for BYOK
     switch (provider) {
       case 'openai':
-        return createOpenAI({ apiKey: byokKey })(modelId || 'gpt-4o-mini');
+        return createOpenAI({ apiKey: byokKey })(modelId || 'gpt-5.5-instant');
       case 'anthropic':
-        return createAnthropic({ apiKey: byokKey })(modelId || 'claude-3-haiku-20240307');
+        return createAnthropic({ apiKey: byokKey })(modelId || 'claude-haiku-4-5');
       case 'groq':
-        return createGroq({ apiKey: byokKey })(modelId || 'llama3-8b-8192');
+        return createGroq({ apiKey: byokKey })(modelId || 'meta-llama/llama-4-maverick-17b-128e-instruct');
       case 'gemini':
-        return createGoogleGenerativeAI({ apiKey: byokKey })(modelId || 'gemini-1.5-flash-latest');
+        return createGoogleGenerativeAI({ apiKey: byokKey })(modelId || 'gemini-3.5-flash');
       case 'ollama':
       default:
         throw new Error(`BYOK is not currently supported for provider: ${provider}`);
@@ -49,16 +49,16 @@ export function getAIModel(provider: AIProvider, modelId?: string, byokKey?: str
   // System defaults
   switch (provider) {
     case 'openai':
-      return createOpenAI({ apiKey: process.env.OPENAI_API_KEY || 'no-key' })(modelId || 'gpt-4o-mini');
+      return createOpenAI({ apiKey: process.env.OPENAI_API_KEY || 'no-key' })(modelId || 'gpt-5.5-instant');
     case 'anthropic':
-      return createAnthropic({ apiKey: process.env.ANTHROPIC_API_KEY || 'no-key' })(modelId || 'claude-3-haiku-20240307');
+      return createAnthropic({ apiKey: process.env.ANTHROPIC_API_KEY || 'no-key' })(modelId || 'claude-haiku-4-5');
     case 'groq':
-      return groq(modelId || 'llama3-8b-8192');
+      return groq(modelId || 'meta-llama/llama-4-maverick-17b-128e-instruct');
     case 'ollama':
       return ollama(modelId || process.env.OLLAMA_MODEL || OLLAMA_DEFAULT_MODEL);
     case 'gemini':
     default:
-      return google(modelId || 'gemini-1.5-flash-latest');
+      return google(modelId || 'gemini-3.5-flash');
   }
 }
 
