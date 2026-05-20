@@ -1,34 +1,34 @@
 :root {
-  /* Core Colors (HSL) */
-  --primary: 250 80% 60%;
-  --primary-foreground: 250 10% 98%;
+  /* Earthy Studio Palette (HSL) */
+  --primary: 30 50% 60%;
+  --primary-foreground: 30 10% 98%;
   
-  --background: 250 40% 5%;
-  --foreground: 250 10% 95%;
+  --background: 40 20% 96%;
+  --foreground: 30 30% 15%;
   
-  --card: 250 30% 8%;
-  --card-foreground: 250 10% 95%;
+  --card: 35 30% 92%;
+  --card-foreground: 30 30% 15%;
   
-  --popover: 250 30% 10%;
-  --popover-foreground: 250 10% 95%;
+  --popover: 35 30% 90%;
+  --popover-foreground: 30 30% 15%;
   
-  --secondary: 250 20% 15%;
-  --secondary-foreground: 250 10% 95%;
+  --secondary: 30 20% 85%;
+  --secondary-foreground: 30 30% 20%;
   
-  --muted: 250 15% 15%;
-  --muted-foreground: 250 10% 60%;
+  --muted: 30 15% 80%;
+  --muted-foreground: 30 20% 40%;
   
-  --accent: 250 30% 20%;
-  --accent-foreground: 250 10% 95%;
+  --accent: 30 40% 75%;
+  --accent-foreground: 30 30% 15%;
   
-  --destructive: 0 84% 60%;
+  --destructive: 0 60% 50%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 250 20% 15%;
-  --input: 250 20% 15%;
-  --ring: 250 80% 60%;
+  --border: 30 20% 70%;
+  --input: 30 20% 70%;
+  --ring: 30 50% 60%;
 
-  --radius: 0.75rem;
+  --radius: 1.25rem;
 }
 
 * {
@@ -80,22 +80,22 @@ a {
   }
 }
 
-/* Glassmorphism Utilities */
+/* Organic Card Utilities */
 .glass {
-  background: hsla(250, 30%, 10%, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid hsla(250, 30%, 20%, 0.3);
+  background: hsla(35, 30%, 92%, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid hsla(30, 20%, 70%, 0.4);
 }
 
 .glass-card {
-  background: hsla(250, 30%, 12%, 0.5);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid hsla(250, 30%, 25%, 0.2);
+  background: hsla(35, 30%, 95%, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid hsla(30, 20%, 70%, 0.3);
   border-radius: var(--radius);
   padding: 1.5rem;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 @media (max-width: 768px) {
@@ -105,8 +105,9 @@ a {
 }
 
 .glass-card:hover {
-  transform: translateY(-2px);
-  border-color: hsla(var(--primary) / 0.4);
+  transform: translateY(-4px);
+  border-color: hsla(var(--primary) / 0.5);
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
 }
 
 /* Scrollbar Styling */
@@ -197,10 +198,8 @@ a {
   bottom: 125%;
   left: 50%;
   transform: translateX(-50%) translateY(10px);
-  background: hsla(var(--popover) / 0.95);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: white;
+  background: hsla(30, 30%, 15%, 0.9);
+  color: hsl(30, 10%, 98%);
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
   font-size: 0.75rem;
@@ -208,9 +207,8 @@ a {
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transition: all 0.15s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  border: 1px solid hsla(var(--primary) / 0.2);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
 
@@ -221,7 +219,7 @@ a {
   left: 50%;
   transform: translateX(-50%);
   border: 5px solid transparent;
-  border-top-color: hsla(var(--popover) / 0.95);
+  border-top-color: hsla(30, 30%, 15%, 0.9);
 }
 
 button:hover .custom-tooltip {

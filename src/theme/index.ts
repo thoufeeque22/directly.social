@@ -2,22 +2,22 @@ import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'light',
     primary: {
-      main: 'hsl(250, 80%, 60%)', // var(--primary)
-      contrastText: 'hsl(250, 10%, 98%)',
+      main: 'hsl(30, 50%, 60%)', // var(--primary)
+      contrastText: 'hsl(30, 10%, 98%)',
     },
     background: {
-      default: 'hsl(250, 40%, 5%)', // var(--background)
-      paper: 'hsla(250, 30%, 12%, 0.5)', // .glass-card background
+      default: 'hsl(40, 20%, 96%)', // var(--background)
+      paper: 'hsla(35, 30%, 95%, 0.7)', // .glass-card background
     },
     text: {
-      primary: 'hsl(250, 10%, 95%)', // var(--foreground)
-      secondary: 'hsl(250, 10%, 60%)', // var(--muted-foreground)
+      primary: 'hsl(30, 30%, 15%)', // var(--foreground)
+      secondary: 'hsl(30, 20%, 40%)', // var(--muted-foreground)
     },
-    divider: 'hsla(250, 30%, 25%, 0.2)', // .glass-card border
+    divider: 'hsla(30, 20%, 70%, 0.3)', // .glass-card border
     error: {
-      main: 'hsl(0, 84%, 60%)', // var(--destructive)
+      main: 'hsl(0, 60%, 50%)', // var(--destructive)
     }
   },
   typography: {
@@ -27,10 +27,10 @@ export const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundImage: 'none', // Remove MUI elevation gradient
-          backdropFilter: 'blur(8px)',
-          borderRadius: '0.75rem',
-          border: '1px solid hsla(250, 30%, 25%, 0.2)',
+          backgroundImage: 'none',
+          backdropFilter: 'blur(4px)',
+          borderRadius: '1.25rem',
+          border: '1px solid hsla(30, 20%, 70%, 0.3)',
         }
       }
     },
@@ -38,7 +38,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           textTransform: 'none',
-          borderRadius: '0.75rem',
+          borderRadius: '1.25rem',
         }
       }
     }
