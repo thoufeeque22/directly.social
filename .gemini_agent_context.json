@@ -1,21 +1,17 @@
 {
   "last_agent": "review-agent",
-  "next_agent": "qa-agent",
+  "next_agent": "dev-agent",
   "branch_name": "398-whats-new-notification",
   "ticket_id": "398",
-  "review_verdict": "PASS",
-  "review_findings": "Audit complete. Files pass 50-line rule. Issues found: 1 lint error (unescaped entity) in WhatsNewModal, 1 unused import in WhatsNewBadge. Both fixed. Static build passes.",
-  "modified_files": [
-    "prisma/schema.prisma",
-    "src/app/actions/whats-new.ts",
-    "src/components/WhatsNew/WhatsNewBadge.tsx",
-    "src/components/WhatsNew/WhatsNewModal.tsx"
-  ],
-  "expected_output": {
-    "verification_steps": [
-      "npx playwright test (all passed)",
-      "Visual artifacts in verification/ folder",
-      "No console errors"
-    ]
+  "ticket_goal": "Whats New Notification Fix and Refactor",
+  "last_updated_at": "2026-05-20T22:45:00Z",
+  "review-agent": {
+    "review_verdict": "FAIL",
+    "failure_details": "DashboardClient.tsx (494 lines) and Header.tsx (89 lines) violate the strict 50-line rule. Architectural cleanup is required.",
+    "expected_output": {
+      "tsc_noEmit": "SUCCESS",
+      "npm_run_build": "SUCCESS",
+      "action": "Refactor DashboardClient.tsx and Header.tsx into smaller modules."
+    }
   }
 }
