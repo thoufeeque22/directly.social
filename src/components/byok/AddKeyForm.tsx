@@ -49,6 +49,7 @@ export function AddKeyForm({ onSave }: Props) {
       </FormControl>
 
       <TextField
+        data-testid="ai-byok-key-input"
         fullWidth variant="outlined" label="API Key" type={showPassword ? 'text' : 'password'}
         value={apiKey} onChange={(e) => setApiKey(e.target.value)}
         placeholder={`Enter your API key`}
@@ -65,7 +66,7 @@ export function AddKeyForm({ onSave }: Props) {
         }}
       />
 
-      <Button variant="contained" onClick={handleSave} disabled={isValidating || !apiKey.trim()} sx={{ mt: 1 }}>
+      <Button data-testid="ai-byok-save-button" variant="contained" onClick={handleSave} disabled={isValidating || !apiKey.trim()} sx={{ mt: 1 }}>
         {isValidating ? <CircularProgress size={24} /> : 'Validate & Save Key'}
       </Button>
     </Paper>
