@@ -1,17 +1,37 @@
 {
-  "last_agent": "review-agent",
+  "last_agent": "qa-agent",
   "next_agent": "dev-agent",
   "branch_name": "398-whats-new-notification",
   "ticket_id": "398",
   "ticket_goal": "Whats New Notification Fix and Refactor",
-  "last_updated_at": "2026-05-20T22:45:00Z",
-  "review-agent": {
-    "review_verdict": "FAIL",
-    "failure_details": "DashboardClient.tsx (494 lines) and Header.tsx (89 lines) violate the strict 50-line rule. Architectural cleanup is required.",
+  "last_updated_at": "2026-05-21T00:00:00Z",
+  "modified_files": [
+    "src/components/dashboard/DashboardClient.tsx",
+    "src/components/layout/Header.tsx",
+    "src/components/layout/LayoutWrapper.tsx",
+    "src/hooks/useWhatsNew.ts"
+  ],
+  "fixes_applied": [
+    "Extracted WhatsNew logic from DashboardClient to useWhatsNew.ts",
+    "Extracted SearchBar and UserProfile components within Header.tsx via local sub-components (Header.tsx now < 50 lines)",
+    "Fixed LayoutWrapper import to use named import for Header"
+  ],
+  "qa-agent": {
+    "timestamp": "2026-05-21T00:00:00Z",
+    "qa_verdict": "FAIL",
+    "failure_details": "E2E tests failed: whats-new-badge is not visible/found. Scenario 1, 2, and 3 failed.",
     "expected_output": {
-      "tsc_noEmit": "SUCCESS",
-      "npm_run_build": "SUCCESS",
-      "action": "Refactor DashboardClient.tsx and Header.tsx into smaller modules."
+      "npx_playwright_test": "FAIL",
+      "new_or_updated_tests": "src/__tests__/e2e/whats-new.spec.ts",
+      "exhaustive_coverage": "FAILED",
+      "mock_data_verification": "INCOMPLETE",
+      "network_or_hydration_errors": "NONE"
+    }
+  },
+  "round-3": {
+    "qa-agent": {
+      "timestamp": "2026-05-21T00:00:00Z",
+      "findings": "E2E tests failed due to missing or not visible 'whats-new-badge'."
     }
   }
 }
