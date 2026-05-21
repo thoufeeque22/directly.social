@@ -1,44 +1,67 @@
 "use server";
 
 import { auth } from '@/auth';
-import { PrismaClient } from '@prisma/client'; // Import raw client directly
+import { prisma } from '@/lib/core/prisma';
+import { protectedAction } from '@/lib/core/action-utils';
 
 export async function getUnseenUpdates() {
   const session = await auth();
   if (!session?.user?.id) return [];
 
-  // Temporary clean instance bypass to confirm if schema is sound
-  const rawPrisma = new PrismaClient();
-
-  const updates = await rawPrisma.updateLog.findMany({
-    where: {
-      seenBy: {
-        none: {
-          userId: session.user.id,
+  try {
+    const updates = await prisma.updateLog.findMany({
+      where: {
+        seenBy: {
+          none: {
+            userId: session.user.id,
+          },
         },
       },
-    },
-    orderBy: { createdAt: 'desc' },
-  });
+      orderBy: { createdAt: 'desc' },
+    });
 
-  return updates.map((u) => ({
-    id: u.id,
-    title: u.title,
-    description: u.description,
-    date: u.createdAt.toISOString(),
-  }));
+    return updates.map((u) => ({
+      id: u.id,
+      title: u.title,
+      description: u.description,
+      date: u.createdAt.toISOString(),
+    }));
+  } catch (error) {
+    console.error('[ERROR] getUnseenUpdates:', error);
+    return [];
+  }
 }
 
 export async function markUpdateAsSeen(updateId: string) {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error('Unauthorized');
+  return protectedAction(async (userId) => {
+    // Validate user existence to avoid foreign key constraints and provide better logging
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    
+    if (!user) {
+      console.error('[CRITICAL] markUpdateAsSeen - User not found in database for ID:', userId);
+      return { success: false, error: 'User not found in database. Please re-login.' };
+    }
 
-  const rawPrisma = new PrismaClient();
-
-  return rawPrisma.userSeenUpdate.create({
-    data: {
-      userId: session.user.id,
-      updateId,
-    },
+    try {
+      await prisma.userSeenUpdate.upsert({
+        where: {
+          userId_updateId: {
+            userId,
+            updateId,
+          },
+        },
+        update: {
+          seenAt: new Date(),
+        },
+        create: {
+          userId,
+          updateId,
+        },
+      });
+      return { success: true };
+    } catch (error) {
+      console.error('[ERROR] markUpdateAsSeen:', error);
+      return { success: false, error: 'Failed to mark update as seen.' };
+    }
   });
 }

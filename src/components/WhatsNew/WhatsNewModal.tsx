@@ -16,9 +16,18 @@ export function WhatsNewModal({ open, onClose, updates, onUpdateSeen }: {
   onUpdateSeen: (id: string) => void;
 }) {
   const handleClose = async (updateId: string) => {
-    await markUpdateAsSeen(updateId);
-    onUpdateSeen(updateId);
-    if (updates.length <= 1) onClose();
+    try {
+      const result = await markUpdateAsSeen(updateId);
+      if (!result.success) {
+        console.warn('[WhatsNewModal] Failed to mark update as seen:', result.error);
+      }
+    } catch (error) {
+      console.error('[WhatsNewModal] Error in markUpdateAsSeen:', error);
+    } finally {
+      // Always remove from local UI state to avoid stuck UI, even on error
+      onUpdateSeen(updateId);
+      if (updates.length <= 1) onClose();
+    }
   };
 
   return (

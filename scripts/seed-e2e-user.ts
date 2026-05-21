@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   const email = 'tester@socialstudio.ai';
+  const stableId = 'e2e-tester-id-stable';
 
   // Check if user already exists
   let user = await prisma.user.findUnique({
@@ -11,16 +12,22 @@ async function main() {
   });
 
   if (!user) {
-    // Create the E2E test user
+    // Create the E2E test user with a STABLE ID to avoid session de-sync
     user = await prisma.user.create({
       data: {
+        id: stableId,
         email,
         name: 'E2E Tester',
       },
     });
-    console.log(`Successfully created E2E test user with email: ${email}`);
+    console.log(`Successfully created E2E test user with email: ${email} and stable ID: ${stableId}`);
   } else {
     console.log(`User with email ${email} already exists.`);
+    // Ensure the ID matches our stable ID (if it was created before we hardcoded it)
+    if (user.id !== stableId) {
+      console.warn(`[WARNING] Existing user has ID ${user.id}, but we expected ${stableId}.`);
+      console.warn(`Consider deleting the user and re-seeding to avoid session de-sync.`);
+    }
   }
 
   // Check if accounts already exist

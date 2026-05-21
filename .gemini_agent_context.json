@@ -2,43 +2,39 @@
   "last_agent": "dev-agent",
   "next_agent": "review-agent",
   "ticket_id": "398",
-  "branch_name": "fix/whats-new-prisma-error",
-  "ticket_goal": "Resolve 'Cannot read properties of undefined (reading 'findMany')' for updateLog.",
-  "round-10": {
+  "ticket_goal": "Fix Prisma foreign key constraint violation in WhatsNew modal",
+  "round-12": {
     "dev-agent": {
-      "timestamp": "2025-05-15T10:00:00Z",
-      "findings": "Prisma client regeneration was successful. Added diagnostic logging to inspect prisma object. Fixed implicit any type in map. Build and Type check successful.",
+      "timestamp": "2026-05-15T10:00:00Z",
+      "findings": "Restored singleton prisma client in src/app/actions/whats-new.ts. Added logging to debug the foreign key constraint violation. Build and TypeScript checks passed.",
       "fixes_applied": [
-        "Regenerated Prisma client",
-        "Added diagnostic console.log to whats-new.ts",
-        "Fixed implicit 'any' typing in whats-new.ts map function"
-      ],
-      "modified_files": [
-        "src/app/actions/whats-new.ts"
+        "Replaced raw PrismaClient instantiation with singleton import in src/app/actions/whats-new.ts",
+        "Added console logging to capture userId and updateId in markUpdateAsSeen action"
       ],
       "expected_output": {
-        "build_success": true,
-        "type_check_success": true,
-        "lint_clean": true
+        "build_status": "PASS",
+        "tsc_status": "PASS",
+        "next_agent": "review-agent"
       }
     }
   },
-  "round-11": {
+  "round-13": {
     "dev-agent": {
-      "timestamp": "2025-05-15T12:00:00Z",
-      "findings": "Refactored `src/lib/core/prisma.ts` to implement a proper singleton pattern using `globalForPrisma`. This avoids stale Prisma client caching in Next.js development and ensures schema changes are detected. Reverified production build and type checking.",
+      "timestamp": "2026-05-20T23:55:00Z",
+      "findings": "Fixed auth callback mismatch where token.id was not consistently being mapped to session.user.id, causing ID mismatch for Prisma. Added explicit user existence check and validation in markUpdateAsSeen.",
       "fixes_applied": [
-        "Refactored src/lib/core/prisma.ts to use a robust singleton pattern for extended Prisma client",
-        "Removed unnecessary dual-caching of base and extended clients"
-      ],
-      "modified_files": [
-        "src/lib/core/prisma.ts"
+        "Updated src/auth.ts to use token.id instead of token.sub for session.user.id",
+        "Added user existence check and logging in src/app/actions/whats-new.ts/markUpdateAsSeen"
       ],
       "expected_output": {
-        "build_success": true,
-        "type_check_success": true,
-        "lint_clean": true
+        "build_status": "PASS",
+        "tsc_status": "PASS",
+        "next_agent": "review-agent"
       }
     }
-  }
+  },
+  "modified_files": [
+    "src/app/actions/whats-new.ts",
+    "src/auth.ts"
+  ]
 }
