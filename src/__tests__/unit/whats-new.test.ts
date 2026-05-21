@@ -7,6 +7,11 @@ vi.mock('@/auth', () => ({
   auth: vi.fn(),
 }));
 
+vi.mock('@/lib/core/action-utils', () => ({
+  protectedAction: vi.fn((action) => action('valid-user', {})),
+  revalidateDashboard: vi.fn(),
+}));
+
 vi.mock('@/lib/core/prisma', () => ({
   prisma: {
     user: {
