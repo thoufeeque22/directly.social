@@ -1,6 +1,6 @@
 'use client';
 
-import { Modal, Box, Typography, Button, List, ListItem, ListItemText } from '@mui/material';
+import { Modal, Box, Typography, Button, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { markUpdateAsSeen } from '@/app/actions/whats-new';
 
 interface Update {
@@ -31,16 +31,67 @@ export function WhatsNewModal({ open, onClose, updates, onUpdateSeen }: {
   };
 
   return (
-    <Modal open={open} onClose={onClose} data-testid="whats-new-modal">
-      <Box sx={{ p: 4, bgcolor: 'background.paper', m: 'auto', mt: 10, maxWidth: 400 }}>
-        <Typography variant="h6">What&apos;s New</Typography>
-        <List>
-          {updates.map((update) => (
-            <ListItem key={update.id} secondaryAction={
-              <Button data-testid="whats-new-modal-close" onClick={() => handleClose(update.id)}>Got it</Button>
-            }>
-              <ListItemText primary={update.title} secondary={update.description} />
-            </ListItem>
+    <Modal 
+      open={open} 
+      onClose={onClose} 
+      data-testid="whats-new-modal"
+      sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
+      <Box sx={{ 
+        p: 4, 
+        bgcolor: 'hsl(250, 30%, 10%)', // Opaque background
+        borderRadius: '1.25rem',
+        border: '1px solid hsla(250, 30%, 30%, 0.3)',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+        maxWidth: 500,
+        width: '90%',
+        maxHeight: '80vh',
+        overflowY: 'auto',
+        outline: 'none'
+      }}>
+        <Typography variant="h5" sx={{ mb: 3, fontWeight: 700, color: 'primary.main' }}>
+          What&apos;s New
+        </Typography>
+        <List disablePadding>
+          {updates.map((update, index) => (
+            <div key={update.id}>
+              <ListItem 
+                sx={{ px: 0, py: 2.5 }}
+                secondaryAction={
+                  <Button 
+                    variant="contained"
+                    size="small"
+                    data-testid="whats-new-modal-close" 
+                    onClick={() => handleClose(update.id)}
+                    sx={{ 
+                      borderRadius: '0.75rem',
+                      px: 2,
+                      fontWeight: 600,
+                      boxShadow: 'none',
+                      '&:hover': { boxShadow: '0 4px 12px hsla(250, 80%, 60%, 0.3)' }
+                    }}
+                  >
+                    Got it
+                  </Button>
+                }
+              >
+                <ListItemText 
+                  primary={
+                    <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 0.5 }}>
+                      {update.title}
+                    </Typography>
+                  } 
+                  secondary={
+                    <Typography variant="body2" sx={{ color: 'text.secondary', pr: 8 }}>
+                      {update.description}
+                    </Typography>
+                  } 
+                />
+              </ListItem>
+              {index < updates.length - 1 && (
+                <Divider sx={{ borderColor: 'hsla(250, 30%, 25%, 0.2)' }} />
+              )}
+            </div>
           ))}
         </List>
       </Box>
