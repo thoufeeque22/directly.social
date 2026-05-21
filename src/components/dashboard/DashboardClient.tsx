@@ -17,8 +17,6 @@ import { usePlatformSelection } from '@/hooks/dashboard/usePlatformSelection';
 import { useDistributionEngine } from '@/hooks/dashboard/useDistributionEngine';
 import { useUploadStatus } from '@/hooks/useUploadStatus';
 import { useAiByok } from '@/hooks/useAiByok';
-import { WhatsNewModal } from '@/components/WhatsNew/WhatsNewModal';
-import { useWhatsNew } from '@/hooks/useWhatsNew';
 
 interface ReviewContext {
   stagedFileId: string;
@@ -53,7 +51,6 @@ export default function DashboardClient({
   const stagedFileIdParam = searchParams.get('staged');
   const { accounts, isLoading, preferences } = useAccounts(initialAccounts, initialPreferences);
   const { configs: byokConfigs } = useAiByok();
-  const { updates, setUpdates, isModalOpen, setIsModalOpen } = useWhatsNew();
 
   const devAccounts = React.useMemo(() => {
     if (process.env.NODE_ENV !== 'development') return accounts;
@@ -218,7 +215,6 @@ export default function DashboardClient({
   return (
     <div className="fade-in">
       <DashboardHeader session={session} />
-      <WhatsNewModal open={isModalOpen} onClose={() => setIsModalOpen(false)} updates={updates} onUpdateSeen={(id) => setUpdates(u => u.filter(up => up.id !== id))} />
       <div className="responsive-grid">
         {isReviewing ? (
           <div style={{ maxWidth: '800px', margin: '0 auto', width: '100%' }}>

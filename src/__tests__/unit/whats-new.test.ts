@@ -2,13 +2,15 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { markUpdateAsSeen, getUnseenUpdates } from '@/app/actions/whats-new';
 import { prisma } from '@/lib/core/prisma';
 import { auth } from '@/auth';
+import { Session } from 'next-auth';
+import { UpdateLog, UserSeenUpdate, User } from '@prisma/client';
 
 vi.mock('@/auth', () => ({
   auth: vi.fn(),
 }));
 
 vi.mock('@/lib/core/action-utils', () => ({
-  protectedAction: vi.fn((action) => action('valid-user', {})),
+  protectedAction: vi.fn((action) => action('valid-user', {} as unknown as Session)),
   revalidateDashboard: vi.fn(),
 }));
 
@@ -33,16 +35,18 @@ describe('What\'s New Actions', () => {
 
   describe('getUnseenUpdates', () => {
     it('should return empty array if no session', async () => {
-      vi.mocked(auth).mockResolvedValue(null);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (auth as unknown as { mockResolvedValue: (val: any) => void }).mockResolvedValue(null);
       const result = await getUnseenUpdates();
       expect(result).toEqual([]);
     });
 
     it('should return updates if session exists', async () => {
-      vi.mocked(auth).mockResolvedValue({ user: { id: 'user-1' } } as any);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (auth as unknown as { mockResolvedValue: (val: any) => void }).mockResolvedValue({ user: { id: 'user-1' } } as unknown as Session);
       vi.mocked(prisma.updateLog.findMany).mockResolvedValue([
         { id: 'u1', title: 'T1', description: 'D1', createdAt: new Date(), version: '1' },
-      ] as any);
+      ] as unknown as UpdateLog[]);
 
       const result = await getUnseenUpdates();
       expect(result).toHaveLength(1);
@@ -52,7 +56,8 @@ describe('What\'s New Actions', () => {
 
   describe('markUpdateAsSeen', () => {
     it('should return error if user not found in DB', async () => {
-      vi.mocked(auth).mockResolvedValue({ user: { id: 'missing-user' } } as any);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (auth as unknown as { mockResolvedValue: (val: any) => void }).mockResolvedValue({ user: { id: 'missing-user' } } as unknown as Session);
       vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
 
       const result = await markUpdateAsSeen('update-1');
@@ -63,9 +68,10 @@ describe('What\'s New Actions', () => {
     });
 
     it('should succeed if user exists', async () => {
-      vi.mocked(auth).mockResolvedValue({ user: { id: 'valid-user' } } as any);
-      vi.mocked(prisma.user.findUnique).mockResolvedValue({ id: 'valid-user' } as any);
-      vi.mocked(prisma.userSeenUpdate.upsert).mockResolvedValue({} as any);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (auth as unknown as { mockResolvedValue: (val: any) => void }).mockResolvedValue({ user: { id: 'valid-user' } } as unknown as Session);
+      vi.mocked(prisma.user.findUnique).mockResolvedValue({ id: 'valid-user' } as unknown as User);
+      vi.mocked(prisma.userSeenUpdate.upsert).mockResolvedValue({} as unknown as UserSeenUpdate);
 
       const result = await markUpdateAsSeen('update-1');
       expect(result).toEqual({ success: true });
