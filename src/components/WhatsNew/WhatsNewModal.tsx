@@ -30,6 +30,14 @@ export function WhatsNewModal({ open, onClose, updates, onUpdateSeen }: {
     }
   };
 
+  const handleDismissAll = async () => {
+    // Optimistically clear all in UI
+    const currentUpdates = [...updates];
+    onClose();
+    // Then fire off all actions in background
+    Promise.allSettled(currentUpdates.map(u => markUpdateAsSeen(u.id)));
+  };
+
   return (
     <Modal 
       open={open} 
@@ -49,9 +57,20 @@ export function WhatsNewModal({ open, onClose, updates, onUpdateSeen }: {
         overflowY: 'auto',
         outline: 'none'
       }}>
-        <Typography variant="h5" sx={{ mb: 3, fontWeight: 700, color: 'primary.main' }}>
-          What&apos;s New
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+          <Typography variant="h5" sx={{ fontWeight: 700, color: 'primary.main' }}>
+            What&apos;s New
+          </Typography>
+          {updates.length > 1 && (
+            <Button 
+              size="small" 
+              onClick={handleDismissAll}
+              sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main' }, textTransform: 'none' }}
+            >
+              Dismiss All
+            </Button>
+          )}
+        </Box>
         <List disablePadding>
           {updates.map((update, index) => (
             <div key={update.id}>
