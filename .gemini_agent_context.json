@@ -3,8 +3,8 @@
   "ticket_goal": "manual mode: add \"enrich title/description\" button near \"Post Video\" button",
   "ticket_description": "",
   "branch_name": "514-manual-mode-add-enrich-titledescription-button-near-post-video-button",
-  "last_agent": "review-agent",
-  "last_updated_at": "2026-05-22T22:04:22.418590Z",
+  "last_agent": "qa-agent",
+  "last_updated_at": "2026-05-22T22:13:39.055737Z",
   "round-1": {
     "discovery-agent": {
       "timestamp": "2026-05-22T21:56:11.896382Z",
@@ -65,6 +65,21 @@
           "Adherence to docs/ and API contracts.",
           "No security vulnerabilities found in diff.",
           "Application passes build and type-checking successfully."
+        ]
+      }
+    },
+    "qa-agent": {
+      "timestamp": "2026-05-22T22:13:39.055840Z",
+      "qa_verdict": "FAIL",
+      "failure_details": "1. Playwright tests capture a React hydration warning ('Warning: Prop `style` did not match.') during component load, caused by `aiTier` changing values between server and client rendering. 2. Several pre-existing/unrelated Playwright tests (e.g. byok/wizard.spec.ts, analytics.spec.ts) are failing with 500 Network errors or layout issues. As per QA rules, these failures prevent a PASS verdict.",
+      "expected_output": {
+        "commands": [
+          "npx playwright test --reporter=list src/__tests__/e2e/polish-with-ai-button.spec.ts"
+        ],
+        "success_indicators": [
+          "The 'Polish with AI' button test passes without hydration warnings.",
+          "No React hydration errors occur on page load.",
+          "All E2E tests pass with no 500 Network errors."
         ]
       }
     }
