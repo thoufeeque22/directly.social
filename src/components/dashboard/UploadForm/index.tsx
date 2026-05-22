@@ -114,6 +114,11 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   }, [selectedAccountIds, accounts]);
 
   const [showGallery, setShowGallery] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -374,12 +379,16 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           </div>
         )}
 
-        <PlatformSelection 
-          accounts={accounts} 
-          preferences={preferences}
-          selectedAccountIds={selectedAccountIds} 
-          onToggleAccount={onToggleAccount} 
-        />
+        {mounted ? (
+          <PlatformSelection 
+            accounts={accounts} 
+            preferences={preferences}
+            selectedAccountIds={selectedAccountIds} 
+            onToggleAccount={onToggleAccount} 
+          />
+        ) : (
+          <div style={{ minHeight: '100px' }} />
+        )}
 
         <SchedulingSelector isScheduled={isScheduled} scheduledAt={scheduledAt} onChange={onSchedulingChange} />
 
@@ -418,7 +427,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             </button>
           )}
 
-          {aiTier === 'Manual' && !isUploading && (
+          {mounted && aiTier === 'Manual' && !isUploading && (
             <button
               type="button"
               onClick={() => onTierChange('Enrich')}
@@ -453,7 +462,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             type="submit" 
             disabled={isUploading}
             style={{ 
-              flex: (hasCachedPreviews || (aiTier === 'Manual' && !isUploading)) ? 1.2 : 1,
+              flex: !mounted ? 1 : ((hasCachedPreviews || (aiTier === 'Manual' && !isUploading)) ? 1.2 : 1),
               background: 'hsl(var(--primary))', 
               color: 'white', 
               border: 'none', 

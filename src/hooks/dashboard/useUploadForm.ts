@@ -35,17 +35,19 @@ export function useUploadForm() {
       console.error("Failed to load platform-specific metadata", e);
     }
 
-    // Defer update to avoid cascading render lint error
     const timer = setTimeout(() => {
-      setForm({
-        title: savedTitle,
-        description: savedDesc,
-        isPlatformSpecific: savedIsPlatformSpecific,
-        platformTitles: savedPlatformTitles,
-        platformDescriptions: savedPlatformDescs
+      setForm(prev => {
+        // Only overwrite if the user hasn't already typed something before this effect runs
+        if (prev.title !== '' || prev.description !== '') return prev;
+        return {
+          title: savedTitle,
+          description: savedDesc,
+          isPlatformSpecific: savedIsPlatformSpecific,
+          platformTitles: savedPlatformTitles,
+          platformDescriptions: savedPlatformDescs
+        };
       });
     }, 0);
-    
     return () => clearTimeout(timer);
   }, []);
 

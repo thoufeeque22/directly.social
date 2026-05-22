@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Metadata Templates (Snippets)', () => {
+test.describe.serial('Metadata Templates (Snippets)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
