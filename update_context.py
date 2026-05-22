@@ -1,30 +1,28 @@
 import json
-from datetime import datetime, timezone
+import datetime
 
+# Read the file
 with open('.gemini_agent_context.json', 'r') as f:
     data = json.load(f)
 
+# Update root keys
 data['last_agent'] = 'qa-agent'
-data['last_updated_at'] = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
+data['next_agent'] = 'dev-agent'
 
-if 'round-1' not in data:
-    data['round-1'] = {}
+# Create/Update round-4 qa-agent entry
+if 'round-4' not in data:
+    data['round-4'] = {}
 
-data['round-1']['qa-agent'] = {
-    "timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+data['round-4']['qa-agent'] = {
+    "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
     "qa_verdict": "FAIL",
-    "failure_details": "1. Playwright tests capture a React hydration warning ('Warning: Prop `style` did not match.') during component load, caused by `aiTier` changing values between server and client rendering. 2. Several pre-existing/unrelated Playwright tests (e.g. byok/wizard.spec.ts, analytics.spec.ts) are failing with 500 Network errors or layout issues. As per QA rules, these failures prevent a PASS verdict.",
+    "failure_details": "Playwright E2E tests failed with 14 failures. While 'polish-with-ai-button' tests passed, systemic regressions were observed across several modules (AI Chatbot, Schedule Navigation, Global Search, Analytics). Errors included 429 Too Many Requests, timeouts, and element visibility issues indicating broken data-seeding or race conditions despite the full project re-seed.",
     "expected_output": {
-        "commands": [
-            "npx playwright test --reporter=list src/__tests__/e2e/polish-with-ai-button.spec.ts"
-        ],
-        "success_indicators": [
-            "The 'Polish with AI' button test passes without hydration warnings.",
-            "No React hydration errors occur on page load.",
-            "All E2E tests pass with no 500 Network errors."
-        ]
+        "commands": ["npx playwright test"],
+        "success_indicators": ["Zero failing E2E tests.", "Clean console output (no hydration warnings or 4xx/5xx)."]
     }
 }
 
+# Write back
 with open('.gemini_agent_context.json', 'w') as f:
     json.dump(data, f, indent=2)
