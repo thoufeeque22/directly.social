@@ -427,35 +427,39 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             </button>
           )}
 
-          {mounted && aiTier === 'Manual' && !isUploading && (
-            <button
-              type="button"
-              onClick={() => onTierChange('Enrich')}
-              style={{
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem',
-                padding: '1rem',
-                borderRadius: '0.75rem',
-                background: 'linear-gradient(135deg, hsla(var(--primary) / 0.1), hsla(var(--primary) / 0.05))',
-                border: '1px solid hsla(var(--primary) / 0.3)',
-                color: 'hsl(var(--primary))',
-                fontWeight: 700,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                fontSize: '0.9rem'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, hsla(var(--primary) / 0.2), hsla(var(--primary) / 0.1))';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, hsla(var(--primary) / 0.1), hsla(var(--primary) / 0.05))';
-              }}
-            >
-              <AutoAwesomeIcon sx={{ fontSize: 18 }} /> Polish with AI
-            </button>
+          {mounted ? (
+            aiTier === 'Manual' && !isUploading && (
+              <button
+                type="button"
+                onClick={() => onTierChange('Enrich')}
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  padding: '1rem',
+                  borderRadius: '0.75rem',
+                  background: 'linear-gradient(135deg, hsla(var(--primary) / 0.1), hsla(var(--primary) / 0.05))',
+                  border: '1px solid hsla(var(--primary) / 0.3)',
+                  color: 'hsl(var(--primary))',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  fontSize: '0.9rem'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'linear-gradient(135deg, hsla(var(--primary) / 0.2), hsla(var(--primary) / 0.1))';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'linear-gradient(135deg, hsla(var(--primary) / 0.1), hsla(var(--primary) / 0.05))';
+                }}
+              >
+                <AutoAwesomeIcon sx={{ fontSize: 18 }} /> Polish with AI
+              </button>
+            )
+          ) : (
+            <div style={{ flex: 1 }} />
           )}
 
           <button 

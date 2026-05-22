@@ -2,7 +2,7 @@
   "cookies": [
     {
       "name": "authjs.csrf-token",
-      "value": "b10f092936c00be11be7e39fa8b838fde80a68bba1db9c9bfaab025e208b94f6%7C04ebc9b864a19d7b08757986d14f56955901507dd3befd485ed11ce80c655986",
+      "value": "5d4ef6e384834a20e1f04631f700d3a96a2426377611cfa6dba215d82f32159f%7C7cd167d45861fea19ee4e7b47d4c73f75cf524425aef52077a988dc84925d7d1",
       "domain": "localhost",
       "path": "/",
       "expires": -1,
@@ -22,24 +22,14 @@
     },
     {
       "name": "authjs.session-token",
-      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..6Lz1xDFk1lEuvewtMWHIaw.0IkVYBz0nuY06s1kToS4dWet8UtWW2Vmrxx0GyDlgkxG5WHvkDFEp24eAK7-qNAbwa0wzLv2-5yKABeNqFseyTrllEGOiTnqzqQ_Aqr9VC_LU9L0kCuT-Pv_j4VwJymumh-a4I11ZO-Ias3niwX8KjceEnnyJ51LsgJS7ymTiOKpd6wnSN6cRrnwf3b6L5ZgA4oizLV8FK2WhPb1b9SRsMZrlSRjanvhQj9itNjCES1egnIKfUaiifOuOOYYZUesw7fvBgkqPqaNl4ZFTQgbEb2bmddT4gYwPfYNIDrmK28.xRrTvCrrivK6clIiUz9-tGNYpGG6W5D4xt-8czgRENk",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..Ym7n7E8hI5mmi6rACR_gcA.5tpDOYti3APrr3fu8vQrXFm_mwqFpkaWGN-GVa8vD7nsMNapHTHeFUrmbQ3xxJ65DvVHsjv9h2sdYA2EWZ1MjaXTilQ_F0bzLXfZ97vEi4lpuwL1qapVxXDArKniIwgYspmODE1mSb0113CBLmqu33BtD_d4zWRPX2IvAjBGXl2JdRqsOJKwf4ciBiB3k_D_mkBCP0wvWfaz3nQ7--Fp9JhkKtuhUN6MVp5harAqNJ9sKS5IoiIF79TATKTmGtfJhcWr4guO4yILvXM4Hi0JQ2kbenq8jLxBd6uyeQ6PB_c._SkgNTRBJoP-BkdyK-18RmnFT2UYYisX6gYXdraSUG4",
       "domain": "localhost",
       "path": "/",
-      "expires": 1782080574.985506,
+      "expires": 1782081390.492072,
       "httpOnly": true,
       "secure": false,
       "sameSite": "Lax"
     }
   ],
-  "origins": [
-    {
-      "origin": "http://localhost:3000",
-      "localStorage": [
-        {
-          "name": "SS_SELECTED_PLATFORMS",
-          "value": "[\"cmped92jz00009bqzm3h4u14t\",\"cmped92jz00019bqzcm6r75a5\",\"local-dev-1\",\"local-dev-2\",\"local-dev-3\"]"
-        }
-      ]
-    }
-  ]
+  "origins": []
 }
