@@ -42,8 +42,7 @@ export const Header = ({ onToggleSidebar }: { onToggleSidebar: () => void }) => 
 };
 
 import { Session } from 'next-auth';
-
-// ... (existing imports)
+import { WhatsNewProfileLink } from '../WhatsNew/WhatsNewProfileLink';
 
 const UserActions = ({ session }: { session: Session | null }) => (
   <>
@@ -54,8 +53,10 @@ const UserActions = ({ session }: { session: Session | null }) => (
     {session?.user && (
       <div className={styles.userProfile}>
         {session.user.image ? <img src={session.user.image} alt="User" className={styles.userAvatar} /> : <div className={styles.userAvatar}>{session.user.name?.charAt(0) || 'U'}</div>}
+        <WhatsNewProfileLink />
         <button className={styles.logoutBtn} onClick={() => signOut({ callbackUrl: '/login' })}>Sign Out</button>
       </div>
     )}
   </>
 );
+

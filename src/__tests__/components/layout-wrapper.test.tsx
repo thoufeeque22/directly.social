@@ -23,7 +23,7 @@ vi.mock('@/components/layout/Sidebar', () => ({
   default: () => <div data-testid="sidebar">Sidebar Mock</div>,
 }));
 vi.mock('@/components/layout/Header', () => ({
-  default: () => <div data-testid="header">Header Mock</div>,
+  Header: () => <div data-testid="header">Header Mock</div>,
 }));
 vi.mock('@/components/chat/AIChatbot', () => ({
   AIChatbot: () => <div data-testid="ai-chatbot">Chatbot Mock</div>,

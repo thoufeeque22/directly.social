@@ -1,41 +1,58 @@
 'use client';
 
-import { Popover, Box, Typography, Button, List, ListItem, ListItemText, Divider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Popover, Box, Typography, Button, CircularProgress } from '@mui/material';
 import { markUpdateAsSeen } from '@/app/actions/whats-new';
-import { useWhatsNew } from '@/hooks/useWhatsNew';
+import { getRecentUpdates } from '@/app/actions/whats-new-history';
+import { useWhatsNew, Update } from './WhatsNewContext';
+import { WhatsNewList } from './WhatsNewList';
+import { WhatsNewHistoryList } from './WhatsNewHistoryList';
 
-export function WhatsNewPopover({ 
-  anchorEl, 
-  onClose 
-}: { 
-  anchorEl: HTMLElement | null; 
-  onClose: () => void; 
+export function WhatsNewPopover({
+  anchorEl,
+  onClose,
+}: {
+  anchorEl: HTMLElement | null;
+  onClose: () => void;
 }) {
   const { updates, setUpdates } = useWhatsNew();
+  const [localUpdates, setLocalUpdates] = useState<Update[]>([]);
+  const [historicalUpdates, setHistoricalUpdates] = useState<Update[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
   const open = Boolean(anchorEl);
 
-  const handleClose = async (updateId: string) => {
-    try {
-      const result = await markUpdateAsSeen(updateId);
-      if (!result.success) {
-        console.warn('[WhatsNewPopover] Failed to mark update as seen:', result.error);
+  useEffect(() => {
+    if (open) {
+      if (updates.length > 0) {
+        const unread = [...updates];
+        const timer = setTimeout(() => {
+          setLocalUpdates(unread);
+          setUpdates([]);
+        }, 0);
+        Promise.allSettled(unread.map((u) => markUpdateAsSeen(u.id)));
+        return () => clearTimeout(timer);
+      } else {
+        setLoadingHistory(true);
+        getRecentUpdates(5)
+          .then((history) => {
+            setHistoricalUpdates(history);
+          })
+          .catch((err) => {
+            console.error('[WhatsNewPopover] Error fetching history:', err);
+          })
+          .finally(() => {
+            setLoadingHistory(false);
+          });
       }
-    } catch (error) {
-      console.error('[WhatsNewPopover] Error in markUpdateAsSeen:', error);
-    } finally {
-      // Always remove from local UI state to avoid stuck UI, even on error
-      const remainingUpdates = updates.filter(u => u.id !== updateId);
-      setUpdates(remainingUpdates);
-      if (remainingUpdates.length === 0) onClose();
     }
+  }, [open, updates, setUpdates]);
+
+  const handleDismissSingle = (id: string) => {
+    setLocalUpdates((prev) => prev.filter((u) => u.id !== id));
   };
 
-  const handleDismissAll = async () => {
-    const currentUpdates = [...updates];
-    onClose();
-    setUpdates([]);
-    // Then fire off all actions in background
-    Promise.allSettled(currentUpdates.map(u => markUpdateAsSeen(u.id)));
+  const handleDismissAll = () => {
+    setLocalUpdates([]);
   };
 
   return (
@@ -43,14 +60,9 @@ export function WhatsNewPopover({
       open={open}
       anchorEl={anchorEl}
       onClose={onClose}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      data-testid="whats-new-modal"
       slotProps={{
         paper: {
           sx: {
@@ -63,72 +75,44 @@ export function WhatsNewPopover({
             maxWidth: 400,
             width: 'calc(100vw - 32px)',
             overflowY: 'auto',
-            maxHeight: '70vh'
-          }
-        }
+            maxHeight: '70vh',
+          },
+        },
       }}
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'primary.main' }}>
           What&apos;s New
         </Typography>
-        {updates.length > 1 && (
-          <Button 
-            size="small" 
-            onClick={handleDismissAll}
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          {localUpdates.length > 1 && (
+            <Button
+              size="small"
+              onClick={handleDismissAll}
+              sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main' }, textTransform: 'none', fontSize: '0.75rem' }}
+            >
+              Dismiss All
+            </Button>
+          )}
+          <Button
+            size="small"
+            onClick={onClose}
+            data-testid="whats-new-modal-close"
             sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main' }, textTransform: 'none', fontSize: '0.75rem' }}
           >
-            Dismiss All
+            Close
           </Button>
-        )}
+        </Box>
       </Box>
 
-      {updates.length === 0 ? (
-        <Typography variant="body2" sx={{ color: 'text.secondary', py: 2, textAlign: 'center' }}>
-          You&apos;re all caught up!
-        </Typography>
+      {localUpdates.length > 0 ? (
+        <WhatsNewList updates={localUpdates} onDismiss={handleDismissSingle} />
+      ) : loadingHistory ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+          <CircularProgress size={24} />
+        </Box>
       ) : (
-        <List disablePadding>
-          {updates.map((update, index) => (
-            <div key={update.id}>
-              <ListItem 
-                sx={{ px: 0, py: 2 }}
-                secondaryAction={
-                  <Button 
-                    variant="outlined"
-                    size="small"
-                    onClick={() => handleClose(update.id)}
-                    sx={{ 
-                      borderRadius: '0.5rem',
-                      px: 1.5,
-                      fontWeight: 600,
-                      fontSize: '0.7rem',
-                      textTransform: 'none'
-                    }}
-                  >
-                    Got it
-                  </Button>
-                }
-              >
-                <ListItemText 
-                  primary={
-                    <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.2 }}>
-                      {update.title}
-                    </Typography>
-                  } 
-                  secondary={
-                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', pr: 7 }}>
-                      {update.description}
-                    </Typography>
-                  } 
-                />
-              </ListItem>
-              {index < updates.length - 1 && (
-                <Divider sx={{ borderColor: 'hsla(250, 30%, 25%, 0.1)' }} />
-              )}
-            </div>
-          ))}
-        </List>
+        <WhatsNewHistoryList updates={historicalUpdates} />
       )}
     </Popover>
   );

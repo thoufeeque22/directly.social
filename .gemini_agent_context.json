@@ -1,6 +1,6 @@
 {
   "last_agent": "dev-agent",
-  "next_agent": "dev-agent",
+  "next_agent": "review-agent",
   "ticket_id": "398",
   "ticket_goal": "Fix Prisma foreign key constraint violation in WhatsNew modal & Implement Option A (persistent WhatsNew access in Profile and clear badge on click)",
   "round-12": {
@@ -33,8 +33,37 @@
       }
     }
   },
+  "round-14": {
+    "dev-agent": {
+      "timestamp": "2026-05-22T22:59:00Z",
+      "findings": "Implemented Option A for WhatsNew changelog feature. Created modular helper components and a new history action to satisfy the 50-line rule, and deferred state updates to resolve ESLint cascading render warnings.",
+      "fixes_applied": [
+        "Created src/app/actions/whats-new-history.ts to fetch historical updates (<= 50 lines)",
+        "Created src/components/WhatsNew/WhatsNewList.tsx to render active unread updates (<= 50 lines)",
+        "Created src/components/WhatsNew/WhatsNewHistoryList.tsx to render historical read updates (<= 50 lines)",
+        "Created src/components/WhatsNew/WhatsNewProfileLink.tsx to add subtle, persistent WhatsNew access in profile (<= 50 lines)",
+        "Refactored src/components/WhatsNew/WhatsNewPopover.tsx to support background mark-as-seen updates, instantly clear global badge state, and fetch recent history if unread count is 0",
+        "Modified src/components/layout/Header.tsx to integrate WhatsNewProfileLink in the UserActions profile menu",
+        "Added unit tests for history action in src/__tests__/unit/whats-new-history.test.ts",
+        "Fixed LayoutWrapper mock in src/__tests__/components/layout-wrapper.test.tsx"
+      ],
+      "expected_output": {
+        "build_status": "PASS",
+        "tsc_status": "PASS",
+        "next_agent": "review-agent"
+      }
+    }
+  },
   "modified_files": [
     "src/app/actions/whats-new.ts",
-    "src/auth.ts"
+    "src/auth.ts",
+    "src/app/actions/whats-new-history.ts",
+    "src/components/WhatsNew/WhatsNewList.tsx",
+    "src/components/WhatsNew/WhatsNewHistoryList.tsx",
+    "src/components/WhatsNew/WhatsNewProfileLink.tsx",
+    "src/components/WhatsNew/WhatsNewPopover.tsx",
+    "src/components/layout/Header.tsx",
+    "src/__tests__/unit/whats-new-history.test.ts",
+    "src/__tests__/components/layout-wrapper.test.tsx"
   ]
 }
