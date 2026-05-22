@@ -2,7 +2,7 @@
   "cookies": [
     {
       "name": "authjs.csrf-token",
-      "value": "5d4ef6e384834a20e1f04631f700d3a96a2426377611cfa6dba215d82f32159f%7C7cd167d45861fea19ee4e7b47d4c73f75cf524425aef52077a988dc84925d7d1",
+      "value": "2fce6b0e0e33174a5731791f669c5b13fa13404c6e227974e62057958219056c%7Ccbb6c576ebe66476dba2180c642edc981a15be00b6b6dc2c8de1bae6d6c5fc9c",
       "domain": "localhost",
       "path": "/",
       "expires": -1,
@@ -22,14 +22,24 @@
     },
     {
       "name": "authjs.session-token",
-      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..Ym7n7E8hI5mmi6rACR_gcA.5tpDOYti3APrr3fu8vQrXFm_mwqFpkaWGN-GVa8vD7nsMNapHTHeFUrmbQ3xxJ65DvVHsjv9h2sdYA2EWZ1MjaXTilQ_F0bzLXfZ97vEi4lpuwL1qapVxXDArKniIwgYspmODE1mSb0113CBLmqu33BtD_d4zWRPX2IvAjBGXl2JdRqsOJKwf4ciBiB3k_D_mkBCP0wvWfaz3nQ7--Fp9JhkKtuhUN6MVp5harAqNJ9sKS5IoiIF79TATKTmGtfJhcWr4guO4yILvXM4Hi0JQ2kbenq8jLxBd6uyeQ6PB_c._SkgNTRBJoP-BkdyK-18RmnFT2UYYisX6gYXdraSUG4",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..4diTA0m3xnc4RAgekv4iHw.i0H2BzsQ-KR1BkpoW1jUTMdAvmDitqK5HIqsGXzQ3U31RD00JnQHAftPaenFxPzhNhnBPa-4JFZje2FLPTyIKsxKB_qok_xo3Oym56-2HzOdK4g2f2qWkL_3E80jpU-Spnc8afn-1JJNqnqECadU_3O2APMC5nY944TRr6Rr7eDZQvPUb-zNvKmKda8sp9jUevl81d7v1xUHJ0Y_DYM662Qr4w-WR8OEWMHr43jTwqpp6gP-C6XQ-sGOzenXokww-2bB6dZb6tEi4y-kcpNJCx1KYCmtdkY-i005Y4s7lAI.nGZzEp4xW__sX1nxEq3AFKk2oh6iezxqAbOmDyAycxw",
       "domain": "localhost",
       "path": "/",
-      "expires": 1782081390.492072,
+      "expires": 1782082009.393663,
       "httpOnly": true,
       "secure": false,
       "sameSite": "Lax"
     }
   ],
-  "origins": []
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "SS_SELECTED_PLATFORMS",
+          "value": "[\"cmped92jz00009bqzm3h4u14t\",\"cmped92jz00019bqzcm6r75a5\",\"local-dev-1\",\"local-dev-2\",\"local-dev-3\"]"
+        }
+      ]
+    }
+  ]
 }
