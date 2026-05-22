@@ -1,6 +1,6 @@
 {
-  "last_agent": "dev-agent",
-  "next_agent": "review-agent",
+  "last_agent": "review-agent",
+  "next_agent": "dev-agent",
   "ticket_id": "398",
   "ticket_goal": "Fix Prisma foreign key constraint violation in WhatsNew modal & Implement Option A (persistent WhatsNew access in Profile and clear badge on click)",
   "round-12": {
@@ -51,6 +51,19 @@
         "build_status": "PASS",
         "tsc_status": "PASS",
         "next_agent": "review-agent"
+      }
+    },
+    "review-agent": {
+      "timestamp": "2026-05-22T23:05:00Z",
+      "findings": "Conducted a detailed code review and verification of round-14 changes. Type-checking passed successfully, and whats-new tests passed perfectly. However, found one blocker ESLint error in WhatsNewPopover.tsx and several modularity violations (exceeding the strict 50-line rule for new files).",
+      "review_verdict": "FAIL",
+      "failure_details": "1. ESLint Error in src/components/WhatsNew/WhatsNewPopover.tsx (line 35): Calling setState (setLoadingHistory(true)) synchronously within an effect can trigger cascading renders (react-hooks/set-state-in-effect).\n2. Architectural Violations of 50-Line Rule (GEMINI.md):\n  - src/components/WhatsNew/WhatsNewPopover.tsx (120 lines): Exceeds maximum 50-line limit for new files.\n  - src/components/WhatsNew/WhatsNewList.tsx (58 lines): Exceeds 50-line limit.\n  - src/components/WhatsNew/WhatsNewContext.tsx (51 lines): Exceeds 50-line limit.",
+      "expected_output": {
+        "build_status": "PASS",
+        "tsc_status": "PASS",
+        "eslint_status": "PASS",
+        "whats_new_tests": "PASS",
+        "next_agent": "dev-agent"
       }
     }
   },
