@@ -72,7 +72,12 @@ test.describe("What's New Option A E2E & Visual Verification", () => {
     await closeButton.click();
     await expect(popover).not.toBeVisible();
 
-    // Locate the permanent link in the user profile section
+    // Open the user profile dropdown menu first
+    const profileMenuButton = page.getByTestId('profile-menu-button');
+    await expect(profileMenuButton).toBeVisible();
+    await profileMenuButton.click();
+
+    // Locate the permanent link in the user profile menu
     const profileLink = page.getByTestId('whats-new-profile-link');
     await expect(profileLink).toBeVisible();
 

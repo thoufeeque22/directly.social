@@ -2,9 +2,10 @@
 
 import React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import styles from './Header.module.css';
 import { WhatsNewBadge } from '../WhatsNew/WhatsNewBadge';
+import { UserActions } from './UserActions';
 
 export const Header = ({ onToggleSidebar }: { onToggleSidebar: () => void }) => {
   const router = useRouter();
@@ -41,22 +42,4 @@ export const Header = ({ onToggleSidebar }: { onToggleSidebar: () => void }) => 
   );
 };
 
-import { Session } from 'next-auth';
-import { WhatsNewProfileLink } from '../WhatsNew/WhatsNewProfileLink';
-
-const UserActions = ({ session }: { session: Session | null }) => (
-  <>
-    <button className={styles.notificationBtn}>🔔</button>
-    <button className={styles.createBtn} onClick={() => window.location.hash = 'create-post-section'}>
-      + Create Post
-    </button>
-    {session?.user && (
-      <div className={styles.userProfile}>
-        {session.user.image ? <img src={session.user.image} alt="User" className={styles.userAvatar} /> : <div className={styles.userAvatar}>{session.user.name?.charAt(0) || 'U'}</div>}
-        <WhatsNewProfileLink />
-        <button className={styles.logoutBtn} onClick={() => signOut({ callbackUrl: '/login' })}>Sign Out</button>
-      </div>
-    )}
-  </>
-);
 
