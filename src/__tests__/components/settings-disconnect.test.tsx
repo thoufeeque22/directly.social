@@ -74,8 +74,14 @@ describe('Settings Disconnect Functionality', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
-  it('renders disconnect buttons (X) for connected accounts when platforms are active', async () => {
+  const renderSettings = () => {
     render(<SettingsPage />);
+    const connectionsTab = screen.getByRole('tab', { name: /Connections/i });
+    fireEvent.click(connectionsTab);
+  };
+
+  it('renders disconnect buttons (X) for connected accounts when platforms are active', async () => {
+    renderSettings();
     
     await waitFor(() => {
       // Find all buttons with "Disconnect account" title
@@ -87,7 +93,7 @@ describe('Settings Disconnect Functionality', () => {
   it('cancels disconnection if user rejects confirmation', async () => {
     vi.mocked(window.confirm).mockReturnValue(false);
     
-    render(<SettingsPage />);
+    renderSettings();
     
     await waitFor(() => screen.getAllByTitle('Disconnect account'));
     
@@ -101,7 +107,7 @@ describe('Settings Disconnect Functionality', () => {
   it('proceeds with disconnection if user confirms', async () => {
     vi.mocked(window.confirm).mockReturnValue(true);
     
-    render(<SettingsPage />);
+    renderSettings();
     
     await waitFor(() => screen.getAllByTitle('Disconnect account'));
     
@@ -116,7 +122,7 @@ describe('Settings Disconnect Functionality', () => {
     // Delay the server action response to test optimistic update
     vi.mocked(disconnectAccount).mockImplementation(() => new Promise(resolve => setTimeout(() => resolve({ success: true }), 100)));
     
-    render(<SettingsPage />);
+    renderSettings();
     
     await waitFor(() => screen.getByText('@thoufiq.ar'));
     
@@ -130,7 +136,7 @@ describe('Settings Disconnect Functionality', () => {
   it('shows an alert if disconnection fails', async () => {
     vi.mocked(disconnectAccount).mockRejectedValue(new Error('Server error'));
     
-    render(<SettingsPage />);
+    renderSettings();
     
     await waitFor(() => screen.getAllByTitle('Disconnect account'));
     

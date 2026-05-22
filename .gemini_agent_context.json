@@ -1,6 +1,6 @@
 {
-  "last_agent": "review-agent",
-  "next_agent": "qa-agent",
+  "last_agent": "qa-agent",
+  "next_agent": "doc-agent",
   "ticket_id": "398",
   "ticket_goal": "Fix Prisma foreign key constraint violation in WhatsNew modal & Implement Option A (persistent WhatsNew access in Profile and clear badge on click)",
   "round-12": {
@@ -141,6 +141,19 @@
         "whats_new_tests": "PASS",
         "next_agent": "qa-agent"
       }
+    },
+    "qa-agent": {
+      "timestamp": "2026-05-22T23:42:00Z",
+      "findings": "Verified that the Playwright E2E test fully covers the profile dropdown menu trigger, persistent WhatsNew link, and modal navigation. Executed the Playwright test suite and verified 100% pass rate. Monitored console and network logs, ensuring zero 4xx/5xx network errors, console errors, or hydration warnings. Successfully generated clean visual audit screenshots under the verification/ folder and replicated them to the app's brain artifacts directories.",
+      "qa_verdict": "PASS",
+      "expected_output": {
+        "playwright_status": "PASS",
+        "whats_new_badge_screenshot": "verification/whats-new-badge.png",
+        "whats_new_profile_link_screenshot": "verification/whats-new-profile-link.png",
+        "whats_new_popover_unread_screenshot": "verification/whats-new-popover-unread.png",
+        "whats_new_popover_history_screenshot": "verification/whats-new-popover-history.png",
+        "next_agent": "doc-agent"
+      }
     }
   },
   "modified_files": [
@@ -164,6 +177,6 @@
     "src/components/layout/UserActions.tsx",
     "src/components/layout/Header.tsx"
   ],
-  "last_updated_at": "2026-05-22T23:38:00Z",
+  "last_updated_at": "2026-05-22T23:42:00Z",
   "branch_name": "398-whats-new-notification"
 }
