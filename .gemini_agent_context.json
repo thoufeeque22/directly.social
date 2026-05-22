@@ -3,8 +3,8 @@
   "ticket_goal": "manual mode: add \"enrich title/description\" button near \"Post Video\" button",
   "ticket_description": "",
   "branch_name": "514-manual-mode-add-enrich-titledescription-button-near-post-video-button",
-  "last_agent": "dev-agent",
-  "next_agent": "review-agent",
+  "last_agent": "review-agent",
+  "next_agent": "dev-agent",
   "last_updated_at": "2026-05-23T03:00:00Z",
   "round-1": {
     "discovery-agent": {
