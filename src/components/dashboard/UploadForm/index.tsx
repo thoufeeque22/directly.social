@@ -459,7 +459,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               </button>
             )
           ) : (
-            <div style={{ flex: 1 }} />
+            <div style={{ flex: 1, padding: '1rem' }} />
           )}
 
           <button 
