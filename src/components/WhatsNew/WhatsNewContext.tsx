@@ -20,20 +20,16 @@ const WhatsNewContext = createContext<WhatsNewContextType | undefined>(undefined
 
 export function WhatsNewProvider({ children }: { children: React.ReactNode }) {
   const [updates, setUpdates] = useState<Update[]>([]);
-
   const refreshUpdates = async () => {
     const u = await getUnseenUpdates();
     setUpdates(u);
     return u;
   };
-
   useEffect(() => {
-    const init = async () => {
-      await refreshUpdates();
-    };
-    init();
+    setTimeout(() => {
+      refreshUpdates();
+    }, 0);
   }, []);
-
   return (
     <WhatsNewContext.Provider value={{ updates, setUpdates, refreshUpdates }}>
       {children}
