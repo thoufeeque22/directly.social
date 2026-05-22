@@ -1,6 +1,6 @@
 {
-  "last_agent": "dev-agent",
-  "next_agent": "review-agent",
+  "last_agent": "review-agent",
+  "next_agent": "qa-agent",
   "ticket_id": "398",
   "ticket_goal": "Fix Prisma foreign key constraint violation in WhatsNew modal & Implement Option A (persistent WhatsNew access in Profile and clear badge on click)",
   "round-12": {
@@ -129,6 +129,18 @@
         "playwright_status": "PASS",
         "next_agent": "review-agent"
       }
+    },
+    "review-agent": {
+      "timestamp": "2026-05-22T23:38:00Z",
+      "findings": "Conducted a detailed code review and verification of Round 16 changes. Verified that the new component src/components/layout/UserActions.tsx (45 lines) and modified src/components/layout/Header.tsx (46 lines) are strictly <= 50 lines. The obsolete WhatsNewProfileLink.tsx was successfully deleted. Linter checks (npm run lint) ran cleanly with zero errors, type-checking (npx tsc --noEmit) passed successfully, and Playwright E2E tests passed perfectly. The profile dropdown menu works flawlessly.",
+      "review_verdict": "PASS",
+      "expected_output": {
+        "build_status": "PASS",
+        "tsc_status": "PASS",
+        "eslint_status": "PASS",
+        "whats_new_tests": "PASS",
+        "next_agent": "qa-agent"
+      }
     }
   },
   "modified_files": [
@@ -151,5 +163,7 @@
     ".gemini/hooks/post-task.sh",
     "src/components/layout/UserActions.tsx",
     "src/components/layout/Header.tsx"
-  ]
+  ],
+  "last_updated_at": "2026-05-22T23:38:00Z",
+  "branch_name": "398-whats-new-notification"
 }
