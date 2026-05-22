@@ -33,38 +33,29 @@ The feature is built with highly decoupled, modular React components, with each 
 A React Context provider that handles the global client-side state for unread updates, ensuring that badge clearance propagates instantly across all triggers in the header.
 
 ### `WhatsNewBadge`
-Located in the global `Header`. It renders a notification badge with the current unread count over an icon button. Clicking the badge displays the `WhatsNewPopover`.
+Located in the global `Header`. It renders an interactive icon button with a Material UI Badge displaying the count of unread updates.
+- **Visibility:** Only visible when unread count is > 0.
 - **Test ID:** `whats-new-badge`
 
-### `UserActions`
-A modular profile dropdown menu component replacing flat header links. It renders the user's avatar as a trigger. When clicked, it opens a Material UI dropdown menu showing options including:
-- **What's New:** Opens the `WhatsNewPopover` persistently.
-  - **Test ID:** `whats-new-profile-link`
-- **Sign Out:** Triggers the Auth.js signOut flow.
-  - **Test ID:** `sign-out-button`
-
 ### `WhatsNewPopover`
-A highly polished, responsive popover component anchored to either the badge or the profile dropdown menu trigger. It displays the unread updates or historical updates.
+A Material UI Popover anchored to either the `WhatsNewBadge` or the profile avatar button.
 - **Test ID:** `whats-new-modal`
-- If unread updates are present:
-  - Renders `WhatsNewList` consisting of `WhatsNewItem` components.
-  - Instantly begins marking updates as seen in the background.
-  - Features a "Dismiss All" button when multiple updates are unread.
-- If no unread updates are present:
-  - Displays a loading indicator and fetches historical updates using `WhatsNewHistoryList`.
+- **Dismiss Button Test ID:** `whats-new-item-dismiss`
 
-### `useWhatsNewPopover`
-A custom hook that encapsulates popover logic, including local state buffering, background synchronization, and historical data fetching, resolving potential ESLint cascading render warnings.
+### `UserActions`
+Located in the `Header`. Contains the notifications bell, post creation button, and user avatar button. Clicking the user avatar button triggers a Material UI actions menu dropdown containing:
+1. **What's New** (Test ID: `whats-new-profile-link`): Opens the popover anchored to the profile avatar button.
+2. **Sign Out** (Test ID: `sign-out-button`): Triggers the session termination flow.
 
-## Server Actions (`src/app/actions/whats-new.ts` & `src/app/actions/whats-new-history.ts`)
+## Server Actions
 
-- `getUnseenUpdates()`: Fetches all `UpdateLog` entries that do not have a corresponding `UserSeenUpdate` for the current user.
-- `markUpdateAsSeen(updateId: string)`: Creates a `UserSeenUpdate` record for the user and the specified update. Includes robust user existence validation and session-to-token ID consistency checks.
-- `getHistoricalUpdates()`: Fetches the most recent read updates for the user to populate the persistent changelog view.
+- `getUnseenUpdates()` (`src/app/actions/whats-new.ts`): Fetches all `UpdateLog` entries that do not have a corresponding `UserSeenUpdate` for the current user.
+- `markUpdateAsSeen(updateId: string)` (`src/app/actions/whats-new.ts`): Creates a `UserSeenUpdate` record for the user and the specified update.
+- `getHistoricalUpdates(limit: number)` (`src/app/actions/whats-new-history.ts`): Fetches the last N read updates for the user to display as historical records.
 
 ## Administration
 
-Updates are seeded or created via database migrations or direct database access (e.g., Prisma Studio).
+Currently, updates are added to the `UpdateLog` table via database migrations or direct database access (e.g., Prisma Studio). Future iterations may include an admin UI for posting updates.
 
 ### Example Seed Script
 To add a new update via a script:

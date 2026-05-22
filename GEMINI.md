@@ -171,7 +171,7 @@ You MUST commit any review artifacts before assigning. If issues found, assign t
   - **Observation:** Any `4xx/5xx` in Network Tab or Hydration errors in Console = `[FAIL]`.
   - **Console Monitoring:** You MUST monitor the browser console for `error` or `warning` (especially deprecations) and mark as `[FAIL]` if any are detected.
   - **Verification:** UI must use **PLN** currency, **Metric** units, and **English** language.
-- **Fail Criteria:** If UI lacks `data-testid`, mark `[FAIL]` and instruct Dev to add them.
+- **Fail Criteria & Boundary Enforcement:** If UI lacks `data-testid`, or if a test fails due to missing integration, incorrect test-ids, missing elements, or structural bugs, `qa-agent` MUST NOT attempt to modify application code under any circumstances. It is strictly forbidden from writing or modifying files outside of `src/__tests__/e2e/`. It MUST mark the build as `[FAIL]` and assign the task back to `dev-agent` with exact failure details.
 - **Handoff:** Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**) with `last_agent: "qa-agent"` and verdict details. You MUST include an `expected_output` block confirming:
   1. `npx playwright test` success report.
   2. New or updated Playwright tests committed to `src/__tests__/e2e/`.
