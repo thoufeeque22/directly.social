@@ -319,14 +319,16 @@ The application implements a hierarchical error handling strategy to ensure grac
 
 ### 8. What's New Notifications
 
-Users are notified of new application updates via a badge in the header.
+Users are notified of new application updates via a badge in the header, and can also persistently access historical updates via the user profile dropdown menu.
 
 ```mermaid
 sequenceDiagram
     participant U as User (UI)
     participant B as WhatsNewBadge (Component)
-    participant M as WhatsNewModal (Component)
-    participant A as Server Action (whats-new.ts)
+    participant UA as UserActions (Component)
+    participant P as WhatsNewPopover (Component)
+    participant H as useWhatsNewPopover (Hook)
+    participant A as Server Actions
     participant DB as Database (Prisma)
 
     B->>A: getUnseenUpdates()
@@ -335,19 +337,32 @@ sequenceDiagram
     A-->>B: Return Updates
     B->>B: Render "New" Badge (count = list.length)
 
-    U->>B: Click Badge
-    B->>M: Open Modal(updates)
-    
-    U->>M: Click "Got it" for an update
-    M->>A: markUpdateAsSeen(updateId)
-    A->>DB: Create UserSeenUpdate record
-    DB-->>A: Success
-    A-->>M: Success
-    M->>M: Remove update from local state
-    opt If no more updates
-        M->>M: Close Modal
+    alt Trigger via Header Badge Click
+        U->>B: Click Badge Icon
+        B->>P: Open Popover (anchorEl = Badge)
+    else Trigger via User Profile Menu Click
+        U->>UA: Click Profile Avatar
+        UA->>UA: Open Menu
+        U->>UA: Click "What's New" Link
+        UA->>P: Open Popover (anchorEl = Profile Avatar)
     end
-    B->>B: Update Badge count
+
+    P->>H: Initialize Popover State & Effects
+    
+    alt If Unread Updates Present
+        H->>A: markUpdateAsSeen(updateId) [in background]
+        A->>DB: Validate user and write UserSeenUpdate
+        H->>H: Instantly clear global context badge count
+        P->>P: Render unread updates list
+        U->>P: Click Dismiss (Got it) or Dismiss All
+        P->>P: Filter local list updates
+    else If No Unread Updates (or after dismissal)
+        H->>A: getHistoricalUpdates() [lazy load]
+        A->>DB: Query recently read UpdateLog entries
+        DB-->>A: Return History
+        A-->>H: Set history state
+        P->>P: Render read updates history list
+    end
 ```
 
 ## Platform Integrations
