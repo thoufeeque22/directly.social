@@ -3,8 +3,8 @@
   "ticket_goal": "manual mode: add \"enrich title/description\" button near \"Post Video\" button",
   "ticket_description": "",
   "branch_name": "514-manual-mode-add-enrich-titledescription-button-near-post-video-button",
-  "last_agent": "review-agent",
-  "next_agent": "qa-agent",
+  "last_agent": "qa-agent",
+  "next_agent": "dev-agent",
   "last_updated_at": "2026-05-22T22:50:00.543453Z",
   "round-1": {
     "discovery-agent": {
@@ -208,6 +208,20 @@
           "Adherence to docs/ and API contracts.",
           "No security vulnerabilities found in diff.",
           "Application passes build and type-checking successfully."
+        ]
+      }
+    },
+    "qa-agent": {
+      "timestamp": "2026-05-22T22:52:38.738008+00:00",
+      "qa_verdict": "FAIL",
+      "failure_details": "Playwright E2E tests failed with 14 failures. While 'polish-with-ai-button' tests passed, systemic regressions were observed across several modules (AI Chatbot, Schedule Navigation, Global Search, Analytics). Errors included 429 Too Many Requests, timeouts, and element visibility issues indicating broken data-seeding or race conditions despite the full project re-seed.",
+      "expected_output": {
+        "commands": [
+          "npx playwright test"
+        ],
+        "success_indicators": [
+          "Zero failing E2E tests.",
+          "Clean console output (no hydration warnings or 4xx/5xx)."
         ]
       }
     }
