@@ -32,6 +32,8 @@ erDiagram
     User ||--o{ GalleryAsset : "uploads"
     User ||--o{ TokenAuditLog : "logs"
     User ||--o{ MetadataTemplate : "saves"
+    User ||--o{ UserSeenUpdate : "tracks"
+    UpdateLog ||--o{ UserSeenUpdate : "logs"
 
     Account ||--o{ TokenAuditLog : "audited by"
 
@@ -118,6 +120,21 @@ erDiagram
         json metadata
         datetime expiresAt
         datetime createdAt
+    }
+
+    UpdateLog {
+        string id PK
+        string version
+        string title
+        string description
+        datetime createdAt
+    }
+
+    UserSeenUpdate {
+        string id PK
+        string userId FK
+        string updateId FK
+        datetime seenAt
     }
 ```
 
@@ -299,6 +316,54 @@ The application implements a hierarchical error handling strategy to ensure grac
   - **Route Boundary (`error.tsx`):** Isolates failures to specific segments, keeping the layout interactive.
   - **Glass Aesthetic:** All error states use a shared `ErrorBoundary` component that follows the project's premium glass aesthetic, featuring blur effects and high-contrast typography.
 - **Recovery:** Error boundaries provide a "Try again" mechanism that triggers a segment re-render, allowing users to recover from transient issues without a full page refresh.
+
+### 8. What's New Notifications
+
+Users are notified of new application updates via a badge in the header, and can also persistently access historical updates via the user profile dropdown menu.
+
+```mermaid
+sequenceDiagram
+    participant U as User (UI)
+    participant B as WhatsNewBadge (Component)
+    participant UA as UserActions (Component)
+    participant P as WhatsNewPopover (Component)
+    participant H as useWhatsNewPopover (Hook)
+    participant A as Server Actions
+    participant DB as Database (Prisma)
+
+    B->>A: getUnseenUpdates()
+    A->>DB: Query UpdateLog entries NOT in UserSeenUpdate
+    DB-->>A: List of Updates
+    A-->>B: Return Updates
+    B->>B: Render "New" Badge (count = list.length)
+
+    alt Trigger via Header Badge Click
+        U->>B: Click Badge Icon
+        B->>P: Open Popover (anchorEl = Badge)
+    else Trigger via User Profile Menu Click
+        U->>UA: Click Profile Avatar
+        UA->>UA: Open Menu
+        U->>UA: Click "What's New" Link
+        UA->>P: Open Popover (anchorEl = Profile Avatar)
+    end
+
+    P->>H: Initialize Popover State & Effects
+    
+    alt If Unread Updates Present
+        H->>A: markUpdateAsSeen(updateId) [in background]
+        A->>DB: Validate user and write UserSeenUpdate
+        H->>H: Instantly clear global context badge count
+        P->>P: Render unread updates list
+        U->>P: Click Dismiss (Got it) or Dismiss All
+        P->>P: Filter local list updates
+    else If No Unread Updates (or after dismissal)
+        H->>A: getHistoricalUpdates() [lazy load]
+        A->>DB: Query recently read UpdateLog entries
+        DB-->>A: Return History
+        A-->>H: Set history state
+        P->>P: Render read updates history list
+    end
+```
 
 ## Platform Integrations
 

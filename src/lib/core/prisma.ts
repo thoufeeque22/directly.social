@@ -1,6 +1,7 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { encrypt, decrypt } from "./encryption";
 
+// 1. Keep your extension logic exactly the same
 const createExtendedClient = (base: PrismaClient) => base.$extends({
   query: {
     account: {
@@ -97,26 +98,34 @@ const createExtendedClient = (base: PrismaClient) => base.$extends({
           return account.id_token ? decrypt(account.id_token) : null;
         }
       }
-
     }
   }
 });
 
+// 2. Clearer TypeScript binding for the global object
 type ExtendedPrismaClient = ReturnType<typeof createExtendedClient>;
 
-const globalForPrisma = global as unknown as { 
-  prisma: PrismaClient | undefined,
-  extendedPrisma: ExtendedPrismaClient | undefined
+const globalForPrisma = globalThis as unknown as {
+  prisma: ExtendedPrismaClient | undefined;
 };
 
-export const basePrisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
+// 3. Separate instantiation from assignment to prevent race conditions during Next.js Hot Reloads
+const getPrismaClient = (): ExtendedPrismaClient => {
+  if (globalForPrisma.prisma) {
+    return globalForPrisma.prisma;
+  }
+  
+  const baseClient = new PrismaClient({
     log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
   });
+  
+  const extendedClient = createExtendedClient(baseClient);
+  
+  if (process.env.NODE_ENV !== "production") {
+    globalForPrisma.prisma = extendedClient;
+  }
+  
+  return extendedClient;
+};
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = basePrisma;
-
-export const prisma = globalForPrisma.extendedPrisma || createExtendedClient(basePrisma);
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.extendedPrisma = prisma;
+export const prisma = getPrismaClient();

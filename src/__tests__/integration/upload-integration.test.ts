@@ -20,6 +20,9 @@ vi.mock('../../lib/core/prisma', () => ({
         refresh_token: "fake_refresh"
       }),
     },
+    byokCredential: {
+      findUnique: vi.fn().mockResolvedValue(null),
+    },
   },
 }));
 

@@ -243,7 +243,7 @@ function LoginContent() {
             </button>
           </div>
 
-          {(process.env.NEXT_PUBLIC_E2E === 'true' && process.env.NODE_ENV === 'development') && (
+          {(process.env.NEXT_PUBLIC_E2E === 'true' && (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')) && (
             <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid hsla(var(--border)/0.5)' }}>
                <h3 style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'hsl(var(--muted-foreground))', marginBottom: '1rem', letterSpacing: '0.05em' }}>E2E Test Login</h3>
                <form onSubmit={handleE2ELogin} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>

@@ -19,6 +19,9 @@ vi.mock('@/lib/core/prisma', () => ({
       findUnique: vi.fn(),
       findFirst: vi.fn(),
     },
+    byokCredential: {
+      findUnique: vi.fn().mockResolvedValue(null),
+    },
   },
 }));
 

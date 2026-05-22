@@ -1,0 +1,26 @@
+'use client';
+
+import React from 'react';
+import { List, Divider } from '@mui/material';
+import { Update } from './WhatsNewContext';
+import { WhatsNewItem } from './WhatsNewItem';
+
+interface WhatsNewListProps {
+  updates: Update[];
+  onDismiss: (id: string) => void;
+}
+
+export function WhatsNewList({ updates, onDismiss }: WhatsNewListProps) {
+  return (
+    <List disablePadding data-testid="whats-new-list">
+      {updates.map((update, index) => (
+        <React.Fragment key={update.id}>
+          <WhatsNewItem update={update} onDismiss={onDismiss} />
+          {index < updates.length - 1 && (
+            <Divider sx={{ borderColor: 'hsla(250, 30%, 25%, 0.1)' }} />
+          )}
+        </React.Fragment>
+      ))}
+    </List>
+  );
+}

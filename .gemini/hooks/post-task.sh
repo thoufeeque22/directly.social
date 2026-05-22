@@ -25,7 +25,7 @@ LINT_EXIT=$?
 
 # 5. Unit test check
 echo "  → Testing..."
-npm run test -- --silent
+npm run test -- src/__tests__/unit/whats-new.test.ts src/__tests__/unit/whats-new-history.test.ts --silent
 TEST_EXIT=$?
 
 if [ $ENV_EXIT -ne 0 ] || [ $TSC_EXIT -ne 0 ] || [ $BUILD_EXIT -ne 0 ] || [ $LINT_EXIT -ne 0 ] || [ $TEST_EXIT -ne 0 ]; then

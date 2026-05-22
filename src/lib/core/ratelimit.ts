@@ -42,6 +42,11 @@ export async function checkRateLimit(
   identifier: string,
   errorMessage: string = "Too many requests. Please try again later."
 ) {
+  // Skip rate limiting in E2E/test environments
+  if (process.env.NEXT_PUBLIC_E2E === 'true' || process.env.NODE_ENV === 'test') {
+    return;
+  }
+
   // Skip rate limiting if environment variables are not set (e.g. local dev without Upstash)
   if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
     return;
