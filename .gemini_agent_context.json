@@ -1,6 +1,6 @@
 {
-  "last_agent": "review-agent",
-  "next_agent": "qa-agent",
+  "last_agent": "qa-agent",
+  "next_agent": "doc-agent",
   "ticket_id": "398",
   "ticket_goal": "Fix Prisma foreign key constraint violation in WhatsNew modal & Implement Option A (persistent WhatsNew access in Profile and clear badge on click)",
   "round-12": {
@@ -97,6 +97,17 @@
         "eslint_status": "PASS",
         "whats_new_tests": "PASS",
         "next_agent": "qa-agent"
+    },
+    "qa-agent": {
+      "timestamp": "2026-05-22T23:20:00Z",
+      "findings": "Wrote and successfully executed full Playwright E2E and visual verification tests for Option A changelog changes. Fixed a critical unmounting bug where clearing the badge state caused the badge component to unmount the active popover component. Shifted the popover test-id target to an inner Box to bypass typescript type checking limitations while maintaining file line limits under 50. All tests passed, typecheck passed, and visual screenshots generated successfully.",
+      "expected_output": {
+        "playwright_status": "PASS",
+        "whats_new_badge_screenshot": "verification/whats-new-badge.png",
+        "whats_new_popover_unread_screenshot": "verification/whats-new-popover-unread.png",
+        "whats_new_profile_link_screenshot": "verification/whats-new-profile-link.png",
+        "whats_new_popover_history_screenshot": "verification/whats-new-popover-history.png",
+        "next_agent": "doc-agent"
       }
     }
   },
@@ -110,6 +121,8 @@
     "src/components/WhatsNew/WhatsNewPopoverHeader.tsx",
     "src/components/WhatsNew/useWhatsNewPopover.ts",
     "src/components/WhatsNew/PopoverStyles.ts",
-    "src/components/WhatsNew/WhatsNewContext.tsx"
+    "src/components/WhatsNew/WhatsNewContext.tsx",
+    "src/__tests__/e2e/whats-new.spec.ts",
+    "src/components/WhatsNew/WhatsNewBadge.tsx"
   ]
 }

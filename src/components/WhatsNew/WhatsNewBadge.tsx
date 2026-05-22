@@ -15,7 +15,7 @@ export function WhatsNewBadge({ forceShow = false }: WhatsNewBadgeProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const count = updates.length;
 
-  if (!forceShow && count === 0) return null;
+  if (!forceShow && count === 0 && !anchorEl) return null;
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
