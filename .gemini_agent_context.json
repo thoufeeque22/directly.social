@@ -3,9 +3,9 @@
   "ticket_goal": "manual mode: add \"enrich title/description\" button near \"Post Video\" button",
   "ticket_description": "",
   "branch_name": "514-manual-mode-add-enrich-titledescription-button-near-post-video-button",
-  "last_agent": "qa-agent",
-  "next_agent": "dev-agent",
-  "last_updated_at": "2026-05-22T22:50:00.543453Z",
+  "last_agent": "dev-agent",
+  "next_agent": "review-agent",
+  "last_updated_at": "2026-05-23T01:50:00Z",
   "round-1": {
     "discovery-agent": {
       "timestamp": "2026-05-22T21:56:11.896382Z",
@@ -225,5 +225,28 @@
         ]
       }
     }
+  },
+  "round-5": {
+    "dev-agent": {
+      "timestamp": "2026-05-23T01:50:00Z",
+      "fixes_applied": [
+        "Resolved hydration mismatch by ensuring the 'Polish with AI' button rendering logic consistently uses a stable fixed-height skeleton before hydration finishes.",
+        "Resolved 429 and 500 Network errors in E2E tests by performing full database cleanup of stray Neon preview branches and re-seeding E2E schedule/user data.",
+        "Verified E2E suite passes with build and tsc checks."
+      ],
+      "expected_output": {
+        "commands": [
+          "npx playwright test",
+          "npm run build",
+          "npx tsc --noEmit"
+        ],
+        "success_indicators": [
+          "Zero failing E2E tests.",
+          "No hydration warnings.",
+          "Production build and type-check success."
+        ]
+      }
+    }
   }
 }
+",file_path:
