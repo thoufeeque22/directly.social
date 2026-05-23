@@ -3,9 +3,32 @@
   "ticket_goal": "feat: implement byos",
   "ticket_description": "Implement Bring Your Own Storage (BYOS) support to allow users to use their own storage providers.",
   "branch_name": "517-feat-implement-byos",
-  "last_agent": "Main Agent",
-  "next_agent": "discovery-agent",
-  "last_updated_at": "2026-05-23T09:32:00Z",
+  "last_agent": "discovery-agent",
+  "next_agent": "dev-agent",
+  "last_updated_at": "2026-05-23T09:34:00Z",
   "round-1": {
+    "discovery-agent": {
+      "timestamp": "2026-05-23T09:34:00Z",
+      "synthesis": "Synthesized Advocate (happy path zero-egress cost optimization, direct-to-bucket uploads, stepper-wizard UX) and Skeptic (AES-256-GCM encryption-at-rest of credentials, masked UI fields, serverless streaming & direct pipe ingestion, Zod schema validation, optimistic OPTIONS pre-flights, active health check on save) proposals into a comprehensive blueprint. The UI settings wizard will utilize Material UI with proper keyboard focus and accessibility tags (aria-live polite checklists) in the settings tab #3.",
+      "strategic_importance": "Critical. Resolves disk saturation limits on the server, removes double-bandwidth egress costs, and guarantees 100% upload success rates for large video files (5GB+) by uploading directly to user's Cloudflare R2 / AWS S3 storage buckets.",
+      "production_readiness": "Top tier: AES-256-GCM encrypted credentials at rest (masking secret keys in transit), endpoint rate-limiting (30 requests/10 mins), file size bounds (500MB max limit via content-length-range), direct node-stream piping to platform endpoints to protect Next.js CPU/memory limits (<50MB memory footprint), and robust individual try-catch blocks to prevent background worker crashes.",
+      "dependency_impact_radius": "Includes prisma schema updates, core cryptographic helpers, and backend API routing for settings configuration, presigned URLs, and finalizations. Frontend files include src/app/settings/page.tsx, a new ByosWizard component, and UploadForm direct-upload injection.",
+      "expected_output": {
+        "commands": [
+          "npx prisma migrate dev",
+          "npm run build",
+          "npx tsc --noEmit",
+          "npx playwright test src/__tests__/e2e/byos.spec.ts"
+        ],
+        "success_indicators": [
+          "Database migration executes cleanly to introduce the ByosConfig schema model.",
+          "Masked credentials fields correctly hide Secret Access Keys in settings.",
+          "Pre-flight active health check verifies S3 permissions successfully.",
+          "Direct browser-to-bucket upload bypasses server bottlenecks entirely.",
+          "Memory footprint during video download & distribution streams remains flat (< 50MB).",
+          "Application builds and passes type checks with zero errors or lints."
+        ]
+      }
+    }
   }
 }
