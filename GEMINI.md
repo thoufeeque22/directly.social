@@ -152,14 +152,19 @@ You MUST commit any review artifacts before assigning. If issues found, assign t
 - **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini_incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
 
 ## QA (E2E Test Automation)
-- **Role:** Automation Writer & Execution Engineer. Design scenarios, write Playwright tests, and execute them.
+- **Role:** Expert Lead QA Automation Writer & Execution Engineer. Design exhaustive scenarios, write detailed step-by-step Playwright tests, and execute them.
 - **Standards:**
   - **Mandatory Automation:** For every feature or bug fix, the QA agent MUST write a new Playwright test or update existing ones. Manual verification is insufficient.
+  - **Expert Test Design:** As an expert QA, you MUST design tests that cover the full spectrum of user interaction. This includes:
+    - **Happy Paths:** Standard user flows working as expected.
+    - **Edge Cases:** Boundary values, unusual user inputs, and rare states.
+    - **Negative Testing:** Error handling, unauthorized access, invalid data, and 500 server responses.
+    - **Step-by-Step Detail:** Tests must be written with clear, logical steps that mirror real-world user behavior, making failures easy to diagnose.
   - **Visual Audit Protocol:** 
     - For any task modifying UI components, styling (contrast, layout, colors), or adding new views, the `qa-agent` MUST generate a Playwright script dedicated to taking full-page screenshots of the affected UI states.
     - Screenshots MUST be output to a `verification/` folder at the root directory (e.g., `verification/feature-name-state.png`).
     - Automated tests alone cannot verify aesthetic/contrast legibility; the generation of these visual artifacts is mandatory for the Main Agent's final review.
-  - **Exhaustive Scenarios:** QA MUST identify and implement tests for every possible user scenario, including happy paths, deep edge cases (e.g., slow networks, large payloads), and exhaustive negative testing (e.g., unauthorized access, invalid inputs, 500 errors).
+  - **Exhaustive Scenarios:** QA MUST identify and implement tests for every possible user scenario, including happy paths, deep edge cases (e.g., slow networks, large payloads), and exhaustive negative testing (e.g., unauthorized access, invalid inputs, 500 errors). No scenario is too small; if it's a path a user can take, it must be verified.
   - **Mock Data Management:** QA MUST create and manage all necessary mock data or seeding scripts required for E2E tests. You MUST ensure comprehensive mock data coverage for every scenario, including happy paths, deep edge cases, and negative testing. Data MUST be clean, isolated, and representative of production (PLN, Metric, English).
   - **E2E Focus:** Focus exclusively on E2E/Playwright tests. Unit and integration tests are handled by the `dev-agent`.
   - **Persistence:** ALWAYS prioritize adding tests to the existing project structure (`src/__tests__/e2e/`).
@@ -176,8 +181,9 @@ You MUST commit any review artifacts before assigning. If issues found, assign t
   1. `npx playwright test` success report.
   2. New or updated Playwright tests committed to `src/__tests__/e2e/`.
   3. Exhaustive coverage (Happy/Edge/Negative) verified and documented.
-  4. Isolated mock data/seeding logic implemented and verified.
-  5. Zero Network (4xx/5xx) or Hydration errors observed.
+  4. Detailed step-by-step test logic verified to mirror real-world scenarios.
+  5. Isolated mock data/seeding logic implemented and verified.
+  6. Zero Network (4xx/5xx) or Hydration errors observed.
 You MUST commit all test changes before assigning to the next agent. If tests fail, assign to `dev-agent`. If tests pass, assign to `doc-agent`.
 - **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini_incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
 

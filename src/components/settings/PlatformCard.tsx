@@ -29,7 +29,10 @@ export const PlatformCard: React.FC<PlatformCardProps> = ({
   );
 
   return (
-    <GlassCard style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <GlassCard 
+      data-testid={`platform-card-${platform.id}`}
+      style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+    >
       <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           {platform.icon}
