@@ -18,11 +18,16 @@ async function main() {
         id: stableId,
         email,
         name: 'E2E Tester',
+        role: 'ADMIN',
       },
     });
-    console.log(`Successfully created E2E test user with email: ${email} and stable ID: ${stableId}`);
+    console.log(`Successfully created E2E test user with email: ${email} and stable ID: ${stableId} and ADMIN role.`);
   } else {
-    console.log(`User with email ${email} already exists.`);
+    console.log(`User with email ${email} already exists. Ensuring ADMIN role.`);
+    user = await prisma.user.update({
+      where: { email },
+      data: { role: 'ADMIN' },
+    });
     // Ensure the ID matches our stable ID (if it was created before we hardcoded it)
     if (user.id !== stableId) {
       console.warn(`[WARNING] Existing user has ID ${user.id}, but we expected ${stableId}.`);

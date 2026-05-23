@@ -65,7 +65,7 @@ export default function DashboardClient({
   
   const { draftFileName, videoFormat, setVideoFormat, videoDuration, handleFileChange } = useDraftFile(session?.user?.id);
   const { selectedAccountIds, setSelectedAccountIds, handleToggleAccount } = usePlatformSelection(devAccounts, preferences, isLoading);
-  const { isUploading, setIsUploading, uploadStatus, setUploadStatus, handleAbortAll } = useDistributionEngine(devAccounts);
+  const { isUploading, setIsUploading, setUploadStatus, handleAbortAll } = useDistributionEngine(devAccounts);
   const { historyId: activeGlobalId, active: isGlobalActive } = useUploadStatus();
   
   useEffect(() => {

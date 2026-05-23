@@ -70,6 +70,13 @@ export default {
       }
       return token;
     },
+    async session({ session, token }) {
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
+        session.user.role = token.role as "USER" | "ADMIN";
+      }
+      return session;
+    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnLogin = nextUrl.pathname === "/login";

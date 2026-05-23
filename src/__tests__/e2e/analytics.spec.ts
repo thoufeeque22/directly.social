@@ -4,6 +4,8 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 test.describe('Analytics Dashboard', () => {
+  test.use({ storageState: '.auth/user.json' });
+
   test.beforeAll(async () => {
     // Seed mock data before running tests
     await prisma.systemMetric.deleteMany();

@@ -2,7 +2,7 @@
   "cookies": [
     {
       "name": "authjs.csrf-token",
-      "value": "3c02074e89d6e9f2d2a9b76250bc212bdc0bfc04e88b10e699c0f41efeeb7aa7%7C4e49f6e4b2ac660a887be615094227fc98832b349883a5ef33456533a6a194e0",
+      "value": "806ba263800cd91cf053b9b9ddb0f06262270ca9e81623a7334b44a55a1fcbed%7C9fdd9eca4a23d2bc638a2ab1f0d1604b030c58eed51a9cd42e6eae1be0561ca3",
       "domain": "localhost",
       "path": "/",
       "expires": -1,
@@ -22,10 +22,10 @@
     },
     {
       "name": "authjs.session-token",
-      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..FMNClmKU0ka8rgiXx2qdCA.-e0X8ebZd-QkqIJRV29y-oLBMb2Pw5AVD-mja5qZXSlkMbo_AixC02W8JHOcLZnhny-wXzakyk1JZqgUsWkYrX9w8WJyVY9Olf_YFcvnlJrqtsbZz-fOKavuSKT0IodOp-7NqGO4TxK0B4hmeiIrX6G-_Oy-he8qyXa8Ry7_KlhROVSoGmx_XDzVIEc94X-SdqOQQ79e8vra8Uicl3ubgDkQuC4U0ZVpHrFC3cgH2dFgVaw51xXqFM9yzs_bBXBiM3L59_1bi3q8SpNws1XKLBu_WcwSOt65HJditosx_9I.rZcTmvJiKOGxCT9lAEDKS1eexw2S-GAYEjIFc4dgY2Q",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..jPPFuUTKLaBN9mn0tN3RVw.t8PAGlOnTm46EkjrG6-wiySECdLLVVvoG9JZ2yrZlcpmhWbmS2Lptl-rN4XtJHUv5vGsiWoISarF4X-iDNGsqubhs18xfbIiOQ6hCKZoh9F9ARtrz-KnGG0F_cyKZWFmgMkmDbV-q2ac4S-fDq61qCRRt7dgV78S-ngL0AZqQ-Ms4DDZB4R2caDbFm8XL83eYB1I_OqwtkDHO2Kp2pyT6jiIe9B57y5CXDVFQet04RNcRdwnAukXR2UgfLW2TFtHZqqJiKMa-L2XRFrmdT2MQA.xnA0_npP_204jw1S6LB8mpesYF-aycziR-zNBVDGmCs",
       "domain": "localhost",
       "path": "/",
-      "expires": 1782111388.41513,
+      "expires": 1782112119.727516,
       "httpOnly": true,
       "secure": false,
       "sameSite": "Lax"
@@ -37,7 +37,7 @@
       "localStorage": [
         {
           "name": "SS_SELECTED_PLATFORMS",
-          "value": "[\"cmped92jz00009bqzm3h4u14t\",\"cmped92jz00019bqzcm6r75a5\",\"local-dev-1\",\"local-dev-2\",\"local-dev-3\"]"
+          "value": "[\"cmpi08iwh00009b509ba88cku\",\"cmpi08iwh00019b50t8dheer9\",\"local-dev-1\",\"local-dev-2\",\"local-dev-3\"]"
         }
       ]
     }
