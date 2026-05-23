@@ -6,10 +6,8 @@ test.describe('Error Handling', () => {
     await page.goto('/test-error'); 
 
     // Check for our custom ErrorBoundary
-    const errorBoundary = page.getByTestId('error-boundary-ui');
-    await expect(errorBoundary).toBeVisible();
-    await expect(errorBoundary.getByText(/Something went wrong/i)).toBeVisible();
-    await expect(errorBoundary.getByText(/Intentional Render Error/i)).toBeVisible();
-    await expect(errorBoundary.getByTestId('error-reset-button')).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Something went wrong/i })).toBeVisible();
+    await expect(page.getByRole('paragraph').filter({ hasText: /Intentional Render Error/i })).toBeVisible();
+    await expect(page.getByTestId('error-reset-button')).toBeVisible();
   });
 });

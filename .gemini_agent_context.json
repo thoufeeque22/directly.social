@@ -3,9 +3,9 @@
   "ticket_goal": "manual mode: add \"enrich title/description\" button near \"Post Video\" button",
   "ticket_description": "",
   "branch_name": "514-manual-mode-add-enrich-titledescription-button-near-post-video-button",
-  "last_agent": "review-agent",
-  "next_agent": "qa-agent",
-  "last_updated_at": "2026-05-23T07:10:00Z",
+  "last_agent": "qa-agent",
+  "next_agent": "doc-agent",
+  "last_updated_at": "2026-05-23T07:20:00Z",
   "round-1": {
     "discovery-agent": {
       "synthesis": "The user requested an 'enrich title/description' button near the 'Post Video' button for the Manual mode. Analysing the UX (Persona A & B), placing a '✨ Polish with AI' button directly beside the 'Post Video' button in the bottom action bar is the best approach. It acts as an intuitive upsell to AI enrichment at the exact moment of user decision, without cluttering the input fields (which already have minor nudges). Clicking it will trigger onTierChange('Enrich'), elegantly transforming the primary button into 'Review AI Strategy' and engaging the AI flow.",
@@ -294,6 +294,24 @@
           "E2E tests pass for Polish with AI, snippets, and analytics dashboards.",
           "Project-wide TypeScript compilation and Next.js production builds complete successfully.",
           "All modified files are 100% clean of lint errors and warnings."
+        ]
+      }
+    },
+    "qa-agent": {
+      "timestamp": "2026-05-23T07:20:00Z",
+      "qa_verdict": "PASS",
+      "failure_details": "",
+      "expected_output": {
+        "commands": [
+          "npx playwright test --workers=1",
+          "npm run build",
+          "npx tsc --noEmit"
+        ],
+        "success_indicators": [
+          "All 55 Playwright E2E tests pass flawlessly.",
+          "Zero console errors or hydration mismatches detected in console audits.",
+          "Successful visual audit: verification/514-enrich-button.png is successfully recorded.",
+          "Production build and type-checking succeed with zero warnings."
         ]
       }
     }

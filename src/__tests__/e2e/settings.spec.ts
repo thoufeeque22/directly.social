@@ -18,6 +18,10 @@ test.describe('Settings Page - Template Management', () => {
 
     // Go to dashboard to create a template from there
     await page.goto('/');
+    await page.evaluate(() => {
+      localStorage.setItem('SS_AI_TIER', 'Manual');
+    });
+    await page.reload();
     
     // Save a new snippet
     const descriptionField = page.getByTestId('video-description').first();
