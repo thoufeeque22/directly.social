@@ -61,7 +61,7 @@ export function useDistributionEngine(accounts: Account[]) {
       });
 
       // Final status sync
-      const finalResults = distribution.platformResults;
+      const finalResults = distribution.platformResults as { accountId: string; status: string; errorMessage?: string }[];
       setPlatformStatuses(prev => {
         const next = { ...prev };
         finalResults.forEach((result) => {

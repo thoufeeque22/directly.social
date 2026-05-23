@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/core/prisma";
 import fsSync from "node:fs";
-import { formatPlatformCaption } from "./distributor-utils";
+import { formatPlatformCaption, PlatformData } from "./distributor-utils";
 import { getOptimizedVideoPath } from "@/lib/video/transcode-manager";
 import { logger } from "@/lib/core/logger";
 import { downloadByosFile } from "@/lib/byos/downloader";
@@ -39,10 +39,21 @@ export async function handlePlatformUploadRequest({ req, platform, uploadLogic }
       const acc = await prisma.account.findFirst({ where: { id: fields.accountId as string, userId: session.user.id } });
       await prisma.postPlatformResult.upsert({ where: { postHistoryId_platform_accountId: { postHistoryId: fields.historyId as string, platform, accountId: fields.accountId as string } }, update: { status: 'uploading' }, create: { postHistoryId: fields.historyId as string, platform, accountId: fields.accountId as string, accountName: acc?.accountName || 'Unknown', status: 'uploading' } });
     }
+    
     const result = await uploadLogic({ userId: session.user.id, filePath: activePath, title: enriched.title, description: caption, videoFormat: (fields.videoFormat as string) || "short", accountId: fields.accountId as string, fields: fields as Record<string, string>, onProgress: await createProgressReporter(fields.historyId as string, platform, fields.accountId as string) });
+    
     if (fields.historyId && fields.accountId) {
       const { extractPlatformPostId, generatePermalink } = await import("./distributor-utils");
-      await prisma.postPlatformResult.update({ where: { postHistoryId_platform_accountId: { postHistoryId: fields.historyId as string, platform, accountId: fields.accountId as string } }, data: { status: 'success', platformPostId: extractPlatformPostId(platform, result), permalink: generatePermalink(platform, result), progress: 100 } });
+      const platformData = result as PlatformData;
+      await prisma.postPlatformResult.update({ 
+        where: { postHistoryId_platform_accountId: { postHistoryId: fields.historyId as string, platform, accountId: fields.accountId as string } }, 
+        data: { 
+          status: 'success', 
+          platformPostId: extractPlatformPostId(platform, platformData), 
+          permalink: generatePermalink(platform, platformData), 
+          progress: 100 
+        } 
+      });
     }
     return NextResponse.json({ success: true, data: result });
   } catch (error: unknown) {

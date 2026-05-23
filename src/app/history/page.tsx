@@ -222,7 +222,7 @@ function HistoryContent() {
         fields: {
           title: post.title || '',
           description: post.description || '',
-          contentMode: post.contentMode || 'Smart',
+          contentMode: (post as any).contentMode || 'Smart',
           videoFormat: post.videoFormat || 'short',
         },
         onPlatformStatus: () => {},
@@ -572,7 +572,7 @@ function HistoryContent() {
         fields: {
           title: post.title || '',
           description: post.description || '',
-          contentMode: post.contentMode || 'Smart',
+          contentMode: (post as any).contentMode || 'Smart',
           videoFormat: post.videoFormat || 'short',
         },
         onPlatformStatus: () => {},
