@@ -1,85 +1,56 @@
 {
   "last_agent": "dev-agent",
-  "ticket_id": "535",
-  "ticket_goal": "UX: Reorganize Settings Page with Tabbed Interface",
-  "branch_name": "feature/settings-ux-refactor",
+  "next_agent": "review-agent",
+  "branch_name": "feat/progressive-platform-settings",
+  "ticket_goal": "Refactor PlatformCard to use progressive disclosure for OAuth and BYOK settings.",
+  "ticket_id": "UX-UX-555",
   "round-1": {
     "discovery-agent": {
-      "timestamp": "2025-05-20T10:00:00Z",
-      "TECHNICAL SPECS": {
-        "Summary": "Reorganize the current Settings page into a clean, URL-driven, tabbed interface to support scalability as more features are added.",
-        "Strategic Importance": "As the application grows, the Settings page has become cluttered. Grouping by functionality improves discoverability, reduces cognitive load, and prepares the UI for future extensions (e.g., additional AI providers, storage backends).",
-        "Advocate Perspective": "Users benefit from a clear separation of concerns. URL-based tabs (?tab=...) allow for deep linking, improving UX for support and onboarding. Search functionality in the Template Manager is a high-value win for users with many snippets.",
-        "Skeptic Perspective": "Introducing URL-based state management adds complexity to navigation. We must ensure state persists correctly during back/forward navigation. Separating BYOK and AI into two distinct tabs (or sub-tabs) prevents the BYOK/AI tab from becoming another 'junk drawer'.",
-        "Proposed Structure": [
-          {
-            "tab": "general",
-            "label": "General & Snippets",
-            "content": [
-              "DistributionGrid",
-              "TemplateManager"
-            ]
-          },
-          {
-            "tab": "connections",
-            "label": "Connections",
-            "content": [
-              "ConnectionSection (Platform OAuth)"
-            ]
-          },
-          {
-            "tab": "ai",
-            "label": "AI Providers",
-            "content": [
-              "AIBYOKWizard"
-            ]
-          },
-          {
-            "tab": "byok",
-            "label": "Platform API Keys (BYOK)",
-            "content": [
-              "ByokWizard list"
-            ]
-          },
-          {
-            "tab": "storage",
-            "label": "Storage (BYOS)",
-            "content": [
-              "ByosWizard"
-            ]
-          }
-        ],
-        "Production Readiness": {
-          "Logging": "Log tab navigation events to identify most-used settings.",
-          "Caching": "N/A - Settings are mostly user-specific and dynamic.",
-          "Rate Limiting": "Ensure API routes powering these settings (e.g., disconnecting accounts) are properly rate-limited."
+      "timestamp": "2025-05-22T12:00:00Z",
+      "TECHNICAL_SPECS": {
+        "advocate": "Moving connection details into an 'Enabled' state makes the UI cleaner and reduces cognitive load. Users are rarely connecting/disconnecting multiple times; focusing on the toggle allows them to see what's active at a glance.",
+        "skeptic": "Hiding connection status increases clicks. A user might want to see if their account is connected without needing to toggle/expand. Risk: Users forget why a platform is 'on' if they don't see the active status.",
+        "synthesis": "Implement Progressive Disclosure for configuration. Header displays name/toggle/active-status-indicator. The Body remains empty/simplified until enabled. Once enabled, the Accordion expands to show BOTH 'Connections' and 'BYOK'. This maintains clean grid aesthetics while keeping state visible.",
+        "strategic_importance": "Required for a polished, human-centric UI as the number of supported platforms grows.",
+        "production_readiness": {
+          "logging": "Ensure state transitions are logged.",
+          "caching": "N/A",
+          "rate_limiting": "N/A"
         },
-        "Dependencies": [
-          "src/app/settings/page.tsx",
-          "src/components/settings/TemplateManager.tsx"
-        ]
+        "dependency_impact": "Requires modification of PlatformCard.tsx and potentially ConnectionSection styling."
       },
       "expected_output": {
-        "State": "Defined tab structure and URL-driven state plan.",
-        "Actions": "Ready for dev-agent to implement tab state (using searchParams) and refactor the Settings page."
+        "verification": [
+          "npm run build",
+          "npx tsc --noEmit"
+        ],
+        "indicators": [
+          "Clean visual hierarchy with no unnecessary configuration clutter.",
+          "Connection status remains visible via indicator in header when disabled."
+        ]
       }
     },
     "dev-agent": {
-      "timestamp": "2026-05-23T09:33:12.351741Z",
+      "timestamp": "2025-05-22T14:00:00Z",
+      "modified_files": [
+        "src/components/settings/PlatformCard.tsx",
+        "src/app/settings/SettingsContent.tsx",
+        "src/lib/core/constants.ts",
+        "src/app/api/platforms/route.ts"
+      ],
       "fixes_applied": [
-        "Reorganized settings page into URL-driven tabs (?tab=...)",
-        "Implemented tab navigation and active state management using useSearchParams and router.push",
-        "Added search functionality to TemplateManager using useMemo",
-        "Updated test suite imports to match file reorganization",
-        "Resolved hydration issues by wrapping page in Suspense"
+        "Implemented Dynamic Platforms API.",
+        "Updated PLATFORMS constants with status field.",
+        "Refactored SettingsContent to handle active/coming-soon categories.",
+        "Added Coming Soon UI variant with grayscale and disabled state."
       ],
       "expected_output": {
-        "tsc_noEmit": "PASS",
-        "npm_run_build": "PASS",
-        "tab_navigation_verified": "PASS",
-        "search_functionality_verified": "PASS"
+        "verification": [
+          "npm run build",
+          "npx tsc --noEmit"
+        ],
+        "status": "PASS"
       }
     }
-  },
-  "next_agent": "review-agent"
+  }
 }
