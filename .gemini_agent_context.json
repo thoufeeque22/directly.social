@@ -1,176 +1,85 @@
 {
-  "ticket_id": "517",
-  "ticket_goal": "feat: implement byos",
-  "ticket_description": "Implement Bring Your Own Storage (BYOS) support to allow users to use their own storage providers.",
-  "branch_name": "517-feat-implement-byos",
-  "last_agent": "doc-agent",
-  "next_agent": "Main Agent",
-  "last_updated_at": "2026-05-23T16:00:00Z",
+  "last_agent": "dev-agent",
+  "ticket_id": "535",
+  "ticket_goal": "UX: Reorganize Settings Page with Tabbed Interface",
+  "branch_name": "feature/settings-ux-refactor",
   "round-1": {
     "discovery-agent": {
-      "timestamp": "2026-05-23T09:34:00Z",
-      "synthesis": "Synthesized Advocate (happy path zero-egress cost optimization, direct-to-bucket uploads, stepper-wizard UX) and Skeptic (AES-256-GCM encryption-at-rest of credentials, masked UI fields, serverless streaming & direct pipe ingestion, Zod schema validation, optimistic OPTIONS pre-flights, active health check on save) proposals into a comprehensive blueprint.",
-      "strategic_importance": "Critical. Resolves disk saturation limits on the server, removes double-bandwidth egress costs, and guarantees 100% upload success rates for large video files (5GB+).",
-      "production_readiness": "Top tier: AES-256-GCM encrypted credentials at rest, endpoint rate-limiting, file size bounds, and direct node-stream piping.",
-      "dependency_impact_radius": "Includes prisma schema updates, core cryptographic helpers, and backend API routing. Frontend files include src/app/settings/page.tsx, ByosWizard component, and UploadForm direct-upload injection.",
-      "expected_output": {
-        "commands": [
-          "npx prisma migrate dev",
-          "npm run build",
-          "npx tsc --noEmit",
-          "npx playwright test src/__tests__/e2e/byos.spec.ts"
+      "timestamp": "2025-05-20T10:00:00Z",
+      "TECHNICAL SPECS": {
+        "Summary": "Reorganize the current Settings page into a clean, URL-driven, tabbed interface to support scalability as more features are added.",
+        "Strategic Importance": "As the application grows, the Settings page has become cluttered. Grouping by functionality improves discoverability, reduces cognitive load, and prepares the UI for future extensions (e.g., additional AI providers, storage backends).",
+        "Advocate Perspective": "Users benefit from a clear separation of concerns. URL-based tabs (?tab=...) allow for deep linking, improving UX for support and onboarding. Search functionality in the Template Manager is a high-value win for users with many snippets.",
+        "Skeptic Perspective": "Introducing URL-based state management adds complexity to navigation. We must ensure state persists correctly during back/forward navigation. Separating BYOK and AI into two distinct tabs (or sub-tabs) prevents the BYOK/AI tab from becoming another 'junk drawer'.",
+        "Proposed Structure": [
+          {
+            "tab": "general",
+            "label": "General & Snippets",
+            "content": [
+              "DistributionGrid",
+              "TemplateManager"
+            ]
+          },
+          {
+            "tab": "connections",
+            "label": "Connections",
+            "content": [
+              "ConnectionSection (Platform OAuth)"
+            ]
+          },
+          {
+            "tab": "ai",
+            "label": "AI Providers",
+            "content": [
+              "AIBYOKWizard"
+            ]
+          },
+          {
+            "tab": "byok",
+            "label": "Platform API Keys (BYOK)",
+            "content": [
+              "ByokWizard list"
+            ]
+          },
+          {
+            "tab": "storage",
+            "label": "Storage (BYOS)",
+            "content": [
+              "ByosWizard"
+            ]
+          }
         ],
-        "success_indicators": [
-          "Database migration executes cleanly.",
-          "Masked credentials fields correctly hide Secret Access Keys.",
-          "Direct browser-to-bucket upload bypasses server bottlenecks.",
-          "Application builds and passes type checks with zero errors or lints."
+        "Production Readiness": {
+          "Logging": "Log tab navigation events to identify most-used settings.",
+          "Caching": "N/A - Settings are mostly user-specific and dynamic.",
+          "Rate Limiting": "Ensure API routes powering these settings (e.g., disconnecting accounts) are properly rate-limited."
+        },
+        "Dependencies": [
+          "src/app/settings/page.tsx",
+          "src/components/settings/TemplateManager.tsx"
         ]
+      },
+      "expected_output": {
+        "State": "Defined tab structure and URL-driven state plan.",
+        "Actions": "Ready for dev-agent to implement tab state (using searchParams) and refactor the Settings page."
       }
     },
     "dev-agent": {
-      "timestamp": "2026-05-23T09:44:00Z",
+      "timestamp": "2026-05-23T09:33:12.351741Z",
       "fixes_applied": [
-        "Added Prisma ByosConfig schema model and migration.",
-        "Implemented AES-256-GCM secure credentials encryption helper.",
-        "Created BYOS Settings route with active health checking.",
-        "Implemented Multipart S3/R2 presigned part url and completion endpoints.",
-        "Built dynamic browser-to-bucket direct upload-utils orchestrator.",
-        "Upgraded Settings dashboard tab #3 with ByosWizard component.",
-        "Integrated BYOS active pipeline badge inside Dashboard UploadForm UI.",
-        "Created E2E test suite in byos.spec.ts."
+        "Reorganized settings page into URL-driven tabs (?tab=...)",
+        "Implemented tab navigation and active state management using useSearchParams and router.push",
+        "Added search functionality to TemplateManager using useMemo",
+        "Updated test suite imports to match file reorganization",
+        "Resolved hydration issues by wrapping page in Suspense"
       ],
       "expected_output": {
-        "commands": [
-          "npx tsc --noEmit",
-          "npm run build",
-          "npx playwright test src/__tests__/e2e/byos.spec.ts"
-        ],
-        "success_indicators": [
-          "TypeScript type check completes.",
-          "NextJS production build finishes cleanly.",
-          "Playwright E2E tests are green."
-        ]
-      }
-    },
-    "review-agent": {
-      "timestamp": "2026-05-23T10:15:00Z",
-      "review_verdict": "FAIL",
-      "failure_details": "Critical architectural violations of the 50-line modularity rule. Code duplication of S3 client logic.",
-      "fixes_applied": [
-        "Identified 50-line rule violations in ByosWizard.tsx and API routes.",
-        "Detected duplicated createS3Client logic."
-      ],
-      "expected_output": {
-        "commands": [
-          "npx tsc --noEmit",
-          "npm run lint"
-        ],
-        "success_indicators": [
-          "All new files are <= 50 lines.",
-          "Duplicated S3 client logic consolidated.",
-          "Zod schemas extracted."
-        ]
+        "tsc_noEmit": "PASS",
+        "npm_run_build": "PASS",
+        "tab_navigation_verified": "PASS",
+        "search_functionality_verified": "PASS"
       }
     }
   },
-  "round-2": {
-    "dev-agent": {
-      "timestamp": "2026-05-23T15:00:00Z",
-      "status": "PASS",
-      "fixes_applied": [
-        "Modularized ByosWizard.tsx into 9 sequential sub-components and a custom hook, all <= 50 lines.",
-        "Renamed step components to sequential descriptive names (e.g., ByosStep1Provider.tsx, ByosStep2Cors.tsx).",
-        "Refactored all BYOS API routes to <= 50 lines by extracting logic into thin services.",
-        "Modularized legacy files (upload-utils.ts, platform-route-handler.ts) to <= 50 lines.",
-        "Consolidated S3 client initialization into src/lib/upload/s3/client.ts.",
-        "Hardened byos-encrypt.ts for production (removed insecure fallbacks).",
-        "Resolved all TypeScript type errors identified by review-agent in integration tests, history page, and distribution hooks.",
-        "Strictly enforced Zero-Any Policy across 40+ files, satisfying strict build requirements.",
-        "Polished BYOS provider descriptions to include Google Cloud Storage, Backblaze B2, and DigitalOcean Spaces."
-      ],
-      "expected_output": {
-        "commands": [
-          "npx tsc --noEmit",
-          "npm run build",
-          "npx playwright test src/__tests__/e2e/byos.spec.ts"
-        ],
-        "success_indicators": [
-          "Every single file touched is <= 50 lines (Architectural Compliance).",
-          "Sequential descriptive naming provides clear directory organization.",
-          "E2E tests for BYOS configuration are 100% green.",
-          "Production build and type check pass with zero blocks (Technical Integrity)."
-        ]
-      }
-    },
-    "review-agent": {
-      "timestamp": "2026-05-23T15:20:00Z",
-      "review_verdict": "PASS",
-      "fixes_applied": [
-        "Verified 50-line modularity compliance across all affected BYOS files.",
-        "Confirmed Zero-Any Policy satisfaction after remediation sweep.",
-        "Validated inclusion of Google Cloud Storage in provider description.",
-        "Confirmed stable production build and green functional baseline."
-      ],
-      "expected_output": {
-        "commands": [
-          "npm run build",
-          "npm run lint",
-          "npx playwright test src/__tests__/e2e/byos.spec.ts"
-        ],
-        "success_indicators": [
-          "Production build is 100% clean.",
-          "Zero 'any' types remaining in core BYOS logic.",
-          "Architectural modularity strictly enforced."
-        ]
-      }
-    },
-    "qa-agent": {
-      "timestamp": "2026-05-23T15:30:00Z",
-      "qa_verdict": "PASS",
-      "fixes_applied": [
-        "Refreshed visual audit artifacts to capture Google Cloud Storage polish.",
-        "Verified functional integrity of refined provider selection flow.",
-        "Confirmed zero network or console regressions after minor copy updates."
-      ],
-      "visual_artifacts": [
-        "verification/byos-step1-provider-refined.png",
-        "verification/byos-step2-cors.png",
-        "verification/byos-step3-credentials.png",
-        "verification/byos-step4-validation.png",
-        "verification/byos-complete-success.png",
-        "verification/byos-upload-form-badge.png"
-      ],
-      "expected_output": {
-        "commands": [
-          "npx playwright test src/__tests__/e2e/byos.spec.ts"
-        ],
-        "success_indicators": [
-          "All E2E tests passing 100%.",
-          "Visual artifacts current with latest UI polish.",
-          "Zero console errors observed."
-        ]
-      }
-    },
-    "doc-agent": {
-      "timestamp": "2026-05-23T16:00:00Z",
-      "status": "PASS",
-      "fixes_applied": [
-        "Created BYOS_SUPPORT.md feature documentation with Mermaid diagrams.",
-        "Generated 517-byos-setup.md manual test specification.",
-        "Updated ARCHITECTURE.md with BYOS data models and workflows.",
-        "Created Pull Request #552 on GitHub."
-      ],
-      "expected_output": {
-        "commands": [
-          "gh pr view 552"
-        ],
-        "success_indicators": [
-          "Documentation accurately reflects the final modular implementation.",
-          "Manual test cases cover all configuration and verification scenarios.",
-          "Pull Request successfully created and linked to issue #517."
-        ]
-      }
-    }
-  }
+  "next_agent": "review-agent"
 }
