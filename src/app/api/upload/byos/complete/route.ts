@@ -33,8 +33,9 @@ export async function POST(req: Request) {
     const history = await upsertPostHistoryForByos(userId, asset.fileId, result.data);
 
     return NextResponse.json({ success: true, data: { fileId: asset.fileId, fileName: asset.fileName, historyId: history.id } });
-  } catch (error: any) {
-    console.error('Complete error:', error.message);
-    return NextResponse.json({ error: `Upload completion failed: ${error.message}` }, { status: 500 });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('Complete error:', msg);
+    return NextResponse.json({ error: `Upload completion failed: ${msg}` }, { status: 500 });
   }
 }

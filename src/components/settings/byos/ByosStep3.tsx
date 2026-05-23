@@ -5,7 +5,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 
 interface Props {
   validationStage: 'idle' | 'checking' | 'success' | 'failed';
-  checklist: any;
+  checklist: { decrypt: string; bucket: string; permissions: string };
   error: string | null;
   success: boolean;
   loading: boolean;

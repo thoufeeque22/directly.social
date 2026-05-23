@@ -2,13 +2,12 @@ export async function stageVideoFileByos({
   file, onStatusUpdate, metadata, platforms, resumeHistoryId, byosConfig, signal
 }: { 
   file: File; onStatusUpdate: (status: string) => void;
-  metadata?: any; platforms: any[]; resumeHistoryId?: string;
+  metadata?: Record<string, string | boolean | undefined>; platforms: { platform: string; accountId: string }[]; resumeHistoryId?: string;
   byosConfig: { provider: string; bucketName: string }; signal?: AbortSignal;
 }): Promise<{ stagedFileId: string; fileName: string; historyId: string }> {
-  const uploadId = resumeHistoryId || `up_${Date.now()}`;
-  const broadcast = (status: string, percent?: number) => onStatusUpdate(status);
+  const broadcast = (status: string) => onStatusUpdate(status);
 
-  broadcast("Initializing BYOS pipeline...", 1);
+  broadcast("Initializing BYOS pipeline...");
   const initRes = await fetch('/api/upload/byos/presign', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action: 'initialize', fileName: file.name, fileSize: file.size }), signal,

@@ -14,9 +14,18 @@ export async function uploadChunk(uploadId: string, index: number, chunk: Blob, 
   return false;
 }
 
-export async function stageVideoFile({ file, onStatusUpdate, metadata, platforms, resumeHistoryId, signal }: any): Promise<any> {
+interface StageParams {
+  file: File;
+  onStatusUpdate: (s: string) => void;
+  metadata?: Record<string, string | boolean | undefined>;
+  platforms: { platform: string; accountId: string }[];
+  resumeHistoryId?: string;
+  signal?: AbortSignal;
+}
+
+export async function stageVideoFile({ file, onStatusUpdate, metadata, platforms, resumeHistoryId, signal }: StageParams): Promise<{ stagedFileId: string; fileName: string; historyId: string }> {
   const byosRes = await fetch('/api/settings/byos', { signal }).catch(() => null);
-  const byosData = byosRes?.ok ? await byosRes.json() : null;
+  const byosData = (byosRes?.ok ? await byosRes.json() : null) as { config?: { provider: string; bucketName: string } } | null;
   if (byosData?.config) return stageVideoFileByos({ file, onStatusUpdate, metadata, platforms, resumeHistoryId, byosConfig: byosData.config, signal });
 
   const uploadId = resumeHistoryId || `up_${file.name.replace(/[^a-zA-Z0-9]/g, '_')}_${file.size}`;
@@ -24,7 +33,7 @@ export async function stageVideoFile({ file, onStatusUpdate, metadata, platforms
 
   broadcastStatus(onStatusUpdate, uploadId, "Resuming stream...");
   const chunksRes = await fetch(`/api/upload/chunks/${uploadId}`, { signal }).catch(() => null);
-  const existingChunks = chunksRes?.ok ? (await chunksRes.json()).chunks || [] : [];
+  const existingChunks = (chunksRes?.ok ? (await chunksRes.json()).chunks : []) as number[];
 
   const CHUNK_SIZE = 5 * 1024 * 1024;
   const totalChunks = Math.ceil(file.size / CHUNK_SIZE);

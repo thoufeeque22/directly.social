@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   return handlePlatformUploadRequest({
     req,
     platform: "youtube",
-    uploadLogic: async ({ userId, filePath, title, description, accountId, fields }: any) => {
+    uploadLogic: async ({ userId, filePath, title, description, accountId, fields }: import("@/lib/core/platform-route-handler").UploadLogicParams) => {
       const result = await uploadToYouTube({
         userId,
         filePath,

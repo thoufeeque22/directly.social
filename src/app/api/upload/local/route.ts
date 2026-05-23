@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { handlePlatformUploadRequest } from "@/lib/core/platform-route-handler";
+import { handlePlatformUploadRequest, UploadLogicParams } from "@/lib/core/platform-route-handler";
 
 export const maxDuration = 300; 
 
@@ -10,16 +10,10 @@ export const maxDuration = 300;
 export async function POST(req: NextRequest) {
   return handlePlatformUploadRequest({
     req,
-    platform: "local", // Supported in PlatformHandlerParams
-    uploadLogic: async ({ accountId: _accountId, fields, onProgress }: any) => {
-      // Use the existing simulation logic from server-distributor
-      // Note: server-distributor's distributeSinglePlatform expects (historyId, platform, stagedFileId, fileName, accountId)
-      // BUT platform-route-handler passes different arguments to uploadLogic.
-      // Wait, platform-route-handler passes: { userId, filePath, title, description, videoFormat, accountId, fields, onProgress }
-      
+    platform: "local",
+    uploadLogic: async ({ fields, onProgress }: UploadLogicParams) => {
       const p = fields.actualPlatform || 'local1';
       
-      // We'll write a simple loop here to simulate it and call onProgress
       console.log(`🚀 [LOCAL-SIM-API] Starting simulated upload for ${p}...`);
       for (let i = 1; i <= 5; i++) {
         await new Promise(r => setTimeout(r, 800));

@@ -41,8 +41,9 @@ export async function POST(req: Request) {
     if (!uploadId || !key || !partNumber) return NextResponse.json({ error: 'Missing parameters' }, { status: 400 });
     const url = await getPartPresignedUrl(client, config.bucketName, key, uploadId, partNumber);
     return NextResponse.json({ success: true, url });
-  } catch (error: any) {
-    console.error('Presign error:', error.message);
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error('Presign error:', msg);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

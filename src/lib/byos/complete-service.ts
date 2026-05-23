@@ -2,7 +2,12 @@ import { S3Client, CompleteMultipartUploadCommand } from '@aws-sdk/client-s3';
 import { prisma } from '@/lib/core/prisma';
 import { randomUUID } from 'crypto';
 
-export const completeMultipartUpload = async (client: S3Client, bucketName: string, key: string, uploadId: string, parts: any[]) => {
+interface S3Part {
+  PartNumber: number;
+  ETag: string;
+}
+
+export const completeMultipartUpload = async (client: S3Client, bucketName: string, key: string, uploadId: string, parts: S3Part[]) => {
   const command = new CompleteMultipartUploadCommand({
     Bucket: bucketName,
     Key: key,
@@ -12,7 +17,13 @@ export const completeMultipartUpload = async (client: S3Client, bucketName: stri
   return await client.send(command);
 };
 
-export const createByosAsset = async (userId: string, data: any, provider: string, bucket: string, key: string) => {
+interface ByosAssetData {
+  fileName: string;
+  fileSize: number | bigint;
+  mimeType?: string;
+}
+
+export const createByosAsset = async (userId: string, data: ByosAssetData, provider: string, bucket: string, key: string) => {
   const fileId = `byos_${randomUUID()}`;
   const expiresAt = new Date(Date.now() + 100 * 365 * 24 * 60 * 60 * 1000);
 
@@ -25,9 +36,19 @@ export const createByosAsset = async (userId: string, data: any, provider: strin
   });
 };
 
-export const upsertPostHistoryForByos = async (userId: string, fileId: string, data: any) => {
+interface ByosPostData {
+  scheduledAt?: string;
+  platforms?: { platform: string; accountId: string; transcodeStatus?: string }[];
+  historyId?: string;
+  title?: string;
+  description?: string;
+  videoFormat?: string;
+  fileName?: string;
+}
+
+export const upsertPostHistoryForByos = async (userId: string, fileId: string, data: ByosPostData) => {
   const finalScheduledAt = data.scheduledAt && !isNaN(new Date(data.scheduledAt).getTime()) ? new Date(data.scheduledAt) : new Date();
-  const initialPlatformData = data.platforms?.map((p: any) => ({ platform: p.platform, accountId: p.accountId, status: 'pending', transcodeStatus: 'skipped' })) || [];
+  const initialPlatformData = data.platforms?.map((p) => ({ platform: p.platform, accountId: p.accountId, status: 'pending' as const, transcodeStatus: 'skipped' as const })) || [];
 
   if (data.historyId) {
     return await prisma.postHistory.update({
@@ -35,10 +56,10 @@ export const upsertPostHistoryForByos = async (userId: string, fileId: string, d
       data: {
         stagedFileId: fileId, title: data.title, description: data.description, scheduledAt: finalScheduledAt,
         platforms: {
-          upsert: initialPlatformData.map((p: any) => ({
-            where: { postHistoryId_platform_accountId: { postHistoryId: data.historyId, platform: p.platform, accountId: p.accountId } },
-            update: { accountId: p.accountId, transcodeStatus: p.transcodeStatus },
-            create: p,
+          upsert: initialPlatformData.map((p) => ({
+            where: { postHistoryId_platform_accountId: { postHistoryId: data.historyId!, platform: p.platform, accountId: p.accountId } },
+            update: { accountId: p.accountId, transcodeStatus: 'skipped' },
+            create: { platform: p.platform, accountId: p.accountId, status: 'pending', transcodeStatus: 'skipped' },
           })),
         },
       },

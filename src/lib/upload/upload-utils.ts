@@ -4,20 +4,41 @@ import { processPlatformUpload } from './distribution-service';
 
 export { stageVideoFile };
 
-export async function distributeToPlatforms(params: any): Promise<any> {
-  const { stagedFileId, fileName, selectedAccountIds, accounts, historyId } = params;
-  const platformResults: any[] = [];
+interface DistributionParams {
+  stagedFileId: string;
+  fileName: string;
+  selectedAccountIds: string[];
+  accounts: { id: string; provider: string; accountName?: string | null }[];
+  historyId: string;
+  fields?: Record<string, string | boolean | undefined>;
+  onStatusUpdate?: (s: string) => void;
+  onPlatformStatus?: (id: string, status: string, error?: string) => void;
+  onAccountSuccess?: (id: string, result: unknown) => void;
+  signals?: Record<string, AbortSignal>;
+}
+
+export async function distributeToPlatforms(params: DistributionParams): Promise<{ platformResults: unknown[] }> {
+  const { selectedAccountIds, accounts, historyId } = params;
+  const platformResults: unknown[] = [];
   const queue = [...selectedAccountIds];
   
   const processOne = async (selectionId: string) => {
     if (checkGlobalAbort(historyId)) return;
-    let [platform, realAccountId] = selectionId.includes(':') ? selectionId.split(':') : [null, selectionId];
+    const [p, accId] = selectionId.includes(':') ? selectionId.split(':') : [null, selectionId];
+    let platform = p;
+    const realAccountId = accId;
+
     if (!platform) {
-      const acc = accounts.find((a: any) => a.id === realAccountId);
+      const acc = accounts.find((a) => a.id === realAccountId);
       if (!acc) return;
       platform = acc.provider === 'google' ? 'youtube' : acc.provider;
     }
-    const result = await processPlatformUpload({ ...params, selectionId, platform, realAccountId, fields: { ...params.fields, stagedFileId }, fileName, account: accounts.find((a: any) => a.id === realAccountId) });
+    
+    const result = await processPlatformUpload({ 
+      ...params, selectionId, platform: platform!, realAccountId, 
+      fields: { ...params.fields, stagedFileId: params.stagedFileId }, 
+      account: accounts.find((a) => a.id === realAccountId) 
+    });
     if (result) platformResults.push(result);
   };
 
@@ -36,9 +57,23 @@ export async function distributeToPlatforms(params: any): Promise<any> {
   return { platformResults };
 }
 
-export async function performMultiPlatformUpload(params: any): Promise<any> {
+interface MultiUploadParams {
+  formData: FormData;
+  onStatusUpdate: (s: string) => void;
+  selectedAccountIds: string[];
+  accounts: { id: string; provider: string; accountName?: string | null }[];
+}
+
+export async function performMultiPlatformUpload(params: MultiUploadParams): Promise<{ platformResults: unknown[]; stagedFileId: string }> {
   const file = params.formData.get('file') as File;
-  const { stagedFileId, fileName } = await stageVideoFile({ file, onStatusUpdate: params.onStatusUpdate, platforms: [], metadata: { title: params.formData.get('title') as string } });
-  const results = await distributeToPlatforms({ ...params, stagedFileId, fileName, historyId: '' });
+  const title = (params.formData.get('title') as string) || '';
+  const { stagedFileId, fileName } = await stageVideoFile({ 
+    file, onStatusUpdate: params.onStatusUpdate, platforms: [], 
+    metadata: { title } 
+  });
+  const results = await distributeToPlatforms({ 
+    ...params, stagedFileId, fileName, historyId: '',
+    fields: { title }
+  });
   return { ...results, stagedFileId };
 }

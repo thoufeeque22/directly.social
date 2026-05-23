@@ -15,11 +15,15 @@ import { useByosWizard } from '@/hooks/useByosWizard';
 export const ByosWizard = () => {
   const { activeStep, setActiveStep, formData, setFormData, loading, error, success, existingConfig, validationStage, checklist, handleSave, handleDelete } = useByosWizard();
 
+  const handleFieldChange = (field: string, value: string | boolean) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
   const renderContent = () => {
     switch (activeStep) {
-      case 0: return <ByosStep0 provider={formData.provider} onProviderChange={(p) => setFormData({ ...formData, provider: p, region: p === 'S3' ? 'us-east-1' : 'auto' })} />;
+      case 0: return <ByosStep0 provider={formData.provider} onProviderChange={(p) => setFormData(prev => ({ ...prev, provider: p, region: p === 'S3' ? 'us-east-1' : 'auto' }))} />;
       case 1: return <ByosStep1 />;
-      case 2: return <ByosStep2 formData={formData} onFieldChange={(f: string, v: any) => setFormData({ ...formData, [f]: v })} existingConfig={!!existingConfig} />;
+      case 2: return <ByosStep2 formData={formData} onFieldChange={handleFieldChange} existingConfig={!!existingConfig} />;
       case 3: return <ByosStep3 validationStage={validationStage} checklist={checklist} error={error} success={success} loading={loading} onSave={handleSave} />;
       default: return null;
     }

@@ -1,131 +1,70 @@
-import { useState, useRef } from 'react';
-import { distributeToPlatforms } from '@/lib/upload/upload-utils';
-import { AIWriteResult } from '@/lib/utils/ai-writer';
+import { useState, useCallback, useRef } from 'react';
 import { Account } from '@/lib/core/types';
 import { StyleMode } from '@/lib/core/constants';
+import { distributeToPlatforms } from '@/lib/upload/upload-utils';
+import { AIWriteResult } from '@/lib/utils/ai-writer';
 
-export type PlatformStatus = 'pending' | 'uploading' | 'processing' | 'success' | 'failed' | 'cancelled';
+export type PlatformStatus = 'pending' | 'uploading' | 'success' | 'failed' | 'cancelled';
 
 export function useDistributionEngine(accounts: Account[]) {
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState<string | React.ReactNode | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<string>('');
   const [platformStatuses, setPlatformStatuses] = useState<Record<string, PlatformStatus>>({});
   const [platformErrors, setPlatformErrors] = useState<Record<string, string>>({});
   const [successfulAccountIds, setSuccessfulAccountIds] = useState<string[]>([]);
   
-  const abortControllers = useRef<Record<string, AbortController>>({});
+  const cockpitStartedRef = useRef(false);
 
-  const handleAbortPlatform = (id: string) => {
-    if (abortControllers.current[id]) {
-      abortControllers.current[id].abort();
-      delete abortControllers.current[id];
-      setPlatformStatuses(prev => ({ ...prev, [id]: 'cancelled' }));
-      setPlatformErrors(prev => ({ ...prev, [id]: 'Stopped by user' }));
-    }
-  };
-
-  const handleAbortAll = () => {
-    setUploadStatus('⏹️ All uploads stopped by user.');
+  const handleAbortAll = useCallback(() => {
     setIsUploading(false);
+    setUploadStatus('Upload aborted');
+    setPlatformStatuses({});
+    setPlatformErrors({});
+    cockpitStartedRef.current = false;
+  }, []);
 
-    Object.values(abortControllers.current).forEach(controller => controller.abort());
-    
-    setPlatformStatuses(prev => {
-      const next = { ...prev };
-      Object.keys(abortControllers.current).forEach(id => {
-        if (next[id] === 'pending' || next[id] === 'uploading' || next[id] === 'processing') {
-          next[id] = 'cancelled';
-        }
-      });
-      return next;
-    });
-
-    setPlatformErrors(prev => {
-      const next = { ...prev };
-      Object.keys(abortControllers.current).forEach(id => {
-        next[id] = 'Stopped by user';
-      });
-      return next;
-    });
-
-    abortControllers.current = {};
-  };
-
-  const executeDistribution = async ({
-    stagedFileId,
-    fileName,
-    historyId,
-    formData,
-    selectedAccountIds,
-    reviewedContent,
-    targetAccountIds
-  }: {
-    stagedFileId: string;
-    fileName: string;
-    historyId: string;
-    formData: FormData;
-    selectedAccountIds: string[];
-    reviewedContent?: Record<string, AIWriteResult>;
-    targetAccountIds?: string[];
-  }) => {
-    setIsUploading(true);
-    
-    const activeTargets = (targetAccountIds || selectedAccountIds).filter(
-      id => !successfulAccountIds.includes(id)
-    );
-    
-    if (activeTargets.length === 0) {
-      setUploadStatus("✅ All selected platforms are already successful.");
-      setIsUploading(false);
-      return;
-    }
-
-    setUploadStatus(targetAccountIds ? `🔄 Retrying ${activeTargets.length} platform(s)...` : "🚀 Orchestrating distribution...");
-    
-    setPlatformStatuses(prev => {
-      const next = { ...prev };
-      activeTargets.forEach(id => { next[id] = 'pending'; });
-      return next;
-    });
-
-    const controllers: Record<string, AbortController> = {};
-    const signals: Record<string, AbortSignal> = {};
-    activeTargets.forEach(id => {
-      const controller = new AbortController();
-      controllers[id] = controller;
-      signals[id] = controller.signal;
-    });
-    abortControllers.current = controllers;
-
+  const executeCockpitDistribution = useCallback(async (
+    stagedFileId: string,
+    fileName: string,
+    historyId: string,
+    formData: FormData,
+    activeTargets: string[],
+    reviewedContent?: Record<string, AIWriteResult>,
+    signals?: Record<string, AbortSignal>
+  ) => {
     try {
+      setIsUploading(true);
       const distribution = await distributeToPlatforms({
         stagedFileId,
         fileName,
-        formData,
-        accounts,
+        fields: {
+          contentMode: (formData.get('contentMode') as StyleMode) || 'Smart',
+          videoFormat: (formData.get('videoFormat') as 'short' | 'long') || 'short',
+          title: (formData.get('title') as string) || undefined,
+          description: (formData.get('description') as string) || undefined,
+        },
+        accounts: accounts.map(a => ({ id: a.id, provider: a.provider, accountName: a.accountName })),
         selectedAccountIds: activeTargets,
-        contentMode: (formData.get('contentMode') as StyleMode) || 'Smart',
-        videoFormat: (formData.get('videoFormat') as 'short' | 'long') || 'short',
+        historyId,
         onStatusUpdate: setUploadStatus,
         onPlatformStatus: (id: string, status: string, error?: string) => {
           setPlatformStatuses(prev => ({ ...prev, [id]: status as PlatformStatus }));
           if (error) setPlatformErrors(prev => ({ ...prev, [id]: error }));
         },
-        onAccountSuccess: (id: string, result: any) => {
+        onAccountSuccess: (id: string, res: unknown) => {
+          const result = res as { status: string };
           if (result.status === 'success') {
             setSuccessfulAccountIds(prev => [...new Set([...prev, id])]);
           }
         },
-        historyId,
-        reviewedContent,
         signals
       });
 
       // Final status sync
-      const finalResults = distribution.platformResults;
+      const finalResults = distribution.platformResults as any[];
       setPlatformStatuses(prev => {
         const next = { ...prev };
-        finalResults.forEach((result: any) => {
+        finalResults.forEach((result) => {
           next[result.accountId] = result.status as PlatformStatus;
         });
         return next;
@@ -133,7 +72,7 @@ export function useDistributionEngine(accounts: Account[]) {
 
       setPlatformErrors(prev => {
         const next = { ...prev };
-        finalResults.forEach((result: any) => {
+        finalResults.forEach((result) => {
           if (result.status === 'failed') {
             next[result.accountId] = result.errorMessage || 'Unknown error';
           }
@@ -141,18 +80,17 @@ export function useDistributionEngine(accounts: Account[]) {
         return next;
       });
 
+      setIsUploading(false);
       return distribution;
 
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       console.error("Distribution engine failed", err);
       setUploadStatus(`❌ Distribution failed: ${errorMessage}`);
-      return null;
-    } finally {
       setIsUploading(false);
-      abortControllers.current = {};
+      return null;
     }
-  };
+  }, [accounts]);
 
   return {
     isUploading,
@@ -165,8 +103,8 @@ export function useDistributionEngine(accounts: Account[]) {
     setPlatformErrors,
     successfulAccountIds,
     setSuccessfulAccountIds,
-    handleAbortPlatform,
+    executeCockpitDistribution,
     handleAbortAll,
-    executeDistribution
+    cockpitStartedRef
   };
 }

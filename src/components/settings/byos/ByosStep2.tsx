@@ -2,7 +2,22 @@ import React from 'react';
 import { Box, Typography, Stack, FormControlLabel, Switch } from '@mui/material';
 import { ByosField } from './ByosField';
 
-export const ByosStep2 = ({ formData, onFieldChange, existingConfig }: any) => (
+interface Props {
+  formData: {
+    bucketName: string;
+    provider: string;
+    endpoint: string;
+    region: string;
+    accessKeyId: string;
+    secretAccessKey: string;
+    pathPrefix: string;
+    keepFiles: boolean;
+  };
+  onFieldChange: (field: string, value: string | boolean) => void;
+  existingConfig: boolean;
+}
+
+export const ByosStep2 = ({ formData, onFieldChange, existingConfig }: Props) => (
   <Box sx={{ mt: 3, mb: 2 }}>
     <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4 }}>Enter the bucket parameters and API credentials.</Typography>
     <Stack spacing={3}>

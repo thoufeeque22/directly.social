@@ -56,7 +56,13 @@ export const useByosWizard = () => {
       setChecklist(p => ({ ...p, permissions: 'success' }));
       setValidationStage('success'); setSuccess(true); setExistingConfig(data.config);
       setTimeout(() => setSuccess(false), 5000);
-    } catch (err: any) { setError(err.message); setValidationStage('failed'); } finally { setLoading(false); }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg);
+      setValidationStage('failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDelete = async () => {
