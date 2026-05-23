@@ -35,7 +35,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
               try {
                 await Browser.close();
-              } catch (e) {
+              } catch {
                 console.log('Browser already closed or not available');
               }
 

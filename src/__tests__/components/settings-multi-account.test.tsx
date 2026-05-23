@@ -69,7 +69,7 @@ describe('Settings Multi-Account Management', () => {
 
   it('displays connected segments ONLY for enabled platforms', async () => {
     render(<SettingsPage />);
-    const connectionsTab = screen.getByRole('tab', { name: /Connections/i });
+    const connectionsTab = screen.getByRole('tab', { name: /Destinations/i });
     fireEvent.click(connectionsTab);
     
     await waitFor(() => {
@@ -87,28 +87,34 @@ describe('Settings Multi-Account Management', () => {
     
     await waitFor(() => screen.getByText('YouTube Shorts'));
     
-    const ytSwitch = screen.getByLabelText('Toggle YouTube Shorts visibility');
+    const ytSwitchSpan = screen.getByLabelText('Toggle YouTube Shorts');
+    const ytSwitch = ytSwitchSpan.querySelector('input')!;
     
     // Toggle OFF
     fireEvent.click(ytSwitch);
     
     await waitFor(() => {
-      expect(togglePlatformPreference).toHaveBeenCalledWith('youtube', false); // Toggled from true to false.
+      expect(togglePlatformPreference).toHaveBeenCalledWith('youtube', false);
     });
   });
 
   it('allows enabling a platform even with 0 accounts (to reveal connect button)', async () => {
     vi.mocked(getUserAccounts).mockResolvedValue([] as Awaited<ReturnType<typeof getUserAccounts>>);
-    vi.mocked(getPlatformPreferences).mockResolvedValue([] as Awaited<ReturnType<typeof getPlatformPreferences>>);
+    vi.mocked(getPlatformPreferences).mockResolvedValue([
+      { id: '1', userId: 'user-1', platformId: 'instagram', isEnabled: false } // 0 accounts but disabled
+    ] as Awaited<ReturnType<typeof getPlatformPreferences>>);
     
     render(<SettingsPage />);
+    const connectionsTab = screen.getByRole('tab', { name: /Destinations/i });
+    fireEvent.click(connectionsTab);
     
     await waitFor(() => screen.getByText('Instagram Reels'));
     
     // Initially hidden
     expect(screen.queryByText('Instagram')).not.toBeInTheDocument();
     
-    const instaSwitch = screen.getByLabelText('Toggle Instagram Reels visibility');
+    const instaSwitchSpan = screen.getByLabelText('Toggle Instagram Reels');
+    const instaSwitch = instaSwitchSpan.querySelector('input')!;
     fireEvent.click(instaSwitch);
     
     await waitFor(() => {
@@ -124,14 +130,14 @@ describe('Settings Multi-Account Management', () => {
     ] as Awaited<ReturnType<typeof getPlatformPreferences>>);
 
     render(<SettingsPage />);
-    const connectionsTab = screen.getByRole('tab', { name: /Connections/i });
+    const connectionsTab = screen.getByRole('tab', { name: /Destinations/i });
     fireEvent.click(connectionsTab);
 
     await waitFor(() => {
       // LinkedIn heading should be visible in the connection grid
       expect(screen.getByRole('heading', { name: /LinkedIn/i })).toBeInTheDocument();
-      // Twitter should be hidden
-      expect(screen.queryByRole('heading', { name: /Twitter\/X/i })).not.toBeInTheDocument();
+      // Twitter should also be visible in the coming soon section
+      expect(screen.getByRole('heading', { name: /Twitter\/X/i })).toBeInTheDocument();
     });
   });
 });

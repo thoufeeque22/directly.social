@@ -99,7 +99,6 @@ test.describe('Calendar Content Planner Refinements', () => {
       await expect(calendarGrid).toBeVisible();
       // Look for a post
       // In the seed script, posts are probably seeded.
-      const posts = page.locator('div[class*="calendarPost"]');
       // Just check that it can find posts or not error out
     } else {
       await expect(emptyState).toBeVisible();

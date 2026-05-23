@@ -10,7 +10,7 @@ interface DistributionGridProps {
   onToggle: (platformId: string, provider: string, currentStatus: boolean) => Promise<void>;
 }
 
-export const DistributionGrid: React.FC<DistributionGridProps> = ({ accounts, preferences, isLoading, onToggle }) => {
+export const DistributionGrid: React.FC<DistributionGridProps> = ({ preferences, isLoading, onToggle }) => {
   if (isLoading) {
     return <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '0.9rem' }}>Loading settings...</p>;
   }

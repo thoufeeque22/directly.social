@@ -13,7 +13,7 @@ import AIBYOKWizard from '@/components/AIBYOKWizard';
 import { ByosWizard } from '@/components/settings/ByosWizard';
 import styles from './Settings.module.css';
 
-import LinkIcon from '@mui/icons-material/Link';
+
 import KeyIcon from '@mui/icons-material/Key';
 import TuneIcon from '@mui/icons-material/Tune';
 import StorageIcon from '@mui/icons-material/Storage';
@@ -31,7 +31,7 @@ const TABS = [
 ];
 
 const SettingsContent = () => {
-  const { accounts, preferences, isLoading: isAccountsLoading, togglePlatform, disconnectAccount } = useAccounts();
+  const { accounts, preferences, togglePlatform, disconnectAccount } = useAccounts();
   const searchParams = useSearchParams();
   const router = useRouter();
   const activeTab = searchParams.get('tab') || 'destinations';

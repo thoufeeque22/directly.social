@@ -10,7 +10,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { publishTikTokVideo } from '@/lib/platforms/tiktok';
 import { prisma } from '@/lib/core/prisma';
-import fs from 'fs';
+
 
 // Mock Prisma
 vi.mock('@/lib/core/prisma', () => ({

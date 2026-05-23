@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { encrypt, decrypt } from '../../lib/core/encryption';
 
 describe('Encryption Utility Security Audit', () => {

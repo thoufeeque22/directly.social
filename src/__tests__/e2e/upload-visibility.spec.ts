@@ -251,7 +251,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
     await page.reload();
 
     // 3. Verify STOP ALL is visible on ghost card
-    const postCard = page.getByText(/Initial Ghost/i);
+    await expect(page.getByText(/Initial Ghost/i)).toBeVisible();
     const stopAll = page.getByRole('button', { name: /STOP ALL/i });
     await expect(stopAll).toBeVisible();
     

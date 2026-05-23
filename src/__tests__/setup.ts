@@ -52,6 +52,9 @@ global.fetch = vi.fn((url) => {
           }
         });
       }
+      if (url.toString().includes('/api/platforms')) {
+        return import('@/lib/core/constants').then(m => m.PLATFORMS);
+      }
       return Promise.resolve({});
     },
   } as Response);

@@ -14,6 +14,7 @@ import { execSync } from 'child_process';
  */
 
 test.describe('Ticket #538: Security Roles and Cleanup', () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
 
   test.beforeAll(async () => {
     console.log('[E2E] Resetting DB state...');
@@ -41,7 +42,6 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     console.log('[E2E] Logged in as Tester.');
 
     // 1. Verify Sidebar does NOT show Analytics
-    await page.getByRole('button', { name: '☰' }).click();
     await expect(page.getByRole('link', { name: 'Analytics' })).not.toBeVisible();
     console.log('[E2E] Analytics link NOT visible in sidebar for Tester.');
     
@@ -60,14 +60,10 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
 
   test('Account with ADMIN role can access admin analytics', async ({ page }) => {
     console.log('[E2E] Testing ADMIN access...');
-    
-    // Elevate tester to ADMIN in DB
-    execSync('npx tsx scripts/make-admin.ts tester@socialstudio.ai');
-    console.log('[E2E] Elevated tester@socialstudio.ai to ADMIN in database.');
 
     // Login again to get new session with ADMIN role
     await page.goto('/login');
-    await page.getByTestId('e2e-email-input').fill('tester@socialstudio.ai');
+    await page.getByTestId('e2e-email-input').fill('admin@socialstudio.ai');
     await page.getByTestId('e2e-password-input').fill('social-studio-e2e-secret');
     await page.getByTestId('e2e-login-submit').click();
     
@@ -75,7 +71,6 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     console.log('[E2E] Logged in as Admin.');
 
     // 1. Verify Sidebar SHOWS Analytics
-    await page.getByRole('button', { name: '☰' }).click();
     const analyticsLink = page.getByRole('link', { name: 'Analytics' });
     await expect(analyticsLink).toBeVisible();
     console.log('[E2E] Analytics link IS visible in sidebar for Admin.');
@@ -112,21 +107,5 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     }
   });
 
-  test('Admin account (admin@socialstudio.ai) login attempt (Expected to Fail if not implemented)', async ({ page }) => {
-    console.log('[E2E] Attempting login with admin@socialstudio.ai...');
-    await page.goto('/login');
-    await page.getByTestId('e2e-email-input').fill('admin@socialstudio.ai');
-    await page.getByTestId('e2e-password-input').fill('social-studio-e2e-secret');
-    await page.getByTestId('e2e-login-submit').click();
-    
-    // Wait a bit to see if we redirect
-    await page.waitForTimeout(3000);
-    
-    const currentUrl = page.url();
-    if (currentUrl.includes('/login')) {
-      console.log('[E2E] [INFO] Login with admin@socialstudio.ai failed (as expected if not implemented in E2E credentials provider).');
-    } else {
-      console.log('[E2E] [SUCCESS] Login with admin@socialstudio.ai succeeded!');
-    }
-  });
+
 });

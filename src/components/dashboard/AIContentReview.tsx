@@ -3,7 +3,6 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import CancelIcon from '@mui/icons-material/Cancel';
 import { PLATFORMS } from '@/lib/core/constants';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
 

@@ -86,7 +86,7 @@ export const ByokWizard = ({ platform }: ByokWizardProps) => {
         await saveByokCredential({ platform, ...credentials });
         setSuccess(true);
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred during validation.');
     } finally {
       setLoading(false);

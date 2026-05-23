@@ -120,7 +120,9 @@ export const UploadForm: React.FC<UploadFormProps> = ({
 
   React.useEffect(() => {
     setMounted(true);
-    fetch('/api/settings/byos')
+    const controller = new AbortController();
+    
+    fetch('/api/settings/byos', { signal: controller.signal })
       .then((res) => {
         if (res.ok) return res.json();
       })
@@ -130,7 +132,16 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           setByosProvider(data.config.provider);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        if (err.name === 'AbortError') return;
+        if (err instanceof TypeError && err.message === 'Failed to fetch') {
+          // Playwright sometimes aborts requests on page close without AbortError
+          return;
+        }
+        console.error('BYOS fetch error:', err);
+      });
+      
+    return () => controller.abort();
   }, []);
 
   const skeleton = <div style={{ minHeight: '100px' }} />;

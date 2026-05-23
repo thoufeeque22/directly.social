@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { CalendarView } from '@/components/schedule/CalendarView';
-import { format, addMonths } from 'date-fns';
+import { addMonths } from 'date-fns';
 import { vi, describe, it, expect } from 'vitest';
 
 const mockPosts = [

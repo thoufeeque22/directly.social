@@ -20,7 +20,7 @@ import {
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { useAiByok } from '@/hooks/useAiByok';
+
 
 /**
  * AIChatbot Component
@@ -29,9 +29,7 @@ import { useAiByok } from '@/hooks/useAiByok';
 export const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [manualInput, setManualInput] = useState('');
-  const { configs: byokConfigs } = useAiByok();
   
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { messages, sendMessage, status, error } = useChat({});
   const scrollRef = useRef<HTMLDivElement>(null);
 
