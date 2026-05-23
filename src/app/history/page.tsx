@@ -216,14 +216,16 @@ function HistoryContent() {
       await distributeToPlatforms({
         stagedFileId,
         fileName,
-        formData: fd,
-        accounts,
+        accounts: accounts.map(a => ({ id: a.id, provider: a.provider, accountName: a.accountName })),
         selectedAccountIds,
-        contentMode: post.contentMode || 'Smart',
-        videoFormat: post.videoFormat as "short" | "long",
-        onStatusUpdate: () => {},
         historyId,
-        reviewedContent,
+        fields: {
+          title: post.title || '',
+          description: post.description || '',
+          contentMode: (post as any).contentMode || 'Smart',
+          videoFormat: post.videoFormat || 'short',
+        },
+        onPlatformStatus: () => {},
         onAccountSuccess: async () => {
            const updated = await fetchHistory();
            setPosts(updated.data || []);
@@ -331,7 +333,9 @@ function HistoryContent() {
       }
 
       // 3. Final Distribution
-      await executeCockpitDistribution(stagedFileId, fileName, historyId, post, reviewedContentToPass);
+      if (stagedFileId && fileName) {
+        await executeCockpitDistribution(stagedFileId, fileName, historyId, post, reviewedContentToPass);
+      }
 
     } catch {
       
@@ -562,13 +566,16 @@ function HistoryContent() {
       await distributeToPlatforms({
         stagedFileId,
         fileName,
-        formData: new FormData(), 
-        accounts,
+        accounts: accounts.map(a => ({ id: a.id, provider: a.provider, accountName: a.accountName })),
         selectedAccountIds,
-        contentMode: 'Smart',
-        videoFormat: post.videoFormat as "short" | "long",
-        onStatusUpdate: () => {},
         historyId,
+        fields: {
+          title: post.title || '',
+          description: post.description || '',
+          contentMode: (post as any).contentMode || 'Smart',
+          videoFormat: post.videoFormat || 'short',
+        },
+        onPlatformStatus: () => {},
         onAccountSuccess: async () => {
            const updated = await fetchHistory();
            setPosts(updated.data || []);

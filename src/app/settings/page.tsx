@@ -11,6 +11,7 @@ import { PLATFORMS } from '@/lib/core/constants';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { ByokWizard } from '@/components/byok/ByokWizard';
 import AIBYOKWizard from '@/components/AIBYOKWizard';
+import { ByosWizard } from '@/components/settings/ByosWizard';
 import styles from './Settings.module.css';
 
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -23,6 +24,7 @@ import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import XIcon from '@mui/icons-material/X';
 import KeyIcon from '@mui/icons-material/Key';
 import TuneIcon from '@mui/icons-material/Tune';
+import StorageIcon from '@mui/icons-material/Storage';
 
 import { Tabs, Tab, Box, Typography, Divider } from '@mui/material';
 
@@ -72,7 +74,7 @@ const SettingsPage = () => {
     
     try {
       await disconnectAccount(accountId);
-    } catch (e) {
+    } catch {
       alert('Failed to disconnect account. Please try again.');
     }
   };
@@ -84,7 +86,7 @@ const SettingsPage = () => {
         return; 
       }
       await togglePlatform(platformId, currentStatus);
-    } catch (e) {
+    } catch {
       alert('Failed to update settings. Please try again.');
     }
   };
@@ -110,6 +112,7 @@ const SettingsPage = () => {
             <Tab icon={<TuneIcon />} iconPosition="start" label="General" {...a11yProps(0)} />
             <Tab icon={<LinkIcon />} iconPosition="start" label="Connections" {...a11yProps(1)} />
             <Tab icon={<KeyIcon />} iconPosition="start" label="BYOK / AI" {...a11yProps(2)} />
+            <Tab icon={<StorageIcon />} iconPosition="start" label="Storage (BYOS)" {...a11yProps(3)} />
           </Tabs>
         </Box>
         
@@ -260,6 +263,11 @@ const SettingsPage = () => {
               </Box>
             </Box>
           </GlassCard>
+        </CustomTabPanel>
+
+        {/* Storage (BYOS) Tab */}
+        <CustomTabPanel value={tabIndex} index={3}>
+          <ByosWizard />
         </CustomTabPanel>
       </Box>
     </div>

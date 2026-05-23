@@ -365,6 +365,15 @@ sequenceDiagram
     end
 ```
 
+### 9. Bring Your Own Storage (BYOS)
+
+Users can connect their own S3/R2 storage to bypass server limits.
+
+- **Direct Upload:** Browser uploads directly to the user's bucket using presigned URLs.
+- **Service Orchestration:** Logic is modularized into dedicated services (`presign-service.ts`, `complete-service.ts`) and a specialized client (`byos-upload-client.ts`).
+- **Security:** Credentials are encrypted at rest via AES-256-GCM.
+- **Streaming Distribution:** Media is streamed directly from the user's bucket to platform APIs during publishing.
+
 ## Platform Integrations
 
 Platform-specific logic is encapsulated in `src/lib/platforms/`.

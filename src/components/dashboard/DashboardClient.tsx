@@ -219,7 +219,7 @@ export default function DashboardClient({
       <div className="responsive-grid">
         {isReviewing ? (
           <div style={{ maxWidth: '800px', margin: '0 auto', width: '100%' }}>
-            <AIContentReview previews={aiPreviews} onBack={() => { setIsReviewing(false); setUploadStatus(null); }} onConfirm={handleConfirmReview} isProcessing={isUploading} />
+            <AIContentReview previews={aiPreviews} onBack={() => { setIsReviewing(false); setUploadStatus(''); }} onConfirm={handleConfirmReview} isProcessing={isUploading} />
           </div>
         ) : (
           <UploadForm 
