@@ -2,7 +2,7 @@
   "cookies": [
     {
       "name": "authjs.csrf-token",
-      "value": "88d4984e45d711afbf53b6918b38bbb4a630a17a75db79d14e81ec638ba67cfe%7Cf7bc8d2a79f26e30c16ab35b862e262e77e957a322ecfae2803607845d20fe6b",
+      "value": "7a6711998b45f08c7a0e9d643c7c1da0da5b15e68cca9601c1fd2624894641cb%7C446ba5c515108c3f0201c966ffbcc5b648102fdd58bae34242a3096b46966905",
       "domain": "localhost",
       "path": "/",
       "expires": -1,
@@ -22,14 +22,24 @@
     },
     {
       "name": "authjs.session-token",
-      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..pypDmLrPp5-dmFEkQwf70A.IT3xgjk_bHf_rJ2vxBsKrbDIqnmasEKUYTqfkB4KCJSaYvAtQ3fPYDcoPeNr2JuGig_RDr8nc8GBIO_Jdzh8FbZqk7XHblNzMUzaHinbz1bj4AMYms6rSWF75U9SaeGPZd8h1YvcMmCfqj8ZQ2OQ_d0rbKeTVCvHkLnA1Kc1po8wEDbuDm9HMUXGOfdGP7dx4pCujSGFtxza7wr2cShtThflcFFaqFfxr1oEMxCpt7fz2jH4j_QJn1YZ40i1zCq_RH7zcHrrXUM8lE_NEIDCQA.pha3TBL3DuA_S1-JweZVi7Q4zipsBaONGPggnXpEwvI",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..a1mmSL59eCj9uU99PqmgbQ.WT1xBO236CvWTja9zTf0kQBL3mutPPnlS_7hYVOdyfHOYFSbSJpJ1OL7MKUT5BZNWf_jucKAAREyaqF4cPTP-YrCqACyiOI1FkEysbc-iDdqetFDYUULXmneCvK2VsscU1GJxHVX-PxM_Jf54XXyY_E6G6VHHBaWlU8o_5KnDp0hZBAC8EfsWgQzVqoHNI1H9D2Cd_dPPw25CA5xQ1YheLNTkWYnOXj_KYyPNmS9JLYcZPghCJ6aUbyARMIYD9DcM8m67pzez5JwmrZhYchbFg.61CJOOGoyNshLhCr2u0vIlfMm6VB-XrK6B-ACMAJ7t0",
       "domain": "localhost",
       "path": "/",
-      "expires": 1782112717.0742,
+      "expires": 1782114060.925744,
       "httpOnly": true,
       "secure": false,
       "sameSite": "Lax"
     }
   ],
-  "origins": []
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "SS_SELECTED_PLATFORMS",
+          "value": "[\"cmpi0k2ns00009b2bjqwtjwd9\",\"cmpi0k2ns00019b2bshc6mt07\",\"local-dev-1\",\"local-dev-2\",\"local-dev-3\"]"
+        }
+      ]
+    }
+  ]
 }

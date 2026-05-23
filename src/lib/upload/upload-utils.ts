@@ -68,6 +68,177 @@ function checkGlobalAbort(historyId?: string): boolean {
 /**
  * PHASE ONE: Staging via Chunking (Zero-Memory Crash)
  */
+/**
+ * helper: Direct multipart S3/R2 upload bypass for BYOS
+ */
+async function stageVideoFileByos({
+  file,
+  onStatusUpdate,
+  metadata,
+  platforms,
+  resumeHistoryId,
+  byosConfig,
+  signal
+}: { 
+  file: File; 
+  onStatusUpdate: (status: string) => void;
+  metadata?: { title?: string; description?: string; videoFormat?: string; scheduledAt?: string; isPublished?: boolean };
+  platforms: { platform: string; accountId: string }[];
+  resumeHistoryId?: string;
+  byosConfig: { provider: string; bucketName: string };
+  signal?: AbortSignal;
+}): Promise<{ stagedFileId: string; fileName: string; historyId: string }> {
+  const fingerprint = `${file.name}-${file.size}-${file.type}`.replace(/[^a-zA-Z0-9]/g, '_');
+  const uploadId = resumeHistoryId || `up_${fingerprint}`;
+
+  const broadcast = (status: string, percent?: number) => {
+    onStatusUpdate(status);
+    if (typeof window !== 'undefined' && window.localStorage) {
+       window.localStorage.setItem('SS_STAGING_STATUS', JSON.stringify({ 
+         status, 
+         percent, 
+         active: true,
+         timestamp: Date.now(),
+         historyId: uploadId
+       }));
+    }
+  };
+
+  if (checkGlobalAbort(uploadId)) throw new Error("Upload cancelled by user.");
+
+  broadcast("Initializing secure BYOS direct pipeline...", 1);
+
+  // 1. Initialize Multipart Upload
+  const initRes = await fetch('/api/upload/byos/presign', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'initialize',
+      fileName: file.name,
+      fileSize: file.size,
+    }),
+    signal,
+  });
+
+  if (!initRes.ok) {
+    const errData = await initRes.json();
+    throw new Error(errData.error || 'Failed to initialize BYOS multipart upload');
+  }
+
+  const { uploadId: s3UploadId, key } = await initRes.json();
+
+  // 2. Upload parts in 5MB chunks
+  const CHUNK_SIZE = 5 * 1024 * 1024;
+  const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+  const parts: { PartNumber: number; ETag: string }[] = [];
+
+  for (let i = 0; i < totalChunks; i++) {
+    if (checkGlobalAbort(uploadId)) throw new Error("Upload cancelled by user.");
+
+    const partNumber = i + 1;
+    const progress = Math.round((i / totalChunks) * 100);
+    broadcast(`Uploading directly to ${byosConfig.provider}: ${progress}%`, progress);
+
+    const start = i * CHUNK_SIZE;
+    const end = Math.min(file.size, start + CHUNK_SIZE);
+    const chunk = file.slice(start, end);
+
+    let success = false;
+    let etag = '';
+
+    for (let retry = 0; retry < 3; retry++) {
+      if (checkGlobalAbort(uploadId)) throw new Error("Upload cancelled by user.");
+
+      try {
+        const presignRes = await fetch('/api/upload/byos/presign', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'presignPart',
+            fileName: file.name,
+            uploadId: s3UploadId,
+            key,
+            partNumber,
+          }),
+          signal,
+        });
+
+        if (!presignRes.ok) {
+          throw new Error('Failed to get presigned part URL');
+        }
+
+        const { url } = await presignRes.json();
+
+        // Direct PUT to R2/S3
+        const uploadRes = await fetch(url, {
+          method: 'PUT',
+          body: chunk,
+          signal,
+        });
+
+        if (!uploadRes.ok) {
+          throw new Error(`Failed to upload part ${partNumber}`);
+        }
+
+        const rawEtag = uploadRes.headers.get('ETag');
+        if (!rawEtag) {
+          throw new Error('ETag header missing in S3 upload response');
+        }
+
+        etag = rawEtag.replace(/"/g, ''); // strip quotes
+        success = true;
+        break;
+      } catch (e: unknown) {
+        console.warn(`Part ${partNumber} upload attempt ${retry + 1} failed:`, e);
+      }
+    }
+
+    if (!success) {
+      throw new Error(`Direct upload interrupted at ${progress}%. Please check your connection.`);
+    }
+
+    parts.push({ PartNumber: partNumber, ETag: etag });
+  }
+
+  if (checkGlobalAbort(uploadId)) throw new Error("Upload cancelled by user.");
+
+  broadcast("Assembling parts directly in bucket...", 99);
+
+  // 3. Complete Multipart Upload
+  const completeRes = await fetch('/api/upload/byos/complete', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      uploadId: s3UploadId,
+      key,
+      fileName: file.name,
+      fileSize: file.size,
+      parts,
+      ...metadata,
+      platforms,
+      historyId: resumeHistoryId
+    }),
+    signal,
+  });
+
+  if (!completeRes.ok) {
+    const errData = await completeRes.json();
+    throw new Error(errData.error || 'Failed to complete BYOS upload');
+  }
+
+  const stageResult = await completeRes.json();
+
+  if (typeof window !== 'undefined' && window.localStorage) {
+    window.localStorage.removeItem('SS_STAGING_STATUS');
+  }
+
+  return {
+    stagedFileId: stageResult.data.fileId,
+    fileName: file.name,
+    historyId: stageResult.data.historyId,
+  };
+}
+
 export async function stageVideoFile({
   file,
   onStatusUpdate,
@@ -83,6 +254,32 @@ export async function stageVideoFile({
   resumeHistoryId?: string;
   signal?: AbortSignal;
 }): Promise<{ stagedFileId: string; fileName: string; historyId: string }> {
+  // Check if BYOS is active and configured
+  let byosConfig: { provider: string; bucketName: string } | null = null;
+  try {
+    const res = await fetch('/api/settings/byos', { signal });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.config) {
+        byosConfig = data.config;
+      }
+    }
+  } catch (e) {
+    console.warn('Failed to query BYOS state, falling back to standard staging', e);
+  }
+
+  if (byosConfig) {
+    return stageVideoFileByos({
+      file,
+      onStatusUpdate,
+      metadata,
+      platforms,
+      resumeHistoryId,
+      byosConfig,
+      signal
+    });
+  }
+
   const fingerprint = `${file.name}-${file.size}-${file.type}`.replace(/[^a-zA-Z0-9]/g, '_');
   const uploadId = resumeHistoryId || `up_${fingerprint}`;
   

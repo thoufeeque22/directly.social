@@ -7,6 +7,10 @@ import { streamMultipartFormData } from "@/lib/upload/streaming-parser";
 import { formatPlatformCaption, PlatformData } from "./distributor-utils";
 import { getOptimizedVideoPath } from "@/lib/video/transcode-manager";
 import { logger } from "@/lib/core/logger";
+import { decryptByos } from "./byos-encrypt";
+import { S3Client, GetObjectCommand, S3ClientConfig } from "@aws-sdk/client-s3";
+import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
 
 interface PlatformHandlerParams {
   req: NextRequest;
@@ -21,6 +25,72 @@ interface PlatformHandlerParams {
     fields: Record<string, string>;
     onProgress?: (percent: number) => void;
   }) => Promise<unknown>;
+}
+
+async function downloadByosFile(userId: string, fileId: string, destPath: string) {
+  const asset = await prisma.galleryAsset.findFirst({
+    where: { fileId, userId }
+  });
+
+  if (!asset) {
+    throw new Error(`Gallery asset not found: ${fileId}`);
+  }
+
+  const metadata = asset.metadata as { byos?: boolean; bucket: string; key: string } | null;
+  if (!metadata || !metadata.byos) {
+    throw new Error(`Asset ${fileId} is not a valid BYOS asset`);
+  }
+
+  const { key } = metadata;
+
+  const byosConfig = await prisma.byosConfig.findUnique({
+    where: { userId }
+  });
+
+  if (!byosConfig) {
+    throw new Error(`BYOS is not configured for user ${userId}`);
+  }
+
+  const decryptedAccessKeyId = decryptByos(byosConfig.accessKeyId);
+  const decryptedSecretAccessKey = decryptByos(byosConfig.secretAccessKey);
+
+  const s3Config: S3ClientConfig = {
+    credentials: {
+      accessKeyId: decryptedAccessKeyId,
+      secretAccessKey: decryptedSecretAccessKey,
+    },
+    region: byosConfig.region || "us-east-1",
+  };
+
+  if (byosConfig.provider === "R2") {
+    if (!byosConfig.endpoint) {
+      throw new Error("Endpoint is required for Cloudflare R2");
+    }
+    s3Config.endpoint = byosConfig.endpoint;
+    s3Config.region = byosConfig.region || "auto";
+  } else if (byosConfig.endpoint) {
+    s3Config.endpoint = byosConfig.endpoint;
+  }
+
+  const s3 = new S3Client(s3Config);
+
+  logger.info(`🌐 [BYOS STREAM] Downloading ${key} from ${byosConfig.bucketName}...`);
+
+  const response = await s3.send(new GetObjectCommand({
+    Bucket: byosConfig.bucketName,
+    Key: key
+  }));
+
+  if (!response.Body) {
+    throw new Error("S3 response body is empty");
+  }
+
+  await fsSync.promises.mkdir(path.dirname(destPath), { recursive: true });
+
+  const writeStream = fsSync.createWriteStream(destPath);
+  await pipeline(response.Body as Readable, writeStream);
+  
+  logger.info(`✅ [BYOS STREAM] Downloaded completed to: ${destPath}`);
 }
 
 /**
@@ -38,8 +108,10 @@ export async function handlePlatformUploadRequest({
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  let filePath: string | undefined;
+  let isByos = false;
+
   try {
-    let filePath: string | undefined;
     let fileName: string | undefined;
     let fields: Record<string, string> = {};
 
@@ -50,6 +122,9 @@ export async function handlePlatformUploadRequest({
       if (!body.stagedFileId) {
         logger.info(" [PLATFORM] JSON request missing stagedFileId");
         return NextResponse.json({ error: "JSON request missing stagedFileId" }, { status: 400 });
+      }
+      if (body.stagedFileId.startsWith("byos_")) {
+        isByos = true;
       }
       // Security check: ensure the file is strictly within src/tmp
       const safeFileId = path.basename(body.stagedFileId);
@@ -64,6 +139,17 @@ export async function handlePlatformUploadRequest({
     } else {
       logger.info(` [PLATFORM] Unsupported Content-Type: ${contentType}`);
       return NextResponse.json({ error: `Unsupported Content-Type: ${contentType}` }, { status: 400 });
+    }
+
+    // If BYOS, stream file on-demand to temp location
+    if (isByos && filePath && fields.stagedFileId) {
+      try {
+        await downloadByosFile(session.user.id, fields.stagedFileId, filePath);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        logger.error(` [BYOS STREAM] Streaming failed: ${msg}`);
+        return NextResponse.json({ error: `BYOS download failed: ${msg}` }, { status: 500 });
+      }
     }
 
     if (!filePath || !fsSync.existsSync(filePath)) {
@@ -111,7 +197,6 @@ export async function handlePlatformUploadRequest({
     }
 
     // 4. Enrich through Intelligence Layer (AI)
-    // BYPASS if already reviewed on client
     let enrichedContent: { title: string; description: string; hashtags: string[] };
     if (fields.reviewedContent) {
       logger.info(` [${platform}] Using user-reviewed AI content.`);
@@ -129,7 +214,6 @@ export async function handlePlatformUploadRequest({
         hashtags: []
       };
     }
-    // Standard formatting for Caption/Description
     const finalCaption = formatPlatformCaption({
         title: enrichedContent.title,
         description: enrichedContent.description,
@@ -137,7 +221,6 @@ export async function handlePlatformUploadRequest({
         platform
     });
 
-    // 1.5 Ensure the record exists for onProgress updates
     if (historyId && accountId) {
       await prisma.postPlatformResult.upsert({
         where: {
@@ -160,7 +243,6 @@ export async function handlePlatformUploadRequest({
 
     // 5. Execute Platform-Specific SDK Logic with Unified Heartbeat
     try {
-      // Create a unified progress reporter that heartbeats to the DB
       let lastReported = -1;
       const wrappedOnProgress = async (percent: number) => {
         const currentPercent = Math.floor(percent);
@@ -183,7 +265,6 @@ export async function handlePlatformUploadRequest({
         onProgress: wrappedOnProgress
       });
 
-      // 6. PERSIST SUCCESS TO DATABASE
       if (historyId && accountId) {
         const { extractPlatformPostId, generatePermalink } = await import("./distributor-utils");
         const platformData = result as PlatformData;
@@ -214,7 +295,6 @@ export async function handlePlatformUploadRequest({
       const e = apiError as Record<string, unknown>;
       const errorMessage = (e.message as string) || String(e);
 
-      // PERSIST FAILURE TO DATABASE
       if (historyId && accountId) {
         await prisma.postPlatformResult.update({
           where: {
@@ -234,7 +314,6 @@ export async function handlePlatformUploadRequest({
       return NextResponse.json({ 
         success: false, 
         error: errorMessage,
-        // Carry over resumable hints if available
         resumableUrl: e.resumableUrl as string | undefined,
         videoId: e.videoId as string | undefined,
         creationId: e.creationId as string | undefined
@@ -247,5 +326,15 @@ export async function handlePlatformUploadRequest({
         success: false, 
         error: message || `${platform} upload failed` 
     }, { status: 500 });
+  } finally {
+    // Zero-leak server disk cleanup for BYOS downloads
+    if (isByos && filePath && fsSync.existsSync(filePath)) {
+      try {
+        fsSync.unlinkSync(filePath);
+        logger.info(`🧹 [BYOS CLEANUP] Cleaned up temporary BYOS file: ${filePath}`);
+      } catch (cleanupErr) {
+        logger.warn(`⚠️ [BYOS CLEANUP] Failed to delete temporary BYOS file:`, cleanupErr);
+      }
+    }
   }
 }
