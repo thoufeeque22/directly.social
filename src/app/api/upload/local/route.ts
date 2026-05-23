@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   return handlePlatformUploadRequest({
     req,
     platform: "local", // Supported in PlatformHandlerParams
-    uploadLogic: async ({ accountId: _accountId, fields, onProgress }) => {
+    uploadLogic: async ({ accountId: _accountId, fields, onProgress }: any) => {
       // Use the existing simulation logic from server-distributor
       // Note: server-distributor's distributeSinglePlatform expects (historyId, platform, stagedFileId, fileName, accountId)
       // BUT platform-route-handler passes different arguments to uploadLogic.

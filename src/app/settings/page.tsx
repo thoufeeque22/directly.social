@@ -74,7 +74,7 @@ const SettingsPage = () => {
     
     try {
       await disconnectAccount(accountId);
-    } catch (e) {
+    } catch {
       alert('Failed to disconnect account. Please try again.');
     }
   };
@@ -86,7 +86,7 @@ const SettingsPage = () => {
         return; 
       }
       await togglePlatform(platformId, currentStatus);
-    } catch (e) {
+    } catch {
       alert('Failed to update settings. Please try again.');
     }
   };

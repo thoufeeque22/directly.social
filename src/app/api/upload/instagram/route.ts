@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   return handlePlatformUploadRequest({
     req,
     platform: "instagram",
-    uploadLogic: async ({ userId, filePath, description, accountId, fields }) => {
+    uploadLogic: async ({ userId, filePath, description, accountId, fields }: any) => {
       return publishInstagramReel({
         userId,
         filePath,

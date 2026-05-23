@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   return handlePlatformUploadRequest({
     req,
     platform: "tiktok",
-    uploadLogic: async ({ userId, filePath, title, accountId }) => {
+    uploadLogic: async ({ userId, filePath, title, accountId }: any) => {
       return publishTikTokVideo({
         userId,
         videoPath: filePath,

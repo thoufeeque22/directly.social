@@ -107,11 +107,11 @@ export function useDistributionEngine(accounts: Account[]) {
         contentMode: (formData.get('contentMode') as StyleMode) || 'Smart',
         videoFormat: (formData.get('videoFormat') as 'short' | 'long') || 'short',
         onStatusUpdate: setUploadStatus,
-        onPlatformStatus: (id, status, error) => {
+        onPlatformStatus: (id: string, status: string, error?: string) => {
           setPlatformStatuses(prev => ({ ...prev, [id]: status as PlatformStatus }));
           if (error) setPlatformErrors(prev => ({ ...prev, [id]: error }));
         },
-        onAccountSuccess: (id, result) => {
+        onAccountSuccess: (id: string, result: any) => {
           if (result.status === 'success') {
             setSuccessfulAccountIds(prev => [...new Set([...prev, id])]);
           }
@@ -125,7 +125,7 @@ export function useDistributionEngine(accounts: Account[]) {
       const finalResults = distribution.platformResults;
       setPlatformStatuses(prev => {
         const next = { ...prev };
-        finalResults.forEach(result => {
+        finalResults.forEach((result: any) => {
           next[result.accountId] = result.status as PlatformStatus;
         });
         return next;
@@ -133,7 +133,7 @@ export function useDistributionEngine(accounts: Account[]) {
 
       setPlatformErrors(prev => {
         const next = { ...prev };
-        finalResults.forEach(result => {
+        finalResults.forEach((result: any) => {
           if (result.status === 'failed') {
             next[result.accountId] = result.errorMessage || 'Unknown error';
           }

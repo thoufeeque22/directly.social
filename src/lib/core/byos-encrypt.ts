@@ -2,14 +2,12 @@ import { createCipheriv, createDecipheriv, randomBytes, createHash } from 'crypt
 
 const ALGORITHM = 'aes-256-gcm';
 
-// Derive a 32-byte key securely from environment variables
 const getEncryptionKey = (): Buffer => {
-  const secret =
-    process.env.BYOS_ENCRYPTION_KEY ||
-    process.env.ENCRYPTION_KEY ||
-    process.env.NEXTAUTH_SECRET ||
-    'byos-fallback-secret-for-development-purposes';
-  return createHash('sha256').update(secret).digest();
+  const secret = process.env.BYOS_ENCRYPTION_KEY;
+  if (!secret && process.env.NODE_ENV === 'production') {
+    throw new Error('BYOS_ENCRYPTION_KEY is required in production');
+  }
+  return createHash('sha256').update(secret || 'dev-fallback-key').digest();
 };
 
 export const encryptByos = (text: string): string => {
@@ -36,7 +34,6 @@ export const decryptByos = (text: string): string => {
     decrypted += decipher.final('utf8');
     return decrypted;
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : String(error);
-    throw new Error(`Failed to decrypt BYOS credential: ${msg}`);
+    throw new Error('Failed to decrypt BYOS credential');
   }
 };

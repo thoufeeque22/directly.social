@@ -331,7 +331,9 @@ function HistoryContent() {
       }
 
       // 3. Final Distribution
-      await executeCockpitDistribution(stagedFileId, fileName, historyId, post, reviewedContentToPass);
+      if (stagedFileId && fileName) {
+        await executeCockpitDistribution(stagedFileId, fileName, historyId, post, reviewedContentToPass);
+      }
 
     } catch {
       

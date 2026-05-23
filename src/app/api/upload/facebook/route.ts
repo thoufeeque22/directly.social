@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   return handlePlatformUploadRequest({
     req,
     platform: "facebook",
-    uploadLogic: async ({ userId, filePath, title, description, videoFormat, accountId, fields }) => {
+    uploadLogic: async ({ userId, filePath, title, description, videoFormat, accountId, fields }: import("@/lib/core/platform-route-handler").UploadLogicParams) => {
       if (videoFormat === 'short') {
         return publishFacebookReel({
           userId,
