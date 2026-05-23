@@ -55,11 +55,11 @@ describe('Distribution Engine Parallelism', () => {
     // Wait a tiny bit for the microtask queue
     await new Promise(r => setTimeout(r, 10));
 
-    expect(onPlatformStatus).toHaveBeenCalledWith('platform1', 'uploading', undefined);
-    expect(onPlatformStatus).toHaveBeenCalledWith('platform2', 'uploading', undefined);
+    expect(onPlatformStatus).toHaveBeenCalledWith('platform1', 'uploading');
+    expect(onPlatformStatus).toHaveBeenCalledWith('platform2', 'uploading');
 
     await distributionPromise;
-    expect(onPlatformStatus).toHaveBeenCalledWith('platform1', 'success', undefined);
+    expect(onPlatformStatus).toHaveBeenCalledWith('platform1', 'success');
   });
 
   it('should limit concurrency for multiple files', async () => {

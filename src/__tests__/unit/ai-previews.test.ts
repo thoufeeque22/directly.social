@@ -83,7 +83,8 @@ describe('getMultiPlatformAIPreviews', () => {
       'Desc',
       'youtube',
       undefined,
-      customVibe
+      customVibe,
+      undefined
     );
   });
 });

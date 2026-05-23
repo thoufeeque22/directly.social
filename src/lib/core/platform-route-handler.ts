@@ -35,9 +35,13 @@ export async function handlePlatformUploadRequest({ req, platform, uploadLogic }
     const rc = fields.reviewedContent ? (JSON.parse(fields.reviewedContent as string) as Record<string, unknown>) : null;
     const enriched = rc ? { title: rc.title as string, description: rc.description as string, hashtags: (rc.hashtags as string[]) || [] } : { title: (fields.title as string) || (fields.fileName as string) || "Untitled", description: (fields.description as string) || "", hashtags: [] };
     const caption = formatPlatformCaption({ ...enriched, platform });
-    if (fields.historyId && fields.accountId) {
+    if (fields.accountId) {
       const acc = await prisma.account.findFirst({ where: { id: fields.accountId as string, userId: session.user.id } });
-      await prisma.postPlatformResult.upsert({ where: { postHistoryId_platform_accountId: { postHistoryId: fields.historyId as string, platform, accountId: fields.accountId as string } }, update: { status: 'uploading' }, create: { postHistoryId: fields.historyId as string, platform, accountId: fields.accountId as string, accountName: acc?.accountName || 'Unknown', status: 'uploading' } });
+      if (!acc) return NextResponse.json({ error: "Unauthorized: Account not found or not owned by user" }, { status: 403 });
+      
+      if (fields.historyId) {
+        await prisma.postPlatformResult.upsert({ where: { postHistoryId_platform_accountId: { postHistoryId: fields.historyId as string, platform, accountId: fields.accountId as string } }, update: { status: 'uploading' }, create: { postHistoryId: fields.historyId as string, platform, accountId: fields.accountId as string, accountName: acc.accountName || 'Unknown', status: 'uploading' } });
+      }
     }
     
     const result = await uploadLogic({ userId: session.user.id, filePath: activePath, title: enriched.title, description: caption, videoFormat: (fields.videoFormat as string) || "short", accountId: fields.accountId as string, fields: fields as Record<string, string>, onProgress: await createProgressReporter(fields.historyId as string, platform, fields.accountId as string) });

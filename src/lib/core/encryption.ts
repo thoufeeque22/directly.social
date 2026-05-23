@@ -13,10 +13,22 @@ export const encrypt = (text: string) => {
 };
 
 export const decrypt = (text: string) => {
+  if (!text || !text.includes(':')) {
+    return text;
+  }
+  
   const [ivHex, authTagHex, encrypted] = text.split(':');
-  const decipher = createDecipheriv(ALGORITHM, KEY, Buffer.from(ivHex, 'hex'));
-  decipher.setAuthTag(Buffer.from(authTagHex, 'hex'));
-  let decrypted = decipher.update(encrypted, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return decrypted;
+  if (!ivHex || !authTagHex || !encrypted) {
+    return text;
+  }
+
+  try {
+    const decipher = createDecipheriv(ALGORITHM, KEY, Buffer.from(ivHex, 'hex'));
+    decipher.setAuthTag(Buffer.from(authTagHex, 'hex'));
+    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
+  } catch (error) {
+    return text;
+  }
 };
