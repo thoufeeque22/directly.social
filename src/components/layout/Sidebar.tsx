@@ -9,8 +9,6 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
-import MapIcon from '@mui/icons-material/Map';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import CloseIcon from '@mui/icons-material/Close';
@@ -23,10 +21,6 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
     { name: 'Schedule', icon: <CalendarMonthIcon sx={{ fontSize: 20 }} />, path: '/schedule' },
     { name: 'Media Gallery', icon: <PermMediaIcon sx={{ fontSize: 20 }} />, path: '/media' },
     { name: 'Activity Hub', icon: <FlashOnIcon sx={{ fontSize: 20 }} />, path: '/history' },
-    ...(process.env.NODE_ENV !== 'production' ? [
-      { name: 'Roadmap', icon: <MapIcon sx={{ fontSize: 20 }} />, path: '/roadmap' },
-      { name: 'Launch', icon: <RocketLaunchIcon sx={{ fontSize: 20 }} />, path: '/launch' },
-    ] : []),
     ...(session?.user?.role === 'ADMIN' ? [
       { name: 'Analytics', icon: <InsightsIcon sx={{ fontSize: 20 }} />, path: '/admin/analytics' },
     ] : []),

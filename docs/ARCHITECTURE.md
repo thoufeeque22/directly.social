@@ -401,6 +401,29 @@ graph TD
     Config --> BYOK[BYOK Wizard]
 ```
 
+## Security & Role-Based Access Control (RBAC)
+
+Social Studio implements a strict Role-Based Access Control (RBAC) system to ensure data integrity and restrict access to sensitive administrative features.
+
+### User Roles
+
+- **USER:** Standard role for all registered users. Allows access to core features (scheduling, media gallery, AI assistant, settings).
+- **ADMIN:** Elevated role for platform administrators. Grants access to the Developer Analytics dashboard and other restricted system settings.
+
+### Enforcement Mechanism
+
+RBAC is enforced at multiple layers:
+
+1.  **API Layer:** Protected API routes (e.g., `/api/admin/*`) use the `auth()` helper to verify the session and explicitly check for the `ADMIN` role. Unauthorized requests return a `401 Unauthorized` response.
+2.  **UI Layer:** Administrative UI segments (like the Analytics dashboard) perform client-side role verification based on API responses and session data, rendering appropriate error states or redirects for non-admin users.
+3.  **Navigation:** The application sidebar dynamically filters links based on the user's role, hiding administrative entry points from standard users.
+
+### Testing Identity
+
+For automated and manual verification, dedicated identities are used:
+- **Tester (`tester@socialstudio.ai`):** A standard `USER` account used for E2E testing of common user flows.
+- **Admin (`admin@socialstudio.ai`):** A dedicated `ADMIN` account used for verifying administrative access and system health monitoring.
+
 ## Platform Integrations
 
 Platform-specific logic is encapsulated in `src/lib/platforms/`.

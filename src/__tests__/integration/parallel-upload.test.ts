@@ -31,12 +31,12 @@ describe('Distribution Engine Parallelism', () => {
     });
 
     const selectedAccountIds = ['platform1', 'platform2', 'platform3', 'platform4'];
-    const accounts: any[] = selectedAccountIds.map(id => ({ 
+    const accounts: Account[] = selectedAccountIds.map(id => ({ 
       id, 
       provider: id, 
       accountName: id,
       isDistributionEnabled: true
-    }));
+    } as Account));
 
     const distributionPromise = distributeToPlatforms({
       stagedFileId: 'stage1',
@@ -85,12 +85,12 @@ describe('Distribution Engine Parallelism', () => {
     });
 
     const selectedAccountIds = ['p1', 'p2', 'p3'];
-    const accounts: any[] = selectedAccountIds.map(id => ({ 
+    const accounts: Account[] = selectedAccountIds.map(id => ({ 
       id, 
       provider: id, 
       accountName: id,
       isDistributionEnabled: true
-    }));
+    } as Account));
 
     await distributeToPlatforms({
       stagedFileId: 'stage2',

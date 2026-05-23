@@ -144,7 +144,7 @@ const SettingsContent = () => {
                   <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
                     <Box>
                       <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Something else?</Typography>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>Suggest a platform you'd like to see next.</Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>Suggest a platform you&apos;d like to see next.</Typography>
                     </Box>
                     <button 
                       onClick={() => alert("Thanks! We've logged your request for a new integration.")}
