@@ -1,11 +1,16 @@
 export const PLATFORMS = [
-  { id: 'instagram', provider: 'facebook', name: 'Instagram Reels', icon: '📸', color: '#E1306C' },
-  { id: 'tiktok', provider: 'tiktok', name: 'TikTok', icon: '🎵', color: 'black' },
-  { id: 'youtube', provider: 'google', name: 'YouTube Shorts', icon: '📺', color: 'hsl(var(--primary))' },
-  { id: 'facebook', provider: 'facebook', name: 'Facebook', icon: '👥', color: '#1877F2' },
-  { id: 'linkedin', provider: 'linkedin', name: 'LinkedIn', icon: '💼', color: '#0A66C2' },
-  { id: 'twitter', provider: 'twitter', name: 'Twitter/X', icon: '𝕏', color: 'white' },
-];
+  { id: 'youtube', provider: 'google', name: 'YouTube Shorts', icon: '📺', color: 'hsl(var(--primary))', status: 'active' },
+  { id: 'instagram', provider: 'facebook', name: 'Instagram Reels', icon: '📸', color: '#E1306C', status: 'active' },
+  { id: 'tiktok', provider: 'tiktok', name: 'TikTok', icon: '🎵', color: 'black', status: 'active' },
+  { id: 'facebook', provider: 'facebook', name: 'Facebook', icon: '👥', color: '#1877F2', status: 'active' },
+  { id: 'linkedin', provider: 'linkedin', name: 'LinkedIn', icon: '💼', color: '#0A66C2', status: 'coming-soon' },
+  { id: 'twitter', provider: 'twitter', name: 'Twitter/X', icon: '𝕏', color: 'white', status: 'coming-soon' },
+  { id: 'pinterest', provider: 'pinterest', name: 'Pinterest', icon: '📌', color: '#E60023', status: 'coming-soon' },
+  { id: 'threads', provider: 'threads', name: 'Threads', icon: '🧵', color: 'black', status: 'coming-soon' },
+] as const;
+
+export type PlatformStatus = 'active' | 'coming-soon';
+export type Platform = typeof PLATFORMS[number];
 
 export type AITier = 'Manual' | 'Enrich' | 'Generate';
 export type StyleMode = 'Smart' | 'Gen-Z' | 'SEO' | 'Story' | 'Custom';

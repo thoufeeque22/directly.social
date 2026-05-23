@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Trash2, Loader2, Bookmark, Edit2, Check, X } from 'lucide-react';
+import React, { useMemo, useState, useEffect } from 'react';
+import { Trash2, Loader2, Bookmark, Edit2, Check, X, Search } from 'lucide-react';
 import { getMetadataTemplates, deleteMetadataTemplate, updateMetadataTemplate } from '@/app/actions/metadata';
+import { TextField, InputAdornment, Box } from '@mui/material';
 
 interface Template {
   id: string;
@@ -12,12 +13,20 @@ export const TemplateManager = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Edit State
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
   const [editContent, setEditContent] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
+
+  const filteredTemplates = useMemo(() => {
+    return templates.filter(t => 
+      t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      t.content.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [templates, searchQuery]);
 
   const fetchTemplates = async () => {
     try {
@@ -90,7 +99,27 @@ export const TemplateManager = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {templates.length === 0 ? (
+      <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', marginBottom: '0.5rem' }}>Reusable Snippets</h2>
+      <div style={{ position: 'relative', marginBottom: '1rem' }}>
+        <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'hsl(var(--muted-foreground))' }} />
+        <input
+          placeholder="Search snippets..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '12px 12px 12px 40px',
+            borderRadius: '0.75rem',
+            background: 'hsla(var(--muted)/0.1)',
+            border: '1px solid hsla(var(--border)/0.3)',
+            color: 'white',
+            outline: 'none',
+            fontSize: '0.9rem'
+          }}
+        />
+      </div>
+
+      {filteredTemplates.length === 0 ? (
         <div style={{ 
           padding: '2rem', 
           textAlign: 'center', 
@@ -100,11 +129,11 @@ export const TemplateManager = () => {
           color: 'hsl(var(--muted-foreground))',
           fontSize: '0.9rem'
         }}>
-          No saved snippets yet. Save them from the Upload dashboard!
+          {searchQuery ? 'No matching snippets found.' : 'No saved snippets yet. Save them from the Upload dashboard!'}
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
-          {templates.map(t => (
+          {filteredTemplates.map(t => (
             <div 
               key={t.id}
               data-testid="template-card"

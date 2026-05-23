@@ -31,8 +31,7 @@ test.describe('BYOS - Bring Your Own Storage', () => {
     await page.waitForLoadState('networkidle');
 
     // Switch to Storage Tab
-    const storageTab = page.locator('button[role="tab"]').nth(3);
-    await storageTab.click();
+    await page.getByRole('tab', { name: /Storage/i }).click();
 
     // Step 0: Select Provider
     await page.getByRole('heading', { name: 'Cloudflare R2' }).click();
@@ -65,8 +64,7 @@ test.describe('BYOS - Bring Your Own Storage', () => {
     });
 
     await page.goto('/settings');
-    const storageTab = page.locator('button[role="tab"]').nth(3);
-    await storageTab.click();
+    await page.getByRole('tab', { name: /Storage/i }).click();
 
     await page.getByRole('heading', { name: 'AWS S3 Compatible' }).click();
     await page.getByRole('button', { name: /continue/i }).click(); // Step 1

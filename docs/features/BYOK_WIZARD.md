@@ -15,19 +15,14 @@ The system dynamically supports credentials for:
 - **Facebook** (via Meta for Developers)
 - **Instagram** (via Meta for Developers)
 
-## User Interface (UX Redesign)
+## User Interface (Progressive Disclosure)
 
-The wizard features a premium **GlassCard** interface with a structured 2-step flow to guide users through the complex setup process.
+The BYOK wizard is now seamlessly integrated into the **PlatformCard** component within the "Destinations" tab of the Settings page.
 
-### Step 1: Get Your Keys
-Users are provided with direct links to the relevant developer portals.
-- **Direct Portal Access:** Quick-action buttons to open the correct developer console (e.g., Google Cloud, TikTok Console).
-- **Platform-Specific Instructions:** Concise guidance on what to do in each portal.
-
-### Step 2: Configure Credentials
-A clean, focused input area for providing the generated secrets.
-- **Input Masking:** Client secrets are masked (password type) for security.
-- **Contextual Help:** Helper text for fields like Redirect URI to reduce configuration errors.
+- **Clean Initial State:** BYOK settings are hidden by default to maintain a clean visual hierarchy.
+- **Progressive Disclosure:** When a platform is toggled to "Enabled", a "Configuration" accordion appears. Expanding this accordion reveals both the **Account Connection** section and the **Advanced Settings (BYOK)** section.
+- **Contextual Wizard:** Each platform card contains its own dedicated instance of the `ByokWizard`, pre-configured for that specific platform.
+- **AI BYOK:** A global AI Provider BYOK wizard remains available under the dedicated "AI Providers" tab in Settings.
 
 ## Roadmap & Phases
 

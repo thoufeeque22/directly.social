@@ -6,6 +6,8 @@ test.describe('Settings Page - Template Management', () => {
   });
 
   test('should display the template manager', async ({ page }) => {
+    // Navigate to snippets tab
+    await page.getByRole('tab', { name: /snippets/i }).click();
     await expect(page.locator('h2:has-text("Reusable Snippets")')).toBeVisible();
     // Instead of expecting empty, just expect the container to be visible
     await expect(page.locator('h2:has-text("Reusable Snippets")').locator('xpath=..')).toBeVisible();
@@ -33,6 +35,7 @@ test.describe('Settings Page - Template Management', () => {
     
     // Now go back to settings to manage it
     await page.goto('/settings');
+    await page.getByRole('tab', { name: /snippets/i }).click();
     await page.waitForLoadState('networkidle');
     await expect(page.getByText(templateName)).toBeVisible();
     
