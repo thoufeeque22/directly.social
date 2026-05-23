@@ -10,6 +10,7 @@ Welcome to the Social Studio project documentation. This folder contains archite
 
 - [Metadata Templates](features/METADATA_TEMPLATES.md) - Reusable description snippets and bio links.
 - [Global Search](features/GLOBAL_SEARCH.md) - Unified filtering for history and media.
+- [Manual Mode AI Polish](features/MANUAL_MODE_AI_ENHANCEMENT.md) - Seamless transition from Manual drafting to AI Enrich.
 
 ## Guides & Troubleshooting
 
@@ -24,3 +25,4 @@ Welcome to the Social Studio project documentation. This folder contains archite
 - [UAT: Snippets UX Improvements](manual_tests/verify-snippets-ux-improvements.md) - UX closing logic.
 - [UAT: Upcoming Posts Navigation](manual_tests/verify-upcoming-posts-navigation.md) - Dashboard-to-Schedule deep linking.
 - [UAT: Video Lifecycle](manual_tests/verify-video-lifecycle.md) - End-to-end publishing flow.
+- [UAT: Manual Mode AI Polish](manual_tests/514-enrich-title-description-button.md) - Action button UAT under issue #514.
