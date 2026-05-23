@@ -4,7 +4,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DoneIcon from '@mui/icons-material/Done';
 import { CORS_JSON } from './ByosWizardUtils';
 
-export const ByosStep1 = () => {
+export const ByosStep2Cors = () => {
   const [copied, setCopied] = useState(false);
 
   const handleCopyCors = async () => {

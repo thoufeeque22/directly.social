@@ -42,7 +42,7 @@ export async function handlePlatformUploadRequest({ req, platform, uploadLogic }
     const result = await uploadLogic({ userId: session.user.id, filePath: activePath, title: enriched.title, description: caption, videoFormat: (fields.videoFormat as string) || "short", accountId: fields.accountId as string, fields: fields as Record<string, string>, onProgress: await createProgressReporter(fields.historyId as string, platform, fields.accountId as string) });
     if (fields.historyId && fields.accountId) {
       const { extractPlatformPostId, generatePermalink } = await import("./distributor-utils");
-      await prisma.postPlatformResult.update({ where: { postHistoryId_platform_accountId: { postHistoryId: fields.historyId as string, platform, accountId: fields.accountId as string } }, data: { status: 'success', platformPostId: extractPlatformPostId(platform, result as any), permalink: generatePermalink(platform, result as any), progress: 100 } });
+      await prisma.postPlatformResult.update({ where: { postHistoryId_platform_accountId: { postHistoryId: fields.historyId as string, platform, accountId: fields.accountId as string } }, data: { status: 'success', platformPostId: extractPlatformPostId(platform, result), permalink: generatePermalink(platform, result), progress: 100 } });
     }
     return NextResponse.json({ success: true, data: result });
   } catch (error: unknown) {

@@ -9,7 +9,7 @@ interface Props {
   onProviderChange: (provider: 'S3' | 'R2') => void;
 }
 
-export const ByosStep0 = ({ provider, onProviderChange }: Props) => (
+export const ByosStep1Provider = ({ provider, onProviderChange }: Props) => (
   <Box sx={{ mt: 3, mb: 2 }}>
     <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4 }}>
       Select your storage provider. Both Amazon Web Services S3 and Cloudflare R2 are supported.

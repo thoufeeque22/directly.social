@@ -17,7 +17,7 @@ interface Props {
   existingConfig: boolean;
 }
 
-export const ByosStep2 = ({ formData, onFieldChange, existingConfig }: Props) => (
+export const ByosStep3Credentials = ({ formData, onFieldChange, existingConfig }: Props) => (
   <Box sx={{ mt: 3, mb: 2 }}>
     <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4 }}>Enter the bucket parameters and API credentials.</Typography>
     <Stack spacing={3}>

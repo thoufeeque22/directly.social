@@ -22,7 +22,7 @@ const CheckItem = ({ status, label }: { status: string; label: string }) => (
   </Stack>
 );
 
-export const ByosStep3 = ({ validationStage, checklist, error, success, loading, onSave }: Props) => (
+export const ByosStep4Validation = ({ validationStage, checklist, error, success, loading, onSave }: Props) => (
   <Box sx={{ mt: 3, mb: 2 }}>
     <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4 }}>
       Click validation button to verify bucket parameters and finalize setup.
