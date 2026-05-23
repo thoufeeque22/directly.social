@@ -669,6 +669,8 @@ function HistoryContent() {
             <button 
               className={styles.pillActionButton} 
               onClick={(e) => handleCancelPlatform(e, p.id, p.platform, post.id)}
+              title="Stop Platform Upload"
+              aria-label="Stop Platform Upload"
             >
               <StopIcon sx={{ fontSize: 14, color: 'error.main' }} />
             </button>

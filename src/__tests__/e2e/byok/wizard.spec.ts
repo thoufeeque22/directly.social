@@ -60,7 +60,9 @@ test.describe('BYOK Integration Wizard E2E', () => {
     await page.screenshot({ path: 'verification/byok-wizard-idle.png', fullPage: true });
     
     const youtubeWizard = page.locator('[data-testid="byok-wizard-youtube"]');
-    await youtubeWizard.locator('[data-testid="client-id-input"] input').fill('visual-test');
+    await youtubeWizard.locator('[data-testid="client-id-input"] input').fill('valid');
+    await youtubeWizard.locator('[data-testid="client-secret-input"] input').fill('secret123');
+    await youtubeWizard.locator('[data-testid="redirect-uri-input"] input').fill('https://socialstudio.ai/callback');
     await youtubeWizard.locator('[data-testid="save-button"]').click();
     
     await page.screenshot({ path: 'verification/byok-wizard-success.png', fullPage: true });

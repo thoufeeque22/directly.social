@@ -4,7 +4,7 @@ import fs from 'fs';
 test.describe('Error Boundary Visual Audit', () => {
   test('capture error boundary screenshot', async ({ page }) => {
     await page.goto('/test-error');
-    const errorBoundary = page.getByTestId('error-boundary-ui');
+    const errorBoundary = page.locator('.glass-card');
     await expect(errorBoundary).toBeVisible();
     
     // Create verification directory if it doesn't exist

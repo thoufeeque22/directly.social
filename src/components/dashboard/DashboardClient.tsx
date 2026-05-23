@@ -65,20 +65,21 @@ export default function DashboardClient({
   
   const { draftFileName, videoFormat, setVideoFormat, videoDuration, handleFileChange } = useDraftFile(session?.user?.id);
   const { selectedAccountIds, setSelectedAccountIds, handleToggleAccount } = usePlatformSelection(devAccounts, preferences, isLoading);
-  const { isUploading, setIsUploading, uploadStatus, setUploadStatus, handleAbortAll } = useDistributionEngine(devAccounts);
+  const { isUploading, setIsUploading, setUploadStatus, handleAbortAll } = useDistributionEngine(devAccounts);
   const { historyId: activeGlobalId, active: isGlobalActive } = useUploadStatus();
   
   useEffect(() => {
     if (isUploading && isGlobalActive === false && activeGlobalId) handleAbortAll();
   }, [isUploading, isGlobalActive, activeGlobalId, handleAbortAll]);
 
-  const [aiTier, setAiTierInternal] = useState<AITier>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('SS_AI_TIER') as AITier;
-      if (saved && ['Manual', 'Enrich', 'Generate'].includes(saved)) return saved;
+  const [aiTier, setAiTierInternal] = useState<AITier>(initialAITier || 'Manual');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('SS_AI_TIER') as AITier;
+    if (saved && ['Manual', 'Enrich', 'Generate'].includes(saved)) {
+      setAiTierInternal(saved);
     }
-    return initialAITier || 'Manual';
-  });
+  }, []);
 
   const [contentMode, setContentMode] = useState<StyleMode>((initialAIStyle && (initialAIStyle as string) !== 'Manual') ? initialAIStyle : 'Smart');
 

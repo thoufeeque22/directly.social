@@ -67,7 +67,7 @@
   1. Activate the `triage-lint` skill.
   2. Batch fixes (max 5-10 errors per turn).
   3. Prioritize by severity and file.
-- **Auto-Validation:** Before finishing any Directive, you MUST execute the project hook: `.gemini/hooks/post-task.sh`. This hook now includes `tsc --noEmit` AND `npm run build`. If it fails, fix the errors and re-run until it passes. All code changes MUST pass a full type check and a production build.
+- **Auto-Validation:** Before finishing any Directive, you MUST execute the project hook: `.gemini/hooks/post-task.sh`. This hook now includes `tsc --noEmit` AND `npm run build`. If it fails, fix the errors and re-run until it passes. All code changes MUST pass a full type check and a production build. *Exception: If the changes are strictly limited to documentation, manual test specifications, markdown files, diagrams, or images (i.e., no changes to `.ts`, `.tsx`, `.js`, `.json`, `.css` or database schemas), then the `doc-agent` and `project-agent` are exempted from running `tsc --noEmit`, `npm run build`, and `.gemini/hooks/post-task.sh` validation checks to speed up pipeline execution.*
 - **Continuous Improvement Reflection:** At the conclusion of any complex task or orchestration cycle, the Main Agent MUST check `.gemini_incidental_observations.json` for entries with `category: "meta"`. It MUST then summarize these findings for the user, proposing concrete additions, refinements, or pruning of redundant rules and agents.
 
 # Meta-Orchestration & Continuous Improvement
@@ -248,6 +248,7 @@ You MUST commit all documentation and manual test changes before assigning to **
   2. `npm run build` success.
   3. All unit/integration tests passed.
   4. Linter clean of errors.
+  *(Exception: doc-agent and project-agent are exempted from compiling, building, or type-checking expected outputs if their modifications are strictly limited to non-code/documentation files).*
 Append to `modified_files` (unique list) and `fixes_applied` (running history) inside this key. Clear the `"review-agent"` and `"qa-agent"` keys to reset the review cycle. **STOP and wait for manual user invocation of the `next_agent`.**
 
 ## Routing

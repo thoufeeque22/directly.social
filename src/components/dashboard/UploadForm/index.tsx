@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Link from 'next/link';
+
 import MovieIcon from '@mui/icons-material/Movie';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { AINudge } from '@/components/ui/AINudge';
@@ -114,6 +114,13 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   }, [selectedAccountIds, accounts]);
 
   const [showGallery, setShowGallery] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const skeleton = <div style={{ minHeight: '100px' }} />;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -356,7 +363,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           </div>
         )}
 
-        {aiTier !== 'Manual' && (
+        {mounted && aiTier !== 'Manual' && (
           <AIStyleSelector 
             contentMode={contentMode} 
             onModeChange={onModeChange} 
@@ -364,8 +371,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             onCustomStyleChange={onCustomStyleChange}
           />
         )}
-        
-        {aiTier !== 'Manual' && (
+
+        {mounted && aiTier !== 'Manual' && (
           <div style={{ padding: '0.75rem', borderRadius: '0.75rem', background: 'hsla(var(--primary)/0.05)', border: '1px solid hsla(var(--primary)/0.15)' }}>
             <p style={{ fontSize: '0.8rem', color: 'hsl(var(--primary))', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <AutoAwesomeIcon sx={{ fontSize: 16 }} />
@@ -374,12 +381,14 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           </div>
         )}
 
-        <PlatformSelection 
-          accounts={accounts} 
-          preferences={preferences}
-          selectedAccountIds={selectedAccountIds} 
-          onToggleAccount={onToggleAccount} 
-        />
+        {mounted ? (
+          <PlatformSelection 
+            accounts={accounts} 
+            preferences={preferences}
+            selectedAccountIds={selectedAccountIds} 
+            onToggleAccount={onToggleAccount} 
+          />
+        ) : skeleton}
 
         <SchedulingSelector isScheduled={isScheduled} scheduledAt={scheduledAt} onChange={onSchedulingChange} />
 
@@ -418,11 +427,36 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             </button>
           )}
 
+          {mounted && aiTier === 'Manual' && !isUploading && (
+            <button
+              type="button"
+              onClick={() => onTierChange('Enrich')}
+              style={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                padding: '1rem',
+                borderRadius: '0.75rem',
+                background: 'linear-gradient(135deg, hsla(var(--primary) / 0.1), hsla(var(--primary) / 0.05))',
+                border: '1px solid hsla(var(--primary) / 0.3)',
+                color: 'hsl(var(--primary))',
+                fontWeight: 700,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                fontSize: '0.9rem'
+              }}
+            >
+              <AutoAwesomeIcon sx={{ fontSize: 18 }} /> Polish with AI
+            </button>
+          )}
+
           <button 
             type="submit" 
             disabled={isUploading}
             style={{ 
-              flex: hasCachedPreviews ? 1.2 : 'none',
+              flex: (hasCachedPreviews || (mounted && aiTier === 'Manual' && !isUploading)) ? 1.2 : 1,
               background: 'hsl(var(--primary))', 
               color: 'white', 
               border: 'none', 
@@ -443,7 +477,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           </button>
         </div>
 
-        {aiTier !== 'Manual' && !isUploading && (
+        {mounted && aiTier !== 'Manual' && !isUploading && (
           <button
             type="button"
             onClick={(e) => {
@@ -460,8 +494,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           >
             <RocketLaunchIcon sx={{ fontSize: 16 }} /> Skip Review & Post Directly
           </button>
-        )}
-      </form>
+        )}      </form>
     </GlassCard>
   );
 };

@@ -3,8 +3,9 @@ import { test, expect } from '@playwright/test';
 test.describe('Header Global Search', () => {
   test('should navigate to history with search query from header', async ({ page }) => {
     await page.goto('/'); // Dashboard
+    await page.waitForLoadState('networkidle');
     
-    const headerSearch = page.getByPlaceholder('Search posts, media, or analytics...');
+    const headerSearch = page.locator('#header-search');
     await expect(headerSearch).toBeVisible();
     
     await headerSearch.fill('Pasta');
@@ -19,7 +20,7 @@ test.describe('Header Global Search', () => {
   test('should navigate to media with search query from header when on media page', async ({ page }) => {
     await page.goto('/media');
     
-    const headerSearch = page.getByPlaceholder('Search posts, media, or analytics...');
+    const headerSearch = page.locator('#header-search');
     await headerSearch.fill('smartphone');
     await headerSearch.press('Enter');
     
