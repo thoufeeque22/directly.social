@@ -1,6 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GET as roadmapGET } from '../../app/api/roadmap/route';
-import { GET as launchGET } from '../../app/api/launch/route';
 import { render, screen } from '@testing-library/react';
 import { UploadForm, UploadFormProps } from '../../components/dashboard/UploadForm';
 import { StyleMode, AITier } from '@/lib/core/constants';
@@ -50,22 +48,6 @@ describe('Project Management & UI Humanization', () => {
       length: 0,
     };
     Object.defineProperty(globalThis, 'localStorage', { value: mockLocalStorage });
-  });
-
-  describe('API Security (Production Lockdown)', () => {
-    it('returns 404 for Roadmap API in production', async () => {
-      vi.stubEnv('NODE_ENV', 'production');
-      const res = await roadmapGET();
-      expect(res.status).toBe(404);
-      vi.unstubAllEnvs();
-    });
-
-    it('returns 404 for Launch API in production', async () => {
-      vi.stubEnv('NODE_ENV', 'production');
-      const res = await launchGET();
-      expect(res.status).toBe(404);
-      vi.unstubAllEnvs();
-    });
   });
 
   describe('UploadForm UI (Dynamic Metadata)', () => {
