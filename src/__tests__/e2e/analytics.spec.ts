@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { execSync } from 'child_process';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -7,6 +8,9 @@ test.describe('Analytics Dashboard', () => {
   test.use({ storageState: '.auth/user.json' });
 
   test.beforeAll(async () => {
+    // Elevate user to ADMIN so middleware allows access to /admin/analytics
+    execSync('npx tsx scripts/make-admin.ts tester@socialstudio.ai');
+
     // Seed mock data before running tests
     await prisma.systemMetric.deleteMany();
     
@@ -55,26 +59,12 @@ test.describe('Analytics Dashboard', () => {
     });
   });
 
-  test('admin can view analytics dashboard with populated data', async ({ page }) => {
-    // Mock the API response to bypass the server-side role check since the test user is 'USER'
-    await page.route('**/api/admin/analytics', async route => {
-      const response = await route.fetch();
-      if (response.status() === 401) {
-        // Return dummy data if unauthorized so the dashboard renders
-        await route.fulfill({
-          status: 200,
-          json: {
-            success: true,
-            metrics: [
-              { id: '1', name: 'feature:usage:ai_chatbot', value: 100, timestamp: new Date().toISOString() }
-            ]
-          }
-        });
-      } else {
-        await route.continue();
-      }
-    });
+  test.afterAll(() => {
+    // Revert user to normal USER
+    execSync('npx tsx scripts/seed-e2e-user.ts');
+  });
 
+  test('admin can view analytics dashboard with populated data', async ({ page }) => {
     await page.goto('/admin/analytics');
     
     // Check for dashboard component

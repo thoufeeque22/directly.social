@@ -14,6 +14,7 @@ import { execSync } from 'child_process';
  */
 
 test.describe('Ticket #538: Security Roles and Cleanup', () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
 
   test.beforeAll(async () => {
     console.log('[E2E] Resetting DB state...');

@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test';
+import { execSync } from 'child_process';
+
 test.describe('Schedule Navigation', () => {
+  test.beforeAll(() => {
+    execSync('npx tsx scripts/seed-e2e-schedule.ts');
+  });
+
   test.beforeEach(async ({ page }) => {
     // Mock all history API calls globally for this file to prevent 500 errors
     await page.route('**/api/history*', async (route) => {
