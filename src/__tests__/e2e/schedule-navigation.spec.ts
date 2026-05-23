@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { execSync } from 'child_process';
 
-test.describe('Schedule Navigation', () => {
+test.describe.serial('Schedule Navigation', () => {
   test.beforeAll(() => {
     execSync('npx tsx scripts/seed-e2e-schedule.ts');
   });
