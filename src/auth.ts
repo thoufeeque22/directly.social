@@ -39,11 +39,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const expectedPassword = process.env.E2E_TEST_PASSWORD || 'social-studio-e2e-secret';
           
           if (
-            credentials?.email === "tester@socialstudio.ai" && 
+            (credentials?.email === "tester@socialstudio.ai" || credentials?.email === "admin@socialstudio.ai") && 
             credentials?.password === expectedPassword
           ) {
             const user = await prisma.user.findFirst({
-              where: { email: "tester@socialstudio.ai" }
+              where: { email: credentials.email }
             });
 
             if (user) {

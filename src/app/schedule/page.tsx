@@ -65,6 +65,11 @@ function ScheduleContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [editingPost, setEditingPost] = useState<PostHistoryEntry | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const [isReviewing, setIsReviewing] = useState(false);
   const [aiPreviews, setAiPreviews] = useState<Record<string, AIWriteResult>>({});
   const [isAILoading, setIsAILoading] = useState(false);
@@ -265,7 +270,7 @@ function ScheduleContent() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || !isMounted) {
     return (
       <div className={styles.schedulePage}>
         <div className={styles.loading}>Loading scheduled posts...</div>
@@ -407,7 +412,7 @@ function ScheduleContent() {
                     <span className={`${styles.formatBadge} ${post.videoFormat === 'short' ? styles.formatShort : styles.formatLong}`}>
                       {post.videoFormat === 'short' ? '⚡ Short' : '🎬 Long'}
                     </span>
-                    <span className={styles.timestamp}>
+                    <span className={styles.timestamp} suppressHydrationWarning>
                       {new Date(post.scheduledAt).toLocaleString(undefined, {
                         month: 'short',
                         day: 'numeric',

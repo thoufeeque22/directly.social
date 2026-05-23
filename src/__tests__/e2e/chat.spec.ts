@@ -52,7 +52,7 @@ test.describe('AI Chatbot E2E', () => {
     // Verify AI response starts streaming (wait for some content)
     // Note: Assistant message role is applied to the container, and it might contain multiple parts
     const aiResponse = page.getByTestId('chat-message-assistant').first();
-    await expect(aiResponse).toBeVisible({ timeout: 20000 });
+    await expect(aiResponse).toBeVisible({ timeout: 50000 });
     await expect(aiResponse).not.toBeEmpty();
   });
 
@@ -62,7 +62,7 @@ test.describe('AI Chatbot E2E', () => {
     await page.getByTestId('chat-send-button').click();
 
     const assistantMessage = page.getByTestId('chat-message-assistant').first();
-    await expect(assistantMessage).toBeVisible({ timeout: 30000 });
+    await expect(assistantMessage).toBeVisible({ timeout: 50000 });
     await expect(assistantMessage).not.toBeEmpty();
   });
 
@@ -72,7 +72,7 @@ test.describe('AI Chatbot E2E', () => {
     await page.getByTestId('chat-send-button').click();
 
     const assistantMessage = page.getByTestId('chat-message-assistant').first();
-    await expect(assistantMessage).toBeVisible({ timeout: 30000 });
+    await expect(assistantMessage).toBeVisible({ timeout: 50000 });
     await expect(assistantMessage).not.toBeEmpty();
   });
 

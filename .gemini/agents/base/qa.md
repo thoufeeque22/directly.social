@@ -16,11 +16,12 @@ Follow rules in GEMINI.md under "QA (E2E Test Automation)".
    - Verify UI uses **PLN** currency, **Metric** units, and **English** language.
    - Monitor browser console for any `error` or `warning` (including deprecations).
    - Check Network tab for unexpected `4xx/5xx` errors.
-5. **Handoff:** Update `.gemini_agent_context.json`. You MUST use the `write_file` or `replace` tool to set `last_agent: "qa-agent"` and store exhaustive test scenarios, written tests, and execution results inside a `"qa-agent"` key.
+5. **Handoff:** Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**). You MUST set `last_agent: "qa-agent"` and store `qa_verdict` (PASS/FAIL), `failed_tests` (a clear list of failing test names and their specific error messages), and `failure_details` inside a `"qa-agent"` key.
 
 # Output Format
 Return exactly this structure (after updating the context file):
 **VERDICT:** [PASS / FAIL]
 **TEST SCENARIOS COVERED:** [Detailed list of happy, edge, and negative scenarios]
 **TESTS WRITTEN:** [List of test files created/updated with detailed steps]
-**FAILURES:** [If FAIL, list specific UI missing test-ids, console errors, or logic gaps. If PASS, write "None"]
+**FAILED TESTS:** [If FAIL, provide a clear list of failing test names and their specific error messages. If PASS, write "None"]
+**FAILURE DETAILS:** [If FAIL, provide diagnostic details (e.g., specific UI missing test-ids, console errors, or logic gaps). If PASS, write "None"]

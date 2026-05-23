@@ -177,14 +177,14 @@ You MUST commit any review artifacts before assigning. If issues found, assign t
   - **Console Monitoring:** You MUST monitor the browser console for `error` or `warning` (especially deprecations) and mark as `[FAIL]` if any are detected.
   - **Verification:** UI must use **PLN** currency, **Metric** units, and **English** language.
 - **Fail Criteria & Boundary Enforcement:** If UI lacks `data-testid`, or if a test fails due to missing integration, incorrect test-ids, missing elements, or structural bugs, `qa-agent` MUST NOT attempt to modify application code under any circumstances. It is strictly forbidden from writing or modifying files outside of `src/__tests__/e2e/`. It MUST mark the build as `[FAIL]` and assign the task back to `dev-agent` with exact failure details.
-- **Handoff:** Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**) with `last_agent: "qa-agent"` and verdict details. You MUST include an `expected_output` block confirming:
-  1. `npx playwright test` success report.
+- **Handoff:** Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**) with `last_agent: "qa-agent"` and store `qa_verdict` (PASS/FAIL), `failed_tests` (a clear list of failing test names and their specific error messages), and `failure_details` inside a `"qa-agent"` key. You MUST include an `expected_output` block confirming:
+  1. `npx playwright test` success report (or failure logs if applicable).
   2. New or updated Playwright tests committed to `src/__tests__/e2e/`.
   3. Exhaustive coverage (Happy/Edge/Negative) verified and documented.
   4. Detailed step-by-step test logic verified to mirror real-world scenarios.
   5. Isolated mock data/seeding logic implemented and verified.
   6. Zero Network (4xx/5xx) or Hydration errors observed.
-You MUST commit all test changes before assigning to the next agent. If tests fail, assign to `dev-agent`. If tests pass, assign to `doc-agent`.
+You MUST commit all test changes before assigning to the next agent. If tests fail, assign to `dev-agent` and include the `failed_tests` and `failure_details` in the handoff. If tests pass, assign to `doc-agent`.
 - **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini_incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
 
 ## Documentation (Living Source of Truth)
@@ -249,7 +249,7 @@ You MUST commit all documentation and manual test changes before assigning to **
     - **Debt Tracking:** Large legacy files must be registered in `docs/ARCHITECTURE.md` with an assigned "debt priority" (Critical/High/Medium).
 
 ## Global Handoff Protocol
-- **Handoff:** Update `.gemini_agent_context.json` (adhering strictly to the **Context Preservation Mandate**). You MUST set `last_agent: "<your-agent-name>"` and `next_agent: "<target-agent-name>"` as the task is passed to the next role. **Every handoff triggers a mandatory system pause.** You MUST include an `expected_output` block confirming:
+- **Handoff:** Update `.gemini_agent_context.json` (adhering strictly to the **Context Preservation Mandate**). You MUST set `last_agent: "<your-agent-name>"` and `next_agent: "<target-agent-name>"` as the task is passed to the next role. **Every handoff triggers a mandatory system pause.** If any validation step fails (build, type-check, lint, or tests), the agent MUST store `failed_items` (a clear list of failing files/tests and their errors) and `failure_details` inside their namespaced key. You MUST include an `expected_output` block confirming:
   1. `npx tsc --noEmit` success.
   2. `npm run build` success.
   3. All unit/integration tests passed.

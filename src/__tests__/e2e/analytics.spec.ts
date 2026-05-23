@@ -64,19 +64,32 @@ test.describe('Analytics Dashboard', () => {
     execSync('npx tsx scripts/seed-e2e-user.ts');
   });
 
-  test('admin can view analytics dashboard with populated data', async ({ page }) => {
-    await page.goto('/admin/analytics');
-    
-    // Check for dashboard component
-    await expect(page.getByTestId('admin-analytics-dashboard')).toBeVisible();
-    await expect(page.getByTestId('feature-adoption-chart')).toBeVisible();
+  test.describe('admin access', () => {
+    test.use({ storageState: { cookies: [], origins: [] } });
 
-    // Wait a brief moment to ensure charts render animations
-    await page.waitForTimeout(1000);
+    test('admin can view analytics dashboard with populated data', async ({ page }) => {
+      // Login to get the new session token with ADMIN role
+      await page.goto('/login');
+      await page.getByTestId('e2e-email-input').fill('admin@socialstudio.ai');
+      await page.getByTestId('e2e-password-input').fill('social-studio-e2e-secret');
+      await page.getByTestId('e2e-login-submit').click();
+      await page.waitForURL('/');
 
-    // Take screenshot
-    await page.screenshot({ path: 'verification/admin-analytics-dashboard.png', fullPage: true });
+      await page.goto('/admin/analytics');
+      
+      // Check for dashboard component
+      await expect(page.getByTestId('admin-analytics-dashboard')).toBeVisible();
+      await expect(page.getByTestId('feature-adoption-chart')).toBeVisible();
+
+      // Wait a brief moment to ensure charts render animations
+      await page.waitForTimeout(1000);
+
+      // Take screenshot
+      await page.screenshot({ path: 'verification/admin-analytics-dashboard.png', fullPage: true });
+    });
   });
+    
+
 
   test.describe('non-admin access', () => {
     test.use({ storageState: { cookies: [], origins: [] } });

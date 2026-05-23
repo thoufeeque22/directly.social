@@ -16,11 +16,10 @@ async function main() {
 
   console.log(`Seeding schedule data for user: ${user.id}`);
 
-  // Clear existing scheduled posts for a clean test state
+  // Clear specific scheduled posts for a clean test state
   await prisma.postHistory.deleteMany({ 
     where: { 
-      userId: user.id,
-      isPublished: false
+      id: { in: ['e2e-post-1', 'e2e-post-2', 'e2e-post-3'] }
     } 
   });
 
@@ -34,8 +33,16 @@ async function main() {
   // Post 3: Scheduled in 3 hours
   const scheduled3 = new Date(now.getTime() + 3 * 60 * 60 * 1000);
 
-  await prisma.postHistory.create({
-    data: {
+  await prisma.postHistory.upsert({
+    where: { id: 'e2e-post-1' },
+    update: {
+      userId: user.id,
+      title: 'Scheduled Post 1',
+      description: 'First scheduled post for E2E testing',
+      scheduledAt: scheduled1,
+      isPublished: false,
+    },
+    create: {
       id: 'e2e-post-1',
       userId: user.id,
       title: 'Scheduled Post 1',
@@ -45,8 +52,16 @@ async function main() {
     }
   });
 
-  await prisma.postHistory.create({
-    data: {
+  await prisma.postHistory.upsert({
+    where: { id: 'e2e-post-2' },
+    update: {
+      userId: user.id,
+      title: 'Scheduled Post 2',
+      description: 'Second scheduled post for E2E testing',
+      scheduledAt: scheduled2,
+      isPublished: false,
+    },
+    create: {
       id: 'e2e-post-2',
       userId: user.id,
       title: 'Scheduled Post 2',
@@ -56,8 +71,16 @@ async function main() {
     }
   });
 
-  await prisma.postHistory.create({
-    data: {
+  await prisma.postHistory.upsert({
+    where: { id: 'e2e-post-3' },
+    update: {
+      userId: user.id,
+      title: 'Scheduled Post 3',
+      description: 'Third scheduled post for E2E testing',
+      scheduledAt: scheduled3,
+      isPublished: false,
+    },
+    create: {
       id: 'e2e-post-3',
       userId: user.id,
       title: 'Scheduled Post 3',
