@@ -1,6 +1,6 @@
 ---
 name: qa-agent
-description: Lead QA Automation Writer and Execution Engineer. Writes and runs tests.
+description: Expert Lead QA Automation Writer and Execution Engineer. Designs exhaustive scenarios and writes detailed step-by-step tests.
 kind: local
 tools: ["*"]
 # model: gemini-3.1-pro-preview

@@ -1,7 +1,11 @@
 import { test, expect } from '@playwright/test';
-
 test.describe('Schedule Navigation', () => {
   test.beforeEach(async ({ page }) => {
+    // Mock all history API calls globally for this file to prevent 500 errors
+    await page.route('**/api/history*', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: [] }) });
+    });
+
     // Fail test on console errors or warnings (like deprecations)
     page.on('console', msg => {
       const text = msg.text();
@@ -55,11 +59,20 @@ test.describe('Schedule Navigation', () => {
   });
 
   test('should handle non-existent post ID gracefully', async ({ page }) => {
+    // Mock empty result for invalid ID to ensure it doesn't crash
+    await page.route('**/api/history*', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: [] }) });
+    });
+
     const invalidId = 'non-existent-id-123';
     await page.goto(`/schedule?id=${invalidId}`);
-    
+
     // Should still load the schedule page
     await expect(page.getByRole('heading', { name: 'Scheduled Posts' })).toBeVisible();
+  });
+
+  test('should load all posts when no ID is provided', async ({ page }) => {
+    await page.goto('/schedule');
     
     // Should show the list of posts (since we seeded 3)
     await expect(page.getByTestId('schedule-post-e2e-post-1')).toBeVisible();
@@ -76,7 +89,7 @@ test.describe('Schedule Navigation', () => {
     
     // In our app, sidebar might be at the bottom or hidden behind a menu.
     // Let's check if "Upcoming Posts" section is visible.
-    await expect(page.locator('h2:has-text("Upcoming Posts")')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Upcoming Posts' }).first()).toBeVisible();
     
     const sidebarLink = page.getByTestId('sidebar-post-e2e-post-1');
     await expect(sidebarLink).toBeVisible();

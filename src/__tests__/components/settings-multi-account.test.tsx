@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import SettingsPage from '../../app/settings/page';
+import SettingsPage from '../../app/settings/SettingsContent';
 import { useSession } from 'next-auth/react';
 import { getUserAccounts, togglePlatformPreference, getPlatformPreferences } from '../../app/actions/user';
 

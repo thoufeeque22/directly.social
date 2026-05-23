@@ -374,6 +374,33 @@ Users can connect their own S3/R2 storage to bypass server limits.
 - **Security:** Credentials are encrypted at rest via AES-256-GCM.
 - **Streaming Distribution:** Media is streamed directly from the user's bucket to platform APIs during publishing.
 
+### 10. Unified Settings & Platform Management
+
+The Settings page is organized into a URL-driven tabbed interface, providing a centralized hub for all configuration.
+
+- **URL-Driven Navigation:** Tab state is persisted in the URL query string (`?tab=...`), allowing for direct linking and consistent state across refreshes.
+- **Progressive Disclosure:** Platform configuration (OAuth and BYOK) is hidden behind a toggle. Once enabled, an accordion expands to reveal both basic connection management and advanced BYOK settings.
+- **Platform Roadmap:** A dynamic "Coming Soon" section displays upcoming platform integrations in a grayscale, disabled state, providing transparency into the project's development roadmap.
+- **Community Feedback:** A "Suggest a Platform" feature allows users to proactively request new integrations.
+
+```mermaid
+graph TD
+    S[Settings Page] --> T[Tabs]
+    T --> D[Destinations]
+    T --> SN[Snippets]
+    T --> AI[AI Providers]
+    T --> ST[Storage - BYOS]
+    
+    D --> AC[Active Platforms]
+    D --> RS[Roadmap/Coming Soon]
+    
+    AC --> PC[Platform Card]
+    PC --> Toggle[Enable Toggle]
+    Toggle -- Enabled --> Config[Configuration Accordion]
+    Config --> Conn[Account Connection]
+    Config --> BYOK[BYOK Wizard]
+```
+
 ## Platform Integrations
 
 Platform-specific logic is encapsulated in `src/lib/platforms/`.

@@ -13,13 +13,15 @@ This test plan verifies the functionality, validation, and persistence of the Pl
 - **Steps:**
   1. Log in to Social Studio.
   2. Navigate to **Settings**.
-  3. Click on the **BYOK Settings** link/button.
+  3. Ensure the **Destinations** tab is active.
+  4. Find a platform (e.g., YouTube) and toggle it to **Enabled**.
+  5. Expand the **Configuration** accordion.
+  6. Locate the **Advanced Settings (BYOK)** section.
 - **Expected Results:**
-  - The URL should be `/settings/byok`.
-  - The page should display "BYOK Integrations" title.
-  - A "Back to Settings" button should be visible at the top.
-  - Wizards for **YouTube**, **TikTok**, **Facebook**, and **Instagram** should be visible in a responsive grid layout.
-  - Each wizard should be enclosed in a `GlassCard` with a platform-specific icon (YouTube: Red, TikTok: Black Music Note, Facebook: Blue, Instagram: Gradient/Pink).
+  - The URL should be `/settings?tab=destinations`.
+  - The "Configuration" accordion should be visible and expandable.
+  - The BYOK wizard should be visible inside the accordion.
+  - Each wizard should have platform-specific instructions and links.
   - Step 1 (Get Your Keys) and Step 2 (Configure Credentials) should be clearly demarcated.
 
 ### 2. External Portal Links

@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "category": "meta",
+    "severity": "MED",
+    "description": "SettingsContent.tsx exceeds the 50-line rule (currently ~192 lines).",
+    "suggestion": "Extract UI sub-components for the tabbed views (Destinations, Snippets, AI, Storage) into separate files in components/settings/."
+  }
+]

@@ -27,8 +27,8 @@ test.describe('AI BYOK Wizard E2E', () => {
     });
 
     await page.goto('/settings');
-    // Click on the BYOK tab (index 2)
-    await page.getByRole('tab', { name: /BYOK/i }).click();
+    // Click on the AI Providers tab
+    await page.getByRole('tab', { name: /AI Providers/i }).click();
   });
 
   test('visual audit and happy path', async ({ page }) => {

@@ -11,7 +11,11 @@ export default function AIBYOKWizard() {
   const { configs, isLoaded, saveConfig, removeConfig } = useAiByok();
 
   if (!isLoaded) {
-    return <CircularProgress />;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   const handleSave = async (provider: AIProvider, apiKey: string, modelId: string) => {
