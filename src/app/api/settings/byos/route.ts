@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     const data = await req.json();
     const config = await saveByosConfig(session.user.id, data);
     return NextResponse.json({ config });
-  } catch (e) {
+  } catch {
     return new NextResponse('Invalid input', { status: 400 });
   }
 }

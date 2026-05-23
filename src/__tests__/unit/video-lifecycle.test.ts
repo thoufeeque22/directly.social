@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { prisma } from '../../lib/core/prisma';
-import { MAX_STORAGE_PER_USER } from '../../lib/core/constants';
+import { checkStorageLimit } from '@/lib/core/storage-utils';
 import * as fsLib from 'fs';
 
 // Mock PRISMA
