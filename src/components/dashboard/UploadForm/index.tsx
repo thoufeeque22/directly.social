@@ -120,6 +120,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
     setMounted(true);
   }, []);
 
+  const skeleton = <div style={{ minHeight: '100px' }} />;
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -361,7 +363,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           </div>
         )}
 
-        {aiTier !== 'Manual' && (
+        {mounted && aiTier !== 'Manual' && (
           <AIStyleSelector 
             contentMode={contentMode} 
             onModeChange={onModeChange} 
@@ -369,8 +371,8 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             onCustomStyleChange={onCustomStyleChange}
           />
         )}
-        
-        {aiTier !== 'Manual' && (
+
+        {mounted && aiTier !== 'Manual' && (
           <div style={{ padding: '0.75rem', borderRadius: '0.75rem', background: 'hsla(var(--primary)/0.05)', border: '1px solid hsla(var(--primary)/0.15)' }}>
             <p style={{ fontSize: '0.8rem', color: 'hsl(var(--primary))', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <AutoAwesomeIcon sx={{ fontSize: 16 }} />
@@ -386,9 +388,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             selectedAccountIds={selectedAccountIds} 
             onToggleAccount={onToggleAccount} 
           />
-        ) : (
-          <div style={{ minHeight: '100px' }} />
-        )}
+        ) : skeleton}
 
         <SchedulingSelector isScheduled={isScheduled} scheduledAt={scheduledAt} onChange={onSchedulingChange} />
 
@@ -427,7 +427,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             </button>
           )}
 
-          {aiTier === 'Manual' && !isUploading && (
+          {mounted && aiTier === 'Manual' && !isUploading && (
             <button
               type="button"
               onClick={() => onTierChange('Enrich')}
@@ -456,7 +456,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             type="submit" 
             disabled={isUploading}
             style={{ 
-              flex: (hasCachedPreviews || (aiTier === 'Manual' && !isUploading)) ? 1.2 : 1,
+              flex: (hasCachedPreviews || (mounted && aiTier === 'Manual' && !isUploading)) ? 1.2 : 1,
               background: 'hsl(var(--primary))', 
               color: 'white', 
               border: 'none', 
@@ -477,7 +477,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           </button>
         </div>
 
-        {aiTier !== 'Manual' && !isUploading && (
+        {mounted && aiTier !== 'Manual' && !isUploading && (
           <button
             type="button"
             onClick={(e) => {
@@ -494,8 +494,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
           >
             <RocketLaunchIcon sx={{ fontSize: 16 }} /> Skip Review & Post Directly
           </button>
-        )}
-      </form>
+        )}      </form>
     </GlassCard>
   );
 };
