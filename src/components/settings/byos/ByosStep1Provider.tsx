@@ -15,7 +15,7 @@ export const ByosStep1Provider = ({ provider, onProviderChange }: Props) => (
       Select your storage provider. Both Amazon Web Services S3 and Cloudflare R2 are supported.
     </Typography>
     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 3 }}>
-      <ProviderOption active={provider === 'S3'} onClick={() => onProviderChange('S3')} icon={<CloudQueueIcon sx={{ fontSize: 40, color: provider === 'S3' ? 'primary.main' : 'text.secondary' }} />} title="AWS S3 Compatible" description="Use AWS S3, Backblaze B2, DigitalOcean Spaces, or any S3-compliant storage." />
+      <ProviderOption active={provider === 'S3'} onClick={() => onProviderChange('S3')} icon={<CloudQueueIcon sx={{ fontSize: 40, color: provider === 'S3' ? 'primary.main' : 'text.secondary' }} />} title="AWS S3 Compatible" description="Use AWS S3, Google Cloud Storage, Backblaze B2, DigitalOcean Spaces, or any S3-compliant storage." />
       <ProviderOption active={provider === 'R2'} onClick={() => onProviderChange('R2')} icon={<StorageIcon sx={{ fontSize: 40, color: provider === 'R2' ? 'primary.main' : 'text.secondary' }} />} title="Cloudflare R2" description="Enjoy zero-egress cost Cloudflare R2 bucket. Perfect for direct uploader streaming." />
     </Box>
   </Box>
