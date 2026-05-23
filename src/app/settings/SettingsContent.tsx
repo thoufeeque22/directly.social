@@ -49,7 +49,7 @@ const SettingsContent = () => {
   const comingSoonPlatforms = apiPlatforms.filter(p => p.status === 'coming-soon');
 
   const handleTabChange = (event: React.SyntheticEvent, newTab: string) => {
-    router.push(`/settings?tab=${newTab}`);
+    router.push(`/settings?tab=${newTab}`, { scroll: false });
   };
 
   const handleDisconnect = async (accountId: string) => {
