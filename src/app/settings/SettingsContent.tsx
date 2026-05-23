@@ -19,6 +19,8 @@ import TuneIcon from '@mui/icons-material/Tune';
 import StorageIcon from '@mui/icons-material/Storage';
 import AppsIcon from '@mui/icons-material/Apps';
 
+import { PlatformIcon } from '@/components/ui/PlatformIcon';
+
 import { Tabs, Tab, Box, Typography, Chip } from '@mui/material';
 
 const TABS = [
@@ -130,7 +132,7 @@ const SettingsContent = () => {
                   <GlassCard key={platform.id} style={{ opacity: 0.6, filter: 'grayscale(1)', cursor: 'not-allowed' }}>
                     <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        {platform.icon as React.ReactNode}
+                        <PlatformIcon platformId={platform.icon} />
                         <Typography variant="h6">{platform.name}</Typography>
                       </Box>
                       <Chip label="Coming Soon" size="small" />

@@ -6,8 +6,10 @@ import { ConnectionSection } from '@/components/settings/ConnectionSection';
 import { ByokWizard } from '@/components/byok/ByokWizard';
 import { Account } from '@/lib/core/types';
 
+import { PlatformIcon } from '@/components/ui/PlatformIcon';
+
 interface PlatformCardProps {
-  platform: { id: string; name: string; icon: React.ReactNode; provider: string };
+  platform: { id: string; name: string; icon: string; provider: string; color: string };
   isEnabled: boolean;
   onToggle: (platformId: string, provider: string, currentStatus: boolean) => Promise<void>;
   accounts: Account[];
@@ -28,6 +30,8 @@ export const PlatformCard: React.FC<PlatformCardProps> = ({
     [accounts, platform.provider]
   );
 
+  const brandColor = platform.color || 'hsl(var(--primary))';
+
   return (
     <GlassCard 
       data-testid={`platform-card-${platform.id}`}
@@ -35,7 +39,7 @@ export const PlatformCard: React.FC<PlatformCardProps> = ({
     >
       <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          {platform.icon}
+          <PlatformIcon platformId={platform.icon} sx={{ color: brandColor }} />
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography variant="h6" sx={{ fontWeight: 600 }}>{platform.name}</Typography>
             <Badge 
@@ -62,9 +66,9 @@ export const PlatformCard: React.FC<PlatformCardProps> = ({
               <ConnectionSection
                 title="Account Connection"
                 subtitle={`Manage ${platform.name} connections.`}
-                icon={platform.icon}
+                icon={<PlatformIcon platformId={platform.icon} sx={{ color: brandColor }} />}
                 provider={platform.provider}
-                color="hsl(var(--primary))"
+                color={brandColor}
                 onConnect={onConnect}
                 onDisconnect={onDisconnect}
                 accounts={accounts}

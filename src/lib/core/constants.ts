@@ -1,12 +1,12 @@
 export const PLATFORMS = [
-  { id: 'youtube', provider: 'google', name: 'YouTube Shorts', icon: '📺', color: 'hsl(var(--primary))', status: 'active' },
-  { id: 'instagram', provider: 'facebook', name: 'Instagram Reels', icon: '📸', color: '#E1306C', status: 'active' },
-  { id: 'tiktok', provider: 'tiktok', name: 'TikTok', icon: '🎵', color: 'black', status: 'active' },
-  { id: 'facebook', provider: 'facebook', name: 'Facebook', icon: '👥', color: '#1877F2', status: 'active' },
-  { id: 'linkedin', provider: 'linkedin', name: 'LinkedIn', icon: '💼', color: '#0A66C2', status: 'coming-soon' },
-  { id: 'twitter', provider: 'twitter', name: 'Twitter/X', icon: '𝕏', color: 'white', status: 'coming-soon' },
-  { id: 'pinterest', provider: 'pinterest', name: 'Pinterest', icon: '📌', color: '#E60023', status: 'coming-soon' },
-  { id: 'threads', provider: 'threads', name: 'Threads', icon: '🧵', color: 'black', status: 'coming-soon' },
+  { id: 'youtube', provider: 'google', name: 'YouTube Shorts', icon: 'youtube', color: '#FF0000', status: 'active' },
+  { id: 'instagram', provider: 'facebook', name: 'Instagram Reels', icon: 'instagram', color: '#E4405F', status: 'active' },
+  { id: 'tiktok', provider: 'tiktok', name: 'TikTok', icon: 'tiktok', color: '#000000', status: 'active' },
+  { id: 'facebook', provider: 'facebook', name: 'Facebook', icon: 'facebook', color: '#1877F2', status: 'active' },
+  { id: 'linkedin', provider: 'linkedin', name: 'LinkedIn', icon: 'linkedin', color: '#0A66C2', status: 'coming-soon' },
+  { id: 'twitter', provider: 'twitter', name: 'Twitter/X', icon: 'twitter', color: '#000000', status: 'coming-soon' },
+  { id: 'pinterest', provider: 'pinterest', name: 'Pinterest', icon: 'pinterest', color: '#E60023', status: 'coming-soon' },
+  { id: 'threads', provider: 'threads', name: 'Threads', icon: 'threads', color: '#000000', status: 'coming-soon' },
 ] as const;
 
 export type PlatformStatus = 'active' | 'coming-soon';
