@@ -173,8 +173,8 @@ You MUST commit any review artifacts before assigning. If issues found, assign t
 - **Execution Standards:**
   - **Frameworks Only:** Execute validation strictly using `playwright`.
   - `playwright`: Use `npx playwright test --reporter=list`. Non-blocking.
-  - **Observation:** Any `4xx/5xx` in Network Tab or Hydration errors in Console = `[FAIL]`.
-  - **Console Monitoring:** You MUST monitor the browser console for `error` or `warning` (especially deprecations) and mark as `[FAIL]` if any are detected.
+  - **Observation:** Any `4xx/5xx` in Network Tab or Hydration errors in Console = `[FAIL]`. *Exception: AI-related rate limit errors (HTTP 429) are a known environment constraint and should be marked as [SKIPPED] rather than [FAIL].*
+  - **Console Monitoring:** You MUST monitor the browser console for `error` or `warning` (especially deprecations) and mark as `[FAIL]` if any are detected. *Exception: Explicit AI provider rate limit warnings/errors (HTTP 429) may be ignored.*
   - **Verification:** UI must use **PLN** currency, **Metric** units, and **English** language.
 - **Fail Criteria & Boundary Enforcement:** If UI lacks `data-testid`, or if a test fails due to missing integration, incorrect test-ids, missing elements, or structural bugs, `qa-agent` MUST NOT attempt to modify application code under any circumstances. It is strictly forbidden from writing or modifying files outside of `src/__tests__/e2e/`. It MUST mark the build as `[FAIL]` and assign the task back to `dev-agent` with exact failure details.
 - **Handoff:** Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**) with `last_agent: "qa-agent"` and store `qa_verdict` (PASS/FAIL), `failed_tests` (a clear list of failing test names and their specific error messages), and `failure_details` inside a `"qa-agent"` key. You MUST include an `expected_output` block confirming:
@@ -183,7 +183,7 @@ You MUST commit any review artifacts before assigning. If issues found, assign t
   3. Exhaustive coverage (Happy/Edge/Negative) verified and documented.
   4. Detailed step-by-step test logic verified to mirror real-world scenarios.
   5. Isolated mock data/seeding logic implemented and verified.
-  6. Zero Network (4xx/5xx) or Hydration errors observed.
+  6. Zero Network (4xx/5xx) or Hydration errors observed (excluding known AI rate limits).
 You MUST commit all test changes before assigning to the next agent. If tests fail, assign to `dev-agent` and include the `failed_tests` and `failure_details` in the handoff. If tests pass, assign to `doc-agent`.
 - **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini_incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
 

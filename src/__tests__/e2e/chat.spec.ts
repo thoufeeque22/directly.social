@@ -57,7 +57,8 @@ test.describe('AI Chatbot E2E', () => {
     await expect(page.getByTestId('chat-message-user').filter({ hasText: 'Hello AI' })).toBeVisible();
     
     // Verify AI response starts streaming (wait for some content)
-    // Note: Assistant message role is applied to the container,    const aiResponse = page.getByTestId('chat-message-assistant').first();
+    // Note: Assistant message role is applied to the container, and it might contain multiple parts
+    const aiResponse = page.getByTestId('chat-message-assistant').first();
     await expect(aiResponse).toBeVisible({ timeout: 5000 });
     await expect(aiResponse).not.toBeEmpty();
   });
