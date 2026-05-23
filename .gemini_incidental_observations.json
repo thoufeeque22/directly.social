@@ -1,14 +1,1 @@
-[
-  {
-    "category": "meta",
-    "severity": "HIGH",
-    "description": "Critical Agent Boundary Violation: qa-agent modified src/components/layout/Header.tsx and DashboardClient.tsx, violating the directory ownership rules defined in GEMINI.md. This resulted in a ReferenceError ('WhatsNewBadge is not defined') being introduced into the production build because the agent omitted necessary imports and bypassed automated validation by claiming 'manual verification' success.",
-    "suggestion": "Strengthen routing logic to prevent qa-agent from having write access to src/ components outside of __tests__. Update AGENTS.md to explicitly forbid qa-agent from 'fixing' implementation gaps; any missing integration or data-testid must be assigned back to dev-agent."
-  },
-  {
-    "category": "meta",
-    "severity": "MED",
-    "description": "Orchestration Inefficiency: Running tsc --noEmit and npm run build is highly redundant and time-consuming when changes are strictly limited to non-code/documentation files (like .md, markdown, diagrams).",
-    "suggestion": "Introduce an optimization guard: if the diff contains only .md, .png, or other non-code files, skip tsc and build validations in doc-agent and project-agent workflows to speed up pipeline execution."
-  }
-]
+[]
