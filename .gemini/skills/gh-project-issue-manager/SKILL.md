@@ -41,7 +41,7 @@ Use this skill to create high-quality GitHub issues and automatically link them 
      - `high`: Security, core crashes, blocked releases.
      - `medium`: Functional bugs, main features.
      - `low`: Nits, docs, minor enhancements.
-   - **Handoff:** Update the calling agent's namespaced key in `.gemini_agent_context.json` with the created issue details.
+   - **Handoff:** Update the calling agent's namespaced key in `.gemini/state/ticket-<id>.json` with the created issue details.
 
 ## Guidelines for Enhancement
 

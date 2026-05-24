@@ -26,9 +26,9 @@
 
 # Agent Orchestration (Direct Routing)
 
-- **Context First:** Always check `.gemini_agent_context.json` for current state before acting.
-- **Handoff & Commit Rule:** Every agent MUST commit their changes (including `.gemini_agent_context.json`) using Conventional Commits and push to the remote branch before assigning the task to the next agent.
-- **Context Synchronization:** Always `git add .gemini_agent_context.json` before committing to ensure the latest state is shared. Push changes immediately after commit.
+- **Context First:** Always check `.gemini/state/ticket-<id>.json` for current state before acting.
+- **Handoff & Commit Rule:** Every agent MUST commit their changes (including `.gemini/state/ticket-<id>.json`) using Conventional Commits and push to the remote branch before assigning the task to the next agent.
+- **Context Synchronization:** Always `git add .gemini/state/ticket-<id>.json` before committing to ensure the latest state is shared. Push changes immediately after commit.
 - **Predictive Validation:** Before handoff, the current agent MUST define an `expected_output` block in their namespaced context. This MUST include specific verification commands (e.g., `npm run build`, `npx tsc`) and the expected success indicators. Handoff is FORBIDDEN until the agent can prove these outputs were achieved.
 - **Context Structure:**
   - **Root Keys:** `last_agent`, `branch_name`, `ticket_goal`, `ticket_id`, and `last_updated_at` (ISO 8601 timestamp) must remain at the root.
@@ -43,18 +43,18 @@
   - Main Agent (Manual Approval) → `project-agent`
   - `project-agent` → End of Task/Main Agent
 - **Orchestration Rules:**
-  - **Context Preservation Mandate:** Every update to `.gemini_agent_context.json` MUST be a non-destructive merge. Agents are FORBIDDEN from overwriting the entire file with only their namespaced data. You MUST read the current file, parse the JSON, update only your specific namespace (e.g., `"round-N"`) and relevant root keys (e.g., `last_agent`, `next_agent`), and write the complete merged object back. Deleting historical rounds, root keys, or other agents' data is a CRITICAL pipeline failure.
-  - **Subagent Isolation Rule:** The Main Agent MUST NOT simulate worker agents internally. It MUST invoke distinct subagents (e.g., via `invoke_subagent` tools) to execute `dev-agent`, `review-agent`, etc. This enforces memory isolation, guaranteeing that each agent must independently read from and write to `.gemini_agent_context.json` upon handoff.
-  - **Worker Agents:** MUST NOT invoke other agents. They MUST update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**) via tools and return their status. **After each worker agent finishes, the pipeline MUST stop and wait for a manual user command to proceed.**
+  - **Context Preservation Mandate:** Every update to `.gemini/state/ticket-<id>.json` MUST be a non-destructive merge. Agents are FORBIDDEN from overwriting the entire file with only their namespaced data. You MUST read the current file, parse the JSON, update only your specific namespace (e.g., `"round-N"`) and relevant root keys (e.g., `last_agent`, `next_agent`), and write the complete merged object back. Deleting historical rounds, root keys, or other agents' data is a CRITICAL pipeline failure.
+  - **Subagent Isolation Rule:** The Main Agent MUST NOT simulate worker agents internally. It MUST invoke distinct subagents (e.g., via `invoke_subagent` tools) to execute `dev-agent`, `review-agent`, etc. This enforces memory isolation, guaranteeing that each agent must independently read from and write to `.gemini/state/ticket-<id>.json` upon handoff.
+  - **Worker Agents:** MUST NOT invoke other agents. They MUST update `.gemini/state/ticket-<id>.json` (adhering to the **Context Preservation Mandate**) via tools and return their status. **After each worker agent finishes, the pipeline MUST stop and wait for a manual user command to proceed.**
   - **Main Agent (Gemini CLI):** Responsible for analyzing the context and reporting status. **The Main Agent MUST NOT automatically invoke the next agent in the pipeline.** It must present the current state and wait for an explicit user directive (e.g., "Invoke dev-agent") before proceeding to the next step.
   - **Manual Intervention Mandate:** The transition between any two agents (e.g., `discovery-agent` to `dev-agent`) is NOT automatic. The Main Agent must pause after every agent handoff and require the user to manually trigger the next agent.
-  - **End of Workflow:** At the conclusion of the entire pipeline (when the task is completed and control returns to the Main Agent), the Main Agent MUST ensure that `.gemini_agent_context.json` is committed and pushed to the remote branch to persist the final state.
+  - **End of Workflow:** At the conclusion of the entire pipeline (when the task is completed and control returns to the Main Agent), the Main Agent MUST ensure that `.gemini/state/ticket-<id>.json` is committed and pushed to the remote branch to persist the final state.
   - **Discovery Gate:** For any task involving New Features or Roadmap items, the Main Agent is FORBIDDEN from invoking `dev-agent` until `discovery-agent` has provided a verified `TECHNICAL SPECS` block. Bypassing Discovery is a CRITICAL pipeline failure.
   - **Visual Integrity Mandate:** All UI changes MUST be verified not just for functional logic, but for visual accessibility (contrast, visibility, spacing). QA-agent MUST include specific Playwright tests that check for the visibility of critical controls (e.g., navigation arrows, labels).
   - **Inception Rule:** When a new ticket ID (URL or number) is provided, the Main Agent MUST:
   1. Immediately switch to the `main` branch and pull the latest changes.
   2. Fetch the ticket details (title and description/body) from GitHub using `gh issue view <id> --json title,body`.
-  3. **Context Reset:** CLEAN UP the existing `.gemini_agent_context.json`. Initialize it FRESH with the new ticket details in the `ticket_goal` and `ticket_description` fields, starting exclusively with a new `round-1`. Historical rounds from previous tickets MUST be discarded to maintain context efficiency.
+  3. **Context Reset:** CLEAN UP the existing `.gemini/state/ticket-<id>.json`. Initialize it FRESH with the new ticket details in the `ticket_goal` and `ticket_description` fields, starting exclusively with a new `round-1`. Historical rounds from previous tickets MUST be discarded to maintain context efficiency.
   4. Bypassing this step is a CRITICAL pipeline failure.
 - **Model Selection:** 
   - Use **Gemini 1.5 Pro** for complex reasoning (Discovery, Dev, Review, QA).
@@ -91,13 +91,13 @@ This system is designed to evolve. All agents are responsible for maintaining th
   - **Trigger:** For **New Features** or **Core Refactors**, the **Main Agent** MUST invoke two distinct discovery sessions.
   - **Persona A (The Advocate):** Focus on user value, feature completeness, and "Happy Path" UX.
   - **Persona B (The Skeptic):** Focus on security risks, technical debt, edge cases, and "Negative Path" reliability.
-  - **Synthesis:** The `discovery-agent` (primary) must synthesize both perspectives into a single `TECHNICAL SPECS` block in `.gemini_agent_context.json`.
+  - **Synthesis:** The `discovery-agent` (primary) must synthesize both perspectives into a single `TECHNICAL SPECS` block in `.gemini/state/ticket-<id>.json`.
 - **GitHub Integration:** Use `gh issue view <id>` for tickets.
 - **Release Scope Guardianship (The "Brains" Check):** Before any technical planning, you MUST perform a Socratic audit of the request. Analyze if the feature is a logical next step for the *current* release or if it introduces premature complexity. You MUST document in the `TECHNICAL SPECS` block of the context file why the feature is important/required, and explicitly assess if it is safe to skip/defer. You are the primary filter: if a feature is architectural 'noise' for the current phase, you MUST invoke the [PARKED] protocol and provide a clear rationale for deferral in the context file.
 - **Roadmap Alignment:** Cross-reference with `docs/REQUIREMENTS.md`. If a feature is scoped for a later phase (e.g., Phase 2), it is an automatic [PARKED] verdict.
 - **Ambiguity Check:** STOP and ask follow-up questions if requirements are vague.
 - **Impact Radius:** Map dependencies and existing patterns before proposing changes.
-- **Handoff:** Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**) with technical specs and an `expected_output` block confirming:
+- **Handoff:** Update `.gemini/state/ticket-<id>.json` (adhering to the **Context Preservation Mandate**) with technical specs and an `expected_output` block confirming:
   1. Synthesis of Advocate/Skeptic perspectives.
   2. Strategic Importance (Why it's required and impact of skipping/deferring).
   3. Production Readiness assessment (Caching/Logging/Security).
@@ -109,7 +109,7 @@ If the task is feasible and required, assign to `dev-agent`. If [PARKED], provid
 
 ## Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular, maintainable code.
-- **Context Recovery:** Read `.gemini_agent_context.json`. Ensure `ticket_id` and `branch_name` are present.
+- **Context Recovery:** Read `.gemini/state/ticket-<id>.json`. Ensure `ticket_id` and `branch_name` are present.
 - **Git Setup:** For New Features, you MUST run `gh issue develop <ticket_id> --checkout`. If already on a branch, verify with `git branch --show-current`.
 - **Path-Based Specialization:**
   - **Systems Specialist (Paths: `src/lib/`, `src/app/api/`, `src/app/actions/`):** 
@@ -144,7 +144,7 @@ If the task is feasible and required, assign to `dev-agent`. If [PARKED], provid
   - Prisma: If schema changed, run `npx prisma generate`.
   - Build: Must pass `tsc --noEmit` and `npm run build`.
   - Lint: Must be 100% clean of warnings/errors.
-- **Handoff:** Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**). Set `last_agent: "review-agent"` and store `review_verdict` (PASS/FAIL/REQUEST CHANGES) and `failure_details` inside a `"review-agent"` key. You MUST include an `expected_output` block confirming:
+- **Handoff:** Update `.gemini/state/ticket-<id>.json` (adhering to the **Context Preservation Mandate**). Set `last_agent: "review-agent"` and store `review_verdict` (PASS/FAIL/REQUEST CHANGES) and `failure_details` inside a `"review-agent"` key. You MUST include an `expected_output` block confirming:
   1. Successful validation of all `fixes_applied`.
   2. Adherence to `docs/` and API contracts.
   3. No security vulnerabilities found in diff.
@@ -177,7 +177,7 @@ You MUST commit any review artifacts before assigning. If issues found, assign t
   - **Console Monitoring:** You MUST monitor the browser console for `error` or `warning` (especially deprecations) and mark as `[FAIL]` if any are detected. *Exception: Explicit AI provider rate limit warnings/errors (HTTP 429) may be ignored.*
   - **Verification:** UI must use **PLN** currency, **Metric** units, and **English** language.
 - **Fail Criteria & Boundary Enforcement:** If UI lacks `data-testid`, or if a test fails due to missing integration, incorrect test-ids, missing elements, or structural bugs, `qa-agent` MUST NOT attempt to modify application code under any circumstances. It is strictly forbidden from writing or modifying files outside of `src/__tests__/e2e/`. It MUST mark the build as `[FAIL]` and assign the task back to `dev-agent` with exact failure details.
-- **Handoff:** Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**) with `last_agent: "qa-agent"` and store `qa_verdict` (PASS/FAIL), `failed_tests` (a clear list of failing test names and their specific error messages), and `failure_details` inside a `"qa-agent"` key. You MUST include an `expected_output` block confirming:
+- **Handoff:** Update `.gemini/state/ticket-<id>.json` (adhering to the **Context Preservation Mandate**) with `last_agent: "qa-agent"` and store `qa_verdict` (PASS/FAIL), `failed_tests` (a clear list of failing test names and their specific error messages), and `failure_details` inside a `"qa-agent"` key. You MUST include an `expected_output` block confirming:
   1. `npx playwright test` success report (or failure logs if applicable).
   2. New or updated Playwright tests committed to `src/__tests__/e2e/`.
   3. Exhaustive coverage (Happy/Edge/Negative) verified and documented.
@@ -196,7 +196,7 @@ You MUST commit all test changes before assigning to the next agent. If tests fa
   - **PR Management:** Use `gh pr create --fill --body "Resolves #<id>"` and `gh issue close <id>`.
   - **System Optimization:** When processing incidental observations, you MUST specifically analyze entries with `category: "meta"`. You are responsible for synthesizing these into proposed updates for `GEMINI.md` or `AGENTS.md`. Proactively suggest **pruning** redundant rules, merging overlapping agents, or removing obsolete documentation to maintain a lean system.
   - **Constraints:** Documentation MUST match code reality. Never modify source code.
-- `handoff`: Update `.gemini_agent_context.json` (adhering to the **Context Preservation Mandate**). Set `last_agent: "doc-agent"` and store status (e.g., `docs_updated: true`, `pr_created: true`) inside a `"doc-agent"` key. You MUST include an `expected_output` block confirming:
+- `handoff`: Update `.gemini/state/ticket-<id>.json` (adhering to the **Context Preservation Mandate**). Set `last_agent: "doc-agent"` and store status (e.g., `docs_updated: true`, `pr_created: true`) inside a `"doc-agent"` key. You MUST include an `expected_output` block confirming:
   1. Documentation/Diagrams accurately reflect implementation.
   2. Manual test cases verified for clarity.
   3. Pull Request created and linked to issue.
@@ -249,7 +249,7 @@ You MUST commit all documentation and manual test changes before assigning to **
     - **Debt Tracking:** Large legacy files must be registered in `docs/ARCHITECTURE.md` with an assigned "debt priority" (Critical/High/Medium).
 
 ## Global Handoff Protocol
-- **Handoff:** Update `.gemini_agent_context.json` (adhering strictly to the **Context Preservation Mandate**). You MUST set `last_agent: "<your-agent-name>"` and `next_agent: "<target-agent-name>"` as the task is passed to the next role. **Every handoff triggers a mandatory system pause.** If any validation step fails (build, type-check, lint, or tests), the agent MUST store `failed_items` (a clear list of failing files/tests and their errors) and `failure_details` inside their namespaced key. You MUST include an `expected_output` block confirming:
+- **Handoff:** Update `.gemini/state/ticket-<id>.json` (adhering strictly to the **Context Preservation Mandate**). You MUST set `last_agent: "<your-agent-name>"` and `next_agent: "<target-agent-name>"` as the task is passed to the next role. **Every handoff triggers a mandatory system pause.** If any validation step fails (build, type-check, lint, or tests), the agent MUST store `failed_items` (a clear list of failing files/tests and their errors) and `failure_details` inside their namespaced key. You MUST include an `expected_output` block confirming:
   1. `npx tsc --noEmit` success.
   2. `npm run build` success.
   3. All unit/integration tests passed.
@@ -271,4 +271,4 @@ Append to `modified_files` (unique list) and `fixes_applied` (running history) i
 - **review-agent:** READ ONLY. No write access.
 
 ## Agent Cross-Boundary Handoff
-- **Handoff Protocol:** If a task requires writing outside your OWNED directory, you MUST update `.gemini_agent_context.json` with the requirement and STOP. Do not cross-contaminate logic and tests. Exception: `dev-agent` can write unit and integration tests in `src/__tests__/unit/` and `src/__tests__/integration/`.
+- **Handoff Protocol:** If a task requires writing outside your OWNED directory, you MUST update `.gemini/state/ticket-<id>.json` with the requirement and STOP. Do not cross-contaminate logic and tests. Exception: `dev-agent` can write unit and integration tests in `src/__tests__/unit/` and `src/__tests__/integration/`.
