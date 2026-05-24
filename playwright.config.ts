@@ -26,6 +26,22 @@ export default defineConfig({
       },
       dependencies: ['setup'],
     },
+    {
+      name: 'Mobile Chrome',
+      use: {
+        ...devices['Pixel 5'],
+        storageState: '.auth/user.json',
+      },
+      dependencies: ['setup'],
+    },
+    {
+      name: 'Mobile Safari',
+      use: {
+        ...devices['iPhone 13'],
+        storageState: '.auth/user.json',
+      },
+      dependencies: ['setup'],
+    },
   ],
   webServer: {
     command: 'npm run dev -- -H 127.0.0.1 -p 3005',
