@@ -42,7 +42,7 @@ test.describe('History Domain Modularization Verification', () => {
 
     await page.reload();
     
-    await expect(page.getByText('Activity Hub')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Activity Hub' })).toBeVisible();
     await expect(page.getByTestId('history-post-post-1')).toBeVisible();
     await expect(page.getByTestId('history-post-post-2')).toBeVisible();
     

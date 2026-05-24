@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
+// TODO: Refactor: logic extraction needed
 const STATE_DIR = '.gemini/state';
 const ARCHIVE_DIR = path.join(STATE_DIR, 'archive');
 const MAX_SIZE_KB = 50;
