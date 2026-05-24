@@ -1,10 +1,10 @@
 {
-  "last_agent": "qa-agent",
+  "last_agent": "dev-agent",
   "branch_name": "558-meta-e2e-port-configuration-inconsistency",
   "ticket_id": "558",
   "ticket_goal": "[META] E2E Port Configuration Inconsistency",
   "ticket_description": "Playwright encountered a port 3000 conflict during validation. The `playwright.config.ts` uses `baseURL: 'http://localhost:3005'` and waits for `3005` in the `webServer` block, but the `webServer.command` is `npm run dev`, which defaults to port 3000. Suggestion: Standardize E2E ports.",
-  "last_updated_at": "2026-05-24T08:46:40Z",
+  "last_updated_at": "2026-05-24T08:48:00Z",
   "round-1": {
     "main-agent": {
       "timestamp": "2026-05-24T08:33:51Z",
@@ -72,8 +72,31 @@
       "timestamp": "2026-05-24T08:46:40Z",
       "action": "Ran Playwright tests to verify port 3005 configuration",
       "qa_verdict": "FAIL",
-      "failed_tests": ["webServer timeout"],
+      "failed_tests": [
+        "webServer timeout"
+      ],
       "failure_details": "Playwright tests failed to start. Error: Timed out waiting 120000ms from config.webServer. Next.js booted on port 3005 but Playwright could not detect it via the specified URL 'http://localhost:3005' within the timeout. This might be because Node 18+ resolves localhost to IPv6 (::1) but the server is listening on IPv4 (127.0.0.1) or vice versa. The dev-agent should investigate updating url to http://127.0.0.1:3005 or similarly fixing the wait condition."
+    }
+  },
+  "round-2": {
+    "dev-agent": {
+      "timestamp": "2026-05-24T08:49:00Z",
+      "action": "Fixed Playwright webServer timeout issue",
+      "findings": "Updated playwright.config.ts to set baseURL and webServer.url to 'http://127.0.0.1:3005' instead of 'http://localhost:3005', fixing IPv4/IPv6 localhost resolution mismatches on Node 18+.",
+      "expected_output": {
+        "modified_files": [
+          "playwright.config.ts"
+        ],
+        "fixes_applied": [
+          "Standardized playwright testing port to 127.0.0.1:3005 to avoid localhost timeout."
+        ],
+        "verification_commands": [
+          "npx playwright test"
+        ],
+        "success_indicators": [
+          "Playwright runs Next.js on port 3005 and tests execute without localhost timeout."
+        ]
+      }
     }
   }
 }
