@@ -188,7 +188,7 @@ export default function DashboardClient({
     if (!reviewContext) return;
     setIsReviewing(false); setIsUploading(true); setUploadStatus(" Applying AI magic...");
     try {
-      const { updatePlatformResultsAction } = await import('@/app/actions/history');
+      const { updatePlatformResultsAction } = await import('@/app/actions/history/metadata');
       await updatePlatformResultsAction(reviewContext.historyId, updatedPreviews);
       const targetPlatforms = mapAccountIdsToPlatforms(selectedAccountIds, devAccounts, false, reviewContext.formData);
       const pendingPost = { title: "AI Optimized Post", description: "", videoFormat, aiTier, contentMode, customStyleText, platforms: targetPlatforms, isScheduled, scheduledAt, galleryFileId, galleryFileName, resumeHistoryId: reviewContext.historyId };

@@ -8,7 +8,7 @@ import {
   updateScheduledPost, 
   deleteScheduledPost, 
   publishNowAction 
-} from '@/app/actions/history';
+} from '@/app/actions/history/schedule';
 import { usePolling } from '@/hooks/usePolling';
 import { AIContentReview } from '@/components/dashboard/AIContentReview';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
@@ -248,7 +248,7 @@ function ScheduleContent() {
     
     setIsSaving(true);
     try {
-      const { saveStagedMetadata } = await import('@/app/actions/history');
+      const { saveStagedMetadata } = await import('@/app/actions/history/metadata');
       await saveStagedMetadata(editingPost.stagedFileId, finalContent);
       
       const firstPlatform = Object.keys(finalContent)[0];
