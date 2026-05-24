@@ -2,7 +2,20 @@
 
 This guide explains how to run automated E2E tests on the native iOS and Android apps directly from your terminal, without opening Xcode or Android Studio.
 
-## 🚀 Quick Start (Terminal Only)
+## ⚡ Full Automation (One Click)
+If you want the script to automatically detect your running device, build the app, install it, and run the tests, use:
+
+```bash
+# For iOS
+npm run test:native:full
+
+# For Android
+npm run test:native:full -- android
+```
+
+---
+
+## 🚀 Manual Workflow (Terminal Only)
 
 ### **1. Launch a Device**
 You must have an emulator or simulator running before starting Maestro.

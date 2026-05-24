@@ -19,6 +19,7 @@
     "prune-state": "npx tsx scripts/prune-state.ts",
     "test:visual": "npx playwright test --grep @visual",
     "test:native": "maestro test .maestro/",
+    "test:native:full": "bash scripts/mobile-test.sh",
     "mobile:ios": "open -a Simulator",
     "mobile:android": "~/Library/Android/sdk/emulator/emulator -avd $(~/Library/Android/sdk/emulator/emulator -list-avds | head -n 1) &",
     "postinstall": "prisma generate"
