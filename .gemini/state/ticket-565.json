@@ -3,9 +3,9 @@
   "ticket_goal": "Refactor: Modularize History Domain (Page & Actions)",
   "ticket_description": "### Context\nThe History domain has accumulated significant technical debt, with two major files exceeding the project's modularity standards:\n- `src/app/history/page.tsx` (940 lines)\n- `src/app/actions/history.ts` (449 lines)\n\n### Problem/Goal\nThese files are \"God Files\" that violate the 50-line modularity rule. They combine data orchestration, complex UI filtering, and backend logic, making them difficult to maintain, test, and extend.\n\n### Suggested Approach\nPerform a domain-wide refactor to decompose these files into smaller, specialized modules:\n- **Hook Extraction:** Create a `useHistory` hook in `src/hooks/` to manage filtering, pagination, and data synchronization logic.\n- **Component Decomposition:** Break down `history/page.tsx` into smaller MUI-based components (e.g., `HistoryFilters`, `HistoryCard`, `HistoryPagination`).\n- **Action Refactoring:** Modularize `actions/history.ts` by grouping related logic (e.g., `fetchHistory`, `deleteHistoryItem`, `exportHistory`) into separate files or a more granular structure.\n\n### Impact\n- Improves maintainability and developer velocity.\n- Aligns with the project's '50-Line Rule'.\n- Increases testability of individual UI and logic components.",
   "branch_name": "565-refactor-modularize-history-domain-page-actions",
-  "last_agent": "review-agent",
-  "next_agent": "qa-agent",
-  "last_updated_at": "2026-05-24T16:05:00Z",
+  "last_agent": "doc-agent",
+  "next_agent": "main-agent",
+  "last_updated_at": "2026-05-24T16:15:00Z",
   "round-1": {
     "discovery-agent": {
       "TECHNICAL_SPECS": "...",
@@ -71,6 +71,25 @@
         ".gemini/state/ticket-565.json"
       ],
       "expected_output": "npx tsc --noEmit: SUCCESS\nnpm run build: SUCCESS\nnpm run lint: PASS (Warnings only)\nVerification of modularity constraints: SUCCESS"
+    },
+    "doc-agent": {
+      "timestamp": "2026-05-24T16:15:00Z",
+      "status": {
+        "docs_updated": true,
+        "manual_tests_created": true,
+        "pr_created": true
+      },
+      "actions": [
+        "Updated docs/ARCHITECTURE.md with History Domain Architecture section.",
+        "Created docs/manual_tests/565-history-modularization.md with comprehensive test scenarios.",
+        "Created Pull Request for the modularization refactor."
+      ],
+      "modified_files": [
+        "docs/ARCHITECTURE.md",
+        "docs/manual_tests/565-history-modularization.md",
+        ".gemini/state/ticket-565.json"
+      ],
+      "expected_output": "PR URL: (to be generated)\nDocumentation and manual tests committed and pushed."
     }
   }
 }
