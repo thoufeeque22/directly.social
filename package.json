@@ -22,6 +22,7 @@
     "test:native:full": "bash scripts/mobile-test.sh",
     "mobile:ios": "open -a Simulator",
     "mobile:android": "~/Library/Android/sdk/emulator/emulator -avd $(~/Library/Android/sdk/emulator/emulator -list-avds | head -n 1) &",
+    "mobile:dev": "bash scripts/mobile-dev.sh",
     "postinstall": "prisma generate"
   },
   "dependencies": {

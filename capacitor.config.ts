@@ -5,14 +5,14 @@ const config: CapacitorConfig = {
   appName: 'Social Studio',
   webDir: 'out',
   server: {
-    // IMPORTANT: Set this to your production URL to use the native shell
-    url: 'https://social-studio-app.vercel.app',
+    // IMPORTANT: Defaults to production. Use CAPACITOR_URL env var for local/tunnel testing.
+    url: process.env.CAPACITOR_URL || 'https://social-studio-app.vercel.app',
     cleartext: true,
     allowNavigation: ['*']
   },
   appendUserAgent: 'SocialStudioApp',
   ios: {
-    scheme: 'socialstudio'
+    scheme: 'App'
   },
   android: {
     allowMixedContent: true

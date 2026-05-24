@@ -8,14 +8,28 @@ If you want the script to automatically detect your running device, build the ap
 ```bash
 # For iOS
 npm run test:native:full
-
+```bash
 # For Android
 npm run test:native:full -- android
 ```
 
 ---
 
+## 🛠️ Testing Local Branch Changes
+To see your local branch changes and the **Tester Login** on the simulator:
+
+1. Start your local server: `npm run dev`
+2. Start your tunnel: `npm run tunnel`
+3. Launch Developer Mode:
+   ```bash
+   # Enter your tunnel URL when prompted
+   npm run mobile:dev
+   ```
+
+---
+
 ## 🚀 Manual Workflow (Terminal Only)
+
 
 ### **1. Launch a Device**
 You must have an emulator or simulator running before starting Maestro.
