@@ -16,6 +16,8 @@
     "clear-activity": "npx tsx scripts/clear-activity.ts",
     "cleanup:neon": "bash scripts/cleanup-neon.sh",
     "cleanup:neon:force": "bash scripts/cleanup-neon.sh --force",
+    "prune-state": "npx tsx scripts/prune-state.ts",
+    "test:visual": "npx playwright test --grep @visual",
     "postinstall": "prisma generate"
   },
   "dependencies": {
