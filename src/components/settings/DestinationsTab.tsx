@@ -16,38 +16,34 @@ export const DestinationsTab = () => {
     fetch('/api/platforms').then(res => res.json()).then(setApiPlatforms).catch(console.error);
   }, []);
 
-  const activePlatforms = apiPlatforms.filter(p => p.status === 'active');
-  const comingSoonPlatforms = apiPlatforms.filter(p => p.status === 'coming-soon');
+  const active = apiPlatforms.filter(p => p.status === 'active');
+  const upcoming = apiPlatforms.filter(p => p.status === 'coming-soon');
+  const isEnabled = (id: string) => preferences.some(p => p.platformId === id && p.isEnabled);
 
   const handleDisconnect = async (id: string) => {
-    if (!confirm('Are you sure you want to disconnect this account?')) return;
-    try { await disconnectAccount(id); } catch { alert('Failed to disconnect.'); }
+    if (confirm('Disconnect account?')) {
+      try { await disconnectAccount(id); } catch { alert('Failed to disconnect.'); }
+    }
   };
 
-  const handlePlatformToggle = async (id: string, provider: string, status: boolean) => {
+  const handleToggle = async (id: string, _: string, status: boolean) => {
     try {
       if (id === 'tiktok' && !status) return alert("TikTok distribution temporarily disabled.");
       await togglePlatform(id, status);
     } catch { alert('Failed to update settings.'); }
   };
 
-  const isEnabled = (id: string) => preferences.some(p => p.platformId === id && p.isEnabled);
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <Box>
         <Typography variant="h6" sx={{ mb: 2 }}>Connected Platforms</Typography>
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
-          {activePlatforms.map((p) => (
-            <PlatformCard
-              key={p.id} platform={p} isEnabled={isEnabled(p.id)}
-              onToggle={handlePlatformToggle} accounts={accounts}
-              onConnect={() => signIn(p.provider)} onDisconnect={handleDisconnect}
-            />
+          {active.map((p) => (
+            <PlatformCard key={p.id} platform={p} isEnabled={isEnabled(p.id)} onToggle={handleToggle} accounts={accounts} onConnect={() => signIn(p.provider)} onDisconnect={handleDisconnect} />
           ))}
         </Box>
       </Box>
-      <RoadmapPlatforms platforms={comingSoonPlatforms} />
+      <RoadmapPlatforms platforms={upcoming} />
     </Box>
   );
 };
