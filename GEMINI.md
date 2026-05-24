@@ -25,6 +25,7 @@ This document serves as the root entry point for all AI agents. It defines the g
     *   Neon Database branch management and cleanup.
 4.  **[Agent Orchestration & Workflow](.gemini/base/ORCHESTRATION.md)**
     *   Ticket Initialization (git checkout main && git pull && check PRs).
+    *   Mobile QA (Playwright Chrome/Safari emulation).
     *   Agent roles and specific workflows.
     *   Discovery Definition of Ready (DoR).
     *   Handoff protocols, State Pruning, and Pipeline routing.

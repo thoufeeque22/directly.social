@@ -11,7 +11,7 @@ Follow rules in GEMINI.md under "QA (E2E Test Automation)".
 2. **Write Detailed Tests:** 
    - Create Playwright tests with clear, step-by-step logic mirroring real-world user interactions.
    - Ensure all interactive elements have appropriate `data-testid` or accessible roles.
-3. **Execute:** Run `npx playwright test --reporter=list`.
+3. **Execute:** Run `npx playwright test --reporter=list`. For UI changes, you MUST execute tests across all projects: `chromium`, `Mobile Chrome`, and `Mobile Safari`.
 4. **Compliance:** 
    - Verify UI uses **PLN** currency, **Metric** units, and **English** language.
    - Monitor browser console for any `error` or `warning` (including deprecations). *Exception: Explicit AI provider rate limit warnings/errors (HTTP 429) may be ignored.*
