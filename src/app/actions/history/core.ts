@@ -72,7 +72,7 @@ export async function savePostHistory(rawInput: SavePostHistoryInput) {
             resumableUrl: p.resumableUrl || null,
             videoId: p.videoId || null,
             creationId: p.creationId || null,
-            metadata: p.metadata || null,
+            metadata: p.metadata ?? undefined,
           })),
         },
       },
