@@ -4,11 +4,8 @@ import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { GlassCard } from '@/components/ui/GlassCard';
 import styles from './schedule.module.css';
-import { 
-  updateScheduledPost, 
-  deleteScheduledPost, 
-  publishNowAction 
-} from '@/app/actions/history/schedule';
+import { updateScheduledPost } from '@/app/actions/history/update-schedule';
+import { deleteScheduledPost, publishNowAction } from '@/app/actions/history/delete-schedule';
 import { usePolling } from '@/hooks/usePolling';
 import { AIContentReview } from '@/components/dashboard/AIContentReview';
 import { AIWriteResult } from '@/lib/utils/ai-writer';

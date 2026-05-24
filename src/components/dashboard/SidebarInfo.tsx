@@ -8,7 +8,7 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { Badge } from '@/components/ui/Badge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Heading } from '@/components/ui/Heading';
-import { getUpcomingPosts } from '@/app/actions/history/schedule';
+import { getUpcomingPosts } from '@/app/actions/history/get-upcoming';
 import { usePolling } from '@/hooks/usePolling';
 import type { PostHistory } from '@prisma/client';
 import styles from './SidebarInfo.module.css';

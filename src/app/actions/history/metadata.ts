@@ -6,6 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
 
+// TODO: Refactor: logic extraction needed
 /**
  * Saves AI-reviewed platform metadata for scheduled/pending posts.
  */

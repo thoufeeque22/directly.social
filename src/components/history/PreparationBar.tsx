@@ -2,13 +2,14 @@ import React from 'react';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import SettingsIcon from '@mui/icons-material/Settings';
 import styles from '@/app/history/history.module.css';
+import { UploadStatus } from '@/hooks/useUploadStatus';
 
 interface PreparationBarProps {
   isActiveStaging: boolean;
   isOptimistic: boolean;
   isCardActive: boolean;
   allPending: boolean;
-  stagingStatus: { active: boolean; historyId?: string; percent?: number; status?: string };
+  stagingStatus: UploadStatus;
 }
 
 export function PreparationBar({

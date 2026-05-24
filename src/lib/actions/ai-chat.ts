@@ -2,11 +2,9 @@
 
 import { prisma } from '@/lib/core/prisma';
 import { protectedAction } from '@/lib/core/action-utils';
-import { 
-  getUpcomingPosts,
-  updateScheduledPost,
-  deleteScheduledPost,
-  } from '@/app/actions/history/schedule';
+import { getUpcomingPosts } from '@/app/actions/history/get-upcoming';
+import { updateScheduledPost } from '@/app/actions/history/update-schedule';
+import { deleteScheduledPost } from '@/app/actions/history/delete-schedule';
   import { savePostHistory } from '@/app/actions/history/core';
 /**
  * Tool: List the user's upcoming scheduled posts.

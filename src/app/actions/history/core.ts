@@ -2,36 +2,8 @@
 
 import { prisma } from '@/lib/core/prisma';
 import { protectedAction, revalidateDashboard } from '@/lib/core/action-utils';
-import { z } from "zod";
 import { logger } from '@/lib/core/logger';
-
-const PlatformResultSchema = z.object({
-  platform: z.string(),
-  accountId: z.string().optional(),
-  accountName: z.string().nullable().optional(),
-  platformPostId: z.string().nullable().optional(),
-  permalink: z.string().nullable().optional(),
-  status: z.enum(['success', 'failed', 'retrying', 'pending', 'cancelled']),
-  errorMessage: z.string().nullable().optional(),
-  resumableUrl: z.string().nullable().optional(),
-  videoId: z.string().nullable().optional(),
-  creationId: z.string().nullable().optional(),
-  metadata: z.any().optional(),
-});
-
-export type PlatformResultInput = z.infer<typeof PlatformResultSchema>;
-
-const SavePostHistorySchema = z.object({
-  title: z.string(),
-  description: z.string().optional(),
-  videoFormat: z.enum(['short', 'long']),
-  platforms: z.array(PlatformResultSchema),
-  stagedFileId: z.string().optional(),
-  scheduledAt: z.union([z.date(), z.string(), z.number()]).transform(val => val ? new Date(val) : null).nullable().optional(),
-  isPublished: z.boolean().optional(),
-});
-
-export type SavePostHistoryInput = z.infer<typeof SavePostHistorySchema>;
+import { SavePostHistoryInput, SavePostHistorySchema, PlatformResultInput } from './schema';
 
 /**
  * Upserts a single platform result (Internal version for Worker).
@@ -64,13 +36,12 @@ export async function upsertPlatformResult(historyId: string, result: PlatformRe
   });
 }
 
+// TODO: Refactor: logic extraction needed
 export async function savePostHistory(rawInput: SavePostHistoryInput) {
   return protectedAction(async (userId) => {
-    // 1. Runtime Validation
     const validated = SavePostHistorySchema.parse(rawInput);
     const { title, description, videoFormat, platforms, stagedFileId, scheduledAt, isPublished } = validated;
 
-    // 🛠️ DEVELOPMENTAL AUTO-TITLE LOGIC
     let finalTitle = title;
     if (!finalTitle || finalTitle.trim() === "" || /^\d+$/.test(finalTitle)) {
       const lastPost = await prisma.postHistory.findFirst({
@@ -86,19 +57,17 @@ export async function savePostHistory(rawInput: SavePostHistoryInput) {
       data: {
         userId,
         title: finalTitle,
-        description: description,
-        videoFormat: videoFormat,
-        stagedFileId: stagedFileId,
+        description,
+        videoFormat,
+        stagedFileId,
         scheduledAt: scheduledAt ?? new Date(),
         isPublished: isPublished ?? false,
         platforms: {
           create: platforms.map((p) => ({
-            platform: p.platform,
-            accountId: p.accountId,
+            ...p,
             accountName: p.accountName || null,
             platformPostId: p.platformPostId || null,
             permalink: p.permalink || null,
-            status: p.status,
             errorMessage: p.errorMessage || null,
             resumableUrl: p.resumableUrl || null,
             videoId: p.videoId || null,
@@ -107,9 +76,7 @@ export async function savePostHistory(rawInput: SavePostHistoryInput) {
           })),
         },
       },
-      include: {
-        platforms: true,
-      },
+      include: { platforms: true },
     });
 
     await revalidateDashboard();

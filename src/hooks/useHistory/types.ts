@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
 import { StyleMode } from '@/lib/core/constants';
 
+// TODO: Refactor: logic extraction needed
 export const PendingPostSchema = z.object({
   title: z.string(),
   description: z.string().optional(),

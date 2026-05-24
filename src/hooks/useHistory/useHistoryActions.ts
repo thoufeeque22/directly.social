@@ -8,7 +8,7 @@ interface UseHistoryActionsProps {
   posts: PostHistoryEntry[];
   pendingPost: CockpitPost | null;
   setPendingPost: (post: CockpitPost | null) => void;
-  fetchHistory: () => Promise<any>;
+  fetchHistory: () => Promise<{ data?: PostHistoryEntry[] }>;
   setPosts: (posts: PostHistoryEntry[]) => void;
   setActiveResumingId: (id: string | null) => void;
 }
@@ -29,8 +29,9 @@ export function useHistoryActions({
         const data = await fetchHistory();
         setPosts(data.data || []);
       } else alert(`Retry failed: ${res.error}`);
-    } catch (err: any) {
-      alert(`Retry error: ${err.message || String(err)}`);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      alert(`Retry error: ${message}`);
     } finally {
       setProcessingIds(prev => prev.filter(id => id !== p.id));
     }

@@ -3,13 +3,14 @@
 import React from 'react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { useUploadStatus } from '@/hooks/useUploadStatus';
-import { useHistory } from '@/hooks/useHistory';
+import { useHistory, PostHistoryEntry } from '@/hooks/useHistory';
 import { HistoryFilters } from '@/components/history/HistoryFilters';
 import { HistoryHeader } from '@/components/history/HistoryHeader';
 import { HistoryEmptyState } from '@/components/history/HistoryEmptyState';
 import { HistoryList } from '@/components/history/HistoryList';
 import styles from './history.module.css';
 
+// TODO: Refactor: logic extraction needed
 function HistoryContent() {
   const {
     posts, pendingPost, nextCursor, loadingMore, activeResumingId,
@@ -19,7 +20,20 @@ function HistoryContent() {
   } = useHistory();
 
   const stagingStatus = useUploadStatus();
-  const reconciledPosts = pendingPost ? [pendingPost, ...posts] : posts;
+  const reconciledPosts = React.useMemo(() => {
+    if (!pendingPost) return posts;
+    const optimisticPost: PostHistoryEntry = {
+      ...pendingPost,
+      id: pendingPost.resumeHistoryId || 'optimistic-pending',
+      createdAt: new Date().toISOString(),
+      description: pendingPost.description || null,
+      stagedFileId: pendingPost.stagedFileId || null,
+      isOptimistic: true,
+    };
+    return [optimisticPost, ...posts];
+  }, [pendingPost, posts]);
+
+  const [now] = React.useState(() => Date.now());
 
   return (
     <div className={styles.historyPage}>
@@ -42,6 +56,7 @@ function HistoryContent() {
             nextCursor={nextCursor}
             loadingMore={loadingMore}
             onLoadMore={handleLoadMore}
+            now={now}
           />
         )}
       </GlassCard>

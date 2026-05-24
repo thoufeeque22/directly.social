@@ -4,7 +4,7 @@ import { distributeToPlatforms } from '@/lib/upload/upload-utils';
 import { PlatformResult, PostHistoryEntry, CockpitPost } from './types';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
 
-export function useCockpitExecution(setPosts: (p: PostHistoryEntry[]) => void, fetchHistory: () => Promise<any>, setActiveResumingId: (id: string | null) => void) {
+export function useCockpitExecution(setPosts: (p: PostHistoryEntry[]) => void, fetchHistory: () => Promise<{ data?: PostHistoryEntry[] }>, setActiveResumingId: (id: string | null) => void) {
   const { accounts } = useAccounts();
 
   return useCallback(async (stagedFileId: string, fileName: string, historyId: string, post: CockpitPost, reviewedContent?: Record<string, AIWriteResult>) => {
@@ -23,7 +23,7 @@ export function useCockpitExecution(setPosts: (p: PostHistoryEntry[]) => void, f
         stagedFileId, fileName, historyId,
         accounts: accounts.map(a => ({ id: a.id, provider: a.provider, accountName: a.accountName })),
         selectedAccountIds,
-        fields: { title: post.title || '', description: post.description || '', contentMode: (post as any).contentMode || 'Smart', videoFormat: post.videoFormat || 'short' },
+        fields: { title: post.title || '', description: post.description || '', contentMode: post.contentMode || 'Smart', videoFormat: post.videoFormat || 'short' },
         onPlatformStatus: () => {},
         onAccountSuccess: async () => { const updated = await fetchHistory(); setPosts(updated.data || []); }
       });

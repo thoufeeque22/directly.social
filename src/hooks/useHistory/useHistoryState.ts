@@ -1,34 +1,28 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { PostHistoryEntry, CockpitPost, PendingPostSchema } from './types';
 
+// TODO: Refactor: logic extraction needed
 export function useHistoryState() {
+  const searchParams = useSearchParams();
+  
   const [posts, setPosts] = useState<PostHistoryEntry[]>([]);
-  const [pendingPost, setPendingPost] = useState<CockpitPost | null>(null);
+  const [pendingPost, setPendingPost] = useState<CockpitPost | null>(() => {
+    if (typeof window === 'undefined') return null;
+    const raw = localStorage.getItem('SS_PENDING_POST');
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      return PendingPostSchema.safeParse(parsed).success ? (parsed as CockpitPost) : null;
+    } catch { return null; }
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [activeResumingId, setActiveResumingId] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(() => searchParams?.get('search') || '');
   const [cancelledIds, setCancelledIds] = useState<string[]>([]);
   const [processingIds, setProcessingIds] = useState<string[]>([]);
-
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const raw = localStorage.getItem('SS_PENDING_POST');
-    if (!raw) return;
-    try {
-      const parsed = JSON.parse(raw);
-      if (PendingPostSchema.safeParse(parsed).success) {
-        setPendingPost(parsed as CockpitPost);
-      } else {
-        localStorage.removeItem('SS_PENDING_POST');
-      }
-    } catch {
-      localStorage.removeItem('SS_PENDING_POST');
-    }
-  }, []);
 
   useEffect(() => {
     if (pendingPost && posts.length > 0) {
@@ -38,16 +32,13 @@ export function useHistoryState() {
         (p.title === pendingPost.title && Math.abs(new Date(p.createdAt).getTime() - Date.now()) < 60000)
       );
       if (match) {
-        setPendingPost(null);
+        React.startTransition(() => {
+          setPendingPost(null);
+        });
         localStorage.removeItem('SS_PENDING_POST');
       }
     }
   }, [posts, pendingPost]);
-
-  useEffect(() => {
-    const urlSearch = searchParams.get('search');
-    if (urlSearch) setSearchQuery(urlSearch);
-  }, [searchParams]);
 
   return {
     posts, setPosts,

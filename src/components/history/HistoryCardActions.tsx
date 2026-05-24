@@ -6,6 +6,7 @@ import { PostHistoryEntry } from '@/hooks/useHistory';
 import { formatRelativeDate } from '@/lib/utils/date';
 import styles from '@/app/history/history.module.css';
 
+// TODO: Refactor: logic extraction needed
 interface HistoryCardActionsProps {
   post: PostHistoryEntry;
   isCardActive: boolean;
@@ -13,6 +14,7 @@ interface HistoryCardActionsProps {
   activeResumingId: string | null;
   onCancelAll: (e: React.MouseEvent, historyId: string) => void;
   onInPlaceResume: (post: PostHistoryEntry) => void;
+  now: number;
 }
 
 export function HistoryCardActions({
@@ -21,11 +23,12 @@ export function HistoryCardActions({
   isActiveStaging,
   activeResumingId,
   onCancelAll,
-  onInPlaceResume
+  onInPlaceResume,
+  now
 }: HistoryCardActionsProps) {
   const postCreatedAt = new Date(post.createdAt).getTime();
   const isPostStale = post.platforms.some(p => p.status === 'pending') && 
-                      (Date.now() - postCreatedAt > 60 * 1000) && 
+                      (now - postCreatedAt > 60 * 1000) && 
                       !post.stagedFileId;
 
   return (

@@ -8,7 +8,7 @@ const UploadStatusSchema = z.object({
   historyId: z.string().nullable().optional(),
 });
 
-type UploadStatus = {
+export type UploadStatus = {
   status: string | null;
   percent: number | null;
   active: boolean;

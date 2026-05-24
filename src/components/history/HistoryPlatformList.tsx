@@ -9,6 +9,7 @@ interface HistoryPlatformListProps {
   processingIds: string[];
   onRetry: (e: React.MouseEvent, p: PlatformResult) => void;
   onCancel: (e: React.MouseEvent, resultId: string, platform?: string, historyId?: string) => void;
+  now: number;
 }
 
 export function HistoryPlatformList({
@@ -16,7 +17,8 @@ export function HistoryPlatformList({
   cancelledIds,
   processingIds,
   onRetry,
-  onCancel
+  onCancel,
+  now
 }: HistoryPlatformListProps) {
   return (
     <div className={styles.platformRow}>
@@ -31,6 +33,7 @@ export function HistoryPlatformList({
             processingIds={processingIds}
             onRetry={onRetry}
             onCancel={onCancel}
+            now={now}
           />
         ))}
     </div>

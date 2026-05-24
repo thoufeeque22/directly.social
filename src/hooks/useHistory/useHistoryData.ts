@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { usePolling } from '@/hooks/usePolling';
 import { PostHistoryEntry } from './types';
 
+// TODO: Refactor: logic extraction needed
 interface UseHistoryDataProps {
   searchQuery: string;
   setPosts: (posts: PostHistoryEntry[]) => void;
