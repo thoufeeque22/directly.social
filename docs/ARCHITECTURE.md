@@ -479,7 +479,18 @@ Unit tests for utility functions and integration tests for server actions are lo
 
 The project uses specialized AI agents (Discovery, Dev, Review, QA) to manage the development lifecycle, ensuring that every change is planned, implemented, audited, and verified before merging.
 
-## Production Readiness
+#### Modular Orchestration Rules (GEMINI.md)
+
+To maintain context efficiency and prevent "rule bloat", the project's core orchestration rules (originally in `GEMINI.md`) are modularized into domain-specific files under `.gemini/base/`:
+
+- **CORE.md:** Technical standards, TypeScript strictness, and Next.js 15/React 19 conventions.
+- **UI_UX.md:** Aesthetic standards, Material UI conventions, and accessibility mandates.
+- **PRODUCTION.md:** Reliability, performance, security, and observability standards.
+- **ORCHESTRATION.md:** Agent roles, handoff protocols, state management (pruning), and Discovery DoR.
+
+Agents are required to read these modular files based on their current task domain.
+
+### 4. Production Readiness
 
 To ensure stability, security, and traceability in a production environment, Social Studio implements:
 
