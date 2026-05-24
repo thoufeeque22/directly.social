@@ -4,20 +4,17 @@ import { publishTikTokVideo } from "@/lib/platforms/tiktok";
 
 export const maxDuration = 300;
 
-/**
- * TIKTOK UPLOAD HANDLER
- * Uses the unified route handler to manage staging and SDK execution.
- */
 export async function POST(req: NextRequest) {
   return handlePlatformUploadRequest({
     req,
     platform: "tiktok",
-    uploadLogic: async ({ userId, filePath, title, accountId }: import("@/lib/core/platform-route-handler").UploadLogicParams) => {
+    uploadLogic: async ({ userId, filePath, title, description, accountId }: import("@/lib/core/platform-route-handler").UploadLogicParams) => {
       return publishTikTokVideo({
         userId,
-        videoPath: filePath,
-        title, // title is already formatted/truncated via the handler's formatPlatformCaption
-        accountId,
+        filePath,
+        title,
+        description,
+        accountId
       });
     }
   });

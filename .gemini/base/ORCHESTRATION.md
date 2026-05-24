@@ -15,6 +15,9 @@
   - `lessons_learned`: Failures or friction points encountered.
   - `verification_outcomes`: Pass/Fail status of critical build/test steps.
 
+## Active Tasks
+- [Refactor Platform Layer (#563)](.gemini/state/ticket-563.json) - In Progress (feature/563-refactor-platform-distribution)
+
 ## Agent Specific Workflows
 
 ### Discovery (Architecture & Planning)

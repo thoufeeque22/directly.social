@@ -22,7 +22,15 @@ vi.mock('@/lib/core/prisma', () => ({
     byokCredential: {
       findUnique: vi.fn().mockResolvedValue(null),
     },
+    logTokenEvent: {
+      create: vi.fn().mockResolvedValue({}),
+    }
   },
+}));
+
+// Mock Audit
+vi.mock('@/lib/core/audit', () => ({
+  logTokenEvent: vi.fn().mockResolvedValue({}),
 }));
 
 // Mock FS
@@ -71,7 +79,7 @@ describe('TikTok Platform Integration', () => {
 
     const result = await publishTikTokVideo({
       userId: 'user1',
-      videoPath: 'test.mp4',
+      filePath: 'test.mp4',
       title: 'TikTok Viral',
       accountId: 'acc1'
     });
@@ -101,7 +109,7 @@ describe('TikTok Platform Integration', () => {
       }),
     } as Response);
 
-    await expect(publishTikTokVideo({ userId: 'u1', videoPath: 'v.mp4', title: 'T', accountId: 'a1' }))
-      .rejects.toThrow('TikTok Publish Failed: Rate limit');
+    await expect(publishTikTokVideo({ userId: 'u1', filePath: 'v.mp4', title: 'T', accountId: 'a1' }))
+      .rejects.toThrow('TikTok Init Failed: Rate limit');
   });
 });

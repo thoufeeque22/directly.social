@@ -4,10 +4,6 @@ import { publishInstagramReel } from "@/lib/platforms/instagram";
 
 export const maxDuration = 300;
 
-/**
- * INSTAGRAM UPLOAD HANDLER
- * Uses the unified route handler to manage staging and SDK execution.
- */
 export async function POST(req: NextRequest) {
   return handlePlatformUploadRequest({
     req,
@@ -16,10 +12,10 @@ export async function POST(req: NextRequest) {
       return publishInstagramReel({
         userId,
         filePath,
-        caption: description,
-        musicId: fields.musicId,
+        description,
         accountId,
         creationId: fields.creationId,
+        musicId: fields.musicId,
       });
     }
   });
