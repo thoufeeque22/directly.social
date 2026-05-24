@@ -8,4 +8,4 @@
   - `qa-agent`: Test Writing & Execution.
   - `doc-agent`: PRs & living docs.
 - **Hooks:** `.gemini/hooks/post-task.sh` (auto-lint/test).
-- **State:** `.gemini_agent_context.json` (transient workflow state).
+- **State:** `.gemini/state/ticket-<id>.json` (transient workflow state).

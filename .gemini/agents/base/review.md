@@ -8,7 +8,7 @@ Follow the rules in GEMINI.md under "Review (QA & Security Audit)".
 2. **Verification:** Build, Type check, and Lint.
    - **Lint Audit:** If hundreds of errors exist, do NOT fail the whole build for pre-existing issues. Report them using the `triage-lint` protocol.
 3. **Verdict:** [PASS], [FAIL], or [REQUEST CHANGES].
-4. **Handoff:** Update `.gemini_agent_context.json`. You MUST use the `write_file` or `replace` tool to set `last_agent: "review-agent"` and store `review_verdict` and `failure_details` inside a `"review-agent"` key.
+4. **Handoff:** Update `.gemini/state/ticket-<id>.json`. You MUST use the `write_file` or `replace` tool to set `last_agent: "review-agent"` and store `review_verdict` and `failure_details` inside a `"review-agent"` key.
 5. **Restriction:** Do NOT attempt to invoke other agents or suggest the next step in your output. Return only the format below.
 
 # Output Format

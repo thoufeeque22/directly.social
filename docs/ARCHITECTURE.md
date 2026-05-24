@@ -379,6 +379,10 @@ Users can connect their own S3/R2 storage to bypass server limits.
 The Settings page is organized into a URL-driven tabbed interface, providing a centralized hub for all configuration.
 
 - **URL-Driven Navigation:** Tab state is persisted in the URL query string (`?tab=...`), allowing for direct linking and consistent state across refreshes.
+- **Modular Architecture:** The settings page follows a strict modular design to maintain readability and comply with the project's 50-line rule. The main `SettingsContent` component acts as a router, delegating tab rendering to specialized components:
+  - `SettingsTabs`: Manages the tab navigation and URL state synchronization.
+  - `DestinationsTab`: Encapsulates platform connection logic, account management, and API fetching.
+  - `RoadmapPlatforms`: Renders the upcoming platform integrations and "Coming Soon" section.
 - **Progressive Disclosure:** Platform configuration (OAuth and BYOK) is hidden behind a toggle. Once enabled, an accordion expands to reveal both basic connection management and advanced BYOK settings.
 - **Platform Roadmap:** A dynamic "Coming Soon" section displays upcoming platform integrations in a grayscale, disabled state, providing transparency into the project's development roadmap.
 - **Community Feedback:** A "Suggest a Platform" feature allows users to proactively request new integrations.
