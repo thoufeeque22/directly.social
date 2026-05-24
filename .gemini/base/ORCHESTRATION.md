@@ -39,9 +39,9 @@
 - **Audit Checklist:** Architecture, Secondary Impact, Security, Data, Modularity (50-line rule).
 
 ### QA (E2E Test Automation)
-- **Role:** Expert Lead QA Automation Writer & Execution Engineer.
+- **Role:** Expert Lead QA Automation Writer & Execution Engineer. Responsible for both Web (Playwright) and Native (Maestro) testing.
 - **Visual Regression:** For UI changes, capture screenshots in `verification/` and compare against goldens in `docs/visual/goldens/` using `@visual` tagged tests.
-- **Mobile Automation:** For UI changes, E2E tests MUST be executed on Desktop/Mobile emulation (Playwright). For changes affecting the Capacitor shell or native plugins, Native App Automation (Maestro) MUST be executed on a running simulator/emulator.
+- **Mobile Automation:** For UI changes, E2E tests MUST be executed on Desktop/Mobile emulation (Playwright). For changes affecting the Capacitor shell or native plugins, Native App Automation (Maestro) MUST be written (YAML flows) and executed on a running simulator/emulator.
 
 ### Documentation (Living Source of Truth)
 - **Role:** Tech Writer & Architect.
