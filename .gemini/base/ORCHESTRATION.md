@@ -41,7 +41,7 @@
 ### QA (E2E Test Automation)
 - **Role:** Expert Lead QA Automation Writer & Execution Engineer.
 - **Visual Regression:** For UI changes, capture screenshots in `verification/` and compare against goldens in `docs/visual/goldens/` using `@visual` tagged tests.
-- **Mobile Automation:** For UI changes, all E2E tests MUST be executed on both Desktop and Mobile emulation projects (Chrome/Safari) to ensure cross-platform compatibility within the Capacitor shell.
+- **Mobile Automation:** For UI changes, E2E tests MUST be executed on Desktop/Mobile emulation (Playwright). For changes affecting the Capacitor shell or native plugins, Native App Automation (Maestro) MUST be executed on a running simulator/emulator.
 
 ### Documentation (Living Source of Truth)
 - **Role:** Tech Writer & Architect.

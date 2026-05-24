@@ -18,6 +18,7 @@
     "cleanup:neon:force": "bash scripts/cleanup-neon.sh --force",
     "prune-state": "npx tsx scripts/prune-state.ts",
     "test:visual": "npx playwright test --grep @visual",
+    "test:native": "maestro test .maestro/",
     "postinstall": "prisma generate"
   },
   "dependencies": {

@@ -56,6 +56,26 @@ The following optimizations have been applied to ensure a native feel:
 
 ---
 
+## 🤖 Native Automation (Maestro)
+We use **Maestro** for true native app automation. Unlike browser emulation, Maestro interacts with the actual native shell and WebView.
+
+### **1. Prerequisites**
+- Install Maestro: `brew tap mobile-dev-inc/tap && brew install mobile-dev-inc/tap/maestro`
+- An Android Emulator or iOS Simulator must be running.
+
+### **2. Running Tests**
+Tests are located in the `.maestro/` directory and written in YAML.
+```bash
+# Run all native flows
+npm run test:native
+```
+
+### **3. Key Flows**
+- `smoke.yaml`: Basic dashboard visibility and navigation.
+- `refresh.yaml`: Verifies the native Pull-to-Refresh gesture.
+
+---
+
 ## ⚠️ Troubleshooting Production
 If you see a **"Server Error"** or **"404"** on the mobile app:
 
