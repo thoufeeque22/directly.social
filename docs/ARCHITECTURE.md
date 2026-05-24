@@ -405,6 +405,19 @@ graph TD
     Config --> BYOK[BYOK Wizard]
 ```
 
+### 11. History Domain Architecture
+
+The History domain manages the record of all past and upcoming posts. To maintain scalability and performance, the domain follows a highly modular architecture that adheres to the project's strict 50-line rule.
+
+- **Decomposed Server Actions:** Logic for fetching, retrying, and canceling history items is split into specialized modules within `src/app/actions/history/`. This ensures that each action has a single responsibility and is independently testable.
+- **Specialized Hooks:** A composite `useHistory` hook orchestrates multiple sub-hooks to manage complex state and logic:
+    - `useHistoryState`: Manages local state for filters, pagination, and data storage.
+    - `useHistoryData`: Handles data fetching, polling, and synchronization with server actions.
+    - `useHistoryActions`: Provides handlers for user interactions such as Retry, Cancel, and Delete.
+    - `useHistoryCockpit`: Manages "Cockpit" mode, enabling real-time monitoring of active post distribution.
+- **Component Decomposition:** The History page is composed of small, focused MUI components (e.g., `HistoryHeader`, `HistoryList`, `HistoryCard`, `PlatformResultItem`). This decomposition reduces cognitive load and improves UI maintainability.
+- **Real-time Monitoring (Cockpit):** A specialized UI state for active tasks that provides live progress updates and status monitoring, utilizing automatic polling and optimized re-renders.
+
 ## Security & Role-Based Access Control (RBAC)
 
 Social Studio implements a strict Role-Based Access Control (RBAC) system to ensure data integrity and restrict access to sensitive administrative features.

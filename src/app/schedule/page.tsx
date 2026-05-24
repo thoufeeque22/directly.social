@@ -4,11 +4,8 @@ import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { GlassCard } from '@/components/ui/GlassCard';
 import styles from './schedule.module.css';
-import { 
-  updateScheduledPost, 
-  deleteScheduledPost, 
-  publishNowAction 
-} from '@/app/actions/history';
+import { updateScheduledPost } from '@/app/actions/history/update-schedule';
+import { deleteScheduledPost, publishNowAction } from '@/app/actions/history/delete-schedule';
 import { usePolling } from '@/hooks/usePolling';
 import { AIContentReview } from '@/components/dashboard/AIContentReview';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
@@ -248,7 +245,7 @@ function ScheduleContent() {
     
     setIsSaving(true);
     try {
-      const { saveStagedMetadata } = await import('@/app/actions/history');
+      const { saveStagedMetadata } = await import('@/app/actions/history/metadata');
       await saveStagedMetadata(editingPost.stagedFileId, finalContent);
       
       const firstPlatform = Object.keys(finalContent)[0];

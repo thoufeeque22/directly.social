@@ -1,0 +1,174 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('History Domain Modularization Verification', () => {
+  test.beforeEach(async ({ page }) => {
+    // We assume the user is already logged in via auth.setup.ts or similar
+    // For local dev, we might need to handle login if not using reuse-auth
+    await page.goto('/history');
+  });
+
+  test('should load history page and display items', async ({ page }) => {
+    // Mock history API
+    await page.route('**/api/history*', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          data: [
+            {
+              id: 'post-1',
+              title: 'Test Post 1',
+              description: 'Description 1',
+              createdAt: new Date().toISOString(),
+              platforms: [
+                { id: 'res-1', platform: 'youtube', status: 'completed' },
+                { id: 'res-2', platform: 'instagram', status: 'completed' }
+              ]
+            },
+            {
+              id: 'post-2',
+              title: 'Test Post 2',
+              description: 'Description 2',
+              createdAt: new Date().toISOString(),
+              platforms: [
+                { id: 'res-3', platform: 'tiktok', status: 'failed', errorMessage: 'Upload failed' }
+              ]
+            }
+          ],
+          nextCursor: null
+        })
+      });
+    });
+
+    await page.reload();
+    
+    await expect(page.getByText('Activity Hub')).toBeVisible();
+    await expect(page.getByTestId('history-post-post-1')).toBeVisible();
+    await expect(page.getByTestId('history-post-post-2')).toBeVisible();
+    
+    // Check titles
+    await expect(page.getByText('Test Post 1')).toBeVisible();
+    await expect(page.getByText('Test Post 2')).toBeVisible();
+  });
+
+  test('should filter history items by search query', async ({ page }) => {
+    await page.route('**/api/history?*search=Post+1*', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          data: [
+            {
+              id: 'post-1',
+              title: 'Test Post 1',
+              description: 'Description 1',
+              createdAt: new Date().toISOString(),
+              platforms: [{ id: 'res-1', platform: 'youtube', status: 'completed' }]
+            }
+          ],
+          nextCursor: null
+        })
+      });
+    });
+
+    const searchField = page.getByPlaceholder('Search history by title or description...');
+    await searchField.fill('Post 1');
+    
+    // Wait for debounce and fetch
+    await expect(page.getByTestId('history-post-post-1')).toBeVisible();
+    await expect(page.getByTestId('history-post-post-2')).not.toBeVisible();
+  });
+
+  test('should handle "Load More" for pagination', async ({ page }) => {
+     await page.route('**/api/history*', async (route) => {
+      const url = new URL(route.request().url());
+      const cursor = url.searchParams.get('cursor');
+
+      if (!cursor) {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            data: [{ id: 'post-1', title: 'Post 1', platforms: [], createdAt: new Date().toISOString() }],
+            nextCursor: 'cursor-1'
+          })
+        });
+      } else if (cursor === 'cursor-1') {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            data: [{ id: 'post-2', title: 'Post 2', platforms: [], createdAt: new Date().toISOString() }],
+            nextCursor: null
+          })
+        });
+      }
+    });
+
+    await page.reload();
+    await expect(page.getByText('Post 1')).toBeVisible();
+    await expect(page.getByText('Post 2')).not.toBeVisible();
+
+    const loadMoreButton = page.getByRole('button', { name: 'Load More' });
+    await loadMoreButton.click();
+
+    await expect(page.getByText('Post 2')).toBeVisible();
+    await expect(loadMoreButton).not.toBeVisible();
+  });
+
+  test('Visual Audit: History States', async ({ page }) => {
+    // 1. Empty State
+    await page.route('**/api/history*', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ data: [], nextCursor: null })
+      });
+    });
+    await page.reload();
+    await page.screenshot({ path: 'verification/history-refactor/empty-state.png', fullPage: true });
+
+    // 2. List View with items
+    await page.route('**/api/history*', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          data: [
+            {
+              id: 'post-1',
+              title: 'Successful Post',
+              description: 'All platforms green',
+              createdAt: new Date().toISOString(),
+              platforms: [
+                { id: 'res-1', platform: 'youtube', status: 'completed' },
+                { id: 'res-2', platform: 'instagram', status: 'completed' }
+              ]
+            },
+            {
+              id: 'post-2',
+              title: 'Active Post',
+              description: 'Uploading...',
+              createdAt: new Date().toISOString(),
+              platforms: [
+                { id: 'res-3', platform: 'tiktok', status: 'uploading', progress: 45 }
+              ]
+            },
+             {
+              id: 'post-3',
+              title: 'Failed Post',
+              description: 'Something went wrong',
+              createdAt: new Date().toISOString(),
+              platforms: [
+                { id: 'res-4', platform: 'facebook', status: 'failed', errorMessage: 'API Error' }
+              ]
+            }
+          ],
+          nextCursor: null
+        })
+      });
+    });
+    await page.reload();
+    await page.screenshot({ path: 'verification/history-refactor/list-view.png', fullPage: true });
+  });
+});

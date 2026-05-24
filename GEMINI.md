@@ -26,9 +26,10 @@
 
 # Agent Orchestration (Direct Routing)
 
+- **Core Mandate:** Every agent MUST maintain unwavering focus on the `ticket_goal`, `ticket_description`, and `acceptance_criteria` defined in `.gemini/state/ticket-<id>.json`. You are FORBIDDEN from being distracted by unrelated bugs, refactors, or "nice-to-have" improvements unless they are strictly required to fulfill the acceptance criteria. Any such incidental discoveries MUST be logged to `.gemini/incidental_observations.json` for later triage by the `project-agent`.
 - **Context First:** Always check `.gemini/state/ticket-<id>.json` for current state before acting.
-- **Handoff & Commit Rule:** Every agent MUST commit their changes (including `.gemini/state/ticket-<id>.json`) using Conventional Commits and push to the remote branch before assigning the task to the next agent.
-- **Context Synchronization:** Always `git add .gemini/state/ticket-<id>.json` before committing to ensure the latest state is shared. Push changes immediately after commit.
+- **Handoff & Commit Rule:** Every agent MUST stage and commit all files they have modified as part of the current task (including code, tests, documentation, and `.gemini/state/ticket-<id>.json`) using Conventional Commits and push to the remote branch before assigning the task to the next agent. You are FORBIDDEN from handing off a task if any of your own modifications remain unstaged or uncommitted.
+- **Context Synchronization:** Always ensure your worked files are specifically staged (`git add <file>...`) and include `.gemini/state/ticket-<id>.json` before committing to ensure the latest state is shared. Push changes immediately after commit.
 - **Predictive Validation:** Before handoff, the current agent MUST define an `expected_output` block in their namespaced context. This MUST include specific verification commands (e.g., `npm run build`, `npx tsc`) and the expected success indicators. Handoff is FORBIDDEN until the agent can prove these outputs were achieved.
 - **Context Structure:**
   - **Root Keys:** `last_agent`, `branch_name`, `ticket_goal`, `ticket_id`, and `last_updated_at` (ISO 8601 timestamp) must remain at the root.
@@ -43,7 +44,8 @@
   - Main Agent (Manual Approval) → `project-agent`
   - `project-agent` → End of Task/Main Agent
 - **Orchestration Rules:**
-  - **Context Preservation Mandate:** Every update to `.gemini/state/ticket-<id>.json` MUST be a non-destructive merge. Agents are FORBIDDEN from overwriting the entire file with only their namespaced data. You MUST read the current file, parse the JSON, update only your specific namespace (e.g., `"round-N"`) and relevant root keys (e.g., `last_agent`, `next_agent`), and write the complete merged object back. Deleting historical rounds, root keys, or other agents' data is a CRITICAL pipeline failure.
+  - **Context Preservation Mandate:** Every update to `.gemini/state/ticket-<id>.json` AND `.gemini/incidental_observations.json` MUST be a non-destructive merge. Agents are FORBIDDEN from overwriting these files with only their namespaced data. You MUST read the current file, parse the JSON, append or update only your specific entry/namespace, and write the complete merged object/array back. Deleting historical rounds, root keys, other agents' data, or existing incidental observations is a CRITICAL pipeline failure.
+  - **Mandatory Handoff Sync:** Before ending a turn and assigning the next agent, the current agent MUST verify that the `.gemini/state/ticket-<id>.json` file contains their latest actions, findings, and `expected_output`. Failure to update the context file before handoff is a CRITICAL pipeline failure.
   - **Subagent Isolation Rule:** The Main Agent MUST NOT simulate worker agents internally. It MUST invoke distinct subagents (e.g., via `invoke_subagent` tools) to execute `dev-agent`, `review-agent`, etc. This enforces memory isolation, guaranteeing that each agent must independently read from and write to `.gemini/state/ticket-<id>.json` upon handoff.
   - **Worker Agents:** MUST NOT invoke other agents. They MUST update `.gemini/state/ticket-<id>.json` (adhering to the **Context Preservation Mandate**) via tools and return their status. **After each worker agent finishes, the pipeline MUST stop and wait for a manual user command to proceed.**
   - **Main Agent (Gemini CLI):** Responsible for analyzing the context and reporting status. **The Main Agent MUST NOT automatically invoke the next agent in the pipeline.** It must present the current state and wait for an explicit user directive (e.g., "Invoke dev-agent") before proceeding to the next step.
@@ -54,13 +56,13 @@
   - **Inception Rule:** When a new ticket ID (URL or number) is provided, the Main Agent MUST:
   1. Immediately switch to the `main` branch and pull the latest changes.
   2. Fetch the ticket details (title and description/body) from GitHub using `gh issue view <id> --json title,body`.
-  3. **Context Reset:** CLEAN UP the existing `.gemini/state/ticket-<id>.json`. Initialize it FRESH with the new ticket details in the `ticket_goal` and `ticket_description` fields, starting exclusively with a new `round-1`. Historical rounds from previous tickets MUST be discarded to maintain context efficiency.
+  3. **Context Reset:** CLEAN UP the existing `.gemini/state/ticket-<id>.json`. Initialize it FRESH with the new ticket details in the `ticket_goal`, `ticket_description`, and `acceptance_criteria` fields, starting exclusively with a new `round-1`. Historical rounds from previous tickets MUST be discarded to maintain context efficiency. **If acceptance criteria are missing from the GitHub issue, the Main Agent MUST prompt the user to provide them before proceeding.**
   4. Bypassing this step is a CRITICAL pipeline failure.
 - **Model Selection:** 
   - Use **Gemini 1.5 Pro** for complex reasoning (Discovery, Dev, Review, QA).
   - Use **Gemini 1.5 Flash** (or **Gemini 3 Flash Preview**) for execution, documentation, and simple triage.
   - If a Flash model fails to follow complex instructions, escalate the task to a Pro model.
-- **Incidental Audit:** Check `.gemini_incidental_observations.json` for high-severity bugs found by other agents.
+- **Incidental Audit:** Check `.gemini/incidental_observations.json` for high-severity bugs found by other agents.
 - **Ambiguity Guard:** If a request is vague ("fix it", "add page"), ask 2-3 targeted questions. DO NOT guess.
 - **Loop Protection:** If "cycle_count" in context reaches 3, stop and request manual intervention.
 - **Triage Lint Protocol:** When lint errors exceed 10, agents MUST NOT attempt a full fix. Instead:
@@ -68,15 +70,15 @@
   2. Batch fixes (max 5-10 errors per turn).
   3. Prioritize by severity and file.
 - **Auto-Validation:** Before finishing any Directive, you MUST execute the project hook: `.gemini/hooks/post-task.sh`. This hook now includes `tsc --noEmit` AND `npm run build`. If it fails, fix the errors and re-run until it passes. All code changes MUST pass a full type check and a production build. *Exception: If the changes are strictly limited to documentation, manual test specifications, markdown files, diagrams, or images (i.e., no changes to `.ts`, `.tsx`, `.js`, `.json`, `.css` or database schemas), then the `doc-agent` and `project-agent` are exempted from running `tsc --noEmit`, `npm run build`, and `.gemini/hooks/post-task.sh` validation checks to speed up pipeline execution.*
-- **Continuous Improvement Reflection:** At the conclusion of any complex task or orchestration cycle, the Main Agent MUST check `.gemini_incidental_observations.json` for entries with `category: "meta"`. It MUST then summarize these findings for the user, proposing concrete additions, refinements, or pruning of redundant rules and agents.
+- **Continuous Improvement Reflection:** At the conclusion of any complex task or orchestration cycle, the Main Agent MUST check `.gemini/incidental_observations.json` for entries with `category: "meta"`. It MUST then summarize these findings for the user, proposing concrete additions, refinements, or pruning of redundant rules and agents.
 
 # Meta-Orchestration & Continuous Improvement
 
 This system is designed to evolve. All agents are responsible for maintaining the health and efficiency of the orchestration itself.
 
-- **System Friction Logging:** If you encounter a rule that is confusing, a workflow that is inefficient, or a missing tool capability, you MUST log it to `.gemini_incidental_observations.json` with `category: "meta"`.
+- **System Friction Logging:** If you encounter a rule that is confusing, a workflow that is inefficient, or a missing tool capability, you MUST log it to `.gemini/incidental_observations.json` with `category: "meta"`.
 - **Redundancy Analysis (Pruning):** If you identify rules, agents, or documentation that are no longer required, consistently bypassed, or redundant, you MUST flag them with `category: "meta"` and a suggestion for removal.
-- **Incidental Observation Schema:** All entries in `.gemini_incidental_observations.json` MUST now include:
+- **Incidental Observation Schema:** All entries in `.gemini/incidental_observations.json` MUST now include:
   - `category`: "bug", "meta", or "security".
   - `severity`: "LOW", "MED", "HIGH", or "CRITICAL".
   - `description`: A clear, concise explanation of the observation.
@@ -91,9 +93,9 @@ This system is designed to evolve. All agents are responsible for maintaining th
   - **Trigger:** For **New Features** or **Core Refactors**, the **Main Agent** MUST invoke two distinct discovery sessions.
   - **Persona A (The Advocate):** Focus on user value, feature completeness, and "Happy Path" UX.
   - **Persona B (The Skeptic):** Focus on security risks, technical debt, edge cases, and "Negative Path" reliability.
-  - **Synthesis:** The `discovery-agent` (primary) must synthesize both perspectives into a single `TECHNICAL SPECS` block in `.gemini/state/ticket-<id>.json`.
+  - **Synthesis:** The `discovery-agent` (primary) must synthesize both perspectives into a single `TECHNICAL SPECS` block in `.gemini/state/ticket-<id>.json`. This synthesis MUST explicitly verify that the proposed architecture fulfills all `acceptance_criteria`. If any criteria are ambiguous or technically unfeasible, the `discovery-agent` MUST flag this for the user.
 - **GitHub Integration:** Use `gh issue view <id>` for tickets.
-- **Release Scope Guardianship (The "Brains" Check):** Before any technical planning, you MUST perform a Socratic audit of the request. Analyze if the feature is a logical next step for the *current* release or if it introduces premature complexity. You MUST document in the `TECHNICAL SPECS` block of the context file why the feature is important/required, and explicitly assess if it is safe to skip/defer. You are the primary filter: if a feature is architectural 'noise' for the current phase, you MUST invoke the [PARKED] protocol and provide a clear rationale for deferral in the context file.
+- **Release Scope Guardianship (The "Brains" Check):** Before any technical planning, you MUST perform a Socratic audit of the request. Analyze if the feature is a logical next step for the *current* release or if it introduces premature complexity. You MUST document in the `TECHNICAL SPECS` block of the context file why the feature is important/required, and explicitly assess if it is safe to skip/defer based on the `acceptance_criteria`. You are the primary filter: if a feature is architectural 'noise' for the current phase, you MUST invoke the [PARKED] protocol and provide a clear rationale for deferral in the context file.
 - **Roadmap Alignment:** Cross-reference with `docs/REQUIREMENTS.md`. If a feature is scoped for a later phase (e.g., Phase 2), it is an automatic [PARKED] verdict.
 - **Ambiguity Check:** STOP and ask follow-up questions if requirements are vague.
 - **Impact Radius:** Map dependencies and existing patterns before proposing changes.
@@ -104,7 +106,7 @@ This system is designed to evolve. All agents are responsible for maintaining th
   4. Dependency impact radius verification.
 If the task is feasible and required, assign to `dev-agent`. If [PARKED], provide the rationale in the context file and assign to `project-agent`.
 - **Production Guard:** Every blueprint MUST include a "Production Readiness" section (Logging, Caching, Rate-limiting).
-- **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini_incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
+- **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini/incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
 - **Constraints:** Never modify source code. Stick to blueprints. English only. PLN/ISO units.
 
 ## Development (Implementation)
@@ -137,6 +139,7 @@ If the task is feasible and required, assign to `dev-agent`. If [PARKED], provid
 - **Verification:** If `fixes_applied` exists, verify they work and check for regressions.
 - **Audit Checklist:**
   - Architecture: Match `docs/` specs and API contracts.
+  - **Secondary Impact Audit:** Look beyond the immediate diff. Check if the new implementation makes any existing code redundant, introduces inconsistencies with untouched files, or suggests a necessary refactor in the broader system to maintain architectural integrity.
   - Security: No hardcoded secrets/PII. Verify rate limiting.
   - Data: PLN currency, Metric units, English names.
   - Modularity: Flag functions/files > 50 lines or mixed responsibilities. For files > 50 lines, ensure new logic is extracted. If not, reject the PR/Handoff.
@@ -149,7 +152,7 @@ If the task is feasible and required, assign to `dev-agent`. If [PARKED], provid
   2. Adherence to `docs/` and API contracts.
   3. No security vulnerabilities found in diff.
 You MUST commit any review artifacts before assigning. If issues found, assign to `dev-agent`. If PASS, assign to `qa-agent`.
-- **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini_incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
+- **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini/incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
 
 ## QA (E2E Test Automation)
 - **Role:** Expert Lead QA Automation Writer & Execution Engineer. Design exhaustive scenarios, write detailed step-by-step Playwright tests, and execute them.
@@ -185,7 +188,7 @@ You MUST commit any review artifacts before assigning. If issues found, assign t
   5. Isolated mock data/seeding logic implemented and verified.
   6. Zero Network (4xx/5xx) or Hydration errors observed (excluding known AI rate limits).
 You MUST commit all test changes before assigning to the next agent. If tests fail, assign to `dev-agent` and include the `failed_tests` and `failure_details` in the handoff. If tests pass, assign to `doc-agent`.
-- **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini_incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
+- **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini/incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
 
 ## Documentation (Living Source of Truth)
 - **Role:** Tech Writer & Architect. Maintain docs and diagrams.
@@ -201,12 +204,12 @@ You MUST commit all test changes before assigning to the next agent. If tests fa
   2. Manual test cases verified for clarity.
   3. Pull Request created and linked to issue.
 You MUST commit all documentation and manual test changes before assigning to **Main Agent** for manual review and approval. Once approved, the Main Agent will assign the task to `project-agent`.
-- **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini_incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
+- **Incidental Discoveries:** Log unrelated bugs or system friction to `.gemini/incidental_observations.json` (Category: "bug" or "meta", Severity: LOW/MED/HIGH/CRITICAL).
 
 ## Project Agent (Management & Tracking)
 - **Role:** Project Manager & Issue Architect. Roadmap health and GitHub Project Board synchronization.
 - **Workflow:** 
-  - **Incidental Resolution:** When assigned by the **Main Agent** (following manual approval of the `doc-agent`'s work), you MUST read `.gemini_incidental_observations.json`.
+  - **Incidental Resolution:** When assigned by the **Main Agent** (following manual approval of the `doc-agent`'s work), you MUST read `.gemini/incidental_observations.json`.
   - **Feature Parking:** When assigned by `discovery-agent` for a [PARKED] task:
     - Use `mcp_github_update_issue` to add the `phase:2` label.
     - Set the Project Board status to **Hold**.
@@ -215,7 +218,7 @@ You MUST commit all documentation and manual test changes before assigning to **
   - **Issue Creation:** If the bug persists, use `mcp_github_create_issue` to create an individual GitHub issue with labels (`bug`, `roadmap`).
   - **Project Board:** Every new issue MUST be added to the project board (`gh project item-add 4`) and set the GitHub Project **Priority** field (`critical`, `high`, `medium`, or `low`).
   - **Constraint:** GitHub issue labels are strictly for classification (e.g., `feature`, `bug`, `roadmap`, `security`, `telemetry`). **EVERY ticket MUST be assigned either the `roadmap` label (for technical/engineering tickets) or the `launch` label (for non-technical, marketing, or legal tickets).** NEVER add priority labels (e.g., `high-priority`, `low-priority`) to GitHub issues; all priority management must be handled exclusively via the project board's Priority field.
-  - **Cleanup:** Clear all processed entries from `.gemini_incidental_observations.json` after logging.
+  - **Cleanup:** Clear all processed entries from `.gemini/incidental_observations.json` after logging.
 - **Constraints:** Technical, structured, and emoji-free documentation.
 
 
@@ -239,7 +242,7 @@ You MUST commit all documentation and manual test changes before assigning to **
 - **Modularity Enforcement (The 50-Line Rule):**
     - **New Files:** MUST be $\le$ 50 lines.
     - **Legacy Files (> 50 lines):** Any new logic MUST be extracted into a new module. Do not add code to the existing monolith.
-    - **Unavoidable Complexity:** If a new module genuinely requires > 50 lines, annotate with `// TODO: Refactor: logic extraction needed`. Keep it $\le$ 100 lines and log in `.gemini_incidental_observations.json` with `category: "meta"` and `severity: "MED"`.
+    - **Unavoidable Complexity:** If a new module genuinely requires > 50 lines, annotate with `// TODO: Refactor: logic extraction needed`. Keep it $\le$ 100 lines and log in `.gemini/incidental_observations.json` with `category: "meta"` and `severity: "MED"`.
     - **Enforcement:** Review-agent performs a mandatory architectural audit during the handoff phase (prior to QA/E2E). It MUST reject any handoff that fails these standards and assign the task back to dev-agent for correction.
 
 - **Legacy Debt Remediation Protocol:**
