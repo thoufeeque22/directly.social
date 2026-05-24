@@ -89,7 +89,7 @@
         "docs/manual_tests/565-history-modularization.md",
         ".gemini/state/ticket-565.json"
       ],
-      "expected_output": "PR URL: (to be generated)\nDocumentation and manual tests committed and pushed."
+      "expected_output": "PR URL: https://github.com/thoufeeque22/social-studio-app/pull/569\nDocumentation and manual tests committed and pushed."
     }
   }
 }
