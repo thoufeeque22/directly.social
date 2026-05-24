@@ -81,4 +81,6 @@ lint_output.txt
 lint_results.txt
 
 # Gemini Context
-.gemini/incidental_observations.json
+!.gemini/incidental_observations.json
+.gemini/state/ticket-*.json
+! .gemini/state/ticket-*.json

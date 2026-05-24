@@ -1,0 +1,26 @@
+[
+  {
+    "category": "meta",
+    "severity": "MED",
+    "description": "Implement automated 50-line rule enforcement via ESLint to shift modularization checks from Review to Linting.",
+    "suggestion": "Add a custom ESLint rule for src/ directory and update orchestration docs to prioritize linting."
+  },
+  {
+    "category": "meta",
+    "severity": "MED",
+    "description": "The following modules in the History domain genuinely require > 50 lines due to complex data orchestration or UI templates, but are capped under 100 lines: src/app/actions/history/cancel.ts (88), src/app/actions/history/core.ts (85), src/app/actions/history/retry.ts (93), src/hooks/useHistory/useHistoryActions.ts (95), src/hooks/useHistory/useHistoryCockpit.ts (81), src/hooks/useHistory/useHistoryData.ts (66), src/app/history/page.tsx (52).",
+    "suggestion": "Log as technical debt and refactor when domain logic changes."
+  },
+  {
+    "category": "meta",
+    "severity": "MED",
+    "description": "scripts/prune-state.ts exceeds 50-line rule (87 lines). Added annotation, but logic should be extracted in future refactor.",
+    "suggestion": "Extract pruneFile logic to a utility module."
+  },
+  {
+    "category": "meta",
+    "severity": "HIGH",
+    "description": "Refactor repository to follow industry-standard directory structure and perform exhaustive cleanup of unwanted/orphaned files (e.g., .tmp_scratch, scratch, verification, old scripts).",
+    "suggestion": "Create a formal ticket for architectural cleanup and standardisation."
+  }
+]
