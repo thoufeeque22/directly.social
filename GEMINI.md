@@ -139,6 +139,7 @@ If the task is feasible and required, assign to `dev-agent`. If [PARKED], provid
 - **Verification:** If `fixes_applied` exists, verify they work and check for regressions.
 - **Audit Checklist:**
   - Architecture: Match `docs/` specs and API contracts.
+  - **Secondary Impact Audit:** Look beyond the immediate diff. Check if the new implementation makes any existing code redundant, introduces inconsistencies with untouched files, or suggests a necessary refactor in the broader system to maintain architectural integrity.
   - Security: No hardcoded secrets/PII. Verify rate limiting.
   - Data: PLN currency, Metric units, English names.
   - Modularity: Flag functions/files > 50 lines or mixed responsibilities. For files > 50 lines, ensure new logic is extracted. If not, reject the PR/Handoff.
