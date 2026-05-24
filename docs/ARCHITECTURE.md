@@ -430,7 +430,18 @@ graph TD
     Config --> BYOK[BYOK Wizard]
 ```
 
-### 11. History Domain Architecture
+### 11. Global Refresh Mechanism
+
+Social Studio implements a unified refresh system to ensure data consistency between server-side state and client-side components.
+
+- **Centralized Logic:** The `useAppRefresh` hook handles the orchestration of `router.refresh()` (for server components) and the dispatching of custom events (for client components).
+- **Event Synchronization:** Components can synchronize their state by listening to the `app:refresh` event on `globalThis`. This pattern allows decoupled components to respond to user-initiated refreshes without complex state management.
+- **Mobile Gestures:** The system is integrated with a "Pull-to-Refresh" mechanism in the `LayoutWrapper`, providing a native-like experience for mobile users.
+- **UX & Feedback:** A minimum delay is enforced to provide satisfying visual feedback, ensuring the user perceives the refresh action regardless of network speed.
+
+For more details, see the [Global Refresh Feature Documentation](features/GLOBAL_REFRESH.md).
+
+### 12. History Domain Architecture
 
 The History domain manages the record of all past and upcoming posts. To maintain scalability and performance, the domain follows a highly modular architecture that adheres to the project's strict 50-line rule.
 

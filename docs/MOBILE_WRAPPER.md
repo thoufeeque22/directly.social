@@ -48,10 +48,11 @@ If you want to test local changes on your physical phone or simulator without de
 ---
 
 ## 📱 Mobile Optimizations
-The following optimizations have been applied to `src/app/layout.tsx`:
+The following optimizations have been applied to ensure a native feel:
 - **Viewport Lock**: Prevented user zooming for a more stable UI.
 - **Safe Area Support**: Added `viewport-fit=cover` to ensure the app handles notches and home indicators correctly.
 - **Translucent Status Bar**: Configured for iOS to blend with the dark theme.
+- **Pull-to-Refresh**: Standard mobile gesture to trigger a global data sync (see [Global Refresh](features/GLOBAL_REFRESH.md)).
 
 ---
 
