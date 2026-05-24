@@ -1,6 +1,7 @@
 # Agent Orchestration & Workflow
 
 ## Core Mandates
+- **Ticket Initialization:** Before starting work on a new ticket, the Main Agent (Orchestrator) MUST switch to the `main` branch, pull the latest changes (`git checkout main && git pull`), and check for any existing open PRs related to the ticket to avoid duplicate work.
 - **Direct Routing Focus:** Every agent MUST maintain unwavering focus on the `ticket_goal`, `ticket_description`, and `acceptance_criteria` defined in `.gemini/state/ticket-<id>.json`. incidental discoveries MUST be logged to `.gemini/incidental_observations.json`.
 - **Context First:** Always check `.gemini/state/ticket-<id>.json` for current state before acting.
 - **Context Preservation Mandate:** Every update to `.gemini/state/ticket-<id>.json` AND `.gemini/incidental_observations.json` MUST be a non-destructive merge.
@@ -48,4 +49,4 @@
 ## Routing & Pipelines
 - **Standard Sequence:** `discovery` → `dev` → `review` → `qa` → `doc` → `project`.
 - **Fast-Track Protocol:** Meta-updates and documentation can go direct to `main`.
-- **Branching Protocol:** App code changes require a feature branch.
+- **Branching Protocol:** App code changes require a feature branch. Always create feature branches from an up-to-date `main` branch.
