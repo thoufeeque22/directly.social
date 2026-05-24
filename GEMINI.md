@@ -35,14 +35,16 @@
   - **Root Keys:** `last_agent`, `branch_name`, `ticket_goal`, `ticket_id`, and `last_updated_at` (ISO 8601 timestamp) must remain at the root.
   - **Round-Based Namespacing:** Every agent activity MUST be encapsulated within a `round-N` key (e.g., `"round-1"`). Inside each round, agents MUST store their findings and actions under their specific agent key (e.g., `"round-1": { "dev-agent": { ... } }`).
   - **History:** If a pipeline fails and cycles back, a new round (e.g., `"round-2"`) MUST be created, containing the new agent activities. This preserves the complete historical record of previous rounds. Each agent entry MUST include a `"timestamp"` (ISO 8601).
+- **Branching & Fast-Track Protocol:**
+  - **Fast-Track Protocol (Direct to `main`):**
+    - **Allowed:** Meta-orchestration updates (`GEMINI.md`, `AGENTS.md`, `.gemini/`), pure documentation (`docs/`, `README.md`), and system maintenance scripts.
+    - **Mandatory:** Even on `main`, agents MUST run `.gemini/hooks/post-task.sh` before committing to ensure system integrity.
+  - **Standard Protocol (Branch Required):**
+    - **Mandatory:** Any change to application code (`src/`), database schema (`prisma/`), or styling MUST use a feature branch (`gh issue develop <id> --checkout`) and follow the `pipeline_config`.
 - **Standard Pipeline Flow:**
-  - `discovery-agent` → `dev-agent`
-  - `dev-agent` → `review-agent`
-  - `review-agent` → `qa-agent` (on PASS) or `dev-agent` (on FAIL)
-  - `qa-agent` → `doc-agent` (on PASS) or `dev-agent` (on FAIL)
-  - `doc-agent` → Main Agent (for manual review) or `dev-agent` (on FAIL)
-  - Main Agent (Manual Approval) → `project-agent`
-  - `project-agent` → End of Task/Main Agent
+  - The standard sequence is: `discovery-agent` → `dev-agent` → `review-agent` → `qa-agent` → `doc-agent` → Main Agent → `project-agent`.
+  - **Dynamic Pipeline Routing:** During Inception, the Main Agent MUST determine the most efficient pipeline based on the ticket complexity and store it as an ordered array `pipeline_config` in the root of `.gemini/state/ticket-<id>.json`.
+  - **Routing Enforcement:** Agents MUST use the `pipeline_config` to determine the `next_agent`. If an agent is not present in the config, the flow skips to the next available agent in the sequence.
 - **Orchestration Rules:**
   - **Context Preservation Mandate:** Every update to `.gemini/state/ticket-<id>.json` AND `.gemini/incidental_observations.json` MUST be a non-destructive merge. Agents are FORBIDDEN from overwriting these files with only their namespaced data. You MUST read the current file, parse the JSON, append or update only your specific entry/namespace, and write the complete merged object/array back. Deleting historical rounds, root keys, other agents' data, or existing incidental observations is a CRITICAL pipeline failure.
   - **Mandatory Handoff Sync:** Before ending a turn and assigning the next agent, the current agent MUST verify that the `.gemini/state/ticket-<id>.json` file contains their latest actions, findings, and `expected_output`. Failure to update the context file before handoff is a CRITICAL pipeline failure.
@@ -56,8 +58,12 @@
   - **Inception Rule:** When a new ticket ID (URL or number) is provided, the Main Agent MUST:
   1. Immediately switch to the `main` branch and pull the latest changes.
   2. Fetch the ticket details (title and description/body) from GitHub using `gh issue view <id> --json title,body`.
-  3. **Context Reset:** CLEAN UP the existing `.gemini/state/ticket-<id>.json`. Initialize it FRESH with the new ticket details in the `ticket_goal`, `ticket_description`, and `acceptance_criteria` fields, starting exclusively with a new `round-1`. Historical rounds from previous tickets MUST be discarded to maintain context efficiency. **If acceptance criteria are missing from the GitHub issue, the Main Agent MUST prompt the user to provide them before proceeding.**
-  4. Bypassing this step is a CRITICAL pipeline failure.
+  3. **Pipeline Optimization:** Analyze the ticket to define the `pipeline_config`. 
+     - *Full:* `["discovery", "dev", "review", "qa", "doc", "project"]` (New Features/Core Refactors).
+     - *Medium:* `["dev", "review", "doc", "project"]` (Bug Fixes/Minor UI).
+     - *Light:* `["dev", "doc", "project"]` (Chores/Typos/Cleanups).
+  4. **Context Reset:** CLEAN UP the existing `.gemini/state/ticket-<id>.json`. Initialize it FRESH with the new ticket details in the `ticket_goal`, `ticket_description`, `acceptance_criteria`, and `pipeline_config` fields, starting exclusively with a new `round-1`. Historical rounds from previous tickets MUST be discarded to maintain context efficiency. **If acceptance criteria are missing from the GitHub issue, the Main Agent MUST prompt the user to provide them before proceeding.**
+  5. Bypassing this step is a CRITICAL pipeline failure.
 - **Model Selection:** 
   - Use **Gemini 1.5 Pro** for complex reasoning (Discovery, Dev, Review, QA).
   - Use **Gemini 1.5 Flash** (or **Gemini 3 Flash Preview**) for execution, documentation, and simple triage.
