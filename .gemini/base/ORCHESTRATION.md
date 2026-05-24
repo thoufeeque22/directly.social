@@ -10,7 +10,7 @@
 - **Context Preservation:** Updates to state files MUST be non-destructive merges.
 - **Handoff & Commit:** Every agent MUST stage and commit their modifications before transition.
 
-## State Management & Pruning (Ticket 571)
+## State Management & Pruning
 - **Pruning Trigger:** If a state file (`.gemini/state/ticket-<id>.json`) exceeds **50KB** or **3 rounds** of activity, it MUST be pruned.
 - **Archival:** The full context is moved to `.gemini/state/archive/ticket-<id>-<timestamp>.json`.
 - **Summary Initialization:** The active state file is reset with a `summary` block containing:
@@ -18,14 +18,11 @@
   - `lessons_learned`: Failures or friction points encountered.
   - `verification_outcomes`: Pass/Fail status of critical build/test steps.
 
-## Active Tasks
-- [Refactor Platform Layer (#563)](.gemini/state/ticket-563.json) - In Progress (feature/563-refactor-platform-distribution)
-
 ## Agent Specific Workflows
 
 ### Discovery (Architecture & Planning)
 - **Role:** Read-only consultant. Create blueprints and risk assessments.
-- **Discovery Definition of Ready (DoR) (Ticket 572):** Before handing off to `dev-agent`, the `discovery-agent` MUST provide a `TECHNICAL SPECS` block that includes:
+- **Discovery Definition of Ready (DoR):** Before handing off to `dev-agent`, the `discovery-agent` MUST provide a `TECHNICAL SPECS` block that includes:
   1. **Strategic Importance:** Explicit rationale for "Why now?" and impact of skipping/deferring.
   2. **Dual-Agent Protocol:** Synthesis of Advocate/Skeptic perspectives.
   3. **Technical Blueprint:** Detailed file paths, data flow, and logic.
@@ -43,7 +40,7 @@
 
 ### QA (E2E Test Automation)
 - **Role:** Expert Lead QA Automation Writer & Execution Engineer.
-- **Visual Regression (Ticket 573):** For UI changes, capture screenshots in `verification/` and compare against goldens in `docs/visual/goldens/` using `@visual` tagged tests.
+- **Visual Regression:** For UI changes, capture screenshots in `verification/` and compare against goldens in `docs/visual/goldens/` using `@visual` tagged tests.
 
 ### Documentation (Living Source of Truth)
 - **Role:** Tech Writer & Architect.
