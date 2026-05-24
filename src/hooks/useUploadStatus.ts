@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { z } from 'zod';
 
+// TODO: Refactor: logic extraction needed
 const UploadStatusSchema = z.object({
   status: z.string().nullable().optional(),
   percent: z.number().nullable().optional(),

@@ -18,11 +18,11 @@ export function useHistoryData({
   searchQuery, setPosts, setNextCursor, setIsLoading, setLoadingMore, posts, nextCursor, loadingMore
 }: UseHistoryDataProps) {
   
-  const fetchHistory = useCallback(async (cursor?: string, search?: string) => {
+  const fetchHistory = useCallback(async (cursor?: string, search?: string, timestamp?: number) => {
     const params = new URLSearchParams({ limit: '20' });
     if (cursor) params.set('cursor', cursor);
     if (search) params.set('search', search);
-    params.set('_t', Date.now().toString());
+    params.set('_t', (timestamp || Date.now()).toString());
 
     const res = await fetch(`/api/history?${params.toString()}`);
     return await res.json();

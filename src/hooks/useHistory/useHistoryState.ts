@@ -26,10 +26,11 @@ export function useHistoryState() {
 
   useEffect(() => {
     if (pendingPost && posts.length > 0) {
+      const now = Date.now();
       const match = posts.find(p => 
         p.id === pendingPost.resumeHistoryId || 
         p.id === pendingPost.historyId ||
-        (p.title === pendingPost.title && Math.abs(new Date(p.createdAt).getTime() - Date.now()) < 60000)
+        (p.title === pendingPost.title && Math.abs(new Date(p.createdAt).getTime() - now) < 60000)
       );
       if (match) {
         React.startTransition(() => {

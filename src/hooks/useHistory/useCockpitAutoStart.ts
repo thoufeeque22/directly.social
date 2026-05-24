@@ -7,6 +7,7 @@ import { AITier } from '@/lib/core/constants';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
 import { CockpitPost, PostHistoryEntry } from './types';
 
+// TODO: Refactor: logic extraction needed
 interface AutoStartProps {
   setPosts: (posts: PostHistoryEntry[]) => void;
   fetchHistory: () => Promise<{ data?: PostHistoryEntry[] }>;

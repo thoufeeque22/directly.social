@@ -5,6 +5,7 @@ import styles from '@/app/history/history.module.css';
 import { PostHistoryEntry, PlatformResult } from '@/hooks/useHistory';
 import { UploadStatus } from '@/hooks/useUploadStatus';
 
+// TODO: Refactor: logic extraction needed
 interface HistoryListProps {
   posts: PostHistoryEntry[];
   cancelledIds: string[];

@@ -11,7 +11,7 @@ export const PlatformResultSchema = z.object({
   resumableUrl: z.string().nullable().optional(),
   videoId: z.string().nullable().optional(),
   creationId: z.string().nullable().optional(),
-  metadata: z.any().optional(),
+  metadata: z.record(z.unknown()).optional(),
 });
 
 export type PlatformResultInput = z.infer<typeof PlatformResultSchema>;
