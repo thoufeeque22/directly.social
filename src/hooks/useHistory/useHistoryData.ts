@@ -40,6 +40,17 @@ export function useHistoryData({
     return () => clearTimeout(timer);
   }, [searchQuery, fetchHistory, posts.length, setPosts, setNextCursor, setIsLoading]);
 
+  useEffect(() => {
+    const handleRefresh = () => {
+      fetchHistory(undefined, searchQuery).then(data => {
+        setPosts(data.data || []);
+        setNextCursor(data.nextCursor);
+      });
+    };
+    globalThis.addEventListener('app:refresh', handleRefresh);
+    return () => globalThis.removeEventListener('app:refresh', handleRefresh);
+  }, [fetchHistory, searchQuery, setPosts, setNextCursor]);
+
   const hasActivePosts = posts.some(post => 
     post.platforms.some(p => ['pending', 'uploading', 'processing', 'retrying'].includes(p.status))
   );

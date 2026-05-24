@@ -30,6 +30,12 @@ export function WhatsNewProvider({ children }: { children: React.ReactNode }) {
       refreshUpdates();
     }, 0);
   }, []);
+  useEffect(() => {
+    const handleRefresh = () => refreshUpdates();
+    globalThis.addEventListener('app:refresh', handleRefresh);
+    return () => globalThis.removeEventListener('app:refresh', handleRefresh);
+  }, []);
+
   return (
     <WhatsNewContext.Provider value={{ updates, setUpdates, refreshUpdates }}>
       {children}
