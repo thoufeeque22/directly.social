@@ -170,6 +170,31 @@ a {
 .page-content {
   padding: 2rem;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ptr-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* react-simple-pull-to-refresh styles */
+.ptr-element {
+  height: auto !important;
+}
+
+.ptr-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.pull-to-refresh-material {
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--primary)) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
 
 @media (max-width: 768px) {

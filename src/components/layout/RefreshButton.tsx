@@ -1,39 +1,17 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { IconButton, Tooltip, CircularProgress } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { useRouter } from 'next/navigation';
+import { useAppRefresh } from '@/hooks/useAppRefresh';
 
 export const RefreshButton = () => {
-  const router = useRouter();
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const isRefreshingRef = useRef(false);
-
-  const handleRefresh = async () => {
-    if (isRefreshingRef.current) return;
-    
-    isRefreshingRef.current = true;
-    setIsRefreshing(true);
-    
-    // 1. Refresh server components
-    router.refresh();
-
-    // 2. Dispatch global events for client components
-    globalThis.dispatchEvent(new CustomEvent('refresh-upcoming'));
-    globalThis.dispatchEvent(new CustomEvent('app:refresh'));
-
-    // Artificial delay for better UX (feedback that something happened)
-    setTimeout(() => {
-      setIsRefreshing(false);
-      isRefreshingRef.current = false;
-    }, 1000);
-  };
+  const { refresh, isRefreshing } = useAppRefresh();
 
   return (
     <Tooltip title="Refresh data">
       <IconButton 
-        onClick={handleRefresh} 
+        onClick={refresh} 
         disabled={isRefreshing}
         size="small"
         sx={{ 
