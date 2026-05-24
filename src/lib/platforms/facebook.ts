@@ -1,7 +1,7 @@
 import { getFacebookPageAccount } from "./facebook/account";
 import { initFacebookReel, finalizeFacebookReel } from "./facebook/reel";
 import { publishFacebookVideoDirect } from "./facebook/video";
-import { pushBinaryToMeta } from "@/lib/core/platforms/meta-uploader";
+import { pushBinaryToMeta, fetchMetaUploadOffset } from "@/lib/core/platforms/meta-uploader";
 import { pollMetaStatus } from "@/lib/core/platforms/meta-utils";
 import { MetaPublishParams } from "@/lib/core/platforms/types";
 
@@ -22,15 +22,17 @@ export const publishFacebookReel = async ({
 }: MetaPublishParams) => {
   const { pageId, pageAccessToken, pageName } = await getFacebookPageAccount(userId, accountId);
   const videoId = existingVideoId || await initFacebookReel(pageId, pageAccessToken);
+  const uploadUrl = `https://rupload.facebook.com/video-upload/v22.0/${videoId}`;
 
-  if (!existingVideoId) {
-    await pushBinaryToMeta({
-      filePath,
-      uploadUrl: `https://rupload.facebook.com/video-upload/v22.0/${videoId}`,
-      accessToken: pageAccessToken,
-      onProgress,
-    });
-  }
+  const startOffset = existingVideoId ? await fetchMetaUploadOffset(uploadUrl, pageAccessToken) : 0;
+
+  await pushBinaryToMeta({
+    filePath,
+    uploadUrl,
+    accessToken: pageAccessToken,
+    onProgress,
+    startOffset,
+  });
 
   const statusUrl = `https://graph.facebook.com/v20.0/${videoId}?fields=status&access_token=${pageAccessToken}`;
   await pollMetaStatus(statusUrl);

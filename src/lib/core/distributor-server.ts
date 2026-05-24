@@ -1,8 +1,6 @@
 "use strict";
-import path from 'path';
 import { 
-  formatPlatformCaption, 
-  constructPublicVideoUrl 
+  formatPlatformCaption 
 } from './distributor-utils';
 import { logger } from '@/lib/core/logger';
 
@@ -49,7 +47,6 @@ export async function distributeSinglePlatform({
       filePath,
       title,
       description: finalCaption,
-      privacy: ((fields.privacy as string) || 'public') as "private" | "public" | "unlisted",
       accountId,
       resumableUrl: fields.resumableUrl as string | undefined,
       onProgress: progressCallback
@@ -60,7 +57,7 @@ export async function distributeSinglePlatform({
   if (platform === 'facebook') {
     const { publishFacebookVideo, publishFacebookReel } = await import('@/lib/platforms/facebook');
     if (videoFormat === 'short') {
-      return await publishFacebookReel({ userId, filePath, description: finalCaption, accountId, videoId: fields.videoId as string | undefined, onProgress: progressCallback });
+      return await publishFacebookReel({ userId, filePath, title, description: finalCaption, accountId, videoId: fields.videoId as string | undefined, onProgress: progressCallback });
     } else {
       return await publishFacebookVideo({ userId, filePath, title, description: finalCaption, accountId, videoId: fields.videoId as string | undefined });
     }
@@ -68,12 +65,8 @@ export async function distributeSinglePlatform({
   
   if (platform === 'instagram') {
     const { publishInstagramReel } = await import('@/lib/platforms/instagram');
-    
     return await publishInstagramReel({ 
-      userId, 
-      filePath,
-      caption: finalCaption,
-      accountId,
+      userId, filePath, title, description: finalCaption, accountId,
       creationId: fields.creationId as string | undefined,
       musicId: fields.musicId as string | undefined,
       onProgress: progressCallback
@@ -84,7 +77,7 @@ export async function distributeSinglePlatform({
     const { publishTikTokVideo } = await import('@/lib/platforms/tiktok');
     return await publishTikTokVideo({
       userId,
-      videoPath: filePath,
+      filePath,
       title: finalCaption,
       accountId
     });

@@ -7,10 +7,11 @@ export { getTikTokAccount };
 
 interface TikTokParams extends PublishParams {
   videoPath?: string;
+  privacy?: string;
 }
 
 export const publishTikTokVideo = async ({
-  userId, filePath, videoPath, title, description, accountId,
+  userId, filePath, videoPath, title, description, accountId, privacy = "SELF_ONLY"
 }: TikTokParams) => {
   const account = await getTikTokAccount(userId, accountId);
   const path = filePath || videoPath;
@@ -19,9 +20,9 @@ export const publishTikTokVideo = async ({
   const { size: videoSize } = await fs.stat(path);
 
   const { upload_url, publish_id } = await initTikTokPublish(
-    account.access_token!, videoSize, title || description || "", "SELF_ONLY"
+    account.access_token!, videoSize, title || description || "", privacy
   );
 
   await pushTikTokBinary(upload_url, path, videoSize);
-  return { publish_id, upload_url }; // Return upload_url for tests if needed
+  return { publish_id, upload_url }; 
 };

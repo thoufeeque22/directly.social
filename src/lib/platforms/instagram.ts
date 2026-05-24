@@ -1,6 +1,6 @@
 import { getInstagramAccount } from "./instagram/account";
 import { createInstagramContainer } from "./instagram/container";
-import { pushBinaryToMeta } from "@/lib/core/platforms/meta-uploader";
+import { pushBinaryToMeta, fetchMetaUploadOffset } from "@/lib/core/platforms/meta-uploader";
 import { pollMetaStatus } from "@/lib/core/platforms/meta-utils";
 import { finalizeInstagramPublish, fetchInstagramPermalink } from "./instagram/finalize";
 import { fetchInstagramStats } from "./instagram/stats";
@@ -14,12 +14,16 @@ export const publishInstagramReel = async ({
   const { igUserId, userAccessToken } = await getInstagramAccount(userId, accountId);
   const finalCaption = caption || description || "";
   const creationId = existingCreationId || await createInstagramContainer(igUserId, userAccessToken, finalCaption, musicId);
+  const uploadUrl = `https://rupload.facebook.com/ig-api-upload/v20.0/${creationId}`;
+
+  const startOffset = existingCreationId ? await fetchMetaUploadOffset(uploadUrl, userAccessToken) : 0;
 
   await pushBinaryToMeta({
     filePath,
-    uploadUrl: `https://rupload.facebook.com/ig-api-upload/v20.0/${creationId}`,
+    uploadUrl,
     accessToken: userAccessToken,
     onProgress,
+    startOffset,
   });
 
   const statusUrl = `https://graph.facebook.com/v20.0/${creationId}?fields=status_code&access_token=${userAccessToken}`;

@@ -8,6 +8,8 @@ export const pushYouTubeBinary = async (
   fileSize: number,
   onProgress?: (percent: number) => void
 ) => {
+  if (startByte >= fileSize) return { success: true };
+
   const fileStream = createReadStream(filePath, { start: startByte });
   let bytesUploaded = startByte;
 
