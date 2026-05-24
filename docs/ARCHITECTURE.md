@@ -418,6 +418,18 @@ The History domain manages the record of all past and upcoming posts. To maintai
 - **Component Decomposition:** The History page is composed of small, focused MUI components (e.g., `HistoryHeader`, `HistoryList`, `HistoryCard`, `PlatformResultItem`). This decomposition reduces cognitive load and improves UI maintainability.
 - **Real-time Monitoring (Cockpit):** A specialized UI state for active tasks that provides live progress updates and status monitoring, utilizing automatic polling and optimized re-renders.
 
+### 12. Complex UI Form Architecture (Modular Engine)
+
+Complex forms (like the Upload Form) follow a "Modular Engine" pattern to manage deep state and UI complexity while adhering to the 50-line rule.
+
+- **Provider-Consumer Pattern:** The form is wrapped in a dedicated `UploadFormProvider` (Context) that consolidates state from props, custom hooks, and local signals. This eliminates prop-drilling across deep component trees.
+- **Atomic Decomposition:** Large forms are broken down into a hierarchy of atomic, single-responsibility components:
+    - `index.tsx`: Pure entry point that initializes the Provider.
+    - `UploadFormInner.tsx`: Orchestrates the high-level layout.
+    - `StandardMetadataFields`, `PlatformMetadataFields`, `VideoSelection`: Focused sub-components that consume the context.
+- **Hook-Driven Logic:** Business logic (media parsing, template management) is extracted into specialized hooks (e.g., `useUploadForm`, `useMediaLibrary`) which are then integrated into the Context.
+- **Visual Feedback:** All atomic units maintain visual consistency using MUI components and shared style modules, ensuring a unified "glass" aesthetic across all form states.
+
 ## Security & Role-Based Access Control (RBAC)
 
 Social Studio implements a strict Role-Based Access Control (RBAC) system to ensure data integrity and restrict access to sensitive administrative features.
