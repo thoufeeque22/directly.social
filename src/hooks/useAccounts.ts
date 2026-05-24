@@ -33,6 +33,20 @@ export const useAccounts = (initialAccounts?: Account[], initialPreferences?: Pl
     loadData();
   }, []);
 
+  // Listen for global refresh
+  useEffect(() => {
+    const handleRefresh = async () => {
+      const [accountsData, prefsData] = await Promise.all([
+        getUserAccounts(),
+        getPlatformPreferences()
+      ]);
+      setAccounts(accountsData);
+      setPreferences(prefsData);
+    };
+    globalThis.addEventListener('app:refresh', handleRefresh);
+    return () => globalThis.removeEventListener('app:refresh', handleRefresh);
+  }, []);
+
   /**
    * Toggles the distribution status for all accounts belonging to a specific provider.
    * Optimistically updates the local state before calling the server actions.
