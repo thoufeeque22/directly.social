@@ -1,13 +1,16 @@
 # Agent Orchestration & Workflow
 
 ## Core Mandates
-- **Ticket Initialization:** Before starting work on a new ticket, the Main Agent (Orchestrator) MUST switch to the `main` branch, pull the latest changes (`git checkout main && git pull`), and check for any existing open PRs related to the ticket to avoid duplicate work.
-- **Direct Routing Focus:** Every agent MUST maintain unwavering focus on the `ticket_goal`, `ticket_description`, and `acceptance_criteria` defined in `.gemini/state/ticket-<id>.json`. incidental discoveries MUST be logged to `.gemini/incidental_observations.json`.
-- **Context First:** Always check `.gemini/state/ticket-<id>.json` for current state before acting.
-- **Context Preservation Mandate:** Every update to `.gemini/state/ticket-<id>.json` AND `.gemini/incidental_observations.json` MUST be a non-destructive merge.
-- **Handoff & Commit Rule:** Every agent MUST stage and commit all files they have modified as part of the current task.
+- **Strict Initialization:** Before any work begins, the Orchestrator MUST:
+  1. Switch to `main` and pull latest (`git checkout main && git pull`).
+  2. Create a dedicated feature branch (`feature/<id>-short-description`).
+  3. Create a state file `.gemini/state/ticket-<id>.json` based on the task description.
+- **Traceable Status:** EVERY agent involved in the pipeline (Discovery, Dev, QA, etc.) MUST update the `steps` and `status` in the `ticket-<id>.json` file before handing off.
+- **Direct Routing Focus:** Every agent MUST maintain unwavering focus on the `ticket_goal` defined in the ticket state file.
+- **Context Preservation:** Updates to state files MUST be non-destructive merges.
+- **Handoff & Commit:** Every agent MUST stage and commit their modifications before transition.
 
-## State Management & Pruning (Ticket 571)
+## State Management & Pruning
 - **Pruning Trigger:** If a state file (`.gemini/state/ticket-<id>.json`) exceeds **50KB** or **3 rounds** of activity, it MUST be pruned.
 - **Archival:** The full context is moved to `.gemini/state/archive/ticket-<id>-<timestamp>.json`.
 - **Summary Initialization:** The active state file is reset with a `summary` block containing:
@@ -19,7 +22,7 @@
 
 ### Discovery (Architecture & Planning)
 - **Role:** Read-only consultant. Create blueprints and risk assessments.
-- **Discovery Definition of Ready (DoR) (Ticket 572):** Before handing off to `dev-agent`, the `discovery-agent` MUST provide a `TECHNICAL SPECS` block that includes:
+- **Discovery Definition of Ready (DoR):** Before handing off to `dev-agent`, the `discovery-agent` MUST provide a `TECHNICAL SPECS` block that includes:
   1. **Strategic Importance:** Explicit rationale for "Why now?" and impact of skipping/deferring.
   2. **Dual-Agent Protocol:** Synthesis of Advocate/Skeptic perspectives.
   3. **Technical Blueprint:** Detailed file paths, data flow, and logic.
@@ -37,7 +40,7 @@
 
 ### QA (E2E Test Automation)
 - **Role:** Expert Lead QA Automation Writer & Execution Engineer.
-- **Visual Regression (Ticket 573):** For UI changes, capture screenshots in `verification/` and compare against goldens in `docs/visual/goldens/` using `@visual` tagged tests.
+- **Visual Regression:** For UI changes, capture screenshots in `verification/` and compare against goldens in `docs/visual/goldens/` using `@visual` tagged tests.
 
 ### Documentation (Living Source of Truth)
 - **Role:** Tech Writer & Architect.

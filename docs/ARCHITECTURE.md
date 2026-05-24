@@ -200,7 +200,32 @@ sequenceDiagram
     end
 ```
 
-### 3. Asset Cleanup
+### 3. Modular Distribution Layer
+
+The platform distribution logic is organized into a modular architecture that separates shared infrastructure from platform-specific implementation details. This ensures maintainability and simplifies the addition of new platforms.
+
+#### Core Infrastructure (`src/lib/core/platforms/`)
+
+Contains shared utilities and types used across multiple platforms:
+- **`account-utils.ts`**: Centralized logic for retrieving platform accounts and logging token usage audits.
+- **`meta-uploader.ts`**: Shared binary upload logic for Meta-based platforms (Facebook, Instagram).
+- **`meta-utils.ts`**: Common Meta Graph API helpers (polling status, fetching pages).
+- **`types.ts`**: Unified interfaces for publishing parameters and results.
+
+#### Platform Modules (`src/lib/platforms/`)
+
+Each platform follows a modular subdirectory pattern (e.g., `src/lib/platforms/instagram/`):
+- **`account.ts`**: Platform-specific account resolution and permission validation.
+- **`container.ts` / `reel.ts`**: Logic for initializing upload sessions or containers.
+- **`finalize.ts`**: Steps required to complete a publication (e.g., publishing a container, fetching permalinks).
+- **`stats.ts`**: Logic for fetching platform-specific engagement metrics.
+- **`[platform].ts`**: The main orchestrator file (e.g., `instagram.ts`) that exports the public API by composing the modular sub-units.
+
+#### Server Orchestration
+
+The `distributor-server.ts` acts as the high-level router, using dynamic imports to load platform orchestrators only when needed. This keeps the worker process lightweight and isolates platform-specific dependencies.
+
+### 4. Asset Cleanup
 
 To maintain storage efficiency, expired assets and orphaned files are purged regularly.
 

@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
         return publishFacebookReel({
           userId,
           filePath,
+          title,
           description,
           accountId,
           videoId: fields.videoId,
