@@ -447,6 +447,7 @@ End-to-End tests are located in `src/__tests__/e2e/` and cover critical user jou
 
 - **Automated Authentication:** The test suite uses a dedicated E2E user (`tester@socialstudio.ai`). A setup project (`auth.setup.ts`) performs a real login via the Credentials provider and saves the session state to `.auth/user.json`, allowing subsequent tests to skip the login step.
 - **Environment Requirements:** E2E tests require `NEXT_PUBLIC_E2E=true` and `NODE_ENV=development` to enable the Credentials provider on the server.
+- **Port Standardization:** E2E tests are configured to run Next.js on port `3005` (via `playwright.config.ts` using the TCP port wait method) to prevent collisions with the default development server on port 3000.
 - **Locators:** Tests prioritize accessible roles (`getByRole`) and `data-testid` attributes for robustness.
 
 ### 2. Unit & Integration Testing (Vitest)
