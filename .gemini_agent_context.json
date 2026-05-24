@@ -1,132 +1,36 @@
 {
-  "last_agent": "project-agent",
-  "next_agent": "main-agent",
-  "branch_name": "544-fix-legacy-unit-tests-failing-due-to-missing-encryption_key",
-  "ticket_goal": "Fix: Legacy Unit Tests Failing due to Missing ENCRYPTION_KEY",
-  "ticket_id": "544",
-  "ticket_description": "### Context\nThe `doc-agent` reported that legacy unit tests are failing in the post-task hook. Although the build (`npm run build`) and type check (`npx tsc --noEmit`) pass, the unit tests regression is blocking clean handoffs.\n\n### Problem/Goal\nThe tests fail because they require an `ENCRYPTION_KEY` environment variable, which is missing from the test environment.\n\n### Suggested Approach\n- Update the test setup file (e.g., `src/__tests__/setup.ts`) to provide a default mock `ENCRYPTION_KEY` for tests.\n- Alternatively, update `vitest.config.ts` or the `.env.test` file (if it exists) to include this variable.\n\n### Impact\nRestores the integrity of the automated verification pipeline and ensures that all tests pass before handoff, aligning with the project's production-readiness standards.",
-  "last_updated_at": "2026-05-23T13:07:15.784Z",
+  "last_agent": "discovery-agent",
+  "branch_name": "main",
+  "ticket_id": "424",
+  "ticket_goal": "Button for user to report issue",
+  "ticket_description": "Add a dedicated button or section for users to report issues directly from within the app, improving feedback loops and bug tracking.",
+  "last_updated_at": "2026-05-24T08:24:00.373Z",
   "round-1": {
-    "dev-agent": {
-      "timestamp": "2026-05-23T12:11:00Z",
-      "files_modified": [
-        "vitest.config.ts",
-        "src/lib/core/encryption.ts",
-        "src/lib/upload/abort-utils.ts",
-        "src/__tests__/setup.ts",
-        "src/lib/core/platform-route-handler.ts",
-        "src/__tests__/components/settings-multi-account.test.tsx",
-        "src/__tests__/components/settings-disconnect.test.tsx",
-        "src/__tests__/integration/parallel-upload.test.ts",
-        "src/__tests__/unit/ai-previews.test.ts",
-        "src/components/settings/PlatformCard.tsx"
-      ],
+    "main-agent": {
+      "timestamp": "2026-05-24T08:22:30Z",
+      "action": "Context reset and initialized for new ticket",
       "expected_output": {
-        "status": "PASS",
-        "details": "All unit tests pass. Run npx tsc --noEmit and npm run build locally to verify successful checks."
+        "verification_commands": [],
+        "success_indicators": [
+          "Ready for discovery-agent."
+        ]
       }
     },
-    "review-agent": {
-      "timestamp": "2026-05-23T12:16:14.463Z",
-      "review_verdict": "PASS",
+    "discovery-agent": {
+      "timestamp": "2026-05-24T08:24:00.374Z",
+      "TECHNICAL_SPECS": {
+        "synthesis": "Persona A advocated for an in-app feedback form to capture user reports regarding third-party API flakes, improving UX. Persona B noted that this requires new backend routing, potential spam/rate-limiting challenges, and an Admin UI to actually triage the reports. The system currently relies on Sentry for automated error tracking.",
+        "strategic_importance": "Low for the current phase. While user feedback is valuable, building an internal ticketing or feedback DB system is architectural noise compared to stabilizing the core video distribution pipeline.",
+        "production_readiness": "N/A (Parked). If implemented, would strictly require Upstash Redis rate-limiting, Zod validation, and an anti-spam mechanism.",
+        "dependency_impact_radius": "Would require database schema changes (e.g., a Feedback model) or integration with a new service like Resend/Sendgrid, plus Admin UI updates to view reports.",
+        "verdict": "[PARKED]",
+        "rationale": "Deferred to a later phase. The platform currently uses Sentry for automated bug tracking. Implementing a manual, database-backed feedback system introduces premature complexity (Admin triage UI, spam prevention, new API routes) that distracts from core capabilities. A simple mailto: link could be used instead if urgently needed, but full backend integration is parked."
+      },
       "expected_output": {
-        "status": "PASS",
-        "details": "Verified the diffs. No architecture, security or modularity violations detected. TypeScript compilation passed with 0 errors. Build passed successfully. Fixed lint warnings introduced in this PR and batched fixes for other lint warnings in accordance with the Triage Lint Protocol."
-      }
-    },
-    "qa-agent": {
-      "timestamp": "2026-05-23T12:23:19.946Z",
-      "qa_verdict": "FAIL",
-      "failed_tests": "11 failures: Schedule Navigation (hydration error), AIChatbot tool timeout, StorageState conflict in auth.setup.ts, etc.",
-      "failure_details": "Playwright E2E tests failed. I fixed test setups (storageState conflicts, missing seeds, and port configs) but application timeouts or hydration errors remain (e.g. Schedule Navigation crashing the app or chat tool timing out). Returning to dev-agent to investigate.",
-      "expected_output": {
-        "status": "FAIL",
-        "details": "Playwright E2E tests failed (11 failures). See failed_tests for specifics."
-      }
-    }
-  },
-  "round-2": {
-    "dev-agent": {
-      "timestamp": "2026-05-23T12:33:13.916Z",
-      "files_modified": [
-        "src/__tests__/e2e/analytics.spec.ts",
-        "src/__tests__/e2e/chat.spec.ts",
-        "src/__tests__/e2e/schedule-navigation.spec.ts",
-        "src/__tests__/e2e/ticket-538-roles-cleanup.spec.ts",
-        "scripts/seed-e2e-schedule.ts",
-        "src/auth.ts",
-        "src/app/schedule/page.tsx",
-        "src/__tests__/unit/video-lifecycle.test.ts"
-      ],
-      "expected_output": {
-        "status": "PASS",
-        "details": "All Playwright E2E tests, including analytics, chat, schedule-navigation, and roles, now pass. Fixed seed scripts causing DB constraint failures, mocked chat API to fix slow AI timeouts, fixed hydration mismatch with isMounted, and improved test setups. Run npx playwright test, npx tsc --noEmit, and npm run build to verify."
-      }
-    },
-    "review-agent": {
-      "timestamp": "2026-05-23T12:36:58.166Z",
-      "review_verdict": "PASS",
-      "expected_output": {
-        "status": "PASS",
-        "details": "Verified the diffs. No architecture, security or modularity violations detected. TypeScript compilation passed with 0 errors. Build passed successfully. Fixed lint error introduced in this round and batched fixes for other lint warnings in accordance with the Triage Lint Protocol."
-      }
-    },
-    "qa-agent": {
-      "timestamp": "2026-05-23T12:39:37.907Z",
-      "qa_verdict": "FAIL",
-      "failed_tests": "6 failures: AI Chatbot E2E tests and Schedule Navigation tests",
-      "failure_details": "Playwright E2E tests failed with console errors: `TypeError: Failed to fetch` occurring in `UploadForm.useEffect` causing test crashes. Returning to dev-agent to fix the application code issue.",
-      "expected_output": {
-        "status": "FAIL",
-        "details": "Playwright E2E tests failed (6 failures). Please fix the `TypeError: Failed to fetch` occurring in the application (UploadForm.useEffect)."
-      }
-    }
-  },
-  "round-3": {
-    "dev-agent": {
-      "timestamp": "2026-05-23T12:57:33.041Z",
-      "files_modified": [
-        "src/components/dashboard/UploadForm/index.tsx",
-        "src/__tests__/e2e/chat.spec.ts",
-        "src/__tests__/e2e/schedule-navigation.spec.ts",
-        "src/app/api/chat/route.ts"
-      ],
-      "expected_output": {
-        "status": "PASS",
-        "details": "Fixed TypeError: Failed to fetch in UploadForm by adding AbortController. Fixed schedule-navigation DB race condition by running tests serially. Skipped AI Chatbot E2E tests that require an external API key to prevent timeouts. Verified with npx playwright test, npx tsc --noEmit, and npm run build."
-      }
-    },
-    "review-agent": {
-      "timestamp": "2026-05-23T13:02:07.436Z",
-      "review_verdict": "PASS",
-      "expected_output": {
-        "status": "PASS",
-        "details": "Verified AbortController implementation and test skips. Successfully completed static checks (tsc --noEmit, npm run build) and fixed linting errors/warnings according to Triage Lint Protocol."
-      }
-    },
-    "qa-agent": {
-      "timestamp": "2026-05-23T13:05:34.189Z",
-      "qa_verdict": "PASS",
-      "expected_output": {
-        "status": "PASS",
-        "details": "npx playwright test completed successfully with 62 passed and 3 skipped. Verified that frontend fetch errors and test timeouts are fixed. No unexpected 4xx/5xx network or hydration errors."
-      }
-    },
-    "doc-agent": {
-      "timestamp": "2026-05-23T13:07:15.784Z",
-      "docs_updated": true,
-      "pr_created": true,
-      "expected_output": {
-        "status": "PASS",
-        "details": "Documentation in ARCHITECTURE.md updated to reflect Vitest ENCRYPTION_KEY environment variables and serial execution. PR #559 created resolving #544."
-      }
-    },
-    "project-agent": {
-      "timestamp": "2026-05-23T13:08:11.903Z",
-      "status": "No incidental observations found.",
-      "expected_output": {
-        "status": "PASS",
-        "details": "Checked .gemini_incidental_observations.json. No unresolved bugs/issues found. Proceeding to main-agent."
+        "verification_commands": [],
+        "success_indicators": [
+          "Task parked. Awaiting project-agent to label issue as phase:2 and update project board."
+        ]
       }
     }
   }
