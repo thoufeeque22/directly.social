@@ -1,63 +1,10 @@
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
-import { z } from '@/lib/api/zod-openapi';
-import { ByosConfigSchema } from '@/lib/schemas/settings';
+import { registerByosGetSettings } from './settings/byos-get';
+import { registerByosSaveSettings } from './settings/byos-save';
+import { registerDisconnectRoutes } from './settings/disconnect';
 
 export function registerSettingsRoutes(registry: OpenAPIRegistry) {
-  registry.registerPath({
-    method: 'get',
-    path: '/settings/byos',
-    description: 'Fetch the user\'s Bring-Your-Own-Storage configuration',
-    summary: 'Get BYOS Config',
-    tags: ['Settings'],
-    responses: {
-      200: {
-        description: 'Successfully fetched BYOS config',
-        content: {
-          'application/json': {
-            schema: z.object({
-              config: ByosConfigSchema.nullable(),
-            }),
-          },
-        },
-      },
-      401: {
-        description: 'Unauthorized',
-      },
-    },
-  });
-
-  registry.registerPath({
-    method: 'post',
-    path: '/settings/byos',
-    description: 'Save the user\'s Bring-Your-Own-Storage configuration',
-    summary: 'Save BYOS Config',
-    tags: ['Settings'],
-    request: {
-      body: {
-        content: {
-          'application/json': {
-            schema: ByosConfigSchema,
-          },
-        },
-      },
-    },
-    responses: {
-      200: {
-        description: 'Successfully saved BYOS config',
-        content: {
-          'application/json': {
-            schema: z.object({
-              config: ByosConfigSchema,
-            }),
-          },
-        },
-      },
-      400: {
-        description: 'Invalid input',
-      },
-      401: {
-        description: 'Unauthorized',
-      },
-    },
-  });
+  registerByosGetSettings(registry);
+  registerByosSaveSettings(registry);
+  registerDisconnectRoutes(registry);
 }
