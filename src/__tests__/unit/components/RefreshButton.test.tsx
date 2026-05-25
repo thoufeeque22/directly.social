@@ -14,7 +14,7 @@ describe('RefreshButton', () => {
   beforeEach(() => {
     vi.mocked(useRouter).mockReturnValue({
       refresh: mockRefresh,
-    } as any);
+    } as unknown as ReturnType<typeof useRouter>);
     vi.useFakeTimers();
   });
 

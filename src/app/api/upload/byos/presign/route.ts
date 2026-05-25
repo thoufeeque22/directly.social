@@ -4,16 +4,7 @@ import { uploadRateLimit, checkRateLimit } from '@/lib/core/ratelimit';
 import { getByosConfig } from '@/lib/byos/service';
 import { createS3Client } from '@/lib/upload/s3/client';
 import { initializeUpload, getPartPresignedUrl } from '@/lib/byos/presign-service';
-import { z } from 'zod';
-
-const presignSchema = z.object({
-  action: z.enum(['initialize', 'presignPart']),
-  fileName: z.string().min(1),
-  fileSize: z.number().max(500 * 1024 * 1024).optional(),
-  uploadId: z.string().optional(),
-  key: z.string().optional(),
-  partNumber: z.number().int().min(1).optional(),
-});
+import { ByosPresignSchema } from '@/lib/schemas/byos-upload';
 
 export async function POST(req: Request) {
   try {
@@ -23,7 +14,7 @@ export async function POST(req: Request) {
 
     await checkRateLimit(uploadRateLimit, userId, 'Upload limit reached');
     const body = await req.json();
-    const result = presignSchema.safeParse(body);
+    const result = ByosPresignSchema.safeParse(body);
     if (!result.success) return NextResponse.json({ error: result.error.issues[0].message }, { status: 400 });
 
     const config = await getByosConfig(userId);

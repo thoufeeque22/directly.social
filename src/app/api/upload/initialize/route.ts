@@ -2,11 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/core/prisma";
 import { MAX_STORAGE_PER_USER } from "@/lib/core/constants";
-
-interface PlatformInput {
-  platform: string;
-  accountId: string;
-}
+import { UploadInitializeSchema } from "@/lib/schemas/upload-pipeline";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -16,7 +12,14 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { title, description, videoFormat, platforms, scheduledAt, isPublished } = await req.json();
+    const body = await req.json();
+    const validated = UploadInitializeSchema.parse(body);
+    const { title, description, videoFormat, platforms, scheduledAt, isPublished } = validated;
+
+    interface PlatformInput {
+      platform: string;
+      accountId: string;
+    }
 
     if (!platforms || !Array.isArray(platforms)) {
       return NextResponse.json({ error: "Missing platforms data" }, { status: 400 });

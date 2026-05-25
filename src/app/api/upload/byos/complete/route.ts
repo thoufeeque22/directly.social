@@ -3,15 +3,7 @@ import { auth } from '@/auth';
 import { getByosConfig } from '@/lib/byos/service';
 import { createS3Client } from '@/lib/upload/s3/client';
 import { completeMultipartUpload, createByosAsset, upsertPostHistoryForByos } from '@/lib/byos/complete-service';
-import { z } from 'zod';
-
-const completeSchema = z.object({
-  uploadId: z.string().min(1), key: z.string().min(1), fileName: z.string().min(1), fileSize: z.number().min(1),
-  mimeType: z.string().optional(), parts: z.array(z.object({ PartNumber: z.number(), ETag: z.string() })).min(1),
-  title: z.string().optional(), description: z.string().optional(), videoFormat: z.string().optional(),
-  historyId: z.string().optional(), platforms: z.array(z.object({ platform: z.string(), accountId: z.string() })).optional(),
-  scheduledAt: z.string().optional(),
-});
+import { ByosCompleteSchema } from '@/lib/schemas/byos-upload';
 
 export async function POST(req: Request) {
   try {
@@ -20,7 +12,7 @@ export async function POST(req: Request) {
     const userId = session.user.id;
 
     const body = await req.json();
-    const result = completeSchema.safeParse(body);
+    const result = ByosCompleteSchema.safeParse(body);
     if (!result.success) return NextResponse.json({ error: result.error.issues[0].message }, { status: 400 });
 
     const config = await getByosConfig(userId);

@@ -6,27 +6,9 @@ import fsSync from "fs";
 import path from "path";
 import { getVideoMetadata, checkTranscodeRequirement, VideoMetadata } from "@/lib/video/processor";
 import { logger } from "@/lib/core/logger";
-import { z } from "zod";
+import { UploadAssembleSchema } from "@/lib/schemas/upload-pipeline";
 
 export const maxDuration = 300; 
-
-const assembleSchema = z.object({
-  uploadId: z.string(),
-  fileName: z.string(),
-  totalChunks: z.number(),
-  totalSize: z.number().optional(),
-  title: z.string().optional(),
-  description: z.string().optional(),
-  videoFormat: z.string().optional(),
-  historyId: z.string().optional(),
-  platforms: z.array(z.object({
-    platform: z.string(),
-    accountId: z.string()
-  })).optional(),
-  scheduledAt: z.string().optional().refine((val) => !val || !isNaN(Date.parse(val)), {
-    message: "Invalid date format for scheduledAt"
-  })
-});
 
 interface PlatformInput {
   platform: string;
@@ -46,7 +28,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const result = assembleSchema.safeParse(body);
+    const result = UploadAssembleSchema.safeParse(body);
 
     if (!result.success) {
       return NextResponse.json({ error: "Invalid request data", details: result.error.format() }, { status: 400 });

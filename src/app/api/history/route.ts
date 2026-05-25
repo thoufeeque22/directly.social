@@ -1,17 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/core/prisma';
-import { z } from 'zod';
 import { logger } from '@/lib/core/logger';
+import { HistoryQuerySchema } from '@/lib/schemas/history';
 
 export const dynamic = 'force-dynamic';
-
-const querySchema = z.object({
-  cursor: z.string().optional(),
-  limit: z.coerce.number().min(1).max(200).default(20),
-  published: z.string().optional(), // 'true', 'false', or 'all'
-  search: z.string().optional(),
-});
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -22,7 +15,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const { searchParams } = new URL(req.url);
-    const result = querySchema.safeParse(Object.fromEntries(searchParams));
+    const result = HistoryQuerySchema.safeParse(Object.fromEntries(searchParams));
 
     if (!result.success) {
       return NextResponse.json({ error: 'Invalid query parameters', details: result.error.format() }, { status: 400 });

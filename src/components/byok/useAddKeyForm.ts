@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AIProvider } from '@/lib/core/ai';
 import { PROVIDERS } from './Providers';
+import { validateAIKeyAction } from '@/lib/actions/ai';
 
 export function useAddKeyForm(onSave: (provider: AIProvider, apiKey: string, modelId: string) => Promise<boolean>) {
   const [selectedProvider, setSelectedProvider] = useState<AIProvider>('openai');
@@ -32,18 +33,13 @@ export function useAddKeyForm(onSave: (provider: AIProvider, apiKey: string, mod
     }
     setIsValidating(true);
     try {
-      const response = await fetch('/api/ai/validate-key', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ provider: selectedProvider, apiKey: apiKey.trim() }),
-      });
-      const data = await response.json();
-      if (response.ok && data.success) {
+      const result = await validateAIKeyAction({ provider: selectedProvider, apiKey: apiKey.trim() });
+      if (result.success) {
         await onSave(selectedProvider, apiKey.trim(), selectedModel);
         setSuccess(`Successfully saved and validated ${PROVIDERS.find(p => p.value === selectedProvider)?.label} API key.`);
         setApiKey('');
       } else {
-        setError(data.error || 'Validation failed.');
+        setError('Validation failed.');
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : String(err));
