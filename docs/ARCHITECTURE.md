@@ -150,7 +150,7 @@ sequenceDiagram
     participant HUD as UploadHUD (Component)
     participant LS as localStorage (SS_STAGING_STATUS)
     participant API as API (/api/upload)
-    participant FS as File System (src/tmp)
+    participant FS as File System (tmp)
     participant DB as Database (Prisma)
 
     U->>API: Upload Video Chunk
@@ -233,7 +233,7 @@ To maintain storage efficiency, expired assets and orphaned files are purged reg
 sequenceDiagram
     participant W as Worker (Cleanup)
     participant DB as Database (Prisma)
-    participant FS as File System (src/tmp)
+    participant FS as File System (tmp)
 
     loop Every 1 Hour
         W->>DB: Find Expired GalleryAssets
@@ -241,7 +241,7 @@ sequenceDiagram
         W->>FS: Delete Physical Files
         W->>DB: Delete GalleryAsset Records
         
-        W->>FS: Scan src/tmp for Orphaned Files (>24h)
+        W->>FS: Scan tmp for Orphaned Files (>24h)
         W->>DB: Check if Files are Tracked
         DB-->>W: Tracking Status
         W->>FS: Delete Untracked Files

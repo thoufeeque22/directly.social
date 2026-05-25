@@ -107,7 +107,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     // 2. Physical cleanup (Always do this, even if DB failed or IDs were already missing)
-    const tempDir = path.join(process.cwd(), "src/tmp");
+    const tempDir = path.join(process.cwd(), "tmp");
     let deletedCount = 0;
     for (const fileId of targetIds) {
       const filePath = path.join(tempDir, fileId);

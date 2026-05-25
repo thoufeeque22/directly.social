@@ -14,7 +14,7 @@ export async function getOptimizedVideoPath(
   postHistoryId?: string,
   accountId?: string
 ): Promise<string> {
-  const originalPath = path.join(process.cwd(), "src/tmp", originalFileId);
+  const originalPath = path.join(process.cwd(), "tmp", originalFileId);
   
   // 1. Check if we already have an optimized version in DB for this post/platform/account
   if (postHistoryId && accountId) {
@@ -29,7 +29,7 @@ export async function getOptimizedVideoPath(
     });
 
     if (result?.optimizedFileId) {
-      const optimizedPath = path.join(process.cwd(), "src/tmp", result.optimizedFileId);
+      const optimizedPath = path.join(process.cwd(), "tmp", result.optimizedFileId);
       if (fs.existsSync(optimizedPath)) {
         logger.info(`️ [TRANSCODER] Reusing optimized file: ${result.optimizedFileId}`);
         return optimizedPath;

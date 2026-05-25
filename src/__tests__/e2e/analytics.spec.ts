@@ -9,7 +9,7 @@ test.describe('Analytics Dashboard', () => {
 
   test.beforeAll(async () => {
     // Elevate user to ADMIN so middleware allows access to /admin/analytics
-    execSync('npx tsx scripts/make-admin.ts tester@socialstudio.ai');
+    execSync('npx tsx src/__tests__/scripts/make-admin.ts tester@socialstudio.ai');
 
     // Seed mock data before running tests
     await prisma.systemMetric.deleteMany();
@@ -61,7 +61,7 @@ test.describe('Analytics Dashboard', () => {
 
   test.afterAll(() => {
     // Revert user to normal USER
-    execSync('npx tsx scripts/seed-e2e-user.ts');
+    execSync('npx tsx src/__tests__/scripts/seed-e2e-user.ts');
   });
 
   test.describe('admin access', () => {

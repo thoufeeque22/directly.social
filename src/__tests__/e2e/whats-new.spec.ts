@@ -6,7 +6,7 @@ import * as path from 'path';
 function runDbScript(scriptName: string) {
   try {
     console.log(`[E2E DB Setup] Running ${scriptName}...`);
-    execSync(`npx tsx scripts/${scriptName}`, { stdio: 'inherit' });
+    execSync(`npx tsx src/__tests__/scripts/${scriptName}`, { stdio: 'inherit' });
   } catch (error) {
     console.error(`[E2E DB Setup Error] Failed to run ${scriptName}:`, error);
   }

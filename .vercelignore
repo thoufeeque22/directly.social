@@ -13,5 +13,5 @@ node_modules/**
 # Ignore local database and tmp files
 *.db
 *.db-journal
-src/tmp/**
+tmp/**
 .vercel/**

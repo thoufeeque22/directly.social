@@ -3,7 +3,7 @@ import { execSync } from 'child_process';
 
 test.describe.serial('Schedule Navigation', () => {
   test.beforeAll(() => {
-    execSync('npx tsx scripts/seed-e2e-schedule.ts');
+    execSync('npx tsx src/__tests__/scripts/seed-e2e-schedule.ts');
   });
 
   test.beforeEach(async ({ page }) => {

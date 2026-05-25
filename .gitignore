@@ -52,7 +52,9 @@ next-env.d.ts
 /src/generated/prisma
 *.db
 *.db-journal
-/src/tmp
+/tmp
+/coverage
+/test-results
 /scratch
 
 # Sentry Config File

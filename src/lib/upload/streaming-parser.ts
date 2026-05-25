@@ -24,7 +24,7 @@ export async function streamMultipartFormData(req: NextRequest): Promise<ParsedM
   let fileName: string | undefined;
 
   // Ensure temp directory exists
-  const tempDir = path.join(process.cwd(), "src/tmp");
+  const tempDir = path.join(process.cwd(), "tmp");
   if (!fs.existsSync(tempDir)) {
     await fsPromises.mkdir(tempDir, { recursive: true });
   }

@@ -13,7 +13,7 @@ Social Studio is a professional-grade multi-platform video distribution platform
 
 ### 2.2 Video Upload & Processing
 - **Zero-Memory Chunked Upload**: Multi-part upload system to handle large video files without browser memory issues.
-- **Server-Side Assembly**: Secure reassembly of file chunks in `src/tmp`.
+- **Server-Side Assembly**: Secure reassembly of file chunks in `tmp`.
 - **Optimization & Transcoding**: Integrated FFmpeg pipeline for platform-specific video optimization (bitrate, resolution, format).
 - **Staging System**: Persistence of uploaded files with a 24-hour expiration and automated cleanup.
 - **Storage Quota**: Hard limit of 2GB per user for staged/gallery assets.
@@ -79,7 +79,7 @@ Social Studio is a professional-grade multi-platform video distribution platform
 - **Asset Resilience**: Sidecar metadata storage for reviewed content to ensure data persistence during the publish cycle.
 
 ## 5. System Constraints & Future Scope
-- **Storage**: Temporary staging in `src/tmp` with automated hourly purge.
+- **Storage**: Temporary staging in `tmp` with automated hourly purge.
 - **Mobile Native**: Already integrated via Capacitor; future work involves deeper native plugin usage.
 - **Advanced Analytics (Phase 2)**: 
     - Visual dashboards featuring cross-platform follower growth, view trends, and engagement metrics.

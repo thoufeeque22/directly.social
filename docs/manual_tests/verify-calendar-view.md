@@ -8,7 +8,7 @@ This test verifies the unified Calendar Content Planner on the Schedule page, co
 2. User has scheduled posts spread across different days/weeks.
 3. If testing in development, run the seed script:
    ```bash
-   npx tsx scripts/seed-e2e-schedule.ts
+   npx tsx src/__tests__/scripts/seed-e2e-schedule.ts
    ```
 
 ## Test Steps

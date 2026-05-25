@@ -18,7 +18,7 @@ export async function GET(
   }
 
   const { uploadId } = await params;
-  const chunkDir = path.join(process.cwd(), "src/tmp/chunks", uploadId);
+  const chunkDir = path.join(process.cwd(), "tmp/chunks", uploadId);
 
   try {
     if (!fsSync.existsSync(chunkDir)) {
