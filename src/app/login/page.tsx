@@ -24,10 +24,6 @@ function LoginContent() {
                    Capacitor.getPlatform() !== 'web' &&
                    (Capacitor.isNativePlatform() || navigator.userAgent.includes('SocialStudioApp'));
 
-  useEffect(() => {
-    console.log("[Auth Debug] env.E2E:", process.env.NEXT_PUBLIC_E2E, "isNative:", isNative, "UA:", navigator.userAgent);
-  }, [isNative]);
-
   // Handle the "Native Bridge" trigger
   useEffect(() => {
     const provider = searchParams.get('provider');
