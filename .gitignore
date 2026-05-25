@@ -15,6 +15,7 @@
 /test-results
 /test-results-unit
 /verification
+/.auth
 
 # next.js
 /.next/

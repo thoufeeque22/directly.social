@@ -82,7 +82,7 @@ pm2 startup
 ---
 
 ## 5. Automation (Zero-Touch Updates)
-I've already added a `.github/workflows/deploy.yml` and `update.sh` to your project. 
+I've already added a `.github/workflows/deploy.yml` and `scripts/update.sh` to your project. 
 
 1. Go to your GitHub Repo -> **Settings** -> **Secrets** -> **Actions**.
 2. Add these three secrets:
