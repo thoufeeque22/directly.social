@@ -22,5 +22,9 @@ describe('OpenAPI API Route', () => {
     expect(data.paths['/admin/aggregate']).toBeDefined();
     expect(data.paths['/history/{id}']).toBeDefined();
     expect(data.paths['/media/{fileId}']).toBeDefined();
+    expect(data.paths['/upload/youtube']).toBeDefined();
+    expect(data.paths['/upload/tiktok']).toBeDefined();
+    expect(data.paths['/upload/byos/presign']).toBeDefined();
+    expect(data.paths['/upload/byos/complete']).toBeDefined();
   });
 });

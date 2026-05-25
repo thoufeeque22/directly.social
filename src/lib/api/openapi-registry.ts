@@ -10,6 +10,8 @@ import { registerUploadPipelineRoutes } from './routes/upload-pipeline';
 import { registerSettingsRoutes } from './routes/settings';
 import { registerAdminRoutes } from './routes/admin';
 import { registerResourceRoutes } from './routes/resources';
+import { registerPlatformUploadRoutes } from './routes/platform-uploads';
+import { registerByosUploadRoutes } from './routes/byos-upload';
 
 // Initialize Registry
 export const registry = new OpenAPIRegistry();
@@ -25,6 +27,8 @@ registerUploadPipelineRoutes(registry);
 registerSettingsRoutes(registry);
 registerAdminRoutes(registry);
 registerResourceRoutes(registry);
+registerPlatformUploadRoutes(registry);
+registerByosUploadRoutes(registry);
 
 export { z };
 
