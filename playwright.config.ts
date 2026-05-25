@@ -45,6 +45,10 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npm run dev -- -H 127.0.0.1 -p 3005',
+    env: {
+      NEXTAUTH_URL: 'http://127.0.0.1:3005',
+      AUTH_URL: 'http://127.0.0.1:3005',
+    },
     port: 3005,
     reuseExistingServer: true,
     stdout: 'pipe',
