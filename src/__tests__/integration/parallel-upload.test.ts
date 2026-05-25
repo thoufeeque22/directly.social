@@ -57,12 +57,13 @@ describe('Distribution Engine Parallelism', () => {
 
     expect(onPlatformStatus).toHaveBeenCalledWith('platform1', 'uploading');
     expect(onPlatformStatus).toHaveBeenCalledWith('platform2', 'uploading');
+    expect(onPlatformStatus).toHaveBeenCalledWith('platform3', 'uploading');
 
     await distributionPromise;
     expect(onPlatformStatus).toHaveBeenCalledWith('platform1', 'success');
   });
 
-  it('should limit concurrency for multiple files', async () => {
+  it('should limit concurrency for multiple platforms', async () => {
     const onPlatformStatus = vi.fn();
     const mockedFetch = global.fetch as Mock;
     
@@ -84,7 +85,7 @@ describe('Distribution Engine Parallelism', () => {
       };
     });
 
-    const selectedAccountIds = ['p1', 'p2', 'p3'];
+    const selectedAccountIds = ['p1', 'p2', 'p3', 'p4'];
     const accounts: Account[] = selectedAccountIds.map(id => ({ 
       id, 
       provider: id, 
@@ -105,7 +106,7 @@ describe('Distribution Engine Parallelism', () => {
       onPlatformStatus
     });
 
-    // Default concurrency is 2 in upload-utils.ts
-    expect(maxConcurrent).toBeLessThanOrEqual(2);
+    // Default concurrency is 3 in upload-utils.ts
+    expect(maxConcurrent).toBeLessThanOrEqual(3);
   });
 });
