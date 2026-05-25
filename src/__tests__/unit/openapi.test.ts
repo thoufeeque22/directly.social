@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { GET } from '@/app/api/openapi.json/route';
 
 describe('OpenAPI API Route', () => {

@@ -137,4 +137,3 @@ export function registerAuxiliaryRoutes(registry: OpenAPIRegistry) {
     },
   });
 }
-}

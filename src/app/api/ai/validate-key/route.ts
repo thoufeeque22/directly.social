@@ -3,7 +3,6 @@ import { generateText } from 'ai';
 import { getAIModel, AIProvider } from '@/lib/core/ai';
 import { logger } from '@/lib/core/logger';
 import { AIKeyValidationSchema } from '@/lib/schemas/ai';
-import { z } from 'zod';
 
 export async function POST(req: NextRequest) {
   try {

@@ -7,7 +7,6 @@ import path from "path";
 import { getVideoMetadata, checkTranscodeRequirement, VideoMetadata } from "@/lib/video/processor";
 import { logger } from "@/lib/core/logger";
 import { UploadAssembleSchema } from "@/lib/schemas/upload-pipeline";
-import { z } from "zod";
 
 export const maxDuration = 300; 
 
