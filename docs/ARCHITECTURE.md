@@ -233,7 +233,7 @@ To maintain storage efficiency, expired assets and orphaned files are purged reg
 sequenceDiagram
     participant W as Worker (Cleanup)
     participant DB as Database (Prisma)
-    participant FS as File System (tmp)
+    participant FS as File System (root tmp/)
 
     loop Every 1 Hour
         W->>DB: Find Expired GalleryAssets
@@ -241,14 +241,14 @@ sequenceDiagram
         W->>FS: Delete Physical Files
         W->>DB: Delete GalleryAsset Records
         
-        W->>FS: Scan tmp for Orphaned Files (>24h)
+        W->>FS: Scan tmp/ for Orphaned Files (>24h)
         W->>DB: Check if Files are Tracked
         DB-->>W: Tracking Status
         W->>FS: Delete Untracked Files
     end
 ```
 
-### 4. AI Chatbot Assistant
+### 5. AI Chatbot Assistant
 
 The AI Chatbot provides a conversational interface for users to manage their content, schedule posts, and view staged media. It leverages the Vercel AI SDK to stream responses and execute server-side tools.
 
@@ -274,7 +274,7 @@ sequenceDiagram
     API-->>U: Stream UI Updates
 ```
 
-### 5. Global Search
+### 6. Global Search
 
 A unified search mechanism provides server-side filtering for history and media assets.
 
@@ -293,7 +293,7 @@ sequenceDiagram
     API-->>U: Render Results
 ```
 
-### 6. Platform BYOK (Bring Your Own Key)
+### 7. Platform BYOK (Bring Your Own Key)
 
 The BYOK Integration Wizard allows power users to provide their own platform API credentials (Client ID, Secret, Redirect URI), bypassing global application-level rate limits.
 
@@ -331,7 +331,7 @@ sequenceDiagram
     end
 ```
 
-### 7. Graceful Error Handling
+### 8. Graceful Error Handling
 
 The application implements a hierarchical error handling strategy to ensure graceful degradation and high observability.
 
@@ -342,7 +342,7 @@ The application implements a hierarchical error handling strategy to ensure grac
   - **Glass Aesthetic:** All error states use a shared `ErrorBoundary` component that follows the project's premium glass aesthetic, featuring blur effects and high-contrast typography.
 - **Recovery:** Error boundaries provide a "Try again" mechanism that triggers a segment re-render, allowing users to recover from transient issues without a full page refresh.
 
-### 8. What's New Notifications
+### 9. What's New Notifications
 
 Users are notified of new application updates via a badge in the header, and can also persistently access historical updates via the user profile dropdown menu.
 
@@ -390,7 +390,7 @@ sequenceDiagram
     end
 ```
 
-### 9. Bring Your Own Storage (BYOS)
+### 10. Bring Your Own Storage (BYOS)
 
 Users can connect their own S3/R2 storage to bypass server limits.
 
@@ -399,7 +399,7 @@ Users can connect their own S3/R2 storage to bypass server limits.
 - **Security:** Credentials are encrypted at rest via AES-256-GCM.
 - **Streaming Distribution:** Media is streamed directly from the user's bucket to platform APIs during publishing.
 
-### 10. Unified Settings & Platform Management
+### 11. Unified Settings & Platform Management
 
 The Settings page is organized into a URL-driven tabbed interface, providing a centralized hub for all configuration.
 
@@ -430,7 +430,7 @@ graph TD
     Config --> BYOK[BYOK Wizard]
 ```
 
-### 11. Global Refresh Mechanism
+### 12. Global Refresh Mechanism
 
 Social Studio implements a unified refresh system to ensure data consistency between server-side state and client-side components.
 
@@ -441,7 +441,7 @@ Social Studio implements a unified refresh system to ensure data consistency bet
 
 For more details, see the [Global Refresh Feature Documentation](features/GLOBAL_REFRESH.md).
 
-### 12. History Domain Architecture
+### 13. History Domain Architecture
 
 The History domain manages the record of all past and upcoming posts. To maintain scalability and performance, the domain follows a highly modular architecture that adheres to the project's strict 50-line rule.
 
@@ -454,7 +454,7 @@ The History domain manages the record of all past and upcoming posts. To maintai
 - **Component Decomposition:** The History page is composed of small, focused MUI components (e.g., `HistoryHeader`, `HistoryList`, `HistoryCard`, `PlatformResultItem`). This decomposition reduces cognitive load and improves UI maintainability.
 - **Real-time Monitoring (Cockpit):** A specialized UI state for active tasks that provides live progress updates and status monitoring, utilizing automatic polling and optimized re-renders.
 
-### 12. Complex UI Form Architecture (Modular Engine)
+### 14. Complex UI Form Architecture (Modular Engine)
 
 Complex forms (like the Upload Form) follow a "Modular Engine" pattern to manage deep state and UI complexity while adhering to the 50-line rule.
 
@@ -482,6 +482,14 @@ RBAC is enforced at multiple layers:
 1.  **API Layer:** Protected API routes (e.g., `/api/admin/*`) use the `auth()` helper to verify the session and explicitly check for the `ADMIN` role. Unauthorized requests return a `401 Unauthorized` response.
 2.  **UI Layer:** Administrative UI segments (like the Analytics dashboard) perform client-side role verification based on API responses and session data, rendering appropriate error states or redirects for non-admin users.
 3.  **Navigation:** The application sidebar dynamically filters links based on the user's role, hiding administrative entry points from standard users.
+
+### File System Security
+
+To prevent unauthorized file access and data leakage, the application implements several file system security measures:
+
+- **Path Traversal Protection:** All file-related API routes (e.g., `/api/media/[fileId]`, `/api/upload`) perform strict validation of input paths. File identifiers are sanitized and checked against expected patterns to ensure they cannot be used to access files outside the designated `tmp/` or storage directories.
+- **Ownership Verification:** File access is tied to the `userId` of the uploader. Every request to retrieve or modify a media asset involves a database check to ensure the requesting user owns the asset.
+- **Atomic Cleanup:** The background worker ensures that temporary files and chunk directories are cleaned up even if processes are interrupted, preventing the accumulation of sensitive orphaned data.
 
 ### Testing Identity
 
@@ -511,6 +519,7 @@ The application maintains a high standard of quality through automated testing a
 End-to-End tests are located in `src/__tests__/e2e/` and cover critical user journeys such as authentication, metadata management, and post scheduling.
 
 - **Automated Authentication:** The test suite uses a dedicated E2E user (`tester@socialstudio.ai`). A setup project (`auth.setup.ts`) performs a real login via the Credentials provider and saves the session state to `.auth/user.json`, allowing subsequent tests to skip the login step.
+- **Helper Scripts:** Complex setup tasks (seeding users, scheduling posts, granting admin rights) are managed via specialized scripts in `src/__tests__/scripts/`.
 - **Environment Requirements:** E2E tests require `NEXT_PUBLIC_E2E=true` and `NODE_ENV=development` to enable the Credentials provider on the server.
 - **Port Standardization:** E2E tests are configured to run Next.js on port `3005` (via `playwright.config.ts` using the TCP port wait method) to prevent collisions with the default development server on port 3000.
 - **Locators:** Tests prioritize accessible roles (`getByRole`) and `data-testid` attributes for robustness.
@@ -545,6 +554,7 @@ To ensure stability, security, and traceability in a production environment, Soc
 - **Observability:** Sentry is integrated on both the client (`sentry.edge.config.ts`, `sentry.server.config.ts`) and server, capturing unhandled exceptions and performance metrics. Sentry error reporting is used across server actions and API routes.
 - **Rate Limiting:** Upstash Redis is used for distributed rate limiting. Critical endpoints (like upload API routes and AI actions) are protected to prevent abuse and manage API costs.
 - **Runtime Validation:** Zod schemas enforce strict validation of request payloads and function arguments across server actions (`action-utils.ts`) and API routes, acting as a guard against malformed data and ensuring type safety at the boundary layer.
+- **Infrastructure Safety:** Production deployments utilize strict directory isolation and automated cleanup tasks to maintain server health.
 
 ## Deployment & Infrastructure
 
