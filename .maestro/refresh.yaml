@@ -1,0 +1,7 @@
+appId: com.thoufeeque.socialstudio
+---
+- launchApp
+- swipe:
+    start: 50%, 20%
+    end: 50%, 80%
+- assertVisible: "Upload & Automate" # Pull-to-refresh shouldn't crash the UI

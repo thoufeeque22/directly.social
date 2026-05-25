@@ -16,7 +16,7 @@ Follow the rules in GEMINI.md under "Discovery (Architecture & Planning)".
 3. **Verdict:** Apply your own Socratic Method.
    - If [NECESSARY]: Create implementation strategy and tech specs. Handoff to `dev-agent`.
    - If [PARKED]: Identify as 'Future Scope' based on architectural maturity. Handoff to `project-agent`.
-5. **Handoff:** Update `.gemini_agent_context.json`. You MUST use the `write_file` or `replace` tool to set `last_agent: "discovery-agent"` and store all technical specs, blueprints, and analysis results inside a `"discovery-agent"` key.
+5. **Handoff:** Update `.gemini/state/ticket-<id>.json`. You MUST use the `write_file` or `replace` tool to set `last_agent: "discovery-agent"` and store all technical specs, blueprints, and analysis results inside a `"discovery-agent"` key.
 
 # Output Format
 Return exactly this structure (after updating the context file):

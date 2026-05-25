@@ -6,7 +6,10 @@ import {
   updatePostTool,
   cancelPostTool
 } from '@/lib/actions/ai-chat';
-import * as historyActions from '@/app/actions/history';
+import * as coreActions from '@/app/actions/history/core';
+import * as getUpcomingActions from '@/app/actions/history/get-upcoming';
+import * as updateScheduleActions from '@/app/actions/history/update-schedule';
+import * as deleteScheduleActions from '@/app/actions/history/delete-schedule';
 import { prisma } from '@/lib/core/prisma';
 
 // Mock dependencies
@@ -22,10 +25,19 @@ vi.mock('@/lib/core/action-utils', () => ({
   protectedAction: vi.fn((cb) => cb('test-user-id')),
 }));
 
-vi.mock('@/app/actions/history', () => ({
-  getUpcomingPosts: vi.fn(),
+vi.mock('@/app/actions/history/core', () => ({
   savePostHistory: vi.fn(),
+}));
+
+vi.mock('@/app/actions/history/get-upcoming', () => ({
+  getUpcomingPosts: vi.fn(),
+}));
+
+vi.mock('@/app/actions/history/update-schedule', () => ({
   updateScheduledPost: vi.fn(),
+}));
+
+vi.mock('@/app/actions/history/delete-schedule', () => ({
   deleteScheduledPost: vi.fn(),
 }));
 
@@ -37,11 +49,11 @@ describe('AI Chatbot Integration Tools', () => {
   describe('listUpcomingPostsTool', () => {
     it('should return posts from getUpcomingPosts', async () => {
       const mockPosts = [{ id: '1', title: 'Test Post' }];
-      vi.mocked(historyActions.getUpcomingPosts).mockResolvedValue(mockPosts as unknown as Awaited<ReturnType<typeof historyActions.getUpcomingPosts>>);
+      vi.mocked(getUpcomingActions.getUpcomingPosts).mockResolvedValue(mockPosts as unknown as Awaited<ReturnType<typeof getUpcomingActions.getUpcomingPosts>>);
 
       const result = await listUpcomingPostsTool();
       expect(result).toEqual(mockPosts);
-      expect(historyActions.getUpcomingPosts).toHaveBeenCalled();
+      expect(getUpcomingActions.getUpcomingPosts).toHaveBeenCalled();
     });
   });
 
@@ -73,11 +85,11 @@ describe('AI Chatbot Integration Tools', () => {
         platforms: ['youtube', 'tiktok']
       };
       
-      vi.mocked(historyActions.savePostHistory).mockResolvedValue({ success: true } as unknown as Awaited<ReturnType<typeof historyActions.savePostHistory>>);
+      vi.mocked(coreActions.savePostHistory).mockResolvedValue({ success: true } as unknown as Awaited<ReturnType<typeof coreActions.savePostHistory>>);
 
       await scheduleVideoTool(params);
 
-      expect(historyActions.savePostHistory).toHaveBeenCalledWith(expect.objectContaining({
+      expect(coreActions.savePostHistory).toHaveBeenCalledWith(expect.objectContaining({
         title: 'New Video',
         stagedFileId: 'f1',
         scheduledAt: new Date('2026-05-20T10:00:00Z'),
@@ -90,14 +102,14 @@ describe('AI Chatbot Integration Tools', () => {
     it('should call updateScheduledPost', async () => {
       const data = { title: 'Updated' };
       await updatePostTool('id1', data);
-      expect(historyActions.updateScheduledPost).toHaveBeenCalledWith('id1', data);
+      expect(updateScheduleActions.updateScheduledPost).toHaveBeenCalledWith('id1', data);
     });
   });
 
   describe('cancelPostTool', () => {
     it('should call deleteScheduledPost', async () => {
       await cancelPostTool('id1');
-      expect(historyActions.deleteScheduledPost).toHaveBeenCalledWith('id1');
+      expect(deleteScheduleActions.deleteScheduledPost).toHaveBeenCalledWith('id1');
     });
   });
 });

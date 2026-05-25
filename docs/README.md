@@ -10,11 +10,13 @@ Welcome to the Social Studio project documentation. This folder contains archite
 
 - [Metadata Templates](features/METADATA_TEMPLATES.md) - Reusable description snippets and bio links.
 - [Global Search](features/GLOBAL_SEARCH.md) - Unified filtering for history and media.
+- [Global Refresh](features/GLOBAL_REFRESH.md) - Unified sync mechanism and Pull-to-Refresh gesture.
 - [Manual Mode AI Polish](features/MANUAL_MODE_AI_ENHANCEMENT.md) - Seamless transition from Manual drafting to AI Enrich.
 
 ## Guides & Troubleshooting
 
 - [Platform Integrations](PLATFORM_INTEGRATIONS.md) - Details on external API integrations.
+- [Adding a New Platform](DEVELOPER_GUIDE_PLATFORMS.md) - Guide for developers to integrate new social platforms.
 - [Mobile Wrapper](MOBILE_WRAPPER.md) - Capacitor setup and native bridging.
 - [Cloudflare Tunnel](CLOUDFLARE_TUNNEL_SETUP.md) - Local development and webhooks.
 

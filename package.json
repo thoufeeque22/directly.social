@@ -16,6 +16,13 @@
     "clear-activity": "npx tsx scripts/clear-activity.ts",
     "cleanup:neon": "bash scripts/cleanup-neon.sh",
     "cleanup:neon:force": "bash scripts/cleanup-neon.sh --force",
+    "prune-state": "npx tsx scripts/prune-state.ts",
+    "test:visual": "npx playwright test --grep @visual",
+    "test:native": "maestro test .maestro/",
+    "test:native:full": "bash scripts/mobile-test.sh",
+    "mobile:ios": "open -a Simulator",
+    "mobile:android": "~/Library/Android/sdk/emulator/emulator -avd $(~/Library/Android/sdk/emulator/emulator -list-avds | head -n 1) &",
+    "mobile:dev": "bash scripts/mobile-dev.sh",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -59,6 +66,7 @@
     "prisma": "^6.19.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-simple-pull-to-refresh": "^1.3.4",
     "server-only": "^0.0.1",
     "tsx": "^4.19.2",
     "zod": "^4.4.3"
@@ -74,6 +82,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.7",
     "eslint": "^9",
     "eslint-config-next": "16.2.3",
     "jsdom": "^29.0.2",

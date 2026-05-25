@@ -7,6 +7,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [['html', { open: 'never' }]],
+  snapshotDir: 'docs/visual/goldens',
   use: {
     baseURL: 'http://127.0.0.1:3005',
     trace: 'on-first-retry',
@@ -25,9 +26,29 @@ export default defineConfig({
       },
       dependencies: ['setup'],
     },
+    {
+      name: 'Mobile Chrome',
+      use: {
+        ...devices['Pixel 5'],
+        storageState: '.auth/user.json',
+      },
+      dependencies: ['setup'],
+    },
+    {
+      name: 'Mobile Safari',
+      use: {
+        ...devices['iPhone 13'],
+        storageState: '.auth/user.json',
+      },
+      dependencies: ['setup'],
+    },
   ],
   webServer: {
     command: 'npm run dev -- -H 127.0.0.1 -p 3005',
+    env: {
+      NEXTAUTH_URL: 'http://127.0.0.1:3005',
+      AUTH_URL: 'http://127.0.0.1:3005',
+    },
     port: 3005,
     reuseExistingServer: true,
     stdout: 'pipe',

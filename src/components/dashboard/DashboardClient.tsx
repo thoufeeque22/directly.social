@@ -188,7 +188,7 @@ export default function DashboardClient({
     if (!reviewContext) return;
     setIsReviewing(false); setIsUploading(true); setUploadStatus(" Applying AI magic...");
     try {
-      const { updatePlatformResultsAction } = await import('@/app/actions/history');
+      const { updatePlatformResultsAction } = await import('@/app/actions/history/metadata');
       await updatePlatformResultsAction(reviewContext.historyId, updatedPreviews);
       const targetPlatforms = mapAccountIdsToPlatforms(selectedAccountIds, devAccounts, false, reviewContext.formData);
       const pendingPost = { title: "AI Optimized Post", description: "", videoFormat, aiTier, contentMode, customStyleText, platforms: targetPlatforms, isScheduled, scheduledAt, galleryFileId, galleryFileName, resumeHistoryId: reviewContext.historyId };
@@ -225,9 +225,9 @@ export default function DashboardClient({
           <UploadForm 
             isUploading={isUploading} accounts={devAccounts} preferences={preferences} selectedAccountIds={selectedAccountIds} contentMode={contentMode} aiTier={aiTier} videoFormat={videoFormat} videoDuration={videoDuration} draftFileName={galleryFileName || draftFileName}
             onVisualScan={handleVisualScan} onTierChange={setAiTier} onModeChange={setContentMode} onToggleAccount={handleToggleAccount}
-            onFileChange={(file) => { setGalleryFileId(null); setGalleryFileName(null); handleFileChange(file); setAiPreviews({}); }}
-            onGallerySelect={(fileId, fileName) => { handleGallerySelect(fileId, fileName); setAiPreviews({}); }}
-            onSubmit={handleMainAction} isScheduled={isScheduled} scheduledAt={scheduledAt} onSchedulingChange={(s, d) => { setIsScheduled(s); setScheduledAt(d); }}
+            onFileChange={(file: File | null) => { setGalleryFileId(null); setGalleryFileName(null); handleFileChange(file); setAiPreviews({}); }}
+            onGallerySelect={(fileId: string, fileName: string) => { handleGallerySelect(fileId, fileName); setAiPreviews({}); }}
+            onSubmit={handleMainAction} isScheduled={isScheduled} scheduledAt={scheduledAt} onSchedulingChange={(s: boolean, d: string) => { setIsScheduled(s); setScheduledAt(d); }}
             customStyleText={customStyleText} onCustomStyleChange={setCustomStyleText} hasCachedPreviews={Object.keys(aiPreviews).length > 0} onResumeReview={() => setIsReviewing(true)}
           />
         )}

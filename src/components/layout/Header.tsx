@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import styles from './Header.module.css';
 import { WhatsNewBadge } from '../WhatsNew/WhatsNewBadge';
 import { UserActions } from './UserActions';
+import { RefreshButton } from './RefreshButton';
 
 export const Header = ({ onToggleSidebar }: { onToggleSidebar: () => void }) => {
   const router = useRouter();
@@ -35,6 +36,7 @@ export const Header = ({ onToggleSidebar }: { onToggleSidebar: () => void }) => 
         />
       </div>
       <div className={styles.actions}>
+        <RefreshButton />
         <WhatsNewBadge />
         <UserActions session={session} />
       </div>

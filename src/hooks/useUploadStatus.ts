@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { z } from 'zod';
 
+// TODO: Refactor: logic extraction needed
 const UploadStatusSchema = z.object({
   status: z.string().nullable().optional(),
   percent: z.number().nullable().optional(),
@@ -8,7 +9,7 @@ const UploadStatusSchema = z.object({
   historyId: z.string().nullable().optional(),
 });
 
-type UploadStatus = {
+export type UploadStatus = {
   status: string | null;
   percent: number | null;
   active: boolean;

@@ -48,10 +48,31 @@ If you want to test local changes on your physical phone or simulator without de
 ---
 
 ## 📱 Mobile Optimizations
-The following optimizations have been applied to `src/app/layout.tsx`:
+The following optimizations have been applied to ensure a native feel:
 - **Viewport Lock**: Prevented user zooming for a more stable UI.
 - **Safe Area Support**: Added `viewport-fit=cover` to ensure the app handles notches and home indicators correctly.
 - **Translucent Status Bar**: Configured for iOS to blend with the dark theme.
+- **Pull-to-Refresh**: Standard mobile gesture to trigger a global data sync (see [Global Refresh](features/GLOBAL_REFRESH.md)).
+
+---
+
+## 🤖 Native Automation (Maestro)
+We use **Maestro** for true native app automation. Unlike browser emulation, Maestro interacts with the actual native shell and WebView.
+
+### **1. Prerequisites**
+- Install Maestro: `brew tap mobile-dev-inc/tap && brew install mobile-dev-inc/tap/maestro`
+- An Android Emulator or iOS Simulator must be running.
+
+### **2. Running Tests**
+Tests are located in the `.maestro/` directory and written in YAML.
+```bash
+# Run all native flows
+npm run test:native
+```
+
+### **3. Key Flows**
+- `smoke.yaml`: Basic dashboard visibility and navigation.
+- `refresh.yaml`: Verifies the native Pull-to-Refresh gesture.
 
 ---
 

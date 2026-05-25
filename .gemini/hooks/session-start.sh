@@ -1,6 +1,5 @@
 #!/bin/bash
 # Check if an autonomous pipeline is in progress
-if [ -f ".gemini_agent_context.json" ]; then
-  # Logic to signal the agent to resume
+if [ "$(ls -A .gemini/state/*.json 2>/dev/null)" ]; then
   echo "AUTONOMOUS_PIPELINE_RESUME"
 fi

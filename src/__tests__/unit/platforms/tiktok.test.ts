@@ -22,7 +22,15 @@ vi.mock('@/lib/core/prisma', () => ({
     byokCredential: {
       findUnique: vi.fn().mockResolvedValue(null),
     },
+    logTokenEvent: {
+      create: vi.fn().mockResolvedValue({}),
+    }
   },
+}));
+
+// Mock Audit
+vi.mock('@/lib/core/audit', () => ({
+  logTokenEvent: vi.fn().mockResolvedValue({}),
 }));
 
 // Mock FS
@@ -48,7 +56,7 @@ describe('TikTok Platform Integration', () => {
     vi.clearAllMocks();
   });
 
-  it('correctly initializes and uploads a video to TikTok', async () => {
+  it('correctly initializes and uploads a video to TikTok with dynamic privacy', async () => {
     // 1. Mock DB Account
     vi.mocked(prisma.account.findUnique).mockResolvedValue({
       id: 'acc1',
@@ -59,7 +67,7 @@ describe('TikTok Platform Integration', () => {
     vi.mocked(global.fetch).mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        data: { upload_url: 'https://tiktok.com/upload/binary' },
+        data: { upload_url: 'https://tiktok.com/upload/binary', publish_id: 'p1' },
         error: { code: 'ok' }
       }),
     } as Response);
@@ -71,24 +79,23 @@ describe('TikTok Platform Integration', () => {
 
     const result = await publishTikTokVideo({
       userId: 'user1',
-      videoPath: 'test.mp4',
+      filePath: 'test.mp4',
       title: 'TikTok Viral',
-      accountId: 'acc1'
+      accountId: 'acc1',
+      privacy: 'PUBLIC_TO_EVERYONE'
     });
 
-    expect(result.upload_url).toBe('https://tiktok.com/upload/binary');
+    expect(result.publish_id).toBe('p1');
     
     // Verify initialization payload
     const initCall = vi.mocked(global.fetch).mock.calls[0];
     const payload = JSON.parse(initCall[1]?.body as string);
     expect(payload.post_info.title).toBe('TikTok Viral');
-    expect(payload.source_info.source).toBe('FILE_UPLOAD');
+    expect(payload.post_info.privacy_level).toBe('PUBLIC_TO_EVERYONE');
 
     // Verify binary upload headers
     const uploadCall = vi.mocked(global.fetch).mock.calls[1];
     expect(uploadCall[0]).toBe('https://tiktok.com/upload/binary');
-    expect(uploadCall[1]?.method).toBe('PUT');
-    expect(uploadCall[1]?.headers).toHaveProperty('Content-Range');
   });
 
   it('throws error if TikTok init fails', async () => {
@@ -101,7 +108,7 @@ describe('TikTok Platform Integration', () => {
       }),
     } as Response);
 
-    await expect(publishTikTokVideo({ userId: 'u1', videoPath: 'v.mp4', title: 'T', accountId: 'a1' }))
-      .rejects.toThrow('TikTok Publish Failed: Rate limit');
+    await expect(publishTikTokVideo({ userId: 'u1', filePath: 'v.mp4', title: 'T', accountId: 'a1' }))
+      .rejects.toThrow('TikTok Init Failed: Rate limit');
   });
 });

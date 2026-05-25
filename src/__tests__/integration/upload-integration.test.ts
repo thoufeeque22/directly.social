@@ -19,11 +19,24 @@ vi.mock('../../lib/core/prisma', () => ({
         access_token: "fake_token", 
         refresh_token: "fake_refresh"
       }),
+      findUnique: vi.fn().mockResolvedValue({
+        id: "1", 
+        access_token: "fake_token", 
+        refresh_token: "fake_refresh"
+      }),
     },
     byokCredential: {
       findUnique: vi.fn().mockResolvedValue(null),
     },
+    logTokenEvent: {
+      create: vi.fn().mockResolvedValue({}),
+    }
   },
+}));
+
+// Mock Audit
+vi.mock('../../lib/core/audit', () => ({
+  logTokenEvent: vi.fn().mockResolvedValue({}),
 }));
 
 // 2. Clear fetch before each test
@@ -65,9 +78,9 @@ vi.mock('axios', () => ({
   default: {
     post: vi.fn().mockImplementation(async (url: string, _data: unknown, config: { headers?: Record<string, string> }) => {
       if (url.includes('rupload.facebook.com')) {
-        // Assert Offset header if it's the resume test
+        // Validates it resumed from 500
         if (config?.headers?.Offset === '500') {
-           expect(config.headers['Offset']).toBe('500');
+           return { data: { success: true } };
         }
         return { data: { success: true } };
       }
@@ -122,7 +135,7 @@ describe('Upload Integrations', () => {
            json: async () => ({ id: 'mock_published_id' })
         } as unknown as Response;
       }
-      return { ok: true, json: async () => ({}) } as unknown as Response;
+      return { ok: true, json: async () => ({}), text: async () => "" } as unknown as Response;
     });
   });
 
@@ -136,29 +149,25 @@ describe('Upload Integrations', () => {
     const publishPromise = publishInstagramReel({
       userId: 'test_user',
       filePath: 'fake.mp4',
-      caption: 'Test Caption',
+      title: 'Test Title',
+      description: 'Test Caption',
       musicId
     });
 
-    // Advance timers so the polling finishes instantly
     await vi.advanceTimersByTimeAsync(10000);
-
     await publishPromise;
 
     const fetchMock = vi.mocked(global.fetch);
-    // At least 4 calls: pages, container, status poll, publish
     expect(fetchMock.mock.calls.length).toBeGreaterThanOrEqual(4);
   });
 
   it('verifies metadata injection for YouTube payload', async () => {
     const mockedFetch = global.fetch as Mock;
-    // Mock the session initialization response
     mockedFetch.mockResolvedValueOnce({
       ok: true,
       headers: { get: () => 'https://mock-upload-url.com' },
     } as unknown as Response);
 
-    // Mock the binary upload response
     mockedFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ id: 'yt_video_123' }),
@@ -169,21 +178,24 @@ describe('Upload Integrations', () => {
       filePath: 'fake.mp4',
       title: 'Short Title',
       description: 'Engaging content',
-      privacy: 'public'
+      privacy: 'unlisted'
     });
 
     expect(result.data.id).toBe('yt_video_123');
     const firstCall = mockedFetch.mock.calls[0];
     const body = JSON.parse(firstCall[1]?.body as string);
     expect(body.snippet.title).toBe('Short Title');
-    expect(body.status.privacyStatus).toBe('public');
+    expect(body.status.privacyStatus).toBe('unlisted');
   });
+
   it('verifies Meta resumable upload logic fetches offset and resumes', async () => {
+    const axios = (await import('axios')).default;
+    const axiosSpy = vi.spyOn(axios, 'post');
+
     vi.mocked(global.fetch).mockImplementation(async (input: string | URL | Request, init?: RequestInit) => {
       const url = typeof input === 'string' ? input : (input instanceof URL ? input.toString() : (input as Request).url);
       const options = init || (input instanceof Request ? input : {});
       
-      // Mock for Facebook Get Account Pages
       if (url.includes('/me/accounts')) {
         return {
           ok: true,
@@ -196,41 +208,37 @@ describe('Upload Integrations', () => {
       if (url.includes('rupload.facebook.com') && options?.method === 'GET') {
         return {
           ok: true,
-          headers: { get: () => '500' }
+          headers: { get: (name: string) => name === 'Offset' ? '500' : null }
         } as unknown as Response;
       }
-      // Mock the POST request for binary push
-      if (url.includes('rupload.facebook.com') && options?.method === 'POST') {
-        expect((options.headers as Record<string, string>)['Offset']).toBe('500'); // Validates it resumed from 500
-        return { ok: true, json: async () => ({ success: true }) } as unknown as Response;
-      }
-      // Mock for Facebook Polling
       if (url.includes('status_code')) {
         return {
            ok: true,
            json: async () => ({ status_code: 'FINISHED' })
         } as unknown as Response;
       }
-      // Mock for Facebook Publish
       if (url.includes('/media_publish')) {
         return {
            ok: true,
            json: async () => ({ id: 'mock_published_id' })
         } as unknown as Response;
       }
-      return { ok: false } as unknown as Response;
+      return { ok: true, json: async () => ({}), text: async () => "" } as unknown as Response;
     });
 
     const publishPromise = publishInstagramReel({
       userId: 'test_user',
       filePath: 'fake.mp4',
-      caption: 'Resuming Upload',
+      title: 'Resuming Upload',
+      description: 'Resuming Upload',
       creationId: 'existing_creation_id_123'
     });
 
-    // Advance timers for polling
     await vi.advanceTimersByTimeAsync(10000);
     await publishPromise;
+
+    // Verify axios post was called with Offset 500
+    const axiosCall = axiosSpy.mock.calls.find(call => call[0].includes('rupload.facebook.com'));
+    expect(axiosCall?.[2]?.headers?.Offset).toBe('500');
   });
 });
-

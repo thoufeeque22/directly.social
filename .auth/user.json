@@ -2,8 +2,8 @@
   "cookies": [
     {
       "name": "authjs.csrf-token",
-      "value": "ba06d84c706f616e598968cc376e1a4304c0a71db1305ddfd952924156d49d1a%7C4711740cd25e3f1d882f8126e7e317df634b09b5829e1f0f57808b8546fe0413",
-      "domain": "localhost",
+      "value": "4ded611b08117c04cd7c7686344a1dee87264d1ad91a653ffd34fb307a932f3b%7C0e675b77456c975d9b193caa81dbafd9f911d7ed4cdedca0b13d5f83d82d2567",
+      "domain": "127.0.0.1",
       "path": "/",
       "expires": -1,
       "httpOnly": true,
@@ -12,8 +12,8 @@
     },
     {
       "name": "authjs.callback-url",
-      "value": "http%3A%2F%2Flocalhost%3A3000%2Flogin",
-      "domain": "localhost",
+      "value": "http%3A%2F%2Flocalhost%3A3005",
+      "domain": "127.0.0.1",
       "path": "/",
       "expires": -1,
       "httpOnly": true,
@@ -22,14 +22,24 @@
     },
     {
       "name": "authjs.session-token",
-      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..fkNyGMM8JZbh1JLx5tnk9A.gjxlus2aBQ_vO4pUDgsr6-37iVNuF0iNpEQooi7oYLtuHlOWkeybApqfeLIpWSTnE65tlnSOTxveJkO0YEhsM18uysr475TkoNBp4O3VBWoUF5umGS8VrQYHSkV1vmo0OX9AO_AQLD5ei4qVr7QdT3oYsG0YogqIt-9kKXknj07mDcv6WgWw95Izp4h8r33jxAtwLi8hM8V-3E9EOnXjYOGTIsFcOQ03mRLrGyTmv32kZE5ZdYnDvLPKEkocnKVC201QsRkGyiaBiDaDLhJ_kw.r22gnGgzB0E3AvBAiy4aFoxpIK7IM2OsTb7fEaHdm7k",
-      "domain": "localhost",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..IqNclVDKF12jrRIB7AJWLQ.AtXc4pZun2TwWqoA-ockOIfpeVFPuWca5ebpG2Mz_hvjQH3zUMy__Qxw02oAEo3UratBgo-dHDX-mQSV5SmPsS4CCierIh4HUE72ETifXLPqEfqqQnCiRWLj7dzKWEBadS7yBFQChYT7JS3mFS_8zlpaMLVgTAZcDdJ7W_PnUYZwf0jJq6ANFX2jw5J2BbbsrHaykEva3WkdOGurTGZC8f5svW7IETMWeHTv625Wy78NFDl3zzJaAVfzC347rlWuEyo96F-EPKSAbJM5MYyyNQ.VOs14HIa-9sQln8dpFpkqzfCtV4IWly4OHC9hpr1KRc",
+      "domain": "127.0.0.1",
       "path": "/",
-      "expires": 1782133022.888394,
+      "expires": 1782331400.938999,
       "httpOnly": true,
       "secure": false,
       "sameSite": "Lax"
     }
   ],
-  "origins": []
+  "origins": [
+    {
+      "origin": "http://127.0.0.1:3005",
+      "localStorage": [
+        {
+          "name": "SS_SELECTED_PLATFORMS",
+          "value": "[\"cmpi0k2ns00009b2bjqwtjwd9\",\"cmpi0k2ns00019b2bshc6mt07\",\"local-dev-1\",\"local-dev-2\",\"local-dev-3\"]"
+        }
+      ]
+    }
+  ]
 }

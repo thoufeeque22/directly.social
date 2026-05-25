@@ -200,7 +200,32 @@ sequenceDiagram
     end
 ```
 
-### 3. Asset Cleanup
+### 3. Modular Distribution Layer
+
+The platform distribution logic is organized into a modular architecture that separates shared infrastructure from platform-specific implementation details. This ensures maintainability and simplifies the addition of new platforms.
+
+#### Core Infrastructure (`src/lib/core/platforms/`)
+
+Contains shared utilities and types used across multiple platforms:
+- **`account-utils.ts`**: Centralized logic for retrieving platform accounts and logging token usage audits.
+- **`meta-uploader.ts`**: Shared binary upload logic for Meta-based platforms (Facebook, Instagram).
+- **`meta-utils.ts`**: Common Meta Graph API helpers (polling status, fetching pages).
+- **`types.ts`**: Unified interfaces for publishing parameters and results.
+
+#### Platform Modules (`src/lib/platforms/`)
+
+Each platform follows a modular subdirectory pattern (e.g., `src/lib/platforms/instagram/`):
+- **`account.ts`**: Platform-specific account resolution and permission validation.
+- **`container.ts` / `reel.ts`**: Logic for initializing upload sessions or containers.
+- **`finalize.ts`**: Steps required to complete a publication (e.g., publishing a container, fetching permalinks).
+- **`stats.ts`**: Logic for fetching platform-specific engagement metrics.
+- **`[platform].ts`**: The main orchestrator file (e.g., `instagram.ts`) that exports the public API by composing the modular sub-units.
+
+#### Server Orchestration
+
+The `distributor-server.ts` acts as the high-level router, using dynamic imports to load platform orchestrators only when needed. This keeps the worker process lightweight and isolates platform-specific dependencies.
+
+### 4. Asset Cleanup
 
 To maintain storage efficiency, expired assets and orphaned files are purged regularly.
 
@@ -379,6 +404,10 @@ Users can connect their own S3/R2 storage to bypass server limits.
 The Settings page is organized into a URL-driven tabbed interface, providing a centralized hub for all configuration.
 
 - **URL-Driven Navigation:** Tab state is persisted in the URL query string (`?tab=...`), allowing for direct linking and consistent state across refreshes.
+- **Modular Architecture:** The settings page follows a strict modular design to maintain readability and comply with the project's 50-line rule. The main `SettingsContent` component acts as a router, delegating tab rendering to specialized components:
+  - `SettingsTabs`: Manages the tab navigation and URL state synchronization.
+  - `DestinationsTab`: Encapsulates platform connection logic, account management, and API fetching.
+  - `RoadmapPlatforms`: Renders the upcoming platform integrations and "Coming Soon" section.
 - **Progressive Disclosure:** Platform configuration (OAuth and BYOK) is hidden behind a toggle. Once enabled, an accordion expands to reveal both basic connection management and advanced BYOK settings.
 - **Platform Roadmap:** A dynamic "Coming Soon" section displays upcoming platform integrations in a grayscale, disabled state, providing transparency into the project's development roadmap.
 - **Community Feedback:** A "Suggest a Platform" feature allows users to proactively request new integrations.
@@ -400,6 +429,42 @@ graph TD
     Config --> Conn[Account Connection]
     Config --> BYOK[BYOK Wizard]
 ```
+
+### 11. Global Refresh Mechanism
+
+Social Studio implements a unified refresh system to ensure data consistency between server-side state and client-side components.
+
+- **Centralized Logic:** The `useAppRefresh` hook handles the orchestration of `router.refresh()` (for server components) and the dispatching of custom events (for client components).
+- **Event Synchronization:** Components can synchronize their state by listening to the `app:refresh` event on `globalThis`. This pattern allows decoupled components to respond to user-initiated refreshes without complex state management.
+- **Mobile Gestures:** The system is integrated with a "Pull-to-Refresh" mechanism in the `LayoutWrapper`, providing a native-like experience for mobile users.
+- **UX & Feedback:** A minimum delay is enforced to provide satisfying visual feedback, ensuring the user perceives the refresh action regardless of network speed.
+
+For more details, see the [Global Refresh Feature Documentation](features/GLOBAL_REFRESH.md).
+
+### 12. History Domain Architecture
+
+The History domain manages the record of all past and upcoming posts. To maintain scalability and performance, the domain follows a highly modular architecture that adheres to the project's strict 50-line rule.
+
+- **Decomposed Server Actions:** Logic for fetching, retrying, and canceling history items is split into specialized modules within `src/app/actions/history/`. This ensures that each action has a single responsibility and is independently testable.
+- **Specialized Hooks:** A composite `useHistory` hook orchestrates multiple sub-hooks to manage complex state and logic:
+    - `useHistoryState`: Manages local state for filters, pagination, and data storage.
+    - `useHistoryData`: Handles data fetching, polling, and synchronization with server actions.
+    - `useHistoryActions`: Provides handlers for user interactions such as Retry, Cancel, and Delete.
+    - `useHistoryCockpit`: Manages "Cockpit" mode, enabling real-time monitoring of active post distribution.
+- **Component Decomposition:** The History page is composed of small, focused MUI components (e.g., `HistoryHeader`, `HistoryList`, `HistoryCard`, `PlatformResultItem`). This decomposition reduces cognitive load and improves UI maintainability.
+- **Real-time Monitoring (Cockpit):** A specialized UI state for active tasks that provides live progress updates and status monitoring, utilizing automatic polling and optimized re-renders.
+
+### 12. Complex UI Form Architecture (Modular Engine)
+
+Complex forms (like the Upload Form) follow a "Modular Engine" pattern to manage deep state and UI complexity while adhering to the 50-line rule.
+
+- **Provider-Consumer Pattern:** The form is wrapped in a dedicated `UploadFormProvider` (Context) that consolidates state from props, custom hooks, and local signals. This eliminates prop-drilling across deep component trees.
+- **Atomic Decomposition:** Large forms are broken down into a hierarchy of atomic, single-responsibility components:
+    - `index.tsx`: Pure entry point that initializes the Provider.
+    - `UploadFormInner.tsx`: Orchestrates the high-level layout.
+    - `StandardMetadataFields`, `PlatformMetadataFields`, `VideoSelection`: Focused sub-components that consume the context.
+- **Hook-Driven Logic:** Business logic (media parsing, template management) is extracted into specialized hooks (e.g., `useUploadForm`, `useMediaLibrary`) which are then integrated into the Context.
+- **Visual Feedback:** All atomic units maintain visual consistency using MUI components and shared style modules, ensuring a unified "glass" aesthetic across all form states.
 
 ## Security & Role-Based Access Control (RBAC)
 
@@ -462,7 +527,18 @@ Unit tests for utility functions and integration tests for server actions are lo
 
 The project uses specialized AI agents (Discovery, Dev, Review, QA) to manage the development lifecycle, ensuring that every change is planned, implemented, audited, and verified before merging.
 
-## Production Readiness
+#### Modular Orchestration Rules (GEMINI.md)
+
+To maintain context efficiency and prevent "rule bloat", the project's core orchestration rules (originally in `GEMINI.md`) are modularized into domain-specific files under `.gemini/base/`:
+
+- **CORE.md:** Technical standards, TypeScript strictness, and Next.js 15/React 19 conventions.
+- **UI_UX.md:** Aesthetic standards, Material UI conventions, and accessibility mandates.
+- **PRODUCTION.md:** Reliability, performance, security, and observability standards.
+- **ORCHESTRATION.md:** Agent roles, handoff protocols, state management (pruning), and Discovery DoR.
+
+Agents are required to read these modular files based on their current task domain.
+
+### 4. Production Readiness
 
 To ensure stability, security, and traceability in a production environment, Social Studio implements:
 
