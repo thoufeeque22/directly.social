@@ -4,6 +4,8 @@ import { processPlatformUpload } from './distribution-service';
 
 export { stageVideoFile };
 
+const MAX_PARALLEL_DISTRIBUTIONS = 3;
+
 interface DistributionParams {
   stagedFileId: string;
   fileName: string;
@@ -43,8 +45,8 @@ export async function distributeToPlatforms(params: DistributionParams): Promise
   };
 
   const workers = [];
-  const concurrency = 2; 
-  for (let i = 0; i < Math.min(concurrency, queue.length); i++) {
+  const workerCount = Math.min(MAX_PARALLEL_DISTRIBUTIONS, queue.length);
+  for (let i = 0; i < workerCount; i++) {
     workers.push((async () => {
       while (queue.length > 0 && !checkGlobalAbort(historyId)) {
         const id = queue.shift();

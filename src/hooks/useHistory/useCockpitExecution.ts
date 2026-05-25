@@ -15,7 +15,7 @@ export function useCockpitExecution(setPosts: (p: PostHistoryEntry[]) => void, f
       }
       const selectedAccountIds = post.platforms.map((p: PlatformResult) => {
          const account = accounts.find(acc => acc.id === p.accountId);
-         if (!account) return (p.accountId?.startsWith('local-dev-')) ? p.accountId : null;
+         if (!account) return (p.accountId?.includes('local-dev-')) ? p.accountId : null;
          return (p.platform === 'facebook' || p.platform === 'instagram') ? `${p.platform}:${account.id}` : account.id;
       }).filter((id): id is string => id !== null);
 
