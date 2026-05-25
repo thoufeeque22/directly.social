@@ -8,6 +8,8 @@ import { registerMediaRoutes } from './routes/media';
 import { registerPlatformRoutes } from './routes/platforms';
 import { registerUploadPipelineRoutes } from './routes/upload-pipeline';
 import { registerSettingsRoutes } from './routes/settings';
+import { registerAdminRoutes } from './routes/admin';
+import { registerResourceRoutes } from './routes/resources';
 
 // Initialize Registry
 export const registry = new OpenAPIRegistry();
@@ -21,6 +23,8 @@ registerMediaRoutes(registry);
 registerPlatformRoutes(registry);
 registerUploadPipelineRoutes(registry);
 registerSettingsRoutes(registry);
+registerAdminRoutes(registry);
+registerResourceRoutes(registry);
 
 export { z };
 

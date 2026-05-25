@@ -18,5 +18,9 @@ describe('OpenAPI API Route', () => {
     expect(data.paths['/upload/chunk']).toBeDefined();
     expect(data.paths['/upload/assemble']).toBeDefined();
     expect(data.paths['/settings/byos']).toBeDefined();
+    expect(data.paths['/admin/analytics']).toBeDefined();
+    expect(data.paths['/admin/aggregate']).toBeDefined();
+    expect(data.paths['/history/{id}']).toBeDefined();
+    expect(data.paths['/media/{fileId}']).toBeDefined();
   });
 });
