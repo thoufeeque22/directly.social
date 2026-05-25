@@ -8,6 +8,7 @@ export function registerAdminRoutes(registry: OpenAPIRegistry) {
     path: '/admin/analytics',
     description: 'Fetch aggregated system metrics for the last 30 days. Requires ADMIN role.',
     summary: 'Get System Metrics',
+    tags: ['Admin'],
     security: [{ bearerAuth: [] }],
     responses: {
       200: {

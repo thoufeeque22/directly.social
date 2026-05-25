@@ -40,6 +40,7 @@ export function registerAuxiliaryRoutes(registry: OpenAPIRegistry) {
     path: '/tiktok-proxy',
     description: 'Proxies TikTok OAuth 2.0 token requests to bypass PKCE and client_id naming issues',
     summary: 'TikTok OAuth Proxy',
+    tags: ['AI'],
     request: {
       body: {
         content: {
@@ -85,6 +86,7 @@ export function registerAuxiliaryRoutes(registry: OpenAPIRegistry) {
     path: '/upload/chunks/{uploadId}',
     description: 'Returns a list of already uploaded chunk indices for an active session',
     summary: 'Get Uploaded Chunks',
+    tags: ['Upload'],
     request: {
       params: z.object({
         uploadId: z.string().openapi({ description: 'The unique ID for the upload session' }),

@@ -8,6 +8,7 @@ export function registerByosUploadRoutes(registry: OpenAPIRegistry) {
     path: '/upload/byos/presign',
     description: 'Initializes or generates part-level presigned URLs for BYOS uploads',
     summary: 'BYOS Presign',
+    tags: ['Upload'],
     request: {
       body: {
         content: {

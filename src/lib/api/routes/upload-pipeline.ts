@@ -8,6 +8,7 @@ export function registerUploadPipelineRoutes(registry: OpenAPIRegistry) {
     path: '/upload/initialize',
     description: 'Initializes a new multi-part upload and checks storage quota',
     summary: 'Initialize Upload Pipeline',
+    tags: ['Upload'],
     request: {
       body: {
         content: {
@@ -79,6 +80,7 @@ export function registerUploadPipelineRoutes(registry: OpenAPIRegistry) {
     path: '/upload/assemble',
     description: 'Concatenates all uploaded chunks into the final video file and registers it in the gallery.',
     summary: 'Assemble Upload',
+    tags: ['Upload'],
     request: {
       body: {
         content: {

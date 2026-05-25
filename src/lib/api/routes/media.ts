@@ -8,6 +8,7 @@ export function registerMediaRoutes(registry: OpenAPIRegistry) {
     path: '/media',
     description: 'Fetch staged gallery assets for the authenticated user',
     summary: 'List Media Assets',
+    tags: ['Media'],
     request: {
       query: z.object({
         search: z.string().optional().openapi({ description: 'Filter assets by filename' }),
