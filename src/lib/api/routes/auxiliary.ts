@@ -8,6 +8,7 @@ export function registerAuxiliaryRoutes(registry: OpenAPIRegistry) {
     path: '/settings/disconnect',
     description: 'Disconnects a social media platform account from the user profile',
     summary: 'Disconnect Platform',
+    tags: ['Settings'],
     request: {
       body: {
         content: {
@@ -108,6 +109,7 @@ export function registerAuxiliaryRoutes(registry: OpenAPIRegistry) {
     path: '/upload/stage',
     description: 'Uploads a large video file in a single stream and stages it on disk',
     summary: 'Stage Upload',
+    tags: ['Upload'],
     request: {
       body: {
         content: {

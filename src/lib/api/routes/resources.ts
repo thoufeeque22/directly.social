@@ -1,7 +1,6 @@
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import { z } from '@/lib/api/zod-openapi';
 import { PostHistorySchema } from '@/lib/schemas/history';
-import { GalleryAssetSchema } from '@/lib/schemas/media';
 
 export function registerResourceRoutes(registry: OpenAPIRegistry) {
   registry.registerPath({
@@ -9,6 +8,7 @@ export function registerResourceRoutes(registry: OpenAPIRegistry) {
     path: '/history/{id}',
     description: 'Fetch a single post history record by ID',
     summary: 'Get Single History',
+    tags: ['History'],
     request: {
       params: z.object({
         id: z.string().openapi({ description: 'The ID of the post history record' }),
@@ -75,6 +75,7 @@ export function registerResourceRoutes(registry: OpenAPIRegistry) {
     path: '/media/{fileId}',
     description: 'Securely delete a media asset from the gallery and disk',
     summary: 'Delete Single Media',
+    tags: ['Media'],
     request: {
       params: z.object({
         fileId: z.string().openapi({ description: 'The ID of the file to delete' }),
