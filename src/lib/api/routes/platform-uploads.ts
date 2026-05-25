@@ -11,6 +11,7 @@ export function registerPlatformUploadRoutes(registry: OpenAPIRegistry) {
       path: `/upload/${platform}`,
       description: `Uploads a video to ${platform.charAt(0).toUpperCase() + platform.slice(1)}`,
       summary: `${platform.charAt(0).toUpperCase() + platform.slice(1)} Upload`,
+      tags: ['Upload'],
       request: {
         body: {
           content: {

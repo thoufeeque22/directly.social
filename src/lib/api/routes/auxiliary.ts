@@ -60,6 +60,7 @@ export function registerAuxiliaryRoutes(registry: OpenAPIRegistry) {
     path: '/upload/cleanup',
     description: 'Deletes a staged file from the temporary storage',
     summary: 'Cleanup Upload',
+    tags: ['Upload'],
     request: {
       body: {
         content: {
@@ -135,4 +136,5 @@ export function registerAuxiliaryRoutes(registry: OpenAPIRegistry) {
       },
     },
   });
+}
 }

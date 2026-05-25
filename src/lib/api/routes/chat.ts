@@ -8,6 +8,7 @@ export function registerChatRoutes(registry: OpenAPIRegistry) {
     path: '/chat',
     description: 'Handles conversational AI assistant with tool calling',
     summary: 'AI Chat',
+    tags: ['AI'],
     request: {
       body: {
         content: {

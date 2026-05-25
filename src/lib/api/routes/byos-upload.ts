@@ -45,6 +45,7 @@ export function registerByosUploadRoutes(registry: OpenAPIRegistry) {
     path: '/upload/byos/complete',
     description: 'Completes a BYOS multi-part upload and registers the asset',
     summary: 'BYOS Complete',
+    tags: ['Upload'],
     request: {
       body: {
         content: {

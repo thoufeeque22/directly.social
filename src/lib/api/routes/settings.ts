@@ -30,6 +30,7 @@ export function registerSettingsRoutes(registry: OpenAPIRegistry) {
     path: '/settings/byos',
     description: 'Save the user\'s Bring-Your-Own-Storage configuration',
     summary: 'Save BYOS Config',
+    tags: ['Settings'],
     request: {
       body: {
         content: {

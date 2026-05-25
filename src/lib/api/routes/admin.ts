@@ -32,6 +32,7 @@ export function registerAdminRoutes(registry: OpenAPIRegistry) {
     path: '/admin/aggregate',
     description: 'Trigger aggregation of Redis telemetry counters into the database. Requires ADMIN role.',
     summary: 'Aggregate Telemetry',
+    tags: ['Admin'],
     security: [{ bearerAuth: [] }],
     responses: {
       200: {

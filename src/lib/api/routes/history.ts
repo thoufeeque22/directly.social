@@ -8,6 +8,7 @@ export function registerHistoryRoutes(registry: OpenAPIRegistry) {
     path: '/history',
     description: 'Fetch post history with pagination and filters',
     summary: 'Get History',
+    tags: ['History'],
     request: {
       query: HistoryQuerySchema,
     },

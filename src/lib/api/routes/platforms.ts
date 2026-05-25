@@ -7,6 +7,7 @@ export function registerPlatformRoutes(registry: OpenAPIRegistry) {
     path: '/platforms',
     description: 'Fetch the list of supported social media platforms',
     summary: 'List Platforms',
+    tags: ['Settings'],
     responses: {
       200: {
         description: 'Successfully fetched platforms',

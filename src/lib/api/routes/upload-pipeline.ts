@@ -45,6 +45,7 @@ export function registerUploadPipelineRoutes(registry: OpenAPIRegistry) {
     path: '/upload/chunk',
     description: 'Uploads a single chunk of a video file. Requires x-upload-id and x-chunk-index headers.',
     summary: 'Upload Chunk',
+    tags: ['Upload'],
     request: {
       headers: z.object({
         'x-upload-id': z.string().openapi({ description: 'Unique ID for the upload session' }),

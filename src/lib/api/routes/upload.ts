@@ -8,6 +8,7 @@ export function registerUploadRoutes(registry: OpenAPIRegistry) {
     path: '/upload/init',
     description: 'Pre-initializes a post history record',
     summary: 'Initialize Upload',
+    tags: ['Upload'],
     request: {
       body: {
         content: {

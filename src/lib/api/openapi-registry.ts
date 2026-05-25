@@ -46,8 +46,31 @@ export function generateOpenApiDocument() {
     info: {
       version: '1.0.0',
       title: 'Social Studio API',
-      description: 'Centralized API Documentation for Next.js Route Handlers',
+      description: 'Centralized API Documentation for Next.js Route Handlers. Most routes require a valid session cookie.',
     },
     servers: [{ url: '/api' }],
+    tags: [
+      { name: 'Upload', description: 'Core upload pipeline and platform-specific publishing' },
+      { name: 'Media', description: 'Gallery management and asset streaming' },
+      { name: 'Admin', description: 'System-wide analytics and maintenance' },
+      { name: 'Settings', description: 'User configurations and platform connections' },
+      { name: 'AI', description: 'AI assistant and provider validation' },
+    ],
+    components: {
+      securitySchemes: {
+        sessionCookie: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'authjs.session-token',
+          description: 'NextAuth.js session cookie',
+        },
+        signedToken: {
+          type: 'apiKey',
+          in: 'query',
+          name: 'signature',
+          description: 'HMAC signature for restricted media access',
+        },
+      },
+    },
   });
 }

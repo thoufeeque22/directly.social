@@ -36,6 +36,7 @@ export function registerMediaRoutes(registry: OpenAPIRegistry) {
     path: '/media',
     description: 'Bulk delete staged gallery assets',
     summary: 'Bulk Delete Media',
+    tags: ['Media'],
     request: {
       body: {
         content: {

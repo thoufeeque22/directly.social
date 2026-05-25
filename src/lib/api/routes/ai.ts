@@ -8,6 +8,7 @@ export function registerAiRoutes(registry: OpenAPIRegistry) {
     path: '/ai/validate-key',
     description: 'Validates an AI provider API key',
     summary: 'Validate AI Key',
+    tags: ['AI'],
     request: {
       body: {
         content: {

@@ -39,6 +39,7 @@ export function registerResourceRoutes(registry: OpenAPIRegistry) {
     path: '/media/{fileId}',
     description: 'Fetch and stream a media asset. Requires signed token.',
     summary: 'Stream Media',
+    tags: ['Media'],
     request: {
       params: z.object({
         fileId: z.string().openapi({ description: 'The unique ID of the media file' }),
@@ -100,4 +101,5 @@ export function registerResourceRoutes(registry: OpenAPIRegistry) {
       },
     },
   });
+}
 }
