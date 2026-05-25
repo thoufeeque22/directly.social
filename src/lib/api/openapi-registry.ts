@@ -12,6 +12,7 @@ import { registerAdminRoutes } from './routes/admin';
 import { registerResourceRoutes } from './routes/resources';
 import { registerPlatformUploadRoutes } from './routes/platform-uploads';
 import { registerByosUploadRoutes } from './routes/byos-upload';
+import { registerAuxiliaryRoutes } from './routes/auxiliary';
 
 // Initialize Registry
 export const registry = new OpenAPIRegistry();
@@ -29,6 +30,7 @@ registerAdminRoutes(registry);
 registerResourceRoutes(registry);
 registerPlatformUploadRoutes(registry);
 registerByosUploadRoutes(registry);
+registerAuxiliaryRoutes(registry);
 
 export { z };
 

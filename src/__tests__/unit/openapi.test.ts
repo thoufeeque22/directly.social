@@ -26,5 +26,9 @@ describe('OpenAPI API Route', () => {
     expect(data.paths['/upload/tiktok']).toBeDefined();
     expect(data.paths['/upload/byos/presign']).toBeDefined();
     expect(data.paths['/upload/byos/complete']).toBeDefined();
+    expect(data.paths['/settings/disconnect']).toBeDefined();
+    expect(data.paths['/tiktok-proxy']).toBeDefined();
+    expect(data.paths['/upload/cleanup']).toBeDefined();
+    expect(data.paths['/upload/stage']).toBeDefined();
   });
 });
