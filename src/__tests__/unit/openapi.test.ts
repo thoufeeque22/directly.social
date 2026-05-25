@@ -10,5 +10,7 @@ describe('OpenAPI API Route', () => {
     expect(data.info.title).toBe('Social Studio API');
     expect(data.paths['/upload/init']).toBeDefined();
     expect(data.paths['/ai/validate-key']).toBeDefined();
+    expect(data.paths['/chat']).toBeDefined();
+    expect(data.paths['/history']).toBeDefined();
   });
 });

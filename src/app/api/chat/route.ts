@@ -67,7 +67,10 @@ export async function POST(req: Request) {
     // 1. Rate Limiting check
     await checkRateLimit(aiRateLimit, userId, "Chat limit reached. Please wait a minute.");
 
-    const { messages, byokConfigs } = await req.json();
+    const body = await req.json();
+    const { messages, byokConfigs } = body; // Using manual destructuring as ChatRequestSchema is primarily for docs and basic structure
+    // Optional: ChatRequestSchema.parse(body);
+
     const modelMessages = await convertToModelMessages(messages);
 
     // 2. Determine which model to use

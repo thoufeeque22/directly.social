@@ -2,6 +2,8 @@ import { OpenAPIRegistry, OpenApiGeneratorV3 } from '@asteasolutions/zod-to-open
 import { z } from '@/lib/api/zod-openapi';
 import { registerAiRoutes } from './routes/ai';
 import { registerUploadRoutes } from './routes/upload';
+import { registerChatRoutes } from './routes/chat';
+import { registerHistoryRoutes } from './routes/history';
 
 // Initialize Registry
 export const registry = new OpenAPIRegistry();
@@ -9,6 +11,8 @@ export const registry = new OpenAPIRegistry();
 // Register all routes
 registerAiRoutes(registry);
 registerUploadRoutes(registry);
+registerChatRoutes(registry);
+registerHistoryRoutes(registry);
 
 export { z };
 
