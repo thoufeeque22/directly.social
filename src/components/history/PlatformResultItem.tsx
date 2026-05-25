@@ -42,7 +42,11 @@ export function PlatformResultItem({ p, post, cancelledIds, processingIds, onRet
   const content = (
     <>
       {(isPending || isUploading) && !isPostStale && (
-         <div className={styles.pillProgressBar} style={{ width: `${Math.max(p.progress, 0)}%` }} />
+         <div 
+           className={styles.pillProgressBar} 
+           style={{ width: `${Math.max(p.progress, 0)}%` }} 
+           data-testid={`progress-bar-${p.platform}`}
+         />
       )}
       <span className={styles.pillIcon} style={{ display: 'flex', alignItems: 'center' }}>
         {isRetrying ? <RefreshIcon className="animate-spin" sx={{ fontSize: 16 }} /> : 
