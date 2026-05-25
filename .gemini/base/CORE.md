@@ -1,7 +1,7 @@
 # Core Technical Standards
 
 ## Project Architecture & Conventions
-- **Next.js 15 & React 19:** Follow strict rules in `AGENTS.md`.
+- **Next.js 15 & React 19:** Follow strict rules in `.gemini/AI_RULES.md`.
 - **Zero-Any Policy:** Strict TypeScript enforcement.
 
 ## Technical & TSX Standards
