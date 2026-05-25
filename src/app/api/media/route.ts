@@ -110,7 +110,7 @@ export async function DELETE(req: NextRequest) {
     const tempDir = path.join(process.cwd(), "tmp");
     let deletedCount = 0;
     for (const fileId of targetIds) {
-      const filePath = path.join(tempDir, fileId);
+      const filePath = path.join(tempDir, path.basename(fileId));
       if (fsSync.existsSync(filePath)) {
         await fs.unlink(filePath).catch(e => logger.warn(`⚠️ [GALLERY] Failed to delete ${fileId} from disk`, e));
         deletedCount++;

@@ -37,8 +37,10 @@ test.describe('Refresh Mechanism', () => {
 
     // Inject code to track events
     await page.evaluate(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).__refreshEventCount = 0;
       window.addEventListener('app:refresh', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).__refreshEventCount++;
       });
     });
