@@ -2,7 +2,7 @@
   "cookies": [
     {
       "name": "authjs.csrf-token",
-      "value": "ee193e8c1620c98698ed745cd7b047b6200d7764efbe7f9db9ebfa6c3a4a542f%7C0ddc5d3e7ebc804da448b1745d1261c2b94a95ef17a876efc8fff73be0068f2c",
+      "value": "c22e769952e7e483c2eadc0f83ea56328fe1a6c8a9b400c6f8178050cfa535f7%7C5c449baf0d5fcb9d40b281458c13217e3c104eddd0d4ca59cd078f394ad88f1b",
       "domain": "127.0.0.1",
       "path": "/",
       "expires": -1,
@@ -22,24 +22,14 @@
     },
     {
       "name": "authjs.session-token",
-      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..IArr-zyWExTraIOP8zvm1Q.Xvt6WViYbuQZo18fbiwH1HJZS1A1-26vHMMStm0n63YAfequVEdE-4BRIgBkvYtKPGEswiI5236GWTPNnD9LmuoorH7DJT0xio3DvJwH2AXrZfM9Volsw3QxUXF5NqLU4Jp4PqA4GNElKWfS4gcDcb7QpAyUTHBT87owH_KOtddJiluh099ZThNDZ06CC9zBDgWuIUeUF4InR3uwisaKwJzfhFHeygghBgQBvkRDqnaAzN4qvpDfSJ8A2ZtO-3PNjkCxsYjxlg2dJFsS9FjKqg.PChlUzXLpSJlbHU01q2WdzuIeCdZXmBBphcfpqYoXFU",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicm9WX3hDaFUyS3ZSSFdCN2ZJa1k1eUpGWTlKWHdCSE1VZTBvbU1MdWk1X0F5TVdXOTJveUtDLWFzdml4cTRHWndjOGlHdmtUaGdoQ2lJN3d6X1hvdWcifQ..CuTQ9pqJeuoxki6jCr8E-g.cPpDWpn7IU60EK_NadT6pJ2ItlPEbXh7_5LhYmwL4hj0pSbPSFl14D_zqqK_EIfKMr68gDfAGUE1IblP10ng4JsypvRJse6LHkeFgu0ZEB0fM5bfFdNzagP9FroYuHUk9x_0GdCqCSiZT7SfLKZn0_78E8R3y1DjnbxJoZ5_cNjgjgfAq62b4LueJLzkI2-AbDAeoBNyjuTEKHdDYgIULkV83W4WVwa5vtL2k9u8zIvjF8uu8_Kan2kLPE6h09EPldq6mCgQavcz7N4jjncJSw.77JvQGUhPQa86pimDObCC_w_xUkDp4n1lTuc3e5Aelo",
       "domain": "127.0.0.1",
       "path": "/",
-      "expires": 1782333478.890365,
+      "expires": 1782335476.814893,
       "httpOnly": true,
       "secure": false,
       "sameSite": "Lax"
     }
   ],
-  "origins": [
-    {
-      "origin": "http://127.0.0.1:3005",
-      "localStorage": [
-        {
-          "name": "SS_SELECTED_PLATFORMS",
-          "value": "[\"cmpi0k2ns00009b2bjqwtjwd9\",\"cmpi0k2ns00019b2bshc6mt07\",\"local-dev-1\",\"local-dev-2\",\"local-dev-3\"]"
-        }
-      ]
-    }
-  ]
+  "origins": []
 }
