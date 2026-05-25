@@ -4,10 +4,10 @@
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST:
   1. Switch to `main` and pull latest (`git checkout main && git pull`).
   2. Create a dedicated feature branch (`feature/<id>-short-description`).
-  3. Create a state file `.gemini/state/ticket-<id>.json` based on the task description.
-- **Traceable Status:** EVERY agent involved in the pipeline (Discovery, Dev, QA, etc.) MUST update the `steps` and `status` in the `ticket-<id>.json` file before handing off.
+  3. Create a state file `.gemini/state/ticket-<id>.json` following the **Round-Based Schema**.
+- **Traceable Status:** EVERY agent MUST update their specific block in the `round-X` object of the state file before handing off.
 - **Direct Routing Focus:** Every agent MUST maintain unwavering focus on the `ticket_goal` defined in the ticket state file.
-- **Context Preservation:** Updates to state files MUST be non-destructive merges.
+- **Context Preservation:** Updates to state files MUST be non-destructive merges. Bypassing state updates is a protocol violation.
 - **Handoff & Commit:** Every agent MUST stage and commit their modifications before transition.
 
 ## State Management & Pruning
@@ -17,6 +17,29 @@
   - `key_decisions`: Major architectural or logic choices.
   - `lessons_learned`: Failures or friction points encountered.
   - `verification_outcomes`: Pass/Fail status of critical build/test steps.
+
+## State Schema Reference
+Every state file MUST adhere to this structure to ensure auditability and automated pruning compatibility:
+```json
+{
+  "ticket_id": 123,
+  "branch_name": "feature/...",
+  "ticket_goal": "Concise goal statement",
+  "status": "in-progress",
+  "round-1": {
+    "discovery-agent": {
+      "timestamp": "ISO-8601",
+      "findings": "Architectural discoveries",
+      "TECHNICAL SPECS": { "Strategic Importance": "...", "Impact Radius": "..." }
+    },
+    "dev-agent": {
+      "timestamp": "ISO-8601",
+      "actions": "Implementation details",
+      "modified_files": ["path/to/file.ts"]
+    }
+  }
+}
+```
 
 ## Agent Specific Workflows
 
@@ -36,7 +59,7 @@
 
 ### Review (QA & Security Audit)
 - **Role:** Senior QA & Security Auditor.
-- **Audit Checklist:** Architecture, Secondary Impact, Security, Data, Modularity (50-line rule).
+- **Audit Checklist:** Architecture, Secondary Impact, Security, Data, Modularity (50-line rule), State Compliance (Verify ticket state schema).
 
 ### QA (E2E Test Automation)
 - **Role:** Expert Lead QA Automation Writer & Execution Engineer. Responsible for both Web (Playwright) and Native (Maestro) testing.
