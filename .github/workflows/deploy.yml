@@ -48,7 +48,7 @@ jobs:
           --exclude 'node_modules' \
           --exclude '.env' \
           --exclude '.env.local' \
-          --exclude 'src/tmp' \
+          --exclude 'tmp' \
           ./ ${VPS_USERNAME}@${VPS_HOST}:~/social-studio-app/
 
     - name: Install Production Deps & Restart Server

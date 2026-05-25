@@ -6,7 +6,7 @@ Verify the implementation of per-user storage quotas, automated file expiry (sma
 ## Prerequisites
 - A test user account.
 - Access to the application database (to verify `expiresAt` fields and storage usage).
-- Access to the `src/tmp` directory on the server/local environment.
+- Access to the `tmp` directory on the server/local environment.
 - At least two video files for testing (one small, one medium).
 
 ---
@@ -65,18 +65,18 @@ Verify the implementation of per-user storage quotas, automated file expiry (sma
 ## Test Case 4: Orphaned File Cleanup (Background Worker)
 
 ### Steps
-1. Manually create a dummy file in the `src/tmp` directory (e.g., `touch src/tmp/orphaned_test.mp4`).
-2. Manually modify the file's "Last Modified" date to be older than 24 hours (e.g., `touch -t 202001010101 src/tmp/orphaned_test.mp4`).
+1. Manually create a dummy file in the `tmp` directory (e.g., `touch tmp/orphaned_test.mp4`).
+2. Manually modify the file's "Last Modified" date to be older than 24 hours (e.g., `touch -t 202001010101 tmp/orphaned_test.mp4`).
 3. Ensure the file is **NOT** listed in either `GalleryAsset` (as `fileId`) or `PostHistory` (as `stagedFileId`).
 4. Trigger the `purgeExpiredAssets()` worker function (or wait for the polling interval).
 
 ### Expected Results
-- The file `src/tmp/orphaned_test.mp4` should be deleted from the file system.
+- The file `tmp/orphaned_test.mp4` should be deleted from the file system.
 - Check the application logs; it should show: `🧹 [WORKER] Purged orphaned file: orphaned_test.mp4`.
 
 ---
 
 ## Edge Cases to Watch For
 - **Deleting Assets:** Verify that deleting a video from the Gallery UI correctly decrements the user's storage quota (enabling new uploads).
-- **Incomplete Uploads:** Ensure that chunk directories in `src/tmp/chunks` are cleaned up even if the assembly fails or is abandoned (orphaned cleanup logic should handle this).
+- **Incomplete Uploads:** Ensure that chunk directories in `tmp/chunks` are cleaned up even if the assembly fails or is abandoned (orphaned cleanup logic should handle this).
 - **Multiple Platforms:** If one platform fails but others succeed, ensure the `expiresAt` logic still maintains a safe grace period for retries.

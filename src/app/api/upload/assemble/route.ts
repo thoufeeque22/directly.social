@@ -54,8 +54,8 @@ export async function POST(req: NextRequest) {
 
     const { uploadId, fileName, totalChunks, totalSize, title, description, videoFormat, historyId, platforms, scheduledAt } = result.data;
     
-    const chunkDir = path.join(process.cwd(), "src/tmp/chunks", path.basename(uploadId));
-    const tempDir = path.join(process.cwd(), "src/tmp");
+    const chunkDir = path.join(process.cwd(), "tmp/chunks", path.basename(uploadId));
+    const tempDir = path.join(process.cwd(), "tmp");
     await fs.mkdir(tempDir, { recursive: true });
 
     // Use a unique file ID (UUID) for the final staged file to prevent collisions

@@ -24,8 +24,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing stagedFileId" }, { status: 400 });
     }
 
-    // Security check: ensure the file is strictly within src/tmp
-    const filePath = path.join(process.cwd(), "src/tmp", path.basename(stagedFileId));
+    // Security check: ensure the file is strictly within tmp
+    const filePath = path.join(process.cwd(), "tmp", path.basename(stagedFileId));
 
     if (fsSync.existsSync(filePath)) {
       await fs.unlink(filePath);

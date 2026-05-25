@@ -37,18 +37,20 @@ test.describe('Refresh Mechanism', () => {
 
     // Inject code to track events
     await page.evaluate(() => {
-      window.__refreshEventCount = 0;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).__refreshEventCount = 0;
       window.addEventListener('app:refresh', () => {
-        window.__refreshEventCount++;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (window as any).__refreshEventCount++;
       });
     });
 
     // We can dispatch clicks directly via JS to truly bypass everything
     // and guarantee rapid execution within the same frame/tick
     await refreshBtn.evaluate((node) => {
-      node.click();
-      node.click();
-      node.click();
+      (node as HTMLElement).click();
+      (node as HTMLElement).click();
+      (node as HTMLElement).click();
     });
     
     // Wait for button to be disabled, then re-enabled
@@ -58,7 +60,7 @@ test.describe('Refresh Mechanism', () => {
     await page.waitForTimeout(2000);
 
     // Assert that the event was only dispatched once despite multiple clicks
-    const eventCount = await page.evaluate(() => window.__refreshEventCount);
+    const eventCount = await page.evaluate(() => (window as any).__refreshEventCount);
     expect(eventCount).toBe(1);
   });
 
@@ -72,9 +74,9 @@ test.describe('Refresh Mechanism', () => {
       
       // Inject code to track events
       await page.evaluate(() => {
-        window.__ptrEventCount = 0;
+        (window as any).__ptrEventCount = 0;
         window.addEventListener('app:refresh', () => {
-          window.__ptrEventCount++;
+          (window as any).__ptrEventCount++;
         });
       });
 
@@ -89,7 +91,7 @@ test.describe('Refresh Mechanism', () => {
       await page.waitForTimeout(1500);
 
       // Verify if the event was triggered.
-      const ptrCount = await page.evaluate(() => window.__ptrEventCount);
+      const ptrCount = await page.evaluate(() => (window as any).__ptrEventCount);
       
       console.log('Pull-to-refresh event count:', ptrCount);
       // We relax the assertion to allow the test to pass even if simulation is 

@@ -21,8 +21,8 @@ async function clearActivity() {
     const { count: galleryCount } = await prisma.galleryAsset.deleteMany({});
     console.log(`- Deleted ${galleryCount} gallery assets.`);
 
-    // 4. Clean up physical temp files in src/tmp
-    const tempDir = path.join(process.cwd(), "src/tmp");
+    // 4. Clean up physical temp files in tmp
+    const tempDir = path.join(process.cwd(), "tmp");
     if (fsSync.existsSync(tempDir)) {
       const files = await fs.readdir(tempDir);
       let deletedFiles = 0;
@@ -52,7 +52,7 @@ async function clearActivity() {
          }
       }
       
-      console.log(`- Purged ${deletedFiles} physical temp files/folders from src/tmp.`);
+      console.log(`- Purged ${deletedFiles} physical temp files/folders from tmp.`);
     }
 
     console.log(" Cleanup Complete! Your Activity Hub and Gallery are now fresh.");

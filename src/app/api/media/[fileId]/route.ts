@@ -43,8 +43,8 @@ export async function GET(
     return new NextResponse("Unauthorized: Invalid or expired media token", { status: 403 });
   }
 
-  const tempDir = path.join(process.cwd(), "src/tmp");
-  const filePath = path.join(tempDir, fileId);
+  const tempDir = path.join(process.cwd(), "tmp");
+  const filePath = path.join(tempDir, path.basename(fileId));
 
   try {
     const stats = await fs.stat(filePath);
@@ -145,8 +145,8 @@ export async function DELETE(
     });
 
     // 2. Physically delete from disk
-    const tempDir = path.join(process.cwd(), "src/tmp");
-    const filePath = path.join(tempDir, fileId);
+    const tempDir = path.join(process.cwd(), "tmp");
+    const filePath = path.join(tempDir, path.basename(fileId));
     
     let diskDeleted = false;
     if (fsSync.existsSync(filePath)) {

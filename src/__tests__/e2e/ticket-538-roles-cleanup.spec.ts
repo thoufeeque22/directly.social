@@ -19,7 +19,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
   test.beforeAll(async () => {
     console.log('[E2E] Resetting DB state...');
     try {
-      execSync('npx tsx scripts/seed-e2e-user.ts');
+      execSync('npx tsx src/__tests__/scripts/seed-e2e-user.ts');
     } catch (error) {
       console.error('[E2E] Failed to seed database:', error);
     }
@@ -29,7 +29,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     console.log('[E2E] Testing Tester (USER) access...');
     
     // Ensure tester is USER
-    execSync('npx tsx scripts/seed-e2e-user.ts');
+    execSync('npx tsx src/__tests__/scripts/seed-e2e-user.ts');
 
     // Login as Tester
     await page.goto('/login');

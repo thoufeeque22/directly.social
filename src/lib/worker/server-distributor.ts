@@ -45,7 +45,7 @@ export async function distributeToPlatformsServer(params: ServerDistributeParams
 
       logger.info(`👷 [SERVER-DISTRIBUTOR] Starting distribution for post ${historyId}`);
 
-  const filePath = path.join(process.cwd(), "src/tmp", stagedFileId);
+  const filePath = path.join(process.cwd(), "tmp", stagedFileId);
   const results: DistributionResult[] = [];
 
   await Promise.allSettled(platforms.map(async (p) => {

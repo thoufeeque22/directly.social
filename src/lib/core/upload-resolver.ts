@@ -7,7 +7,7 @@ export async function resolveUploadRequest(req: NextRequest) {
   if (contentType.includes("application/json")) {
     const fields = await req.json();
     const isByos = fields.stagedFileId?.startsWith("byos_");
-    const filePath = fields.stagedFileId ? path.join(process.cwd(), "src/tmp", path.basename(fields.stagedFileId)) : undefined;
+    const filePath = fields.stagedFileId ? path.join(process.cwd(), "tmp", path.basename(fields.stagedFileId)) : undefined;
     return { fields, isByos, filePath };
   }
   const parsed = await streamMultipartFormData(req);

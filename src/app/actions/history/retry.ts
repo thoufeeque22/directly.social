@@ -38,7 +38,7 @@ export async function retryUploadAction(resultId: string) {
       const stagedFileId = result.postHistory.stagedFileId;
       if (!stagedFileId) throw new Error("Original staged file reference missing.");
 
-      const filePath = path.join(process.cwd(), "src/tmp", stagedFileId);
+      const filePath = path.join(process.cwd(), "tmp", stagedFileId);
       if (!fs.existsSync(filePath)) {
         throw new Error("Source video file has been purged from the server (24h limit).");
       }

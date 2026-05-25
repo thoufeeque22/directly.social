@@ -4,7 +4,7 @@
 Verify that the administrative and testing roles are strictly separated and that unused legacy endpoints (Roadmap and Launch) have been completely removed from the application.
 
 ## Prerequisites
-1.  **Database Seeded:** Run `npm run seed:e2e` (or equivalent script that executes `scripts/seed-e2e-user.ts`) to ensure `tester@socialstudio.ai` is a `USER` and `admin@socialstudio.ai` is an `ADMIN`.
+1.  **Database Seeded:** Run `npm run seed:e2e` (or equivalent script that executes `src/__tests__/scripts/seed-e2e-user.ts`) to ensure `tester@socialstudio.ai` is a `USER` and `admin@socialstudio.ai` is an `ADMIN`.
 2.  **Environment:** The application must be running in a development environment where the Credentials provider is enabled.
 
 ---

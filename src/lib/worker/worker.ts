@@ -18,7 +18,7 @@ declare global {
 /**
  * PURGE EXPIRED ASSETS & CLEANUP ORPHANED FILES
  * 1. Cleans up DB records and physical files for expired gallery assets.
- * 2. Purges orphaned files in src/tmp not tracked in DB (>24h old).
+ * 2. Purges orphaned files in tmp not tracked in DB (>24h old).
  */
 export async function purgeExpiredAssets() {
   try {
@@ -38,22 +38,22 @@ export async function purgeExpiredAssets() {
       
       for (const asset of expired) {
         try {
-          const filePath = path.join(process.cwd(), "src/tmp", asset.fileId);
+          const filePath = path.join(process.cwd(), "tmp", asset.fileId);
           if (existsSync(filePath)) {
             await fs.unlink(filePath);
             logger.info(`🗑️ [WORKER] Deleted physical file: ${asset.fileId}`);
           }
           
-          const metadataPath = path.join(process.cwd(), "src/tmp", `${asset.fileId}.metadata.json`);
+          const metadataPath = path.join(process.cwd(), "tmp", `${asset.fileId}.metadata.json`);
           if (existsSync(metadataPath)) {
             await fs.unlink(metadataPath);
           }
 
           // Also clean up optimized versions if any
-          const files = await fs.readdir(path.join(process.cwd(), "src/tmp"));
+          const files = await fs.readdir(path.join(process.cwd(), "tmp"));
           for (const file of files) {
              if (file.includes(asset.fileId) && file !== asset.fileId) {
-                await fs.unlink(path.join(process.cwd(), "src/tmp", file)).catch(() => {});
+                await fs.unlink(path.join(process.cwd(), "tmp", file)).catch(() => {});
              }
           }
 
@@ -68,8 +68,8 @@ export async function purgeExpiredAssets() {
     }
 
     // --- 2. ORPHANED FILES CLEANUP ---
-    // Files in src/tmp older than 24h that are NOT in GalleryAsset or PostHistory
-    const tempDir = path.join(process.cwd(), "src/tmp");
+    // Files in tmp older than 24h that are NOT in GalleryAsset or PostHistory
+    const tempDir = path.join(process.cwd(), "tmp");
     if (existsSync(tempDir)) {
       const files = await fs.readdir(tempDir);
       const dayAgo = now.getTime() - (24 * 60 * 60 * 1000);
@@ -176,12 +176,12 @@ export async function startPublishingWorker() {
                return;
             }
 
-            const filePath = path.join(process.cwd(), "src/tmp", stagedFileId);
+            const filePath = path.join(process.cwd(), "tmp", stagedFileId);
             if (!existsSync(filePath)) {
               throw new Error(`File purged or missing: ${filePath}`);
             }
 
-            const metadataPath = path.join(process.cwd(), "src/tmp", `${stagedFileId}.metadata.json`);
+            const metadataPath = path.join(process.cwd(), "tmp", `${stagedFileId}.metadata.json`);
             let reviewedContent = undefined;
             if (existsSync(metadataPath)) {
                try {

@@ -61,7 +61,7 @@ Used for TikTok video publishing.
   - `AUTH_SECRET`: Used to encrypt sessions.
   - `AUTH_TRUST_HOST`: Must be `true`.
   - `VERCEL_ANALYZE_BUILD_OUTPUT`: Set to `1` to debug large bundle sizes (over 300MB).
-- **Exclusions**: The `src/tmp` and `.next/cache` folders are excluded via `.vercelignore` to stay under the 2GB upload limit.
+- **Exclusions**: The `tmp` and `.next/cache` folders are excluded via `.vercelignore` to stay under the 2GB upload limit.
 
 ### 5. Neon (Database)
 - **Role**: Serverless PostgreSQL provider.

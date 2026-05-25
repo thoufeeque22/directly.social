@@ -16,7 +16,7 @@ interface LocalPublishParams {
 export const publishLocalReel = async ({ filePath, onProgress }: LocalPublishParams) => {
   logger.info(`🚀 [LOCAL-SIM] Starting simulated upload for: ${path.basename(filePath)}`);
 
-  const publishedDir = path.join(process.cwd(), 'src/tmp/published');
+  const publishedDir = path.join(process.cwd(), 'tmp/published');
   if (!fs.existsSync(publishedDir)) {
     fs.mkdirSync(publishedDir, { recursive: true });
   }
