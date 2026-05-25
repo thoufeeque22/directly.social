@@ -5,8 +5,9 @@ import { generateSignedMediaUrl } from "@/lib/core/media-auth";
 import { promises as fs } from "fs";
 import fsSync from "fs";
 import path from "path";
-import { z } from "zod";
 import { logger } from "@/lib/core/logger";
+import { MediaDeleteSchema } from "@/lib/schemas/media";
+import { z } from "zod";
 
 /**
  * MEDIA DISCOVERY API
@@ -51,11 +52,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Failed to fetch gallery assets" }, { status: 500 });
   }
 }
-
-const MediaDeleteSchema = z.object({
-  fileIds: z.array(z.string()).optional(),
-  deleteAll: z.boolean().optional()
-});
 
 /**
  * BULK DELETE API

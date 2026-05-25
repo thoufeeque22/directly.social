@@ -4,6 +4,8 @@ import { registerAiRoutes } from './routes/ai';
 import { registerUploadRoutes } from './routes/upload';
 import { registerChatRoutes } from './routes/chat';
 import { registerHistoryRoutes } from './routes/history';
+import { registerMediaRoutes } from './routes/media';
+import { registerPlatformRoutes } from './routes/platforms';
 
 // Initialize Registry
 export const registry = new OpenAPIRegistry();
@@ -13,6 +15,8 @@ registerAiRoutes(registry);
 registerUploadRoutes(registry);
 registerChatRoutes(registry);
 registerHistoryRoutes(registry);
+registerMediaRoutes(registry);
+registerPlatformRoutes(registry);
 
 export { z };
 

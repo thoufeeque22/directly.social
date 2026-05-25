@@ -12,5 +12,7 @@ describe('OpenAPI API Route', () => {
     expect(data.paths['/ai/validate-key']).toBeDefined();
     expect(data.paths['/chat']).toBeDefined();
     expect(data.paths['/history']).toBeDefined();
+    expect(data.paths['/media']).toBeDefined();
+    expect(data.paths['/platforms']).toBeDefined();
   });
 });
