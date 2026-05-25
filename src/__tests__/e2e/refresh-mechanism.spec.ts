@@ -37,11 +37,9 @@ test.describe('Refresh Mechanism', () => {
 
     // Inject code to track events
     await page.evaluate(() => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (window as any).__refreshEventCount = 0;
+      (window as unknown as { __refreshEventCount: number }).__refreshEventCount = 0;
       window.addEventListener('app:refresh', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (window as any).__refreshEventCount++;
+        (window as unknown as { __refreshEventCount: number }).__refreshEventCount++;
       });
     });
 
@@ -60,7 +58,7 @@ test.describe('Refresh Mechanism', () => {
     await page.waitForTimeout(2000);
 
     // Assert that the event was only dispatched once despite multiple clicks
-    const eventCount = await page.evaluate(() => (window as any).__refreshEventCount);
+    const eventCount = await page.evaluate(() => (window as unknown as { __refreshEventCount: number }).__refreshEventCount);
     expect(eventCount).toBe(1);
   });
 
@@ -74,9 +72,9 @@ test.describe('Refresh Mechanism', () => {
       
       // Inject code to track events
       await page.evaluate(() => {
-        (window as any).__ptrEventCount = 0;
+        (window as unknown as { __ptrEventCount: number }).__ptrEventCount = 0;
         window.addEventListener('app:refresh', () => {
-          (window as any).__ptrEventCount++;
+          (window as unknown as { __ptrEventCount: number }).__ptrEventCount++;
         });
       });
 
@@ -91,7 +89,7 @@ test.describe('Refresh Mechanism', () => {
       await page.waitForTimeout(1500);
 
       // Verify if the event was triggered.
-      const ptrCount = await page.evaluate(() => (window as any).__ptrEventCount);
+      const ptrCount = await page.evaluate(() => (window as unknown as { __ptrEventCount: number }).__ptrEventCount);
       
       console.log('Pull-to-refresh event count:', ptrCount);
       // We relax the assertion to allow the test to pass even if simulation is 

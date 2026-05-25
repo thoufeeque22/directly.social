@@ -4,18 +4,22 @@ import React, { createContext, useContext, useMemo, useState, useEffect } from '
 import { useUploadForm } from '@/hooks/dashboard/useUploadForm';
 import { UploadFormProps, UploadFormContextType } from './UploadFormContext.types';
 import { getSelectedPlatforms } from './UploadFormContext.utils';
+import { getByosConfigAction } from '@/lib/actions/settings';
 
 const UploadFormContext = createContext<UploadFormContextType | undefined>(undefined);
 
 const useBYOSConfig = () => {
   const [config, setConfig] = useState<{ active: boolean; provider: 'S3' | 'R2' | null }>({ active: false, provider: null });
   useEffect(() => {
-    const controller = new AbortController();
-    fetch('/api/settings/byos', { signal: controller.signal })
-      .then(res => res.ok ? res.json() : null)
-      .then(data => data?.config && setConfig({ active: true, provider: data.config.provider }))
+    let mounted = true;
+    getByosConfigAction()
+      .then(data => {
+        if (mounted && data?.config) {
+          setConfig({ active: true, provider: data.config.provider as 'S3' | 'R2' });
+        }
+      })
       .catch(() => {});
-    return () => controller.abort();
+    return () => { mounted = false; };
   }, []);
   return config;
 };

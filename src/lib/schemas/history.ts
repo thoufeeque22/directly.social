@@ -21,6 +21,6 @@ export const PostHistorySchema = z.object({
     platform: z.string(),
     accountId: z.string(),
     status: z.string(),
-    metadata: z.any().nullable(),
+    metadata: z.unknown().nullable(),
   })),
 }).openapi('PostHistory');

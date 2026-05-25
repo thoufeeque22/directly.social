@@ -17,6 +17,21 @@ import { registerAuxiliaryRoutes } from './routes/auxiliary';
 // Initialize Registry
 export const registry = new OpenAPIRegistry();
 
+// Register Security Schemes
+registry.registerComponent('securitySchemes', 'sessionCookie', {
+  type: 'apiKey',
+  in: 'cookie',
+  name: 'authjs.session-token',
+  description: 'NextAuth.js session cookie',
+});
+
+registry.registerComponent('securitySchemes', 'signedToken', {
+  type: 'apiKey',
+  in: 'query',
+  name: 'signature',
+  description: 'HMAC signature for restricted media access',
+});
+
 // Register all routes
 registerAiRoutes(registry);
 registerUploadRoutes(registry);
@@ -56,21 +71,5 @@ export function generateOpenApiDocument() {
       { name: 'Settings', description: 'User configurations and platform connections' },
       { name: 'AI', description: 'AI assistant and provider validation' },
     ],
-    components: {
-      securitySchemes: {
-        sessionCookie: {
-          type: 'apiKey',
-          in: 'cookie',
-          name: 'authjs.session-token',
-          description: 'NextAuth.js session cookie',
-        },
-        signedToken: {
-          type: 'apiKey',
-          in: 'query',
-          name: 'signature',
-          description: 'HMAC signature for restricted media access',
-        },
-      },
-    },
   });
 }

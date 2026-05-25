@@ -9,7 +9,7 @@ import { CircularProgress, Box, Typography } from '@mui/material';
 const SwaggerUI = dynamic(() => import('swagger-ui-react'), { 
   ssr: false,
   loading: () => (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
       <CircularProgress />
     </Box>
   )

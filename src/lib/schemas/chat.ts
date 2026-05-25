@@ -8,7 +8,7 @@ export const ChatRequestSchema = z.object({
     tool_call_id: z.string().optional(),
     name: z.string().optional(),
   })).openapi({ description: 'Array of messages in the conversation' }),
-  byokConfigs: z.record(z.object({
+  byokConfigs: z.record(z.string(), z.object({
     modelId: z.string().optional(),
     apiKey: z.string().optional(),
   })).optional().openapi({ description: 'Bring-Your-Own-Key configurations' }),

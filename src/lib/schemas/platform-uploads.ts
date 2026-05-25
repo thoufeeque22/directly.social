@@ -5,7 +5,7 @@ export const PlatformUploadSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   accountId: z.string().openapi({ description: 'The platform-specific account ID' }),
-  fields: z.record(z.any()).optional().openapi({ description: 'Platform-specific fields' }),
+  fields: z.record(z.string(), z.unknown()).optional().openapi({ description: 'Platform-specific fields' }),
 }).openapi('PlatformUpload');
 
 export const YouTubeUploadSchema = PlatformUploadSchema.extend({

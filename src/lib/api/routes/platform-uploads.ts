@@ -28,7 +28,7 @@ export function registerPlatformUploadRoutes(registry: OpenAPIRegistry) {
             'application/json': {
               schema: z.object({
                 success: z.boolean(),
-                data: z.any(),
+                data: z.unknown(),
               }),
             },
           },

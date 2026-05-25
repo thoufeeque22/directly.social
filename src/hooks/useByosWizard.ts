@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getByosConfigAction, saveByosConfigAction } from '@/lib/actions/settings';
 
 export interface ByosConfigState {
   provider: 'S3' | 'R2';
@@ -27,34 +28,46 @@ export const useByosWizard = () => {
   useEffect(() => { fetchConfig(); }, []);
 
   const fetchConfig = async () => {
-    const res = await fetch('/api/settings/byos');
-    if (res.ok) {
-      const data = await res.json();
-      if (data.config) {
-        setExistingConfig(data.config);
-        setFormData({ ...data.config, endpoint: data.config.endpoint || '', region: data.config.region || 'us-east-1' });
+    try {
+      const result = await getByosConfigAction();
+      if (result.config) {
+        setExistingConfig(result.config as unknown as ByosConfigState);
+        setFormData({ 
+          ...(result.config as unknown as ByosConfigState), 
+          endpoint: result.config.endpoint || '', 
+          region: result.config.region || 'us-east-1' 
+        });
       }
+    } catch (e) {
+      console.error('Failed to fetch BYOS config', e);
     }
   };
 
   const handleSave = async () => {
-    setLoading(true); setError(null); setValidationStage('checking');
+    setLoading(true); 
+    setError(null); 
+    setValidationStage('checking');
     setChecklist({ decrypt: 'loading', bucket: 'pending', permissions: 'pending' });
+    
     try {
       await new Promise(r => setTimeout(r, 800));
       setChecklist(p => ({ ...p, decrypt: 'success', bucket: 'loading' }));
-      const res = await fetch('/api/settings/byos', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (!res.ok) {
+
+      const result = await saveByosConfigAction(formData);
+
+      if (!result.success) {
         setChecklist(p => ({ ...p, bucket: 'failed', permissions: 'failed' }));
-        setValidationStage('failed'); setError(data.error || 'Connection failed'); return;
+        setValidationStage('failed'); 
+        setError('Connection failed'); 
+        return;
       }
+      
       setChecklist(p => ({ ...p, bucket: 'success', permissions: 'loading' }));
       await new Promise(r => setTimeout(r, 600));
       setChecklist(p => ({ ...p, permissions: 'success' }));
-      setValidationStage('success'); setSuccess(true); setExistingConfig(data.config);
+      setValidationStage('success'); 
+      setSuccess(true); 
+      setExistingConfig(result.config as unknown as ByosConfigState);
       setTimeout(() => setSuccess(false), 5000);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -68,14 +81,25 @@ export const useByosWizard = () => {
   const handleDelete = async () => {
     if (!confirm('Disconnect storage?')) return;
     setLoading(true);
-    const res = await fetch('/api/settings/byos', { method: 'DELETE' });
-    if (res.ok) {
-      setExistingConfig(null);
-      setFormData({ provider: 'S3', bucketName: '', endpoint: '', region: 'us-east-1', accessKeyId: '', secretAccessKey: '', pathPrefix: '', keepFiles: true });
-      setActiveStep(0); setValidationStage('idle');
+    try {
+      const res = await fetch('/api/settings/byos', { method: 'DELETE' });
+      if (res.ok) {
+        setExistingConfig(null);
+        setFormData({ 
+          provider: 'S3', bucketName: '', endpoint: '', region: 'us-east-1', 
+          accessKeyId: '', secretAccessKey: '', pathPrefix: '', keepFiles: true 
+        });
+        setActiveStep(0); 
+        setValidationStage('idle');
+      }
+    } catch (e) {
+      console.error('Failed to delete BYOS config', e);
     }
     setLoading(false);
   };
 
-  return { activeStep, setActiveStep, formData, setFormData, loading, error, success, existingConfig, validationStage, checklist, handleSave, handleDelete };
+  return { 
+    activeStep, setActiveStep, formData, setFormData, loading, error, 
+    success, existingConfig, validationStage, checklist, handleSave, handleDelete 
+  };
 };

@@ -16,6 +16,11 @@ export async function POST(req: NextRequest) {
     const validated = UploadInitializeSchema.parse(body);
     const { title, description, videoFormat, platforms, scheduledAt, isPublished } = validated;
 
+    interface PlatformInput {
+      platform: string;
+      accountId: string;
+    }
+
     if (!platforms || !Array.isArray(platforms)) {
       return NextResponse.json({ error: "Missing platforms data" }, { status: 400 });
     }

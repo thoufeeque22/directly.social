@@ -2,9 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateText } from 'ai';
 import { getAIModel, AIProvider } from '@/lib/core/ai';
 import { logger } from '@/lib/core/logger';
+import { auth } from '@/auth';
 import { AIKeyValidationSchema } from '@/lib/schemas/ai';
 
 export async function POST(req: NextRequest) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
     const validated = AIKeyValidationSchema.parse(body);
