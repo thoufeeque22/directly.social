@@ -23,12 +23,7 @@
     "description": "Refactor repository to follow industry-standard directory structure and perform exhaustive cleanup of unwanted/orphaned files (e.g., .tmp_scratch, scratch, verification, old scripts).",
     "suggestion": "Create a formal ticket for architectural cleanup and standardisation."
   },
-  {
-    "category": "bug",
-    "severity": "HIGH",
-    "description": "Next.js dev server crashes with ECONNRESET and uncaughtException when accessing /admin/analytics in E2E tests.",
-    "suggestion": "Audit the /admin/analytics route and its middleware for connection handling issues."
-  },
+
   {
     "category": "bug",
     "severity": "MED",
