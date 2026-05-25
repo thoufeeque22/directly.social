@@ -12,6 +12,7 @@
       ".github/workflows/deploy.yml",
       "package.json",
       "docs/ARCHITECTURE.md",
+      ".gemini/base/ORCHESTRATION.md",
       "src/lib/core/logger.ts",
       "src/lib/worker/worker.ts",
       "src/__tests__/e2e/whats-new.spec.ts",
@@ -23,7 +24,7 @@
       "src/app/api/upload/chunk/route.ts",
       "src/app/api/upload/chunks/[uploadId]/route.ts"
     ],
-    "verification_outcomes": "Pass - All E2E tests (whats-new, analytics) passed. Build successful. tmp/ directory correctly utilized and ignored. Security audit passed with path traversal fixes. Documentation updated."
+    "verification_outcomes": "Pass - All E2E tests (whats-new, analytics) passed. Build successful. tmp/ directory correctly utilized and ignored. Security audit passed with path traversal fixes. Documentation updated with new orchestration mandates."
   },
   "round-1": {
     "discovery-agent": {
@@ -61,9 +62,9 @@
       "qa_verdict": "PASS"
     },
     "doc-agent": {
-      "timestamp": "2026-05-25T22:00:00Z",
-      "actions": "Updated ARCHITECTURE.md and finalized ticket state.",
-      "findings": "Architecture docs now accurately reflect root tmp/ and E2E script locations."
+      "timestamp": "2026-05-25T22:30:00Z",
+      "actions": "Updated ARCHITECTURE.md and finalized ticket state. Strengthened ORCHESTRATION.md with explicit schema and mandates.",
+      "findings": "Architecture docs updated. Orchestration rules now include a 'Gold Standard' schema and mandatory state-check for reviewers to prevent future compliance failures."
     }
   }
 }
