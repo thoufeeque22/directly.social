@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateText } from 'ai';
 import { getAIModel, AIProvider } from '@/lib/core/ai';
 import { logger } from '@/lib/core/logger';
+import { AIKeyValidationSchema } from '@/lib/schemas/ai';
+import { z } from 'zod';
 
 export async function POST(req: NextRequest) {
   try {
-    const { provider, apiKey } = await req.json();
-
-    if (!provider || !apiKey) {
-      return NextResponse.json({ success: false, error: 'Provider and apiKey are required' }, { status: 400 });
-    }
+    const body = await req.json();
+    const validated = AIKeyValidationSchema.parse(body);
+    const { provider, apiKey } = validated;
 
     // Cast provider to AIProvider
     const aiProvider = provider as AIProvider;

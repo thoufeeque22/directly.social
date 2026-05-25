@@ -4,17 +4,7 @@ import { prisma } from "@/lib/core/prisma";
 import { z } from "zod";
 import { uploadRateLimit, checkRateLimit } from "@/lib/core/ratelimit";
 import { logger } from "@/lib/core/logger";
-
-const UploadInitSchema = z.object({
-  title: z.string().optional().default("Untitled Post"),
-  description: z.string().optional(),
-  videoFormat: z.string().optional().default("short"),
-  platforms: z.array(z.object({
-    platform: z.string(),
-    accountId: z.string(),
-    customContent: z.any().optional()
-  })).min(1, "At least one platform is required")
-});
+import { UploadInitSchema } from "@/lib/schemas/upload";
 
 /**
  * INIT HANDLER
