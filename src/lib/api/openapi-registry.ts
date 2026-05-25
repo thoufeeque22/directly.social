@@ -6,6 +6,8 @@ import { registerChatRoutes } from './routes/chat';
 import { registerHistoryRoutes } from './routes/history';
 import { registerMediaRoutes } from './routes/media';
 import { registerPlatformRoutes } from './routes/platforms';
+import { registerUploadPipelineRoutes } from './routes/upload-pipeline';
+import { registerSettingsRoutes } from './routes/settings';
 
 // Initialize Registry
 export const registry = new OpenAPIRegistry();
@@ -17,6 +19,8 @@ registerChatRoutes(registry);
 registerHistoryRoutes(registry);
 registerMediaRoutes(registry);
 registerPlatformRoutes(registry);
+registerUploadPipelineRoutes(registry);
+registerSettingsRoutes(registry);
 
 export { z };
 

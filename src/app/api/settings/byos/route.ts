@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getByosConfig, saveByosConfig } from '@/lib/byos/service';
 import { auth } from '@/auth';
+import { ByosConfigSchema } from '@/lib/schemas/settings';
 
 export async function GET() {
   const session = await auth();
@@ -14,7 +15,8 @@ export async function POST(req: Request) {
   if (!session?.user?.id) return new NextResponse('Unauthorized', { status: 401 });
   try {
     const data = await req.json();
-    const config = await saveByosConfig(session.user.id, data);
+    const validated = ByosConfigSchema.parse(data);
+    const config = await saveByosConfig(session.user.id, validated);
     return NextResponse.json({ config });
   } catch {
     return new NextResponse('Invalid input', { status: 400 });
