@@ -70,7 +70,7 @@ describe('Token Refresher', () => {
       refresh_token: 'ref-123',
       expires_at: past,
     } as unknown as Account);
-    vi.mocked(getPlatformCredentials).mockResolvedValue({ clientId: 'id', clientSecret: 'secret' });
+    vi.mocked(getPlatformCredentials).mockResolvedValue({ clientId: 'id', clientSecret: 'secret', redirectUri: 'uri' });
     vi.mocked(refreshGoogleToken).mockResolvedValue({
       access_token: 'new-acc-123',
       refresh_token: 'new-ref-123',
@@ -100,7 +100,7 @@ describe('Token Refresher', () => {
       refresh_token: 'ref-456',
       expires_at: soon,
     } as unknown as Account);
-    vi.mocked(getPlatformCredentials).mockResolvedValue({ clientId: 'id', clientSecret: 'secret' });
+    vi.mocked(getPlatformCredentials).mockResolvedValue({ clientId: 'id', clientSecret: 'secret', redirectUri: 'uri' });
     vi.mocked(refreshTikTokToken).mockResolvedValue({
       access_token: 'new-acc-456',
       refresh_token: 'new-ref-456',
