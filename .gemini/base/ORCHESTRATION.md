@@ -69,7 +69,9 @@ status: in-progress
 
 ### Review (QA & Security Audit)
 - **Role:** Senior Auditor. **READ-ONLY**.
-- **Mandate:** MUST NOT modify code. If issues exist, Verdict MUST be "FAIL".
+- **Mandate:** 
+  1. **Security & Quality**: MUST NOT modify code. If issues exist, Verdict MUST be "FAIL".
+  2. **Performance Audit**: MUST run a "Web Vitals / Performance Audit" using the `@GoogleChrome/modern-web-guidance` extension. Verify that no deprecated patterns are introduced and that Core Web Vitals (LCP, INP, CLS) are considered.
 - **Verdict:** Pass -> QA | Fail -> Return to Dev.
 
 ### QA (E2E Test Automation & Manual Scripts)

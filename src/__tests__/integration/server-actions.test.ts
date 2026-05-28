@@ -16,7 +16,7 @@ vi.mock('@/lib/byos/service', () => ({
 
 // Mock revalidateDashboard to avoid side effects
 vi.mock('@/lib/core/action-utils', async (importOriginal) => {
-  const actual = await importOriginal() as any;
+  const actual = await importOriginal() as Record<string, unknown>;
   return {
     ...actual,
     revalidateDashboard: vi.fn(),
@@ -29,7 +29,7 @@ describe('Server Actions', () => {
   describe('validateAIKeyAction', () => {
     it('should validate correctly when authorized', async () => {
       (auth as Mock).mockResolvedValue({ user: { id: 'user_1' } } as Session);
-      (generateText as Mock).mockResolvedValue({ text: 'OK' } as any);
+      (generateText as Mock).mockResolvedValue({ text: 'OK' } as unknown);
       
       const result = await validateAIKeyAction({ provider: 'openai', apiKey: 'sk-123' });
       expect(result.success).toBe(true);
