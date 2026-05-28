@@ -215,6 +215,8 @@ model User {
   image                String?
   preferredVideoFormat String               @default("short")
   preferredAIStyle     String               @default("Manual")
+  preferredAIStyleMode String               @default("Smart")
+  preferredAIProvider  String               @default("gemini")
   role                 Role                 @default(USER)
   accounts              Account[]
   byokCredentials       ByokCredential[]
@@ -227,7 +229,6 @@ model User {
   tokenAuditLogs        TokenAuditLog[]
   seenUpdates       UserSeenUpdate[]
 }
-
 model UserSeenUpdate {
   id        String    @id @default(cuid())
   userId    String

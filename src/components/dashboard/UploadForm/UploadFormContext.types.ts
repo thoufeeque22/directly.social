@@ -1,5 +1,6 @@
 import { StyleMode, AITier } from '@/lib/core/constants';
 import { Account, PlatformPreference } from '@/lib/core/types';
+import { AIProvider } from '@/lib/core/ai';
 
 export interface UploadFormProps {
   isUploading: boolean;
@@ -8,6 +9,7 @@ export interface UploadFormProps {
   selectedAccountIds: string[];
   contentMode: StyleMode;
   aiTier: AITier;
+  aiProvider: AIProvider;
   videoFormat: 'short' | 'long';
   videoDuration: number | null;
   draftFileName: string | null;
@@ -17,6 +19,7 @@ export interface UploadFormProps {
   hasCachedPreviews?: boolean;
   onVisualScan: (file: File) => Promise<void>;
   onTierChange: (tier: AITier) => void;
+  onProviderChange: (provider: AIProvider) => void;
   onModeChange: (mode: StyleMode) => void;
   onToggleAccount: (id: string) => void;
   onFileChange: (file: File | null) => void;

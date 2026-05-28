@@ -1,5 +1,6 @@
 import React from 'react';
 import { AITierSelector } from './AITierSelector';
+import { AIProviderSelector } from './AIProviderSelector';
 import { PlatformSelection } from './PlatformSelection';
 import { SchedulingSelector } from './SchedulingSelector';
 import { MediaPicker } from './MediaPicker';
@@ -16,7 +17,8 @@ import { GlassCard } from '@/components/ui/GlassCard';
 
 export const UploadFormInner: React.FC = () => {
   const {
-    aiTier, onTierChange, onSubmit, showGallery, setShowGallery, onGallerySelect,
+    aiTier, onTierChange, aiProvider, onProviderChange,
+    onSubmit, showGallery, setShowGallery, onGallerySelect,
     contentMode, onModeChange, customStyleText, onCustomStyleChange,
     accounts, preferences, selectedAccountIds, onToggleAccount,
     isScheduled, scheduledAt, onSchedulingChange
@@ -34,6 +36,7 @@ export const UploadFormInner: React.FC = () => {
         <VideoSelection />
         {showGallery && <MediaPicker onClose={() => setShowGallery(false)} onSelect={(a) => { onGallerySelect(a.fileId, a.fileName); setShowGallery(false); }} />}
         <AITierSelector selectedTier={aiTier} onChange={onTierChange} />
+        {aiTier !== 'Manual' && <AIProviderSelector selectedProvider={aiProvider} onChange={onProviderChange} />}
         <PlatformSpecificToggle />
         <StandardMetadataFields />
         <PlatformMetadataFields />

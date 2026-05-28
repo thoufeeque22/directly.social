@@ -5,9 +5,12 @@ import { Suspense } from "react";
 import { 
   getUserAccounts, 
   getPlatformPreferences, 
-  getAIStylePreference 
+  getAIStylePreference,
+  getAIProviderPreference,
+  getAIStyleModePreference
 } from "@/app/actions/user";
-import { AITier } from "@/lib/core/constants";
+import { AITier, StyleMode } from "@/lib/core/constants";
+import { AIProvider } from "@/lib/core/ai";
 
 export default async function Home() {
   const session = await auth();
@@ -21,11 +24,15 @@ export default async function Home() {
   const [
     accounts, 
     preferences, 
-    aiStyle
+    aiStyle,
+    aiProvider,
+    aiStyleMode
   ] = await Promise.all([
     getUserAccounts(),
     getPlatformPreferences(),
-    getAIStylePreference()
+    getAIStylePreference(),
+    getAIProviderPreference(),
+    getAIStyleModePreference()
   ]);
 
   // 3. Render with pre-fetched session and data (no loading flash)
@@ -35,8 +42,9 @@ export default async function Home() {
         session={session} 
         initialAccounts={accounts}
         initialPreferences={preferences}
-        initialAIStyle="Smart"
+        initialAIStyle={aiStyleMode as StyleMode}
         initialAITier={aiStyle as AITier}
+        initialAIProvider={aiProvider as AIProvider}
       />
     </Suspense>
   );

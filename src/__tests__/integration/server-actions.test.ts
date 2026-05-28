@@ -48,7 +48,7 @@ describe('Server Actions', () => {
       (getByosConfig as Mock).mockResolvedValue({ provider: 'S3', bucketName: 'test' });
       
       const result = await getByosConfigAction();
-      expect(result.config.provider).toBe('S3');
+      expect(result?.config?.provider).toBe('S3');
     });
 
     it('should save BYOS config', async () => {

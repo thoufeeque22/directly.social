@@ -17,6 +17,7 @@ import { usePlatformSelection } from '@/hooks/dashboard/usePlatformSelection';
 import { useDistributionEngine } from '@/hooks/dashboard/useDistributionEngine';
 import { useUploadStatus } from '@/hooks/useUploadStatus';
 import { useAiByok } from '@/hooks/useAiByok';
+import { AIProvider } from '@/lib/core/ai';
 
 interface ReviewContext {
   stagedFileId: string;
@@ -37,6 +38,7 @@ interface DashboardClientProps {
   initialPreferences: PlatformPreference[];
   initialAIStyle: StyleMode;
   initialAITier: AITier;
+  initialAIProvider?: AIProvider;
 }
 
 export default function DashboardClient({ 
@@ -44,7 +46,8 @@ export default function DashboardClient({
   initialAccounts, 
   initialPreferences,
   initialAIStyle,
-  initialAITier
+  initialAITier,
+  initialAIProvider
 }: Readonly<DashboardClientProps>) {
   const searchParams = useSearchParams();
   const resumeActivityId = searchParams.get('resume');
@@ -73,15 +76,24 @@ export default function DashboardClient({
   }, [isUploading, isGlobalActive, activeGlobalId, handleAbortAll]);
 
   const [aiTier, setAiTierInternal] = useState<AITier>(initialAITier || 'Manual');
+  const [aiProvider, setAiProviderInternal] = useState<AIProvider>(initialAIProvider || 'gemini');
 
   useEffect(() => {
-    const saved = localStorage.getItem('SS_AI_TIER') as AITier;
-    if (saved && ['Manual', 'Enrich', 'Generate'].includes(saved)) {
-      setAiTierInternal(saved);
+    const savedTier = localStorage.getItem('SS_AI_TIER') as AITier;
+    if (savedTier && ['Manual', 'Enrich', 'Generate'].includes(savedTier)) {
+      setAiTierInternal(savedTier);
+    }
+    const savedProvider = localStorage.getItem('SS_AI_PROVIDER') as AIProvider;
+    if (savedProvider && ['gemini', 'groq', 'ollama', 'openai', 'anthropic'].includes(savedProvider)) {
+      setAiProviderInternal(savedProvider);
+    }
+    const savedMode = localStorage.getItem('SS_AI_MODE') as StyleMode;
+    if (savedMode && ['Smart', 'Gen-Z', 'SEO', 'Story', 'Custom'].includes(savedMode)) {
+      setContentModeInternal(savedMode);
     }
   }, []);
 
-  const [contentMode, setContentMode] = useState<StyleMode>((initialAIStyle && (initialAIStyle as string) !== 'Manual') ? initialAIStyle : 'Smart');
+  const [contentMode, setContentModeInternal] = useState<StyleMode>((initialAIStyle && (initialAIStyle as string) !== 'Manual') ? initialAIStyle : 'Smart');
 
   const setAiTier = async (newTier: AITier) => {
     setAiTierInternal(newTier);
@@ -90,6 +102,24 @@ export default function DashboardClient({
       const { updateAIStylePreference } = await import('@/app/actions/user');
       await updateAIStylePreference(newTier);
     } catch (err) { console.error("Failed to persist AI Tier preference", err); }
+  };
+
+  const setAiProvider = async (newProvider: AIProvider) => {
+    setAiProviderInternal(newProvider);
+    if (globalThis.localStorage) localStorage.setItem('SS_AI_PROVIDER', newProvider);
+    try {
+      const { updateAIProviderPreference } = await import('@/app/actions/user');
+      await updateAIProviderPreference(newProvider);
+    } catch (err) { console.error("Failed to persist AI Provider preference", err); }
+  };
+
+  const setContentMode = async (newMode: StyleMode) => {
+    setContentModeInternal(newMode);
+    if (globalThis.localStorage) localStorage.setItem('SS_AI_MODE', newMode);
+    try {
+      const { updateAIStyleModePreference } = await import('@/app/actions/user');
+      await updateAIStyleModePreference(newMode);
+    } catch (err) { console.error("Failed to persist AI Mode preference", err); }
   };
 
   const [isReviewing, setIsReviewing] = useState(false);
@@ -171,7 +201,7 @@ export default function DashboardClient({
       if (aiTier !== 'Manual' && !skipReview) {
         setUploadStatus(" Generating AI Strategy...");
         const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
-        const previews = await getMultiPlatformAIPreviews(formData.get('title') as string, formData.get('description') as string, aiTier, contentMode, targetPlatforms.map(p => p.platform), [], customStyleText, byokConfigs);
+        const previews = await getMultiPlatformAIPreviews(formData.get('title') as string, formData.get('description') as string, aiTier, contentMode, targetPlatforms.map(p => p.platform), [], customStyleText, byokConfigs, aiProvider);
         setAiPreviews(previews);
         setReviewContext({ activityId: actualActivityId, stagedFileId: galleryFileId || '', fileName: galleryFileName || draftFileName || '', formData: formData });
         setIsReviewing(true);
@@ -204,7 +234,7 @@ export default function DashboardClient({
       const frames = await extractVideoFrames(file);
       const platforms = preferences.filter(p => p.isEnabled);
       const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
-      const previews = await getMultiPlatformAIPreviews('', '', 'Generate', contentMode, platforms.map(p => p.platformId), frames, customStyleText, byokConfigs);
+      const previews = await getMultiPlatformAIPreviews('', '', 'Generate', contentMode, platforms.map(p => p.platformId), frames, customStyleText, byokConfigs, aiProvider);
       setAiPreviews(previews); setIsReviewing(true);
     } catch (err) { console.error(err); } 
   };
@@ -223,8 +253,8 @@ export default function DashboardClient({
           </div>
         ) : (
           <UploadForm 
-            isUploading={isUploading} accounts={devAccounts} preferences={preferences} selectedAccountIds={selectedAccountIds} contentMode={contentMode} aiTier={aiTier} videoFormat={videoFormat} videoDuration={videoDuration} draftFileName={galleryFileName || draftFileName}
-            onVisualScan={handleVisualScan} onTierChange={setAiTier} onModeChange={setContentMode} onToggleAccount={handleToggleAccount}
+            isUploading={isUploading} accounts={devAccounts} preferences={preferences} selectedAccountIds={selectedAccountIds} contentMode={contentMode} aiTier={aiTier} aiProvider={aiProvider} videoFormat={videoFormat} videoDuration={videoDuration} draftFileName={galleryFileName || draftFileName}
+            onVisualScan={handleVisualScan} onTierChange={setAiTier} onProviderChange={setAiProvider} onModeChange={setContentMode} onToggleAccount={handleToggleAccount}
             onFileChange={(file: File | null) => { setGalleryFileId(null); setGalleryFileName(null); handleFileChange(file); setAiPreviews({}); }}
             onGallerySelect={(fileId: string, fileName: string) => { handleGallerySelect(fileId, fileName); setAiPreviews({}); }}
             onSubmit={handleMainAction} isScheduled={isScheduled} scheduledAt={scheduledAt} onSchedulingChange={(s: boolean, d: string) => { setIsScheduled(s); setScheduledAt(d); }}

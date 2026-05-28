@@ -80,6 +80,7 @@ export interface FallbackOptions<T> {
   modelIdOverride?: string;
   visualData?: string[];
   byokConfigs?: Record<string, { apiKey: string; modelId: string }>;
+  preferredProvider?: AIProvider;
 }
 
 /**
@@ -87,7 +88,7 @@ export interface FallbackOptions<T> {
  * Uses the Vercel AI SDK `generateObject` under the hood.
  */
 export async function generateObjectWithFallback<T>(options: FallbackOptions<T>): Promise<T> {
-  const primaryProvider = (process.env.ACTIVE_AI_PROVIDER as AIProvider) || 'gemini';
+  const primaryProvider = options.preferredProvider || (process.env.ACTIVE_AI_PROVIDER as AIProvider) || 'gemini';
   const fallbackChain = getFallbackChain(primaryProvider);
 
   let lastError: Error | null = null;

@@ -150,3 +150,61 @@ export async function updateAIStylePreference(style: string) {
     return { success: true };
   });
 }
+
+/**
+ * Fetches the preferred AI provider for the current user.
+ */
+export async function getAIProviderPreference() {
+  return protectedAction(async (userId) => {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { preferredAIProvider: true }
+    });
+
+    return user?.preferredAIProvider ?? "gemini";
+  }).catch(() => "gemini");
+}
+
+/**
+ * Updates the preferred AI provider for the current user.
+ */
+export async function updateAIProviderPreference(provider: string) {
+  return protectedAction(async (userId) => {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { preferredAIProvider: provider }
+    });
+
+    await revalidateDashboard();
+    return { success: true };
+  });
+}
+
+/**
+ * Fetches the preferred AI style mode for the current user.
+ */
+export async function getAIStyleModePreference() {
+  return protectedAction(async (userId) => {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { preferredAIStyleMode: true }
+    });
+
+    return user?.preferredAIStyleMode ?? "Smart";
+  }).catch(() => "Smart");
+}
+
+/**
+ * Updates the preferred AI style mode for the current user.
+ */
+export async function updateAIStyleModePreference(mode: string) {
+  return protectedAction(async (userId) => {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { preferredAIStyleMode: mode }
+    });
+
+    await revalidateDashboard();
+    return { success: true };
+  });
+}
