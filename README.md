@@ -34,3 +34,19 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## API Documentation
+
+Social Studio features a centralized API documentation system powered by Swagger/OpenAPI.
+
+- **Live Docs:** Access the interactive Swagger UI at `/api/docs` in your local development environment.
+- **Specification:** The OpenAPI specification is dynamically generated from route configurations and Zod schemas.
+- **Standard:** All new Route Handlers MUST be documented in the OpenAPI registry.
+
+## Centralized Schemas
+
+Validation logic is centralized in `src/lib/schemas/` to ensure consistency between API routes, Server Actions, and the client-side UI.
+
+- **Location:** `src/lib/schemas/*.ts`
+- **Technology:** [Zod](https://zod.dev/)
+- **Usage:** Always import schemas from this directory for request validation and type inference.

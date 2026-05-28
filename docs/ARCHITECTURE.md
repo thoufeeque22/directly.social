@@ -466,6 +466,33 @@ Complex forms (like the Upload Form) follow a "Modular Engine" pattern to manage
 - **Hook-Driven Logic:** Business logic (media parsing, template management) is extracted into specialized hooks (e.g., `useUploadForm`, `useMediaLibrary`) which are then integrated into the Context.
 - **Visual Feedback:** All atomic units maintain visual consistency using MUI components and shared style modules, ensuring a unified "glass" aesthetic across all form states.
 
+### 15. API Architecture & Documentation
+
+Social Studio utilizes a hybrid API architecture consisting of Next.js Route Handlers and Server Actions, with a strong emphasis on standardization and documentation.
+
+#### Documentation (Swagger/OpenAPI)
+
+The application maintains a "Living Source of Truth" for its API surface using Swagger/OpenAPI.
+- **Access:** Interactive documentation is available at `/api/docs`.
+- **Implementation:** Routes are registered in the OpenAPI specification, enabling automated client generation and consistent error responses.
+- **Requirement:** Every new Route Handler must be accompanied by an OpenAPI registration entry.
+
+#### Centralized Schemas
+
+All data validation and type inference are managed through centralized Zod schemas located in `src/lib/schemas/`. This ensures:
+- **Consistency:** The same validation logic is applied to API routes, Server Actions, and UI forms.
+- **Maintainability:** Changes to data structures only need to be updated in one location.
+- **Type Safety:** TypeScript types are inferred directly from these schemas.
+
+### 16. Route Handlers vs. Server Actions
+
+The project follows a specific strategy for choosing between Route Handlers and Server Actions:
+
+- **Route Handlers:** Reserved for binary data/streaming (uploads, media streaming), external webhooks (TikTok proxy), third-party tool access, and long-running tasks requiring custom duration settings.
+- **Server Actions:** Preferred for UI-triggered mutations, simple database updates, and lightweight queries. They provide tighter TypeScript integration and reduce public API surface.
+
+For a detailed analysis, refer to [API_ARCHITECTURE_REPORT.md](API_ARCHITECTURE_REPORT.md).
+
 ## Security & Role-Based Access Control (RBAC)
 
 Social Studio implements a strict Role-Based Access Control (RBAC) system to ensure data integrity and restrict access to sensitive administrative features.

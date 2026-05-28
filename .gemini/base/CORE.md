@@ -11,6 +11,12 @@
   - **No `any`:** Strict enforcement. Use `unknown` or defined interfaces/types if the type is truly dynamic.
   - **Strict Null Checks:** Handle `null`/`undefined` explicitly using optional chaining (`?.`) or type guards.
 - **Functional Purity:** Keep components "pure". Extract business logic into custom hooks (`src/hooks/`) to separate side effects from rendering.
+- **Centralized Validation:** 
+  - **Schemas:** All Zod schemas MUST be stored in `src/lib/schemas/*.ts`.
+  - **Shared Logic:** Reuse these schemas for both Route Handlers and Server Actions to ensure parity.
+- **API Documentation:**
+  - **Swagger/OpenAPI:** Every Route Handler (`app/api/.../route.ts`) MUST be documented in the centralized OpenAPI registry.
+  - **Verification:** Ensure the documentation is accessible at `/api/docs`.
 - **Naming Conventions:**
   - **Components:** PascalCase (e.g., `UploadHud.tsx`).
   - **Hooks:** camelCase starting with `use` (e.g., `useUploadStatus.ts`).

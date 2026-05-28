@@ -6,6 +6,8 @@ This document serves as the root entry point for all AI agents. It defines the g
 
 - **Zero-Any Policy:** Strict TypeScript enforcement across the entire codebase.
 - **Modularity (50-Line Rule):** New files must be ≤ 50 lines. Logic from legacy files must be extracted.
+- **Centralized Schemas:** All validation logic MUST reside in `src/lib/schemas`.
+- **API Documentation:** All Route Handlers MUST be documented at `/api/docs` (Swagger).
 - **Human-Centric UI:** Prioritize accessibility, professional aesthetics (MUI), and no emojis.
 - **Production Readiness:** Every feature must include robust error handling, security, and observability.
 - **Context Preservation:** Agents must never destructively overwrite state files.
