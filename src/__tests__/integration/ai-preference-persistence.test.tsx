@@ -1,9 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import DashboardClient from '@/components/dashboard/DashboardClient';
-import { Account, PlatformPreference } from '@/lib/core/types';
-import { StyleMode, AITier } from '@/lib/core/constants';
-import { AIProvider } from '@/lib/core/ai';
+import { Session } from 'next-auth';
 
 // Mock Auth
 vi.mock('@/auth', () => ({
@@ -53,7 +51,7 @@ const localStorageMock = (() => {
 Object.defineProperty(globalThis, 'localStorage', { value: localStorageMock });
 
 describe('AI Preference Persistence', () => {
-  const mockSession = { user: { name: 'Test User', id: 'user_1' }, expires: '' };
+  const mockSession: Session = { user: { name: 'Test User', id: 'user_1' }, expires: '' };
   
   beforeEach(() => {
     vi.clearAllMocks();
@@ -68,7 +66,7 @@ describe('AI Preference Persistence', () => {
 
     render(
       <DashboardClient 
-        session={mockSession as any}
+        session={mockSession}
         initialAccounts={[]}
         initialPreferences={[]}
         initialAIStyle="Smart"
@@ -89,7 +87,7 @@ describe('AI Preference Persistence', () => {
   it('uses initial server props if localStorage is empty', async () => {
     render(
       <DashboardClient 
-        session={mockSession as any}
+        session={mockSession}
         initialAccounts={[]}
         initialPreferences={[]}
         initialAIStyle="Story"
