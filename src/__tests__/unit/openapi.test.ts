@@ -11,7 +11,7 @@ describe('OpenAPI API Route', () => {
     expect(data.paths['/upload/init']).toBeDefined();
     expect(data.paths['/ai/validate-key']).toBeDefined();
     expect(data.paths['/chat']).toBeDefined();
-    expect(data.paths['/history']).toBeDefined();
+    expect(data.paths['/activity']).toBeDefined();
     expect(data.paths['/media']).toBeDefined();
     expect(data.paths['/platforms']).toBeDefined();
     expect(data.paths['/upload/initialize']).toBeDefined();
@@ -20,7 +20,7 @@ describe('OpenAPI API Route', () => {
     expect(data.paths['/settings/byos']).toBeDefined();
     expect(data.paths['/admin/analytics']).toBeDefined();
     expect(data.paths['/admin/aggregate']).toBeDefined();
-    expect(data.paths['/history/{id}']).toBeDefined();
+    expect(data.paths['/activity/{id}']).toBeDefined();
     expect(data.paths['/media/{fileId}']).toBeDefined();
     expect(data.paths['/upload/youtube']).toBeDefined();
     expect(data.paths['/upload/tiktok']).toBeDefined();

@@ -14,8 +14,8 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
   });
 
   test('Preparation Bar: Visible inside matching card', async ({ page }) => {
-    // 1. Mock specific history for this test
-    await page.route('**/api/history*', async (route) => {
+    // 1. Mock specific activity for this test
+    await page.route('**/api/activity*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -31,12 +31,12 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
       });
     });
 
-    await page.goto('/history');
+    await page.goto('/activity');
     
     // 2. Inject local state
     await page.evaluate(() => {
       localStorage.setItem('SS_STAGING_STATUS', JSON.stringify({
-        historyId: 'post-123',
+        activityId: 'post-123',
         status: 'Staging video...',
         percent: 45,
         active: true
@@ -45,7 +45,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
     
     await page.reload();
 
-    const postCard = page.getByTestId('history-post-post-123');
+    const postCard = page.getByTestId('activity-post-post-123');
     const prepBar = postCard.getByTestId('preparation-bar');
     
     await expect(prepBar).toBeVisible();
@@ -58,8 +58,8 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
   });
 
   test('Interaction: STOP ALL broadcasts abort', async ({ page }) => {
-    // 1. Mock specific history
-    await page.route('**/api/history*', async (route) => {
+    // 1. Mock specific activity
+    await page.route('**/api/activity*', async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
@@ -75,11 +75,11 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
         });
       });
 
-    await page.goto('/history');
+    await page.goto('/activity');
     
     await page.evaluate(() => {
       localStorage.setItem('SS_STAGING_STATUS', JSON.stringify({
-        historyId: 'post-cancel-all',
+        activityId: 'post-cancel-all',
         status: 'Uploading...',
         active: true
       }));
@@ -88,7 +88,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
     await page.reload();
 
     // Ensure the bar is visible first
-    const postCard = page.getByTestId('history-post-post-cancel-all');
+    const postCard = page.getByTestId('activity-post-post-cancel-all');
     await expect(postCard.getByTestId('preparation-bar')).toBeVisible();
 
     const stopButton = postCard.getByRole('button', { name: /STOP ALL/i });
@@ -112,7 +112,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
   });
 
   test('Optimistic UI: Shows ghost card immediately', async ({ page }) => {
-    await page.route('**/api/history*', async (route) => {
+    await page.route('**/api/activity*', async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
@@ -120,7 +120,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
         });
       });
 
-    await page.goto('/history');
+    await page.goto('/activity');
 
     await page.evaluate(() => {
       localStorage.setItem('SS_PENDING_POST', JSON.stringify({
@@ -140,7 +140,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
   });
 
   test('Optimistic UI: Ghost card persists after fetch without record', async ({ page }) => {
-    await page.route('**/api/history*', async (route) => {
+    await page.route('**/api/activity*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -148,7 +148,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
       });
     });
 
-    await page.goto('/history');
+    await page.goto('/activity');
 
     await page.evaluate(() => {
       localStorage.setItem('SS_PENDING_POST', JSON.stringify({
@@ -165,8 +165,8 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
   });
 
   test('Optimistic UI: Individual platform stop on ghost card', async ({ page }) => {
-    // 1. Mock history with the post already there
-    await page.route('**/api/history*', async (route) => {
+    // 1. Mock activity with the post already there
+    await page.route('**/api/activity*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -182,12 +182,12 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
       });
     });
 
-    await page.goto('/history');
+    await page.goto('/activity');
 
     // 2. Inject pending post (Optimistic)
     await page.evaluate(() => {
       localStorage.setItem('SS_PENDING_POST', JSON.stringify({
-        resumeHistoryId: 'real-id-individual',
+        resumeActivityId: 'real-id-individual',
         title: 'Individual Stop Video',
         videoFormat: 'short',
         platforms: [{ platform: 'youtube', accountId: '1' }]
@@ -197,7 +197,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
     await page.reload();
 
     // 3. Find the card and its platform stop button
-    const postCard = page.getByTestId('history-post-real-id-individual');
+    const postCard = page.getByTestId('activity-post-real-id-individual');
     await expect(postCard).toBeVisible();
     
     const stopButton = postCard.getByRole('button', { name: /Stop Platform Upload/i });
@@ -205,7 +205,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
     
     // Intercept the server action call
     let actionTriggered = false;
-    await page.route('**/history*', async (route) => {
+    await page.route('**/activity*', async (route) => {
       if (route.request().method() === 'POST') {
          actionTriggered = true;
          await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true }) });
@@ -222,8 +222,8 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
   });
 
   test('Optimistic UI: STOP ALL on ghost card broadcasts abort', async ({ page }) => {
-    // 1. Ensure empty history mock for pure ghost card
-    await page.route('**/api/history*', async (route) => {
+    // 1. Ensure empty activity mock for pure ghost card
+    await page.route('**/api/activity*', async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
@@ -231,9 +231,9 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
         });
       });
 
-    await page.goto('/history');
+    await page.goto('/activity');
     
-    // 2. Inject pending post without historyId (pure optimistic-pending)
+    // 2. Inject pending post without activityId (pure optimistic-pending)
     await page.evaluate(() => {
       localStorage.setItem('SS_PENDING_POST', JSON.stringify({
         title: 'Initial Ghost',
@@ -242,7 +242,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
       }));
       // Simulate active staging for this ghost
       localStorage.setItem('SS_STAGING_STATUS', JSON.stringify({
-        historyId: 'optimistic-pending',
+        activityId: 'optimistic-pending',
         status: 'Initializing...',
         active: true
       }));
@@ -271,8 +271,8 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
   });
 
   test('Distribution: Individual platform progress bars are visible', async ({ page }) => {
-    // 1. Mock history with a platform showing 65% progress
-    await page.route('**/api/history*', async (route) => {
+    // 1. Mock activity with a platform showing 65% progress
+    await page.route('**/api/activity*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -291,9 +291,9 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
       });
     });
 
-    await page.goto('/history');
+    await page.goto('/activity');
 
-    const postCard = page.getByTestId('history-post-post-progress-test');
+    const postCard = page.getByTestId('activity-post-post-progress-test');
     
     // 2. Verify YouTube progress bar and percentage
     const youtubeBar = postCard.getByTestId('progress-bar-youtube');

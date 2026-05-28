@@ -35,6 +35,6 @@ export async function revalidateDashboard() {
   const { revalidatePath } = await import('next/cache');
   revalidatePath("/");
   revalidatePath("/settings");
-  revalidatePath("/history");
+  revalidatePath("/activity");
   revalidatePath("/schedule");
 }

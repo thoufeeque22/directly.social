@@ -20,7 +20,7 @@ export const UploadAssembleSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   videoFormat: z.string().optional(),
-  historyId: z.string().optional(),
+  activityId: z.string().optional(),
   platforms: z.array(z.object({
     platform: z.string(),
     accountId: z.string()

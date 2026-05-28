@@ -28,7 +28,7 @@ export function registerPipelineAssemble(registry: OpenAPIRegistry) {
               data: z.object({
                 fileId: z.string(),
                 fileName: z.string(),
-                historyId: z.string(),
+                activityId: z.string(),
               }),
             }),
           },

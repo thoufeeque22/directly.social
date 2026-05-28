@@ -41,7 +41,7 @@ global.fetch = vi.fn((url) => {
   return Promise.resolve({
     ok: true,
     json: () => {
-      if (url.toString().includes('/api/history/')) {
+      if (url.toString().includes('/api/activity/')) {
         return Promise.resolve({
           data: {
             id: 'hist_123',

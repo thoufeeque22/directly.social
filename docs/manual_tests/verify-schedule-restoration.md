@@ -1,4 +1,4 @@
-# UAT: Schedule & History Restoration
+# UAT: Schedule & Activity Restoration
 
 ## Purpose
 Verify that the schedule functionality is fully restored, showing upcoming posts and historical published posts with correct filtering and ordering.
@@ -22,16 +22,16 @@ Verify that the schedule functionality is fully restored, showing upcoming posts
 
 ### Expected Results
 - The post is successfully created.
-- The user is redirected to the **History** or **Schedule** tab.
+- The user is redirected to the **Activity** or **Schedule** tab.
 - The new post appears under the **Upcoming/Scheduled** section.
-- Database: `PostHistory` record has `scheduledAt` set to the selected time and `isPublished` is `false`.
+- Database: `PostActivity` record has `scheduledAt` set to the selected time and `isPublished` is `false`.
 
 ---
 
-## Test Case 2: History API Filtering (Upcoming vs Published)
+## Test Case 2: Activity API Filtering (Upcoming vs Published)
 
 ### Steps
-1. Navigate to the **History** page.
+1. Navigate to the **Activity** page.
 2. Observe the two tabs: **Scheduled** and **Published**.
 3. Create another post for immediate launch.
 4. Wait for the immediate post to be processed (or manually set `isPublished` to `true` in DB).
@@ -48,7 +48,7 @@ Verify that the schedule functionality is fully restored, showing upcoming posts
 ## Test Case 3: Robustness & Validation (API Layer)
 
 ### Steps
-1. Attempt to call the `/api/history` endpoint directly with invalid parameters (if applicable).
+1. Attempt to call the `/api/activity` endpoint directly with invalid parameters (if applicable).
 2. Attempt to call `/api/upload/assemble` with a malformed `scheduledAt` string (e.g., "invalid-date").
 
 ### Expected Results

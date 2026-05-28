@@ -51,4 +51,4 @@
 - **Step 1:** Click the close button in the chat window header.
 - **Expected:** Window slides out/closes smoothly.
 - **Step 2:** Re-open the chat.
-- **Expected:** Previous chat history is preserved.
+- **Expected:** Previous chat activity is preserved.

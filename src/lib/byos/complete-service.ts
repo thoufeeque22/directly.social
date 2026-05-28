@@ -39,25 +39,25 @@ export const createByosAsset = async (userId: string, data: ByosAssetData, provi
 interface ByosPostData {
   scheduledAt?: string;
   platforms?: { platform: string; accountId: string; transcodeStatus?: string }[];
-  historyId?: string;
+  activityId?: string;
   title?: string;
   description?: string;
   videoFormat?: string;
   fileName?: string;
 }
 
-export const upsertPostHistoryForByos = async (userId: string, fileId: string, data: ByosPostData) => {
+export const upsertPostActivityForByos = async (userId: string, fileId: string, data: ByosPostData) => {
   const finalScheduledAt = data.scheduledAt && !isNaN(new Date(data.scheduledAt).getTime()) ? new Date(data.scheduledAt) : new Date();
   const initialPlatformData = data.platforms?.map((p) => ({ platform: p.platform, accountId: p.accountId, status: 'pending' as const, transcodeStatus: 'skipped' as const })) || [];
 
-  if (data.historyId) {
-    return await prisma.postHistory.update({
-      where: { id: data.historyId, userId },
+  if (data.activityId) {
+    return await prisma.postActivity.update({
+      where: { id: data.activityId, userId },
       data: {
         stagedFileId: fileId, title: data.title, description: data.description, scheduledAt: finalScheduledAt,
         platforms: {
           upsert: initialPlatformData.map((p) => ({
-            where: { postHistoryId_platform_accountId: { postHistoryId: data.historyId!, platform: p.platform, accountId: p.accountId } },
+            where: { postActivityId_platform_accountId: { postActivityId: data.activityId!, platform: p.platform, accountId: p.accountId } },
             update: { accountId: p.accountId, transcodeStatus: 'skipped' },
             create: { platform: p.platform, accountId: p.accountId, status: 'pending', transcodeStatus: 'skipped' },
           })),
@@ -66,7 +66,7 @@ export const upsertPostHistoryForByos = async (userId: string, fileId: string, d
     });
   }
 
-  return await prisma.postHistory.create({
+  return await prisma.postActivity.create({
     data: {
       userId, title: data.title || data.fileName || 'Untitled Post', description: data.description || null,
       videoFormat: data.videoFormat || 'short', stagedFileId: fileId, isPublished: false, scheduledAt: finalScheduledAt,

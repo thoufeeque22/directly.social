@@ -8,13 +8,13 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { Badge } from '@/components/ui/Badge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Heading } from '@/components/ui/Heading';
-import { getUpcomingPosts } from '@/app/actions/history/get-upcoming';
+import { getUpcomingPosts } from '@/app/actions/activity/get-upcoming';
 import { usePolling } from '@/hooks/usePolling';
-import type { PostHistory } from '@prisma/client';
+import type { PostActivity } from '@prisma/client';
 import styles from './SidebarInfo.module.css';
 
 export const SidebarInfo: React.FC = () => {
-  const [upcoming, setUpcoming] = useState<PostHistory[]>([]);
+  const [upcoming, setUpcoming] = useState<PostActivity[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchQueue = () => {

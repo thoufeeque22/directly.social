@@ -17,7 +17,7 @@ async function main() {
   console.log(`Seeding schedule data for user: ${user.id}`);
 
   // Clear specific scheduled posts for a clean test state
-  await prisma.postHistory.deleteMany({ 
+  await prisma.postActivity.deleteMany({ 
     where: { 
       id: { in: ['e2e-post-1', 'e2e-post-2', 'e2e-post-3'] }
     } 
@@ -33,7 +33,7 @@ async function main() {
   // Post 3: Scheduled in 3 hours
   const scheduled3 = new Date(now.getTime() + 3 * 60 * 60 * 1000);
 
-  await prisma.postHistory.upsert({
+  await prisma.postActivity.upsert({
     where: { id: 'e2e-post-1' },
     update: {
       userId: user.id,
@@ -52,7 +52,7 @@ async function main() {
     }
   });
 
-  await prisma.postHistory.upsert({
+  await prisma.postActivity.upsert({
     where: { id: 'e2e-post-2' },
     update: {
       userId: user.id,
@@ -71,7 +71,7 @@ async function main() {
     }
   });
 
-  await prisma.postHistory.upsert({
+  await prisma.postActivity.upsert({
     where: { id: 'e2e-post-3' },
     update: {
       userId: user.id,

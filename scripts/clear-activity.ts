@@ -13,9 +13,9 @@ async function clearActivity() {
     const { count: resultCount } = await prisma.postPlatformResult.deleteMany({});
     console.log(`- Deleted ${resultCount} platform result records.`);
 
-    // 2. Delete Post History
-    const { count: historyCount } = await prisma.postHistory.deleteMany({});
-    console.log(`- Deleted ${historyCount} post history entries.`);
+    // 2. Delete Post Activity
+    const { count: activityCount } = await prisma.postActivity.deleteMany({});
+    console.log(`- Deleted ${activityCount} post activity entries.`);
 
     // 3. Optional: Clear Gallery Assets (Staged files metadata)
     const { count: galleryCount } = await prisma.galleryAsset.deleteMany({});

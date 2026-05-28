@@ -17,6 +17,15 @@ const nextConfig: NextConfig = {
     proxyClientMaxBodySize: "50gb",
   },
   serverExternalPackages: ["@prisma/client", "prisma"],
+  async redirects() {
+    return [
+      {
+        source: "/history",
+        destination: "/activity",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 // Check if we should skip Sentry during build to save memory (useful for 1GB RAM VPS)

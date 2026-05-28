@@ -28,7 +28,7 @@ erDiagram
     User ||--o{ Account : "has"
     User ||--o{ Session : "has"
     User ||--o{ PlatformPreference : "defines"
-    User ||--o{ PostHistory : "creates"
+    User ||--o{ PostActivity : "creates"
     User ||--o{ GalleryAsset : "uploads"
     User ||--o{ TokenAuditLog : "logs"
     User ||--o{ MetadataTemplate : "saves"
@@ -37,7 +37,7 @@ erDiagram
 
     Account ||--o{ TokenAuditLog : "audited by"
 
-    PostHistory ||--o{ PostPlatformResult : "distributes to"
+    PostActivity ||--o{ PostPlatformResult : "distributes to"
 
     User {
         string id PK
@@ -75,7 +75,7 @@ erDiagram
         boolean isDistributionEnabled
     }
 
-    PostHistory {
+    PostActivity {
         string id PK
         string userId FK
         string title
@@ -89,7 +89,7 @@ erDiagram
 
     PostPlatformResult {
         string id PK
-        string postHistoryId FK
+        string postActivityId FK
         string platform
         string accountName
         string accountId
@@ -276,13 +276,13 @@ sequenceDiagram
 
 ### 6. Global Search
 
-A unified search mechanism provides server-side filtering for history and media assets.
+A unified search mechanism provides server-side filtering for activity and media assets.
 
 ```mermaid
 sequenceDiagram
     participant U as User (UI)
     participant C as SearchField (Component)
-    participant API as API (/api/history or /api/media)
+    participant API as API (/api/activity or /api/media)
     participant DB as Database (Prisma)
 
     U->>C: Type search term
@@ -384,9 +384,9 @@ sequenceDiagram
     else If No Unread Updates (or after dismissal)
         H->>A: getHistoricalUpdates() [lazy load]
         A->>DB: Query recently read UpdateLog entries
-        DB-->>A: Return History
-        A-->>H: Set history state
-        P->>P: Render read updates history list
+        DB-->>A: Return Activity
+        A-->>H: Set activity state
+        P->>P: Render read updates activity list
     end
 ```
 
@@ -441,17 +441,17 @@ Social Studio implements a unified refresh system to ensure data consistency bet
 
 For more details, see the [Global Refresh Feature Documentation](features/GLOBAL_REFRESH.md).
 
-### 13. History Domain Architecture
+### 13. Activity Domain Architecture
 
-The History domain manages the record of all past and upcoming posts. To maintain scalability and performance, the domain follows a highly modular architecture that adheres to the project's strict 50-line rule.
+The Activity domain manages the record of all past and upcoming posts. To maintain scalability and performance, the domain follows a highly modular architecture that adheres to the project's strict 50-line rule.
 
-- **Decomposed Server Actions:** Logic for fetching, retrying, and canceling history items is split into specialized modules within `src/app/actions/history/`. This ensures that each action has a single responsibility and is independently testable.
-- **Specialized Hooks:** A composite `useHistory` hook orchestrates multiple sub-hooks to manage complex state and logic:
-    - `useHistoryState`: Manages local state for filters, pagination, and data storage.
-    - `useHistoryData`: Handles data fetching, polling, and synchronization with server actions.
-    - `useHistoryActions`: Provides handlers for user interactions such as Retry, Cancel, and Delete.
-    - `useHistoryCockpit`: Manages "Cockpit" mode, enabling real-time monitoring of active post distribution.
-- **Component Decomposition:** The History page is composed of small, focused MUI components (e.g., `HistoryHeader`, `HistoryList`, `HistoryCard`, `PlatformResultItem`). This decomposition reduces cognitive load and improves UI maintainability.
+- **Decomposed Server Actions:** Logic for fetching, retrying, and canceling activity items is split into specialized modules within `src/app/actions/activity/`. This ensures that each action has a single responsibility and is independently testable.
+- **Specialized Hooks:** A composite `useActivity` hook orchestrates multiple sub-hooks to manage complex state and logic:
+    - `useActivityState`: Manages local state for filters, pagination, and data storage.
+    - `useActivityData`: Handles data fetching, polling, and synchronization with server actions.
+    - `useActivityActions`: Provides handlers for user interactions such as Retry, Cancel, and Delete.
+    - `useActivityCockpit`: Manages "Cockpit" mode, enabling real-time monitoring of active post distribution.
+- **Component Decomposition:** The Activity page is composed of small, focused MUI components (e.g., `ActivityHeader`, `ActivityList`, `ActivityCard`, `PlatformResultItem`). This decomposition reduces cognitive load and improves UI maintainability.
 - **Real-time Monitoring (Cockpit):** A specialized UI state for active tasks that provides live progress updates and status monitoring, utilizing automatic polling and optimized re-renders.
 
 ### 14. Complex UI Form Architecture (Modular Engine)

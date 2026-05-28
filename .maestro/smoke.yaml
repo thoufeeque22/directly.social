@@ -2,4 +2,4 @@ appId: com.thoufeeque.socialstudio
 ---
 - launchApp
 - assertVisible: "Upload & Automate"
-- assertVisible: "History"
+- assertVisible: "Activity Hub"

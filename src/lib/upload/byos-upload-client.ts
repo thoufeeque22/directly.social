@@ -1,10 +1,10 @@
 export async function stageVideoFileByos({
-  file, onStatusUpdate, metadata, platforms, resumeHistoryId, byosConfig, signal
+  file, onStatusUpdate, metadata, platforms, resumeActivityId, byosConfig, signal
 }: { 
   file: File; onStatusUpdate: (status: string) => void;
-  metadata?: Record<string, string | boolean | undefined>; platforms: { platform: string; accountId: string }[]; resumeHistoryId?: string;
+  metadata?: Record<string, string | boolean | undefined>; platforms: { platform: string; accountId: string }[]; resumeActivityId?: string;
   byosConfig: { provider: string; bucketName: string }; signal?: AbortSignal;
-}): Promise<{ stagedFileId: string; fileName: string; historyId: string }> {
+}): Promise<{ stagedFileId: string; fileName: string; activityId: string }> {
   const broadcast = (status: string) => onStatusUpdate(status);
 
   broadcast("Initializing BYOS pipeline...");
@@ -37,8 +37,8 @@ export async function stageVideoFileByos({
 
   const completeRes = await fetch('/api/upload/byos/complete', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ uploadId: s3UploadId, key, fileName: file.name, fileSize: file.size, parts, ...metadata, platforms, historyId: resumeHistoryId }), signal,
+    body: JSON.stringify({ uploadId: s3UploadId, key, fileName: file.name, fileSize: file.size, parts, ...metadata, platforms, activityId: resumeActivityId }), signal,
   });
   const stageResult = await completeRes.json();
-  return { stagedFileId: stageResult.data.fileId, fileName: file.name, historyId: stageResult.data.historyId };
+  return { stagedFileId: stageResult.data.fileId, fileName: file.name, activityId: stageResult.data.activityId };
 }

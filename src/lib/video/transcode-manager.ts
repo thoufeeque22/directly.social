@@ -11,17 +11,17 @@ import { logger } from "@/lib/core/logger";
 export async function getOptimizedVideoPath(
   originalFileId: string,
   platform: string,
-  postHistoryId?: string,
+  postActivityId?: string,
   accountId?: string
 ): Promise<string> {
   const originalPath = path.join(process.cwd(), "tmp", originalFileId);
   
   // 1. Check if we already have an optimized version in DB for this post/platform/account
-  if (postHistoryId && accountId) {
+  if (postActivityId && accountId) {
     const result = await prisma.postPlatformResult.findUnique({
       where: {
-        postHistoryId_platform_accountId: {
-          postHistoryId,
+        postActivityId_platform_accountId: {
+          postActivityId,
           platform,
           accountId
         }
@@ -48,19 +48,19 @@ export async function getOptimizedVideoPath(
 
   logger.info(`️ [TRANSCODER] Starting optimization for ${platform}: ${platformResult.reason}`);
 
-  // 3. Mark as processing in DB (if postHistoryId provided)
-  if (postHistoryId && accountId) {
+  // 3. Mark as processing in DB (if postActivityId provided)
+  if (postActivityId && accountId) {
     await prisma.postPlatformResult.upsert({
       where: {
-        postHistoryId_platform_accountId: {
-          postHistoryId,
+        postActivityId_platform_accountId: {
+          postActivityId,
           platform,
           accountId
         }
       },
       update: { transcodeStatus: 'processing' },
       create: { 
-        postHistoryId, 
+        postActivityId, 
         platform, 
         accountId,
         transcodeStatus: 'processing',
@@ -77,11 +77,11 @@ export async function getOptimizedVideoPath(
     logger.info(` [TRANSCODER] Optimization complete: ${optimizedFileId}`);
 
     // 5. Update DB
-    if (postHistoryId && accountId) {
+    if (postActivityId && accountId) {
       await prisma.postPlatformResult.update({
         where: {
-          postHistoryId_platform_accountId: {
-            postHistoryId,
+          postActivityId_platform_accountId: {
+            postActivityId,
             platform,
             accountId
           }
@@ -98,11 +98,11 @@ export async function getOptimizedVideoPath(
     const message = err instanceof Error ? err.message : String(err);
     logger.error(` [TRANSCODER] Optimization failed for ${platform}: ${message}`);
     
-    if (postHistoryId && accountId) {
+    if (postActivityId && accountId) {
       await prisma.postPlatformResult.update({
         where: {
-          postHistoryId_platform_accountId: {
-            postHistoryId,
+          postActivityId_platform_accountId: {
+            postActivityId,
             platform,
             accountId
           }

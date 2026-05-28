@@ -25,7 +25,7 @@ export function registerPipelineInitialize(registry: OpenAPIRegistry) {
             schema: z.object({
               success: z.boolean(),
               data: z.object({
-                historyId: z.string(),
+                activityId: z.string(),
               }),
             }),
           },

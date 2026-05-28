@@ -22,7 +22,7 @@ Skills are modular, self-contained packages that extend Gemini CLI's capabilitie
 
 ### Concise is Key
 
-The context window is a public good. Skills share the context window with everything else Gemini CLI needs: system prompt, conversation history, other Skills' metadata, and the actual user request.
+The context window is a public good. Skills share the context window with everything else Gemini CLI needs: system prompt, conversation activity, other Skills' metadata, and the actual user request.
 
 **Default assumption: Gemini CLI is already very smart.** Only add context Gemini CLI doesn't already have. Challenge each piece of information: "Does Gemini CLI really need this explanation?" and "Does this paragraph justify its token cost?"
 

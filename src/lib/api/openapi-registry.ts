@@ -3,7 +3,7 @@ import { z } from '@/lib/api/zod-openapi';
 import { registerAiRoutes } from './routes/ai';
 import { registerUploadRoutes } from './routes/upload';
 import { registerChatRoutes } from './routes/chat';
-import { registerHistoryRoutes } from './routes/history';
+import { registerActivityRoutes } from './routes/activity';
 import { registerMediaRoutes } from './routes/media';
 import { registerPlatformRoutes } from './routes/platforms';
 import { registerUploadPipelineRoutes } from './routes/upload-pipeline';
@@ -36,7 +36,7 @@ registry.registerComponent('securitySchemes', 'signedToken', {
 registerAiRoutes(registry);
 registerUploadRoutes(registry);
 registerChatRoutes(registry);
-registerHistoryRoutes(registry);
+registerActivityRoutes(registry);
 registerMediaRoutes(registry);
 registerPlatformRoutes(registry);
 registerUploadPipelineRoutes(registry);

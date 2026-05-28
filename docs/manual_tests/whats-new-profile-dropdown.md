@@ -67,4 +67,4 @@ Refer to the following visual verification screenshots under the `verification/`
 - `verification/whats-new-badge.png` - Visual proof of the notification badge.
 - `verification/whats-new-profile-link.png` - Visual proof of the user profile dropdown menu and persistent "What's New" option.
 - `verification/whats-new-popover-unread.png` - Visual proof of unread updates in the popover.
-- `verification/whats-new-popover-history.png` - Visual proof of the historical changelog in the popover.
+- `verification/whats-new-popover-activity.png` - Visual proof of the historical changelog in the popover.

@@ -17,17 +17,17 @@ Verify that the user receives real-time, context-specific feedback within the Ac
 2. Select a medium-sized video file (> 50MB).
 3. Select at least one platform.
 4. Click **Launch** or **Post Video**.
-5. **Observe:** The browser should redirect to the **Activity Hub** (/history) *immediately*.
-6. **Simulate Delay:** In the Network tab of DevTools, set "Throttling" to "Slow 3G" right after the redirect to simulate a slow database fetch for the history list.
+5. **Observe:** The browser should redirect to the **Activity Hub** (/activity) *immediately*.
+6. **Simulate Delay:** In the Network tab of DevTools, set "Throttling" to "Slow 3G" right after the redirect to simulate a slow database fetch for the activity list.
 
 ### Expected Results
-- Immediate redirect to `/history`.
-- **Optimistic UI:** A "Ghost Card" (skeleton/placeholder) appears at the top of the timeline *before* the real history record is fetched.
-- **Persistence:** Even if the history list fetch takes several seconds (due to throttling), the Ghost Card MUST persist and continue showing real-time progress from `localStorage`. It should not flicker or disappear between polling cycles.
+- Immediate redirect to `/activity`.
+- **Optimistic UI:** A "Ghost Card" (skeleton/placeholder) appears at the top of the timeline *before* the real activity record is fetched.
+- **Persistence:** Even if the activity list fetch takes several seconds (due to throttling), the Ghost Card MUST persist and continue showing real-time progress from `localStorage`. It should not flicker or disappear between polling cycles.
 - A "Processing Dot" (pulsing blue/primary) is visible on this Ghost Card.
 - The card displays technical status messages like "Synchronizing cockpit state..." or "Resuming stream: X%".
 - **Emoji Audit:** Verify that NO emojis are present in any status text (e.g., no rocket, no cloud, no checkmarks).
-- Once the history fetch completes, the Ghost Card should seamlessly transition into the real History Card (reconciled by ID or fuzzy matching).
+- Once the activity fetch completes, the Ghost Card should seamlessly transition into the real Activity Card (reconciled by ID or fuzzy matching).
 - No floating HUD is visible on the Dashboard or Activity Hub.
 
 ---
@@ -132,11 +132,11 @@ Verify that the user receives real-time, context-specific feedback within the Ac
 ## Test Case 8: Manual Resume for Stale Uploads
 
 ### Steps
-1. Identify or create a history entry where some platforms are stuck in "Pending" and it was created more than 60 seconds ago.
+1. Identify or create a activity entry where some platforms are stuck in "Pending" and it was created more than 60 seconds ago.
 2. **Observe:** The "STOP ALL" button should be hidden, and the **Manual Resume** button (Rocket icon) should be visible.
 3. Click **Manual Resume**.
 4. Select the original video file when prompted.
-5. **Observe:** The button text changes to "Processing" and a pulsing history icon appears.
+5. **Observe:** The button text changes to "Processing" and a pulsing activity icon appears.
 6. The browser should redirect to the Dashboard with the `?resume=[id]` parameter, or handle the resume in-place if implemented (verify current implementation behavior).
 
 ### Expected Results

@@ -22,7 +22,7 @@ vi.mock('lucide-react', () => ({
   Calendar: () => <div data-testid="calendar-icon" />,
   Plus: () => <div data-testid="plus-icon" />,
   Trash2: () => <div data-testid="trash-icon" />,
-  History: () => <div data-testid="history-icon" />,
+  Activity: () => <div data-testid="activity-icon" />,
   ArrowRight: () => <div data-testid="arrow-right-icon" />,
   Settings: () => <div data-testid="settings-icon" />,
   LogOut: () => <div data-testid="logout-icon" />,

@@ -8,65 +8,6 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
-model User {
-  id                   String               @id @default(cuid())
-  name                 String?
-  email                String?              @unique
-  emailVerified        DateTime?
-  image                String?
-  preferredVideoFormat String               @default("short")
-  preferredAIStyle     String               @default("Manual")
-  role                 Role                 @default(USER)
-  accounts             Account[]
-  byokCredentials      ByokCredential[]
-  galleryAssets        GalleryAsset[]
-  metadataTemplates    MetadataTemplate[]
-  platformPreferences  PlatformPreference[]
-  postHistories        PostHistory[]
-  sessions             Session[]
-  tokenAuditLogs       TokenAuditLog[]
-  seenUpdates          UserSeenUpdate[]
-  byosConfig           ByosConfig?
-}
-
-model ByokCredential {
-  id           String   @id @default(cuid())
-  userId       String
-  platform     String
-  clientId     String
-  clientSecret String
-  redirectUri  String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, platform])
-}
-
-model MetadataTemplate {
-  id        String   @id @default(cuid())
-  userId    String
-  name      String
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-}
-
-model SystemMetric {
-  id        String   @id @default(cuid())
-  name      String
-  value     Float
-  timestamp DateTime @default(now())
-}
-
 model Account {
   id                    String          @id @default(cuid())
   userId                String
@@ -88,6 +29,78 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+model ByokCredential {
+  id           String   @id @default(cuid())
+  userId       String
+  platform     String
+  clientId     String
+  clientSecret String
+  redirectUri  String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, platform])
+}
+
+model ByosConfig {
+  id              String       @id @default(cuid())
+  userId          String       @unique
+  provider        ByosProvider
+  bucketName      String
+  endpoint        String?
+  region          String?
+  accessKeyId     String
+  secretAccessKey String
+  pathPrefix      String       @default("")
+  keepFiles       Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model GalleryAsset {
+  id               String   @id @default(cuid())
+  userId           String
+  fileId           String   @unique
+  fileName         String
+  fileSize         BigInt?
+  mimeType         String?
+  expiresAt        DateTime
+  createdAt        DateTime @default(now())
+  metadata         Json?
+  processingStatus String?  @default("ready")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@index([userId])
+}
+
+model LaunchTask {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  status      String   @default("pending")
+  category    String   @default("Marketing")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category, status])
+}
+
+model MetadataTemplate {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
 model PlatformPreference {
   id         String  @id @default(cuid())
   userId     String
@@ -98,23 +111,7 @@ model PlatformPreference {
   @@unique([userId, platformId])
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
-model PostHistory {
+model PostActivity {
   id           String               @id @default(cuid())
   userId       String
   title        String
@@ -130,7 +127,7 @@ model PostHistory {
 
 model PostPlatformResult {
   id              String      @id @default(cuid())
-  postHistoryId   String
+  postActivityId   String
   platform        String
   accountName     String?
   accountId       String?
@@ -149,9 +146,9 @@ model PostPlatformResult {
   transcodeStatus String?     @default("skipped")
   metadata        Json?
   progress        Int         @default(0)
-  postHistory     PostHistory @relation(fields: [postHistoryId], references: [id], onDelete: Cascade)
+  postActivity     PostActivity @relation(fields: [postActivityId], references: [id], onDelete: Cascade)
 
-  @@unique([postHistoryId, platform, accountId], name: "postHistoryId_platform_accountId")
+  @@unique([postActivityId, platform, accountId], name: "postActivityId_platform_accountId")
 }
 
 model RoadmapTask {
@@ -167,34 +164,19 @@ model RoadmapTask {
   @@index([priority, status])
 }
 
-model LaunchTask {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  status      String   @default("pending")
-  category    String   @default("Marketing")
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([category, status])
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model GalleryAsset {
-  id               String   @id @default(cuid())
-  userId           String
-  fileId           String   @unique
-  fileName         String
-  fileSize         BigInt?
-  mimeType         String?
-  expiresAt        DateTime
-  createdAt        DateTime @default(now())
-  metadata         Json?
-  processingStatus String?  @default("ready")
-  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([expiresAt])
+model SystemMetric {
+  id        String   @id @default(cuid())
+  name      String
+  value     Float
+  timestamp DateTime @default(now())
 }
 
 model TokenAuditLog {
@@ -208,21 +190,42 @@ model TokenAuditLog {
   account   Account? @relation(fields: [accountId], references: [id])
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
   @@index([accountId])
   @@index([action])
   @@index([createdAt])
+  @@index([userId])
 }
 
 model UpdateLog {
-  id          String   @id @default(cuid())
-  version     String
-  title       String
-  description String
-  createdAt   DateTime @default(now())
-  seenBy      UserSeenUpdate[]
+  id             String           @id @default(cuid())
+  version        String
+  title          String
+  description    String
+  createdAt      DateTime         @default(now())
+  seenBy UserSeenUpdate[]
 
   @@index([createdAt])
+}
+
+model User {
+  id                   String               @id @default(cuid())
+  name                 String?
+  email                String?              @unique
+  emailVerified        DateTime?
+  image                String?
+  preferredVideoFormat String               @default("short")
+  preferredAIStyle     String               @default("Manual")
+  role                 Role                 @default(USER)
+  accounts              Account[]
+  byokCredentials       ByokCredential[]
+  byosConfig           ByosConfig?
+  galleryAssets         GalleryAsset[]
+  metadataTemplates     MetadataTemplate[]
+  platformPreferences   PlatformPreference[]
+  postActivities          PostActivity[]
+  sessions              Session[]
+  tokenAuditLogs        TokenAuditLog[]
+  seenUpdates       UserSeenUpdate[]
 }
 
 model UserSeenUpdate {
@@ -230,11 +233,19 @@ model UserSeenUpdate {
   userId    String
   updateId  String
   seenAt    DateTime  @default(now())
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   update    UpdateLog @relation(fields: [updateId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, updateId])
   @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 enum ByosProvider {
@@ -242,19 +253,7 @@ enum ByosProvider {
   R2
 }
 
-model ByosConfig {
-  id              String       @id @default(cuid())
-  userId          String       @unique
-  provider        ByosProvider
-  bucketName      String
-  endpoint        String?
-  region          String?
-  accessKeyId     String
-  secretAccessKey String
-  pathPrefix      String       @default("")
-  keepFiles       Boolean      @default(true)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+enum Role {
+  USER
+  ADMIN
 }
-

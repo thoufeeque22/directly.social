@@ -2,10 +2,10 @@
 
 import { prisma } from '@/lib/core/prisma';
 import { protectedAction } from '@/lib/core/action-utils';
-import { getUpcomingPosts } from '@/app/actions/history/get-upcoming';
-import { updateScheduledPost } from '@/app/actions/history/update-schedule';
-import { deleteScheduledPost } from '@/app/actions/history/delete-schedule';
-  import { savePostHistory } from '@/app/actions/history/core';
+import { getUpcomingPosts } from '@/app/actions/activity/get-upcoming';
+import { updateScheduledPost } from '@/app/actions/activity/update-schedule';
+import { deleteScheduledPost } from '@/app/actions/activity/delete-schedule';
+  import { savePostActivity } from '@/app/actions/activity/core';
 /**
  * Tool: List the user's upcoming scheduled posts.
  */
@@ -54,7 +54,7 @@ export async function scheduleVideoTool(params: {
       status: 'pending' as const,
     }));
 
-    const result = await savePostHistory({
+    const result = await savePostActivity({
       title: params.title,
       description: params.description,
       videoFormat: 'short', // Assuming short for social distribution

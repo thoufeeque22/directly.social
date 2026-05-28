@@ -8,7 +8,7 @@ import { UploadInitSchema } from "@/lib/schemas/upload";
 
 /**
  * INIT HANDLER
- * Pre-initializes a post history record so it appears in the Activity Hub
+ * Pre-initializes a post activity record so it appears in the Activity Hub
  * even before the physical upload/assembly is finished.
  */
 export async function POST(req: NextRequest) {
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
     logger.info(`Initializing upload for user ${userId}`, { platforms: platforms.length });
 
-    const history = await prisma.postHistory.create({
+    const activity = await prisma.postActivity.create({
       data: {
         userId,
         title,
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
-      data: { historyId: history.id } 
+      data: { activityId: activity.id } 
     });
   } catch (error: unknown) {
     logger.error("Upload Init Error", error);

@@ -5,7 +5,7 @@ This test verifies that the navigational links in the "Upcoming Posts" sidebar o
 
 ## Prerequisites
 1. User is logged into the application.
-2. User has at least 2-3 scheduled posts in their history (unpublished).
+2. User has at least 2-3 scheduled posts in their activity (unpublished).
 3. If testing in development, run the seed script:
    ```bash
    npx tsx src/__tests__/scripts/seed-e2e-schedule.ts

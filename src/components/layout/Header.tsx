@@ -16,7 +16,7 @@ export const Header = ({ onToggleSidebar }: { onToggleSidebar: () => void }) => 
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      const targetPage = pathname.startsWith('/media') ? '/media' : '/history';
+      const targetPage = pathname.startsWith('/media') ? '/media' : '/activity';
       router.push(`${targetPage}?search=${encodeURIComponent(searchQuery)}`);
     }
   };

@@ -23,7 +23,7 @@ vi.mock('@/auth', () => ({
 
 vi.mock('../../lib/core/prisma', () => ({
   prisma: {
-    postHistory: { count: vi.fn() },
+    postActivity: { count: vi.fn() },
     account: { findMany: vi.fn() },
   },
 }));
@@ -44,7 +44,7 @@ describe('Stats Server Actions', () => {
 
   it('calculates aggregate stats across multiple platforms', async () => {
     vi.mocked(auth as unknown as () => Promise<Session | null>).mockResolvedValue({ user: { id: 'u1' } } as unknown as Session);
-    vi.mocked(prisma.postHistory.count).mockResolvedValue(5);
+    vi.mocked(prisma.postActivity.count).mockResolvedValue(5);
     vi.mocked(prisma.account.findMany).mockResolvedValue([
       { 
         id: 'a1', 
@@ -97,7 +97,7 @@ describe('Stats Server Actions', () => {
 
   it('gracefully handles platform failures', async () => {
     vi.mocked(auth as unknown as () => Promise<Session | null>).mockResolvedValue({ user: { id: 'u1' } } as unknown as Session);
-    vi.mocked(prisma.postHistory.count).mockResolvedValue(1);
+    vi.mocked(prisma.postActivity.count).mockResolvedValue(1);
     vi.mocked(prisma.account.findMany).mockResolvedValue([
       { 
         id: 'a1', 

@@ -21,7 +21,7 @@ interface PlatformResult {
   accountId: string | null;
 }
 
-interface PostHistoryEntry {
+interface PostActivityEntry {
   id: string;
   title: string;
   description: string | null;
@@ -34,10 +34,10 @@ interface PostHistoryEntry {
 }
 
 interface CalendarViewProps {
-  posts: PostHistoryEntry[];
+  posts: PostActivityEntry[];
   currentDate: Date;
   viewType: 'month' | 'week';
-  onEditPost: (post: PostHistoryEntry) => void;
+  onEditPost: (post: PostActivityEntry) => void;
 }
 
 const getPlatformClass = (platforms: PlatformResult[]) => {

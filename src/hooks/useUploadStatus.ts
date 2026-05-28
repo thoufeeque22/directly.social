@@ -6,14 +6,14 @@ const UploadStatusSchema = z.object({
   status: z.string().nullable().optional(),
   percent: z.number().nullable().optional(),
   active: z.boolean(),
-  historyId: z.string().nullable().optional(),
+  activityId: z.string().nullable().optional(),
 });
 
 export type UploadStatus = {
   status: string | null;
   percent: number | null;
   active: boolean;
-  historyId: string | null;
+  activityId: string | null;
 };
 
 export const useUploadStatus = (): UploadStatus => {
@@ -21,14 +21,14 @@ export const useUploadStatus = (): UploadStatus => {
     status: null,
     percent: null,
     active: false,
-    historyId: null,
+    activityId: null,
   });
 
   useEffect(() => {
     const checkStatus = () => {
       const rawData = localStorage.getItem('SS_STAGING_STATUS');
       if (!rawData) {
-        setStatus({ status: null, percent: null, active: false, historyId: null });
+        setStatus({ status: null, percent: null, active: false, activityId: null });
         return;
       }
 
@@ -39,11 +39,11 @@ export const useUploadStatus = (): UploadStatus => {
           status: validated.status ?? null,
           percent: validated.percent ?? null,
           active: validated.active,
-          historyId: validated.historyId ?? null
+          activityId: validated.activityId ?? null
         });
       } catch (error) {
         console.error('Failed to parse SS_STAGING_STATUS', error);
-        setStatus({ status: null, percent: null, active: false, historyId: null });
+        setStatus({ status: null, percent: null, active: false, activityId: null });
       }
     };
 

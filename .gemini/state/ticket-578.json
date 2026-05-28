@@ -6,7 +6,7 @@
     "problem": "Mismatch between E2E test (upload-visibility.spec.ts) expecting data-testid=\"progress-bar-youtube\" and implementation in PlatformResultItem.tsx which uses a CSS class.",
     "suggested_approach": "Add explicit data-testid attributes to progress bar components in src/components/ and ensure consistency across all platform progress bars.",
     "affected_files": [
-      "src/components/history/PlatformResultItem.tsx",
+      "src/components/activity/PlatformResultItem.tsx",
       "src/__tests__/e2e/upload-visibility.spec.ts"
     ],
     "verification_outcomes": "Pass - All 22 E2E tests in upload-visibility.spec.ts passed after fix."

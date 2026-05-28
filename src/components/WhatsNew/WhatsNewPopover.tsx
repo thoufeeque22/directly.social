@@ -4,7 +4,7 @@ import React from 'react';
 import { Popover, Box, CircularProgress } from '@mui/material';
 import { useWhatsNew } from './WhatsNewContext';
 import { WhatsNewList } from './WhatsNewList';
-import { WhatsNewHistoryList } from './WhatsNewHistoryList';
+import { WhatsNewActivityList } from './WhatsNewActivityList';
 import { WhatsNewPopoverHeader } from './WhatsNewPopoverHeader';
 import { useWhatsNewPopover } from './useWhatsNewPopover';
 import { popoverPaperSx } from './PopoverStyles';
@@ -35,7 +35,7 @@ export function WhatsNewPopover({ anchorEl, onClose }: { anchorEl: HTMLElement |
         ) : loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}><CircularProgress size={24} /></Box>
         ) : (
-          <WhatsNewHistoryList updates={historicalUpdates} />
+          <WhatsNewActivityList updates={historicalUpdates} />
         )}
       </Box>
     </Popover>

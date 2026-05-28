@@ -21,7 +21,7 @@ import { useAiByok } from '@/hooks/useAiByok';
 interface ReviewContext {
   stagedFileId: string;
   fileName: string;
-  historyId: string;
+  activityId: string;
   formData: FormData;
   targetAccountIds?: string[];
 }
@@ -47,7 +47,7 @@ export default function DashboardClient({
   initialAITier
 }: Readonly<DashboardClientProps>) {
   const searchParams = useSearchParams();
-  const resumeHistoryId = searchParams.get('resume');
+  const resumeActivityId = searchParams.get('resume');
   const stagedFileIdParam = searchParams.get('staged');
   const { accounts, isLoading, preferences } = useAccounts(initialAccounts, initialPreferences);
   const { configs: byokConfigs } = useAiByok();
@@ -66,7 +66,7 @@ export default function DashboardClient({
   const { draftFileName, videoFormat, setVideoFormat, videoDuration, handleFileChange } = useDraftFile(session?.user?.id);
   const { selectedAccountIds, setSelectedAccountIds, handleToggleAccount } = usePlatformSelection(devAccounts, preferences, isLoading);
   const { isUploading, setIsUploading, setUploadStatus, handleAbortAll } = useDistributionEngine(devAccounts);
-  const { historyId: activeGlobalId, active: isGlobalActive } = useUploadStatus();
+  const { activityId: activeGlobalId, active: isGlobalActive } = useUploadStatus();
   
   useEffect(() => {
     if (isUploading && isGlobalActive === false && activeGlobalId) handleAbortAll();
@@ -102,12 +102,12 @@ export default function DashboardClient({
   const [customStyleText, setCustomStyleText] = useState('');
 
   useEffect(() => {
-    if (resumeHistoryId && accounts.length > 0) {
+    if (resumeActivityId && accounts.length > 0) {
       const loadResumptionData = async () => {
         setUploadStatus(" Loading resumption data...");
         try {
           const baseUrl = globalThis.window === undefined ? '' : globalThis.window.location.origin;
-          const res = await fetch(`${baseUrl}/api/history/${resumeHistoryId}`);
+          const res = await fetch(`${baseUrl}/api/activity/${resumeActivityId}`);
           if (res.ok) {
             const { data } = await res.json();
             if (data.title) localStorage.setItem('SS_DRAFT_TITLE', data.title);
@@ -129,7 +129,7 @@ export default function DashboardClient({
       };
       loadResumptionData();
     }
-  }, [resumeHistoryId, accounts, setSelectedAccountIds, setUploadStatus, setVideoFormat]);
+  }, [resumeActivityId, accounts, setSelectedAccountIds, setUploadStatus, setVideoFormat]);
 
   useEffect(() => {
     if (stagedFileIdParam) {
@@ -166,21 +166,21 @@ export default function DashboardClient({
       setUploadStatus("️ Initializing Cockpit...");
       const initRes = await fetch('/api/upload/init', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: formData.get('title') as string, description: formData.get('description') as string, videoFormat, platforms: targetPlatforms }) });
       const initData = await initRes.json();
-      const actualHistoryId = initData.data?.historyId || resumeHistoryId;
+      const actualActivityId = initData.data?.activityId || resumeActivityId;
       const skipReview = formData.get('skipReview') === 'true';
       if (aiTier !== 'Manual' && !skipReview) {
         setUploadStatus(" Generating AI Strategy...");
         const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
         const previews = await getMultiPlatformAIPreviews(formData.get('title') as string, formData.get('description') as string, aiTier, contentMode, targetPlatforms.map(p => p.platform), [], customStyleText, byokConfigs);
         setAiPreviews(previews);
-        setReviewContext({ historyId: actualHistoryId, stagedFileId: galleryFileId || '', fileName: galleryFileName || draftFileName || '', formData: formData });
+        setReviewContext({ activityId: actualActivityId, stagedFileId: galleryFileId || '', fileName: galleryFileName || draftFileName || '', formData: formData });
         setIsReviewing(true);
         return;
       }
-      const pendingPost = { title: formData.get('title') as string, description: formData.get('description') as string, videoFormat, aiTier, contentMode, customStyleText, platforms: targetPlatforms, isScheduled, scheduledAt, galleryFileId, galleryFileName, resumeHistoryId: actualHistoryId, skipReview };
+      const pendingPost = { title: formData.get('title') as string, description: formData.get('description') as string, videoFormat, aiTier, contentMode, customStyleText, platforms: targetPlatforms, isScheduled, scheduledAt, galleryFileId, galleryFileName, resumeActivityId: actualActivityId, skipReview };
       localStorage.setItem('SS_PENDING_POST', JSON.stringify(pendingPost));
       localStorage.removeItem('SS_DRAFT_TITLE'); localStorage.removeItem('SS_DRAFT_DESC');
-      window.location.href = '/history?action=distribute';
+      window.location.href = '/activity?action=distribute';
     } catch (err: unknown) { const message = err instanceof Error ? err.message : String(err); setUploadStatus(` Error: ${message}`); }
   };
 
@@ -188,13 +188,13 @@ export default function DashboardClient({
     if (!reviewContext) return;
     setIsReviewing(false); setIsUploading(true); setUploadStatus(" Applying AI magic...");
     try {
-      const { updatePlatformResultsAction } = await import('@/app/actions/history/metadata');
-      await updatePlatformResultsAction(reviewContext.historyId, updatedPreviews);
+      const { updatePlatformResultsAction } = await import('@/app/actions/activity/metadata');
+      await updatePlatformResultsAction(reviewContext.activityId, updatedPreviews);
       const targetPlatforms = mapAccountIdsToPlatforms(selectedAccountIds, devAccounts, false, reviewContext.formData);
-      const pendingPost = { title: "AI Optimized Post", description: "", videoFormat, aiTier, contentMode, customStyleText, platforms: targetPlatforms, isScheduled, scheduledAt, galleryFileId, galleryFileName, resumeHistoryId: reviewContext.historyId };
+      const pendingPost = { title: "AI Optimized Post", description: "", videoFormat, aiTier, contentMode, customStyleText, platforms: targetPlatforms, isScheduled, scheduledAt, galleryFileId, galleryFileName, resumeActivityId: reviewContext.activityId };
       localStorage.setItem('SS_PENDING_POST', JSON.stringify(pendingPost));
       localStorage.removeItem('SS_DRAFT_TITLE'); localStorage.removeItem('SS_DRAFT_DESC');
-      window.location.href = '/history?action=distribute';
+      window.location.href = '/activity?action=distribute';
     } catch (err: unknown) { const message = err instanceof Error ? err.message : "An unknown error occurred"; setUploadStatus(` Error saving AI content: ${message}`); setIsUploading(false); }
   };
 

@@ -1,0 +1,37 @@
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/core/prisma";
+
+/**
+ * GET SINGLE ACTIVITY HANDLER
+ * Returns a single activity record with its platforms for pre-filling the dashboard.
+ */
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id } = await params;
+
+  try {
+    const post = await prisma.postActivity.findUnique({
+      where: { id, userId: session.user.id },
+      include: { platforms: true }
+    });
+
+    if (!post) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ data: post });
+  } catch (error: unknown) {
+    console.error("Failed to fetch activity record:", error);
+    const message = error instanceof Error ? error.message : "Internal Server Error";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}

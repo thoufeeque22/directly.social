@@ -131,17 +131,17 @@
     },
     "qa-agent": {
       "timestamp": "2026-05-24T17:00:00Z",
-      "actions": "Verified visual regression infrastructure and general E2E stability. Created visual baseline and audit scripts. Fixed regression in history.spec.ts.",
-      "findings": "Visual regression script works and snapshots generated in docs/visual/goldens/. Visual Audit Mandate implemented with screenshots in verification/. 71/77 E2E tests passed; fixed regression in history.spec.ts; 3 remaining failures are unrelated crashes/missing elements logged to incidental_observations.json.",
+      "actions": "Verified visual regression infrastructure and general E2E stability. Created visual baseline and audit scripts. Fixed regression in activity.spec.ts.",
+      "findings": "Visual regression script works and snapshots generated in docs/visual/goldens/. Visual Audit Mandate implemented with screenshots in verification/. 71/77 E2E tests passed; fixed regression in activity.spec.ts; 3 remaining failures are unrelated crashes/missing elements logged to incidental_observations.json.",
       "qa_verdict": "PASS",
       "modified_files": [
         "src/__tests__/e2e/visual-regression.spec.ts",
         "src/__tests__/e2e/visual-audit-batch.spec.ts",
-        "src/__tests__/e2e/history.spec.ts"
+        "src/__tests__/e2e/activity.spec.ts"
       ],
       "expected_output": {
         "npm run test:visual": "8 passed (includes setup, 3 regression, 4 audit)",
-        "verification/": "Screenshots generated for Home, Settings, Schedule, History.",
+        "verification/": "Screenshots generated for Home, Settings, Schedule, Activity.",
         "docs/visual/goldens/": "Baseline snapshots generated for visual regression.",
         "General Stability": "71/77 tests passed. Remaining failures unrelated and logged."
       }

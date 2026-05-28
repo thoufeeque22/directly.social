@@ -6,10 +6,10 @@ import {
   updatePostTool,
   cancelPostTool
 } from '@/lib/actions/ai-chat';
-import * as coreActions from '@/app/actions/history/core';
-import * as getUpcomingActions from '@/app/actions/history/get-upcoming';
-import * as updateScheduleActions from '@/app/actions/history/update-schedule';
-import * as deleteScheduleActions from '@/app/actions/history/delete-schedule';
+import * as coreActions from '@/app/actions/activity/core';
+import * as getUpcomingActions from '@/app/actions/activity/get-upcoming';
+import * as updateScheduleActions from '@/app/actions/activity/update-schedule';
+import * as deleteScheduleActions from '@/app/actions/activity/delete-schedule';
 import { prisma } from '@/lib/core/prisma';
 
 // Mock dependencies
@@ -25,19 +25,19 @@ vi.mock('@/lib/core/action-utils', () => ({
   protectedAction: vi.fn((cb) => cb('test-user-id')),
 }));
 
-vi.mock('@/app/actions/history/core', () => ({
-  savePostHistory: vi.fn(),
+vi.mock('@/app/actions/activity/core', () => ({
+  savePostActivity: vi.fn(),
 }));
 
-vi.mock('@/app/actions/history/get-upcoming', () => ({
+vi.mock('@/app/actions/activity/get-upcoming', () => ({
   getUpcomingPosts: vi.fn(),
 }));
 
-vi.mock('@/app/actions/history/update-schedule', () => ({
+vi.mock('@/app/actions/activity/update-schedule', () => ({
   updateScheduledPost: vi.fn(),
 }));
 
-vi.mock('@/app/actions/history/delete-schedule', () => ({
+vi.mock('@/app/actions/activity/delete-schedule', () => ({
   deleteScheduledPost: vi.fn(),
 }));
 
@@ -77,7 +77,7 @@ describe('AI Chatbot Integration Tools', () => {
   });
 
   describe('scheduleVideoTool', () => {
-    it('should call savePostHistory with correctly formatted data', async () => {
+    it('should call savePostActivity with correctly formatted data', async () => {
       const params = {
         fileId: 'f1',
         title: 'New Video',
@@ -85,11 +85,11 @@ describe('AI Chatbot Integration Tools', () => {
         platforms: ['youtube', 'tiktok']
       };
       
-      vi.mocked(coreActions.savePostHistory).mockResolvedValue({ success: true } as unknown as Awaited<ReturnType<typeof coreActions.savePostHistory>>);
+      vi.mocked(coreActions.savePostActivity).mockResolvedValue({ success: true } as unknown as Awaited<ReturnType<typeof coreActions.savePostActivity>>);
 
       await scheduleVideoTool(params);
 
-      expect(coreActions.savePostHistory).toHaveBeenCalledWith(expect.objectContaining({
+      expect(coreActions.savePostActivity).toHaveBeenCalledWith(expect.objectContaining({
         title: 'New Video',
         stagedFileId: 'f1',
         scheduledAt: new Date('2026-05-20T10:00:00Z'),

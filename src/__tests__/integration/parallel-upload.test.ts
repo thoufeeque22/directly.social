@@ -41,7 +41,7 @@ describe('Distribution Engine Parallelism', () => {
     const distributionPromise = distributeToPlatforms({
       stagedFileId: 'stage1',
       fileName: 'test.mp4',
-      historyId: 'hist1',
+      activityId: 'hist1',
       accounts,
       selectedAccountIds,
       fields: {
@@ -96,7 +96,7 @@ describe('Distribution Engine Parallelism', () => {
     await distributeToPlatforms({
       stagedFileId: 'stage2',
       fileName: 'large.mp4',
-      historyId: 'hist2',
+      activityId: 'hist2',
       accounts,
       selectedAccountIds,
       fields: {

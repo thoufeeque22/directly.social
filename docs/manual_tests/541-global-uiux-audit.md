@@ -1,7 +1,7 @@
 # Manual Test: Global UI/UX Audit (Premium Glass Aesthetic)
 
 **Issue**: #541
-**Objective**: Verify that the application-wide UI aligns with the new Dashboard premium "Glass Aesthetic" (specifically the Settings and History pages) and that interactive elements maintain high usability and accessibility.
+**Objective**: Verify that the application-wide UI aligns with the new Dashboard premium "Glass Aesthetic" (specifically the Settings and Activity pages) and that interactive elements maintain high usability and accessibility.
 
 ## Prerequisites
 1. Ensure the application is running locally (`npm run dev`) or deployed to a staging environment.
@@ -27,18 +27,18 @@
 - Individual platform cards should have a cohesive design without legacy hardcoded background colors.
 - Interactive elements (Connect/Disconnect buttons) should have clear hover states.
 
-### 3. History Page UI (`/history`)
+### 3. Activity Page UI (`/activity`)
 **Steps:**
-1. Navigate to `/history` via the sidebar menu.
+1. Navigate to `/activity` via the sidebar menu.
 2. Observe the search/filter controls at the top and the timeline list below.
 **Expected Results:**
-- The main wrapper for the history content should feature the translucent "glass" design.
+- The main wrapper for the activity content should feature the translucent "glass" design.
 - The Status pills (e.g., "Published", "Failed", "Pending") should use proper Material UI variables rather than hardcoded string colors.
 - Platform icons inside the timeline should inherit colors from the MUI theme (e.g., YouTube in `error.main` red).
 
 ### 4. Responsiveness and A11y
 **Steps:**
-1. Open any of the updated views (`/settings`, `/history`).
+1. Open any of the updated views (`/settings`, `/activity`).
 2. Shrink the browser window to mobile width.
 3. Use the `Tab` key to navigate through the interactive elements.
 **Expected Results:**

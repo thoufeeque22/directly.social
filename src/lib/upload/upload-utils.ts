@@ -11,7 +11,7 @@ interface DistributionParams {
   fileName: string;
   selectedAccountIds: string[];
   accounts: { id: string; provider: string; accountName?: string | null }[];
-  historyId: string;
+  activityId: string;
   fields?: Record<string, string | boolean | undefined>;
   onStatusUpdate?: (s: string) => void;
   onPlatformStatus?: (id: string, status: string, error?: string) => void;
@@ -20,12 +20,12 @@ interface DistributionParams {
 }
 
 export async function distributeToPlatforms(params: DistributionParams): Promise<{ platformResults: unknown[] }> {
-  const { selectedAccountIds, accounts, historyId } = params;
+  const { selectedAccountIds, accounts, activityId } = params;
   const platformResults: unknown[] = [];
   const queue = [...selectedAccountIds];
   
   const processOne = async (selectionId: string) => {
-    if (checkGlobalAbort(historyId)) return;
+    if (checkGlobalAbort(activityId)) return;
     const [p, accId] = selectionId.includes(':') ? selectionId.split(':') : [null, selectionId];
     let platform = p;
     const realAccountId = accId;
@@ -48,14 +48,14 @@ export async function distributeToPlatforms(params: DistributionParams): Promise
   const workerCount = Math.min(MAX_PARALLEL_DISTRIBUTIONS, queue.length);
   for (let i = 0; i < workerCount; i++) {
     workers.push((async () => {
-      while (queue.length > 0 && !checkGlobalAbort(historyId)) {
+      while (queue.length > 0 && !checkGlobalAbort(activityId)) {
         const id = queue.shift();
         if (id) await processOne(id);
       }
     })());
   }
   await Promise.all(workers);
-  clearStagingStatus(historyId);
+  clearStagingStatus(activityId);
   return { platformResults };
 }
 
@@ -74,7 +74,7 @@ export async function performMultiPlatformUpload(params: MultiUploadParams): Pro
     metadata: { title } 
   });
   const results = await distributeToPlatforms({ 
-    ...params, stagedFileId, fileName, historyId: '',
+    ...params, stagedFileId, fileName, activityId: '',
     fields: { title }
   });
   return { ...results, stagedFileId };

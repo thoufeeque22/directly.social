@@ -4,8 +4,8 @@ import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { GlassCard } from '@/components/ui/GlassCard';
 import styles from './schedule.module.css';
-import { updateScheduledPost } from '@/app/actions/history/update-schedule';
-import { deleteScheduledPost, publishNowAction } from '@/app/actions/history/delete-schedule';
+import { updateScheduledPost } from '@/app/actions/activity/update-schedule';
+import { deleteScheduledPost, publishNowAction } from '@/app/actions/activity/delete-schedule';
 import { usePolling } from '@/hooks/usePolling';
 import { AIContentReview } from '@/components/dashboard/AIContentReview';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
@@ -34,7 +34,7 @@ interface PlatformResult {
   accountId: string | null;
 }
 
-interface PostHistoryEntry {
+interface PostActivityEntry {
   id: string;
   title: string;
   description: string | null;
@@ -58,9 +58,9 @@ function ScheduleContent() {
   const { configs: byokConfigs } = useAiByok();
   const targetId = searchParams.get('id');
   
-  const [posts, setPosts] = useState<PostHistoryEntry[]>([]);
+  const [posts, setPosts] = useState<PostActivityEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [editingPost, setEditingPost] = useState<PostHistoryEntry | null>(null);
+  const [editingPost, setEditingPost] = useState<PostActivityEntry | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -113,7 +113,7 @@ function ScheduleContent() {
         params.set('limit', '100');
       }
 
-      const res = await fetch(`/api/history?${params.toString()}`);
+      const res = await fetch(`/api/activity?${params.toString()}`);
       const data = await res.json();
       setPosts(data.data || []);
     } catch (err) {
@@ -179,11 +179,11 @@ function ScheduleContent() {
     
     try {
       await publishNowAction(id);
-      // It will move to history automatically when worker picks it up
+      // It will move to activity automatically when worker picks it up
       // For now, we just remove it from the list or refresh
       setPosts(prev => prev.filter(p => p.id !== id));
       globalThis.dispatchEvent(new CustomEvent('refresh-upcoming'));
-      alert('Post moved to publishing queue! Check History in a few moments.');
+      alert('Post moved to publishing queue! Check Activity in a few moments.');
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
       alert(`Failed to publish: ${message}`);
@@ -245,7 +245,7 @@ function ScheduleContent() {
     
     setIsSaving(true);
     try {
-      const { saveStagedMetadata } = await import('@/app/actions/history/metadata');
+      const { saveStagedMetadata } = await import('@/app/actions/activity/metadata');
       await saveStagedMetadata(editingPost.stagedFileId, finalContent);
       
       const firstPlatform = Object.keys(finalContent)[0];

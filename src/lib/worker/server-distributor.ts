@@ -24,7 +24,7 @@ export interface DistributionResult {
 export interface ServerDistributeParams {
   stagedFileId: string;
   userId: string;
-  historyId: string;
+  activityId: string;
   title: string;
   description: string;
   videoFormat: 'short' | 'long';
@@ -41,22 +41,22 @@ export interface ServerDistributeParams {
  * Bypasses internal HTTP APIs and talks directly to platform SDKs/Logic.
  */
 export async function distributeToPlatformsServer(params: ServerDistributeParams) {
-  const { stagedFileId, userId, historyId, title, description, videoFormat, platforms } = params;
+  const { stagedFileId, userId, activityId, title, description, videoFormat, platforms } = params;
 
-      logger.info(`👷 [SERVER-DISTRIBUTOR] Starting distribution for post ${historyId}`);
+      logger.info(`👷 [SERVER-DISTRIBUTOR] Starting distribution for post ${activityId}`);
 
   const filePath = path.join(process.cwd(), "tmp", stagedFileId);
   const results: DistributionResult[] = [];
 
   await Promise.allSettled(platforms.map(async (p) => {
     try {
-      logger.info(`🚀 [SERVER-DISTRIBUTOR] Processing platform: ${p.platform} for History ID: ${historyId}`);
+      logger.info(`🚀 [SERVER-DISTRIBUTOR] Processing platform: ${p.platform} for Activity ID: ${activityId}`);
       
       // 1. Fetch existing result to see if we have a resumable session or cancellation
       const existingResult = await prisma.postPlatformResult.findUnique({
         where: {
-          postHistoryId_platform_accountId: {
-            postHistoryId: historyId,
+          postActivityId_platform_accountId: {
+            postActivityId: activityId,
             platform: p.platform,
             accountId: p.accountId
           }
@@ -100,15 +100,15 @@ export async function distributeToPlatformsServer(params: ServerDistributeParams
       logger.info(`🚀 [SERVER-DISTRIBUTOR] Updating status to uploading for ${p.platform}`);
       const currentResult = await prisma.postPlatformResult.upsert({
         where: {
-          postHistoryId_platform_accountId: {
-            postHistoryId: historyId,
+          postActivityId_platform_accountId: {
+            postActivityId: activityId,
             platform: p.platform,
             accountId: p.accountId
           }
         },
         update: { status: 'uploading' },
         create: {
-          postHistoryId: historyId,
+          postActivityId: activityId,
           platform: p.platform,
           accountId: p.accountId,
           accountName: p.accountName,
@@ -120,7 +120,7 @@ export async function distributeToPlatformsServer(params: ServerDistributeParams
       logger.info(`🚀 [SERVER-DISTRIBUTOR] Starting optimization check for ${p.platform}`);
       let activeFilePath = filePath;
       try {
-        activeFilePath = await getOptimizedVideoPath(stagedFileId, p.platform, historyId, p.accountId);
+        activeFilePath = await getOptimizedVideoPath(stagedFileId, p.platform, activityId, p.accountId);
       } catch (optErr: unknown) {
         logger.warn(`⚠️ [SERVER-DISTRIBUTOR] Optimization failed for ${p.platform}, using original. Reason: ${optErr instanceof Error ? optErr.message : String(optErr)}`);
       }
@@ -161,14 +161,14 @@ export async function distributeToPlatformsServer(params: ServerDistributeParams
       // In-lined database logic to avoid importing from Server Actions files
       await prisma.postPlatformResult.upsert({
         where: {
-          postHistoryId_platform_accountId: {
-            postHistoryId: historyId,
+          postActivityId_platform_accountId: {
+            postActivityId: activityId,
             platform: p.platform,
             accountId: p.accountId
           }
         },
-        update: { ...platformResult, postHistoryId: historyId },
-        create: { ...platformResult, postHistoryId: historyId }
+        update: { ...platformResult, postActivityId: activityId },
+        create: { ...platformResult, postActivityId: activityId }
       });
 
       results.push(platformResult);
@@ -195,8 +195,8 @@ export async function distributeToPlatformsServer(params: ServerDistributeParams
 
       await prisma.postPlatformResult.upsert({
         where: {
-          postHistoryId_platform_accountId: {
-            postHistoryId: historyId,
+          postActivityId_platform_accountId: {
+            postActivityId: activityId,
             platform: p.platform,
             accountId: p.accountId
           }
@@ -207,7 +207,7 @@ export async function distributeToPlatformsServer(params: ServerDistributeParams
         },
         create: { 
           ...errorPayload, 
-          postHistoryId: historyId,
+          postActivityId: activityId,
           retryCount: 1
         }
       });

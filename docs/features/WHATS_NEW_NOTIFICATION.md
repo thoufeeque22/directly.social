@@ -7,8 +7,8 @@ The "What's New" notification system keeps users informed about the latest featu
 - **Update Tracking:** New updates are stored in the `UpdateLog` table.
 - **Personalized Status:** The system tracks which updates each user has seen using the `UserSeenUpdate` table.
 - **Visual Cues:** A red badge appears over a "New Releases" icon in the header when there are unseen updates.
-- **Persistent Access:** Even when all updates are read (badge is hidden), users can always access the complete update history via the **What's New** link inside the user profile actions dropdown menu.
-- **Instant Dismissal and History:** Opening the popover triggers background mark-as-seen updates, instantly clearing the global badge count to 0 for a seamless UX, and fetches recent historical updates when no unread updates remain.
+- **Persistent Access:** Even when all updates are read (badge is hidden), users can always access the complete update activity via the **What's New** link inside the user profile actions dropdown menu.
+- **Instant Dismissal and Activity:** Opening the popover triggers background mark-as-seen updates, instantly clearing the global badge count to 0 for a seamless UX, and fetches recent historical updates when no unread updates remain.
 
 ## Data Models
 
@@ -51,7 +51,7 @@ Located in the `Header`. Contains the notifications bell, post creation button, 
 
 - `getUnseenUpdates()` (`src/app/actions/whats-new.ts`): Fetches all `UpdateLog` entries that do not have a corresponding `UserSeenUpdate` for the current user.
 - `markUpdateAsSeen(updateId: string)` (`src/app/actions/whats-new.ts`): Creates a `UserSeenUpdate` record for the user and the specified update.
-- `getHistoricalUpdates(limit: number)` (`src/app/actions/whats-new-history.ts`): Fetches the last N read updates for the user to display as historical records.
+- `getHistoricalUpdates(limit: number)` (`src/app/actions/whats-new-activity.ts`): Fetches the last N read updates for the user to display as historical records.
 
 ## Administration
 
@@ -64,7 +64,7 @@ await prisma.updateLog.create({
   data: {
     version: "1.1.0",
     title: "New Feature: Global Search",
-    description: "You can now search through your post history and media assets from anywhere."
+    description: "You can now search through your post activity and media assets from anywhere."
   }
 });
 ```

@@ -19,9 +19,9 @@ test.describe('Visual Audit Mandate @visual', () => {
     await page.screenshot({ path: 'verification/schedule-page.png', fullPage: true });
   });
 
-  test('Capture History Page', async ({ page }) => {
-    await page.goto('/history');
+  test('Capture Activity Page', async ({ page }) => {
+    await page.goto('/activity');
     await page.waitForLoadState('networkidle');
-    await page.screenshot({ path: 'verification/history-page.png', fullPage: true });
+    await page.screenshot({ path: 'verification/activity-page.png', fullPage: true });
   });
 });

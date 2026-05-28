@@ -68,7 +68,7 @@ export async function purgeExpiredAssets() {
     }
 
     // --- 2. ORPHANED FILES CLEANUP ---
-    // Files in tmp older than 24h that are NOT in GalleryAsset or PostHistory
+    // Files in tmp older than 24h that are NOT in GalleryAsset or PostActivity
     const tempDir = path.join(process.cwd(), "tmp");
     if (existsSync(tempDir)) {
       const files = await fs.readdir(tempDir);
@@ -76,7 +76,7 @@ export async function purgeExpiredAssets() {
       
       const trackedFileIds = new Set([
         ...(await prisma.galleryAsset.findMany({ select: { fileId: true } })).map(a => a.fileId),
-        ...(await prisma.postHistory.findMany({ where: { stagedFileId: { not: null } }, select: { stagedFileId: true } })).map(p => p.stagedFileId!)
+        ...(await prisma.postActivity.findMany({ where: { stagedFileId: { not: null } }, select: { stagedFileId: true } })).map(p => p.stagedFileId!)
       ]);
 
       for (const file of files) {
@@ -134,12 +134,12 @@ export async function startPublishingWorker() {
       const now = new Date();
       logger.info(`💓 [WORKER-HEARTBEAT] [PULSE-CHECK-V1] Checking at ${now.toISOString()}...`);
       
-      const totalPendingCount = await prisma.postHistory.count({ where: { isPublished: false } });
+      const totalPendingCount = await prisma.postActivity.count({ where: { isPublished: false } });
       if (totalPendingCount > 0) {
         logger.info(` [WORKER-DEBUG] Found ${totalPendingCount} total non-published posts in DB.`);
       }
 
-      const pending = await prisma.postHistory.findMany({
+      const pending = await prisma.postActivity.findMany({
         where: {
           isPublished: false,
           stagedFileId: { not: null },
@@ -164,7 +164,7 @@ export async function startPublishingWorker() {
           logger.info(`🚀 [WORKER] Attempting to publish: "${post.title}" (ID: ${post.id})`);
           
           // Mark as published immediately so other worker ticks don't pick it up
-          await prisma.postHistory.update({
+          await prisma.postActivity.update({
             where: { id: post.id },
             data: { isPublished: true }
           });
@@ -197,7 +197,7 @@ export async function startPublishingWorker() {
             await distributeToPlatformsServer({
               stagedFileId,
               userId: post.userId,
-              historyId: post.id,
+              activityId: post.id,
               title: post.title,
               description: post.description || "",
               videoFormat: post.videoFormat as 'short' | 'long',
@@ -225,7 +225,7 @@ export async function startPublishingWorker() {
               extra: { postId: post.id, title: post.title }
             });
             // We mark it as processed so it doesn't keep looping
-            await prisma.postHistory.update({
+            await prisma.postActivity.update({
               where: { id: post.id },
               data: { isPublished: true } 
             });
