@@ -56,7 +56,9 @@ status: in-progress
 - **Results**: Pass
 
 ## 📝 Documentation
-- **Updates**: (Pending)
+- **Updates**: 
+    - Updated `docs/features/METADATA_TEMPLATES.md` to reflect new Advanced Metadata functionality (Overrides, Limits, Inheritance).
+    - Added comprehensive scenarios for inheritance and limits to `docs/manual_tests/verify-metadata-templates.md`.
 
 ## 📊 Project
 - **Status**: Completed
