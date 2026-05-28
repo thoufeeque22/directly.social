@@ -22,7 +22,7 @@ vi.mock('@/auth', () => ({
 // Mock Prisma
 vi.mock('@/lib/core/prisma', () => ({
   prisma: {
-    postHistory: {
+    postActivity: {
       create: vi.fn().mockResolvedValue({ id: 'h1' }),
       update: vi.fn().mockResolvedValue({ id: 'h1' }),
     },

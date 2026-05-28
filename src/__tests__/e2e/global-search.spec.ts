@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Global Search', () => {
-  test('should filter history items by search query', async ({ page }) => {
-    await page.goto('/history');
+  test('should filter activity items by search query', async ({ page }) => {
+    await page.goto('/activity');
     
     // Wait for the page to load
     await expect(page.getByRole('heading', { name: 'Activity Hub' })).toBeVisible();
@@ -11,7 +11,7 @@ test.describe('Global Search', () => {
     await expect(page.getByText('Exploring the Grand Canyon')).toBeVisible();
     await expect(page.getByText('Cooking Italian Pasta')).toBeVisible();
     
-    const searchField = page.getByPlaceholder('Search history by title or description...');
+    const searchField = page.getByPlaceholder('Search activity by title or description...');
     await expect(searchField).toBeVisible();
     
     // 1. Search by Title

@@ -20,7 +20,7 @@ vi.mock('../../lib/core/prisma', () => ({
       upsert: (args: unknown) => mockUpsert(args),
       findUnique: (args: unknown) => mockFindUnique(args),
     },
-    postHistory: {
+    postActivity: {
       update: vi.fn().mockResolvedValue({}),
       findUnique: vi.fn().mockResolvedValue({}),
     }
@@ -51,7 +51,7 @@ describe('Server Distributor', () => {
   const baseParams = {
     stagedFileId: 'file-123',
     userId: 'user-1',
-    historyId: 'history-1',
+    activityId: 'activity-1',
     title: 'Test Title',
     description: 'Test Desc',
     videoFormat: 'short' as const,
@@ -88,8 +88,8 @@ describe('Server Distributor', () => {
     // expect(mockUpsert).toHaveBeenCalledTimes(2); // Removed due to new heartbeat system making 4 calls
     expect(mockUpsert).toHaveBeenCalledWith(expect.objectContaining({
       where: {
-        postHistoryId_platform_accountId: {
-          postHistoryId: 'history-1',
+        postActivityId_platform_accountId: {
+          postActivityId: 'activity-1',
           platform: 'youtube',
           accountId: 'acc-yt'
         }
@@ -117,8 +117,8 @@ describe('Server Distributor', () => {
     // Should have recorded error in DB
     expect(mockUpsert).toHaveBeenCalledWith(expect.objectContaining({
       where: {
-        postHistoryId_platform_accountId: {
-          postHistoryId: 'history-1',
+        postActivityId_platform_accountId: {
+          postActivityId: 'activity-1',
           platform: 'youtube',
           accountId: 'acc-yt'
         }

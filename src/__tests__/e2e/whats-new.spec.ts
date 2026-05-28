@@ -20,7 +20,7 @@ test.describe("What's New Option A E2E & Visual Verification", () => {
     }
   });
 
-  test('E2E Flow: Unread Badge, Popover Dismissal, Profile Link, and History State', async ({ page }) => {
+  test('E2E Flow: Unread Badge, Popover Dismissal, Profile Link, and Activity State', async ({ page }) => {
     // 1. Reset database to have clean unseen updates
     runDbScript('cleanup-whats-new.ts');
     runDbScript('seed-whats-new.ts');
@@ -88,10 +88,10 @@ test.describe("What's New Option A E2E & Visual Verification", () => {
     await profileLink.click();
     await expect(popover).toBeVisible();
 
-    const historyList = page.getByTestId('whats-new-history-list');
-    await expect(historyList).toBeVisible({ timeout: 10000 });
+    const activityList = page.getByTestId('whats-new-activity-list');
+    await expect(activityList).toBeVisible({ timeout: 10000 });
 
-    await page.screenshot({ path: 'verification/whats-new-popover-history.png', fullPage: true });
+    await page.screenshot({ path: 'verification/whats-new-popover-activity.png', fullPage: true });
 
     await closeButton.click();
     await expect(popover).not.toBeVisible();

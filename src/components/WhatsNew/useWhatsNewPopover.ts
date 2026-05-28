@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Update } from '@/components/WhatsNew/WhatsNewContext';
 import { markUpdateAsSeen } from '@/app/actions/whats-new';
-import { getRecentUpdates } from '@/app/actions/whats-new-history';
+import { getRecentUpdates } from '@/app/actions/whats-new-activity';
 
 export function useWhatsNewPopover(
   open: boolean,

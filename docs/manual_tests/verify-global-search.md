@@ -1,14 +1,14 @@
 # Manual Test: Global Search Field
 
 ## Prerequisites
-1. Authenticated user with existing post history and media assets.
+1. Authenticated user with existing post activity and media assets.
 2. At least 5-10 posts in the Activity Hub with varying titles and descriptions.
 3. At least 5-10 videos in the Media Gallery with varying filenames.
 
 ## Test Scenarios
 
-### 1. Activity Hub (History) Search
-1. Navigate to the **Activity Hub** (/history).
+### 1. Activity Hub (Activity) Search
+1. Navigate to the **Activity Hub** (/activity).
 2. Locate the search bar at the top of the list.
 3. **Keyword Search:** Type a word that appears in one of your post titles.
     - **Expected:** The list should update (debounced) to show only matching posts.
@@ -17,7 +17,7 @@
 5. **No Results:** Type a random string that doesn't match anything.
     - **Expected:** A "No matching activity" empty state should appear with the search term displayed.
 6. **Clear Search:** Clear the search bar.
-    - **Expected:** The full history list should be restored.
+    - **Expected:** The full activity list should be restored.
 7. **Pagination + Search:** Search for a term that has more than 20 results (if possible) and click "Load More".
     - **Expected:** The additional results should also be filtered by the search term.
 

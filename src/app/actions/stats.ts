@@ -19,7 +19,7 @@ interface PlatformStats {
 export async function getDashboardStats() {
   return protectedAction(async (userId) => {
     // 1. Total Posts (Local DB)
-    const totalPosts = await prisma.postHistory.count({
+    const totalPosts = await prisma.postActivity.count({
       where: { userId }
     });
 

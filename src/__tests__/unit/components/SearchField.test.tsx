@@ -5,8 +5,8 @@ import React from 'react';
 
 describe('SearchField', () => {
   it('renders correctly with placeholder', () => {
-    render(<SearchField value="" onChange={() => {}} placeholder="Search history..." />);
-    expect(screen.getByPlaceholderText('Search history...')).toBeDefined();
+    render(<SearchField value="" onChange={() => {}} placeholder="Search activity..." />);
+    expect(screen.getByPlaceholderText('Search activity...')).toBeDefined();
   });
 
   it('displays the correct value', () => {

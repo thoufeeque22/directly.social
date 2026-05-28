@@ -6,7 +6,7 @@ export function registerUploadRoutes(registry: OpenAPIRegistry) {
   registry.registerPath({
     method: 'post',
     path: '/upload/init',
-    description: 'Pre-initializes a post history record',
+    description: 'Pre-initializes a post activity record',
     summary: 'Initialize Upload',
     tags: ['Upload'],
     request: {
@@ -26,7 +26,7 @@ export function registerUploadRoutes(registry: OpenAPIRegistry) {
             schema: z.object({
               success: z.boolean(),
               data: z.object({
-                historyId: z.string(),
+                activityId: z.string(),
               }),
             }),
           },

@@ -19,16 +19,16 @@ interface StageParams {
   onStatusUpdate: (s: string) => void;
   metadata?: Record<string, string | boolean | undefined>;
   platforms: { platform: string; accountId: string }[];
-  resumeHistoryId?: string;
+  resumeActivityId?: string;
   signal?: AbortSignal;
 }
 
-export async function stageVideoFile({ file, onStatusUpdate, metadata, platforms, resumeHistoryId, signal }: StageParams): Promise<{ stagedFileId: string; fileName: string; historyId: string }> {
+export async function stageVideoFile({ file, onStatusUpdate, metadata, platforms, resumeActivityId, signal }: StageParams): Promise<{ stagedFileId: string; fileName: string; activityId: string }> {
   const byosRes = await fetch('/api/settings/byos', { signal }).catch(() => null);
   const byosData = (byosRes?.ok ? await byosRes.json() : null) as { config?: { provider: string; bucketName: string } } | null;
-  if (byosData?.config) return stageVideoFileByos({ file, onStatusUpdate, metadata, platforms, resumeHistoryId, byosConfig: byosData.config, signal });
+  if (byosData?.config) return stageVideoFileByos({ file, onStatusUpdate, metadata, platforms, resumeActivityId, byosConfig: byosData.config, signal });
 
-  const uploadId = resumeHistoryId || `up_${file.name.replace(/[^a-zA-Z0-9]/g, '_')}_${file.size}`;
+  const uploadId = resumeActivityId || `up_${file.name.replace(/[^a-zA-Z0-9]/g, '_')}_${file.size}`;
   if (checkGlobalAbort(uploadId)) throw new Error("Upload cancelled");
 
   broadcastStatus(onStatusUpdate, uploadId, "Resuming stream...");
@@ -48,10 +48,10 @@ export async function stageVideoFile({ file, onStatusUpdate, metadata, platforms
   broadcastStatus(onStatusUpdate, uploadId, "Finalizing...", 99);
   const res = await fetch(`/api/upload/assemble`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ uploadId, fileName: file.name, totalChunks, totalSize: file.size, ...metadata, platforms, historyId: resumeHistoryId }), signal
+    body: JSON.stringify({ uploadId, fileName: file.name, totalChunks, totalSize: file.size, ...metadata, platforms, activityId: resumeActivityId }), signal
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || "Assembly failed");
   clearStagingStatus(uploadId);
-  return { stagedFileId: data.data.fileId, fileName: file.name, historyId: data.data.historyId };
+  return { stagedFileId: data.data.fileId, fileName: file.name, activityId: data.data.activityId };
 }

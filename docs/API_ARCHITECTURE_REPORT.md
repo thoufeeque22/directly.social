@@ -16,7 +16,7 @@ This report evaluates the current usage of Next.js Route Handlers (API Routes) i
 4.  **Long-Running Tasks:** Routes requiring `maxDuration` extensions beyond standard Server Action limits.
 
 ### Migrate to Server Actions
-1.  **UI-Triggered Mutations:** Simple database updates like `settings/byos`, `settings/disconnect`, or `history` cleanup. These benefit from tight TypeScript integration and reduced boilerplate.
+1.  **UI-Triggered Mutations:** Simple database updates like `settings/byos`, `settings/disconnect`, or `activity` cleanup. These benefit from tight TypeScript integration and reduced boilerplate.
 2.  **Form Submissions:** Any operation currently using a POST route handler that is exclusively triggered by a React component.
 3.  **Lightweight Queries:** GET operations that populate specific UI components and don't require caching at the network level.
 

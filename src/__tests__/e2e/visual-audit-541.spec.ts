@@ -15,10 +15,10 @@ test.describe('Global UI/UX Audit (Issue #541)', () => {
     await page.screenshot({ path: 'verification/settings-byok-page.png', fullPage: true });
   });
 
-  test('Visual Audit: History Page', async ({ page }) => {
-    await page.goto('/history');
+  test('Visual Audit: Activity Page', async ({ page }) => {
+    await page.goto('/activity');
     await page.waitForLoadState('networkidle');
     await expect(page.locator('.glass-card').first()).toBeVisible();
-    await page.screenshot({ path: 'verification/history-page.png', fullPage: true });
+    await page.screenshot({ path: 'verification/activity-page.png', fullPage: true });
   });
 });

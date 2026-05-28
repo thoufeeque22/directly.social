@@ -28,7 +28,7 @@ Verify the implementation of per-user storage quotas, automated file expiry (sma
 ### Expected Results
 - When the 2GB limit is reached, the **Launch** button (or initialization phase) should return an error.
 - **Error Message:** "Storage limit exceeded. You are using X MB of your 2048 MB quota. Please delete some old videos from your Gallery before uploading more."
-- No new `PostHistory` or `GalleryAsset` records should be created after the limit is hit.
+- No new `PostActivity` or `GalleryAsset` records should be created after the limit is hit.
 
 ---
 
@@ -67,7 +67,7 @@ Verify the implementation of per-user storage quotas, automated file expiry (sma
 ### Steps
 1. Manually create a dummy file in the `tmp` directory (e.g., `touch tmp/orphaned_test.mp4`).
 2. Manually modify the file's "Last Modified" date to be older than 24 hours (e.g., `touch -t 202001010101 tmp/orphaned_test.mp4`).
-3. Ensure the file is **NOT** listed in either `GalleryAsset` (as `fileId`) or `PostHistory` (as `stagedFileId`).
+3. Ensure the file is **NOT** listed in either `GalleryAsset` (as `fileId`) or `PostActivity` (as `stagedFileId`).
 4. Trigger the `purgeExpiredAssets()` worker function (or wait for the polling interval).
 
 ### Expected Results

@@ -71,7 +71,7 @@ CREATE TABLE "VerificationToken" (
 );
 
 -- CreateTable
-CREATE TABLE "PostHistory" (
+CREATE TABLE "PostActivity" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -82,13 +82,13 @@ CREATE TABLE "PostHistory" (
     "stagedFileId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "PostHistory_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "PostActivity_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "PostPlatformResult" (
     "id" TEXT NOT NULL,
-    "postHistoryId" TEXT NOT NULL,
+    "postActivityId" TEXT NOT NULL,
     "platform" TEXT NOT NULL,
     "accountName" TEXT,
     "accountId" TEXT,
@@ -190,7 +190,7 @@ CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token"
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "PostPlatformResult_postHistoryId_platform_accountId_key" ON "PostPlatformResult"("postHistoryId", "platform", "accountId");
+CREATE UNIQUE INDEX "PostPlatformResult_postActivityId_platform_accountId_key" ON "PostPlatformResult"("postActivityId", "platform", "accountId");
 
 -- CreateIndex
 CREATE INDEX "RoadmapTask_priority_status_idx" ON "RoadmapTask"("priority", "status");
@@ -232,10 +232,10 @@ ALTER TABLE "PlatformPreference" ADD CONSTRAINT "PlatformPreference_userId_fkey"
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PostHistory" ADD CONSTRAINT "PostHistory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "PostActivity" ADD CONSTRAINT "PostActivity_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PostPlatformResult" ADD CONSTRAINT "PostPlatformResult_postHistoryId_fkey" FOREIGN KEY ("postHistoryId") REFERENCES "PostHistory"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "PostPlatformResult" ADD CONSTRAINT "PostPlatformResult_postActivityId_fkey" FOREIGN KEY ("postActivityId") REFERENCES "PostActivity"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "GalleryAsset" ADD CONSTRAINT "GalleryAsset_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

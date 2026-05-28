@@ -1,10 +1,10 @@
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
-import { registerHistoryResourceRoutes } from './resources/history';
+import { registerActivityResourceRoutes } from './resources/activity';
 import { registerMediaStreamRoutes } from './resources/media-stream';
 import { registerMediaDeleteResourceRoutes } from './resources/media-delete';
 
 export function registerResourceRoutes(registry: OpenAPIRegistry) {
-  registerHistoryResourceRoutes(registry);
+  registerActivityResourceRoutes(registry);
   registerMediaStreamRoutes(registry);
   registerMediaDeleteResourceRoutes(registry);
 }

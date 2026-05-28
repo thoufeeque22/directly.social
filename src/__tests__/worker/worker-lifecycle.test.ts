@@ -18,7 +18,7 @@ const g = global as any;
 // Mock Dependencies
 vi.mock('../../lib/core/prisma', () => ({
   prisma: {
-    postHistory: {
+    postActivity: {
       findMany: vi.fn(),
       update: vi.fn(),
       count: vi.fn(),
@@ -85,9 +85,9 @@ describe('Worker Lifecycle & Polling', () => {
 
     // Return one pending post
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(prisma.postHistory.findMany).mockResolvedValue([mockPost] as any[]);
+    vi.mocked(prisma.postActivity.findMany).mockResolvedValue([mockPost] as any[]);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(prisma.postHistory.update).mockResolvedValue({} as any);
+    vi.mocked(prisma.postActivity.update).mockResolvedValue({} as any);
 
     await startPublishingWorker();
     
@@ -95,7 +95,7 @@ describe('Worker Lifecycle & Polling', () => {
     await vi.advanceTimersByTimeAsync(11000);
 
     // Should have checked DB
-    expect(prisma.postHistory.findMany).toHaveBeenCalledWith(expect.objectContaining({
+    expect(prisma.postActivity.findMany).toHaveBeenCalledWith(expect.objectContaining({
       where: expect.objectContaining({
         isPublished: false,
         scheduledAt: expect.anything()
@@ -103,14 +103,14 @@ describe('Worker Lifecycle & Polling', () => {
     }));
 
     // Should have marked as published (locking)
-    expect(prisma.postHistory.update).toHaveBeenCalledWith({
+    expect(prisma.postActivity.update).toHaveBeenCalledWith({
       where: { id: 'p1' },
       data: { isPublished: true }
     });
 
     // Should have called server distributor
     expect(distributeToPlatformsServer).toHaveBeenCalledWith(expect.objectContaining({
-      historyId: 'p1',
+      activityId: 'p1',
       title: 'Scheduled Post'
     }));
   });
@@ -126,6 +126,6 @@ describe('Worker Lifecycle & Polling', () => {
     await vi.advanceTimersByTimeAsync(11000);
 
     // Should NOT have polled because version mismatch detected in interval
-    expect(prisma.postHistory.findMany).not.toHaveBeenCalled();
+    expect(prisma.postActivity.findMany).not.toHaveBeenCalled();
   });
 });

@@ -26,7 +26,7 @@ export function useDistributionEngine(accounts: Account[]) {
   const executeCockpitDistribution = useCallback(async (
     stagedFileId: string,
     fileName: string,
-    historyId: string,
+    activityId: string,
     formData: FormData,
     activeTargets: string[],
     reviewedContent?: Record<string, AIWriteResult>,
@@ -45,7 +45,7 @@ export function useDistributionEngine(accounts: Account[]) {
         },
         accounts: accounts.map(a => ({ id: a.id, provider: a.provider, accountName: a.accountName })),
         selectedAccountIds: activeTargets,
-        historyId,
+        activityId,
         onStatusUpdate: setUploadStatus,
         onPlatformStatus: (id: string, status: string, error?: string) => {
           setPlatformStatuses(prev => ({ ...prev, [id]: status as PlatformStatus }));

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { getByosConfig } from '@/lib/byos/service';
 import { createS3Client } from '@/lib/upload/s3/client';
-import { completeMultipartUpload, createByosAsset, upsertPostHistoryForByos } from '@/lib/byos/complete-service';
+import { completeMultipartUpload, createByosAsset, upsertPostActivityForByos } from '@/lib/byos/complete-service';
 import { ByosCompleteSchema } from '@/lib/schemas/byos-upload';
 
 export async function POST(req: Request) {
@@ -22,9 +22,9 @@ export async function POST(req: Request) {
     await completeMultipartUpload(client, config.bucketName, result.data.key, result.data.uploadId, result.data.parts);
 
     const asset = await createByosAsset(userId, result.data, config.provider, config.bucketName, result.data.key);
-    const history = await upsertPostHistoryForByos(userId, asset.fileId, result.data);
+    const activity = await upsertPostActivityForByos(userId, asset.fileId, result.data);
 
-    return NextResponse.json({ success: true, data: { fileId: asset.fileId, fileName: asset.fileName, historyId: history.id } });
+    return NextResponse.json({ success: true, data: { fileId: asset.fileId, fileName: asset.fileName, activityId: activity.id } });
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : String(error);
     console.error('Complete error:', msg);

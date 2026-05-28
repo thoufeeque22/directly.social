@@ -38,9 +38,9 @@ Social Studio is a professional-grade multi-platform video distribution platform
 - **Retry Mechanism**: Resumable upload support for YouTube and error logging for other platforms.
 - **Scheduling**: Support for immediate publishing or scheduling for a future date/time.
 
-### 2.5 Unified Dashboard & History
+### 2.5 Unified Dashboard & Activity
 - **Aggregate Stats**: Cross-platform view of views and subscribers (YouTube supported).
-- **Post History**: Searchable log of all distributions with platform-specific post IDs and permalinks.
+- **Post Activity**: Searchable log of all distributions with platform-specific post IDs and permalinks.
 
 ## 3. Technical Architecture
 

@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid request data", details: result.error.format() }, { status: 400 });
     }
 
-    const { uploadId, fileName, totalChunks, totalSize, title, description, videoFormat, historyId, platforms, scheduledAt } = result.data;
+    const { uploadId, fileName, totalChunks, totalSize, title, description, videoFormat, activityId, platforms, scheduledAt } = result.data;
     
     const chunkDir = path.join(process.cwd(), "tmp/chunks", path.basename(uploadId));
     const tempDir = path.join(process.cwd(), "tmp");
@@ -176,8 +176,8 @@ export async function POST(req: NextRequest) {
       logger.warn("⚠️ [ASSEMBLE] Gallery registration failed (non-critical):", e);
     }
 
-    // UPSERT POST HISTORY RECORD (RELIABILITY FIX V4)
-    let history;
+    // UPSERT POST ACTIVITY RECORD (RELIABILITY FIX V4)
+    let activity;
     const initialPlatformData = platforms ? await Promise.all((platforms as PlatformInput[]).map(async (p) => {
       const { results } = await checkTranscodeRequirement(finalPath, [p.platform]);
       return {
@@ -190,9 +190,9 @@ export async function POST(req: NextRequest) {
 
     const finalScheduledAt = (scheduledAt && !isNaN(new Date(scheduledAt).getTime())) ? new Date(scheduledAt) : new Date();
 
-    if (historyId) {
-      history = await prisma.postHistory.update({
-        where: { id: historyId, userId: session.user.id },
+    if (activityId) {
+      activity = await prisma.postActivity.update({
+        where: { id: activityId, userId: session.user.id },
         data: {
           stagedFileId: fileId,
           title: title || undefined,
@@ -202,8 +202,8 @@ export async function POST(req: NextRequest) {
           platforms: {
             upsert: initialPlatformData.map(p => ({
               where: { 
-                postHistoryId_platform_accountId: { 
-                  postHistoryId: historyId, 
+                postActivityId_platform_accountId: { 
+                  postActivityId: activityId, 
                   platform: p.platform,
                   accountId: p.accountId 
                 } 
@@ -218,7 +218,7 @@ export async function POST(req: NextRequest) {
         }
       });
     } else {
-      history = await prisma.postHistory.create({
+      activity = await prisma.postActivity.create({
         data: {
           userId: session.user.id,
           title: title || fileName || "Untitled Post",
@@ -239,7 +239,7 @@ export async function POST(req: NextRequest) {
       data: { 
         fileId,
         fileName,
-        historyId: history.id
+        activityId: activity.id
       } 
     });
   } catch (error: unknown) {

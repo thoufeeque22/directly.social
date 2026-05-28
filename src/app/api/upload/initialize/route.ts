@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       }, { status: 403 });
     }
 
-    const history = await prisma.postHistory.create({
+    const activity = await prisma.postActivity.create({
       data: {
         userId: session.user.id,
         title: title || "Untitled Post",
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
-      data: { historyId: history.id } 
+      data: { activityId: activity.id } 
     });
   } catch (error: unknown) {
     console.error("Initialization Error:", error);

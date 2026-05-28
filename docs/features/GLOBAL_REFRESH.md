@@ -42,5 +42,5 @@ useEffect(() => {
 - **Events Dispatched:**
   - `router.refresh()`: Re-validates server component data.
   - `app:refresh`: General event for all client-side listeners.
-  - `refresh-upcoming`: Specific event for the Upcoming Posts / History listeners.
+  - `refresh-upcoming`: Specific event for the Upcoming Posts / Activity listeners.
 - **UX Throttling:** The refresh process includes a minimum 800ms delay to ensure that UI animations (like the spinner) are visible and satisfying to the user, even if the network request is near-instant.

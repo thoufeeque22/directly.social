@@ -16,16 +16,16 @@ A reusable UI component was created to ensure visual and behavioral consistency.
 
 ### 2. Server-Side Filtering
 
-Unlike simple client-side filtering, Global Search performs queries on the server to ensure scalability as the user's history and gallery grow.
+Unlike simple client-side filtering, Global Search performs queries on the server to ensure scalability as the user's activity and gallery grow.
 
 - **Prisma Integration:** API routes use the `contains` filter with `insensitive` mode to perform case-insensitive partial matches on relevant fields.
-  - **History API:** Filters `title` and `description`.
+  - **Activity API:** Filters `title` and `description`.
   - **Media API:** Filters `fileName`.
 - **Debouncing:** The client-side implementation uses a 500ms debounce to prevent excessive API calls while the user is typing.
 
 ### 3. Integration Points
 
-#### Activity Hub (`/history`)
+#### Activity Hub (`/activity`)
 - Integrated into the main list header.
 - Works seamlessly with pagination ("Load More") and background polling.
 - Displays a "No matching activity" empty state when no results are found.
@@ -37,5 +37,5 @@ Unlike simple client-side filtering, Global Search performs queries on the serve
 
 ## Performance Considerations
 
-- **Database Indexes:** To maintain performance, the database schema should include indexes on the `title`, `description` (PostHistory), and `fileName` (GalleryAsset) columns if the datasets become significantly large.
+- **Database Indexes:** To maintain performance, the database schema should include indexes on the `title`, `description` (PostActivity), and `fileName` (GalleryAsset) columns if the datasets become significantly large.
 - **API Efficiency:** Only the filtered subset of data is returned to the client, reducing payload size and rendering overhead.

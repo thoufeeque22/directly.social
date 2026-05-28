@@ -11,7 +11,7 @@ vi.mock('../../lib/core/prisma', () => ({
       delete: vi.fn(),
       updateMany: vi.fn(),
     },
-    postHistory: {
+    postActivity: {
       findMany: vi.fn(),
     },
   },
@@ -81,7 +81,7 @@ describe('Video Lifecycle Logic', () => {
 
       vi.mocked(prisma.galleryAsset.findMany).mockResolvedValueOnce([mockExpiredAsset] as never)
                                            .mockResolvedValue([]);
-      vi.mocked(prisma.postHistory.findMany).mockResolvedValue([]);
+      vi.mocked(prisma.postActivity.findMany).mockResolvedValue([]);
       
       vi.mocked(fsLib.existsSync).mockReturnValue(true);
       vi.mocked(fsLib.promises.readdir).mockResolvedValue([]);
@@ -99,7 +99,7 @@ describe('Video Lifecycle Logic', () => {
       const dayAgo = now - (25 * 60 * 60 * 1000);
 
       vi.mocked(prisma.galleryAsset.findMany).mockResolvedValue([]);
-      vi.mocked(prisma.postHistory.findMany).mockResolvedValue([]);
+      vi.mocked(prisma.postActivity.findMany).mockResolvedValue([]);
       vi.mocked(fsLib.promises.readdir).mockResolvedValue(['orphaned.mp4'] as never);
       vi.mocked(fsLib.promises.stat).mockResolvedValue({ isFile: () => true, mtimeMs: dayAgo } as never);
 

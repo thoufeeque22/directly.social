@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Header Global Search', () => {
-  test('should navigate to history with search query from header', async ({ page }) => {
+  test('should navigate to activity with search query from header', async ({ page }) => {
     await page.goto('/'); // Dashboard
     await page.waitForLoadState('networkidle');
     
@@ -11,8 +11,8 @@ test.describe('Header Global Search', () => {
     await headerSearch.fill('Pasta');
     await headerSearch.press('Enter');
     
-    // Should navigate to /history and filter
-    await expect(page).toHaveURL(/\/history\?search=Pasta/);
+    // Should navigate to /activity and filter
+    await expect(page).toHaveURL(/\/activity\?search=Pasta/);
     await expect(page.getByText('Cooking Italian Pasta')).toBeVisible();
     await expect(page.getByText('Exploring the Grand Canyon')).not.toBeVisible();
   });

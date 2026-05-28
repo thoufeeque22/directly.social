@@ -67,7 +67,7 @@ test.describe.serial('Schedule Navigation', () => {
 
   test('should handle non-existent post ID gracefully', async ({ page }) => {
     // Mock empty result for invalid ID to ensure it doesn't crash
-    await page.route('**/api/history*', async (route) => {
+    await page.route('**/api/activity*', async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: [] }) });
     });
 

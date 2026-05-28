@@ -31,8 +31,8 @@ test.describe('Parallel Distribution Channels', () => {
   });
 
   test('should process multiple platform uploads concurrently', async ({ page }) => {
-    // 1. Mock history to be empty initially
-    await page.route('**/api/history*', async (route) => {
+    // 1. Mock activity to be empty initially
+    await page.route('**/api/activity*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -50,7 +50,7 @@ test.describe('Parallel Distribution Channels', () => {
         await route.fulfill({
             status: 200,
             contentType: 'application/json',
-            body: JSON.stringify({ success: true, data: { historyId: 'e2e-history-123' } })
+            body: JSON.stringify({ success: true, data: { activityId: 'e2e-activity-123' } })
         });
         return;
       }
@@ -75,11 +75,11 @@ test.describe('Parallel Distribution Channels', () => {
     });
 
     // We will inject a pending post that requests uploading to 4 platforms
-    await page.goto('/history');
+    await page.goto('/activity');
 
     await page.evaluate(() => {
       localStorage.setItem('SS_PENDING_POST', JSON.stringify({
-        resumeHistoryId: 'e2e-history-123',
+        resumeActivityId: 'e2e-activity-123',
         title: 'Parallel E2E Test',
         videoFormat: 'short',
         platforms: [
@@ -94,7 +94,7 @@ test.describe('Parallel Distribution Channels', () => {
       }));
     });
 
-    await page.goto('/history?action=distribute');
+    await page.goto('/activity?action=distribute');
 
     const ghostCard = page.getByText(/Parallel E2E Test/i);
     await expect(ghostCard).toBeVisible();
