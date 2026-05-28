@@ -4,47 +4,71 @@
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST:
   1. Switch to `main` and pull latest (`git checkout main && git pull`).
   2. Create a dedicated feature branch (`feature/<id>-short-description`).
-  3. Create a state file `.gemini/state/ticket-<id>.json` following the **Round-Based Schema**.
-- **Traceable Status:** EVERY agent MUST update their specific block in the `round-X` object of the state file before handing off.
-- **Direct Routing Focus:** Every agent MUST maintain unwavering focus on the `ticket_goal` defined in the ticket state file.
+  3. Create a state file `.gemini/state/ticket-<id>.md` following the **Markdown Lifecycle Template**.
+- **Traceable Status:** EVERY agent MUST update their specific section in the current `Round X` of the state file before handing off.
+- **Direct Routing Focus:** Every agent MUST maintain unwavering focus on the `Goal` defined in the YAML frontmatter.
 - **Context Preservation:** Updates to state files MUST be non-destructive merges. Bypassing state updates is a protocol violation.
 - **Handoff & Commit:** Every agent MUST stage and commit their modifications before transition.
 
 ## State Management & Pruning
-- **Pruning Trigger:** If a state file (`.gemini/state/ticket-<id>.json`) exceeds **50KB** or **3 rounds** of activity, it MUST be pruned.
-- **Archival:** The full context is moved to `.gemini/state/archive/ticket-<id>-<timestamp>.json`.
-- **Summary Initialization:** The active state file is reset with a `summary` block containing:
-  - `key_decisions`: Major architectural or logic choices.
-  - `lessons_learned`: Failures or friction points encountered.
-  - `verification_outcomes`: Pass/Fail status of critical build/test steps.
+- **Pruning Trigger:** If a state file (`.gemini/state/ticket-<id>.md`) exceeds **100 lines** or **3 rounds** of activity, it MUST be pruned.
+- **Archival:** The full content is moved to `.gemini/state/archive/ticket-<id>-<timestamp>.md`.
+- **Summary Initialization:** The active state file is reset with a `Summary` section containing:
+  - `Key Decisions`: Major architectural or logic choices.
+  - `Lessons Learned`: Failures or friction points encountered.
+  - `Verification Outcomes`: Pass/Fail status of critical build/test steps.
 
-## State Schema Reference
-Every state file MUST adhere to this structure to ensure auditability and automated pruning compatibility:
-```json
-{
-  "ticket_id": 123,
-  "branch_name": "feature/...",
-  "ticket_goal": "Concise goal statement",
-  "status": "in-progress",
-  "round-1": {
-    "discovery-agent": {
-      "timestamp": "ISO-8601",
-      "findings": "Architectural discoveries",
-      "TECHNICAL SPECS": { "Strategic Importance": "...", "Impact Radius": "..." }
-    },
-    "dev-agent": {
-      "timestamp": "ISO-8601",
-      "actions": "Implementation details",
-      "modified_files": ["path/to/file.ts"]
-    }
-  }
-}
+## Markdown Lifecycle Template
+Every state file MUST adhere to this structure (YAML Frontmatter + Markdown Sections):
+```markdown
+---
+ticket_id: 123
+branch_name: feature/...
+goal: Concise goal statement
+status: in-progress
+---
+
+# Round 1
+
+## 🔍 Discovery
+- **Strategic Importance**: ...
+- **Dual-Agent Protocol**: ...
+- **Technical Blueprint**: ...
+- **Impact Radius**: ...
+- **Production Readiness**: ...
+- **Test Specification**: ...
+
+## 🛠️ Development
+- **Actions**: ...
+- **Modified Files**: ...
+
+## 🛡️ Review
+- **Checklist**:
+  - [ ] Modularity (50-line rule)
+  - [ ] Zero-Any Policy
+  - [ ] No Emojis
+  - [ ] Security/Audit
+
+## 🧪 QA
+- **Scenarios**: ...
+- **Results**: ...
+
+## 📝 Documentation
+- **Updates**: ...
+
+## 📊 Project
+- **Status**: ...
 ```
 
 ## Agent Specific Workflows
 
 ### Discovery (Architecture & Planning)
 - **Role:** Read-only consultant. Create blueprints and risk assessments.
+- **Discovery Outcomes:**
+  - **Approved (DoR Met):** Move to `dev-agent` for implementation.
+  - **Rejected (Non-Viable):** Close the ticket. Provide a detailed rationale in the `findings` section explaining why the fix/feature is unnecessary, dangerous, or technically impossible.
+  - **Parked (Deferred):** Move to `backlog`. Define specific "Re-evaluation Triggers" (e.g., "Wait for API v2", "Revisit after Q3 launch").
+  - **Needs-Info:** Return to `discovery-agent` for Round 2 after user/technical clarification.
 - **Discovery Definition of Ready (DoR):** Before handing off to `dev-agent`, the `discovery-agent` MUST provide a `TECHNICAL SPECS` block that includes:
   1. **Strategic Importance:** Explicit rationale for "Why now?" and impact of skipping/deferring.
   2. **Dual-Agent Protocol:** Synthesis of Advocate/Skeptic perspectives.
@@ -75,5 +99,6 @@ Every state file MUST adhere to this structure to ensure auditability and automa
 
 ## Routing & Pipelines
 - **Standard Sequence:** `discovery` → `dev` → `review` → `qa` → `doc` → `project`.
-- **Fast-Track Protocol:** Meta-updates and documentation can go direct to `main`.
-- **Branching Protocol:** App code changes require a feature branch. Always create feature branches from an up-to-date `main` branch.
+- **Single Workflow Mandate:** ALL changes, including documentation and meta-updates, MUST follow the standard sequence. The 'Fast-Track' to `main` is abolished to ensure auditability.
+- **Branching Protocol:** ALL code and documentation changes require a feature branch created from an up-to-date `main` branch.
+- **Protocol Failure:** Any deviation from this workflow (skipping initialization, bypassing agents, or omitting state updates) is considered a terminal protocol violation and must be corrected immediately.

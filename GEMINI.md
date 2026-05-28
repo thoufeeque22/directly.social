@@ -4,6 +4,9 @@ This document serves as the root entry point for all AI agents. It defines the g
 
 ## Global Mandates
 
+- **Orchestration Protocol Compliance:** The workflow defined in `.gemini/base/ORCHESTRATION.md` is **NON-NEGOTIABLE**. Skipping branch creation (`feature/<id>`), `main` synchronization, or state file initialization is a terminal failure.
+- **Verification Integrity:** Local verification MUST be exhaustive (e.g., `npm run build`, `npm run lint`). NEVER use 'surgical' or 'token-optimized' checks unless explicitly instructed by the user.
+- **Single Workflow Enforcement:** Every task MUST involve the full chain of agents (Discovery, Development, Review, QA, Documentation, Project) as defined in the standard sequence.
 - **Zero-Any Policy:** Strict TypeScript enforcement across the entire codebase.
 - **Modularity (50-Line Rule):** New files must be ≤ 50 lines. Logic from legacy files must be extracted.
 - **Centralized Schemas:** All validation logic MUST reside in `src/lib/schemas`.
