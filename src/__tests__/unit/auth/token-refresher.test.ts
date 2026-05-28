@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { refreshTokenIfNecessary } from '@/lib/auth/token-refresher';
 import { prisma } from '@/lib/core/prisma';
+import { type Account } from '@prisma/client';
 import { getPlatformCredentials } from '@/lib/core/credential-provider';
 import { refreshGoogleToken } from '@/lib/auth/providers/google';
 import { refreshTikTokToken } from '@/lib/auth/providers/tiktok';
@@ -42,7 +43,7 @@ describe('Token Refresher', () => {
       id: 'acc-1',
       provider: 'google',
       refresh_token: null,
-    } as any);
+    } as unknown as Account);
     const result = await refreshTokenIfNecessary('acc-1');
     expect(result).toBe(false);
   });
@@ -54,7 +55,7 @@ describe('Token Refresher', () => {
       provider: 'google',
       refresh_token: 'ref-123',
       expires_at: farFuture,
-    } as any);
+    } as unknown as Account);
     const result = await refreshTokenIfNecessary('acc-1');
     expect(result).toBe(false);
     expect(refreshGoogleToken).not.toHaveBeenCalled();
@@ -68,7 +69,7 @@ describe('Token Refresher', () => {
       provider: 'google',
       refresh_token: 'ref-123',
       expires_at: past,
-    } as any);
+    } as unknown as Account);
     vi.mocked(getPlatformCredentials).mockResolvedValue({ clientId: 'id', clientSecret: 'secret' });
     vi.mocked(refreshGoogleToken).mockResolvedValue({
       access_token: 'new-acc-123',
@@ -98,7 +99,7 @@ describe('Token Refresher', () => {
       provider: 'tiktok',
       refresh_token: 'ref-456',
       expires_at: soon,
-    } as any);
+    } as unknown as Account);
     vi.mocked(getPlatformCredentials).mockResolvedValue({ clientId: 'id', clientSecret: 'secret' });
     vi.mocked(refreshTikTokToken).mockResolvedValue({
       access_token: 'new-acc-456',

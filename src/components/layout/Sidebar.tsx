@@ -3,6 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import styles from './Sidebar.module.css';
 
@@ -62,7 +63,14 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
       {session?.user && (
         <div className={styles.userProfile}>
           {session.user.image ? (
-            <img src={session.user.image} alt="User" className={styles.avatar} style={{ objectFit: 'cover' }} />
+            <Image 
+              src={session.user.image} 
+              alt="User" 
+              width={32} 
+              height={32} 
+              className={styles.avatar} 
+              style={{ objectFit: 'cover' }} 
+            />
           ) : (
             <div className={styles.avatar}>{session.user.name?.charAt(0) || 'U'}</div>
           )}

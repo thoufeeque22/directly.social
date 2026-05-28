@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
     proxyClientMaxBodySize: "50gb",
   },
   serverExternalPackages: ["@prisma/client", "prisma"],
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+      { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
+    ],
+  },
   async redirects() {
     return [
       {

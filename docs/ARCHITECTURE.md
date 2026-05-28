@@ -607,7 +607,13 @@ The project enforces a strict 50-line limit for all source files to ensure high 
 - **Exceptions:** Test files (`src/__tests__/**`) are exempt from this rule to allow for comprehensive test suites.
 - **Legacy Support:** Existing files that exceed the limit are "grandfathered" using `/* eslint-disable max-lines */`. Developers are required to extract logic into compliant modules whenever touching these legacy files.
 
-### 5. Production Readiness
+### 5. Modern Web Standards
+
+The project integrates the `@GoogleChrome/modern-web-guidance` Gemini CLI extension to ensure adherence to modern web performance and quality standards.
+- **Workflow Integration:** Performance audits and best-practice checks are a mandatory part of the Review and QA phases, as defined in `.gemini/base/ORCHESTRATION.md`.
+- **Optimization Focus:** Continuous monitoring of Core Web Vitals (LCP, INP, CLS) and idiomatic React 19 / Next.js 16 patterns (e.g., proper RSC boundaries, using `proxy.ts` convention).
+
+### 6. Production Readiness
 
 To ensure stability, security, and traceability in a production environment, Social Studio implements:
 
