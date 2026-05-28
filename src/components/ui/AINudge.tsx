@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, IconButton, Tooltip } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';

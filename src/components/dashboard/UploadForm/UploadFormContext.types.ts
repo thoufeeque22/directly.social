@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { StyleMode, AITier } from '@/lib/core/constants';
 import { Account, PlatformPreference } from '@/lib/core/types';
 

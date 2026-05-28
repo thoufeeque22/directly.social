@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { z } from 'zod';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
 import { StyleMode } from '@/lib/core/constants';

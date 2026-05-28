@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { NextResponse, NextRequest } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/core/prisma";

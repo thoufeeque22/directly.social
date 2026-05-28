@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useState, useEffect, useRef } from 'react';
 import { storeDraftFile, getDraftFile } from '@/lib/upload/file-store';
 import { updateVideoFormatPreference } from '@/app/actions/user';

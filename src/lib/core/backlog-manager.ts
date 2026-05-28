@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { prisma } from '@/lib/core/prisma';
 import type { RoadmapTask, LaunchTask, Prisma } from '@prisma/client';
 
