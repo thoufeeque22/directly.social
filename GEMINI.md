@@ -4,7 +4,7 @@ This document serves as the root entry point for all AI agents. It defines the g
 
 ## Global Mandates
 
-- **Orchestration Protocol Compliance:** The workflow defined in `.gemini/base/ORCHESTRATION.md` is **NON-NEGOTIABLE**. Skipping branch creation (`feature/<id>`), `main` synchronization, state file initialization, or per-agent commits is a terminal failure.
+- **Explicit Commit Permission:** AI agents MUST NEVER commit changes to the repository without explicit, per-commit permission from the user. This takes precedence over the orchestration protocol's per-agent commit mandate. Before every commit, the agent MUST present a summary of changes and wait for user approval.
 - **Verification Integrity:** Local verification MUST be exhaustive (e.g., `npm run build`, `npm run lint`). NEVER use 'surgical' or 'token-optimized' checks unless explicitly instructed by the user.
 - **Single Workflow Enforcement:** Every task MUST involve the full chain of agents (Discovery, Development, Review, QA, Documentation, Project) as defined in the standard sequence.
 - **Zero-Any Policy:** Strict TypeScript enforcement across the entire codebase.
