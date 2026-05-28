@@ -2,14 +2,14 @@
 ticket_id: 371
 branch_name: feature/371-automated-token-refresh
 goal: Implement automated OAuth token refresh before scheduled publishing
-status: in-progress
+status: completed
 ---
 
 # 📋 Ticket Metadata
 - **ID**: 371
 - **Branch**: `feature/371-automated-token-refresh`
 - **Goal**: Implement automated OAuth token refresh before scheduled publishing
-- **Status**: in-progress
+- **Status**: completed
 
 # Round 1
 
