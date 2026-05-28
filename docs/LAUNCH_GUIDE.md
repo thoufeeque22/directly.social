@@ -59,24 +59,54 @@ sudo npm install -g pm2
 ```
 
 ---
-
 ## 4. Deploy the Code
 ```bash
-# Clone and Install
-git clone https://github.com/your-username/social-studio-app.git
-cd social-studio-app
-npm install
+# Setup directory structure
+mkdir -p ~/social-studio-app/releases
+cd ~/social-studio-app
+
+# Clone the repository for the first time
+git clone https://github.com/your-username/social-studio-app.git current
 
 # Transfer your .env and dev.db from your LOCAL Mac to the server
 # (Run this on your Mac terminal, not the server)
+# NOTE: The .env should live in the parent directory ~/social-studio-app/
 scp -i ~/Downloads/key.key .env ubuntu@IP:~/social-studio-app/.env
-scp -i ~/Downloads/key.key prisma/dev.db ubuntu@IP:~/social-studio-app/prisma/dev.db
+scp -i ~/Downloads/key.key prisma/dev.db ubuntu@IP:~/social-studio-app/current/prisma/dev.db
 
 # Build and Launch (on the server)
+cd ~/social-studio-app/current
+ln -sfn ../.env .env
+npm install
+npx prisma generate
 npm run build
 pm2 start npm --name "social-studio" -- run start
 pm2 save
 pm2 startup
+```
+
+### Atomic Symlink Deploys
+The project now uses an **Atomic Symlink Deployment** strategy.
+- **`~/social-studio-app/.env`**: The shared environment file.
+- **`~/social-studio-app/releases/`**: Stores timestamped or SHA-named build folders.
+- **`~/social-studio-app/current`**: A symlink that always points to the active release.
+
+This ensures zero-downtime during `npm install` and allows for instant rollbacks.
+
+#### Manual Update
+To perform a manual update on the server:
+```bash
+./scripts/update.sh
+```
+
+#### Instant Rollback
+If a deployment fails or introduces a critical bug, roll back instantly:
+```bash
+# Roll back to the previous release
+./scripts/rollback.sh
+
+# Or roll back to a specific release folder
+./scripts/rollback.sh 20231027123000
 ```
 
 ---

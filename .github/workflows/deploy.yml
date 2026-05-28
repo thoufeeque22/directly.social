@@ -43,13 +43,16 @@ jobs:
         ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
         
         echo "Syncing build artifacts to Oracle Cloud VM..."
+        # Create base and releases directory
+        ssh ${VPS_USERNAME}@${VPS_HOST} "mkdir -p ~/social-studio-app/releases/${{ github.sha }}"
+        
         rsync -avz --delete \
           --exclude '.git' \
           --exclude 'node_modules' \
           --exclude '.env' \
           --exclude '.env.local' \
           --exclude 'tmp' \
-          ./ ${VPS_USERNAME}@${VPS_HOST}:~/social-studio-app/
+          ./ ${VPS_USERNAME}@${VPS_HOST}:~/social-studio-app/releases/${{ github.sha }}/
 
     - name: Install Production Deps & Restart Server
       uses: appleboy/ssh-action@master
@@ -58,8 +61,41 @@ jobs:
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          cd ~/social-studio-app
+          set -e
+          
+          # 1. Setup paths
+          BASE_DIR="~/social-studio-app"
+          RELEASE_DIR="$BASE_DIR/releases/${{ github.sha }}"
+          CURRENT_DIR="$BASE_DIR/current"
+          
+          echo "Preparing release at $RELEASE_DIR..."
+          cd $RELEASE_DIR
+          
+          # 2. Symlink shared .env
+          if [ -f "$BASE_DIR/.env" ]; then
+            ln -sfn $BASE_DIR/.env .env
+          else
+            echo "⚠️ Warning: $BASE_DIR/.env not found."
+          fi
+          
+          # 3. Install production deps & generate prisma
+          echo "📦 Installing production dependencies..."
           npm install --production --legacy-peer-deps
+          echo "🏗️ Generating Prisma client..."
           npx prisma generate
+          
+          # 4. Atomic swap symlink
+          echo "🔄 Swapping symlink to $RELEASE_DIR..."
+          ln -sfn $RELEASE_DIR $CURRENT_DIR
+          
+          # 5. Restart PM2 from the current symlink path
+          echo "🔄 Restarting PM2 processes..."
+          cd $CURRENT_DIR
           pm2 restart social-studio --update-env || pm2 start "npm run start" --name "social-studio"
           pm2 restart social-studio-worker --update-env || pm2 start "npm run worker" --name "social-studio-worker"
+          
+          # 6. Cleanup old releases (keep last 5)
+          echo "🧹 Cleaning up old releases..."
+          ls -dt $BASE_DIR/releases/* | tail -n +6 | xargs -r rm -rf --
+          
+          echo "✅ Deployment successful!"
