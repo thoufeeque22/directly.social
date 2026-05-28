@@ -6,8 +6,8 @@ export function registerPipelineAssemble(registry: OpenAPIRegistry) {
   registry.registerPath({
     method: 'post',
     path: '/upload/assemble',
-    description: 'Concatenates all uploaded chunks into the final video file and registers it in the gallery.',
-    summary: 'Assemble Upload',
+    description: 'Finalizes the upload process by orchestrating chunk assembly, integrity verification, gallery registration, and post activity initialization. Also performs pre-flight transcode requirement checks for target platforms.',
+    summary: 'Assemble Upload Orchestration',
     tags: ['Upload'],
     request: {
       body: {

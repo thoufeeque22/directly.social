@@ -1,248 +1,39 @@
-/* eslint-disable max-lines */
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { prisma } from "@/lib/core/prisma";
-import { promises as fs } from "fs";
-import fsSync from "fs";
-import path from "path";
-import { getVideoMetadata, checkTranscodeRequirement, VideoMetadata } from "@/lib/video/processor";
 import { logger } from "@/lib/core/logger";
 import { UploadAssembleSchema } from "@/lib/schemas/upload-pipeline";
+import { assembleChunks } from "@/lib/upload/chunk-assembler";
+import { registerGalleryAsset } from "@/lib/upload/gallery-registration";
+import { upsertUploadActivity } from "@/lib/upload/activity-registration";
+import { getVideoMetadata, checkTranscodeRequirement } from "@/lib/video/processor";
 
 export const maxDuration = 300; 
 
-interface PlatformInput {
-  platform: string;
-  accountId: string;
-}
-
-/**
- * ASSEMBLE HANDLER
- * Concatenates all uploaded chunks into the final video file.
- */
 export async function POST(req: NextRequest) {
   const session = await auth();
-
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const body = await req.json();
-    const result = UploadAssembleSchema.safeParse(body);
+    const result = UploadAssembleSchema.safeParse(await req.json());
+    if (!result.success) return NextResponse.json({ error: "Invalid data" }, { status: 400 });
 
-    if (!result.success) {
-      return NextResponse.json({ error: "Invalid request data", details: result.error.format() }, { status: 400 });
-    }
+    const p = result.data;
+    const { fileId, finalPath, size } = await assembleChunks(p.uploadId, p.fileName, p.totalChunks, p.totalSize);
 
-    const { uploadId, fileName, totalChunks, totalSize, title, description, videoFormat, activityId, platforms, scheduledAt } = result.data;
-    
-    const chunkDir = path.join(process.cwd(), "tmp/chunks", path.basename(uploadId));
-    const tempDir = path.join(process.cwd(), "tmp");
-    await fs.mkdir(tempDir, { recursive: true });
+    let videoMetadata = null;
+    try { videoMetadata = await getVideoMetadata(finalPath); } 
+    catch (e) { logger.warn("Metadata extraction failed:", e); }
 
-    // Use a unique file ID (UUID) for the final staged file to prevent collisions
-    const fileId = `${crypto.randomUUID()}-${fileName.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-    const finalPath = path.join(tempDir, fileId);
+    try { await registerGalleryAsset({ userId: session.user.id, fileId, fileName: p.fileName, size, finalPath, scheduledAt: p.scheduledAt, videoMetadata }); } 
+    catch (e) { logger.warn("Gallery registration failed:", e); }
 
-    logger.info(`🧩 [ASSEMBLE] Joining ${totalChunks} chunks into: ${finalPath}`);
+    const transcodeResults = p.platforms ? (await checkTranscodeRequirement(finalPath, p.platforms.map(x => x.platform))).results : {};
 
-    // Verify all chunks exist before starting
-    const chunkFiles = (await fs.readdir(chunkDir)).sort();
-    
-    if (chunkFiles.length !== totalChunks) {
-        return NextResponse.json({ 
-            error: `Chunk mismatch. Expected ${totalChunks}, found ${chunkFiles.length}` 
-        }, { status: 400 });
-    }
-
-    // Helper to write chunk and wait for drain if needed
-    const writeChunk = (stream: fsSync.WriteStream, buffer: Buffer) => {
-      return new Promise<void>((resolve, reject) => {
-        const canWrite = stream.write(buffer);
-        if (canWrite) {
-          resolve();
-          return;
-        }
-
-        const cleanup = () => {
-          stream.removeListener('drain', onDrain);
-          stream.removeListener('error', onError);
-        };
-
-        function onDrain() {
-          cleanup();
-          resolve();
-        }
-
-        function onError(err: Error) {
-          cleanup();
-          reject(err);
-        }
-
-        stream.on('drain', onDrain);
-        stream.on('error', onError);
-      });
-    };
-
-    const writeStream = fsSync.createWriteStream(finalPath);
-
-    try {
-      for (const chunkFile of chunkFiles) {
-        const chunkPath = path.join(chunkDir, chunkFile);
-        const chunkBuffer = await fs.readFile(chunkPath);
-        await writeChunk(writeStream, chunkBuffer);
-        // Clean up chunk immediately after successful write
-        await fs.unlink(chunkPath);
-      }
-    } finally {
-      writeStream.end();
-    }
-
-    // Wait for the stream to fully close
-    await new Promise<void>((resolve, reject) => {
-      writeStream.on('finish', resolve);
-      writeStream.on('error', reject);
+    const activity = await upsertUploadActivity({
+      userId: session.user.id, fileId, fileName: p.fileName, finalPath, activityId: p.activityId, title: p.title, description: p.description, videoFormat: p.videoFormat, platforms: p.platforms, scheduledAt: p.scheduledAt, transcodeResults
     });
 
-    // INTEGRITY CHECK: Verify total size
-    if (totalSize) {
-      const stats = await fs.stat(finalPath);
-      if (stats.size !== totalSize) {
-        // Cleanup the corrupt file
-        await fs.unlink(finalPath);
-        throw new Error(`Integrity Check Failed: Expected ${totalSize} bytes, got ${stats.size} bytes.`);
-      }
-      logger.info(`📏 [INTEGRITY] Size verified: ${stats.size} bytes`);
-    }
-
-    // Cleanup the empty chunk directory
-    await fs.rmdir(chunkDir);
-
-    logger.info(`✅ [ASSEMBLE] Success: ${fileId}`);
-
-    // REGISTER OR UPDATE IN GALLERY (LEAN GALLERY #388) - DEDUPLICATION LOGIC
-    try {
-      const stats = await fs.stat(finalPath);
-      
-      // Calculate Expiry: Scheduled time + 48 hours (Grace period)
-      // Default to 7 days if no schedule is provided
-      const parsedScheduledAt = scheduledAt ? new Date(scheduledAt) : null;
-      const baseExpiryDate = (parsedScheduledAt && !isNaN(parsedScheduledAt.getTime())) ? parsedScheduledAt : new Date();
-      const expiresAt = new Date(baseExpiryDate.getTime() + (scheduledAt ? 48 : 7 * 24) * 60 * 60 * 1000);
-
-      // Check for existing asset with same name and size for this user
-      const existingAsset = await prisma.galleryAsset.findFirst({
-        where: {
-          userId: session.user.id,
-          fileName: fileName,
-          fileSize: BigInt(stats.size)
-        }
-      });
-
-      // 1. EXTRACT METADATA (FFMPEG PRE-FLIGHT)
-      let videoMetadata: VideoMetadata | null = null;
-      try {
-        videoMetadata = await getVideoMetadata(finalPath);
-        logger.info(`🎬 [METADATA] Extracted for ${fileName}: ${videoMetadata.width}x${videoMetadata.height}`);
-      } catch (me) {
-        logger.warn("⚠️ [METADATA] Extraction failed (non-critical):", me);
-      }
-
-      if (existingAsset) {
-        logger.info(`🔄 [GALLERY] Updating existing asset to prevent duplicate: ${fileName}`);
-        await prisma.galleryAsset.update({
-          where: { id: existingAsset.id },
-          data: {
-            fileId: fileId, // Point to the newest version
-            expiresAt: expiresAt,
-            createdAt: new Date(), // Reset creation date for sorting
-            metadata: videoMetadata ? (videoMetadata as unknown as Record<string, unknown>) : undefined
-          }
-        });
-      } else {
-        await prisma.galleryAsset.create({
-          data: {
-            userId: session.user.id,
-            fileId: fileId,
-            fileName: fileName,
-            fileSize: BigInt(stats.size),
-            mimeType: "video/mp4", // Default
-            expiresAt: expiresAt,
-            metadata: videoMetadata ? (videoMetadata as unknown as Record<string, unknown>) : undefined
-          }
-        });
-      }
-    } catch (e) {
-      logger.warn("⚠️ [ASSEMBLE] Gallery registration failed (non-critical):", e);
-    }
-
-    // UPSERT POST ACTIVITY RECORD (RELIABILITY FIX V4)
-    let activity;
-    const initialPlatformData = platforms ? await Promise.all((platforms as PlatformInput[]).map(async (p) => {
-      const { results } = await checkTranscodeRequirement(finalPath, [p.platform]);
-      return {
-        platform: p.platform,
-        accountId: p.accountId,
-        status: 'pending',
-        transcodeStatus: results[p.platform]?.needsTranscode ? 'pending' : 'skipped'
-      };
-    })) : [];
-
-    const finalScheduledAt = (scheduledAt && !isNaN(new Date(scheduledAt).getTime())) ? new Date(scheduledAt) : new Date();
-
-    if (activityId) {
-      activity = await prisma.postActivity.update({
-        where: { id: activityId, userId: session.user.id },
-        data: {
-          stagedFileId: fileId,
-          title: title || undefined,
-          description: description || undefined,
-          isPublished: false,
-          scheduledAt: finalScheduledAt,
-          platforms: {
-            upsert: initialPlatformData.map(p => ({
-              where: { 
-                postActivityId_platform_accountId: { 
-                  postActivityId: activityId, 
-                  platform: p.platform,
-                  accountId: p.accountId 
-                } 
-              },
-              update: { 
-                accountId: p.accountId, 
-                transcodeStatus: p.transcodeStatus 
-              },
-              create: p
-            }))
-          }
-        }
-      });
-    } else {
-      activity = await prisma.postActivity.create({
-        data: {
-          userId: session.user.id,
-          title: title || fileName || "Untitled Post",
-          description: description || null,
-          videoFormat: videoFormat || "short",
-          stagedFileId: fileId,
-          isPublished: false, // Background worker will pick this up
-          scheduledAt: finalScheduledAt, // Publish at scheduled time or ASAP
-          platforms: {
-            create: initialPlatformData
-          }
-        }
-      });
-    }
-
-    return NextResponse.json({ 
-      success: true, 
-      data: { 
-        fileId,
-        fileName,
-        activityId: activity.id
-      } 
-    });
+    return NextResponse.json({ success: true, data: { fileId, fileName: p.fileName, activityId: activity.id } });
   } catch (error: unknown) {
     logger.error("Assembly Error:", error);
     return NextResponse.json({ error: error instanceof Error ? error.message : "Unknown error" }, { status: 500 });
