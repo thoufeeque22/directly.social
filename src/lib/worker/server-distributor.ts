@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { prisma } from '@/lib/core/prisma';
 import path from 'path';
 import { logger } from '@/lib/core/logger';

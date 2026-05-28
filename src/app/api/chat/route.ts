@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { streamText, tool, convertToModelMessages } from 'ai';
 import { z } from 'zod';
 import { auth } from '@/auth';

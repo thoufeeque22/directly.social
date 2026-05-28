@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useState, useEffect, useCallback } from 'react';
 import { getUserAccounts, toggleAccountDistribution, disconnectAccount as disconnectAccountAction, getPlatformPreferences, togglePlatformPreference as togglePlatformPreferenceAction } from '@/app/actions/user';
 import { Account, PlatformPreference } from '@/lib/core/types';

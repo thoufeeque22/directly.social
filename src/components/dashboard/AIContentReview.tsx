@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, { useState } from 'react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';

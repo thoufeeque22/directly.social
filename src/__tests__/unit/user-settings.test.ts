@@ -16,7 +16,11 @@ import {
   getVideoFormatPreference,
   updateVideoFormatPreference,
   getAIStylePreference,
-  updateAIStylePreference
+  updateAIStylePreference,
+  getAIProviderPreference,
+  updateAIProviderPreference,
+  getAIStyleModePreference,
+  updateAIStyleModePreference
 } from '../../app/actions/user';
 import { prisma } from '../../lib/core/prisma';
 import { auth } from '@/auth';
@@ -156,6 +160,32 @@ describe('User Account Server Actions', () => {
       expect(prisma.user.update).toHaveBeenCalledWith({
         where: { id: 'user_1' },
         data: { preferredAIStyle: 'Generate' }
+      });
+    });
+
+    it('manages AI provider preference', async () => {
+      vi.mocked(prisma.user.findUnique).mockResolvedValue({ preferredAIProvider: 'groq' } as never);
+      const provider = await getAIProviderPreference();
+      expect(provider).toBe('groq');
+
+      vi.mocked(prisma.user.update).mockResolvedValue({} as never);
+      await updateAIProviderPreference('openai');
+      expect(prisma.user.update).toHaveBeenCalledWith({
+        where: { id: 'user_1' },
+        data: { preferredAIProvider: 'openai' }
+      });
+    });
+
+    it('manages AI style mode preference', async () => {
+      vi.mocked(prisma.user.findUnique).mockResolvedValue({ preferredAIStyleMode: 'Gen-Z' } as never);
+      const mode = await getAIStyleModePreference();
+      expect(mode).toBe('Gen-Z');
+
+      vi.mocked(prisma.user.update).mockResolvedValue({} as never);
+      await updateAIStyleModePreference('SEO');
+      expect(prisma.user.update).toHaveBeenCalledWith({
+        where: { id: 'user_1' },
+        data: { preferredAIStyleMode: 'SEO' }
       });
     });
   });

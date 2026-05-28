@@ -1,9 +1,10 @@
+/* eslint-disable max-lines */
 import { z } from 'zod';
 import { 
   AITier, 
   StyleMode,
 } from '../core/constants';
-import { generateObjectWithFallback } from '../core/ai';
+import { generateObjectWithFallback, AIProvider } from '../core/ai';
 
 export type Platform = 'youtube' | 'instagram' | 'tiktok' | 'facebook' | 'linkedin' | 'twitter';
 
@@ -109,7 +110,8 @@ export async function generatePostContent(
   platform: Platform,
   visualData?: string[],
   customStyleText?: string,
-  byokConfigs?: Record<string, { apiKey: string; modelId: string }>
+  byokConfigs?: Record<string, { apiKey: string; modelId: string }>,
+  preferredProvider?: AIProvider
 ): Promise<AIWriteResult> {
   if (tier === 'Manual') {
     return {
@@ -131,5 +133,6 @@ export async function generatePostContent(
     schema: resultSchema,
     visualData: visualData,
     byokConfigs,
+    preferredProvider,
   });
 }

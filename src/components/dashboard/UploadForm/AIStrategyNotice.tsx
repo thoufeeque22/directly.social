@@ -5,17 +5,20 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { useUploadFormContext } from './UploadFormContext';
 
 export const AIStrategyNotice: React.FC = () => {
-  const { aiTier, contentMode } = useUploadFormContext();
+  const { aiTier, contentMode, aiProvider } = useUploadFormContext();
 
   if (aiTier === 'Manual') return null;
 
   return (
-    <div style={{ 
-      padding: '0.75rem', 
-      borderRadius: '0.75rem', 
-      background: 'hsla(var(--primary)/0.05)', 
-      border: '1px solid hsla(var(--primary)/0.15)' 
-    }}>
+    <div 
+      data-testid="ai-strategy-notice"
+      style={{ 
+        padding: '0.75rem', 
+        borderRadius: '0.75rem', 
+        background: 'hsla(var(--primary)/0.05)', 
+        border: '1px solid hsla(var(--primary)/0.15)' 
+      }}
+    >
       <p style={{ 
         fontSize: '0.8rem', 
         color: 'hsl(var(--primary))', 
@@ -26,7 +29,7 @@ export const AIStrategyNotice: React.FC = () => {
       }}>
         <AutoAwesomeIcon sx={{ fontSize: 16 }} />
         <span>
-          <strong>AI Strategy:</strong> {aiTier === 'Enrich' ? 'Refining draft' : 'Generating content'} in <strong>{contentMode}</strong> style.
+          <strong>AI Strategy:</strong> {aiTier === 'Enrich' ? 'Refining draft' : 'Generating content'} in <strong>{contentMode}</strong> style using <strong>{aiProvider.charAt(0).toUpperCase() + aiProvider.slice(1)}</strong>.
         </span>
       </p>
     </div>

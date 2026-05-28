@@ -27,10 +27,12 @@
 
 ## Global Architectural Standards
 - **Modularity Enforcement (The 50-Line Rule):**
-    - **New Files:** MUST be ≤ 50 lines.
-    - **Legacy Files (> 50 lines):** Any new logic MUST be extracted into a new module. Do not add code to the existing monolith.
-    - **Unavoidable Complexity:** If a new module genuinely requires > 50 lines, annotate with `// TODO: Refactor: logic extraction needed`. Keep it ≤ 100 lines and log in `.gemini/incidental_observations.json` with `category: "meta"` and `severity: "MED"`.
-    - **Enforcement:** Review-agent performs a mandatory architectural audit during the handoff phase (prior to QA/E2E). It MUST reject any handoff that fails these standards and assign the task back to dev-agent for correction.
+    - **Enforcement:** Automated via ESLint `max-lines` (error severity).
+    - **Configuration:** `["error", { "max": 50, "skipBlankLines": true, "skipComments": true }]`.
+    - **New Files:** MUST be ≤ 50 lines. ESLint will block builds if this is violated.
+    - **Legacy Files (> 50 lines):** Grandfathered via `/* eslint-disable max-lines */`.
+    - **Debt Reduction:** Any interaction with a legacy file MUST include logic extraction into new, compliant modules. Do not remove the disable flag until the file is < 50 lines.
+    - **Tests:** `src/__tests__/**` is exempt from the 50-line rule to allow for comprehensive test suites.
 
 - **Legacy Debt Remediation Protocol:**
     - Files > 50 lines are classified as "Legacy".

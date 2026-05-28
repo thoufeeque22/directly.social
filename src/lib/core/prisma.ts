@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { PrismaClient, Prisma } from "@prisma/client";
 import { encrypt, decrypt } from "./encryption";
 

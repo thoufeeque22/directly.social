@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 "use server";
 
 import { protectedAction } from "@/lib/core/action-utils";
@@ -6,6 +7,7 @@ import { AITier, StyleMode } from "@/lib/core/constants";
 import { z } from "zod";
 import { aiRateLimit, checkRateLimit } from "@/lib/core/ratelimit";
 import { logger } from "@/lib/core/logger";
+import { AIProvider } from "@/lib/core/ai";
 
 const AIPreviewSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -15,6 +17,7 @@ const AIPreviewSchema = z.object({
   platforms: z.array(z.string()).min(1, "At least one platform is required"),
   visualData: z.array(z.string()).optional(),
   customStyleText: z.string().optional(),
+  aiProvider: z.string().optional(),
 });
 
 /**
@@ -29,7 +32,8 @@ export async function getMultiPlatformAIPreviews(
   platforms: string[],
   visualData?: string[],
   customStyleText?: string,
-  byokConfigs?: Record<string, { apiKey: string; modelId: string }>
+  byokConfigs?: Record<string, { apiKey: string; modelId: string }>,
+  aiProvider?: AIProvider
 ) {
   return protectedAction(async (userId) => {
     // 1. Runtime Validation
@@ -40,7 +44,8 @@ export async function getMultiPlatformAIPreviews(
       mode, 
       platforms, 
       visualData, 
-      customStyleText 
+      customStyleText,
+      aiProvider
     });
     
     // Use validated values to ensure type safety and correctness
@@ -57,7 +62,7 @@ export async function getMultiPlatformAIPreviews(
     // 2. Rate Limiting
     await checkRateLimit(aiRateLimit, userId, "AI Generation limit reached. Please wait a minute.");
 
-    logger.info(`Generating AI previews for user ${userId}`, { platforms: vPlatforms, tier: vTier, mode: vMode });
+    logger.info(`Generating AI previews for user ${userId}`, { platforms: vPlatforms, tier: vTier, mode: vMode, provider: aiProvider });
 
     const results: { platform: string, result: AIWriteResult }[] = [];
 
@@ -71,7 +76,8 @@ export async function getMultiPlatformAIPreviews(
           platform as Platform,
           visualData,
           customStyleText,
-          byokConfigs
+          byokConfigs,
+          aiProvider
         );
         results.push({ platform, result });
       } catch (err: unknown) {

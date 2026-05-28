@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useState, useEffect } from 'react';
 
 interface FormState {
