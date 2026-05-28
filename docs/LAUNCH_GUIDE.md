@@ -35,14 +35,16 @@ This guide covers the 100% free, "Always On" deployment method using Oracle Clou
 ---
 
 ## 3. Configure the Server Environment
-Once the instance status is "Running," copy the **Public IP Address**. Open your Mac terminal and connect:
+Once the instance status is "Running," copy the **Public IP Address** (e.g., `30.162.57.229`). Open your Mac terminal and connect:
 
 ```bash
-# Set permissions for your key (do this once)
-chmod 400 ~/Downloads/ssh-key-yourname.key
+# 1. Set permissions for your key (do this once)
+# Example using your current key:
+chmod 400 ~/Documents/keys/ssh-key-2026-04-23.key
 
-# Connect to the server
-ssh -i ~/Downloads/ssh-key-yourname.key ubuntu@YOUR_SERVER_IP
+# 2. Connect to the server
+# Example using your current key and IP:
+ssh -i ~/Documents/keys/ssh-key-2026-04-23.key ubuntu@30.162.57.229
 ```
 
 Inside the server, run these setup commands:
@@ -71,8 +73,9 @@ git clone https://github.com/your-username/social-studio-app.git current
 # Transfer your .env and dev.db from your LOCAL Mac to the server
 # (Run this on your Mac terminal, not the server)
 # NOTE: The .env should live in the parent directory ~/social-studio-app/
-scp -i ~/Downloads/key.key .env ubuntu@IP:~/social-studio-app/.env
-scp -i ~/Downloads/key.key prisma/dev.db ubuntu@IP:~/social-studio-app/current/prisma/dev.db
+# Example using your current key and IP:
+scp -i ~/Documents/keys/ssh-key-2026-04-23.key .env ubuntu@30.162.57.229:~/social-studio-app/.env
+scp -i ~/Documents/keys/ssh-key-2026-04-23.key prisma/dev.db ubuntu@30.162.57.229:~/social-studio-app/current/prisma/dev.db
 
 # Build and Launch (on the server)
 cd ~/social-studio-app/current
