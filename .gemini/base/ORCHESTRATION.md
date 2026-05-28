@@ -59,7 +59,7 @@ status: in-progress
 
 ### Discovery (Architecture & Planning)
 - **Role:** Read-only consultant. Create blueprints.
-- **Mandate:** MUST provide a **Test Specification** block with high-level manual and automated test scenarios.
+- **Mandate:** MUST provide an explicit **Socratic Log** (via `discovery-agent`) followed by a **Test Specification** block with high-level manual and automated test scenarios.
 - **Verdict:** Approved -> Dev | Needs-Info -> Round 2 | Rejected -> Close.
 
 ### Development (Implementation)

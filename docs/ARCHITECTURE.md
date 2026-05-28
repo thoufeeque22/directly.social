@@ -622,3 +622,4 @@ To ensure stability, security, and traceability in a production environment, Soc
 - **PostgreSQL:** Primary data store (likely Vercel Postgres or Supabase).
 - **Cloudflared:** Used for local development tunneling to test webhooks and platform callbacks.
 - **Worker Process:** A separate `tsx` process (`scripts/worker.ts`) runs the background polling and cleanup logic.
+- **Atomic Symlink Deploys:** The production deployment on Oracle VPS utilizes an atomic symlink strategy. A `current` symlink points to a version-controlled release directory, enabling zero-downtime updates and near-instant rollbacks by swapping the symlink target.
