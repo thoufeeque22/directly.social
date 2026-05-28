@@ -39,5 +39,5 @@ export async function refreshTokenIfNecessary(accountId: string): Promise<boolea
   } catch (error: unknown) {
     logger.error(`[TOKEN-REFRESHER] Error:`, error instanceof Error ? error.message : String(error));
   }
-  return true;
+  return false;
 }

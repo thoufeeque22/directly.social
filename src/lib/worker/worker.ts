@@ -182,7 +182,7 @@ export async function startPublishingWorker() {
             for (const platformResult of post.platforms) {
                if (platformResult.accountId) {
                   await refreshTokenIfNecessary(platformResult.accountId).catch(err => {
-                    logger.error(`❌ [WORKER] Pre-publish token refresh failed for account ${platformResult.accountId}:`, err);
+                    logger.error(`[WORKER] Pre-publish token refresh failed for account ${platformResult.accountId}:`, err);
                   });
                }
             }

@@ -24,8 +24,18 @@ status: in-progress
 - **Test Specification**: Mocking OAuth endpoints to verify rotation and database persistence.
 
 ## 🛠️ Development
-- **Actions**: (Pending)
-- **Modified Files**: []
+- **Actions**:
+  - Implemented `refreshTokenIfNecessary` in `src/lib/auth/token-refresher.ts`.
+  - Added provider-specific refresh logic in `src/lib/auth/providers/google.ts` and `src/lib/auth/providers/tiktok.ts`.
+  - Integrated pre-publish refresh hook in `src/lib/worker/worker.ts`.
+- **Modified Files**:
+  - `src/lib/auth/token-refresher.ts`
+  - `src/lib/auth/providers/google.ts`
+  - `src/lib/auth/providers/tiktok.ts`
+  - `src/lib/worker/worker.ts`
+  - `src/__tests__/unit/auth/token-refresher.test.ts`
+  - `src/__tests__/unit/auth/providers/google.test.ts`
+  - `src/__tests__/unit/auth/providers/tiktok.test.ts`
 
 ## 🛡️ Review
 - **Checklist**:
@@ -42,8 +52,19 @@ status: in-progress
   - **Refinement**: `refreshTokenIfNecessary` returns `true` even if no refresh happened (e.g., unknown provider). While harmless in the current worker context, it could be more precise.
 
 ## 🧪 QA
-- **Scenarios**: (Pending)
-- **Results**: ...
+- **Scenarios**:
+  - [x] **Account Discovery**: Verify `refreshTokenIfNecessary` handles missing accounts correctly.
+  - [x] **Proactive Refresh (Google)**: Verify Google token rotation when `expires_at` is in the past.
+  - [x] **Buffer Management (TikTok)**: Verify TikTok token rotation when token expires within the 15-minute buffer.
+  - [x] **Idempotency**: Verify no refresh occurs when tokens are still valid (> 15 mins).
+  - [x] **Error Resiliency**: Verify provider failures are logged without crashing the worker.
+  - [x] **Worker Integration**: Verify pre-publish hook in worker calls the refresher for each platform account.
+- **Results**:
+  - Unit tests implemented in `src/__tests__/unit/auth/` covering all scenarios.
+  - Google and TikTok provider logic verified with mocks.
+  - Worker integration verified via manual code audit and existing lifecycle tests.
+  - "No Emojis" policy enforced in worker.ts for the new error log.
+  - All new tests passing. Baseline test failures on `main` noted and confirmed unrelated.
 
 ## 📝 Documentation
 - **Updates**: (Pending)
