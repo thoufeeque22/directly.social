@@ -404,7 +404,7 @@ Users can connect their own S3/R2 storage to bypass server limits.
 The Settings page is organized into a URL-driven tabbed interface, providing a centralized hub for all configuration.
 
 - **URL-Driven Navigation:** Tab state is persisted in the URL query string (`?tab=...`), allowing for direct linking and consistent state across refreshes.
-- **Modular Architecture:** The settings page follows a strict modular design to maintain readability and comply with the project's 50-line rule. The main `SettingsContent` component acts as a router, delegating tab rendering to specialized components:
+- **Modular Architecture:** The settings page follows a strict modular design to maintain readability and comply with the project's 50-line rule (automated via ESLint). The main `SettingsContent` component acts as a router, delegating tab rendering to specialized components:
   - `SettingsTabs`: Manages the tab navigation and URL state synchronization.
   - `DestinationsTab`: Encapsulates platform connection logic, account management, and API fetching.
   - `RoadmapPlatforms`: Renders the upcoming platform integrations and "Coming Soon" section.
@@ -443,7 +443,7 @@ For more details, see the [Global Refresh Feature Documentation](features/GLOBAL
 
 ### 13. Activity Domain Architecture
 
-The Activity domain manages the record of all past and upcoming posts. To maintain scalability and performance, the domain follows a highly modular architecture that adheres to the project's strict 50-line rule.
+The Activity domain manages the record of all past and upcoming posts. To maintain scalability and performance, the domain follows a highly modular architecture that adheres to the project's strict 50-line rule (automated via ESLint).
 
 - **Decomposed Server Actions:** Logic for fetching, retrying, and canceling activity items is split into specialized modules within `src/app/actions/activity/`. This ensures that each action has a single responsibility and is independently testable.
 - **Specialized Hooks:** A composite `useActivity` hook orchestrates multiple sub-hooks to manage complex state and logic:
@@ -456,7 +456,7 @@ The Activity domain manages the record of all past and upcoming posts. To mainta
 
 ### 14. Complex UI Form Architecture (Modular Engine)
 
-Complex forms (like the Upload Form) follow a "Modular Engine" pattern to manage deep state and UI complexity while adhering to the 50-line rule.
+Complex forms (like the Upload Form) follow a "Modular Engine" pattern to manage deep state and UI complexity while adhering to the 50-line rule (automated via ESLint).
 
 - **Provider-Consumer Pattern:** The form is wrapped in a dedicated `UploadFormProvider` (Context) that consolidates state from props, custom hooks, and local signals. This eliminates prop-drilling across deep component trees.
 - **Atomic Decomposition:** Large forms are broken down into a hierarchy of atomic, single-responsibility components:
@@ -574,7 +574,14 @@ To maintain context efficiency and prevent "rule bloat", the project's core orch
 
 Agents are required to read these modular files based on their current task domain.
 
-### 4. Production Readiness
+### 4. Modularity Enforcement (The 50-Line Rule)
+
+The project enforces a strict 50-line limit for all source files to ensure high maintainability and prevent monolithic modules.
+- **Automation:** This rule is automatically enforced via ESLint's `max-lines` rule. Violations will trigger an error and block the CI pipeline.
+- **Exceptions:** Test files (`src/__tests__/**`) are exempt from this rule to allow for comprehensive test suites.
+- **Legacy Support:** Existing files that exceed the limit are "grandfathered" using `/* eslint-disable max-lines */`. Developers are required to extract logic into compliant modules whenever touching these legacy files.
+
+### 5. Production Readiness
 
 To ensure stability, security, and traceability in a production environment, Social Studio implements:
 

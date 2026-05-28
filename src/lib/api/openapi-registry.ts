@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 import { z } from '@/lib/api/zod-openapi';
 import { registerAiRoutes } from './routes/ai';

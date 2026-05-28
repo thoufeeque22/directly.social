@@ -4,11 +4,11 @@ This document serves as the root entry point for all AI agents. It defines the g
 
 ## Global Mandates
 
-- **Orchestration Protocol Compliance:** The workflow defined in `.gemini/base/ORCHESTRATION.md` is **NON-NEGOTIABLE**. Skipping branch creation (`feature/<id>`), `main` synchronization, or state file initialization is a terminal failure.
+- **Explicit Commit Permission:** AI agents MUST NEVER commit changes to the repository without explicit, per-commit permission from the user. This takes precedence over the orchestration protocol's per-agent commit mandate. Before every commit, the agent MUST present a summary of changes and wait for user approval.
 - **Verification Integrity:** Local verification MUST be exhaustive (e.g., `npm run build`, `npm run lint`). NEVER use 'surgical' or 'token-optimized' checks unless explicitly instructed by the user.
 - **Single Workflow Enforcement:** Every task MUST involve the full chain of agents (Discovery, Development, Review, QA, Documentation, Project) as defined in the standard sequence.
 - **Zero-Any Policy:** Strict TypeScript enforcement across the entire codebase.
-- **Modularity (50-Line Rule):** New files must be ≤ 50 lines. Logic from legacy files must be extracted.
+- **Modularity (50-Line Rule):** All source files must be ≤ 50 lines (automated via ESLint `max-lines`). Legacy files exceeding this limit must have `/* eslint-disable max-lines */` and be targeted for refactoring. Tests are exempt.
 - **Centralized Schemas:** All validation logic MUST reside in `src/lib/schemas`.
 - **API Documentation:** All Route Handlers MUST be documented at `/api/docs` (Swagger).
 - **Human-Centric UI:** Prioritize accessibility, professional aesthetics (MUI), and no emojis.

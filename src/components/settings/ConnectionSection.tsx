@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React from 'react';
 import styles from '@/app/settings/Settings.module.css';
 import { Account } from '@/lib/core/types';

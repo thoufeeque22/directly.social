@@ -8,7 +8,7 @@
 - **Traceable Status:** EVERY agent MUST update their specific section in the current `Round X` of the state file before handing off.
 - **Direct Routing Focus:** Every agent MUST maintain unwavering focus on the `Goal` defined in the YAML frontmatter.
 - **Context Preservation:** Updates to state files MUST be non-destructive merges. Bypassing state updates is a protocol violation.
-- **Handoff & Commit:** Every agent MUST stage and commit their modifications before transition.
+- **Per-Agent Commits:** Every agent MUST stage and commit their modifications (including state file updates) immediately upon completion and BEFORE handoff to the next agent in the sequence. Collective "end-of-task" commits are prohibited to ensure maximum traceability.
 
 ## State Management & Pruning
 - **Pruning Trigger:** If a state file (`.gemini/state/ticket-<id>.md`) exceeds **100 lines** or **3 rounds** of activity, it MUST be pruned.
@@ -99,6 +99,6 @@ status: in-progress
 
 ## Routing & Pipelines
 - **Standard Sequence:** `discovery` → `dev` → `review` → `qa` → `doc` → `project`.
-- **Single Workflow Mandate:** ALL changes, including documentation and meta-updates, MUST follow the standard sequence. The 'Fast-Track' to `main` is abolished to ensure auditability.
+- **Single Workflow Mandate:** ALL changes, including documentation and meta-updates, MUST follow the standard sequence. Every step MUST be accompanied by an atomic commit from the respective agent. The 'Fast-Track' to `main` is abolished to ensure auditability.
 - **Branching Protocol:** ALL code and documentation changes require a feature branch created from an up-to-date `main` branch.
 - **Protocol Failure:** Any deviation from this workflow (skipping initialization, bypassing agents, or omitting state updates) is considered a terminal protocol violation and must be corrected immediately.

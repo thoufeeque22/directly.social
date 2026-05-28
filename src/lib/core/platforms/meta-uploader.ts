@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { createReadStream, promises as fs } from "fs";
 import { Transform } from "stream";
 import axios from "axios";

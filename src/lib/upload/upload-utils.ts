@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { checkGlobalAbort, clearStagingStatus } from './abort-utils';
 import { stageVideoFile } from './staging-service';
 import { processPlatformUpload } from './distribution-service';

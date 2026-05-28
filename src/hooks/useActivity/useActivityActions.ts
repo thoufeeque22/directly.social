@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { PlatformResult, PostActivityEntry, CockpitPost } from './types';
 
 interface UseActivityActionsProps {

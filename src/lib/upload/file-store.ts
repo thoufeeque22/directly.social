@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /**
  * IndexedDB-based file persistence for the upload form.
  * Stores the selected video file so it survives tab switches and refreshes.

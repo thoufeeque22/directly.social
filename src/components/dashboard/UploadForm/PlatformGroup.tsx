@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React from 'react';
 import Link from 'next/link';
 import { Account, PlatformPreference } from '@/lib/core/types';

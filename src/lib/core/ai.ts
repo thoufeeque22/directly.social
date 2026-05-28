@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createGroq } from '@ai-sdk/groq';
 import { createOllama } from 'ai-sdk-ollama';

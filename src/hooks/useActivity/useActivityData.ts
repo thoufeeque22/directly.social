@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useCallback, useEffect } from 'react';
 import { usePolling } from '@/hooks/usePolling';
 import { PostActivityEntry } from './types';

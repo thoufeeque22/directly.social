@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 "use server";
 
 import { protectedAction } from "@/lib/core/action-utils";

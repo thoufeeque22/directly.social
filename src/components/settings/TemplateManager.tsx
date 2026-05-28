@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, { useMemo, useState, useEffect } from 'react';
 import { Trash2, Loader2, Bookmark, Edit2, Check, X, Search } from 'lucide-react';
 import { getMetadataTemplates, deleteMetadataTemplate, updateMetadataTemplate } from '@/app/actions/metadata';

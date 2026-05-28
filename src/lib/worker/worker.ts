@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { prisma } from "@/lib/core/prisma";
 import * as Sentry from "@sentry/nextjs";
 import path from "path";

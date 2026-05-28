@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useState, useEffect } from 'react';
 import { getByosConfigAction, saveByosConfigAction } from '@/lib/actions/settings';
 
