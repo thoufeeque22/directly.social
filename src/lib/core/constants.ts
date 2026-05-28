@@ -32,3 +32,11 @@ export const OLLAMA_DEFAULT_MODEL = "gemma4";
 
 // Storage Quotas
 export const MAX_STORAGE_PER_USER = 2 * 1024 * 1024 * 1024; // 2GB in bytes
+
+// Metadata Constraints
+export const PLATFORM_LIMITS: Record<string, { title?: number; description: number }> = {
+  youtube: { title: 100, description: 5000 },
+  instagram: { description: 2200 },
+  tiktok: { description: 4000 },
+  facebook: { description: 5000 },
+};

@@ -4,7 +4,7 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { PLATFORMS } from '@/lib/core/constants';
+import { PLATFORMS, PLATFORM_LIMITS } from '@/lib/core/constants';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
 
 interface AIContentReviewProps {
@@ -37,6 +37,10 @@ export const AIContentReview: React.FC<AIContentReviewProps> = ({
 
   const activeData = editedContent[activePlatform];
   const activePlatformInfo = PLATFORMS.find(p => p.id === activePlatform) || PLATFORMS[0];
+  const limits = PLATFORM_LIMITS[activePlatform] || { description: 2000 };
+
+  const isTitleOver = limits.title ? activeData.title.length > limits.title : false;
+  const isDescOver = activeData.description.length > limits.description;
 
   return (
     <GlassCard style={{ padding: '2rem', animation: 'slideUp 0.4s ease-out' }}>
@@ -103,9 +107,16 @@ export const AIContentReview: React.FC<AIContentReviewProps> = ({
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'hsl(var(--muted-foreground))' }}>
-            {activePlatform === 'youtube' ? 'Video Title' : 'Campaign Hook'}
-          </label>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'hsl(var(--muted-foreground))' }}>
+              {activePlatform === 'youtube' ? 'Video Title' : 'Campaign Hook'}
+            </label>
+            {limits.title && (
+              <span style={{ fontSize: '0.7rem', fontWeight: 600, color: isTitleOver ? 'hsl(var(--destructive))' : 'hsl(var(--muted-foreground))' }}>
+                {activeData.title.length}/{limits.title}
+              </span>
+            )}
+          </div>
           <input 
             type="text"
             value={activeData.title}
@@ -114,17 +125,24 @@ export const AIContentReview: React.FC<AIContentReviewProps> = ({
               background: 'hsla(var(--muted) / 0.3)', 
               padding: '0.8rem 1rem', 
               borderRadius: '0.75rem', 
-              border: '1px solid hsla(var(--border) / 0.5)',
+              border: `1px solid ${isTitleOver ? 'hsl(var(--destructive))' : 'hsla(var(--border) / 0.5)'}`,
               color: 'white',
-              fontSize: '0.95rem'
+              fontSize: '0.95rem',
+              outline: 'none',
+              transition: 'border-color 0.2s'
             }}
           />
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'hsl(var(--muted-foreground))' }}>
-            Description & Hashtags
-          </label>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'hsl(var(--muted-foreground))' }}>
+              Description & Hashtags
+            </label>
+            <span style={{ fontSize: '0.7rem', fontWeight: 600, color: isDescOver ? 'hsl(var(--destructive))' : 'hsl(var(--muted-foreground))' }}>
+              {activeData.description.length}/{limits.description}
+            </span>
+          </div>
           <textarea 
             value={activeData.description}
             onChange={(e) => handleUpdate('description', e.target.value)}
@@ -133,11 +151,13 @@ export const AIContentReview: React.FC<AIContentReviewProps> = ({
               background: 'hsla(var(--muted) / 0.3)', 
               padding: '0.8rem 1rem', 
               borderRadius: '0.75rem', 
-              border: '1px solid hsla(var(--border) / 0.5)',
+              border: `1px solid ${isDescOver ? 'hsl(var(--destructive))' : 'hsla(var(--border) / 0.5)'}`,
               color: 'white',
               fontSize: '0.9rem',
               lineHeight: 1.5,
-              resize: 'none'
+              resize: 'none',
+              outline: 'none',
+              transition: 'border-color 0.2s'
             }}
           />
         </div>
