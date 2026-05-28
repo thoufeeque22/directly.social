@@ -1,23 +1,29 @@
-# Metadata Templates
+# Advanced Metadata & Templates
 
-Metadata Templates allow users to save and reuse common metadata snippets (e.g., standard descriptions, "Link in Bio" text, or credits) across multiple posts to streamline their workflow.
+The Advanced Metadata suite allows users to manage platform-specific nuances while maintaining efficiency through inheritance and reusable snippets. This feature is crucial for creators distributing to multiple channels with distinct audiences and constraints.
 
 ## Overview
 
-Users often have repetitive text they include in every post, such as social links, attribution, or call-to-actions. Instead of manual copy-pasting, they can now save these as "Snippets" and insert them with a single click.
+Users can choose between a unified "Global" strategy or dive into "Platform-Specific" overrides. The system intelligently handles character limits, content inheritance, and reusable snippets (e.g., standard descriptions, "Link in Bio" text) to streamline the workflow.
 
 ## Core Components
 
-### 1. Snippet Selection (Upload Dashboard)
-Located next to the description fields in the main upload form.
-- **Insert:** Choose an existing snippet to append it to the current description.
-- **Save:** Quickly save the current description as a new snippet for future use.
+### 1. Platform-Specific Overrides & Inheritance
+- **Per-Platform Fields:** When enabled, users can define distinct titles and descriptions for each selected channel (e.g., YouTube Shorts vs. TikTok).
+- **Intelligent Inheritance:** If a platform-specific field is left blank, the system automatically inherits the content from the "Global" metadata fields during submission. This ensures content is always present while minimizing redundant typing.
 
-### 2. Snippet Management (Settings)
-A dedicated section in the Settings page (`/settings`) for organizing saved assets.
-- **List View:** See all saved snippets, their names, and content previews.
-- **Update:** Edit snippet name or content.
-- **Delete:** Remove outdated or redundant snippets.
+### 2. Character Limit Validation
+- **Real-time Feedback:** Inputs display character counters (e.g., `55/100`) that turn orange (warning) or red (exceeded) as users type.
+- **Platform Constraints:** Hardcoded limits based on API restrictions:
+  - YouTube: 100 char Title, 5000 char Description
+  - TikTok: 4000 char Description
+  - Instagram: 2200 char Description
+  - Facebook: 5000 char Description
+- **AI Review Integration:** The AI Review step also respects and displays these limits when users manually tweak AI-generated content.
+
+### 3. Snippet Management
+- **Upload Dashboard:** Users can select existing snippets or save the current description as a new snippet directly from the upload form (global or per-platform).
+- **Settings Page:** A dedicated `/settings` section provides full CRUD (Create, Read, Update, Delete) capabilities for organizing saved snippets.
 
 ## Technical Implementation
 
@@ -25,54 +31,41 @@ A dedicated section in the Settings page (`/settings`) for organizing saved asse
 Managed via Prisma in `prisma/schema.prisma`:
 - **Model:** `MetadataTemplate`
 - **Fields:** `id`, `userId` (owner), `name`, `content` (text), `createdAt`, `updatedAt`.
-- **Relationship:** Belongs to a `User` (Cascade delete).
-
-### Server Actions
-Implemented in `src/app/actions/metadata.ts`:
-- `getMetadataTemplates()`: Fetches user-specific snippets.
-- `createMetadataTemplate(data)`: Persists a new snippet.
-- `updateMetadataTemplate(id, data)`: Modifies an existing snippet.
-- `deleteMetadataTemplate(id)`: Removes a snippet (with ownership check).
 
 ### State Management & UX
 Enhanced `useUploadForm` hook in `src/hooks/dashboard/useUploadForm.ts`:
-- `appendDescription(val, platform?)`: Helper to intelligently append text with proper newline separation.
+- Manages state for `isPlatformSpecific`, `platformTitles`, and `platformDescriptions`.
+- Local storage syncing ensures drafts are not lost during navigation.
 
-**Menu UX Improvements:**
-- **Auto-Close:** The snippets menu automatically closes after a successful "Save" or when a snippet is "Selected" for insertion.
-- **Click Outside:** The menu dismisses gracefully when clicking anywhere outside the menu container.
-- **Explicit Close:** An "X" button is provided for quick dismissal.
+**Inheritance Logic:** Implemented directly in `DashboardClient.tsx` before API submission:
+```typescript
+const customContent = isPlatformSpecific ? { 
+  title: platformTitle || globalTitle, 
+  description: platformDescription || globalDescription 
+} : undefined;
+```
 
 ## Quality Assurance
 
 ### Automated Testing
-- **Unit Tests:** `src/__tests__/unit/metadata-actions.test.ts` covers CRUD operations and authorization.
-- **Integration Tests:** Existing test suites were updated to ensure compatibility with `StyleMode` and `AITier` type changes.
-- **E2E Tests (Playwright):**
-    - `src/__tests__/e2e/snippets.spec.ts`: Verifies full user journey on the dashboard and UX closing logic.
-    - `src/__tests__/e2e/settings.spec.ts`: Verifies template management (Edit/Delete) with hardened locators and dialog handling.
-    - **Automated Auth:** Uses `src/__tests__/e2e/auth.setup.ts` to perform real logins and save session state for reuse across all E2E tests.
-
+- **Unit Tests:** `src/__tests__/unit/metadata-actions.test.ts` covers snippet CRUD operations.
+- **E2E Tests:** Playwright specs (`snippets.spec.ts`, `settings.spec.ts`) verify UI workflows.
 
 ### Manual Verification
 Refer to the following UAT scripts:
-- [UAT Script: Metadata Templates](../manual_tests/verify-metadata-templates.md) (Core Flow)
-- [UAT Script: Snippets UX Improvements](../manual_tests/verify-snippets-ux-improvements.md) (Targeted UX check)
+- [UAT Script: Metadata Templates](../manual_tests/verify-metadata-templates.md) (Core Flow + Inheritance/Limits)
 
 ## User Flow
 
 ```mermaid
 graph TD
-    A[Start Post] --> B{Existing Snippet?}
-    B -- Yes --> C[Click Snippets Dropdown]
-    C --> D[Select Snippet]
-    D --> E[Snippet Appended to Description]
-    E --> J[Menu Closes Automatically]
-    B -- No --> F[Type Description]
-    F --> G[Click Snippets -> Save Current]
-    G --> H[Enter Name & Save]
-    H --> I[Snippet Saved for Future]
-    I --> K[Menu Closes Automatically]
-    J --> L[Distribute Post]
-    K --> L
+    A[Start Post] --> B{Platform Specific?}
+    B -- No --> C[Write Global Metadata]
+    B -- Yes --> D[Write Global + Platform Overrides]
+    C --> E[Submit]
+    D --> F{Is Override Empty?}
+    F -- Yes --> G[Inherit Global Value]
+    F -- No --> H[Use Override Value]
+    G --> E
+    H --> E
 ```
