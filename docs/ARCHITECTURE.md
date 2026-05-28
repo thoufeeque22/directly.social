@@ -171,11 +171,12 @@ sequenceDiagram
 
 ### 2. Post Distribution (Publishing)
 
-A background worker polls for scheduled posts and distributes them to selected platforms.
+A background worker polls for scheduled posts and distributes them to selected platforms. It automatically refreshes OAuth tokens if they are nearing expiration (within 15 minutes) to ensure uninterrupted publishing.
 
 ```mermaid
 sequenceDiagram
     participant W as Worker (Polling)
+    participant TR as Token Refresher
     participant DB as Database (Prisma)
     participant DIST as Server Distributor
     participant P as Platform APIs (YT, FB, IG, TT)
@@ -187,6 +188,18 @@ sequenceDiagram
         rect rgb(240, 240, 240)
             note right of W: For each post (Parallel)
             W->>DB: Mark as Published (Immediate Lock)
+
+            loop For each Platform Account
+                W->>TR: refreshTokenIfNecessary(accountId)
+                TR->>DB: Check expiry & refresh_token
+                alt Token Expiring (<15m)
+                   TR->>P: Request new access token
+                   P-->>TR: New tokens
+                   TR->>DB: Update Account (access_token, expires_at)
+                end
+                TR-->>W: Ready
+            end
+
             W->>DIST: distributeToPlatformsServer(post)
             
             loop For each Platform
@@ -492,6 +505,19 @@ The project follows a specific strategy for choosing between Route Handlers and 
 - **Server Actions:** Preferred for UI-triggered mutations, simple database updates, and lightweight queries. They provide tighter TypeScript integration and reduce public API surface.
 
 For a detailed analysis, refer to [API_ARCHITECTURE_REPORT.md](API_ARCHITECTURE_REPORT.md).
+
+### 17. Automated Token Refresh
+
+To maintain long-term connectivity without requiring frequent user re-authentication, the system implements an automated token refresh mechanism.
+
+- **Trigger:** The background publishing worker checks the expiration status of OAuth tokens for all accounts involved in a scheduled post.
+- **Buffer:** Tokens are refreshed if they are set to expire within **15 minutes**.
+- **Provider Logic:** 
+    - **Google/YouTube:** Uses the `refresh_token` to obtain a new `access_token` via the Google OAuth2 client.
+    - **TikTok:** Uses the `refresh_token` to obtain new tokens via the TikTok Content Posting API.
+    - **Facebook/Instagram:** Currently relies on long-lived tokens (typically 60 days) and manual re-auth, as Meta handles refresh differently.
+- **Persistence:** New tokens and updated expiration timestamps are persisted to the `Account` table immediately after a successful refresh.
+- **Audit:** Token refresh events are logged to the system logger for traceability.
 
 ## Security & Role-Based Access Control (RBAC)
 

@@ -53,6 +53,24 @@ Used for TikTok video publishing.
 
 ---
 
+## 🔄 Automated Token Refresh
+
+Social Studio implements a background refresh mechanism to ensure that scheduled posts do not fail due to expired OAuth tokens.
+
+### Refresh Mechanism
+- **Service**: `src/lib/auth/token-refresher.ts`
+- **Automation**: Integrated into the background publishing worker (`src/lib/worker/worker.ts`).
+- **Logic**: Checks tokens for accounts in pending posts. If a token expires within **15 minutes**, a refresh is triggered using the stored `refresh_token`.
+
+### Platform Specifics
+| Platform | Token Type | Refresh Strategy |
+| :--- | :--- | :--- |
+| **Google/YouTube** | OAuth 2.0 | Automated via `refresh_token`. Requires `access_type: 'offline'` during initial auth. |
+| **TikTok** | OAuth 2.0 | Automated via `refresh_token`. Handled via the TikTok Content Posting API. |
+| **Facebook/Instagram** | Long-lived User Token | Manual re-auth required every 60 days. Meta's short-lived tokens are exchanged for long-lived ones during connection. |
+
+---
+
 ## 🏗️ Infrastructure & DevOps
 
 ### 4. Vercel (Hosting)

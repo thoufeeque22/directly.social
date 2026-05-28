@@ -2,7 +2,7 @@
 
 - **Material UI Aesthetic:** Prioritize a "humanly", professional, and polished UI design.
 - **Icons:** Exclusively use **Material UI Icons** (MUI). Avoid generic icon libraries unless MUI lacks a specific icon.
-- **No Emojis:** Strictly forbid the use of chat emojis in code, documentation, or UI.
+- **No Emojis in UI:** Strictly forbid the use of emojis in user-facing UI components, labels, and buttons (use MUI Icons instead). Emojis ARE permitted in backend server logs, CLI output, and internal markdown documentation to aid visual scanning.
 - **Human-Centric Design:** Focus on accessibility, clean spacing, clear visual hierarchy, and intuitive user flows.
 - **Visual Integrity Mandate:** All UI changes MUST be verified not just for functional logic, but for visual accessibility (contrast, visibility, spacing). QA-agent MUST include specific Playwright tests that check for the visibility of critical controls (e.g., navigation arrows, labels).
 

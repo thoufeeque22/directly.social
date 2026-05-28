@@ -4,6 +4,7 @@ import * as Sentry from "@sentry/nextjs";
 import path from "path";
 import { readFileSync, existsSync, promises as fs } from "fs";
 import { logger } from "@/lib/core/logger";
+import { refreshTokenIfNecessary } from "@/lib/auth/token-refresher";
 
 declare global {
    
@@ -175,6 +176,15 @@ export async function startPublishingWorker() {
             if (!stagedFileId) {
                logger.warn(`⚠️ [WORKER] Post "${post.title}" has no stagedFileId. Skipping.`);
                return;
+            }
+
+            // --- TOKEN REFRESH CHECK ---
+            for (const platformResult of post.platforms) {
+               if (platformResult.accountId) {
+                  await refreshTokenIfNecessary(platformResult.accountId).catch(err => {
+                    logger.error(`[WORKER] Pre-publish token refresh failed for account ${platformResult.accountId}:`, err);
+                  });
+               }
             }
 
             const filePath = path.join(process.cwd(), "tmp", stagedFileId);
