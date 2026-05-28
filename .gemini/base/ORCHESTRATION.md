@@ -80,6 +80,7 @@ status: in-progress
 ### Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular, maintainable code.
 - **Path-Based Specialization:** Systems Specialist (logic/API) vs UX Specialist (components/styling).
+- **MANDATORY Exhaustive Verification:** Before handing off, the `dev-agent` MUST successfully execute the full verification suite (`npm run build` and `npm run lint`). **Token-optimized shortcuts (e.g., using `tsc` instead of a full `build`) are STRICTLY FORBIDDEN.** The build must pass to ensure Server-Side Rendering (SSR) and data hydration logic are fundamentally sound.
 
 ### Review (QA & Security Audit)
 - **Role:** Senior QA & Security Auditor.
@@ -87,6 +88,7 @@ status: in-progress
 
 ### QA (E2E Test Automation)
 - **Role:** Expert Lead QA Automation Writer & Execution Engineer. Responsible for both Web (Playwright) and Native (Maestro) testing.
+- **MANDATORY Full-Suite Execution:** The `qa-agent` MUST run the entire test suite (`npm test`) to ensure no regressions were introduced outside the modified files.
 - **Visual Regression:** For UI changes, capture screenshots in `verification/` and compare against goldens in `docs/visual/goldens/` using `@visual` tagged tests.
 - **Mobile Automation:** For UI changes, E2E tests MUST be executed on Desktop/Mobile emulation (Playwright). For changes affecting the Capacitor shell or native plugins, Native App Automation (Maestro) MUST be written (YAML flows) and executed on a running simulator/emulator.
 
