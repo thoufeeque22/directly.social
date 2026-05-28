@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/core/prisma';
 import { protectedAction, revalidateDashboard } from '@/lib/core/action-utils';
-import { syncGalleryExpiry } from './utils';
+import { syncGalleryExpiry } from './activity-helpers';
 
 /**
  * Updates a scheduled post (before it is published).

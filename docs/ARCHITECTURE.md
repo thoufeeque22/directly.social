@@ -464,14 +464,17 @@ For more details, see the [Global Refresh Feature Documentation](features/GLOBAL
 
 The Activity domain manages the record of all past and upcoming posts. To maintain scalability and performance, the domain follows a highly modular architecture that adheres to the project's strict 50-line rule (automated via ESLint).
 
-- **Decomposed Server Actions:** Logic for fetching, retrying, and canceling activity items is split into specialized modules within `src/app/actions/activity/`. This ensures that each action has a single responsibility and is independently testable.
+- **Decomposed Server Actions:** Logic for fetching, retrying, and canceling activity items is split into specialized modules within `src/app/actions/activity/`.
+    - **`core.ts` / `cancel.ts` / `retry.ts`**: High-level action entry points.
+    - **`prisma-helpers.ts` / `activity-helpers.ts` / `retry-helpers.ts`**: Shared database lookups, title generation, and status mapping logic.
+    - **`retry-executor.ts`**: Isolated distribution orchestration for retry attempts.
 - **Specialized Hooks:** A composite `useActivity` hook orchestrates multiple sub-hooks to manage complex state and logic:
     - `useActivityState`: Manages local state for filters, pagination, and data storage.
-    - `useActivityData`: Handles data fetching, polling, and synchronization with server actions.
-    - `useActivityActions`: Provides handlers for user interactions such as Retry, Cancel, and Delete.
-    - `useActivityCockpit`: Manages "Cockpit" mode, enabling real-time monitoring of active post distribution.
-- **Component Decomposition:** The Activity page is composed of small, focused MUI components (e.g., `ActivityHeader`, `ActivityList`, `ActivityCard`, `PlatformResultItem`). This decomposition reduces cognitive load and improves UI maintainability.
-- **Real-time Monitoring (Cockpit):** A specialized UI state for active tasks that provides live progress updates and status monitoring, utilizing automatic polling and optimized re-renders.
+    - `useActivityData` / `useActivityFetcher` / `useActivityPolling`: Handles data fetching, adaptive polling (5s active / 15s idle), and pagination lifecycle.
+    - `useActivityActions` / `useRetryHandler` / `useCancelHandlers`: Provides modularized handlers for user interactions.
+    - `useActivityCockpit`: Manages "Cockpit" mode for real-time distribution monitoring.
+- **Optimistic UI & Reconciliation**: The `useActivity` hook centralizes the logic for merging active "pending" posts with historical data, ensuring a seamless optimistic experience without bloated UI components.
+- **Component Decomposition:** The Activity page is split into a server-side shell (`page.tsx`) and a focused client-side renderer (`ActivityContent.tsx`), which delegates to small MUI components (`ActivityHeader`, `ActivityList`, etc.).
 
 ### 14. Complex UI Form Architecture (Modular Engine)
 
