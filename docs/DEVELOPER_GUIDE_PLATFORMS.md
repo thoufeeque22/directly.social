@@ -26,6 +26,10 @@ Inside this directory, implement the following (as applicable):
 - **`stats.ts`**: Implement a function to fetch analytics/engagement data.
 - **`publish.ts`** (or granular files like `video.ts`, `reel.ts`): Implement the platform-specific API calls for uploading and publishing content.
 
+### 2.5 Implement Token Refresh (If Applicable)
+
+If the platform uses OAuth tokens that expire, implement a refresh function in `src/lib/auth/providers/[platform].ts` and register it in `src/lib/auth/token-refresher.ts`. This ensures the background worker can proactively rotate tokens before publishing.
+
 ### 3. Create the Orchestrator
 
 Create `src/lib/platforms/[platform].ts`. This file should:

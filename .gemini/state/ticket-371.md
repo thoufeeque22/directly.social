@@ -67,7 +67,9 @@ status: in-progress
   - All new tests passing. Baseline test failures on `main` noted and confirmed unrelated.
 
 ## 📝 Documentation
-- **Updates**: (Pending)
+- **Updates**:
+  - Updated `docs/ARCHITECTURE.md` to include the Automated Token Refresh workflow and updated the publishing sequence diagram.
+  - Updated `docs/PLATFORM_INTEGRATIONS.md` with a new "Automated Token Refresh" section detailing platform-specific strategies.
 
 ## 📊 Project
-- **Status**: in-progress
+- **Status**: completed
