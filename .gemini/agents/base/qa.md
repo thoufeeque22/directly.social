@@ -19,12 +19,10 @@ Follow rules in GEMINI.md under "QA (E2E Test Automation)".
    - Verify UI uses **PLN** currency, **Metric** units, and **English** language.
    - Monitor browser console for any `error` or `warning` (including deprecations). *Exception: Explicit AI provider rate limit warnings/errors (HTTP 429) may be ignored.*
    - Check Network tab for unexpected `4xx/5xx` errors. *Exception: AI-related rate limit errors (HTTP 429) are a known environment constraint and should be marked as [SKIPPED] rather than [FAIL].*
-5. **Handoff:** Update `.gemini/state/ticket-<id>.json` (adhering to the **Context Preservation Mandate**). You MUST set `last_agent: "qa-agent"` and store `qa_verdict` (PASS/FAIL), `failed_tests` (a clear list of failing test names and their specific error messages), and `failure_details` inside a `"qa-agent"` key.
+5. **State Update:** Update the `.gemini/state/ticket-<id>.md` file. Add your findings to the `## 🧪 QA` section. Set the **Verdict** (PASS/FAIL) and list failing tests. You MUST NOT invoke another agent. Stop and return control to the Orchestrator.
 
 # Output Format
-Return exactly this structure (after updating the context file):
+Return exactly this structure (after updating the ticket.md file):
 **VERDICT:** [PASS / FAIL]
 **TEST SCENARIOS COVERED:** [Detailed list of happy, edge, and negative scenarios]
-**TESTS WRITTEN:** [List of test files created/updated with detailed steps]
-**FAILED TESTS:** [If FAIL, provide a clear list of failing test names and their specific error messages. If PASS, write "None"]
-**FAILURE DETAILS:** [If FAIL, provide diagnostic details (e.g., specific UI missing test-ids, console errors, or logic gaps). If PASS, write "None"]
+**FAILED TESTS:** [If FAIL, provide a clear list. If PASS, write "None"]

@@ -4,9 +4,15 @@ This document serves as the root entry point for all AI agents. It defines the g
 
 ## Global Mandates
 
-- **Explicit Commit Permission:** AI agents MUST NEVER commit changes to the repository without explicit, per-commit permission from the user. This takes precedence over the orchestration protocol's per-agent commit mandate. Before every commit, the agent MUST present a summary of changes and wait for user approval.
+- **Phase Throttling (Human-in-the-Loop):** The Orchestrator MUST terminate its turn after calling exactly one sub-agent. NEVER chain sub-agents autonomously. ALL transitions between phases (Discovery -> Dev -> Review -> etc.) MUST be approved by the user.
+- **State-First Protocol:** Before invoking any sub-agent or performing any action, the Orchestrator MUST create or update the Markdown state file in `.gemini/state/ticket-<id>.md`.
+- **Initialization Precedence:** Every new ticket MUST begin with: 
+  1. `git checkout main && git pull`.
+  2. `git checkout -b feature/<id>-<desc>`.
+  3. Creation of the `.md` state file. 
+  This sequence MUST complete before the first sub-agent is invoked.
+- **Explicit Commit Permission:** AI agents MUST NEVER commit changes to the repository without explicit, per-commit permission from the user. This takes precedence over any sub-agent mandate. Before every commit, the agent MUST present a summary of changes and wait for user approval.
 - **Verification Integrity:** Local verification MUST be exhaustive (e.g., `npm run build`, `npm run lint`). NEVER use 'surgical' or 'token-optimized' checks unless explicitly instructed by the user.
-- **Single Workflow Enforcement:** Every task MUST involve the full chain of agents (Discovery, Development, Review, QA, Documentation, Project) as defined in the standard sequence.
 - **Zero-Any Policy:** Strict TypeScript enforcement across the entire codebase.
 - **Modularity (50-Line Rule):** All source files must be ≤ 50 lines (automated via ESLint `max-lines`). Legacy files exceeding this limit must have `/* eslint-disable max-lines */` and be targeted for refactoring. Tests are exempt.
 - **Centralized Schemas:** All validation logic MUST reside in `src/lib/schemas`.

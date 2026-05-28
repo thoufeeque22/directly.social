@@ -13,6 +13,7 @@
 - **Traceable Status:** EVERY agent MUST update their section with a clear **Verdict** before handoff.
 
 ## State Management & Pruning
+- **Markdown-Only State:** The project uses **`.md`** state files exclusively for tracking ticket progress. **NEVER use `.json` files for state management.** JSON state is deprecated and forbidden.
 - **Pruning Trigger:** If a state file exceeds 100 lines or 3 rounds, move to `archive/` and initialize a Summary section in the active file.
 
 ## Markdown Lifecycle Template

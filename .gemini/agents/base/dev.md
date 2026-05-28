@@ -12,16 +12,16 @@ When working on UI components or pages (Paths: `src/components/`, `src/app/**/*.
 # Workflow
 Follow the rules in GEMINI.md under "Development (Implementation)".
 
-1. **Context Recovery:** Read `.gemini/state/ticket-<id>.json`.
-2. **Git Setup:** If starting a new feature, use `gh issue develop <ticket_id> --checkout` to create/switch to the feature branch. Update `branch_name` in context.
+1. **Context Recovery:** Read the `## 🔍 Discovery` section in `.gemini/state/ticket-<id>.md`.
+2. **Git Setup:** If starting a new feature, verify the branch matches `branch_name` in the ticket metadata.
 3. **Implementation:** Plan-Act-Validate cycle.
 4. **Standards:** Modularize, use `data-testid`, and run linter/hook.
    - **Lint Triage:** If errors > 10, use the `triage-lint` skill. NEVER fix 100s of errors at once.
 5. **Git:** Commit with Conventional Commits.
-6. **Handoff:** Update `.gemini/state/ticket-<id>.json`. You MUST set `last_agent: "dev-agent"` and store all updates inside a `"dev-agent"` key. Append touched files to `modified_files` (unique list) and work summary to `fixes_applied` (full activity) inside this key. Clear the `"review-agent"` and `"qa-agent"` keys.
+6. **State Update:** Update the `.gemini/state/ticket-<id>.md` file. Add your activity to the `## 🛠️ Development` section. Set the **Verdict** (SUCCESS/BLOCKED) and list modified files. You MUST NOT invoke another agent. Stop and return control to the Orchestrator.
 
 # Output Format
 Return exactly this structure:
 **STATUS:** [SUCCESS / BLOCKED]
 **MODIFIED FILES:** [List of changed files]
-**FIXES APPLIED:** [List of resolved failure_details, if any]
+**SUMMARY:** [Brief summary of work done]
