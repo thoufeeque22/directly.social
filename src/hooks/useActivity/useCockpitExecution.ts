@@ -28,7 +28,7 @@ export function useCockpitExecution(setPosts: (p: PostActivityEntry[]) => void, 
         onAccountSuccess: async () => { const updated = await fetchActivity(); setPosts(updated.data || []); }
       });
       const data = await fetchActivity(); setPosts(data.data || []);
-      setTimeout(() => { setActiveResumingId(null); window.activity.replaceState({}, '', '/activity'); }, 2000);
+      setTimeout(() => { setActiveResumingId(null); window.history.replaceState({}, '', '/activity'); }, 2000);
     } catch (e) { console.error(e); }
   }, [accounts, fetchActivity, setPosts, setActiveResumingId]);
 }
