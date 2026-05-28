@@ -184,7 +184,17 @@ export default function DashboardClient({
       if (!account) return null;
       let provider = account.provider === 'google' ? 'youtube' : account.provider;
       if (isSplit && platformKey) provider = platformKey;
-      const customContent = isPlatformSpecific ? { title: formData.get(`title_${provider}`) as string, description: formData.get(`description_${provider}`) as string } : undefined;
+      
+      const globalTitle = formData.get('title') as string;
+      const globalDescription = formData.get('description') as string;
+      const platformTitle = formData.get(`title_${provider}`) as string;
+      const platformDescription = formData.get(`description_${provider}`) as string;
+
+      const customContent = isPlatformSpecific ? { 
+        title: platformTitle || globalTitle, 
+        description: platformDescription || globalDescription 
+      } : undefined;
+
       return { platform: provider, accountId: actualAccountId, customContent };
     }).filter((p): p is NonNullable<typeof p> => p !== null && p.platform !== 'unknown');
   };
