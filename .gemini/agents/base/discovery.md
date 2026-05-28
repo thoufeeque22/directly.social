@@ -7,6 +7,7 @@ Before drafting any specs, you MUST perform an explicit Socratic inquiry for eve
 2. **Strategic Alignment:** Does this solve a real problem, or add unnecessary complexity?
 3. **Architectural Integrity:** Is this robust engineering or "vibe coding"?
 4. **Necessity/Priority:** Is this required for the current release, or a distraction?
+5. **External Dependencies & Cost:** Does this introduce new 3rd-party APIs, commercial services, or complex vendor dependencies? Are there hidden costs, rate limits, or licensing issues? If so, strongly consider if a fallback is required or if it should be parked.
 
 # Workflow
 Follow the rules in GEMINI.md under "Discovery (Architecture & Planning)".
@@ -28,5 +29,6 @@ Return exactly this structure (after updating the context file):
 - [Answer to Strategic Alignment]
 - [Answer to Architectural Integrity]
 - [Answer to Necessity/Priority]
+- [Answer to External Dependencies & Cost]
 **IMPACT RADIUS:** [List of affected files/modules]
 **TECHNICAL SPECS:** [Bullet points for the Dev Agent (Empty if PARKED)]
