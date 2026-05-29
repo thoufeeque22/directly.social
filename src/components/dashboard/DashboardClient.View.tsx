@@ -42,6 +42,7 @@ interface ViewProps {
   onSchedulingChange: (s: boolean, d: string) => void;
   onCustomStyleChange: (t: string) => void;
   onResumeReview: () => void;
+  initialByosConfig?: { provider: string; bucketName: string } | null;
 }
 
 export const DashboardView: React.FC<ViewProps> = (p) => (
@@ -58,6 +59,7 @@ export const DashboardView: React.FC<ViewProps> = (p) => (
           onVisualScan={p.onVisualScan} onTierChange={p.onTierChange} onProviderChange={p.onProviderChange} onModeChange={p.onModeChange} onToggleAccount={p.onToggleAccount}
           onFileChange={p.onFileChange} onGallerySelect={p.onGallerySelect} onSubmit={p.onSubmit} isScheduled={p.isScheduled} scheduledAt={p.scheduledAt} onSchedulingChange={p.onSchedulingChange}
           customStyleText={p.customStyleText} onCustomStyleChange={p.onCustomStyleChange} hasCachedPreviews={Object.keys(p.aiPreviews).length > 0} onResumeReview={p.onResumeReview}
+          initialByosConfig={p.initialByosConfig}
         />
       )}
       <SidebarInfo />

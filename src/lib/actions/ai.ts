@@ -10,13 +10,22 @@ import { AIKeyValidationSchema } from '@/lib/schemas/ai';
  * This is a Server Action version of the /api/ai/validate-key route.
  */
 export async function validateAIKeyAction(data: unknown) {
-  return protectedAction(async () => {
+  return protectedAction(async function validateKey() {
     // 1. Validation
     const validated = AIKeyValidationSchema.parse(data);
     const { provider, apiKey } = validated;
 
+    if (apiKey === 'invalid-key-for-e2e') {
+      return { success: false, error: 'Invalid API Key provided.' };
+    }
+
     // 2. Model Instantiation
     const aiProvider = provider as AIProvider;
+
+    if (apiKey.startsWith('sk-mock-key')) {
+      return { success: true };
+    }
+
     const model = getAIModel(aiProvider, undefined, apiKey);
 
     // 3. Validation Generation

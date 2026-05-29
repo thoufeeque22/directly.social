@@ -22,3 +22,9 @@ export const getByosConfig = async (userId: string) => {
     secretAccessKey: decryptByos(config.secretAccessKey),
   };
 };
+
+export const deleteByosConfig = async (userId: string) => {
+  return await prisma.byosConfig.delete({
+    where: { userId },
+  });
+};

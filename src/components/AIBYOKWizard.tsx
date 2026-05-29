@@ -7,7 +7,9 @@ import { AIProvider } from '@/lib/core/ai';
 import { AddKeyForm } from './byok/AddKeyForm';
 import { SavedKeysList } from './byok/SavedKeysList';
 
-export default function AIBYOKWizard() {
+import { SettingsWizardCard } from './settings/SettingsWizardCard';
+
+export default function AiByokWizard() {
   const { configs, isLoaded, saveConfig, removeConfig } = useAiByok();
 
   if (!isLoaded) {
@@ -24,16 +26,13 @@ export default function AIBYOKWizard() {
   };
 
   return (
-    <Box sx={{ maxWidth: 600, width: '100%' }}>
-      <Typography variant="h6" gutterBottom>
-        AI Provider Keys (BYOK)
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Bring your own API keys to bypass platform rate limits and access higher-tier models. Keys are securely stored only in your local browser storage.
-      </Typography>
-
+    <SettingsWizardCard
+      title="AI Provider Keys (BYOK)"
+      subtitle="Bring your own API keys to bypass platform rate limits and access higher-tier models. Keys are securely stored only in your local browser storage."
+      data-testid="ai-byok-wizard"
+    >
       <AddKeyForm onSave={handleSave} />
       <SavedKeysList configs={configs} onRemove={removeConfig} />
-    </Box>
+    </SettingsWizardCard>
   );
 }

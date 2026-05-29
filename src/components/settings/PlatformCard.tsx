@@ -4,7 +4,7 @@ import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Switch,
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { ConnectionSection } from '@/components/settings/ConnectionSection';
-import { ByokWizard } from '@/components/byok/ByokWizard';
+import { PlatformByokWizard } from '@/components/byok/PlatformByokWizard';
 import { Account } from '@/lib/core/types';
 
 import { PlatformIcon } from '@/components/ui/PlatformIcon';
@@ -78,7 +78,7 @@ export const PlatformCard: React.FC<PlatformCardProps> = ({
             </Box>
             <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.1)', pt: 2 }}>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>Advanced Settings (BYOK)</Typography>
-              <ByokWizard platform={platform.id} />
+              <PlatformByokWizard platform={platform.id} />
             </Box>
           </AccordionDetails>
         </Accordion>

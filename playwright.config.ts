@@ -53,6 +53,8 @@ export default defineConfig({
       NEXTAUTH_URL: 'http://127.0.0.1:3005',
       AUTH_URL: 'http://127.0.0.1:3005',
       UPLOAD_TEMP_DIR: './tmp/e2e',
+      E2E_TEST_PASSWORD: process.env.E2E_TEST_PASSWORD || 'password',
+      NEXT_PUBLIC_SENTRY_DSN: '',
       DEBUG: 'prisma:client:pool',
       TEST_WORKER_INDEX: '0',
     },

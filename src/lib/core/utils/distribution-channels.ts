@@ -16,7 +16,7 @@ export const getDistributionChannels = (
   preferences: PlatformPreference[]
 ): DistributionChannel[] => {
   const isPlatformEnabled = (platformId: string) => {
-    const pref = preferences.find((p) => p.platformId === platformId);
+    const pref = (preferences || []).find((p) => p.platformId === platformId);
     return pref ? pref.isEnabled : true;
   };
 
