@@ -26,3 +26,4 @@ Return exactly this structure (after updating the ticket.md file):
 **VERDICT:** [NECESSARY / REVISE_SCOPE / REJECTED / PARKED]
 **SOCRATIC_LOG:** ... (Summarize findings here)
 **TECHNICAL SPECS:** [Bullet points for the Dev Agent]
+**TEST SPECIFICATION:** [Bullet points for QA Agent: Happy, Edge, and Negative scenarios]

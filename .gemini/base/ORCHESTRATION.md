@@ -5,16 +5,22 @@
   1. Switch to `main` and pull latest (`git checkout main && git pull`).
   2. Create a dedicated feature branch (`feature/<id>-short-description`).
   3. Create a state file `.gemini/state/ticket-<id>.md` following the **Markdown Lifecycle Template**.
+- **Strict Sequential Workflow:** ALL tickets MUST follow this exact sequence:
+  `Discovery` -> `Development` -> `Review` -> `QA` -> `Documentation` -> `Project Management`.
+- **Phase Termination & Failure Protocol:**
+  1. **Atomic Phases:** An agent MUST NOT proceed to the next phase in the sequence. It MUST update the state file, set its **Verdict**, and return control to the Orchestrator.
+  2. **Immediate Stop on Failure:** If any phase (especially `Review` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately. No further agents (Doc, Project, etc.) can be invoked in that round.
+  3. **Round 2+ Entry Point:** If a round fails during `Review` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
 - **Human-in-the-Loop Workflow:** ALL transitions between agent phases MUST be mediated by the user. 
   1. **Update State File First:** The active agent MUST update the `ticket.md` file with the results/verdicts before presenting for review.
   2. **Manual Review:** The user reviews the changes and the ticket state.
-  3. **Explicit Approval:** The user provides approval to proceed.
-  4. **Sub-Agent Execution:** ONLY AFTER approval, a sub-agent is invoked to perform the `git commit`.
+  3. **Explicit Approval:** The user provides approval to proceed to the *next* phase in the sequence.
 - **Traceable Status:** EVERY agent MUST update their section with a clear **Verdict** before handoff.
 
 ## State Management & Pruning
 - **Markdown-Only State:** The project uses **`.md`** state files exclusively for tracking ticket progress. **NEVER use `.json` files for state management.** JSON state is deprecated and forbidden.
 - **Pruning Trigger:** If a state file exceeds 100 lines or 3 rounds, move to `archive/` and initialize a Summary section in the active file.
+- **Pruning Script:** Use `scripts/prune-state.ts` (updated for Markdown) to maintain state file health.
 
 ## Markdown Lifecycle Template
 ```markdown
@@ -35,7 +41,9 @@ status: in-progress
 
 ## 🔍 Discovery
 - **Verdict**: [APPROVED / NEEDS-INFO / REJECTED]
+- **Socratic Log**: ...
 - **Technical Blueprint**: ...
+- **Test Specification**: ...
 
 ## 🛠️ Development
 - **Verdict**: [SUCCESS / BLOCKED]
