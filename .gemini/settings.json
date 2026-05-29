@@ -1,0 +1,46 @@
+{
+  "agents": {
+    "overrides": {
+      "discovery-agent": {
+        "modelConfig": {
+          "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-pro-preview}"
+          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3-flash-preview}"
+          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
+        }
+      },
+      "dev-agent": {
+        "modelConfig": {
+          "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-pro-preview}"
+          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3-flash-preview}"
+          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
+        } 
+      },
+      "review-agent": {
+        "modelConfig": {
+          "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-pro-preview}"
+          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3-flash-preview}"
+          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
+        }
+      },
+      "qa-agent": {
+        "modelConfig": {
+          "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-pro-preview}"
+          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3-flash-preview}"
+          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
+        }
+      },
+      "doc-agent": {
+        "modelConfig": { 
+          "model": "${DOC_AGENT_MODEL:-gemini-3-flash-preview}"
+          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
+        }
+      },
+      "project-agent": {
+        "modelConfig": { 
+          "model": "${PROJECT_AGENT_MODEL:-gemini-3-flash-preview}"
+          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
+        }
+      }
+    }
+  }
+}

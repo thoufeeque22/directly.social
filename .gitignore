@@ -88,4 +88,3 @@ lint_results.txt
 !.gemini/incidental_observations.json
 .gemini/state/ticket-*.json
 ! .gemini/state/ticket-*.json
-.gemini/settings.json
