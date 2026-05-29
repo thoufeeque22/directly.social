@@ -59,7 +59,7 @@ export const useByosWizard = () => {
       if (!result.success) {
         setChecklist(p => ({ ...p, bucket: 'failed', permissions: 'failed' }));
         setValidationStage('failed'); 
-        setError('Connection failed'); 
+        setError(result.error || 'Connection failed'); 
         return;
       }
       

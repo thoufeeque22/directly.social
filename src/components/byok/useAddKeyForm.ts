@@ -40,7 +40,7 @@ export function useAddKeyForm(onSave: (provider: AIProvider, apiKey: string, mod
         setSuccess(`Successfully saved and validated ${PROVIDERS.find(p => p.value === selectedProvider)?.label} API key.`);
         setApiKey('');
       } else {
-        setError('Validation failed.');
+        setError(result.error || 'Validation failed.');
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : String(err));

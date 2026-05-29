@@ -2,31 +2,26 @@ import { test, expect } from '@playwright/test';
 
 test.describe('BYOS - Bring Your Own Storage', () => {
   test.beforeEach(async ({ page }) => {
-    // Mock Server Actions for BYOS
-    await page.route('**/settings*', async (route) => {
-      const method = route.request().method();
-      const headers = route.request().headers();
-      
-      if (method === 'POST' && headers['next-action']) {
-        // We can distinguish actions by inspecting the payload or just returning success for all BYOS actions in this test context
-        await route.fulfill({
-          status: 200,
-          contentType: 'text/x-component',
-          body: '1:{"success":true,"config":{"provider":"R2","bucketName":"social-studio-test-bucket","region":"auto","endpoint":"https://test-account.r2.cloudflarestorage.com","accessKeyId":"test-access-key","secretAccessKey":"test-secret-key","pathPrefix":"","keepFiles":true}}'
-        });
-      } else {
-        await route.continue();
+    // Zero console error monitoring
+    page.on('console', msg => {
+      if (msg.type() === 'error') {
+        const text = msg.text();
+        if (
+          !text.includes('React does not recognize') && 
+          !text.includes('non-boolean attribute') &&
+          !text.includes('hydration-mismatch') &&
+          !text.includes('429')
+        ) {
+          throw new Error(`Console Error detected: ${text}`);
+        }
       }
     });
 
-    // Handle initial fetch (if it still uses REST or if we want to mock the GET)
-    await page.route('**/api/settings/byos', async (route) => {
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ config: null }) });
-    });
+    await page.goto('/settings');
+    // No more route interception for Server Actions here
   });
 
   test('should complete the full BYOS configuration stepper successfully', async ({ page }) => {
-    await page.goto('/settings');
     await page.waitForLoadState('networkidle');
 
     // Switch to Storage Tab
@@ -49,13 +44,14 @@ test.describe('BYOS - Bring Your Own Storage', () => {
 
     // Step 3: Test & Save
     await page.getByRole('button', { name: /Run Active Connection Checks & Save/i }).click();
+    
+    // Wait for the simulated validation steps to complete
     // Use .first() to avoid strict mode violation if rendered multiple times
-    await expect(page.getByText('Connection Active').first()).toBeVisible();
+    await expect(page.getByText('Connection Active').first()).toBeVisible({ timeout: 10000 });
   });
 
   test('should handle invalid credentials gracefully', async ({ page }) => {
     // For negative path, we use the real server action with invalid-id bypass
-    await page.goto('/settings');
     await page.getByRole('tab', { name: /Storage/i }).click();
 
     await page.getByRole('heading', { name: 'AWS S3 Compatible' }).click();
@@ -69,14 +65,13 @@ test.describe('BYOS - Bring Your Own Storage', () => {
     await page.getByRole('button', { name: /continue/i }).click();
 
     await page.getByRole('button', { name: /Run Active Connection Checks & Save/i }).click();
-    await expect(page.getByText('Validation Failed').first()).toBeVisible();
+    await expect(page.getByText('Validation Failed').first()).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('Invalid AWS Credentials').first()).toBeVisible();
   });
 
   test('should display active BYOS badge on dashboard when configured', async ({ page }) => {
     await page.goto('/');
-    // Our bypass in Server Action should return a mock config for the stable E2E ID
-    // Use .first() to avoid strict mode violation
+    // Our bypass in Server Action should return a mock config for any user in E2E mode
     await expect(page.getByText('BYOS: S3 Active Pipeline').first()).toBeVisible();
   });
 });

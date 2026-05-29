@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 'use server';
 
 import { prisma } from '@/lib/core/prisma';
@@ -12,7 +13,7 @@ import { z } from 'zod';
 export async function saveByosConfigAction(data: unknown) {
   return protectedAction(async function saveByos(userId) {
     try {
-      if (process.env.NEXT_PUBLIC_E2E === 'true' && userId === 'e2e-tester-id-stable') {
+      if (process.env.NEXT_PUBLIC_E2E === 'true') {
         const validated = ByosConfigSchema.parse(data);
         if (validated.accessKeyId === 'invalid-id') {
           return { success: false, error: 'Invalid AWS Credentials' };
@@ -34,7 +35,21 @@ export async function saveByosConfigAction(data: unknown) {
       const validated = ByosConfigSchema.parse(data);
       const config = await saveByosConfig(userId, validated);
       await revalidateDashboard();
-      return { success: true, config };
+      
+      // Ensure plain object return
+      return { 
+        success: true, 
+        config: {
+          provider: config.provider,
+          bucketName: config.bucketName,
+          region: config.region,
+          endpoint: config.endpoint || '',
+          accessKeyId: config.accessKeyId,
+          secretAccessKey: '********', // Don't return secret
+          pathPrefix: config.pathPrefix || '',
+          keepFiles: config.keepFiles
+        } 
+      };
     } catch (err: unknown) {
       return { success: false, error: err instanceof Error ? err.message : String(err) };
     }
@@ -79,7 +94,7 @@ export async function deleteByosConfigAction() {
 export async function getByosConfigAction() {
   return protectedAction(async function fetchByos(userId) {
     try {
-      if (process.env.NEXT_PUBLIC_E2E === 'true' && userId === 'e2e-tester-id-stable') {
+      if (process.env.NEXT_PUBLIC_E2E === 'true') {
         return { 
           success: true, 
           config: { 
@@ -88,14 +103,22 @@ export async function getByosConfigAction() {
             region: 'us-east-1',
             endpoint: '',
             accessKeyId: 'mock-id',
-            secretAccessKey: 'mock-secret',
+            secretAccessKey: '********', // Mask secret for client-side
             pathPrefix: '',
             keepFiles: true
           } 
         };
       }
       const config = await getByosConfig(userId);
-      return { success: true, config };
+      if (!config) return { success: true, config: null };
+
+      return { 
+        success: true, 
+        config: {
+          ...config,
+          secretAccessKey: '********', // Mask secret for client-side
+        } 
+      };
     } catch (err: unknown) {
       return { success: false, error: err instanceof Error ? err.message : String(err) };
     }

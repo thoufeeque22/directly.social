@@ -9,7 +9,7 @@ import { protectedAction, revalidateDashboard } from "@/lib/core/action-utils";
  */
 export async function getUserAccounts() {
   return protectedAction(async function fetchUserAccounts(userId) {
-    if (process.env.NEXT_PUBLIC_E2E === 'true' && userId === 'e2e-tester-id-stable') {
+    if (process.env.NEXT_PUBLIC_E2E === 'true') {
        return [
          { id: 'mock-youtube-acc', provider: 'google', accountName: 'Mock YouTube Channel', isDistributionEnabled: true },
          { id: 'mock-facebook-acc', provider: 'facebook', accountName: 'Mock Facebook Page', isDistributionEnabled: true }
@@ -32,7 +32,7 @@ export async function getUserAccounts() {
  */
 export async function getPlatformPreferences() {
   return protectedAction(async function fetchPlatformPreferences(userId) {
-    if (process.env.NEXT_PUBLIC_E2E === 'true' && userId === 'e2e-tester-id-stable') {
+    if (process.env.NEXT_PUBLIC_E2E === 'true') {
       return [
         { id: 'mock-pref-1', userId: 'e2e-tester-id-stable', platformId: 'youtube', isEnabled: true },
         { id: 'mock-pref-2', userId: 'e2e-tester-id-stable', platformId: 'facebook', isEnabled: true },

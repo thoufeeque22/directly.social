@@ -83,6 +83,8 @@ export const PlatformByokWizard = ({ platform }: PlatformByokWizardProps) => {
       const result = await validateAndSaveByokAction({ platform, ...credentials });
       if (result.success) {
         setSuccess(true);
+      } else {
+        setError(result.error || 'Validation failed.');
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : String(err));

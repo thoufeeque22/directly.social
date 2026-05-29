@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 "use server";
 
 import { prisma } from '@/lib/core/prisma';
@@ -29,9 +30,9 @@ export async function saveByokCredential(data: {
       },
     });
 
-    // revalidatePath('/');
-    // revalidatePath('/settings');
-    // await revalidateDashboard();
+    revalidatePath('/');
+    revalidatePath('/settings');
+    await revalidateDashboard();
     return result;
   });
 }
@@ -77,9 +78,9 @@ export async function validateAndSaveByokAction(data: {
         },
       });
 
-      // revalidatePath('/');
-      // revalidatePath('/settings');
-      // await revalidateDashboard();
+      revalidatePath('/');
+      revalidatePath('/settings');
+      await revalidateDashboard();
       return { success: true, result };
     } catch (err: unknown) {
       return { success: false, error: err instanceof Error ? err.message : String(err) };
@@ -97,7 +98,7 @@ export async function getByokCredential(platform: string) {
 
     return {
       ...cred,
-      clientSecret: decrypt(cred.clientSecret),
+      clientSecret: '********', // Mask secret for client-side
     };
   });
 }
