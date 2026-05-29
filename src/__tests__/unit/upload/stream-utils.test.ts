@@ -2,6 +2,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { writeChunk } from "@/lib/upload/stream-utils";
 import { EventEmitter } from "events";
+import * as fsSync from "fs";
 
 describe("stream-utils", () => {
   it("should resolve immediately if stream.write returns true", async () => {

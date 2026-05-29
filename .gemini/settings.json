@@ -1,0 +1,86 @@
+{
+  "experimental": {
+    "dynamicModelConfiguration": true,
+    "gemmaModelRouter": {
+      "enabled": true,
+      "classifier": {
+        "host": "http://localhost:11434/v1",
+        "model": "gemma4:latest"
+      }
+    }
+  },
+  "modelConfigs": {
+    "modelChains": {
+      "robust-chain": [
+        {
+          "model": "gemini-3.1-pro-preview",
+          "maxAttempts": 2
+        },
+        {
+          "model": "gemini-3-flash-preview",
+          "isLastResort": true
+        }
+      ],
+      "fast-chain": [
+        {
+          "model": "gemini-3-flash-preview",
+          "maxAttempts": 2
+        },
+        {
+          "model": "gemini-3.1-pro-preview",
+          "isLastResort": true
+        }
+      ]
+    },
+    "overrides": [
+      {
+        "match": {
+          "overrideScope": "discovery-agent"
+        },
+        "modelConfig": {
+          "model": "robust-chain"
+        }
+      },
+      {
+        "match": {
+          "overrideScope": "dev-agent"
+        },
+        "modelConfig": {
+          "model": "robust-chain"
+        }
+      },
+      {
+        "match": {
+          "overrideScope": "review-agent"
+        },
+        "modelConfig": {
+          "model": "robust-chain"
+        }
+      },
+      {
+        "match": {
+          "overrideScope": "qa-agent"
+        },
+        "modelConfig": {
+          "model": "robust-chain"
+        }
+      },
+      {
+        "match": {
+          "overrideScope": "doc-agent"
+        },
+        "modelConfig": {
+          "model": "fast-chain"
+        }
+      },
+      {
+        "match": {
+          "overrideScope": "project-agent"
+        },
+        "modelConfig": {
+          "model": "fast-chain"
+        }
+      }
+    ]
+  }
+}

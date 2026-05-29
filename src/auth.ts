@@ -29,7 +29,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
     ...authConfig.providers,
-    ...(process.env.NEXT_PUBLIC_E2E === 'true' && process.env.NODE_ENV === 'development' ? [
+    ...(process.env.NEXT_PUBLIC_E2E === 'true' ? [
       Credentials({
         name: "E2E Credentials",
         credentials: {
@@ -37,9 +37,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           password: { label: "Password", type: "password" }
         },
         async authorize(credentials) {
-          const expectedPassword = process.env.E2E_TEST_PASSWORD || 'social-studio-e2e-secret';
+          const expectedPassword = process.env.E2E_TEST_PASSWORD;
+          
+          if (process.env.NEXT_PUBLIC_E2E === 'true' && !expectedPassword) {
+            throw new Error("CRITICAL: E2E_TEST_PASSWORD is not set in environment.");
+          }
           
           if (
+            expectedPassword &&
             (credentials?.email === "tester@socialstudio.ai" || credentials?.email === "admin@socialstudio.ai") && 
             credentials?.password === expectedPassword
           ) {

@@ -15,7 +15,11 @@ setup('authenticate', async ({ page }) => {
 
   // Perform login
   const testEmail = 'tester@socialstudio.ai';
-  const testPassword = process.env.E2E_TEST_PASSWORD || 'social-studio-e2e-secret';
+  const testPassword = process.env.E2E_TEST_PASSWORD;
+  
+  if (!testPassword) {
+    throw new Error('E2E_TEST_PASSWORD environment variable is not set');
+  }
   
   console.log(`[E2E Setup] Attempting login for ${testEmail}...`);
   

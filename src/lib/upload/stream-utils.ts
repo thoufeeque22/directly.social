@@ -1,4 +1,4 @@
-import fsSync from "fs";
+import * as fsSync from "fs";
 
 export const writeChunk = (stream: fsSync.WriteStream, buffer: Buffer) => {
   return new Promise<void>((resolve, reject) => {

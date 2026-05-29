@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useActivityData } from '@/hooks/useActivity/useActivityData';
 import { useActivityFetcher } from '@/hooks/useActivity/useActivityFetcher';
@@ -13,7 +13,7 @@ vi.mock('@/hooks/useActivity/useActivityPolling', () => ({
 }));
 
 interface MockFetcher {
-  fetchActivity: ReturnType<typeof vi.fn>;
+  fetchActivity: Mock;
 }
 
 describe('useActivityData regression test', () => {
@@ -22,7 +22,7 @@ describe('useActivityData regression test', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.clearAllMocks();
-    (useActivityFetcher as unknown as vi.Mock).mockReturnValue({ fetchActivity: mockFetchActivity } as MockFetcher);
+    (useActivityFetcher as unknown as Mock).mockReturnValue({ fetchActivity: mockFetchActivity } as MockFetcher);
   });
 
   it('should NOT reset to page 1 when posts change (FIX VERIFICATION)', async () => {
