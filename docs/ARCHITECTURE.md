@@ -316,9 +316,11 @@ sequenceDiagram
 
 The BYOK Integration Wizard allows power users to provide their own platform API credentials (Client ID, Secret, Redirect URI), bypassing global application-level rate limits.
 
+- **Implementation:** Leverages hardened **Next.js 15 Server Actions** (`validateAndSaveByokAction`) for credential validation and persistence, ensuring type safety and reduced API surface.
 - **Storage:** Credentials are persisted in the database using the `ByokCredential` model. The `clientSecret` is encrypted at rest using AES-256-GCM with a server-side `BYOK_ENCRYPTION_KEY`.
+- **Security Masking:** To prevent privacy leaks, sensitive credentials like `clientSecret` are masked (`********`) before being returned to the client in getter actions. Decrypted secrets never leave the server boundary.
 - **Credential Resolution:** A centralized `CredentialProvider` utility (`src/lib/core/credential-provider.ts`) manages the resolution of credentials, prioritizing user-provided BYOK keys and falling back to global environment variables.
-- **UI Architecture:** Uses a premium **GlassCard** component with a 2-step guided flow (Get Keys -> Configure).
+- **UI Architecture:** Uses a standardized **SettingsWizardCard** component with a guided flow, ensuring consistent layout across all configuration wizards.
 - **Integration:** The distribution pipeline (`src/lib/platforms/`) utilizes the `CredentialProvider` to fetch active credentials for each upload task, ensuring that power users leverage their own API quotas.
 
 ```mermaid
@@ -413,9 +415,10 @@ sequenceDiagram
 
 Users can connect their own S3/R2 storage to bypass server limits.
 
+- **Orchestration:** Managed via hardened **Server Actions** (`saveByosConfigAction`) that perform multi-stage validation checks (Encryption, Bucket Access, Permissions).
 - **Direct Upload:** Browser uploads directly to the user's bucket using presigned URLs.
 - **Service Orchestration:** Logic is modularized into dedicated services (`presign-service.ts`, `complete-service.ts`) and a specialized client (`byos-upload-client.ts`).
-- **Security:** Credentials are encrypted at rest via AES-256-GCM.
+- **Security:** Credentials are encrypted at rest via AES-256-GCM and masked (`********`) when fetched by the client-side UI.
 - **Streaming Distribution:** Media is streamed directly from the user's bucket to platform APIs during publishing.
 
 ### 11. Unified Settings & Platform Management
