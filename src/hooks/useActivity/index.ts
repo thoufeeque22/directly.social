@@ -24,15 +24,16 @@ export function useActivity() {
 
   const reconciledPosts = useMemo(() => {
     if (!state.pendingPost) return state.posts;
+    const optimisticId = state.pendingPost.resumeActivityId || state.pendingPost.activityId || 'optimistic-pending';
     const optimisticPost: PostActivityEntry = {
       ...state.pendingPost,
-      id: state.pendingPost.resumeActivityId || 'optimistic-pending',
+      id: optimisticId,
       createdAt: new Date().toISOString(),
       description: state.pendingPost.description || null,
       stagedFileId: state.pendingPost.stagedFileId || null,
       isOptimistic: true,
     };
-    return [optimisticPost, ...state.posts];
+    return [optimisticPost, ...state.posts.filter(p => p.id !== optimisticId)];
   }, [state.pendingPost, state.posts]);
 
   return { ...state, ...actions, ...cockpit, reconciledPosts, handleLoadMore, fetchActivity };
