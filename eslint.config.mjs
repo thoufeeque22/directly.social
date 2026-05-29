@@ -34,7 +34,7 @@ const eslintConfig = defineConfig([
     }
   },
   {
-    files: ["src/**/*.{ts,tsx,js,jsx}"],
+    files: ["src/**/*.{ts,tsx,js,jsx}", "scripts/**/*.{ts,tsx,js,jsx}"],
     ignores: ["src/__tests__/**"],
     rules: {
       "max-lines": ["error", { "max": 50, "skipBlankLines": true, "skipComments": true }]
