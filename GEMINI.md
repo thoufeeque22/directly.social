@@ -4,7 +4,7 @@ This document serves as the root entry point for all AI agents. It defines the g
 
 ## Global Mandates
 
-- **Phase Throttling (Human-in-the-Loop):** The Orchestrator MUST terminate its turn after calling exactly one sub-agent. NEVER chain sub-agents autonomously. ALL transitions between phases (Discovery -> Dev -> Review -> etc.) MUST be approved by the user.
+- **Phase Throttling (Human-in-the-Loop):** The Orchestrator MUST terminate its turn after calling exactly one sub-agent. NEVER chain sub-agents autonomously. ALL transitions between phases (`Discovery` -> `Dev` -> `Review` -> `QA` -> `Doc` -> `Project`) MUST be approved by the user. If any phase fails, the round stops immediately and recovery must begin in a new round (starting from `Development` for `Review`/`QA` failures).
 - **State-First Protocol:** Before invoking any sub-agent or performing any action, the Orchestrator MUST create or update the Markdown state file in `.gemini/state/ticket-<id>.md`.
 - **Initialization Precedence:** Every new ticket MUST begin with: 
   1. `git checkout main && git pull`.
