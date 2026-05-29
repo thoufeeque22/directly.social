@@ -27,6 +27,14 @@
 - [x] Improve test server stability under parallel load.
 - [x] Update visual regression baselines.
 
+## 📝 Documentation
+- **Verdict**: [COMPLETE]
+- **Summary**: Updated system architecture and created a developer-focused E2E testing guide.
+- **Key Changes**:
+    - Updated `docs/ARCHITECTURE.md` with production-mode E2E requirements.
+    - Created `docs/E2E_TESTING.md` (Detailed infrastructure and troubleshooting guide).
+    - Updated `docs/README.md` to include the new testing guide.
+
 ## Progress
 - [x] Initialized ticket and feature branch.
 - [x] Completed Discovery phase.
@@ -38,7 +46,7 @@
 - [x] Remediated Reviewer feedback (Security + Context Propagation).
 - [x] Review approved by `review-agent`.
 - [x] QA phase completed: Systematic environment breakdown resolved.
-- [/] Documentation updates in progress.
+- [x] Documentation completed: Architecture and Guides updated.
 
 ## 🧪 QA Results
 - **Systematic Stability**: PASS. No `ECONNRESET` or `500` errors observed during the 36-minute full run.

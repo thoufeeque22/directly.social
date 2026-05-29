@@ -595,10 +595,14 @@ The application maintains a high standard of quality through automated testing a
 
 End-to-End tests are located in `src/__tests__/e2e/` and cover critical user journeys such as authentication, metadata management, and post scheduling.
 
+- **Production Mode Stability:** To resolve historical server instability (`ECONNRESET`) and hydration mismatches, the E2E suite runs against a production build (`npm run build && npm run start`). This ensures the test environment perfectly mirrors the behavior of the final application.
+- **Global Setup & Seeding:** The suite uses a `global-setup.ts` orchestrator that performs a full database cleanup (`npm run clear-activity`) and idempotent seeding (`npm run seed:e2e`) exactly once before the test workers start.
 - **Automated Authentication:** The test suite uses a dedicated E2E user (`tester@socialstudio.ai`). A setup project (`auth.setup.ts`) performs a real login via the Credentials provider and saves the session state to `.auth/user.json`, allowing subsequent tests to skip the login step.
-- **Helper Scripts:** Complex setup tasks (seeding users, scheduling posts, granting admin rights) are managed via specialized scripts in `src/__tests__/scripts/`.
-- **Environment Requirements:** E2E tests require `NEXT_PUBLIC_E2E=true` and `NODE_ENV=development` to enable the Credentials provider on the server.
-- **Port Standardization:** E2E tests are configured to run Next.js on port `3005` (via `playwright.config.ts` using the TCP port wait method) to prevent collisions with the default development server on port 3000.
+- **Environment Requirements:** 
+  - `NEXT_PUBLIC_E2E=true` must be set.
+  - `E2E_TEST_PASSWORD` environment variable is mandatory for authentication during tests.
+  - The server runs on port `3005` to avoid collisions.
+- **Worker Isolation:** The backend worker process (`src/lib/worker/worker.ts`) supports namespaced temp directories via `TEST_WORKER_INDEX`, preventing file system collisions during parallel test runs.
 - **Locators:** Tests prioritize accessible roles (`getByRole`) and `data-testid` attributes for robustness.
 
 ### 2. Unit & Integration Testing (Vitest)

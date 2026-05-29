@@ -22,6 +22,7 @@ Welcome to the Social Studio project documentation. This folder contains archite
 
 ## Quality Assurance & Testing
 
+- [E2E Testing Guide](E2E_TESTING.md) - Playwright workflow and infrastructure.
 - [UAT: Metadata Templates](manual_tests/verify-metadata-templates.md) - Core snippet workflow.
 - [UAT: Global Search](manual_tests/verify-global-search.md) - Unified search field verification.
 - [UAT: Snippets UX Improvements](manual_tests/verify-snippets-ux-improvements.md) - UX closing logic.
