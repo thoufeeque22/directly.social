@@ -17,6 +17,12 @@ declare global {
   var _ss_worker_version: number | undefined;
 }
 
+const getTempDir = () => {
+  const base = process.env.UPLOAD_TEMP_DIR || path.join(process.cwd(), "tmp");
+  const workerIndex = process.env.TEST_WORKER_INDEX;
+  return workerIndex ? path.join(base, `worker-${workerIndex}`) : base;
+};
+
 /**
  * PURGE EXPIRED ASSETS & CLEANUP ORPHANED FILES
  * 1. Cleans up DB records and physical files for expired gallery assets.
@@ -25,6 +31,7 @@ declare global {
 export async function purgeExpiredAssets() {
   try {
     const now = new Date();
+    const tempDir = getTempDir();
     
     // --- 1. DB-TRACKED EXPIRED ASSETS ---
     const expired = await prisma.galleryAsset.findMany({
@@ -40,23 +47,25 @@ export async function purgeExpiredAssets() {
       
       for (const asset of expired) {
         try {
-          const filePath = path.join(process.cwd(), "tmp", asset.fileId);
+          const filePath = path.join(tempDir, asset.fileId);
           if (existsSync(filePath)) {
             await fs.unlink(filePath);
             logger.info(`🗑️ [WORKER] Deleted physical file: ${asset.fileId}`);
           }
           
-          const metadataPath = path.join(process.cwd(), "tmp", `${asset.fileId}.metadata.json`);
+          const metadataPath = path.join(tempDir, `${asset.fileId}.metadata.json`);
           if (existsSync(metadataPath)) {
             await fs.unlink(metadataPath);
           }
 
           // Also clean up optimized versions if any
-          const files = await fs.readdir(path.join(process.cwd(), "tmp"));
-          for (const file of files) {
-             if (file.includes(asset.fileId) && file !== asset.fileId) {
-                await fs.unlink(path.join(process.cwd(), "tmp", file)).catch(() => {});
-             }
+          if (existsSync(tempDir)) {
+            const files = await fs.readdir(tempDir);
+            for (const file of files) {
+               if (file.includes(asset.fileId) && file !== asset.fileId) {
+                  await fs.unlink(path.join(tempDir, file)).catch(() => {});
+               }
+            }
           }
 
           await prisma.galleryAsset.delete({
@@ -71,7 +80,6 @@ export async function purgeExpiredAssets() {
 
     // --- 2. ORPHANED FILES CLEANUP ---
     // Files in tmp older than 24h that are NOT in GalleryAsset or PostActivity
-    const tempDir = path.join(process.cwd(), "tmp");
     if (existsSync(tempDir)) {
       const files = await fs.readdir(tempDir);
       const dayAgo = now.getTime() - (24 * 60 * 60 * 1000);
@@ -187,12 +195,13 @@ export async function startPublishingWorker() {
                }
             }
 
-            const filePath = path.join(process.cwd(), "tmp", stagedFileId);
+            const tempDir = getTempDir();
+            const filePath = path.join(tempDir, stagedFileId);
             if (!existsSync(filePath)) {
               throw new Error(`File purged or missing: ${filePath}`);
             }
 
-            const metadataPath = path.join(process.cwd(), "tmp", `${stagedFileId}.metadata.json`);
+            const metadataPath = path.join(tempDir, `${stagedFileId}.metadata.json`);
             let reviewedContent = undefined;
             if (existsSync(metadataPath)) {
                try {

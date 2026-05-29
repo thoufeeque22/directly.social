@@ -19,8 +19,14 @@ async function main() {
   // Clear specific scheduled posts for a clean test state
   await prisma.postActivity.deleteMany({ 
     where: { 
-      id: { in: ['e2e-post-1', 'e2e-post-2', 'e2e-post-3'] }
+      id: { in: ['e2e-post-1', 'e2e-post-2', 'e2e-post-3', 'e2e-search-1', 'e2e-search-2'] }
     } 
+  });
+
+  await prisma.galleryAsset.deleteMany({
+    where: {
+      fileId: { in: ['grand_canyon_vlog.mp4', 'pasta_tutorial.mov', 'smartphone_unboxing.mp4'] }
+    }
   });
 
   // Seed Scheduled Posts
@@ -32,6 +38,37 @@ async function main() {
   const scheduled2 = new Date(now.getTime() + 2 * 60 * 60 * 1000);
   // Post 3: Scheduled in 3 hours
   const scheduled3 = new Date(now.getTime() + 3 * 60 * 60 * 1000);
+
+  // Search Data
+  await prisma.postActivity.create({
+    data: {
+      id: 'e2e-search-1',
+      userId: user.id,
+      title: 'Exploring the Grand Canyon',
+      description: 'A beautiful journey through the South Rim.',
+      isPublished: true,
+    }
+  });
+
+  await prisma.postActivity.create({
+    data: {
+      id: 'e2e-search-2',
+      userId: user.id,
+      title: 'Cooking Italian Pasta',
+      description: 'Learn how to make authentic carbonara.',
+      isPublished: true,
+    }
+  });
+
+  // Media Gallery Data
+  const farFuture = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000);
+  await prisma.galleryAsset.createMany({
+    data: [
+      { userId: user.id, fileId: 'grand_canyon_vlog.mp4', fileName: 'grand_canyon_vlog.mp4', expiresAt: farFuture },
+      { userId: user.id, fileId: 'pasta_tutorial.mov', fileName: 'pasta_tutorial.mov', expiresAt: farFuture },
+      { userId: user.id, fileId: 'smartphone_unboxing.mp4', fileName: 'smartphone_unboxing.mp4', expiresAt: farFuture },
+    ]
+  });
 
   await prisma.postActivity.upsert({
     where: { id: 'e2e-post-1' },

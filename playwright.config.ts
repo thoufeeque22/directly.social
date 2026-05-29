@@ -2,10 +2,11 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './src/__tests__/e2e',
+  globalSetup: './src/__tests__/e2e/global-setup.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   reporter: [['html', { open: 'never' }]],
   snapshotDir: 'docs/visual/goldens',
   use: {
@@ -44,16 +45,20 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev -- -H 127.0.0.1 -p 3005',
+    command: 'npm run build && npm run start -- -p 3005',
     env: {
       NEXT_DIST_DIR: '.next-e2e',
+      NEXT_PUBLIC_E2E: 'true',
+      NEXT_RUNTIME: 'nodejs',
       NEXTAUTH_URL: 'http://127.0.0.1:3005',
       AUTH_URL: 'http://127.0.0.1:3005',
+      UPLOAD_TEMP_DIR: './tmp/e2e',
+      DEBUG: 'prisma:client:pool',
     },
     port: 3005,
     reuseExistingServer: false,
     stdout: 'pipe',
     stderr: 'pipe',
-    timeout: 120 * 1000,
+    timeout: 600 * 1000,
   },
 });

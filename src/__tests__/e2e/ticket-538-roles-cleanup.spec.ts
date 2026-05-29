@@ -79,6 +79,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     await page.screenshot({ path: 'verification/admin-sidebar.png' });
 
     // 2. Access /admin/analytics
+    await analyticsLink.scrollIntoViewIfNeeded();
     await analyticsLink.click();
     await page.waitForURL('/admin/analytics');
     
