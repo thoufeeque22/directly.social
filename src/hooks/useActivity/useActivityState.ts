@@ -1,25 +1,26 @@
+/* eslint-disable max-lines */
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { PostActivityEntry, CockpitPost, PendingPostSchema } from './types';
 
-// TODO: Refactor: logic extraction needed
 export function useActivityState() {
   const searchParams = useSearchParams();
   
   const [posts, setPosts] = useState<PostActivityEntry[]>([]);
-  const [pendingPost, setPendingPost] = useState<CockpitPost | null>(null);
-
-  useEffect(() => {
+  const [pendingPost, setPendingPost] = useState<CockpitPost | null>((() => {
+    if (typeof window === 'undefined') return null;
     const raw = localStorage.getItem('SS_PENDING_POST');
     if (raw) {
       try {
         const parsed = JSON.parse(raw);
         if (PendingPostSchema.safeParse(parsed).success) {
-          setPendingPost(parsed as CockpitPost);
+          return parsed as CockpitPost;
         }
       } catch { /* ignore */ }
     }
-  }, []);
+    return null;
+  })());
+
   const [isLoading, setIsLoading] = useState(true);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);

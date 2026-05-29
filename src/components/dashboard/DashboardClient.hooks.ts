@@ -5,6 +5,7 @@ import { AIProvider } from '@/lib/core/ai';
 import { Account } from '@/lib/core/types';
 import { useUploadStatus } from '@/hooks/useUploadStatus';
 import { useDistributionEngine } from '@/hooks/dashboard/useDistributionEngine';
+export { useAIPreviewCache as useDashboardAIPreviews } from '@/hooks/useAIPreviewCache';
 
 export const useDashboardDevAccounts = (accounts: Account[], userId?: string) => {
   return useMemo(() => {
