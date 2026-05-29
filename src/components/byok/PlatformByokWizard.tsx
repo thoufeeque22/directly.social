@@ -18,15 +18,15 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import { validateCredentials, ByokCredential } from '../../lib/byok/credential-validator';
-import { GlassCard } from '../ui/GlassCard';
-import { saveByokCredential } from '../../app/actions/byok';
+import { ByokCredential } from '../../lib/byok/credential-validator';
+import { SettingsWizardCard } from '../settings/SettingsWizardCard';
+import { validateAndSaveByokAction } from '../../app/actions/byok';
 
-interface ByokWizardProps {
+interface PlatformByokWizardProps {
   platform: string;
 }
 
-export const ByokWizard = ({ platform }: ByokWizardProps) => {
+export const PlatformByokWizard = ({ platform }: PlatformByokWizardProps) => {
   const [credentials, setCredentials] = useState<ByokCredential>({ 
     clientId: '', 
     clientSecret: '', 
@@ -80,33 +80,25 @@ export const ByokWizard = ({ platform }: ByokWizardProps) => {
     setSuccess(false);
     
     try {
-      const result = await validateCredentials(platform, credentials);
-      if (!result.success) {
-        setError(result.message);
-      } else {
-        await saveByokCredential({ platform, ...credentials });
+      const result = await validateAndSaveByokAction({ platform, ...credentials });
+      if (result.success) {
         setSuccess(true);
+      } else {
+        setError(result.error || 'Validation failed.');
       }
-    } catch {
-      setError('An unexpected error occurred during validation.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <GlassCard style={{ overflow: 'hidden' }}>
-      <Box 
-        sx={{ p: 3 }} 
-        data-testid={`byok-wizard-${platform.toLowerCase()}`}
-      >
-        <Stack direction="row" spacing={1.5} sx={{ mb: 3, alignItems: 'center' }}>
-          {portal.icon}
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            {displayName} Integration
-          </Typography>
-        </Stack>
-
+    <SettingsWizardCard
+      title={`${displayName} Integration`}
+      icon={portal.icon}
+      data-testid={`byok-wizard-${platform.toLowerCase()}`}
+    >
         <Box sx={{ mb: 4 }}>
           <Typography variant="overline" sx={{ color: 'primary.main', fontWeight: 700 }}>
             Step 1: Get Your Keys
@@ -126,8 +118,6 @@ export const ByokWizard = ({ platform }: ByokWizardProps) => {
             Go to Developer Portal
           </Button>
         </Box>
-
-        <Divider sx={{ mb: 4, opacity: 0.1 }} />
 
         <Box sx={{ mb: 3 }}>
           <Typography variant="overline" sx={{ color: 'primary.main', fontWeight: 700, mb: 2, display: 'block' }}>
@@ -197,7 +187,6 @@ export const ByokWizard = ({ platform }: ByokWizardProps) => {
         >
           {loading ? <CircularProgress size={24} color="inherit" /> : 'Validate & Save Credentials'}
         </Button>
-      </Box>
-    </GlassCard>
+    </SettingsWizardCard>
   );
 };

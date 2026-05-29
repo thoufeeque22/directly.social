@@ -17,6 +17,11 @@
   3. **Explicit Approval:** The user provides approval to proceed to the *next* phase in the sequence.
 - **Traceable Status:** EVERY agent MUST update their section with a clear **Verdict** before handoff.
 
+## E2E Performance Optimization
+- **Server Reuse:** To save time, E2E tests are configured to reuse an existing server on port 3005 (`reuseExistingServer: true`).
+- **Agent Protocol:** Before running `npx playwright test`, agents SHOULD check if a server is already responding on `http://127.0.0.1:3005`. If it is, they MUST NOT attempt to start another one. If not, they may trigger the test command which will handle the build/start automatically.
+- **Background Server:** Agents are permitted to start the E2E server in the background using `run_shell_command(..., is_background: true)` if multiple test runs are expected within a single session.
+
 ## State Management & Pruning
 - **Markdown-Only State:** The project uses **`.md`** state files exclusively for tracking ticket progress. **NEVER use `.json` files for state management.** JSON state is deprecated and forbidden.
 - **Pruning Trigger:** If a state file exceeds 100 lines or 3 rounds, move to `archive/` and initialize a Summary section in the active file.

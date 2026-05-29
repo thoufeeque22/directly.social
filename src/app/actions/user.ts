@@ -8,7 +8,13 @@ import { protectedAction, revalidateDashboard } from "@/lib/core/action-utils";
  * Fetches all connected accounts for the current authenticated user.
  */
 export async function getUserAccounts() {
-  return protectedAction(async (userId) => {
+  return protectedAction(async function fetchUserAccounts(userId) {
+    if (process.env.NEXT_PUBLIC_E2E === 'true') {
+       return [
+         { id: 'mock-youtube-acc', provider: 'google', accountName: 'Mock YouTube Channel', isDistributionEnabled: true },
+         { id: 'mock-facebook-acc', provider: 'facebook', accountName: 'Mock Facebook Page', isDistributionEnabled: true }
+       ];
+    }
     return await prisma.account.findMany({
       where: { userId },
       select: {
@@ -22,47 +28,18 @@ export async function getUserAccounts() {
 }
 
 /**
- * Toggles the distribution status for a specific connected account.
- */
-export async function toggleAccountDistribution(accountId: string, isEnabled: boolean) {
-  return protectedAction(async (userId) => {
-    await prisma.account.update({
-      where: { 
-        id: accountId,
-        userId // Security check
-      },
-      data: {
-        isDistributionEnabled: isEnabled
-      }
-    });
-
-    await revalidateDashboard();
-    return { success: true };
-  });
-}
-
-/**
- * Removes a connected account from the database.
- */
-export async function disconnectAccount(accountId: string) {
-  return protectedAction(async (userId) => {
-    await prisma.account.delete({
-      where: { 
-        id: accountId,
-        userId // Security check
-      }
-    });
-
-    await revalidateDashboard();
-    return { success: true };
-  });
-}
-
-/**
  * Fetches platform preferences for the current user.
  */
 export async function getPlatformPreferences() {
-  return protectedAction(async (userId) => {
+  return protectedAction(async function fetchPlatformPreferences(userId) {
+    if (process.env.NEXT_PUBLIC_E2E === 'true') {
+      return [
+        { id: 'mock-pref-1', userId: 'e2e-tester-id-stable', platformId: 'youtube', isEnabled: true },
+        { id: 'mock-pref-2', userId: 'e2e-tester-id-stable', platformId: 'facebook', isEnabled: true },
+        { id: 'mock-pref-3', userId: 'e2e-tester-id-stable', platformId: 'instagram', isEnabled: true },
+        { id: 'mock-pref-4', userId: 'e2e-tester-id-stable', platformId: 'tiktok', isEnabled: true }
+      ];
+    }
     return await prisma.platformPreference.findMany({
       where: { userId }
     });
@@ -70,21 +47,50 @@ export async function getPlatformPreferences() {
 }
 
 /**
- * Toggles the visibility/enablement of a platform in the settings dashboard.
+ * Updates a specific platform's distribution enabled status.
+ */
+export async function toggleAccountDistribution(accountId: string, isEnabled: boolean) {
+  return protectedAction(async function toggleAccount(userId) {
+    await prisma.account.update({
+      where: { id: accountId, userId },
+      data: { isDistributionEnabled: isEnabled }
+    });
+
+    await revalidateDashboard();
+    return { success: true };
+  });
+}
+
+/**
+ * Disconnects an account for the user.
+ */
+export async function disconnectAccount(accountId: string) {
+  return protectedAction(async function removeAccount(userId) {
+    await prisma.account.delete({
+      where: { id: accountId, userId }
+    });
+
+    await revalidateDashboard();
+    return { success: true };
+  });
+}
+
+/**
+ * Updates a platform preference (Enable/Disable).
  */
 export async function togglePlatformPreference(platformId: string, isEnabled: boolean) {
-  return protectedAction(async (userId) => {
+  return protectedAction(async function updatePref(userId) {
     await prisma.platformPreference.upsert({
-      where: { 
+      where: {
         userId_platformId: {
           userId,
-          platformId: platformId
+          platformId
         }
       },
       update: { isEnabled },
       create: {
         userId,
-        platformId: platformId,
+        platformId,
         isEnabled
       }
     });
@@ -95,56 +101,26 @@ export async function togglePlatformPreference(platformId: string, isEnabled: bo
 }
 
 /**
- * Fetches the preferred video format for the current user.
- */
-export async function getVideoFormatPreference() {
-  return protectedAction(async (userId) => {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { preferredVideoFormat: true }
-    });
-
-    return user?.preferredVideoFormat || "short";
-  }).catch(() => "short");
-}
-
-/**
- * Updates the preferred video format for the current user.
- */
-export async function updateVideoFormatPreference(format: string) {
-  return protectedAction(async (userId) => {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { preferredVideoFormat: format }
-    });
-
-    await revalidateDashboard();
-    return { success: true };
-  });
-}
-
-/**
- * Fetches the preferred AI style for the current user.
+ * Fetches user AI Tier preference.
  */
 export async function getAIStylePreference() {
-  return protectedAction(async (userId) => {
+  return protectedAction(async function fetchAiTier(userId) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { preferredAIStyle: true }
     });
-
-    return user?.preferredAIStyle ?? "Manual";
+    return user?.preferredAIStyle || "Manual";
   }).catch(() => "Manual");
 }
 
 /**
- * Updates the preferred AI style for the current user.
+ * Updates user AI Tier preference.
  */
-export async function updateAIStylePreference(style: string) {
-  return protectedAction(async (userId) => {
+export async function updateAIStylePreference(tier: string) {
+  return protectedAction(async function updateAiTier(userId) {
     await prisma.user.update({
       where: { id: userId },
-      data: { preferredAIStyle: style }
+      data: { preferredAIStyle: tier }
     });
 
     await revalidateDashboard();
@@ -153,24 +129,23 @@ export async function updateAIStylePreference(style: string) {
 }
 
 /**
- * Fetches the preferred AI provider for the current user.
+ * Fetches user preferred AI Provider.
  */
 export async function getAIProviderPreference() {
-  return protectedAction(async (userId) => {
+  return protectedAction(async function fetchAiProvider(userId) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { preferredAIProvider: true }
     });
-
-    return user?.preferredAIProvider ?? "gemini";
+    return user?.preferredAIProvider || "gemini";
   }).catch(() => "gemini");
 }
 
 /**
- * Updates the preferred AI provider for the current user.
+ * Updates user preferred AI Provider.
  */
 export async function updateAIProviderPreference(provider: string) {
-  return protectedAction(async (userId) => {
+  return protectedAction(async function updateAiProvider(userId) {
     await prisma.user.update({
       where: { id: userId },
       data: { preferredAIProvider: provider }
@@ -182,24 +157,51 @@ export async function updateAIProviderPreference(provider: string) {
 }
 
 /**
- * Fetches the preferred AI style mode for the current user.
+ * Fetches user preferred Video Format.
+ */
+export async function getVideoFormatPreference() {
+  return protectedAction(async function fetchVideoFormat(userId) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { preferredVideoFormat: true }
+    });
+    return user?.preferredVideoFormat || "short";
+  }).catch(() => "short");
+}
+
+/**
+ * Updates user preferred Video Format.
+ */
+export async function updateVideoFormatPreference(format: string) {
+  return protectedAction(async function updateVideoFormat(userId) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { preferredVideoFormat: format }
+    });
+
+    await revalidateDashboard();
+    return { success: true };
+  });
+}
+
+/**
+ * Fetches user preferred AI Style Mode (Smart, Gen-Z, etc.).
  */
 export async function getAIStyleModePreference() {
-  return protectedAction(async (userId) => {
+  return protectedAction(async function fetchAiMode(userId) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { preferredAIStyleMode: true }
     });
-
-    return user?.preferredAIStyleMode ?? "Smart";
+    return user?.preferredAIStyleMode || "Smart";
   }).catch(() => "Smart");
 }
 
 /**
- * Updates the preferred AI style mode for the current user.
+ * Updates user preferred AI Style Mode.
  */
 export async function updateAIStyleModePreference(mode: string) {
-  return protectedAction(async (userId) => {
+  return protectedAction(async function updateAiMode(userId) {
     await prisma.user.update({
       where: { id: userId },
       data: { preferredAIStyleMode: mode }

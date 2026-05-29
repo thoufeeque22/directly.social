@@ -9,17 +9,18 @@ import { Session } from "next-auth";
 export async function protectedAction<T>(
   action: (userId: string, session: Session) => Promise<T>
 ): Promise<T> {
+  const actionName = action.name || 'anonymous';
   const session = await auth();
 
   if (!session?.user?.id) {
-    throw new Error("Unauthorized: You must be logged in to perform this action.");
+    throw new Error(`Unauthorized: ${actionName}`);
   }
 
   try {
     return await action(session.user.id, session);
   } catch (error: unknown) {
-    // Logger now automatically captures in Sentry
-    logger.error("Server Action Error", error);
+    console.trace("Server Action Error Trace");
+    logger.error(`Server Action Error in ${actionName}`, error);
     
     if (error instanceof Error) {
       throw error;
@@ -32,9 +33,13 @@ export async function protectedAction<T>(
  * Handles common path revalidations for the dashboard.
  */
 export async function revalidateDashboard() {
-  const { revalidatePath } = await import('next/cache');
-  revalidatePath("/");
-  revalidatePath("/settings");
-  revalidatePath("/activity");
-  revalidatePath("/schedule");
+  try {
+    const { revalidatePath } = await import('next/cache');
+    revalidatePath("/");
+    revalidatePath("/settings");
+    revalidatePath("/activity");
+    revalidatePath("/schedule");
+  } catch (error) {
+    logger.warn("Revalidation failed (non-critical)", error);
+  }
 }

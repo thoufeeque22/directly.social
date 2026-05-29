@@ -46,7 +46,7 @@ export async function getUnseenUpdates() {
 }
 
 export async function markUpdateAsSeen(updateId: string) {
-  return protectedAction(async (userId) => {
+  return protectedAction(async function markSeen(userId) {
     // Validate user existence to avoid foreign key constraints and provide better logging
     const user = await prisma.user.findUnique({ where: { id: userId } });
     

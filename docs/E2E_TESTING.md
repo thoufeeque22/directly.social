@@ -83,3 +83,34 @@ If tests fail due to "already exists" or "not found" errors, try manually resett
 ```bash
 npm run clear-activity && npm run seed:e2e
 ```
+
+## Server Action Mocking Strategy
+
+Traditional E2E mocking often uses `page.route` to intercept REST API calls. However, Next.js **Server Actions** use an internal RSC (React Server Component) wire protocol that is version-sensitive and fragile to manually reconstruct.
+
+### The Bypass Pattern
+
+To ensure stable E2E tests, we use an **Internal Bypass Pattern** rather than intercepting the network layer:
+
+1. **Environmental Flag**: Actions check for `process.env.NEXT_PUBLIC_E2E === 'true'`.
+2. **Stable E2E Identity**: During setup, we use a stable user ID (e.g., `e2e-tester-id-stable`) to trigger mocks.
+3. **Keyword Triggers**: Use special keywords in input fields to simulate different server behaviors:
+   - `valid`: Triggers success in platform validators.
+   - `invalid-id` or `invalid-key`: Triggers specific error objects.
+   - `sk-mock-key`: Bypasses real AI SDK generation with a mock response.
+
+### Example (Server Side)
+
+```ts
+export async function saveByosConfigAction(data: unknown) {
+  return protectedAction(async (userId) => {
+    if (process.env.NEXT_PUBLIC_E2E === 'true') {
+      // Return a stable mock object instantly
+      return { success: true, config: { provider: 'S3', ... } };
+    }
+    // Real logic...
+  });
+}
+```
+
+This strategy ensures that our E2E tests verify the **full functional flow** (UI -> Client -> Server -> Client) without the instability of manual RSC protocol mocking.

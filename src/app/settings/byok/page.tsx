@@ -1,7 +1,7 @@
 'use client';
 
 import { GlassCard } from '@/components/ui/GlassCard';
-import { ByokWizard } from '@/components/byok/ByokWizard';
+import { PlatformByokWizard } from '@/components/byok/PlatformByokWizard';
 import { Container, Typography, Box } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Link from 'next/link';
@@ -45,7 +45,7 @@ export default function ByokSettingsPage() {
           }}
         >
           {supportedPlatforms.map((platform) => (
-            <ByokWizard key={platform.id} platform={platform.id} />
+            <PlatformByokWizard key={platform.id} platform={platform.id} />
           ))}
         </Box>
         </GlassCard>

@@ -35,7 +35,7 @@ export async function getMultiPlatformAIPreviews(
   byokConfigs?: Record<string, { apiKey: string; modelId: string }>,
   aiProvider?: AIProvider
 ) {
-  return protectedAction(async (userId) => {
+  return protectedAction(async function generatePreviews(userId) {
     // 1. Runtime Validation
     const validated = AIPreviewSchema.parse({ 
       title, 

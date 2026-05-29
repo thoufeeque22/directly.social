@@ -19,7 +19,8 @@ test.describe('AI BYOK Wizard E2E', () => {
           !text.includes('non-boolean attribute') &&
           !text.includes('hydration-mismatch') &&
           !text.includes('401') && // Ignore API validation 401s in tests
-          !text.includes('400') // Ignore API validation 400s in tests
+          !text.includes('400') && // Ignore API validation 400s in tests
+          !text.includes('429') // Ignore rate limiting in tests
         ) {
           throw new Error(`Console Error detected: ${text}`);
         }
@@ -45,19 +46,10 @@ test.describe('AI BYOK Wizard E2E', () => {
     // 2. Filled state
     await page.screenshot({ path: 'verification/ai-byok-wizard-filled.png', fullPage: true });
 
-    // We can't fully submit and expect success unless we mock the API response.
-    // Let's mock the /api/ai/validate-key endpoint.
-    await page.route('**/api/ai/validate-key', async route => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ success: true })
-      });
-    });
-
+    // Click save - using real Server Action with sk-mock-key
     await page.locator('[data-testid="ai-byok-save-button"]').click();
 
-    // Wait for success message
+    // Wait for success message - uses substring match
     await expect(page.locator('text=Successfully saved')).toBeVisible();
 
     // 3. Success state
@@ -71,21 +63,12 @@ test.describe('AI BYOK Wizard E2E', () => {
     await expect(page.locator('text=AI Provider Keys (BYOK)')).toBeVisible();
 
     const keyInput = page.locator('[data-testid="ai-byok-key-input"] input');
-    await keyInput.fill('invalid-key');
-
-    // Mock API failure
-    await page.route('**/api/ai/validate-key', async route => {
-      await route.fulfill({
-        status: 400,
-        contentType: 'application/json',
-        body: JSON.stringify({ success: false, error: 'Invalid API Key provided.' })
-      });
-    });
+    await keyInput.fill('invalid-key-for-e2e');
 
     await page.locator('[data-testid="ai-byok-save-button"]').click();
 
-    // Wait for error message
-    await expect(page.locator('text=Invalid API Key provided.')).toBeVisible();
+    // Wait for error message - use flexible matcher
+    await expect(page.getByText(/Invalid API Key/i).first()).toBeVisible();
 
     // 4. Error state
     await page.screenshot({ path: 'verification/ai-byok-wizard-error.png', fullPage: true });

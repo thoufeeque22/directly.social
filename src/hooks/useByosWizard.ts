@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { useState, useEffect } from 'react';
-import { getByosConfigAction, saveByosConfigAction } from '@/lib/actions/settings';
+import { getByosConfigAction, saveByosConfigAction, deleteByosConfigAction } from '@/lib/actions/settings';
 
 export interface ByosConfigState {
   provider: 'S3' | 'R2';
@@ -59,7 +59,7 @@ export const useByosWizard = () => {
       if (!result.success) {
         setChecklist(p => ({ ...p, bucket: 'failed', permissions: 'failed' }));
         setValidationStage('failed'); 
-        setError('Connection failed'); 
+        setError(result.error || 'Connection failed'); 
         return;
       }
       
@@ -83,8 +83,8 @@ export const useByosWizard = () => {
     if (!confirm('Disconnect storage?')) return;
     setLoading(true);
     try {
-      const res = await fetch('/api/settings/byos', { method: 'DELETE' });
-      if (res.ok) {
+      const res = await deleteByosConfigAction();
+      if (res.success) {
         setExistingConfig(null);
         setFormData({ 
           provider: 'S3', bucketName: '', endpoint: '', region: 'us-east-1', 

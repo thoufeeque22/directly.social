@@ -6,7 +6,7 @@ import { Box, Typography } from '@mui/material';
 import { SettingsHeader } from '@/components/settings/SettingsHeader';
 import { TemplateManager } from '@/components/settings/TemplateManager';
 import { GlassCard } from '@/components/ui/GlassCard';
-import AIBYOKWizard from '@/components/AIBYOKWizard';
+import AiByokWizard from '@/components/AiByokWizard';
 import { ByosWizard } from '@/components/settings/ByosWizard';
 import { DestinationsTab } from '@/components/settings/DestinationsTab';
 import { SettingsTabs } from '@/components/settings/SettingsTabs';
@@ -41,7 +41,7 @@ const SettingsContent = () => {
           <GlassCard style={{ padding: '2rem' }}>
             <Box>
               <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>AI Providers</Typography>
-              <AIBYOKWizard />
+              <AiByokWizard />
             </Box>
           </GlassCard>
         )}

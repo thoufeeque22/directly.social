@@ -8,9 +8,15 @@ import { getByosConfigAction } from '@/lib/actions/settings';
 
 const UploadFormContext = createContext<UploadFormContextType | undefined>(undefined);
 
-const useBYOSConfig = () => {
-  const [config, setConfig] = useState<{ active: boolean; provider: 'S3' | 'R2' | null }>({ active: false, provider: null });
+const useBYOSConfig = (initial?: { provider: string; bucketName: string } | null) => {
+  const [config, setConfig] = useState<{ active: boolean; provider: 'S3' | 'R2' | null }>({ 
+    active: !!initial, 
+    provider: (initial?.provider as 'S3' | 'R2') || null 
+  });
+  
   useEffect(() => {
+    if (initial) return; // Skip fetch if we already have initial data
+    
     let mounted = true;
     getByosConfigAction()
       .then(data => {
@@ -20,14 +26,14 @@ const useBYOSConfig = () => {
       })
       .catch(() => {});
     return () => { mounted = false; };
-  }, []);
+  }, [initial]);
   return config;
 };
 
 export const UploadFormProvider: React.FC<{ children: React.ReactNode; props: UploadFormProps }> = ({ children, props }) => {
   const uploadFormState = useUploadForm();
   const [showGallery, setShowGallery] = useState(false);
-  const byos = useBYOSConfig();
+  const byos = useBYOSConfig(props.initialByosConfig);
 
   const selectedPlatforms = useMemo(() => 
     getSelectedPlatforms(props.selectedAccountIds, props.accounts), 

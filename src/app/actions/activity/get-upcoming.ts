@@ -7,7 +7,7 @@ import { protectedAction } from '@/lib/core/action-utils';
  * Fetches upcoming scheduled posts.
  */
 export async function getUpcomingPosts() {
-  return protectedAction(async (userId) => {
+  return protectedAction(async function fetchUpcoming(userId) {
     return await prisma.postActivity.findMany({
       where: {
         userId,

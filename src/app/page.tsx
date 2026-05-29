@@ -9,6 +9,7 @@ import {
   getAIProviderPreference,
   getAIStyleModePreference
 } from "@/app/actions/user";
+import { getByosConfigAction } from "@/lib/actions/settings";
 import { AITier, StyleMode } from "@/lib/core/constants";
 import { AIProvider } from "@/lib/core/ai";
 
@@ -26,13 +27,15 @@ export default async function Home() {
     preferences, 
     aiStyle,
     aiProvider,
-    aiStyleMode
+    aiStyleMode,
+    byosConfig
   ] = await Promise.all([
     getUserAccounts(),
     getPlatformPreferences(),
     getAIStylePreference(),
     getAIProviderPreference(),
-    getAIStyleModePreference()
+    getAIStyleModePreference(),
+    getByosConfigAction()
   ]);
 
   // 3. Render with pre-fetched session and data (no loading flash)
@@ -45,6 +48,7 @@ export default async function Home() {
         initialAIStyle={aiStyleMode as StyleMode}
         initialAITier={aiStyle as AITier}
         initialAIProvider={aiProvider as AIProvider}
+        initialByosConfig={byosConfig && 'config' in byosConfig ? (byosConfig.config as { provider: string; bucketName: string } | null) : null}
       />
     </Suspense>
   );

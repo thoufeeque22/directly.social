@@ -29,6 +29,7 @@ export interface UploadFormProps {
   onSchedulingChange: (isScheduled: boolean, date: string) => void;
   onCustomStyleChange: (text: string) => void;
   onResumeReview?: () => void;
+  initialByosConfig?: { provider: string; bucketName: string } | null;
 }
 
 export interface UploadFormContextType extends UploadFormProps {

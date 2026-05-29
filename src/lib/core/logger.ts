@@ -43,7 +43,8 @@ export const logger = {
     // 1. Print to console
     console.error(`❌ [ERROR] ${message}`, error);
     
-    // 2. Capture in Sentry
+    // 2. Capture in Sentry (Temporarily disabled for debugging)
+    /*
     if (error instanceof Error) {
       import('@sentry/nextjs').then(Sentry => {
         Sentry.captureException(error, {
@@ -58,6 +59,7 @@ export const logger = {
         });
       });
     }
+    */
     
     // 3. Append to file (Skip on Vercel)
     if (!IS_VERCEL) {

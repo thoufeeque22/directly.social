@@ -23,4 +23,5 @@ export interface DashboardClientProps {
   initialAIStyle: StyleMode;
   initialAITier: AITier;
   initialAIProvider?: AIProvider;
+  initialByosConfig?: { provider: string; bucketName: string } | null;
 }
