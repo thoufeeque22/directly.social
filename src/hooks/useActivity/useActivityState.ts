@@ -7,15 +7,19 @@ export function useActivityState() {
   const searchParams = useSearchParams();
   
   const [posts, setPosts] = useState<PostActivityEntry[]>([]);
-  const [pendingPost, setPendingPost] = useState<CockpitPost | null>(() => {
-    if (typeof window === 'undefined') return null;
+  const [pendingPost, setPendingPost] = useState<CockpitPost | null>(null);
+
+  useEffect(() => {
     const raw = localStorage.getItem('SS_PENDING_POST');
-    if (!raw) return null;
-    try {
-      const parsed = JSON.parse(raw);
-      return PendingPostSchema.safeParse(parsed).success ? (parsed as CockpitPost) : null;
-    } catch { return null; }
-  });
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (PendingPostSchema.safeParse(parsed).success) {
+          setPendingPost(parsed as CockpitPost);
+        }
+      } catch { /* ignore */ }
+    }
+  }, []);
   const [isLoading, setIsLoading] = useState(true);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);

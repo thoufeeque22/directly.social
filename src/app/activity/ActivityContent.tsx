@@ -13,7 +13,11 @@ import styles from './activity.module.css';
 export function ActivityContent() {
   const activity = useActivity();
   const stagingStatus = useUploadStatus();
-  const [now] = React.useState(() => Date.now());
+  const [now, setNow] = React.useState(0);
+
+  React.useEffect(() => {
+    setNow(Date.now());
+  }, []);
 
   return (
     <div className={styles.activityPage}>
