@@ -3,8 +3,8 @@
 ## Status
 - [x] Discovery
 - [x] Development
-- [/] Review
-- [ ] QA
+- [x] Review
+- [/] QA
 - [ ] Documentation
 - [ ] Project Management
 
@@ -37,4 +37,22 @@
 - [x] Isolated worker temporary directories.
 - [x] Updated visual snapshots.
 - [x] Reduced workers to 1 for maximum stability.
-- [/] Pending Review.
+- [x] Committed initial changes.
+- [x] Remediated Reviewer feedback:
+    - Removed hardcoded fallback password in `src/auth.ts` (Security Fix).
+    - Restored and refined `TEST_WORKER_INDEX` logic in `src/lib/worker/worker.ts`.
+    - Propagated worker context in `playwright.config.ts`.
+    - Fixed type check failures in unit tests.
+- [x] Review approved by `review-agent`.
+- [/] QA phase in progress.
+
+## 🛡️ Review Recap
+### Remediations
+1. **Security**: Removed hardcoded `'social-studio-e2e-secret'`. `E2E_TEST_PASSWORD` is now strictly enforced.
+2. **Isolation**: `TEST_WORKER_INDEX` is now correctly propagated to the web server, allowing for future parallel scaling while maintaining file-system integrity.
+3. **Quality**: Fixed legacy type errors in `useActivityData.test.ts` and `stream-utils.test.ts`.
+
+## 🧪 QA (Verification)
+- [ ] Run full E2E suite (`npx playwright test`).
+- [ ] Verify "Grand Canyon" data visibility.
+- [ ] Confirm no `ECONNRESET` or `ENOENT` errors remain.

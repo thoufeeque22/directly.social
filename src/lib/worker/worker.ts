@@ -19,8 +19,11 @@ declare global {
 
 const getTempDir = () => {
   const base = process.env.UPLOAD_TEMP_DIR || path.join(process.cwd(), "tmp");
-  const workerIndex = process.env.TEST_WORKER_INDEX;
-  return workerIndex ? path.join(base, `worker-${workerIndex}`) : base;
+  // Propagate isolation from E2E environment if available
+  if (process.env.TEST_WORKER_INDEX) {
+    return path.join(base, `worker-${process.env.TEST_WORKER_INDEX}`);
+  }
+  return base;
 };
 
 /**

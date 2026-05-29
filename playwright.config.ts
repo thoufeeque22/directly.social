@@ -54,6 +54,7 @@ export default defineConfig({
       AUTH_URL: 'http://127.0.0.1:3005',
       UPLOAD_TEMP_DIR: './tmp/e2e',
       DEBUG: 'prisma:client:pool',
+      TEST_WORKER_INDEX: '0',
     },
     port: 3005,
     reuseExistingServer: false,
