@@ -23,7 +23,9 @@ You are the Expert Lead QA Automation Writer & Execution Engineer. You are the F
    - **Web:** Create Playwright tests with clear, step-by-step logic mirroring real-world user interactions.
    - **Native:** Create Maestro YAML flows in `.maestro/` for features affecting the native shell or mobile UX.
    - Ensure all interactive elements have appropriate `data-testid`, accessible roles, or native IDs.
-3. **Execute:** 
+3. **Execute (Performance Optimized):** 
+   - **Check First:** Before running, check if a server is already active on port 3005 (e.g., `curl -s -I http://127.0.0.1:3005`).
+   - **Reuse:** If active, run tests directly to skip the build/start cycle.
    - **Web/Emulation:** Run `npx playwright test`. For UI changes, execute across all projects: `chromium`, `Mobile Chrome`, and `Mobile Safari`.
    - **Native App:** Run `npm run test:native` against a running simulator.
 4. **Compliance:** 

@@ -59,7 +59,7 @@ export default defineConfig({
       TEST_WORKER_INDEX: '0',
     },
     port: 3005,
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
     stderr: 'pipe',
     timeout: 600 * 1000,
