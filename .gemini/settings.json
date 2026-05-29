@@ -1,46 +1,79 @@
 {
-  "agents": {
-    "overrides": {
-      "discovery-agent": {
+  "experimental": {
+    "dynamicModelConfiguration": true
+  },
+  "modelConfigs": {
+    "modelChains": {
+      "robust-chain": [
+        {
+          "model": "gemini-3.1-pro-preview",
+          "maxAttempts": 2
+        },
+        {
+          "model": "gemini-3-flash-preview",
+          "isLastResort": true
+        }
+      ],
+      "fast-chain": [
+        {
+          "model": "gemini-3-flash-preview",
+          "maxAttempts": 2
+        },
+        {
+          "model": "gemini-3.1-pro-preview",
+          "isLastResort": true
+        }
+      ]
+    },
+    "overrides": [
+      {
+        "match": {
+          "overrideScope": "discovery-agent"
+        },
         "modelConfig": {
-          "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-pro-preview}"
-          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3-flash-preview}"
-          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
+          "model": "robust-chain"
         }
       },
-      "dev-agent": {
+      {
+        "match": {
+          "overrideScope": "dev-agent"
+        },
         "modelConfig": {
-          "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-pro-preview}"
-          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3-flash-preview}"
-          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
-        } 
-      },
-      "review-agent": {
-        "modelConfig": {
-          "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-pro-preview}"
-          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3-flash-preview}"
-          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
+          "model": "robust-chain"
         }
       },
-      "qa-agent": {
+      {
+        "match": {
+          "overrideScope": "review-agent"
+        },
         "modelConfig": {
-          "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-pro-preview}"
-          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3-flash-preview}"
-          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
+          "model": "robust-chain"
         }
       },
-      "doc-agent": {
-        "modelConfig": { 
-          "model": "${DOC_AGENT_MODEL:-gemini-3-flash-preview}"
-          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
+      {
+        "match": {
+          "overrideScope": "qa-agent"
+        },
+        "modelConfig": {
+          "model": "robust-chain"
         }
       },
-      "project-agent": {
-        "modelConfig": { 
-          "model": "${PROJECT_AGENT_MODEL:-gemini-3-flash-preview}"
-          // "model": "${DISCOVERY_AGENT_MODEL:-gemini-3.1-flash-lite-preview}"
+      {
+        "match": {
+          "overrideScope": "doc-agent"
+        },
+        "modelConfig": {
+          "model": "fast-chain"
+        }
+      },
+      {
+        "match": {
+          "overrideScope": "project-agent"
+        },
+        "modelConfig": {
+          "model": "fast-chain"
         }
       }
-    }
+    ]
   }
 }
