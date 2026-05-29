@@ -9,7 +9,7 @@ import { useAiByok } from '@/hooks/useAiByok';
 import { extractVideoFrames } from '@/lib/utils/video-analysis';
 import { DashboardView } from './DashboardClient.View';
 import { ReviewContext, Asset, DashboardClientProps } from './DashboardClient.types';
-import { useDashboardDevAccounts, useDashboardAIState, useDashboardUploadEngine } from './DashboardClient.hooks';
+import { useDashboardDevAccounts, useDashboardAIState, useDashboardUploadEngine, useDashboardAIPreviews } from './DashboardClient.hooks';
 import { useDashboardHandlers } from './DashboardClient.handlers';
 
 export default function DashboardClient(p: Readonly<DashboardClientProps>) {
@@ -20,9 +20,10 @@ export default function DashboardClient(p: Readonly<DashboardClientProps>) {
   const { selectedAccountIds, setSelectedAccountIds, handleToggleAccount } = usePlatformSelection(devAccounts, preferences, isLoading);
   const { isUploading, setIsUploading, setUploadStatus } = useDashboardUploadEngine(devAccounts);
   const { aiTier, setAiTier, aiProvider, setAiProvider, contentMode, setContentMode } = useDashboardAIState(p.initialAITier, p.initialAIStyle, p.initialAIProvider || 'gemini');
-  const [isReviewing, setIsReviewing] = useState(false), [aiPreviews, setAiPreviews] = useState({}), [isScheduled, setIsScheduled] = useState(false), [scheduledAt, setScheduledAt] = useState(''), [reviewContext, setReviewContext] = useState<ReviewContext | null>(null), [galleryFileId, setGalleryFileId] = useState<string | null>(null), [galleryFileName, setGalleryFileName] = useState<string | null>(null), [customStyleText, setCustomStyleText] = useState('');
+  const { aiPreviews, setAiPreviews, clearCache } = useDashboardAIPreviews();
+  const [isReviewing, setIsReviewing] = useState(false), [isScheduled, setIsScheduled] = useState(false), [scheduledAt, setScheduledAt] = useState(''), [reviewContext, setReviewContext] = useState<ReviewContext | null>(null), [galleryFileId, setGalleryFileId] = useState<string | null>(null), [galleryFileName, setGalleryFileName] = useState<string | null>(null), [customStyleText, setCustomStyleText] = useState('');
 
-  const { onSubmit, onConfirm } = useDashboardHandlers(resumeId, stagedId, devAccounts, selectedAccountIds, aiTier, contentMode, aiProvider, customStyleText, byokConfigs, videoFormat, draftFileName, galleryFileId, galleryFileName, isScheduled, scheduledAt, setUploadStatus, setIsReviewing, setAiPreviews, setReviewContext, setIsUploading);
+  const { onSubmit, onConfirm } = useDashboardHandlers(resumeId, stagedId, devAccounts, selectedAccountIds, aiTier, contentMode, aiProvider, customStyleText, byokConfigs, videoFormat, draftFileName, galleryFileId, galleryFileName, isScheduled, scheduledAt, setUploadStatus, setIsReviewing, setAiPreviews, setReviewContext, setIsUploading, clearCache);
 
   useEffect(() => {
     if (resumeId && accounts.length > 0) {

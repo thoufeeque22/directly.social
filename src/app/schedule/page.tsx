@@ -11,11 +11,14 @@ import { usePolling } from '@/hooks/usePolling';
 import { AIContentReview } from '@/components/dashboard/AIContentReview';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
 import { useAiByok } from '@/hooks/useAiByok';
+import { useAIPreviewCache } from '@/hooks/useAIPreviewCache';
 
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import { checkCacheValidity } from '@/components/dashboard/UploadForm/UploadFormContext.utils';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
@@ -69,8 +72,22 @@ function ScheduleContent() {
     setIsMounted(true);
   }, []);
   const [isReviewing, setIsReviewing] = useState(false);
-  const [aiPreviews, setAiPreviews] = useState<Record<string, AIWriteResult>>({});
+  const { aiPreviews, setAiPreviews, clearCache } = useAIPreviewCache();
   const [isAILoading, setIsAILoading] = useState(false);
+
+  const isCacheValid = React.useMemo(() => {
+    if (!aiPreviews || Object.keys(aiPreviews).length === 0 || !editingPost) return false;
+    try {
+      const savedContext = localStorage.getItem('SS_AI_PREVIEWS_CONTEXT');
+      if (!savedContext) return false;
+      const context = JSON.parse(savedContext);
+      const pNames = editingPost.platforms.map(p => p.platform);
+      return checkCacheValidity(
+        { title: editingPost.title, description: editingPost.description || '', platforms: pNames, aiTier: 'Enrich', contentMode: 'Smart' },
+        context
+      );
+    } catch (e) { return false; }
+  }, [aiPreviews, editingPost]);
   const [viewMode, setViewMode] = useState<'timeline' | 'month' | 'week'>('timeline');
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -227,6 +244,13 @@ function ScheduleContent() {
       const previews = await getMultiPlatformAIPreviews(currentTitle, currentDesc, 'Enrich', 'Smart', pNames, [], undefined, byokConfigs);
       
       if (previews) {
+        localStorage.setItem('SS_AI_PREVIEWS_CONTEXT', JSON.stringify({ 
+          title: currentTitle, 
+          description: currentDesc, 
+          platforms: pNames, 
+          aiTier: 'Enrich', 
+          contentMode: 'Smart' 
+        }));
         setAiPreviews(previews);
         setIsReviewing(true);
       }
@@ -258,6 +282,7 @@ function ScheduleContent() {
 
       setIsReviewing(false);
       setEditingPost(null);
+      clearCache();
       fetchSchedule();
       globalThis.dispatchEvent(new CustomEvent('refresh-upcoming'));
     } catch (err) {
@@ -478,7 +503,28 @@ function ScheduleContent() {
           <GlassCard className={styles.modalContent}>
             <h2 className={styles.modalTitle}>Edit Scheduled Post</h2>
             <form action={handleUpdate}>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem', gap: '0.75rem' }}>
+                {isCacheValid && (
+                  <button
+                    type="button"
+                    onClick={() => setIsReviewing(true)}
+                    style={{
+                      background: 'hsla(var(--primary)/0.05)',
+                      color: 'hsl(var(--primary))',
+                      border: '1px solid hsla(var(--primary)/0.2)',
+                      padding: '0.5rem 1rem',
+                      borderRadius: '0.5rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.85rem',
+                      fontWeight: 500
+                    }}
+                  >
+                    <SkipNextIcon sx={{ fontSize: 18 }} /> Resume Review
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={handleAIBrainstorm}
@@ -499,7 +545,7 @@ function ScheduleContent() {
                     opacity: isAILoading ? 0.7 : 1
                   }}
                 >
-                  <RocketLaunchIcon sx={{ fontSize: 18 }} /> {isAILoading ? 'Brainstorming...' : 'Brainstorm Strategies & Polish'}
+                  <RocketLaunchIcon sx={{ fontSize: 18 }} /> {isAILoading ? 'Brainstorming...' : (isCacheValid ? 'Regenerate Strategy' : 'Brainstorm Strategies & Polish')}
                 </button>
               </div>
               <div className={styles.formGroup}>
@@ -546,7 +592,7 @@ function ScheduleContent() {
                 <button 
                   type="button" 
                   className={`${styles.actionButton} ${styles.secondaryAction}`}
-                  onClick={() => setEditingPost(null)}
+                  onClick={() => { setEditingPost(null); clearCache(); }}
                 >
                   Cancel
                 </button>

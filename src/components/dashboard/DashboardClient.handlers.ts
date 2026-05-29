@@ -25,7 +25,8 @@ export const useDashboardHandlers = (
   setIsReviewing: (b: boolean) => void,
   setAiPreviews: (p: Record<string, AIWriteResult>) => void,
   setReviewContext: (c: ReviewContext) => void,
-  setIsUploading: (b: boolean) => void
+  setIsUploading: (b: boolean) => void,
+  clearCache: () => void
 ) => {
   const map = (ids: string[], accs: Account[], specific: boolean, fd: FormData) => ids.map(id => {
     const isSplit = id.includes(':'), platformKey = isSplit ? id.split(':')[0] : null, accId = isSplit ? id.split(':')[1] : id, acc = accs.find(a => a.id === accId);
@@ -45,9 +46,18 @@ export const useDashboardHandlers = (
       if (aiTier !== 'Manual' && fd.get('skipReview') !== 'true') {
         setUploadStatus(" Generating AI Strategy...");
         const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
-        const previews = await getMultiPlatformAIPreviews(fd.get('title') as string, fd.get('description') as string, aiTier, contentMode, platforms.map(p => p.platform), [], customStyleText, byokConfigs, aiProvider);
+        const title = fd.get('title') as string;
+        const description = fd.get('description') as string;
+        const platformsNames = platforms.map(p => p.platform);
+        const previews = await getMultiPlatformAIPreviews(title, description, aiTier, contentMode, platformsNames, [], customStyleText, byokConfigs, aiProvider);
+        
+        if (previews) {
+          localStorage.setItem('SS_AI_PREVIEWS_CONTEXT', JSON.stringify({ title, description, platforms: platformsNames, aiTier, contentMode }));
+        }
+
         setAiPreviews(previews); setReviewContext({ activityId, stagedFileId: galleryFileId || '', fileName: galleryFileName || draftFileName || '', formData: fd }); setIsReviewing(true); return;
       }
+      clearCache();
       localStorage.setItem('SS_PENDING_POST', JSON.stringify({ title: fd.get('title'), description: fd.get('description'), videoFormat, aiTier, contentMode, customStyleText, platforms, isScheduled, scheduledAt, galleryFileId, galleryFileName, resumeActivityId: activityId }));
       window.location.href = '/activity?action=distribute';
     } catch (err: unknown) { const msg = err instanceof Error ? err.message : String(err); setUploadStatus(` Error: ${msg}`); }
@@ -59,6 +69,7 @@ export const useDashboardHandlers = (
     try {
       const { updatePlatformResultsAction } = await import('@/app/actions/activity/metadata');
       await updatePlatformResultsAction(context.activityId, updated);
+      clearCache();
       localStorage.setItem('SS_PENDING_POST', JSON.stringify({ title: "AI Optimized Post", description: "", videoFormat, aiTier, contentMode, customStyleText, platforms: map(selectedAccountIds, devAccounts, false, context.formData), isScheduled, scheduledAt, galleryFileId, galleryFileName, resumeActivityId: context.activityId }));
       window.location.href = '/activity?action=distribute';
     } catch (err: unknown) { const msg = err instanceof Error ? err.message : String(err); setUploadStatus(` Error: ${msg}`); setIsUploading(false); }
