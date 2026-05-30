@@ -65,9 +65,6 @@ export default {
       if (user) {
         token.id = user.id;
         token.role = user.role;
-        console.log('JWT callback - new user sign-in, token.role set to:', token.role);
-      } else {
-        console.log('JWT callback - existing user, current token.role:', token.role);
       }
       return token;
     },

@@ -78,7 +78,16 @@
   }
   
   .search {
-    display: none !important; /* Force hide search on mobile header */
+    display: flex !important;
+    width: auto;
+    flex: 1;
+    margin: 0 0.75rem;
+    min-width: 120px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .searchInput {
+    font-size: 0.85rem;
   }
 
   .actions {

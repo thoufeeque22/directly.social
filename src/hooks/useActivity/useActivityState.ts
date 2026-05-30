@@ -29,6 +29,18 @@ export function useActivityState() {
   const [cancelledIds, setCancelledIds] = useState<string[]>([]);
   const [processingIds, setProcessingIds] = useState<string[]>([]);
 
+  const lastUrlQuery = React.useRef(searchParams?.get('search'));
+
+  useEffect(() => {
+    const currentUrlQuery = searchParams?.get('search') || '';
+    if (currentUrlQuery !== (lastUrlQuery.current || '')) {
+      React.startTransition(() => {
+        setSearchQuery(currentUrlQuery);
+      });
+      lastUrlQuery.current = currentUrlQuery;
+    }
+  }, [searchParams, searchQuery]);
+
   useEffect(() => {
     if (pendingPost && posts.length > 0) {
       const now = Date.now();
