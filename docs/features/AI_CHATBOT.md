@@ -14,10 +14,11 @@ The assistant leverages tool-calling capabilities provided by the Vercel AI SDK 
 
 ## Technical Implementation
 
-### Architecture
-- **Vercel AI SDK v6**: Manages state, streaming, and tool execution securely on the server-side.
-- **Model Support**: Defaults to Google Gemini (`gemini-1.5-flash-latest`), but features a strict local fallback mechanism. When running locally (with `USE_OLLAMA=true`), the system defaults to a local Ollama instance running `gemma4:latest`, allowing developers to test AI integration without consuming external API credits.
-- **UI Framework**: Utilizes React (`useChat`), Material UI components, and Framer Motion for animations. The interface handles streaming tool invocations resiliently.
+- **Technical Implementation**:
+  - **Vercel AI SDK v6**: Manages state, streaming, and tool execution securely on the server-side.
+  - **Model Support**: Defaults to Google Gemini (`gemini-1.5-flash-latest`), but features a strict local fallback mechanism.
+  - **Responsive Design**: Utilizes MUI `useMediaQuery` to detect screen size. On mobile devices (`sm` breakpoint), the chat interface renders as a bottom **Drawer** (bottom sheet) for a native mobile experience. The floating FAB is automatically hidden when the drawer is open to prevent UI overlap and pointer event interception. Desktop users continue to see the glassmorphism floating window.
+  - **UI Framework**: Utilizes React (`useChat`), Material UI components, and Framer Motion for animations. The interface handles streaming tool invocations resiliently.
 
 ### Production Readiness
 - **Rate Limiting**: Protected by Upstash Redis to prevent abuse.

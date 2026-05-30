@@ -9,16 +9,22 @@ import { useMetadataTemplates } from './useMetadataTemplates';
 import { TemplateList } from './TemplateList';
 import { TemplateSaveForm } from './TemplateSaveForm';
 
+import { useUploadFormContext } from './UploadFormContext';
+
 interface MetadataTemplatesProps {
   onSelect: (content: string) => void;
-  currentContent: string;
+  platform?: string;
 }
 
-export const MetadataTemplates: React.FC<MetadataTemplatesProps> = ({ onSelect, currentContent }) => {
+export const MetadataTemplates: React.FC<MetadataTemplatesProps> = ({ onSelect, platform }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showSaveForm, setShowSaveForm] = useState(false);
   const [newName, setNewName] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { description, platformDescriptions } = useUploadFormContext();
+  const currentContent = platform ? (platformDescriptions[platform] || '') : description;
+
   const { templates, isLoading, isSaving, saveTemplate } = useMetadataTemplates(isOpen);
 
   useEffect(() => {
@@ -32,9 +38,11 @@ export const MetadataTemplates: React.FC<MetadataTemplatesProps> = ({ onSelect, 
   const handleSave = async () => {
     try {
       await saveTemplate(newName, currentContent);
-      setNewName('');
-      setShowSaveForm(false);
-      setIsOpen(false);
+      React.startTransition(() => {
+        setNewName('');
+        setShowSaveForm(false);
+        setIsOpen(false);
+      });
     } catch { alert('Failed to save template.'); }
   };
 

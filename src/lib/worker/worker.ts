@@ -18,10 +18,10 @@ declare global {
 }
 
 const getTempDir = () => {
-  const base = process.env.UPLOAD_TEMP_DIR || path.join(process.cwd(), "tmp");
+  const base = process.env.UPLOAD_TEMP_DIR || path.join(/*turbopackIgnore: true*/ process.cwd(), "tmp");
   // Propagate isolation from E2E environment if available
   if (process.env.TEST_WORKER_INDEX) {
-    return path.join(base, `worker-${process.env.TEST_WORKER_INDEX}`);
+    return path.join(/*turbopackIgnore: true*/ base, `worker-${process.env.TEST_WORKER_INDEX}`);
   }
   return base;
 };
@@ -50,13 +50,13 @@ export async function purgeExpiredAssets() {
       
       for (const asset of expired) {
         try {
-          const filePath = path.join(tempDir, asset.fileId);
+          const filePath = path.join(/*turbopackIgnore: true*/ tempDir, asset.fileId);
           if (existsSync(filePath)) {
             await fs.unlink(filePath);
             logger.info(`🗑️ [WORKER] Deleted physical file: ${asset.fileId}`);
           }
           
-          const metadataPath = path.join(tempDir, `${asset.fileId}.metadata.json`);
+          const metadataPath = path.join(/*turbopackIgnore: true*/ tempDir, `${asset.fileId}.metadata.json`);
           if (existsSync(metadataPath)) {
             await fs.unlink(metadataPath);
           }
@@ -66,7 +66,7 @@ export async function purgeExpiredAssets() {
             const files = await fs.readdir(tempDir);
             for (const file of files) {
                if (file.includes(asset.fileId) && file !== asset.fileId) {
-                  await fs.unlink(path.join(tempDir, file)).catch(() => {});
+                  await fs.unlink(path.join(/*turbopackIgnore: true*/ tempDir, file)).catch(() => {});
                }
             }
           }
@@ -95,7 +95,7 @@ export async function purgeExpiredAssets() {
       for (const file of files) {
         if (file === '.gitignore' || file === 'chunks') continue;
         
-        const filePath = path.join(tempDir, file);
+        const filePath = path.join(/*turbopackIgnore: true*/ tempDir, file);
         const stats = await fs.stat(filePath);
         
         if (stats.isFile() && stats.mtimeMs < dayAgo) {
@@ -199,12 +199,12 @@ export async function startPublishingWorker() {
             }
 
             const tempDir = getTempDir();
-            const filePath = path.join(tempDir, stagedFileId);
+            const filePath = path.join(/*turbopackIgnore: true*/ tempDir, stagedFileId);
             if (!existsSync(filePath)) {
               throw new Error(`File purged or missing: ${filePath}`);
             }
 
-            const metadataPath = path.join(tempDir, `${stagedFileId}.metadata.json`);
+            const metadataPath = path.join(/*turbopackIgnore: true*/ tempDir, `${stagedFileId}.metadata.json`);
             let reviewedContent = undefined;
             if (existsSync(metadataPath)) {
                try {

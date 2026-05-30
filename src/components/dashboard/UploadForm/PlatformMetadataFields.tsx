@@ -32,7 +32,7 @@ export const PlatformMetadataFields: React.FC = () => {
           <div key={platform} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>{getPlatformIcon(platform)}<span style={labelStyle}>{platform} Details</span></div>
-              {!isUploading && <MetadataTemplates onSelect={(val) => appendDescription(val, platform)} currentContent={descVal} />}
+              {!isUploading && <MetadataTemplates onSelect={(val) => appendDescription(val, platform)} platform={platform} />}
             </div>
             {limits.title && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>

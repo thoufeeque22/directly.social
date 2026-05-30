@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface FormState {
   title: string;
@@ -10,47 +10,33 @@ interface FormState {
 }
 
 export function useUploadForm() {
-  const [form, setForm] = useState<FormState>({
-    title: '',
-    description: '',
-    platformTitles: {},
-    platformDescriptions: {},
-    isPlatformSpecific: false
+  const [form, setForm] = useState<FormState>(() => {
+    const initialState = {
+      title: '',
+      description: '',
+      platformTitles: {},
+      platformDescriptions: {},
+      isPlatformSpecific: false
+    };
+
+    if (typeof window === 'undefined') return initialState;
+
+    try {
+      return {
+        title: localStorage.getItem('SS_DRAFT_TITLE') || '',
+        description: localStorage.getItem('SS_DRAFT_DESC') || '',
+        isPlatformSpecific: localStorage.getItem('SS_METADATA_SPECIFIC') === 'true',
+        platformTitles: JSON.parse(localStorage.getItem('SS_PLATFORM_TITLES') || '{}'),
+        platformDescriptions: JSON.parse(localStorage.getItem('SS_PLATFORM_DESCS') || '{}')
+      };
+    } catch (e) {
+      console.error("Failed to load metadata from localStorage", e);
+      return initialState;
+    }
   });
   
   const [titleUndo, setTitleUndo] = useState<string | null>(null);
   const [descUndo, setDescUndo] = useState<string | null>(null);
-
-  // Sync with localStorage on mount
-  useEffect(() => {
-    const savedTitle = localStorage.getItem('SS_DRAFT_TITLE') || '';
-    const savedDesc = localStorage.getItem('SS_DRAFT_DESC') || '';
-    const savedIsPlatformSpecific = localStorage.getItem('SS_METADATA_SPECIFIC') === 'true';
-
-    let savedPlatformTitles = {};
-    let savedPlatformDescs = {};
-    try {
-      savedPlatformTitles = JSON.parse(localStorage.getItem('SS_PLATFORM_TITLES') || '{}');
-      savedPlatformDescs = JSON.parse(localStorage.getItem('SS_PLATFORM_DESCS') || '{}');
-    } catch (e) {
-      console.error("Failed to load platform-specific metadata", e);
-    }
-
-    const timer = setTimeout(() => {
-      setForm(prev => {
-        // Only overwrite if the user hasn't already typed something before this effect runs
-        if (prev.title !== '' || prev.description !== '') return prev;
-        return {
-          title: savedTitle,
-          description: savedDesc,
-          isPlatformSpecific: savedIsPlatformSpecific,
-          platformTitles: savedPlatformTitles,
-          platformDescriptions: savedPlatformDescs
-        };
-      });
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleTitleChange = (val: string) => {
     setForm(prev => ({ ...prev, title: val }));
@@ -63,14 +49,21 @@ export function useUploadForm() {
   };
 
   const appendDescription = (val: string, platform?: string) => {
-    if (platform) {
-      const current = form.platformDescriptions[platform] || '';
-      const separator = current && !current.endsWith('\n') ? '\n' : '';
-      handlePlatformDescriptionChange(platform, current + separator + val);
-    } else {
-      const separator = form.description && !form.description.endsWith('\n') ? '\n' : '';
-      handleDescriptionChange(form.description + separator + val);
-    }
+    setForm(prev => {
+      if (platform) {
+        const current = prev.platformDescriptions[platform] || '';
+        const separator = current && !current.endsWith('\n') ? '\n' : '';
+        const nextDescs = { ...prev.platformDescriptions, [platform]: current + separator + val };
+        localStorage.setItem('SS_PLATFORM_DESCS', JSON.stringify(nextDescs));
+        return { ...prev, platformDescriptions: nextDescs };
+      } else {
+        const current = prev.description || '';
+        const separator = current && !current.endsWith('\n') ? '\n' : '';
+        const nextDesc = current + separator + val;
+        localStorage.setItem('SS_DRAFT_DESC', nextDesc);
+        return { ...prev, description: nextDesc };
+      }
+    });
   };
 
   const handlePlatformTitleChange = (platform: string, val: string) => {
