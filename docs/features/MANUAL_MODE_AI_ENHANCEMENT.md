@@ -34,7 +34,7 @@ The button is integrated inside `src/components/dashboard/UploadForm/index.tsx` 
 ### Layout Implementation
 
 The action bar uses a responsive flex row with a dynamic flex-grow configuration:
-- **Polish with AI Button:** Takes `flex: 1` to balance the layout.
+- **Polish with AI Button:** Takes `flex: 1` to balance the layout. Uses `React.startTransition` to update the AI tier, ensuring the button hides immediately and the UI transforms without lag from background server actions.
 - **Primary Submit Button:** Takes `flex: 1.2` when another action button is visible, creating a clear visual hierarchy.
 
 ```tsx

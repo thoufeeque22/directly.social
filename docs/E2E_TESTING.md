@@ -84,6 +84,10 @@ If tests fail due to "already exists" or "not found" errors, try manually resett
 npm run clear-activity && npm run seed:e2e
 ```
 
+### Error Boundary Verification
+
+To reliably test the global `ErrorBoundary` fallback UI, a dedicated test route `src/app/test-error/page.tsx` is implemented. This route intentionally throws a client-side error during render. End-to-end tests can navigate to `/test-error` and verify that the app correctly displays the error card and "Try again" button instead of crashing or showing a blank screen.
+
 ## Server Action Mocking Strategy
 
 Traditional E2E mocking often uses `page.route` to intercept REST API calls. However, Next.js **Server Actions** use an internal RSC (React Server Component) wire protocol that is version-sensitive and fragile to manually reconstruct.

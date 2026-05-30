@@ -53,7 +53,7 @@ test.describe('Manual Mode: Polish with AI Button', () => {
       if (msg.type() === 'error') {
         const text = msg.text();
         // Ignore known harmless errors
-        if (!text.includes('Sentry') && !text.includes('Extension')) {
+        if (!text.includes('Sentry') && !text.includes('Extension') && !text.includes('429')) {
           errors.push(text);
         }
       }

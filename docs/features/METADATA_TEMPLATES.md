@@ -34,6 +34,9 @@ Managed via Prisma in `prisma/schema.prisma`:
 
 ### State Management & UX
 Enhanced `useUploadForm` hook in `src/hooks/dashboard/useUploadForm.ts`:
+- **Idiomatic Initialization:** Synchronizes with `localStorage` using a `useState` initializer function, preventing hydration mismatches and cascading render warnings in Next.js 15.
+- **Concurrent Interaction Support:** The `appendDescription` function uses functional state updates to ensure content is merged reliably even during rapid user input.
+- **Responsive UI via Transitions:** The snippet menu closure and save logic utilize `React.startTransition`. This guarantees immediate visual feedback (closing the menu) without being blocked by background server action revalidations.
 - Manages state for `isPlatformSpecific`, `platformTitles`, and `platformDescriptions`.
 - Local storage syncing ensures drafts are not lost during navigation.
 

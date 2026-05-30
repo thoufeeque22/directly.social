@@ -33,13 +33,17 @@ test.describe.serial('Metadata Templates (Snippets)', () => {
     const snippetName = `Name ${Date.now()}`;
 
     // Type content to save
-    await descriptionField.fill(testContent);
+    await descriptionField.focus();
+    await page.keyboard.type(testContent, { delay: 10 });
+    await descriptionField.blur();
 
     // Open menu
     await page.getByTestId('snippets-trigger').first().click();
     
-    // Open save form
-    await page.getByTestId('save-snippet-form-trigger').click();
+    // Open save form - wait for it to be enabled (state sync)
+    const saveTrigger = page.getByTestId('save-snippet-form-trigger');
+    await expect(saveTrigger).toBeEnabled({ timeout: 10000 });
+    await saveTrigger.click();
     
     // Fill name
     await page.getByTestId('new-snippet-name-input').fill(snippetName);
@@ -56,11 +60,13 @@ test.describe.serial('Metadata Templates (Snippets)', () => {
   });
 
   test('should append snippet content to description and close menu', async ({ page }) => {
-    const descriptionField = page.getByTestId('video-description');
-    await descriptionField.fill('Initial text.');
+    const descriptionField = page.getByTestId('video-description').first();
+    await descriptionField.focus();
+    await page.keyboard.type('Initial text.');
+    await descriptionField.blur();
 
     // Open menu
-    await page.getByTestId('snippets-trigger').click();
+    await page.getByTestId('snippets-trigger').first().click();
     
     // Select first available snippet (assuming one exists from previous test or seed)
     const firstSnippet = page.locator('[data-testid^="snippet-item-"]').first();
@@ -91,7 +97,7 @@ test.describe.serial('Metadata Templates (Snippets)', () => {
     const platformHeader = page.locator('span:has-text("Details")').first();
     if (await platformHeader.isVisible()) {
       const platformContainer = platformHeader.locator('xpath=../..');
-      const platformTrigger = platformContainer.getByTestId('snippets-trigger');
+      const platformTrigger = platformContainer.getByTestId('snippets-trigger').first();
       const platformInput = platformContainer.getByTestId('video-description-youtube');
 
       await platformTrigger.click();

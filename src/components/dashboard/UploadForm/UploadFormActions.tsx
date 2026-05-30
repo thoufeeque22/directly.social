@@ -48,7 +48,7 @@ export const UploadFormActions: React.FC = () => {
           </button>
         )}
         {aiTier === 'Manual' && !isUploading && (
-          <button type="button" onClick={() => onTierChange('Enrich')} style={secondaryButtonStyle}>
+          <button type="button" onClick={() => React.startTransition(() => { onTierChange('Enrich'); })} style={secondaryButtonStyle}>
             <AutoAwesomeIcon sx={{ fontSize: 18 }} /> Polish with AI
           </button>
         )}

@@ -2,7 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const LOG_FILE = path.join(process.cwd(), 'tmp/app.log');
+const LOG_FILE = path.join(/*turbopackIgnore: true*/ process.cwd(), 'tmp/app.log');
 const IS_VERCEL = !!process.env.VERCEL;
 
 // Ensure the directory exists (Skip on Vercel as it's a read-only filesystem)
