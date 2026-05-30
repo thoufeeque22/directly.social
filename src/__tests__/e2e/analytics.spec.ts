@@ -4,12 +4,23 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+function safeExec(command: string, retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return execSync(command, { stdio: 'inherit' });
+    } catch (error) {
+      if (i === retries - 1) throw error;
+      console.warn(`[E2E] Command failed, retrying (${i + 1}/${retries}): ${command}`);
+    }
+  }
+}
+
 test.describe('Analytics Dashboard', () => {
   test.use({ storageState: '.auth/user.json' });
 
   test.beforeAll(async () => {
     // Elevate user to ADMIN so middleware allows access to /admin/analytics
-    execSync('npx tsx src/__tests__/scripts/make-admin.ts tester@socialstudio.ai');
+    safeExec('npx tsx src/__tests__/scripts/make-admin.ts tester@socialstudio.ai');
 
     // Seed mock data before running tests
     await prisma.systemMetric.deleteMany();
@@ -59,9 +70,14 @@ test.describe('Analytics Dashboard', () => {
     });
   });
 
-  test.afterAll(() => {
+  test.afterAll(async () => {
     // Revert user to normal USER
-    execSync('npx tsx src/__tests__/scripts/seed-e2e-user.ts');
+    try {
+      safeExec('npx tsx src/__tests__/scripts/seed-e2e-user.ts');
+    } catch (e) {
+      console.warn('Failed to reset user role in afterAll', e);
+    }
+    await prisma.$disconnect();
   });
 
   test.describe('admin access', () => {
