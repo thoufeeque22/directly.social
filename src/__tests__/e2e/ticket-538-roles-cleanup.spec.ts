@@ -54,7 +54,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     
     // 3. Verify redirect to / (as per authorized callback in auth.config.ts)
     await page.waitForURL('/', { timeout: 10000 });
-    expect(page.url()).toBe('http://localhost:3000/');
+    expect(page.url()).toContain('://127.0.0.1:3005/');
     console.log('[E2E] Direct access denied and redirected to home.');
   });
 

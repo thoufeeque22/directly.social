@@ -58,7 +58,7 @@ export default defineConfig({
       DEBUG: 'prisma:client:pool',
       TEST_WORKER_INDEX: '0',
     },
-    port: 3005,
+    url: 'http://127.0.0.1:3005',
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
     stderr: 'pipe',
