@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import IconButton from '@mui/material/IconButton';
@@ -15,6 +16,7 @@ import type { PostActivity } from '@prisma/client';
 import styles from './SidebarInfo.module.css';
 
 export const SidebarInfo: React.FC = () => {
+  const router = useRouter();
   const [upcoming, setUpcoming] = useState<PostActivity[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -63,8 +65,7 @@ export const SidebarInfo: React.FC = () => {
           <Heading level={2} style={{ margin: 0 }}>Upcoming Posts</Heading>
           <Tooltip title="View full schedule">
             <IconButton 
-              component={Link}
-              href="/schedule"
+              onClick={() => router.push('/schedule')}
               size="small" 
               aria-label="view full schedule"
               data-testid="sidebar-view-all-schedule"
