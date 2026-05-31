@@ -10,3 +10,6 @@ Fixed type imports in WhatsNew module following Round 4 refactoring. Verified wi
 
 ## [2026-05-31 18:50:09] Verdict: SUCCESS
 Stabilized E2E environment by adding resilience to NotificationProvider (console.error -> console.warn) and ensuring robust rate-limit bypass in E2E environments. Also updated base-test fixture to ignore transient 429 noise.
+
+## [2026-05-31 18:57:08] Verdict: SUCCESS
+Refactored ratelimit.ts to satisfy 50-line rule. Created ratelimit-config.ts for instances. Updated all consumers and fixed build/lint errors.

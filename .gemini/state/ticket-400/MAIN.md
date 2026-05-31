@@ -54,3 +54,4 @@
 - **[2026-05-31 18:37:14]**: REVIEW [PASS] - Verified import fixes in WhatsNew module. Build and Lint pass. Security and modularity standards maintained.
 - **[2026-05-31 18:50:09]**: DEV [SUCCESS] - Stabilized E2E environment by adding resilience to NotificationProvider (console.error -> console.warn) and ensuring robust rate-limit bypass in E2E environments. Also updated base-test fixture to ignore transient 429 noise.
 - **[2026-05-31 18:54:40]**: REVIEW [FAIL] - Verified E2E stability fixes and security posture. Stability fixes in NotificationProvider and base-test are correct. However, src/lib/core/ratelimit.ts now exceeds the 50-line modularity rule (68 lines). Refactoring required to split instances from utility logic.
+- **[2026-05-31 18:57:08]**: DEV [SUCCESS] - Refactored ratelimit.ts to satisfy 50-line rule. Created ratelimit-config.ts for instances. Updated all consumers and fixed build/lint errors.
