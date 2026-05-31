@@ -1,4 +1,5 @@
 import { useCallback, useRef, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import { useAccounts } from '@/hooks/useAccounts';
 import { useAiByok } from '@/hooks/useAiByok';
 import { stageVideoFile } from '@/lib/upload/upload-utils';
@@ -19,6 +20,7 @@ export function useCockpitAutoStart({ setPosts, fetchActivity, setActiveResuming
   const cockpitStartedRef = useRef(false);
   const { accounts } = useAccounts();
   const { configs: byokConfigs } = useAiByok();
+  const { update } = useSession();
 
   const handleCockpitStart = useCallback(async () => {
     if (accounts.length === 0) return;
@@ -40,6 +42,10 @@ export function useCockpitAutoStart({ setPosts, fetchActivity, setActiveResuming
       if (post.aiTier !== 'Manual' && post.skipReview) {
         const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
         reviewed = await getMultiPlatformAIPreviews(post.title, post.description || '', post.aiTier as AITier, post.contentMode || 'Smart', post.platforms.map(p => p.platform), [], post.customStyleText, byokConfigs);
+        const { getAiBalance } = await import('@/app/actions/credits');
+        const newBalance = await getAiBalance();
+        await update({ aiCredits: newBalance });
+        
         const { updatePlatformResultsAction } = await import('@/app/actions/activity/metadata');
         await updatePlatformResultsAction(activityId, reviewed);
       }

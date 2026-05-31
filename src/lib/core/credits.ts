@@ -18,36 +18,45 @@ export async function consumeAiCredit(
   activeProvider: string,
   byokConfigs?: Record<string, { apiKey: string; modelId: string }>
 ) {
-  // 1. If a valid BYOK exists for the active provider, skip deduction
   if (byokConfigs && byokConfigs[activeProvider]) {
-    return { success: true }; // skipped deduction
+    return { success: true };
   }
 
-  // 2. Fetch the current user balance using transaction to prevent race conditions
-  const user = await prisma.user.findUnique({
+  // Use updateMany for atomic decrement with condition
+  const result = await prisma.user.updateMany({
+    where: { 
+      id: userId,
+      aiCredits: { gt: 0 }
+    },
+    data: { aiCredits: { decrement: 1 } },
+  });
+
+  if (result.count === 0) {
+    // Determine if it was user not found or insufficient credits
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { aiCredits: true },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+    throw new Error("Insufficient AI Credits");
+  }
+
+  // Fetch the new balance after successful decrement
+  const updatedUser = await prisma.user.findUnique({
     where: { id: userId },
     select: { aiCredits: true },
   });
 
-  if (!user) {
-    throw new Error("User not found");
+  if (!updatedUser) {
+    throw new Error("User not found after update");
   }
-
-  if (user.aiCredits <= 0) {
-    throw new Error("Insufficient AI Credits");
-  }
-
-  // 3. Decrement aiCredits by 1
-  const updatedUser = await prisma.user.update({
-    where: { id: userId },
-    data: { aiCredits: { decrement: 1 } },
-  });
 
   const newBalance = updatedUser.aiCredits;
 
-  // 4. If new balance hits low threshold, trigger Alert System
   if (newBalance === LOW_CREDIT_THRESHOLD || newBalance === 0) {
-    // Alert the user
     await prisma.notification.create({
       data: {
         userId: userId,
@@ -56,7 +65,6 @@ export async function consumeAiCredit(
       },
     });
 
-    // Alert the admins
     const admins = await prisma.user.findMany({
       where: { role: "ADMIN" },
       select: { id: true },
@@ -74,7 +82,6 @@ export async function consumeAiCredit(
       });
     }
 
-    // Mock email dispatcher to fulfill the email mandate gracefully
     logger.info(`EMAIL ALERT: User ${userId} has hit the low AI credits threshold (${newBalance} credits left).`);
   }
 

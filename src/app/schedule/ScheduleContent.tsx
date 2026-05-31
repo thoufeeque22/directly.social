@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { GlassCard } from '@/components/ui/GlassCard';
 import styles from './schedule.module.css';
@@ -58,6 +59,7 @@ const PLATFORM_ICONS: Record<string, React.ReactNode> = {
 };
 
 export function ScheduleContent() {
+  const { update } = useSession();
   const searchParams = useSearchParams();
   const { configs: byokConfigs } = useAiByok();
   const targetId = searchParams.get('id');
@@ -241,6 +243,11 @@ export function ScheduleContent() {
       const currentDesc = formData?.get('description') as string || editingPost.description || '';
       const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
       const previews = await getMultiPlatformAIPreviews(currentTitle, currentDesc, 'Enrich', 'Smart', pNames, [], undefined, byokConfigs);
+      
+      const { getAiBalance } = await import('@/app/actions/credits');
+      const newBalance = await getAiBalance();
+      await update({ aiCredits: newBalance });
+
       if (previews) {
         localStorage.setItem('SS_AI_PREVIEWS_CONTEXT', JSON.stringify({ 
           title: currentTitle, 

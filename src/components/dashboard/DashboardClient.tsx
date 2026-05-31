@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useAccounts } from '@/hooks/useAccounts';
 import { useDraftFile } from '@/hooks/dashboard/useDraftFile';
@@ -20,6 +21,7 @@ import { useDashboardLocalState } from '@/hooks/dashboard/useDashboardLocalState
 
 export default function DashboardClient(p: Readonly<DashboardClientProps>) {
   const s = useSearchParams(), resumeId = s.get('resume'), stagedId = s.get('staged');
+  const { update } = useSession();
   const { accounts, isLoading, preferences } = useAccounts(p.initialAccounts, p.initialPreferences);
   const { configs: byokConfigs } = useAiByok();
   const devAccounts = useDashboardDevAccounts(accounts, p.session?.user?.id);
@@ -45,7 +47,7 @@ export default function DashboardClient(p: Readonly<DashboardClientProps>) {
     st.customStyleText, byokConfigs, videoFormat, draftFileName, st.galleryFileId, st.galleryFileName,
     st.isScheduled, st.scheduledAt, setUploadStatus, st.setIsReviewing, setAiPreviews,
     st.setReviewContext, setIsUploading, clearCache, preferences, handleFileChange,
-    st.setGalleryFileId, st.setGalleryFileName
+    st.setGalleryFileId, st.setGalleryFileName, update
   );
 
   return (

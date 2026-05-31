@@ -3,6 +3,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useChat, UIMessage as Message } from '@ai-sdk/react';
+import { useSession } from 'next-auth/react';
 import { 
   Box, 
   IconButton, 
@@ -288,6 +289,8 @@ const ChatWindowContent = ({
  * A floating conversational assistant interface using Vercel AI SDK.
  */
 export const AIChatbot = () => {
+  const { update } = useSession();
+  const prevStatus = useRef<string>('ready');
   const [isOpen, setIsOpen] = useState(false);
   const [manualInput, setManualInput] = useState('');
   const theme = useTheme();
@@ -297,6 +300,15 @@ export const AIChatbot = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const isLoading = status === 'submitted' || status === 'streaming';
+
+  useEffect(() => {
+    if (prevStatus.current === 'streaming' && (status === 'ready' || status === 'error' || status === undefined)) {
+      import('@/app/actions/credits').then(({ getAiBalance }) => {
+        getAiBalance().then(b => update({ aiCredits: b }));
+      });
+    }
+    prevStatus.current = status || 'ready';
+  }, [status, update]);
 
   useEffect(() => {
     if (scrollRef.current) {
