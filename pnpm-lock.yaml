@@ -20,6 +20,9 @@ importers:
       '@ai-sdk/openai':
         specifier: ^3.0.64
         version: 3.0.67(zod@4.4.3)
+      '@ai-sdk/provider-utils':
+        specifier: ^4.0.27
+        version: 4.0.27(zod@4.4.3)
       '@ai-sdk/react':
         specifier: ^3.0.180
         version: 3.0.195(react@19.2.4)(zod@4.4.3)

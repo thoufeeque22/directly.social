@@ -40,6 +40,11 @@ The detailed plan is available in [.gemini/state/ticket-621-spec.md](.gemini/sta
 - Updated `.github/workflows/deploy.yml` to use `pnpm/action-setup@v4` and `cache: 'pnpm'`.
 - Updated VPS deployment script to ensure `pnpm` is installed and used for production dependencies.
 
+### ⚠️ Post-Migration Incident (Fixed)
+- **Issue**: Vercel build failed due to missing `@ai-sdk/provider-utils` module (phantom dependency).
+- **Fix**: Explicitly added `@ai-sdk/provider-utils` to `package.json` to satisfy `pnpm`'s strict dependency resolution.
+- **Verification**: Local `pnpm run build` verified as passing.
+
 ## Verdict
 SUCCESS
 
