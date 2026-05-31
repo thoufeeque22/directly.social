@@ -12,21 +12,27 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 11
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+        cache: 'pnpm'
 
     - name: Install Dependencies
-      run: npm ci --legacy-peer-deps
+      run: pnpm install --frozen-lockfile
 
     - name: Generate Prisma Client
-      run: npx prisma generate
+      run: pnpm exec prisma generate
       env:
         DATABASE_URL: sqlite://./prisma/dev.db
 
     - name: Build Next.js App
-      run: npm run build
+      run: pnpm build
       env:
         NEXTAUTH_SECRET: dummy_secret_for_build_only
         DATABASE_URL: sqlite://./prisma/dev.db
@@ -79,10 +85,16 @@ jobs:
           fi
           
           # 3. Install production deps & generate prisma
+          echo "📦 Ensuring pnpm is installed..."
+          if ! command -v pnpm &> /dev/null; then
+            npm install -g pnpm
+          fi
+          
           echo "📦 Installing production dependencies..."
-          npm install --production --legacy-peer-deps
+          pnpm install --prod
+          
           echo "🏗️ Generating Prisma client..."
-          npx prisma generate
+          pnpm exec prisma generate
           
           # 4. Atomic swap symlink
           echo "🔄 Swapping symlink to $RELEASE_DIR..."
@@ -91,8 +103,9 @@ jobs:
           # 5. Restart PM2 from the current symlink path
           echo "🔄 Restarting PM2 processes..."
           cd $CURRENT_DIR
-          pm2 restart social-studio --update-env || pm2 start "npm run start" --name "social-studio"
-          pm2 restart social-studio-worker --update-env || pm2 start "npm run worker" --name "social-studio-worker"
+          # Note: PM2 still uses node/npm under the hood for 'npm start'
+          pm2 restart social-studio --update-env || pm2 start "pnpm start" --name "social-studio"
+          pm2 restart social-studio-worker --update-env || pm2 start "pnpm run worker" --name "social-studio-worker"
           
           # 6. Cleanup old releases (keep last 5)
           echo "🧹 Cleaning up old releases..."
