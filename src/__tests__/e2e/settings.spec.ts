@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Settings Page - Template Management', () => {
+test.describe('Settings Page - Template Management @regression', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/settings');
   });

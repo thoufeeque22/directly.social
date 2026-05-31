@@ -89,7 +89,7 @@ vi.mock('axios', () => ({
   }
 }));
 
-describe('Upload Integrations', () => {
+describe('Upload Integrations @regression', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();

@@ -5,9 +5,8 @@ import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 import { App } from "@capacitor/app";
 import { Browser } from "@capacitor/browser";
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeContextProvider } from "./ThemeContextProvider";
 import CssBaseline from '@mui/material/CssBaseline';
-import { theme } from '@/theme';
 import { WhatsNewProvider } from "./WhatsNew/WhatsNewContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -65,13 +64,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeContextProvider>
       <CssBaseline />
       <SessionProvider>
         <WhatsNewProvider>
           {children}
         </WhatsNewProvider>
       </SessionProvider>
-    </ThemeProvider>
+    </ThemeContextProvider>
   );
 }

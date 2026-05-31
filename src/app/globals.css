@@ -37,6 +37,29 @@
   --radius: 0.75rem;
 }
 
+.light-mode {
+  --background: 250 40% 98%;
+  --foreground: 250 40% 10%;
+  
+  --card: 0 0% 100%;
+  --card-foreground: 250 40% 10%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 250 40% 10%;
+  
+  --secondary: 250 20% 90%;
+  --secondary-foreground: 250 40% 10%;
+  
+  --muted: 250 20% 92%;
+  --muted-foreground: 250 10% 40%;
+  
+  --accent: 250 80% 96%;
+  --accent-foreground: 250 80% 40%;
+  
+  --border: 250 20% 90%;
+  --input: 250 20% 90%;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -50,6 +73,7 @@ body {
   height: 100%;
   -webkit-text-size-adjust: 100%;
   overscroll-behavior-y: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 * {
@@ -89,20 +113,30 @@ a {
 
 /* Glassmorphism Utilities */
 .glass {
-  background: hsla(250, 30%, 10%, 0.7);
+  background: var(--glass-bg, hsla(250, 30%, 10%, 0.7));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid hsla(250, 30%, 20%, 0.3);
+  border: 1px solid var(--glass-border, hsla(250, 30%, 20%, 0.3));
+}
+
+.light-mode .glass {
+  --glass-bg: hsla(250, 40%, 98%, 0.7);
+  --glass-border: hsla(250, 20%, 80%, 0.3);
 }
 
 .glass-card {
-  background: hsla(250, 30%, 12%, 0.5);
+  background: var(--glass-card-bg, hsla(250, 30%, 12%, 0.5));
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid hsla(250, 30%, 25%, 0.2);
+  border: 1px solid var(--glass-card-border, hsla(250, 30%, 25%, 0.2));
   border-radius: var(--radius);
   padding: 1.5rem;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.3s ease;
+}
+
+.light-mode .glass-card {
+  --glass-card-bg: hsla(0, 0%, 100%, 0.5);
+  --glass-card-border: hsla(250, 20%, 85%, 0.2);
 }
 
 @media (max-width: 768px) {

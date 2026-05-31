@@ -42,7 +42,7 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(to bottom, hsla(250, 80%, 60%, 0.4), transparent);
+  background: linear-gradient(to bottom, hsla(var(--primary) / 0.4), transparent);
   border-radius: 2px;
 }
 
@@ -61,7 +61,7 @@
   border-radius: 50%;
   background: hsl(var(--primary));
   border: 3px solid hsl(var(--background));
-  box-shadow: 0 0 10px hsla(250, 80%, 60%, 0.4);
+  box-shadow: 0 0 10px hsla(var(--primary) / 0.4);
   z-index: 1;
 }
 
@@ -263,9 +263,9 @@
 }
 
 .platformDefault {
-  background: hsla(250, 30%, 40%, 0.12);
-  color: hsl(250, 30%, 70%);
-  border-color: hsla(250, 30%, 40%, 0.2);
+  background: hsla(var(--muted) / 0.5);
+  color: hsl(var(--muted-foreground));
+  border-color: hsla(var(--border) / 0.5);
 }
 
 .pillIcon {
@@ -308,9 +308,9 @@
 }
 
 .platformPillRetrying {
-  background: hsla(250, 80%, 60%, 0.12);
-  color: hsl(250, 80%, 75%);
-  border-color: hsla(250, 80%, 60%, 0.3);
+  background: hsla(var(--primary) / 0.12);
+  color: hsl(var(--primary));
+  border-color: hsla(var(--primary) / 0.3);
   cursor: wait;
 }
 

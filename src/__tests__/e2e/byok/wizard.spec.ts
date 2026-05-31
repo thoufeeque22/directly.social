@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('BYOK Integration Wizard E2E', () => {
+test.describe('BYOK Integration Wizard E2E @regression', () => {
   test.beforeEach(async ({ page }) => {
     // Zero console error monitoring
     page.on('console', msg => {

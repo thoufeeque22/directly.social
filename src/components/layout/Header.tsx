@@ -7,6 +7,7 @@ import styles from './Header.module.css';
 import { WhatsNewBadge } from '../WhatsNew/WhatsNewBadge';
 import { UserActions } from './UserActions';
 import { RefreshButton } from './RefreshButton';
+import { ThemeToggle } from './ThemeToggle';
 
 export const Header = ({ onToggleSidebar }: { onToggleSidebar: () => void }) => {
   const router = useRouter();
@@ -36,6 +37,7 @@ export const Header = ({ onToggleSidebar }: { onToggleSidebar: () => void }) => 
         />
       </div>
       <div className={styles.actions}>
+        <ThemeToggle />
         <RefreshButton />
         <WhatsNewBadge />
         <UserActions session={session} />

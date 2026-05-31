@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Session Reuse Verification', () => {
+test.describe('Session Reuse Verification @smoke @regression', () => {
   test('should access the dashboard without logging in (using storageState)', async ({ page }) => {
     // Navigate directly to the dashboard
     await page.goto('/');

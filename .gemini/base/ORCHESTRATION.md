@@ -4,7 +4,7 @@
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST:
   1. Switch to `main` and pull latest (`git checkout main && git pull`).
   2. Create a dedicated feature branch (`feature/<id>-short-description`).
-  3. Create a state file `.gemini/state/ticket-<id>.md` following the **Markdown Lifecycle Template**.
+  3. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template**.
 - **Strict Sequential Workflow:** ALL tickets MUST follow this exact sequence:
   `Discovery` -> `Development` -> `Review` -> `QA` -> `Documentation` -> `Project Management`.
 - **Phase Termination & Failure Protocol:**
@@ -18,18 +18,33 @@
   3. **Explicit Approval:** The user provides approval to proceed to the *next* phase in the sequence.
 - **Traceable Status:** EVERY agent MUST update their section with a clear **Verdict** before handoff.
 
-## E2E Performance Optimization
-- **Server Reuse:** To save time, E2E tests are configured to reuse an existing server on port 3005 (`reuseExistingServer: true`).
-- **Agent Protocol:** Before running `npx playwright test`, agents SHOULD check if a server is already responding on `http://127.0.0.1:3005`. If it is, they MUST NOT attempt to start another one. If not, they may trigger the test command which will handle the build/start automatically.
-- **Background Server:** Agents are permitted to start the E2E server in the background using `run_shell_command(..., is_background: true)` if multiple test runs are expected within a single session.
+## Tiered Testing Strategy
+To maintain speed and context efficiency, the project uses a tiered testing model based on tags (`@smoke`, `@regression`):
+
+- **Smoke Suite (`@smoke`):** Critical paths only (Login, Main Dashboard load, Core Upload start). Must take < 60 seconds.
+- **Regression Suite (`@regression`):** Broad feature coverage (Settings, AI generation, Gallery, Filtering).
+- **Full Suite:** The complete test directory, including long-running E2E and edge-case unit tests.
+
+### Agent Test Mandates
+- **dev-agent:** MUST run `npm run test:smoke` and `npm run lint`.
+- **review-agent:** READ-ONLY.
+- **qa-agent:** MUST run `npm run test:regression`. For features with specific impact, they may also run relevant individual tests.
+- **Human-in-the-Loop:** The **User** SHOULD run the full suite (`npm test`) before the final merge.
+
+### package.json Scripts (Implementation)
+- `test:smoke`: `npx playwright test --grep @smoke` (and vitest equivalent if applicable)
+- `test:regression`: `npx playwright test --grep @regression`
 
 ## State Management & Isolation (Directory-First)
 - **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `.gemini/state/ticket-<id>/`.
-- **File Isolation Mandate:** Agents MUST NOT overwrite a single shared file. They MUST only write to their designated files within the current round's directory.
+- **State Manager Hook:** Agents MUST NOT manually edit `MAIN.md` or their individual round files. Instead, agents MUST execute the state manager hook before terminating:
+  `npm run state:update -- --agent="dev" --verdict="SUCCESS" --summary="Implemented UI toggle" [--status="review"]`
+  *The script will automatically update the `MAIN.md` timeline and append your detailed summary to the correct `round-<N>` file.*
 - **State Layout:**
+
   ```
   .gemini/state/ticket-<id>/
-  ├── MAIN.md              # Global Metadata, Status, and Cross-Round Summary
+  ├── MAIN.md              # Global Metadata, Status, History, and TIMELINE
   ├── round-1/
   │   ├── discovery.md     # Discovery agent only
   │   ├── development.md   # Dev agent only
@@ -39,7 +54,6 @@
       ├── development.md
       └── ...
   ```
-- **Read-Only History:** Agents SHOULD read files from previous rounds (e.g., `round-1/review.md`) to understand previous failures, but they MUST NEVER modify them.
 
 ## MAIN.md Template
 ```markdown
@@ -60,7 +74,13 @@ current_round: 1
 # 🔄 Round History
 - **Round 1**: [FAILED @ Review] - Violated 50-line rule.
 - **Round 2**: [IN-PROGRESS]
+
+# 📅 Timeline
+- **[YYYY-MM-DD HH:mm:ss]**: Discovery started by `discovery-agent`.
+- **[YYYY-MM-DD HH:mm:ss]**: Development completed by `dev-agent`.
+- **[YYYY-MM-DD HH:mm:ss]**: Review FAIL: Modularity regression in `page.tsx`.
 ```
+
 
 ## Agent Specific State Files
 
@@ -160,10 +180,11 @@ current_round: 1
 - **Role**: User (Human).
 - **Mandate**: The user performs the final project synchronization and PR creation.
 - **Steps**:
-  1. Final review of the `ticket.md` state file.
-  2. `git add .gemini/state/ticket-<id>.md && git commit -m "docs: finalize ticket <id> state"`.
+  1. Final review of the `.gemini/state/ticket-<id>/` directory.
+  2. `git add .gemini/state/ticket-<id>/ && git commit -m "docs: finalize ticket <id> state"`.
   3. `git push origin feature/<branch>`.
   4. `gh pr create --title "..." --body "..."`.
+
 
 ## Routing & Pipelines
 

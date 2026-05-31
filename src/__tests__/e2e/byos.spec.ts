@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('BYOS - Bring Your Own Storage', () => {
+test.describe('BYOS - Bring Your Own Storage @regression', () => {
   test.beforeEach(async ({ page }) => {
     // Zero console error monitoring
     page.on('console', msg => {

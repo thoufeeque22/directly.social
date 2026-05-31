@@ -36,7 +36,7 @@ export function WhatsNewActivityList({ updates }: WhatsNewActivityListProps) {
             />
           </ListItem>
           {index < updates.length - 1 && (
-            <Divider sx={{ borderColor: 'hsla(250, 30%, 25%, 0.05)' }} />
+            <Divider sx={{ borderColor: 'divider', opacity: 0.1 }} />
           )}
         </div>
       ))}

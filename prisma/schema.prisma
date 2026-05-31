@@ -218,6 +218,7 @@ model User {
   preferredAIStyleMode String               @default("Smart")
   preferredAIProvider  String               @default("gemini")
   role                 Role                 @default(USER)
+  preferredTheme       Theme                @default(SYSTEM)
   accounts              Account[]
   byokCredentials       ByokCredential[]
   byosConfig           ByosConfig?
@@ -257,4 +258,10 @@ enum ByosProvider {
 enum Role {
   USER
   ADMIN
+}
+
+enum Theme {
+  LIGHT
+  DARK
+  SYSTEM
 }

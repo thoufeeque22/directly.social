@@ -91,3 +91,11 @@ To optimize for SEO (Metadata API) and maintain strict modularity (50-line rule)
 - **Server Shell (`page.tsx`):** A server component that exports static or dynamic `metadata`, handles initial server-side auth/data fetching, and renders a `Suspense` boundary around the client content.
 - **Client Content (`*Content.tsx`):** A focused client component (marked with `'use client'`) that manages interactive state, hooks, and complex UI logic.
 - **Benefits:** This separation ensures that logic-heavy client components don't block the export of static metadata and makes it easier to stay within the 50-line modularity limit.
+
+## 9. Theme Management System
+
+The application uses a unified 3-way toggle (Light, Dark, System) for theme management.
+
+- **State Management:** The `ThemeContextProvider` manages the active theme, applying `dark` or `light` classes to the `html` element based on user preference or OS-level `prefers-color-scheme`.
+- **CSS Variables:** All components must use theme-aware CSS variables (e.g., `var(--background)`, `var(--card)`, `var(--text-primary)`) rather than hardcoded hex values to ensure visual consistency across both modes.
+- **Persistence:** Theme preferences are persisted locally via `localStorage` and synchronized with the database using Server Actions for cross-device consistency.

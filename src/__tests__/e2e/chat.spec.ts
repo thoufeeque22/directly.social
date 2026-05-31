@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 
-test.describe('AI Chatbot E2E', () => {
+test.describe('AI Chatbot E2E @regression', () => {
   test.setTimeout(60000); // 60 seconds for slow local models
 
   test.beforeEach(async ({ page }) => {
