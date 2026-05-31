@@ -103,9 +103,16 @@ export const MediaLibrary: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const searchParams = useSearchParams();
 
+  const [now, setNow] = useState(0);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setNow(Date.now());
+  }, []);
+
   useEffect(() => {
     const urlSearch = searchParams.get('search');
     if (urlSearch) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSearchQuery(urlSearch);
     }
   }, [searchParams]);
@@ -183,7 +190,8 @@ export const MediaLibrary: React.FC = () => {
   };
 
   const getRemainingTimeInfo = (expiresAt: string) => {
-    const remaining = new Date(expiresAt).getTime() - Date.now();
+    if (!now) return { text: '...', isExpiringSoon: false };
+    const remaining = new Date(expiresAt).getTime() - now;
     const hours = Math.max(0, Math.floor(remaining / (1000 * 60 * 60)));
     const mins = Math.max(0, Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60)));
     const isExpiringSoon = hours < 24;

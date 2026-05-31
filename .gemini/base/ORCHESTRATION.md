@@ -23,53 +23,75 @@
 - **Agent Protocol:** Before running `npx playwright test`, agents SHOULD check if a server is already responding on `http://127.0.0.1:3005`. If it is, they MUST NOT attempt to start another one. If not, they may trigger the test command which will handle the build/start automatically.
 - **Background Server:** Agents are permitted to start the E2E server in the background using `run_shell_command(..., is_background: true)` if multiple test runs are expected within a single session.
 
-## State Management & Pruning
-- **Markdown-Only State:** The project uses **`.md`** state files exclusively for tracking ticket progress. **NEVER use `.json` files for state management.** JSON state is deprecated and forbidden.
-- **Pruning Trigger:** If a state file exceeds 100 lines or 3 rounds, move to `archive/` and initialize a Summary section in the active file.
-- **Pruning Script:** Use `scripts/prune-state.ts` (updated for Markdown) to maintain state file health.
+## State Management & Isolation (Directory-First)
+- **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `.gemini/state/ticket-<id>/`.
+- **File Isolation Mandate:** Agents MUST NOT overwrite a single shared file. They MUST only write to their designated files within the current round's directory.
+- **State Layout:**
+  ```
+  .gemini/state/ticket-<id>/
+  ├── MAIN.md              # Global Metadata, Status, and Cross-Round Summary
+  ├── round-1/
+  │   ├── discovery.md     # Discovery agent only
+  │   ├── development.md   # Dev agent only
+  │   ├── review.md        # Review agent only
+  │   └── qa.md            # QA agent only
+  └── round-2/
+      ├── development.md
+      └── ...
+  ```
+- **Read-Only History:** Agents SHOULD read files from previous rounds (e.g., `round-1/review.md`) to understand previous failures, but they MUST NEVER modify them.
 
-## Markdown Lifecycle Template
+## MAIN.md Template
 ```markdown
 ---
-ticket_id: 123
+ticket_id: <id>
 branch_name: feature/...
 goal: Concise goal statement
-status: in-progress
-next_agent: dev-agent
+status: [discovery|development|review|qa|doc|pm]
+current_round: 1
 ---
 
 # 📋 Ticket Metadata
-- **ID**: 123
+- **ID**: <id>
 - **Branch**: `feature/...`
 - **Goal**: Concise goal statement
-- **Status**: in-progress
+- **Current Status**: in-progress
 
-# Round 1
+# 🔄 Round History
+- **Round 1**: [FAILED @ Review] - Violated 50-line rule.
+- **Round 2**: [IN-PROGRESS]
+```
 
-## 🔍 Discovery
+## Agent Specific State Files
+
+### discovery.md
 - **Verdict**: [APPROVED / NEEDS-INFO / REJECTED]
 - **Socratic Log**: ...
 - **Technical Blueprint**: ...
 - **Test Specification**: ...
 
-## 🛠️ Development
+### development.md
 - **Verdict**: [SUCCESS / BLOCKED]
-- **Actions**: ...
+- **Summary**: ...
+- **Modified Files**: ...
+- **Verification Logs**: [Link to build/lint results]
 
-## 🛡️ Review
+### review.md
 - **Verdict**: [PASS / FAIL]
-- **Checklist**: ...
+- **Security Audit**: ...
+- **Performance Audit**: ...
+- **Failures**: [If FAIL, list specific file:line and reason]
 
-## 🧪 QA
+### qa.md
 - **Verdict**: [PASS / FAIL]
-- **Results**: ...
+- **Test Results**: [Playwright/Maestro output]
+- **Manual Script**: [Link to doc/manual_tests/ticket-<id>.md]
 
-## 📝 Documentation
-- **Verdict**: [COMPLETE]
+## Phase Termination & Failure Protocol
+1. **Atomic Phases:** An agent MUST NOT proceed to the next phase. It MUST update its specific `.md` file in the current `round-N/` folder, update the `status` and `current_round` in `MAIN.md`, and return control.
+2. **Failure Recovery:** If `review.md` or `qa.md` results in a **FAIL**, the user MUST trigger a new round. The `dev-agent` will then start by creating `round-(N+1)/` and initializing `development.md`.
+3. **Traceable Fixes:** Dev agents in Round 2+ MUST read the previous round's `review.md` or `qa.md` to ensure all reported issues are addressed.
 
-## 📊 Project
-- **Verdict**: [CLOSED]
-```
 
 ## Agent Specific Workflows
 

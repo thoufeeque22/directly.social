@@ -26,8 +26,6 @@ export const useByosWizard = () => {
   const [validationStage, setValidationStage] = useState<'idle' | 'checking' | 'success' | 'failed'>('idle');
   const [checklist, setChecklist] = useState({ decrypt: 'pending', bucket: 'pending', permissions: 'pending' });
 
-  useEffect(() => { fetchConfig(); }, []);
-
   const fetchConfig = async () => {
     try {
       const result = await getByosConfigAction();
@@ -43,6 +41,11 @@ export const useByosWizard = () => {
       console.error('Failed to fetch BYOS config', e);
     }
   };
+
+  useEffect(() => { 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchConfig(); 
+  }, []);
 
   const handleSave = async () => {
     setLoading(true); 

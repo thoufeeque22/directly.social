@@ -13,9 +13,12 @@ import styles from './activity.module.css';
 export function ActivityContent() {
   const activity = useActivity();
   const stagingStatus = useUploadStatus();
+  // Initialize with 0 and use an effect to set the actual time to avoid hydration mismatch
   const [now, setNow] = React.useState(0);
 
   React.useEffect(() => {
+    // Only update once on mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNow(Date.now());
   }, []);
 
