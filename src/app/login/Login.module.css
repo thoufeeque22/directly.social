@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   background: radial-gradient(circle at top left, hsla(250, 30%, 15%, 1) 0%, hsla(250, 30%, 5%, 1) 100%);
-  padding: 2rem;
+  padding: calc(2rem + var(--safe-area-top)) calc(2rem + var(--safe-area-right)) calc(2rem + var(--safe-area-bottom)) calc(2rem + var(--safe-area-left));
 }
 
 .contentWrapper {
@@ -357,7 +357,7 @@
 
 @media (max-width: 640px) {
   .container {
-    padding: 1.5rem;
+    padding: calc(1.5rem + var(--safe-area-top)) calc(1.5rem + var(--safe-area-right)) calc(1.5rem + var(--safe-area-bottom)) calc(1.5rem + var(--safe-area-left));
   }
 
   .loginCard {

@@ -1,4 +1,10 @@
 :root {
+  /* Safe Area Insets */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+
   /* Core Colors (HSL) */
   --primary: 250 80% 60%;
   --primary-foreground: 250 10% 98%;
@@ -203,6 +209,9 @@ a {
 @media (max-width: 768px) {
   .page-content {
     padding: 1rem;
+    padding-left: calc(1rem + var(--safe-area-left));
+    padding-right: calc(1rem + var(--safe-area-right));
+    padding-bottom: calc(1rem + var(--safe-area-bottom));
   }
 }
 

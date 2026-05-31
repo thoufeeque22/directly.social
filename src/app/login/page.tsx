@@ -21,10 +21,6 @@ function LoginContent() {
   const [pendingProvider, setPendingProvider] = useState<string | null>(null);
   const searchParams = useSearchParams();
 
-  const isNative = typeof window !== 'undefined' && 
-                   Capacitor.getPlatform() !== 'web' &&
-                   (Capacitor.isNativePlatform() || navigator.userAgent.includes('SocialStudioApp'));
-
   // Handle the "Native Bridge" trigger
   useEffect(() => {
     const provider = searchParams.get('provider');
