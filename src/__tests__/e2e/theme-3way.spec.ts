@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 
 test.describe('Theme 3-Way Toggle Cycle', () => {
   test.beforeEach(async ({ page }) => {

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../base-test';;
 import fs from 'fs';
 
 test.describe('AI BYOK Wizard E2E', () => {

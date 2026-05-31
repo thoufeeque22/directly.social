@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 
 test.describe('Activity Hub: Upload Preparation Bar', () => {
   // Use existing auth state for all tests

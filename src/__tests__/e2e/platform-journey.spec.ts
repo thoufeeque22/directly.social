@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 
 test.describe('Platform Sequential Journey @regression', () => {
   test.beforeEach(async ({ page }) => {

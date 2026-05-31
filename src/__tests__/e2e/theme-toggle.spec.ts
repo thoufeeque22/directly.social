@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 
 test.describe('Theme Toggle @smoke @regression', () => {
   test.beforeEach(async ({ page }) => {

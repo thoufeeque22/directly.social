@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test } from './base-test';;
 
 test.describe('Visual Audit Mandate @visual', () => {
   test('Capture Home Page', async ({ page }) => {

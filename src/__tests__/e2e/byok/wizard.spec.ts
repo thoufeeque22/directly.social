@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../base-test';;
 
 test.describe('BYOK Integration Wizard E2E @regression', () => {
   test.beforeEach(async ({ page }) => {
