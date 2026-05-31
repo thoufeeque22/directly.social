@@ -477,7 +477,7 @@ The Activity domain manages the record of all past and upcoming posts. To mainta
     - `useActivityActions` / `useRetryHandler` / `useCancelHandlers`: Provides modularized handlers for user interactions.
     - `useActivityCockpit`: Manages "Cockpit" mode for real-time distribution monitoring.
 - **Optimistic UI & Reconciliation**: The `useActivity` hook centralizes the logic for merging active "pending" posts with historical data, ensuring a seamless optimistic experience without bloated UI components.
-- **Component Decomposition:** The Activity page is split into a server-side shell (`page.tsx`) and a focused client-side renderer (`ActivityContent.tsx`), which delegates to small MUI components (`ActivityHeader`, `ActivityList`, etc.).
+- **Component Decomposition**: The Activity page is split into a server-side shell (`page.tsx`) and a focused client-side renderer (`ActivityContent.tsx`), which delegates to small MUI components (`ActivityHeader`, `ActivityList`, etc.).
 
 ### 14. Complex UI Form Architecture (Modular Engine)
 
@@ -546,6 +546,14 @@ The upload pipeline utilizes a suite of specialized services to manage the compl
 
 These services are composed within the `/api/upload/assemble` route handler, which acts as a transactional orchestrator. This modularity ensures that the upload logic is decoupled from the HTTP transport layer and can be reused in other contexts, such as background processing or administrative tools.
 
+### 19. Standard View Pattern (Server Shell / Client Content)
+
+To optimize for SEO (Metadata API) and maintain strict modularity (50-line rule), all primary views follow a standard decomposition pattern:
+
+- **Server Shell (`page.tsx`):** A server component that exports static or dynamic `metadata`, handles initial server-side auth/data fetching, and renders a `Suspense` boundary around the client content.
+- **Client Content (`*Content.tsx`):** A focused client component (marked with `'use client'`) that manages interactive state, hooks, and complex UI logic.
+- **Benefits:** This separation ensures that logic-heavy client components don't block the export of static metadata and makes it easier to stay within the 50-line modularity limit by isolating rendering from configuration.
+
 ## Security & Role-Based Access Control (RBAC)
 
 Social Studio implements a strict Role-Based Access Control (RBAC) system to ensure data integrity and restrict access to sensitive administrative features.
@@ -586,15 +594,15 @@ Platform-specific logic is encapsulated in `src/lib/platforms/`.
 - **TikTok:** Uses TikTok Content Posting API.
 - **Local:** Simulates distribution for testing purposes.
 
-## 18. Mobile Architecture
+## 20. Mobile Architecture
 
 The app is wrapped using **Capacitor**, allowing it to run as a native app on iOS and Android while sharing the same web codebase. Native features (camera, gallery, auth) are accessed via Capacitor plugins.
 
-## 19. Mobile UI/UX Standards
+## 21. Mobile UI/UX Standards
 
 To ensure a premium, native-like experience on iOS and Android devices, Social Studio follows specific mobile UI/UX standards, particularly regarding "Safe Areas" for devices with notches, dynamic islands, or home indicators.
 
-### 19.1 Safe Area Insets
+### 21.1 Safe Area Insets
 
 The application handles system UI overlaps using CSS environment variables and a global configuration:
 
@@ -614,16 +622,16 @@ The application handles system UI overlaps using CSS environment variables and a
   height: calc(80px + var(--safe-area-inset-top));
   ```
 
-### 19.2 Gestures & Interactions
+### 21.2 Gestures & Interactions
 
 - **Pull-to-Refresh:** Integrated via the `useAppRefresh` hook and `LayoutWrapper` to provide a standard mobile refresh gesture.
 - **Overscroll Behavior:** `overscroll-behavior-y: none` is applied to the root container to prevent the "rubber-band" effect on the entire page, while allowing it within specific scrollable regions.
 
-## 20. Testing & Quality Assurance
+## 22. Testing & Quality Assurance
 
 The application maintains a high standard of quality through automated testing and strict TypeScript enforcement.
 
-### 1. E2E Testing (Playwright)
+### 22.1 E2E Testing (Playwright)
 
 End-to-End tests are located in `src/__tests__/e2e/` and cover critical user journeys such as authentication, metadata management, and post scheduling.
 
@@ -637,7 +645,7 @@ End-to-End tests are located in `src/__tests__/e2e/` and cover critical user jou
 - **Worker Isolation:** The backend worker process (`src/lib/worker/worker.ts`) supports namespaced temp directories via `TEST_WORKER_INDEX`, preventing file system collisions during parallel test runs.
 - **Locators:** Tests prioritize accessible roles (`getByRole`) and `data-testid` attributes for robustness.
 
-### 2. Unit & Integration Testing (Vitest)
+### 22.2 Unit & Integration Testing (Vitest)
 
 Unit tests for utility functions and integration tests for server actions are located in `src/__tests__/unit/` and `src/__tests__/integration/`.
 
@@ -645,7 +653,7 @@ Unit tests for utility functions and integration tests for server actions are lo
 - **Mocking Strategy:** External APIs (like OpenAI for chat) and platform dependencies are heavily mocked to prevent timeouts and external network dependencies.
 - **Execution:** Certain integration or E2E tests interacting heavily with the database (like schedule navigation or parallel uploads) are configured to run serially to avoid race conditions.
 
-### 3. Agent Orchestration
+### 22.3 Agent Orchestration
 
 The project uses specialized AI agents (Discovery, Dev, Review, QA) to manage the development lifecycle, ensuring that every change is planned, implemented, audited, and verified before merging.
 
@@ -660,20 +668,20 @@ To maintain context efficiency and prevent "rule bloat", the project's core orch
 
 Agents are required to read these modular files based on their current task domain.
 
-### 4. Modularity Enforcement (The 50-Line Rule)
+### 22.4 Modularity Enforcement (The 50-Line Rule)
 
 The project enforces a strict 50-line limit for all source files to ensure high maintainability and prevent monolithic modules.
 - **Automation:** This rule is automatically enforced via ESLint's `max-lines` rule. Violations will trigger an error and block the CI pipeline.
 - **Exceptions:** Test files (`src/__tests__/**`) are exempt from this rule to allow for comprehensive test suites.
 - **Legacy Support:** Existing files that exceed the limit are "grandfathered" using `/* eslint-disable max-lines */`. Developers are required to extract logic into compliant modules whenever touching these legacy files.
 
-### 5. Modern Web Standards
+### 22.5 Modern Web Standards
 
 The project integrates the `@GoogleChrome/modern-web-guidance` Gemini CLI extension to ensure adherence to modern web performance and quality standards.
 - **Workflow Integration:** Performance audits and best-practice checks are a mandatory part of the Review and QA phases, as defined in `.gemini/base/ORCHESTRATION.md`.
 - **Optimization Focus:** Continuous monitoring of Core Web Vitals (LCP, INP, CLS) and idiomatic React 19 / Next.js 16 patterns (e.g., proper RSC boundaries, using `proxy.ts` convention).
 
-### 6. Production Readiness
+### 22.6 Production Readiness
 
 To ensure stability, security, and traceability in a production environment, Social Studio implements:
 
