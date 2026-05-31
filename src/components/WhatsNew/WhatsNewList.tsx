@@ -17,7 +17,7 @@ export function WhatsNewList({ updates, onDismiss }: WhatsNewListProps) {
         <React.Fragment key={update.id}>
           <WhatsNewItem update={update} onDismiss={onDismiss} />
           {index < updates.length - 1 && (
-            <Divider sx={{ borderColor: 'hsla(250, 30%, 25%, 0.1)' }} />
+            <Divider sx={{ borderColor: 'divider', opacity: 0.2 }} />
           )}
         </React.Fragment>
       ))}

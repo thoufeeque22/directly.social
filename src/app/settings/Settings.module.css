@@ -43,16 +43,16 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem;
-  background: hsla(250, 30%, 12%, 0.5);
+  background: hsla(var(--card) / 0.5);
   backdrop-filter: blur(8px);
-  border: 1px solid hsla(250, 30%, 25%, 0.2);
+  border: 1px solid hsla(var(--border) / 0.2);
   border-radius: var(--radius);
   transition: all 0.2s ease;
 }
 
 .platformCard:hover {
   border-color: hsla(var(--primary) / 0.4);
-  background: hsla(250, 30%, 15%, 0.5);
+  background: hsla(var(--secondary) / 0.5);
 }
 
 .platformInfo {
@@ -155,7 +155,7 @@
 
 .removeBtn:hover {
   opacity: 1;
-  background: hsla(255, 100%, 100%, 0.1);
+  background: hsla(var(--primary) / 0.1);
 }
 
 /* Custom Toggle Switch */

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
@@ -19,8 +20,7 @@ export const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
         localStorage.setItem('theme-preference', modePref);
       }
     })().catch(() => {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const update = () => {
@@ -40,7 +40,10 @@ export const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
       const t = m === 'system' ? Theme.SYSTEM : m === 'dark' ? Theme.DARK : Theme.LIGHT;
       updateThemePreference(t).catch(() => {});
     },
-    toggleMode: () => value.setMode(mode === 'light' ? 'dark' : 'light')
+    toggleMode: () => {
+      const nextMode: ColorMode = mode === 'light' ? 'dark' : mode === 'dark' ? 'system' : 'light';
+      value.setMode(nextMode);
+    }
   }), [mode]);
   return (
     <ThemeContext.Provider value={value}>
