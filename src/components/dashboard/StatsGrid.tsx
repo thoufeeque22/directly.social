@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import React, { useEffect, useState } from 'react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { getDashboardStats } from '@/app/actions/stats';

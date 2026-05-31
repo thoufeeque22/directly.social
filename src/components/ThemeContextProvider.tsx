@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';

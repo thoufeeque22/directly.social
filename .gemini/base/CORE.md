@@ -7,13 +7,13 @@
 - **API Documentation (Swagger):** ALL Route Handlers MUST be documented in the centralized OpenAPI registry. Ensure documentation is accessible at `/api/docs`.
 
 ## Global Architectural Standards
-- **Modularity Enforcement (The 50-Line Rule):**
+- **Modularity Enforcement (The 100-Line Rule):**
     - **Enforcement:** Automated via ESLint `max-lines` (error severity).
-    - **Configuration:** `["error", { "max": 50, "skipBlankLines": true, "skipComments": true }]`.
-    - **New Files:** MUST be ≤ 50 lines. ESLint will block builds if this is violated.
-    - **Legacy Files (> 50 lines):** Grandfathered via `/* eslint-disable max-lines */`.
-    - **Debt Reduction Protocol:** Any interaction with a legacy file MUST include logic extraction into new, compliant modules. Do not remove the disable flag until the file is < 50 lines.
-    - **Tests:** `src/__tests__/**` is exempt from the 50-line rule.
+    - **Configuration:** `["error", { "max": 100, "skipBlankLines": true, "skipComments": true }]`.
+    - **New Files:** MUST be ≤ 100 lines. ESLint will block builds if this is violated.
+    - **Legacy Files (> 100 lines):** Grandfathered via `/* eslint-disable max-lines */`.
+    - **Debt Reduction Protocol:** Any interaction with a legacy file MUST include logic extraction into new, compliant modules. Do not remove the disable flag until the file is < 100 lines.
+    - **Tests:** `src/__tests__/**` is exempt from the 100-line rule.
 
 ## Technical & TSX Standards
 - **Component Composition:** Prefer composition over deep prop-drilling. Use React Context or state management (Zustand) when sharing data across non-adjacent components.

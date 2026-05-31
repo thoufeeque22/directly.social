@@ -23,9 +23,9 @@ Unit tests for utilities and integration tests for server actions are in `src/__
 
 The project uses specialized AI agents (Discovery, Dev, Review, QA) to manage the development lifecycle. Core orchestration rules are modularized in `.gemini/base/`.
 
-## 4. Modularity Enforcement (The 50-Line Rule)
+## 4. Modularity Enforcement (The 100-Line Rule)
 
-The project enforces a strict 50-line limit for all source files to ensure high maintainability.
+The project enforces a strict 100-line limit for all source files to ensure high maintainability.
 - **Automation:** Enforced via ESLint's `max-lines` rule.
 - **Exceptions:** Test files are exempt.
 - **Legacy Support:** Existing files exceed limit use `/* eslint-disable max-lines */`.

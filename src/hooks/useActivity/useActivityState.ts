@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { PostActivityEntry, CockpitPost, PendingPostSchema } from './types';

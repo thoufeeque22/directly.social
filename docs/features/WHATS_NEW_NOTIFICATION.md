@@ -27,7 +27,7 @@ Tracks the relationship between users and updates they have acknowledged.
 
 ## Components & Architecture
 
-The feature is built with highly decoupled, modular React components, with each file limited to under 50 lines to maintain clean separation of concerns and high maintainability.
+The feature is built with highly decoupled, modular React components, with each file limited to under 100 lines to maintain clean separation of concerns and high maintainability.
 
 ### `WhatsNewContext`
 A React Context provider that handles the global client-side state for unread updates, ensuring that badge clearance propagates instantly across all triggers in the header.

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { useCallback, useRef, useEffect } from 'react';
 import { useAccounts } from '@/hooks/useAccounts';
 import { useAiByok } from '@/hooks/useAiByok';

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { StyleMode, AITier } from '@/lib/core/constants';
 import { Account, PlatformPreference } from '@/lib/core/types';
 import { AIProvider } from '@/lib/core/ai';
@@ -14,6 +13,7 @@ export interface UploadFormProps {
   videoFormat: 'short' | 'long';
   videoDuration: number | null;
   draftFileName: string | null;
+  draftFile: File | null;
   isScheduled: boolean;
   scheduledAt: string;
   customStyleText: string;

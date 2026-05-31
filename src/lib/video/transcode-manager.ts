@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { prisma } from "@/lib/core/prisma";
 import { checkTranscodeRequirement, transcodeForPlatform } from "./processor";
 import path from "path";
