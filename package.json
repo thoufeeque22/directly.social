@@ -17,6 +17,7 @@
     "cleanup:neon": "bash scripts/cleanup-neon.sh",
     "cleanup:neon:force": "bash scripts/cleanup-neon.sh --force",
     "prune-state": "npx tsx scripts/prune-state.ts",
+    "state:update": "npx tsx scripts/state-manager.ts",
     "seed:e2e": "npx tsx src/__tests__/scripts/seed-e2e-user.ts",
     "seed:schedule": "npx tsx src/__tests__/scripts/seed-e2e-schedule.ts",
     "seed:whats-new": "npx tsx src/__tests__/scripts/seed-whats-new.ts",

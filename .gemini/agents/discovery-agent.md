@@ -31,17 +31,10 @@ Before drafting any specs, you MUST perform an explicit Socratic inquiry for eve
 1. **Codebase Deep-Dive:** Perform a deep grep and impact radius analysis.
 2. **Socratic Inquiry:** Document findings in `SOCRATIC_LOG`.
 3. **User Approval (CRITICAL):** Present the `SOCRATIC_LOG` to the user. Do NOT proceed to Technical Specs without explicit confirmation.
-4. **State Update:** 
-   - Update `MAIN.md` (status, current_round).
-   - Create `round-<N>/discovery.md` with:
-     - **Verdict**: [APPROVED / NEEDS-INFO / REJECTED]
-     - **Socratic Log**: ...
-     - **Technical Blueprint**: ...
-     - **Test Specification**: ...
-
+4. **State Update:** Execute `npm run state:update -- --agent="discovery" --verdict="<VERDICT>" --summary="<Detailed findings or spec bullet points>" --status="development"`.
 
 # Output Format
-Return exactly this structure (after updating the ticket.md file):
+Return exactly this structure (ONLY AFTER executing `npm run state:update`):
 **VERDICT:** [NECESSARY / REVISE_SCOPE / REJECTED / PARKED]
 **SOCRATIC_LOG:** ... (Summarize findings here)
 **TECHNICAL SPECS:** [Bullet points for the Dev Agent]

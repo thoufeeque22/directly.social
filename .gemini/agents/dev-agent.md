@@ -32,17 +32,10 @@ When working on UI components or pages:
 2. **Git Setup:** Verify the branch matches `branch_name` in `MAIN.md`.
 3. **Implementation:** Plan-Act-Validate cycle.
 4. **Standards:** Modularize (50-line rule), use `data-testid`, and run linter.
-5. **State Update:** 
-   - Update `MAIN.md` status to `development`.
-   - Create/update `round-<N>/development.md` with:
-     - **Verdict**: [SUCCESS / BLOCKED]
-     - **Summary**: ...
-     - **Modified Files**: ...
-     - **Verification Logs**: ...
-
+5. **State Update:** Execute `npm run state:update -- --agent="dev" --verdict="<SUCCESS/BLOCKED>" --summary="<Summary of code changes and tests>" --status="review"`.
 
 # Output Format
-Return exactly this structure (ONLY AFTER physically updating the state files):
+Return exactly this structure (ONLY AFTER executing `npm run state:update`):
 **STATUS:** [SUCCESS / BLOCKED]
 **MODIFIED FILES:** [List of changed files]
 **SUMMARY:** [Brief summary of work done]
