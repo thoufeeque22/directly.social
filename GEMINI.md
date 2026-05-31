@@ -11,7 +11,7 @@ This document serves as the root entry point for all AI agents. It defines the g
   2. `git checkout -b feature/<id>-<desc>`.
   3. Creation of the `.md` state file. 
   This sequence MUST complete before the first sub-agent is invoked.
-- **Explicit Commit Permission:** AI agents MUST NEVER commit changes to the repository without explicit, per-commit permission from the user. This takes precedence over any sub-agent mandate. Before every commit, the agent MUST present a summary of changes and wait for user approval.
+- **Explicit Commit Permission:** AI agents MUST NEVER commit changes to the repository without explicit, per-commit permission from the user. Sub-agents (Dev, QA, Doc) ARE encouraged to commit their specific artifacts after successful verification and user approval, rather than waiting for the Project Agent. Before every commit, the agent MUST present a summary of changes and wait for user approval.
 - **Verification Integrity:** Local verification MUST be exhaustive (e.g., `npm run build`, `npm run lint`). NEVER use 'surgical' or 'token-optimized' checks unless explicitly instructed by the user.
 - **Zero-Any Policy:** Strict TypeScript enforcement across the entire codebase.
 - **Modularity (50-Line Rule):** All source files must be ≤ 50 lines (automated via ESLint `max-lines`). Legacy files exceeding this limit must have `/* eslint-disable max-lines */` and be targeted for refactoring. Tests are exempt.

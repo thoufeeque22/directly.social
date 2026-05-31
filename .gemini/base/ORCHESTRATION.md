@@ -82,6 +82,7 @@ next_agent: dev-agent
 - **Role:** Staff Engineer. Clean, modular code.
 - **Verdict:** Success -> Review | Blocked -> Discovery/Manual.
 - **Exhaustive Verification:** MUST run `npm run build` and `npm run lint`.
+- **Commit Mandate:** After successful verification, the agent MUST present a summary and ask for permission to commit the implementation code before handoff.
 
 ### Review (QA & Security Audit)
 - **Role:** Senior Auditor. **READ-ONLY**.
@@ -96,21 +97,54 @@ next_agent: dev-agent
   1. **Automation**: Write and execute Playwright/Maestro tests.
   2. **Manual**: Formalize the Discovery test spec into a detailed step-by-step manual test script in `docs/manual_tests/ticket-<id>.md`.
   3. **No App Edits**: MUST NOT modify application source code.
+  4. **Commit Mandate**: After successful verification, the agent MUST present a summary and ask for permission to commit the test files and manual scripts before handoff.
 - **Verdict:** Pass -> Documentation | Fail -> Return to Dev.
 
-### Documentation & Project
-- **Documentation:** 
-  - **Role**: Tech Writer. Finalize feature docs and architectural reports.
-  - **Verdict**: [COMPLETE] -> Project.
-- **Project Agent:** 
-  - **Role**: Project Manager. Finalizes the ticket and creates the PR.
-  - **Mandate**: 
-    1. **Finalize State**: Update `ticket.md` with final summary; set status to `completed`.
-    2. **Shell Operations**: Permitted to run `git add`, `git commit`, `git push`, and `gh pr create`.
-    3. **No App Edits**: STRICTLY forbidden from modifying application code (`src/`).
-  - **Verdict**: [CLOSED].
+### Documentation
+- **Role**: Tech Writer & Orchestration Architect. Finalize feature docs and optimize instruction layer.
+- **Commit Mandate**: After finishing documentation, the agent MUST present a summary and ask for permission to commit the docs.
+- **Orchestration Audit**: The agent MUST periodically run the `orchestration-auditor` skill to identify contradictions or redundancies in `GEMINI.md` and `.gemini/base/*.md`.
+- **Incidental Check**: After committing, the agent MUST read `.gemini/incidental_observations.json`.
+  - If **Observations exist**: Suggest invoking `project-agent` to resolve them.
+  - If **No Observations exist**: Suggest the **User** for final PR creation.
+- **Verdict**: [COMPLETE].
+
+### Project Agent
+- **Role**: Issue Architect. Specialized in resolving technical debt and requirement refinement.
+- **Mandate**: 
+  1. **Direct Requests**: Can be invoked by the **User** at any time to create, update, or refine GitHub issues, even outside the standard ticket sequence.
+  2. **Incidental Resolution**: When invoked during the ticket lifecycle, it MUST read `.gemini/incidental_observations.json`. For each observation, verify the issue and create a new GitHub issue if appropriate. CLEAR the file (`[]`) after resolution.
+  3. **Issue Enhancement**: When creating issues, the agent should include technical context, suggested implementation paths, and labels/priorities.
+  4. **Next Step**: After processing requests or observations, suggest the **User** for the next logical step (e.g., final PR creation or returning to another task).
+- **No App Edits**: STRICTLY forbidden from modifying application code (`src/`).
+- **Verdict**: [ISSUES-MANAGED].
+
+## Incidental Observations Protocol
+- **Purpose**: To capture bugs, technical debt, or optimization opportunities discovered *outside* the scope of the current ticket without derailing the primary task.
+- **Logging**: Any agent (Dev, Review, QA, etc.) that discovers an incidental issue MUST append it to `.gemini/incidental_observations.json`. 
+- **Format**: 
+  ```json
+  {
+    "id": "OBS-<timestamp>",
+    "discovery_agent": "dev-agent",
+    "observation": "Brief description of the issue",
+    "file": "path/to/file:line",
+    "severity": "low/medium/high"
+  }
+  ```
+- **Resolution**: The **Project Agent** is responsible for processing this file.
+
+## Human-Centric Closure
+- **Role**: User (Human).
+- **Mandate**: The user performs the final project synchronization and PR creation.
+- **Steps**:
+  1. Final review of the `ticket.md` state file.
+  2. `git add .gemini/state/ticket-<id>.md && git commit -m "docs: finalize ticket <id> state"`.
+  3. `git push origin feature/<branch>`.
+  4. `gh pr create --title "..." --body "..."`.
 
 ## Routing & Pipelines
+
 - **Manual Redirection:** Any **FAIL** or **NEEDS-INFO** verdict requires manual redirection back to Development or Discovery by the user.
 - **Single Workflow Mandate:** ALL changes MUST follow this sequence. No 'Fast-Track' to main.
 - **Protocol Failure:** Any deviation is a terminal violation and must be corrected immediately.
