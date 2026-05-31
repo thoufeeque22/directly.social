@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Update } from '@/components/WhatsNew/WhatsNewContext';
+import { Update } from '@/components/WhatsNew/types';
 import { markUpdateAsSeen } from '@/app/actions/whats-new';
 import { getRecentUpdates } from '@/app/actions/whats-new-activity';
 

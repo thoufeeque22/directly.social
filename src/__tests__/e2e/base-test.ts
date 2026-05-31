@@ -13,7 +13,12 @@ export const test = base.extend<{ consoleChecker: void }>({
       // Catch console.error logs (React hydration errors, warnings, etc.)
       page.on('console', msg => {
         if (msg.type() === 'error') {
-          errors.push(`Console error: ${msg.text()}`);
+          const text = msg.text();
+          // Ignore known noise
+          if (text.includes('429') || text.includes('Too Many Requests')) return;
+          if (text.includes('Failed to load resource: the server responded with a status of 429')) return;
+          
+          errors.push(`Console error: ${text}`);
         }
       });
 

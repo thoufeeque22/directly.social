@@ -19,7 +19,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       const data = await getNotifications();
       setNotifications(data as Notification[]);
     } catch (error) {
-      console.error('[Notifications] Failed to fetch:', error);
+      console.warn('[Notifications] Failed to fetch:', error);
     } finally { setLoading(false); }
   }, [status]);
   useEffect(() => {

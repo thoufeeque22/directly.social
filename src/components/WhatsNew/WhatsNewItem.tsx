@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ListItem, ListItemText, Typography, Button } from '@mui/material';
-import { Update } from './WhatsNewContext';
+import { Update } from './types';
 
 interface WhatsNewItemProps {
   update: Update;

@@ -43,7 +43,12 @@ export async function checkRateLimit(
   errorMessage: string = "Too many requests. Please try again later."
 ) {
   // Skip rate limiting in E2E/test environments
-  if (process.env.NEXT_PUBLIC_E2E === 'true' || process.env.NODE_ENV === 'test') {
+  if (
+    process.env.NEXT_PUBLIC_E2E === 'true' || 
+    process.env.NODE_ENV === 'test' || 
+    process.env.CI === 'true' ||
+    process.env.VITEST === 'true'
+  ) {
     return;
   }
 

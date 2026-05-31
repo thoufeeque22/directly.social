@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { List, Divider } from '@mui/material';
-import { Update } from './WhatsNewContext';
+import { Update } from './types';
 import { WhatsNewItem } from './WhatsNewItem';
 
 interface WhatsNewListProps {

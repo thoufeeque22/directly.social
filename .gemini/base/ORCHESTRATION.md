@@ -89,24 +89,27 @@ current_round: 1
 
 ### discovery.md
 - **Verdict**: [APPROVED / NEEDS-INFO / REJECTED]
+- **Feedback Analysis (Round 2+ only)**: Analyze why the previous blueprint was rejected or revised.
 - **Socratic Log**: ...
 - **Technical Blueprint**: ...
 - **Test Specification**: ...
 
 ### development.md
 - **Verdict**: [SUCCESS / BLOCKED]
+- **Root Cause Analysis (Round 2+ only)**: Explicitly identify WHY the previous round was rejected (e.g., "Violated 50-line rule").
+- **Remediation Strategy (Round 2+ only)**: Detail the specific changes made to address the failure and prevent regression.
 - **Summary**: ...
-- **Modified Files**: ...
-- **Verification Logs**: [Link to build/lint results]
 
 ### review.md
 - **Verdict**: [PASS / FAIL]
+- **Audit Gap Analysis (Round 2+ only)**: If the previous audit was overridden or if QA found issues missed here, analyze the gap in the audit protocol.
 - **Security Audit**: ...
 - **Performance Audit**: ...
 - **Failures**: [If FAIL, list specific file:line and reason]
 
 ### qa.md
 - **Verdict**: [PASS / FAIL]
+- **Test Gap Analysis (Round 2+ only)**: If a bug was found manually that this suite missed, identify the missing test scenario.
 - **Test Results**: [Playwright/Maestro output]
 - **Manual Script**: [Link to doc/manual_tests/ticket-<id>.md]
 

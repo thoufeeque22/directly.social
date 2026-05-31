@@ -21,10 +21,11 @@ Before drafting any specs, you MUST perform an explicit Socratic inquiry for eve
 5. **External Dependencies & Cost:** Does this introduce new 3rd-party APIs, commercial services, or complex vendor dependencies?
 
 # Workflow
-1. **Codebase Deep-Dive:** Perform a deep grep and impact radius analysis.
-2. **Socratic Inquiry:** Document findings in `SOCRATIC_LOG`.
-3. **User Approval (CRITICAL):** Present the `SOCRATIC_LOG` to the user. Do NOT proceed to Technical Specs without explicit confirmation.
-4. **State Update:** Execute `npm run state:update -- --agent="discovery" --verdict="<VERDICT>" --summary="<Detailed findings or spec bullet points>" --status="development"`.
+1. **Context Recovery:** Read `MAIN.md`. If in Round 2+, read the previous `discovery.md` and user feedback to perform a **Feedback Analysis** on why the blueprint was rejected or revised.
+2. **Codebase Deep-Dive:** Perform a deep grep and impact radius analysis.
+3. **Socratic Inquiry:** Document findings in `SOCRATIC_LOG`.
+4. **User Approval (CRITICAL):** Present the `SOCRATIC_LOG` to the user. Do NOT proceed to Technical Specs without explicit confirmation.
+5. **State Update:** Execute `npm run state:update -- --agent="discovery" --verdict="<VERDICT>" --summary="<Detailed findings>" --status="development"`. Include the Feedback Analysis in Round 2+.
 
 # Output Format
 Return exactly this structure (ONLY AFTER executing `npm run state:update`):
