@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
+import { Providers } from "@/components/Providers";
+import { ThemeScript } from "@/components/layout/ThemeScript";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,15 +24,16 @@ export const metadata: Metadata = {
   },
 };
 
-import { Providers } from "@/components/Providers";
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body className={inter.className}>
         <Providers>
           <LayoutWrapper>

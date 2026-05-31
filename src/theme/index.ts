@@ -1,25 +1,8 @@
 import { createTheme } from '@mui/material/styles';
+import { getPalette } from './palette';
 
-export const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: 'hsl(250, 80%, 60%)', // var(--primary)
-      contrastText: 'hsl(250, 10%, 98%)',
-    },
-    background: {
-      default: 'hsl(250, 40%, 5%)', // var(--background)
-      paper: 'hsla(250, 30%, 12%, 0.5)', // .glass-card background
-    },
-    text: {
-      primary: 'hsl(250, 10%, 95%)', // var(--foreground)
-      secondary: 'hsl(250, 10%, 60%)', // var(--muted-foreground)
-    },
-    divider: 'hsla(250, 30%, 25%, 0.2)', // .glass-card border
-    error: {
-      main: 'hsl(0, 84%, 60%)', // var(--destructive)
-    }
-  },
+export const getTheme = (mode: 'light' | 'dark') => createTheme({
+  palette: getPalette(mode),
   typography: {
     fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
   },
@@ -27,10 +10,12 @@ export const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundImage: 'none', // Remove MUI elevation gradient
+          backgroundImage: 'none',
           backdropFilter: 'blur(8px)',
           borderRadius: '0.75rem',
-          border: '1px solid hsla(250, 30%, 25%, 0.2)',
+          border: mode === 'light' 
+            ? '1px solid rgba(0, 0, 0, 0.12)' 
+            : '1px solid hsla(250, 30%, 25%, 0.2)',
         }
       }
     },
@@ -44,3 +29,5 @@ export const theme = createTheme({
     }
   }
 });
+
+export const theme = getTheme('dark');
