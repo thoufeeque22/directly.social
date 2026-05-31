@@ -79,3 +79,53 @@ if (platform === '[platform-name]') {
 - **Error Handling:** Wrap API calls in try-catch blocks and throw descriptive errors. Use the platform's error messages where possible.
 - **Logging:** Use the centralized `logger` from `@/lib/core/logger` to track the distribution process.
 - **Shared Utilities:** Check `src/lib/core/platforms/` for existing utilities (especially for Meta-based platforms) before implementing new ones.
+
+## Mobile Safe Areas
+
+When developing new UI components, especially fixed or absolute elements, you must account for "Safe Area" insets (notches, dynamic islands, and home indicators).
+
+### Core CSS Variables
+Use the following global variables defined in `src/app/globals.css`:
+- `--safe-area-inset-top`
+- `--safe-area-inset-bottom`
+- `--safe-area-inset-left`
+- `--safe-area-inset-right`
+
+### Usage Examples
+
+#### Fixed Headers
+Always add the top inset to the padding and calculate the total height:
+```css
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding-top: var(--safe-area-inset-top);
+  height: calc(80px + var(--safe-area-inset-top));
+}
+```
+
+#### Bottom Navigation / FABs
+Use `calc()` to ensure elements are positioned above the home indicator:
+```tsx
+// Using MUI sx prop
+<Fab
+  sx={{
+    position: 'fixed',
+    bottom: `calc(24px + var(--safe-area-inset-bottom))`,
+    right: 24
+  }}
+>
+  ...
+</Fab>
+```
+
+#### Full-Page Containers
+Ensure side notches in landscape mode don't clip content:
+```css
+.container {
+  padding-left: calc(1rem + var(--safe-area-inset-left));
+  padding-right: calc(1rem + var(--safe-area-inset-right));
+  padding-bottom: var(--safe-area-inset-bottom);
+}
+```

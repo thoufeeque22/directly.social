@@ -10,7 +10,7 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-right: 1px solid hsla(250, 30%, 20%, 0.4);
-  padding: 2rem 1rem;
+  padding: calc(2rem + var(--safe-area-top)) 1rem calc(2rem + var(--safe-area-bottom)) calc(1rem + var(--safe-area-left));
   z-index: 100;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

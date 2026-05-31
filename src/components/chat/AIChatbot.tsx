@@ -230,7 +230,12 @@ const ChatWindowContent = ({
     <Box 
       component="form"
       onSubmit={handleSubmit}
-      sx={{ p: 2, borderTop: '1px solid hsla(var(--border) / 0.5)', background: 'hsla(var(--background) / 0.8)' }}
+      sx={{ 
+        p: 2, 
+        pb: 'calc(16px + var(--safe-area-bottom))',
+        borderTop: '1px solid hsla(var(--border) / 0.5)', 
+        background: 'hsla(var(--background) / 0.8)' 
+      }}
     >
       <TextField
         fullWidth
@@ -308,7 +313,12 @@ export const AIChatbot = () => {
   return (
     <>
       {(!isMobile || !isOpen) && (
-        <Box sx={{ position: 'fixed', bottom: 24, right: 24, zIndex: 1300 }}>
+        <Box sx={{ 
+          position: 'fixed', 
+          bottom: 'calc(24px + var(--safe-area-bottom))', 
+          right: 'calc(24px + var(--safe-area-right))', 
+          zIndex: 1300 
+        }}>
           <Tooltip title="AI Assistant" placement="left">
             <IconButton
               data-testid="chat-fab"
