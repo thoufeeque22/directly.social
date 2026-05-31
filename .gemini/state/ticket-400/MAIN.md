@@ -3,8 +3,8 @@
 ## Status
 - [x] Initialization
 - [x] Discovery (Discovery Agent / Manual)
-- [ ] Development (Dev Agent)
-- [ ] Review (Review Agent)
+- [x] Development (Dev Agent)
+- [x] Review (Review Agent)
 - [ ] QA (QA Agent)
 - [ ] Documentation (Doc Agent)
 - [ ] Project Wrap-up (Project Agent)
@@ -15,10 +15,10 @@
 - **Verdict:** NECESSARY
 
 ## Development
-- **Status:** Pending
+- **Status:** Complete
 
-## QA
-- **Status:** Pending
+## Review
+- **Status:** In Progress
 
 ## Documentation
 - **Status:** Pending
@@ -27,3 +27,7 @@
 - **[2026-05-31 16:38:36]**: DISCOVERY [NECESSARY] - Proposed a separate Notification Utility (Bell Icon) for transactional alerts, distinct from the system-wide 'What\'s New' system. Specified a new Prisma model, server actions, and MUI components following the 50-line rule and 'no emojis' policy.
 - **[2026-05-31 16:45:00]**: Discovery Complete. Technical specification written to `round-1/SPEC.md`. Ticket ready for development.
 - **[2026-05-31 16:39:47]**: DISCOVERY [NECESSARY] - Discovery complete. Technical spec written to SPEC.md. Proposed Notification model, server actions, and MUI components.
+- **[2026-05-31 16:50:00]**: DEVELOPMENT [START] - Invoking Dev Agent to implement the Notification Utility as per SPEC.md.
+- **[2026-05-31 16:55:00]**: DEVELOPMENT [COMPLETE] - Implementation finished, build and lint validated. All components under 50 lines. Ready for Review.
+- **[2026-05-31 17:00:00]**: REVIEW [START] - Invoking Review Agent for code quality and security audit.
+- **[2026-05-31 17:01:13]**: REVIEW [PASS] - Audit complete. implementation follows spec, secure server actions with IDOR protection, all files < 50 lines. Ready for QA.
