@@ -10,6 +10,7 @@ End-to-End tests are located in `src/__tests__/e2e/`.
 - **Global Setup & Seeding:** Full database cleanup and idempotent seeding performed once before tests.
 - **Automated Authentication:** Setup project performs login and saves session state.
 - **Worker Isolation:** Backend worker supports namespaced temp directories via `TEST_WORKER_INDEX`.
+- **Zero Console Error Policy:** E2E tests automatically fail if any unhandled exceptions or `console.error` logs occur during execution. This is enforced via the `consoleChecker` fixture in `base-test.ts`, ensuring high UI stability and preventing silent failures or hydration mismatches.
 
 ## 2. Unit & Integration Testing (Vitest)
 

@@ -12,6 +12,7 @@ erDiagram
     User ||--o{ TokenAuditLog : "logs"
     User ||--o{ MetadataTemplate : "saves"
     User ||--o{ UserSeenUpdate : "tracks"
+    User ||--o{ Notification : "receives"
     UpdateLog ||--o{ UserSeenUpdate : "logs"
 
     Account ||--o{ TokenAuditLog : "audited by"
@@ -114,5 +115,15 @@ erDiagram
         string userId FK
         string updateId FK
         datetime seenAt
+    }
+
+    Notification {
+        string id PK
+        string userId FK
+        string type
+        string message
+        boolean isRead
+        string link
+        datetime createdAt
     }
 ```
