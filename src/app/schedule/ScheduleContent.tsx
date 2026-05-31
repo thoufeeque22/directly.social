@@ -89,9 +89,14 @@ export function ScheduleContent() {
     } catch (e) { return false; }
   }, [aiPreviews, editingPost]);
   const [viewMode, setViewMode] = useState<'timeline' | 'month' | 'week'>('timeline');
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setCurrentDate(new Date());
+  }, []);
 
   const nextPeriod = () => {
+    if (!currentDate) return;
     if (viewMode === 'month') {
       setCurrentDate(addMonths(currentDate, 1));
     } else if (viewMode === 'week') {
@@ -100,6 +105,7 @@ export function ScheduleContent() {
   };
 
   const prevPeriod = () => {
+    if (!currentDate) return;
     if (viewMode === 'month') {
       setCurrentDate(subMonths(currentDate, 1));
     } else if (viewMode === 'week') {
@@ -141,8 +147,7 @@ export function ScheduleContent() {
 
   const hasActivePosts = posts.some(p => {
     const scheduledTime = new Date(p.scheduledAt).getTime();
-    const now = Date.now();
-    return scheduledTime <= now + 30000;
+    return scheduledTime <= Date.now() + 30000;
   });
 
   usePolling({
@@ -299,10 +304,10 @@ export function ScheduleContent() {
                 Today
               </button>
               <span data-testid="calendar-current-period" style={{ fontWeight: 700, fontSize: '1.1rem', minWidth: '140px', textAlign: 'center', color: 'hsl(var(--foreground))' }}>
-                {viewMode === 'month' 
+                {currentDate && (viewMode === 'month' 
                   ? format(currentDate, 'MMMM yyyy')
-                  : `${format(startOfWeek(currentDate), 'MMM d')} - ${format(endOfWeek(currentDate), 'MMM d, yyyy')}`
-                }
+                  : `${format(startOfWeek(currentDate as Date), 'MMM d')} - ${format(endOfWeek(currentDate as Date), 'MMM d, yyyy')}`
+                )}
               </span>
               <IconButton onClick={nextPeriod} data-testid="calendar-next-btn" size="small" sx={{ color: 'hsl(var(--foreground))', background: 'hsla(var(--muted)/0.2)' }}>
                 <ChevronRightIcon />
@@ -385,12 +390,14 @@ export function ScheduleContent() {
           </div>
         </GlassCard>
       ) : (viewMode === 'month' || viewMode === 'week') ? (
-        <CalendarView 
-          posts={posts} 
-          currentDate={currentDate}
-          viewType={viewMode}
-          onEditPost={(post) => setEditingPost(post)} 
-        />
+        currentDate && (
+          <CalendarView 
+            posts={posts} 
+            currentDate={currentDate}
+            viewType={viewMode}
+            onEditPost={(post) => setEditingPost(post)} 
+          />
+        )
       ) : (
         <div className={styles.timeline}>
           {posts.map((post) => (
