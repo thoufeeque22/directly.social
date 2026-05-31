@@ -16,17 +16,13 @@ export function UserActions({ session }: { session: Session | null }) {
 
   return (
     <>
-      {session?.user && (
+      {/* 
+        Feature temporarily disabled:
+        session?.user && (
         <Tooltip title="AI Credits remaining">
-          <Chip 
-            icon={<BoltIcon sx={{ color: '#FFD700 !important' }} />} 
-            label={`${session.user.aiCredits ?? 0} Credits`} 
-            variant="outlined"
-            size="small"
-            sx={{ mr: 1, borderColor: 'rgba(255,255,255,0.2)' }}
-          />
+          <Chip ... />
         </Tooltip>
-      )}
+      )*/}
       <NotificationBell />
       <button className={styles.createBtn} onClick={() => { window.location.hash = 'create-post-section'; }}>
         + Create Post

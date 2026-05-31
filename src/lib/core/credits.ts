@@ -18,9 +18,14 @@ export async function consumeAiCredit(
   activeProvider: string,
   byokConfigs?: Record<string, { apiKey: string; modelId: string }>
 ) {
+  // Feature temporarily disabled.
+  return { success: true };
+  
+  /* 
   if (byokConfigs && byokConfigs[activeProvider]) {
     return { success: true };
   }
+  */
 
   // Use updateMany for atomic decrement with condition
   const result = await prisma.user.updateMany({
