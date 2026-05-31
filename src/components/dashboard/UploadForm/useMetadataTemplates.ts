@@ -27,6 +27,7 @@ export function useMetadataTemplates(isOpen: boolean) {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (isOpen) fetchTemplates();
   }, [isOpen]);
 

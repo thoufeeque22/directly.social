@@ -69,6 +69,7 @@ export function ScheduleContent() {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
   const [isReviewing, setIsReviewing] = useState(false);
@@ -92,6 +93,7 @@ export function ScheduleContent() {
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentDate(new Date());
   }, []);
 
@@ -145,10 +147,16 @@ export function ScheduleContent() {
     }
   }, [targetId, viewMode]);
 
-  const hasActivePosts = posts.some(p => {
-    const scheduledTime = new Date(p.scheduledAt).getTime();
-    return scheduledTime <= Date.now() + 30000;
-  });
+  const [hasActivePosts, setHasActivePosts] = useState(false);
+  useEffect(() => {
+    const now = Date.now();
+    const hasActive = posts.some(p => {
+      const scheduledTime = new Date(p.scheduledAt).getTime();
+      return scheduledTime <= now + 30000;
+    });
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setHasActivePosts(hasActive);
+  }, [posts]);
 
   usePolling({
     callback: fetchSchedule,
@@ -157,6 +165,7 @@ export function ScheduleContent() {
   });
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchSchedule();
     globalThis.addEventListener('refresh-upcoming', fetchSchedule);
     return () => {

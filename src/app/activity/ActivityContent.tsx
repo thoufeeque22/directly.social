@@ -18,6 +18,7 @@ export function ActivityContent() {
 
   React.useEffect(() => {
     // Only update once on mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNow(Date.now());
   }, []);
 

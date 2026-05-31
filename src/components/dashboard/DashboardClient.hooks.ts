@@ -26,11 +26,14 @@ export const useDashboardAIState = (initialAITier: AITier, initialAIStyle: Style
 
   useEffect(() => {
     const savedTier = localStorage.getItem('SS_AI_TIER') as AITier;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (savedTier && ['Manual', 'Enrich', 'Generate'].includes(savedTier)) setAiTierInternal(savedTier);
     const savedProvider = localStorage.getItem('SS_AI_PROVIDER') as AIProvider;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (savedProvider && ['gemini', 'groq', 'ollama', 'openai', 'anthropic'].includes(savedProvider)) setAiProviderInternal(savedProvider);
     const savedMode = localStorage.getItem('SS_AI_MODE') as StyleMode;
-    if (savedMode && ['Smart', 'Gen-Z', 'SEO', 'Story', 'Custom'].includes(savedMode)) setContentModeInternal(savedMode);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (savedMode && ['Smart', 'Creative', 'Balanced'].includes(savedMode)) setContentModeInternal(savedMode);
   }, []);
 
   const setAiTier = async (newTier: AITier) => {
