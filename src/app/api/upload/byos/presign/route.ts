@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import { uploadRateLimit, checkRateLimit } from '@/lib/core/ratelimit';
+import { checkRateLimit } from '@/lib/core/ratelimit';
+import { uploadRateLimit } from '@/lib/core/ratelimit-config';
 import { getByosConfig } from '@/lib/byos/service';
 import { createS3Client } from '@/lib/upload/s3/client';
 import { initializeUpload, getPartPresignedUrl } from '@/lib/byos/presign-service';

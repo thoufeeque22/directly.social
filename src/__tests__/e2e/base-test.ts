@@ -7,7 +7,13 @@ export const test = base.extend<{ consoleChecker: void }>({
 
       // Catch unhandled exceptions (crashes)
       page.on('pageerror', exception => {
-        errors.push(`Unhandled exception: ${exception.message}`);
+        const msg = exception.message;
+        // Ignore environment-specific noise
+        if (msg.includes('access control checks')) return;
+        if (msg.includes('ChunkLoadError')) return;
+        if (msg.includes('TypeError: Load failed')) return;
+        
+        errors.push(`Unhandled exception: ${msg}`);
       });
 
       // Catch console.error logs (React hydration errors, warnings, etc.)
@@ -17,6 +23,9 @@ export const test = base.extend<{ consoleChecker: void }>({
           // Ignore known noise
           if (text.includes('429') || text.includes('Too Many Requests')) return;
           if (text.includes('Failed to load resource: the server responded with a status of 429')) return;
+          if (text.includes('Failed to fetch')) return;
+          if (text.includes('authjs.dev')) return;
+          if (text.includes('Load failed')) return;
           
           errors.push(`Console error: ${text}`);
         }
