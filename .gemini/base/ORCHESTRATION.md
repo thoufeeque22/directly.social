@@ -4,7 +4,7 @@
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST:
   1. Switch to `main` and pull latest (`git checkout main && git pull`).
   2. Create a dedicated feature branch (`feature/<id>-short-description`).
-  3. Create a state file `.gemini/state/ticket-<id>.md` following the **Markdown Lifecycle Template**.
+  3. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template**.
 - **Strict Sequential Workflow:** ALL tickets MUST follow this exact sequence:
   `Discovery` -> `Development` -> `Review` -> `QA` -> `Documentation` -> `Project Management`.
 - **Phase Termination & Failure Protocol:**
@@ -25,11 +25,12 @@
 
 ## State Management & Isolation (Directory-First)
 - **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `.gemini/state/ticket-<id>/`.
+- **Append-Only Mandate:** Agents MUST NOT destructive-overwrite previous entries. They MUST append new actions, findings, or logs to the end of their designated files using the `replace` tool or targeted `write_file` (if creating for the first time).
 - **File Isolation Mandate:** Agents MUST NOT overwrite a single shared file. They MUST only write to their designated files within the current round's directory.
 - **State Layout:**
   ```
   .gemini/state/ticket-<id>/
-  ├── MAIN.md              # Global Metadata, Status, and Cross-Round Summary
+  ├── MAIN.md              # Global Metadata, Status, History, and TIMELINE
   ├── round-1/
   │   ├── discovery.md     # Discovery agent only
   │   ├── development.md   # Dev agent only
@@ -39,7 +40,6 @@
       ├── development.md
       └── ...
   ```
-- **Read-Only History:** Agents SHOULD read files from previous rounds (e.g., `round-1/review.md`) to understand previous failures, but they MUST NEVER modify them.
 
 ## MAIN.md Template
 ```markdown
@@ -60,7 +60,13 @@ current_round: 1
 # 🔄 Round History
 - **Round 1**: [FAILED @ Review] - Violated 50-line rule.
 - **Round 2**: [IN-PROGRESS]
+
+# 📅 Timeline
+- **[YYYY-MM-DD HH:mm:ss]**: Discovery started by `discovery-agent`.
+- **[YYYY-MM-DD HH:mm:ss]**: Development completed by `dev-agent`.
+- **[YYYY-MM-DD HH:mm:ss]**: Review FAIL: Modularity regression in `page.tsx`.
 ```
+
 
 ## Agent Specific State Files
 
@@ -160,10 +166,11 @@ current_round: 1
 - **Role**: User (Human).
 - **Mandate**: The user performs the final project synchronization and PR creation.
 - **Steps**:
-  1. Final review of the `ticket.md` state file.
-  2. `git add .gemini/state/ticket-<id>.md && git commit -m "docs: finalize ticket <id> state"`.
+  1. Final review of the `.gemini/state/ticket-<id>/` directory.
+  2. `git add .gemini/state/ticket-<id>/ && git commit -m "docs: finalize ticket <id> state"`.
   3. `git push origin feature/<branch>`.
   4. `gh pr create --title "..." --body "..."`.
+
 
 ## Routing & Pipelines
 
