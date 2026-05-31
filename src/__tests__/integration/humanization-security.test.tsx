@@ -62,6 +62,7 @@ describe('Project Management & UI Humanization', () => {
       videoFormat: 'short',
       videoDuration: 45,
       draftFileName: 'dance.mp4',
+      draftFile: null,
       onVisualScan: vi.fn(),
       onTierChange: vi.fn(),
       onProviderChange: vi.fn(),

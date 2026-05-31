@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
-import { Menu, MenuItem } from '@mui/material';
+import { Menu, MenuItem, Chip, Tooltip } from '@mui/material';
+import BoltIcon from '@mui/icons-material/Bolt';
 import { WhatsNewPopover } from '../WhatsNew/WhatsNewPopover';
 import NotificationBell from '../Notifications/NotificationBell';
 import styles from './Header.module.css';
@@ -15,6 +16,13 @@ export function UserActions({ session }: { session: Session | null }) {
 
   return (
     <>
+      {/* 
+        Feature temporarily disabled:
+        session?.user && (
+        <Tooltip title="AI Credits remaining">
+          <Chip ... />
+        </Tooltip>
+      )*/}
       <NotificationBell />
       <button className={styles.createBtn} onClick={() => { window.location.hash = 'create-post-section'; }}>
         + Create Post

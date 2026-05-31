@@ -31,7 +31,8 @@ export const useDashboardHandlers = (
   preferences: PlatformPreference[] | undefined,
   handleFileChange: (f: File | null) => void,
   setGalleryFileId: (id: string | null) => void,
-  setGalleryFileName: (n: string | null) => void
+  setGalleryFileName: (n: string | null) => void,
+  updateSession: (data: Record<string, unknown>) => Promise<unknown>
 ) => {
   const mapPlatforms = (ids: string[], accs: Account[], specific: boolean, fd: FormData) =>
     ids
@@ -97,6 +98,10 @@ export const useDashboardHandlers = (
           byokConfigs,
           aiProvider
         );
+
+        const { getAiBalance } = await import('@/app/actions/credits');
+        const newBalance = await getAiBalance();
+        await updateSession({ aiCredits: newBalance });
 
         if (previews) {
           localStorage.setItem(
@@ -192,6 +197,10 @@ export const useDashboardHandlers = (
         byokConfigs,
         aiProvider
       );
+
+      const { getAiBalance } = await import('@/app/actions/credits');
+      const newBalance = await getAiBalance();
+      await updateSession({ aiCredits: newBalance });
       setAiPreviews(previews);
       setIsReviewing(true);
     } catch (err: unknown) {

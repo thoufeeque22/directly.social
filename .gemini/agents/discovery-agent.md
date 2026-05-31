@@ -25,10 +25,12 @@ Before drafting any specs, you MUST perform an explicit Socratic inquiry for eve
 2. **Codebase Deep-Dive:** Perform a deep grep and impact radius analysis.
 3. **Socratic Inquiry:** Document findings in `SOCRATIC_LOG`.
 4. **User Approval (CRITICAL):** Present the `SOCRATIC_LOG` to the user. Do NOT proceed to Technical Specs without explicit confirmation.
-5. **State Update:** Execute `npm run state:update -- --agent="discovery" --verdict="<VERDICT>" --summary="<Detailed findings>" --status="development"`. Include the Feedback Analysis in Round 2+.
+5. **State Update:** Execute `npm run state:update -- --agent="discovery" --verdict="<VERDICT>" --summary="<FULL_CONTENT>" --status="development"`. 
+   - **CRITICAL:** The `--summary` argument MUST contain the **entire** generated content (Socratic Log, Technical Specs, and Test Specification). Do NOT pass a brief summary.
+   - Include the Feedback Analysis in the summary if in Round 2+.
 
 # Output Format
-Return exactly this structure (ONLY AFTER executing `npm run state:update`):
+Return exactly this structure (ONLY AFTER executing `npm run state:update` with the content below):
 **VERDICT:** [NECESSARY / REVISE_SCOPE / REJECTED / PARKED]
 **SOCRATIC_LOG:** ... (Summarize findings here)
 **TECHNICAL SPECS:** [Bullet points for the Dev Agent]

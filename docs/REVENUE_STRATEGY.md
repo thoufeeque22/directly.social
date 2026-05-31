@@ -7,6 +7,7 @@ When transitioning from local development to a public app, you must protect your
 2. **User-Level Rate Limiting:** Use Next.js Middleware with a service like Upstash Redis to cap how many AI generations a single user can perform per hour/day. This prevents malicious users from running up your API bill.
 3. **Background Queuing:** Implement a job queue (like Inngest or BullMQ) for the AI generation. Instead of the frontend waiting synchronously and timing out, requests are queued and processed safely at your API's maximum comfortable throughput.
 4. **Bring Your Own Key (BYOK):** Allow power users to plug in their own Gemini or OpenAI API keys in the settings. This shifts the API cost entirely to them.
+5. **Internal User Credits:** Manage the consumption of platform-provided AI services via the `aiCredits` field. See the [Internal User Credits Feature](features/INTERNAL_USER_CREDITS.md) for details on the feature flag and BYOK bypass logic.
 
 ---
 

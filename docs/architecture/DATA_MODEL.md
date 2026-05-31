@@ -27,6 +27,7 @@ erDiagram
         string image
         string preferredVideoFormat
         string preferredAIStyle
+        int aiCredits
     }
 
     MetadataTemplate {

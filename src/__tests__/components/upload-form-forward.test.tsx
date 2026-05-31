@@ -43,6 +43,7 @@ describe('UploadForm Props Forwarding', () => {
     videoFormat: 'short',
     videoDuration: 45,
     draftFileName: 'test.mp4',
+    draftFile: null,
     onVisualScan: vi.fn(),
     onTierChange: vi.fn(),
     onProviderChange: vi.fn(),
