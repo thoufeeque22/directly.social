@@ -40,8 +40,8 @@ To build, test, or archive your app for the store, use these scripts:
 
 ### **3. Local Testing (The Tunnel)**
 If you want to test local changes on your physical phone or simulator without deploying:
-1. Start your tunnel: `npm run tunnel`
-2. Copy the `.trycloudflare.com` URL.
+1. Ensure your tunnel is running (handled manually by the User, e.g., `tailscale funnel`).
+2. Copy the tunnel URL.
 3. Paste it into the `url` field in `capacitor.config.ts`.
 4. Run `npm run cap:sync` and re-run the app in Xcode/Android Studio.
 

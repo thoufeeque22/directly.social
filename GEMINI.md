@@ -1,45 +1,36 @@
 # Social Studio App: Agent Instructions & Standards
 
-This document serves as the root entry point for all AI agents. It defines the global mandates and links to domain-specific standards.
+This document serves as the root entry point for all AI agents. It defines the global management policies and links to domain-specific standards.
 
-## Global Mandates
+## Global Management Policies
 
-- **Phase Throttling (Human-in-the-Loop):** The Orchestrator MUST terminate its turn after calling exactly one sub-agent. NEVER chain sub-agents autonomously. ALL transitions between phases (`Discovery` -> `Dev` -> `Review` -> `QA` -> `Doc` -> `Project`) MUST be approved by the user. If any phase fails, the round stops immediately and recovery must begin in a new round (starting from `Development` for `Review`/`QA` failures).
+- **Phase Throttling (Human-in-the-Loop):** The Orchestrator MUST terminate its turn after calling exactly one sub-agent. NEVER chain sub-agents autonomously. ALL transitions between phases (`Discovery` -> `Dev` -> `Review` -> `QA` -> `Doc` -> `Project`) MUST be approved by the user.
 - **State-First Protocol:** Before invoking any sub-agent or performing any action, the Orchestrator MUST create or update the Markdown state file in `.gemini/state/ticket-<id>/MAIN.md`.
-- **Initialization Precedence:** Every new ticket MUST begin with: 
-  1. `git checkout main && git pull`.
-  2. `git checkout -b feature/<id>-<desc>`.
-  3. Creation of the `.gemini/state/ticket-<id>/` directory and `MAIN.md` state file. 
-  This sequence MUST complete before the first sub-agent is invoked.
-- **Explicit Commit Permission:** AI agents MUST NEVER commit changes to the repository without explicit, per-commit permission from the user. Sub-agents (Dev, QA, Doc) ARE encouraged to commit their specific artifacts after successful verification and user approval, rather than waiting for the Project Agent. Before every commit, the agent MUST present a summary of changes and wait for user approval.
+- **Initialization Precedence:** Every new ticket MUST follow the **Strict Initialization** workflow defined in [ORCHESTRATION.md](.gemini/base/ORCHESTRATION.md). This includes conditional branch synchronization and state directory creation.
+- **Explicit Commit Permission & Auto-Handoff:** AI agents MUST NOT commit changes without user permission, EXCEPT during phase handoffs. As defined in [ORCHESTRATION.md](.gemini/base/ORCHESTRATION.md), the Orchestrator automatically checkpoints changes upon handoff approval using dynamic messaging.
 - **Verification Integrity:** Local verification MUST be exhaustive (e.g., `npm run build`, `npm run lint`). NEVER use 'surgical' or 'token-optimized' checks unless explicitly instructed by the user.
-- **Zero-Any Policy:** Strict TypeScript enforcement across the entire codebase.
-- **Modularity (50-Line Rule):** All source files must be ≤ 50 lines (automated via ESLint `max-lines`). Legacy files exceeding this limit must have `/* eslint-disable max-lines */` and be targeted for refactoring. Tests are exempt.
-- **Centralized Schemas:** All validation logic MUST reside in `src/lib/schemas`.
-- **API Documentation:** All Route Handlers MUST be documented at `/api/docs` (Swagger).
-- **Human-Centric UI:** Prioritize accessibility, professional aesthetics (MUI), and no emojis.
-- **Production Readiness:** Every feature must include robust error handling, security, and observability.
+- **Technical Excellence:** ALL code MUST adhere to the standards in [CORE.md](.gemini/base/CORE.md) (TypeScript Zero-Any, 50-Line Modularity, Centralized Schemas, Swagger Docs).
+- **Aesthetic Integrity:** ALL UI MUST adhere to the standards in [UI_UX.md](.gemini/base/UI_UX.md) (MUI, Theme Awareness, No Emojis).
+- **Manual Environment Management:** The User manages the dev server and tunnels manually. Agents MUST NOT interfere, as defined in [ORCHESTRATION.md](.gemini/base/ORCHESTRATION.md).
 - **Context Preservation:** Agents must never destructively overwrite state files.
 
 ## Table of Contents
 
 1.  **[Core Technical Standards](.gemini/base/CORE.md)**
-    *   Next.js 15 & React 19 conventions.
-    *   TypeScript strictness and TSX standards.
-    *   Modularity and Legacy Debt Remediation.
+    *   TypeScript Zero-Any & Next.js 15 conventions.
+    *   Modularity (50-Line Rule) & Legacy Debt Remediation.
+    *   Centralized Schemas & API Documentation.
 2.  **[UI & Aesthetic Standards](.gemini/base/UI_UX.md)**
-    *   Material UI (MUI) usage and Iconography.
-    *   Accessibility (A11y) and Visual Integrity.
-    *   Strict "No Emojis" policy.
+    *   Material UI (MUI) usage & Theme Awareness.
+    *   Accessibility (A11y) & Strict "No Emojis" policy.
+    *   Modular Form Standards.
 3.  **[Production & Infrastructure](.gemini/base/PRODUCTION.md)**
     *   Performance, Security, and Observability.
-    *   Neon Database branch management and cleanup.
+    *   Neon Database branch management.
 4.  **[Agent Orchestration & Workflow](.gemini/base/ORCHESTRATION.md)**
-    *   Ticket Initialization (git checkout main && git pull && check PRs).
-    *   Mobile QA (Playwright Chrome/Safari emulation).
-    *   Agent roles and specific workflows.
-    *   Discovery Definition of Ready (DoR).
-    *   Handoff protocols, State Pruning, and Pipeline routing.
+    *   Initialization logic & Git Branching.
+    *   Phase Sequence, Failure Protocols, & Auto-Commit.
+    *   Agent-specific mandates & Isolation.
 
 ---
 

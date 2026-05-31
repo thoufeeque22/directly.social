@@ -9,7 +9,7 @@ import { useNotifications } from '@/hooks/useNotifications';
  * Renders a list of notifications or an empty state.
  */
 export default function NotificationList() {
-  const { notifications, loading } = useNotifications();
+  const { notifications, loading, markAsRead } = useNotifications();
 
   if (loading && notifications.length === 0) {
     return (
@@ -32,7 +32,8 @@ export default function NotificationList() {
       {notifications.map((notification) => (
         <NotificationItem 
           key={notification.id} 
-          notification={notification} 
+          notification={notification}
+          onMarkAsRead={markAsRead}
         />
       ))}
     </List>

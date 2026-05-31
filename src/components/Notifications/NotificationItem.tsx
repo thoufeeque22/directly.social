@@ -2,30 +2,21 @@
 
 import React from 'react';
 import { ListItem, ListItemText, ListItemIcon, Typography } from '@mui/material';
-import { Info, CheckCircle, Warning, Error as ErrorIcon } from '@mui/icons-material';
 import { Notification } from '@/lib/schemas/notifications';
-import { useNotifications } from '@/hooks/useNotifications';
 import { formatDistanceToNow } from 'date-fns';
 import { useRouter } from 'next/navigation';
+import { getNotificationIcon } from './NotificationIcons';
 
-const getIcon = (type: Notification['type']) => {
-  switch (type) {
-    case 'SUCCESS': return <CheckCircle color="success" fontSize="small" />;
-    case 'WARNING': return <Warning color="warning" fontSize="small" />;
-    case 'ERROR': return <ErrorIcon color="error" fontSize="small" />;
-    default: return <Info color="info" fontSize="small" />;
-  }
-};
+interface NotificationItemProps {
+  notification: Notification;
+  onMarkAsRead: (id: string) => Promise<void>;
+}
 
-/**
- * Individual notification item.
- */
-export default function NotificationItem({ notification }: { notification: Notification }) {
-  const { markAsRead } = useNotifications();
+export default function NotificationItem({ notification, onMarkAsRead }: NotificationItemProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    if (!notification.isRead) markAsRead(notification.id);
+    if (!notification.isRead) onMarkAsRead(notification.id);
     if (notification.link) {
       if (notification.link.startsWith('http')) {
         window.location.href = notification.link;
@@ -45,7 +36,7 @@ export default function NotificationItem({ notification }: { notification: Notif
         borderBottom: '1px solid', borderColor: 'divider',
       }}
     >
-      <ListItemIcon sx={{ minWidth: 36 }}>{getIcon(notification.type)}</ListItemIcon>
+      <ListItemIcon sx={{ minWidth: 36 }}>{getNotificationIcon(notification.type)}</ListItemIcon>
       <ListItemText
         primary={<Typography variant="body2" sx={{ fontWeight: notification.isRead ? 400 : 600 }}>{notification.message}</Typography>}
         secondary={<Typography variant="caption" color="text.secondary">{formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}</Typography>}

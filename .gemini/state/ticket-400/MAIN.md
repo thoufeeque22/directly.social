@@ -6,8 +6,8 @@
 - [x] Development (Dev Agent)
 - [x] Review (Review Agent)
 - [x] QA (QA Agent)
-- [ ] Documentation (Doc Agent)
-- [ ] Project Wrap-up (Project Agent)
+- [x] Documentation (Doc Agent)
+- [x] Project Wrap-up (Project Agent)
 
 ## Discovery
 - **Status:** Complete
@@ -21,10 +21,13 @@
 - **Status:** Complete
 
 ## QA
-- **Status:** In Progress (Re-verification)
+- **Status:** Complete (Re-verified)
+- **Verdict:** PASS
+- **Report:** [.gemini/state/ticket-400/round-2/qa.md](.gemini/state/ticket-400/round-2/qa.md)
 
 ## Documentation
-- **Status:** Pending
+- **Status:** Complete
+- **Feature Doc:** [docs/features/NOTIFICATIONS.md](docs/features/NOTIFICATIONS.md)
 
 # 📅 Timeline
 - **[2026-05-31 16:38:36]**: DISCOVERY [NECESSARY] - Proposed a separate Notification Utility (Bell Icon) for transactional alerts, distinct from the system-wide 'What\'s New' system. Specified a new Prisma model, server actions, and MUI components following the 50-line rule and 'no emojis' policy.
@@ -41,3 +44,5 @@
 - **[2026-05-31 17:40:00]**: DEVELOPMENT [REMEDIATION] - Implementing NotificationProvider to centralize state and optimize fetching.
 - **[2026-05-31 17:45:00]**: DEVELOPMENT [REMEDIATION COMPLETE] - Centralized state in NotificationContext, refactored hook and components. Build/Lint validated. Ready for re-QA.
 - **[2026-05-31 17:25:59]**: QA [PASS] - All E2E tests passed. State sync verified via NotificationProvider. Performance issue resolved by removing hook from list items.
+- **[2026-05-31 17:55:00]**: DOCUMENTATION [START] - Invoking Doc Agent to update system documentation.
+- **[2026-05-31 18:10:00]**: PROJECT WRAP-UP [COMPLETE] - Ticket #400 fully implemented, verified, and documented.
