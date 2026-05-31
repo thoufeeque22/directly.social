@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface FormState {
   title: string;
@@ -10,30 +10,30 @@ interface FormState {
 }
 
 export function useUploadForm() {
-  const [form, setForm] = useState<FormState>(() => {
-    const initialState = {
-      title: '',
-      description: '',
-      platformTitles: {},
-      platformDescriptions: {},
-      isPlatformSpecific: false
-    };
+  const initialState = {
+    title: '',
+    description: '',
+    platformTitles: {},
+    platformDescriptions: {},
+    isPlatformSpecific: false
+  };
 
-    if (typeof window === 'undefined') return initialState;
+  const [form, setForm] = useState<FormState>(initialState);
 
+  useEffect(() => {
     try {
-      return {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setForm({
         title: localStorage.getItem('SS_DRAFT_TITLE') || '',
         description: localStorage.getItem('SS_DRAFT_DESC') || '',
         isPlatformSpecific: localStorage.getItem('SS_METADATA_SPECIFIC') === 'true',
         platformTitles: JSON.parse(localStorage.getItem('SS_PLATFORM_TITLES') || '{}'),
         platformDescriptions: JSON.parse(localStorage.getItem('SS_PLATFORM_DESCS') || '{}')
-      };
+      });
     } catch (e) {
       console.error("Failed to load metadata from localStorage", e);
-      return initialState;
     }
-  });
+  }, []);
   
   const [titleUndo, setTitleUndo] = useState<string | null>(null);
   const [descUndo, setDescUndo] = useState<string | null>(null);

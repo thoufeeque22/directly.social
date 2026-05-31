@@ -8,6 +8,7 @@ import { Browser } from "@capacitor/browser";
 import { ThemeContextProvider } from "./ThemeContextProvider";
 import CssBaseline from '@mui/material/CssBaseline';
 import { WhatsNewProvider } from "./WhatsNew/WhatsNewContext";
+import { NotificationProvider } from "./Notifications/NotificationContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -68,7 +69,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <CssBaseline />
       <SessionProvider>
         <WhatsNewProvider>
-          {children}
+          <NotificationProvider>
+            {children}
+          </NotificationProvider>
         </WhatsNewProvider>
       </SessionProvider>
     </ThemeContextProvider>

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 
 test.describe('Manual Mode: Polish with AI Button', () => {
   // Use existing auth state for tests

@@ -8,9 +8,13 @@ import { Theme } from '@prisma/client';
 import { ColorMode, ThemeContext } from './ThemeContext';
 
 export const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [mode, setMode] = useState<ColorMode>(() => (typeof window !== 'undefined' && localStorage.getItem('theme-preference') as ColorMode) || 'system');
+  const [mode, setMode] = useState<ColorMode>('system');
   const [resolvedMode, setResolvedMode] = useState<'light' | 'dark'>('dark');
   useEffect(() => {
+    const localPref = localStorage.getItem('theme-preference') as ColorMode;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (localPref) setMode(localPref);
+    
     (async () => {
       const { getThemePreference } = await import('@/app/actions/user');
       const pref = await getThemePreference();

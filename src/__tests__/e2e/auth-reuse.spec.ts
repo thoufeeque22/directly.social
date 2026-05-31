@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 
 test.describe('Session Reuse Verification @smoke @regression', () => {
   test('should access the dashboard without logging in (using storageState)', async ({ page }) => {

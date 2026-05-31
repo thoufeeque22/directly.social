@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 import { format, addMonths, subMonths, startOfWeek, endOfWeek } from 'date-fns';
 
 test.describe('Calendar Content Planner Refinements @regression', () => {

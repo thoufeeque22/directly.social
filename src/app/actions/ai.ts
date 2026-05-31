@@ -5,7 +5,8 @@ import { protectedAction } from "@/lib/core/action-utils";
 import { generatePostContent, AIWriteResult, Platform } from "@/lib/utils/ai-writer";
 import { AITier, StyleMode } from "@/lib/core/constants";
 import { z } from "zod";
-import { aiRateLimit, checkRateLimit } from "@/lib/core/ratelimit";
+import { checkRateLimit } from "@/lib/core/ratelimit";
+import { aiRateLimit } from "@/lib/core/ratelimit-config";
 import { logger } from "@/lib/core/logger";
 import { AIProvider } from "@/lib/core/ai";
 

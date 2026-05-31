@@ -1,11 +1,14 @@
 # UI & Aesthetic Standards
 
-- **Material UI Aesthetic:** Prioritize a "humanly", professional, and polished UI design.
-- **Theme Awareness (Light/Dark/System):** Do not use hardcoded colors (e.g., `#0A0A0A`, `#1A1A1A`) for UI components. Always use semantic CSS variables (e.g., `var(--background)`, `var(--card)`, `var(--text-primary)`) to ensure consistent visual presentation across Light and Dark modes.
-- **Icons:** Exclusively use **Material UI Icons** (MUI). Avoid generic icon libraries unless MUI lacks a specific icon.
-- **No Emojis in UI:** Strictly forbid the use of emojis in user-facing UI components, labels, and buttons (use MUI Icons instead). Emojis ARE permitted in backend server logs, CLI output, and internal markdown documentation to aid visual scanning.
-- **Human-Centric Design:** Focus on accessibility, clean spacing, clear visual hierarchy, and intuitive user flows.
-- **Visual Integrity Mandate:** All UI changes MUST be verified not just for functional logic, but for visual accessibility (contrast, visibility, spacing). QA-agent MUST include specific Playwright tests that check for the visibility of critical controls (e.g., navigation arrows, labels).
+## Aesthetic Principles
+- **Material UI Aesthetic:** Prioritize a "humanly", professional, and polished UI design using Material UI (MUI).
+- **Theme Awareness (Light/Dark/System):** Do NOT use hardcoded colors. Always use semantic CSS variables (e.g., `var(--background)`, `var(--text-primary)`) to ensure consistency across modes.
+- **Human-Centric Design:** Focus on accessibility (A11y), clean spacing, clear visual hierarchy, and intuitive user flows.
+- **Strict "No Emojis" Policy:** Emojis are strictly FORBIDDEN in user-facing UI components, labels, and buttons. Use MUI Icons instead. Emojis are only permitted in backend logs, CLI output, and internal documentation.
+
+## Visual Components
+- **Icons:** Exclusively use **Material UI Icons** (MUI). Avoid generic libraries unless MUI lacks a specific icon.
+- **Visual Integrity Mandate:** All UI changes MUST be verified for contrast, visibility, and spacing. QA-agent MUST include specific tests for critical control visibility.
 
 ## Modular Form Standards
 

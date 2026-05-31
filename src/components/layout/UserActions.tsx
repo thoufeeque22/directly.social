@@ -4,6 +4,7 @@ import { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
 import { Menu, MenuItem } from '@mui/material';
 import { WhatsNewPopover } from '../WhatsNew/WhatsNewPopover';
+import NotificationBell from '../Notifications/NotificationBell';
 import styles from './Header.module.css';
 
 export function UserActions({ session }: { session: Session | null }) {
@@ -14,7 +15,7 @@ export function UserActions({ session }: { session: Session | null }) {
 
   return (
     <>
-      <button className={styles.notificationBtn}>🔔</button>
+      <NotificationBell />
       <button className={styles.createBtn} onClick={() => { window.location.hash = 'create-post-section'; }}>
         + Create Post
       </button>

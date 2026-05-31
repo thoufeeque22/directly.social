@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test } from './base-test';;
 
 test('Visual capture of calendar contrast fix', async ({ page }) => {
   await page.goto('/schedule');

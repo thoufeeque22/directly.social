@@ -18,9 +18,8 @@ npm run test:native:full -- android
 ## 🛠️ Testing Local Branch Changes
 To see your local branch changes and the **Tester Login** on the simulator:
 
-1. Start your local server: `npm run dev`
-2. Start your tunnel: `npm run tunnel`
-3. Launch Developer Mode:
+1. Ensure your local server and tunnel are running (handled manually by the User).
+2. Launch Developer Mode:
    ```bash
    # Enter your tunnel URL when prompted
    npm run mobile:dev

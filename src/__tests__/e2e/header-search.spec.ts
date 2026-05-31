@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 
 test.describe('Header Global Search', () => {
   test('should navigate to activity with search query from header', async ({ page }) => {

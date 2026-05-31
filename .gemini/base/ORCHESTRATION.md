@@ -2,9 +2,12 @@
 
 ## Core Mandates
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST:
-  1. Switch to `main` and pull latest (`git checkout main && git pull`).
-  2. Create a dedicated feature branch (`feature/<id>-short-description`).
-  3. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template**.
+  1. Check the current branch. If NOT on the target feature branch (`feature/<id>-...`):
+     a. Switch to `main` and pull latest (`git checkout main && git pull`).
+     b. Create the dedicated feature branch (`git checkout -b feature/<id>-<desc>`).
+  2. If ALREADY on the target feature branch, skip the `main` synchronization and branch creation steps.
+  3. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template** (skip if state already exists).
+- **Manual Environment Management:** The User always manages the development server (`npm run dev`) and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, or check the connectivity of these services.
 - **Strict Sequential Workflow:** ALL tickets MUST follow this exact sequence:
   `Discovery` -> `Development` -> `Review` -> `QA` -> `Documentation` -> `Project Management`.
 - **Phase Termination & Failure Protocol:**
@@ -13,9 +16,9 @@
   3. **Immediate Stop on Failure:** If any phase (especially `Review` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately. No further agents (Doc, Project, etc.) can be invoked in that round.
   4. **Round 2+ Entry Point:** If a round fails during `Review` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
 - **Human-in-the-Loop Workflow:** ALL transitions between agent phases MUST be mediated by the user. 
-  1. **Update State File First:** The active agent MUST update the `ticket.md` file with the results/verdicts before presenting for review.
+  1. **Update State File First:** The active agent MUST update the `MAIN.md` file with the results/verdicts before presenting for review.
   2. **Manual Review:** The user reviews the changes and the ticket state.
-  3. **Explicit Approval:** The user provides approval to proceed to the *next* phase in the sequence.
+  3. **Explicit Approval & Auto-Commit:** When the User provides approval to proceed to the *next* phase (e.g., "Invoke dev-agent"), the Orchestrator MUST automatically commit any pending changes from the current phase before starting the next one. The commit message MUST be dynamic and descriptive (e.g., `feat(ticket-400): complete development phase - added notification utility`), derived from the `MAIN.md` status or the summary of the completed phase. This commit is implicitly approved by the user's directive to proceed.
 - **Traceable Status:** EVERY agent MUST update their section with a clear **Verdict** before handoff.
 
 ## Tiered Testing Strategy
@@ -86,24 +89,27 @@ current_round: 1
 
 ### discovery.md
 - **Verdict**: [APPROVED / NEEDS-INFO / REJECTED]
+- **Feedback Analysis (Round 2+ only)**: Analyze why the previous blueprint was rejected or revised.
 - **Socratic Log**: ...
 - **Technical Blueprint**: ...
 - **Test Specification**: ...
 
 ### development.md
 - **Verdict**: [SUCCESS / BLOCKED]
+- **Root Cause Analysis (Round 2+ only)**: Explicitly identify WHY the previous round was rejected (e.g., "Violated 50-line rule").
+- **Remediation Strategy (Round 2+ only)**: Detail the specific changes made to address the failure and prevent regression.
 - **Summary**: ...
-- **Modified Files**: ...
-- **Verification Logs**: [Link to build/lint results]
 
 ### review.md
 - **Verdict**: [PASS / FAIL]
+- **Audit Gap Analysis (Round 2+ only)**: If the previous audit was overridden or if QA found issues missed here, analyze the gap in the audit protocol.
 - **Security Audit**: ...
 - **Performance Audit**: ...
 - **Failures**: [If FAIL, list specific file:line and reason]
 
 ### qa.md
 - **Verdict**: [PASS / FAIL]
+- **Test Gap Analysis (Round 2+ only)**: If a bug was found manually that this suite missed, identify the missing test scenario.
 - **Test Results**: [Playwright/Maestro output]
 - **Manual Script**: [Link to doc/manual_tests/ticket-<id>.md]
 
@@ -124,7 +130,6 @@ current_round: 1
 - **Role:** Staff Engineer. Clean, modular code.
 - **Verdict:** Success -> Review | Blocked -> Discovery/Manual.
 - **Exhaustive Verification:** MUST run `npm run build` and `npm run lint`.
-- **Commit Mandate:** After successful verification, the agent MUST present a summary and ask for permission to commit the implementation code before handoff.
 
 ### Review (QA & Security Audit)
 - **Role:** Senior Auditor. **READ-ONLY**.
@@ -139,14 +144,12 @@ current_round: 1
   1. **Automation**: Write and execute Playwright/Maestro tests.
   2. **Manual**: Formalize the Discovery test spec into a detailed step-by-step manual test script in `docs/manual_tests/ticket-<id>.md`.
   3. **No App Edits**: MUST NOT modify application source code.
-  4. **Commit Mandate**: After successful verification, the agent MUST present a summary and ask for permission to commit the test files and manual scripts before handoff.
 - **Verdict:** Pass -> Documentation | Fail -> Return to Dev.
 
 ### Documentation
 - **Role**: Tech Writer & Orchestration Architect. Finalize feature docs and optimize instruction layer.
-- **Commit Mandate**: After finishing documentation, the agent MUST present a summary and ask for permission to commit the docs.
 - **Orchestration Audit**: The agent MUST periodically run the `orchestration-auditor` skill to identify contradictions or redundancies in `GEMINI.md` and `.gemini/base/*.md`.
-- **Incidental Check**: After committing, the agent MUST read `.gemini/incidental_observations.json`.
+- **Incidental Check**: After finishing work, the agent MUST read `.gemini/incidental_observations.json`.
   - If **Observations exist**: Suggest invoking `project-agent` to resolve them.
   - If **No Observations exist**: Suggest the **User** for final PR creation.
 - **Verdict**: [COMPLETE].

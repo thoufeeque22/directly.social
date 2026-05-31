@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 import { execSync } from 'child_process';
 import { PrismaClient } from '@prisma/client';
 

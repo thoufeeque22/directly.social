@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 
 test.describe('Activity Domain Modularization Verification @regression', () => {
   test.beforeEach(async ({ page }) => {

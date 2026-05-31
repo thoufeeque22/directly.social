@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import fs from 'fs/promises';
 import path from 'path';
 import { execSync } from 'child_process';

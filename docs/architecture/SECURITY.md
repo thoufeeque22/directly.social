@@ -30,3 +30,11 @@ To prevent unauthorized file access and data leakage, the application implements
 For automated and manual verification, dedicated identities are used:
 - **Tester (`tester@socialstudio.ai`):** A standard `USER` account used for E2E testing of common user flows.
 - **Admin (`admin@socialstudio.ai`):** A dedicated `ADMIN` account used for verifying administrative access and system health monitoring.
+
+## 4. Rate Limiting & Abuse Prevention
+
+The application protects its public and authenticated endpoints from brute-force and exhaustion attacks using an Upstash-backed rate-limiting system.
+
+- **Modular Configuration:** Rate-limiting instances are centrally managed in `src/lib/core/ratelimit-config.ts`, allowing for granular control over different API tiers (e.g., standard, heavy-AI, or media uploads).
+- **Environment Awareness:** The system is aware of the `E2E_RATE_LIMIT_BYPASS` secret, which allows Playwright tests to execute exhaustive verification without being blocked by throttling, while maintaining full security in production.
+- **Graceful Throttling:** When a limit is hit, the API returns a standard `429 Too Many Requests` status, which is handled gracefully by the UI and monitored via Sentry.

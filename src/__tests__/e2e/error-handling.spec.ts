@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 
 test.describe('Error Handling', () => {
   test('should display ErrorBoundary UI on app error', async ({ page }) => {

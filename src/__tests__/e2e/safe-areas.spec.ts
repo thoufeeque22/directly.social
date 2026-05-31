@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { type Page } from '@playwright/test';
+import { test, expect } from './base-test';
 
 test.describe('Mobile Safe Areas (Ticket 395)', () => {
   test.use({
@@ -6,7 +7,7 @@ test.describe('Mobile Safe Areas (Ticket 395)', () => {
     userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1',
   });
 
-  async function injectSafeAreas(page) {
+  async function injectSafeAreas(page: Page) {
     await page.addStyleTag({
       content: `
         :root {

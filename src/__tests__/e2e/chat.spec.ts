@@ -1,4 +1,5 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from './base-test';
+import { Page } from '@playwright/test';;
 
 test.describe('AI Chatbot E2E @regression', () => {
   test.setTimeout(60000); // 60 seconds for slow local models

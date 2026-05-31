@@ -50,6 +50,26 @@ The `ErrorBoundary` component (`src/components/ui/ErrorBoundary.tsx`) is the vis
 
 `src/app/error.tsx` handles errors within specific route segments. This allows users to continue using the sidebar or navigation even if the main content area fails.
 
+## Hydration Resilience
+
+To prevent React hydration mismatches (where server-rendered HTML differs from the initial client render), the application uses a strict mounting guard pattern.
+
+### The Mounting Guard Pattern
+
+For components that rely on browser-only state (like theme detection or localStorage), state updates MUST be deferred until after the component has mounted on the client.
+
+```tsx
+const [isMounted, setIsMounted] = useState(false);
+
+useEffect(() => {
+  setIsMounted(true);
+}, []);
+
+if (!isMounted) return null; // Or a skeleton/placeholder
+```
+
+This pattern is consistently applied in providers like `ThemeContextProvider` and hooks like `useUploadForm` to ensure "Zero Console Error" compliance.
+
 ## Best Practices
 
 1. **Be Granular:** Use `ErrorBoundary` to wrap high-risk components (like third-party integrations) to isolate failures.

@@ -34,8 +34,12 @@ Go to the [TikTok for Developers](https://developers.tiktok.com/console/):
   `https://your-new-url.trycloudflare.com/api/auth/callback/tiktok`
 
 ## 5. How to Launch
-Instead of running ngrok, simply use:
+The User now prefers **Tailscale Funnel** for manual tunnel management:
+```bash
+tailscale up && tailscale funnel 3000
+```
 
+Alternatively, to use the Cloudflare tunnel:
 ```bash
 npm run tunnel
 ```

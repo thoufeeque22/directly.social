@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';;
 
 test.describe('Global UI/UX Audit (Issue #541)', () => {
   test('Visual Audit: Settings Page', async ({ page }) => {

@@ -8,7 +8,7 @@
  */
 
 import { describe, it, beforeEach, vi, expect } from 'vitest';
-import { upsertPlatformResultInternal } from '../../app/actions/activity/core';
+import { upsertPlatformResultInternal } from '../../app/actions/activity/upsert-helpers';
 import { prisma } from '../../lib/core/prisma';
 
 // Mock Auth

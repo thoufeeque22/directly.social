@@ -2,7 +2,8 @@
 import { streamText, tool, convertToModelMessages } from 'ai';
 import { z } from 'zod';
 import { auth } from '@/auth';
-import { aiRateLimit, checkRateLimit } from '@/lib/core/ratelimit';
+import { checkRateLimit } from '@/lib/core/ratelimit';
+import { aiRateLimit } from '@/lib/core/ratelimit-config';
 import { logger } from '@/lib/core/logger';
 import * as Sentry from '@sentry/nextjs';
 import { 

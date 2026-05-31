@@ -229,6 +229,7 @@ model User {
   sessions              Session[]
   tokenAuditLogs        TokenAuditLog[]
   seenUpdates       UserSeenUpdate[]
+  notifications     Notification[]
 }
 model UserSeenUpdate {
   id        String    @id @default(cuid())
@@ -242,6 +243,20 @@ model UserSeenUpdate {
   @@index([userId])
 }
 
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      NotificationType @default(INFO)
+  message   String
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
 model VerificationToken {
   identifier String
   token      String   @unique
@@ -253,6 +268,13 @@ model VerificationToken {
 enum ByosProvider {
   S3
   R2
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
 }
 
 enum Role {
