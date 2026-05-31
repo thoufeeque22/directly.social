@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import DashboardClient from "@/components/dashboard/DashboardClient";
@@ -12,6 +13,10 @@ import {
 import { getByosConfigAction } from "@/lib/actions/settings";
 import { AITier, StyleMode } from "@/lib/core/constants";
 import { AIProvider } from "@/lib/core/ai";
+
+export const metadata: Metadata = {
+  title: "Dashboard | SocialStudio",
+};
 
 export default async function Home() {
   const session = await auth();
