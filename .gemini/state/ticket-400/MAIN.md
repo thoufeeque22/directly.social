@@ -5,7 +5,7 @@
 - [x] Discovery (Discovery Agent / Manual)
 - [x] Development (Dev Agent)
 - [x] Review (Review Agent)
-- [ ] QA (QA Agent)
+- [x] QA (QA Agent)
 - [ ] Documentation (Doc Agent)
 - [ ] Project Wrap-up (Project Agent)
 
@@ -21,7 +21,8 @@
 - **Status:** Complete
 
 ## QA
-- **Status:** Pending
+- **Status:** FAIL (Remediation Required)
+- **Report:** [.gemini/state/ticket-400/round-1/qa.md](.gemini/state/ticket-400/round-1/qa.md)
 
 ## Documentation
 - **Status:** Pending
@@ -35,3 +36,6 @@
 - **[2026-05-31 17:00:00]**: REVIEW [START] - Invoking Review Agent for code quality and security audit.
 - **[2026-05-31 17:01:13]**: REVIEW [PASS] - Audit complete. implementation follows spec, secure server actions with IDOR protection, all files < 50 lines. Ready for QA.
 - **[2026-05-31 17:10:00]**: REVIEW [COMPLETE] - Addressed review feedback (Next.js router integration, lint cleanup). Build/Lint validated. Ready for QA.
+- **[2026-05-31 17:15:00]**: QA [START] - Changes committed. Invoking QA Agent for exhaustive verification and Playwright test creation.
+- **[2026-05-31 17:35:00]**: QA [FAIL] - Functional verification failed. Isolated state in `useNotifications` hook prevents real-time badge updates and causes excessive API fetching. Regression tests in `notifications.spec.ts` failed on badge count assertions. Remediation to 'dev' phase required for state centralization.
+- **[2026-05-31 17:06:47]**: QA [FAIL] - Isolated state management in useNotifications leads to inconsistent UI and over-fetching.
