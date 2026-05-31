@@ -41,8 +41,15 @@ export const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
       updateThemePreference(t).catch(() => {});
     },
     toggleMode: () => {
-      const nextMode: ColorMode = mode === 'light' ? 'dark' : mode === 'dark' ? 'system' : 'light';
-      value.setMode(nextMode);
+      console.log('[Theme] Toggle clicked!');
+      setMode((prevMode) => {
+        const nextMode: ColorMode = prevMode === 'light' ? 'dark' : prevMode === 'dark' ? 'system' : 'light';
+        console.log('[Theme] Switching from', prevMode, 'to', nextMode);
+        localStorage.setItem('theme-preference', nextMode);
+        const t = nextMode === 'system' ? Theme.SYSTEM : nextMode === 'dark' ? Theme.DARK : Theme.LIGHT;
+        updateThemePreference(t).catch(e => console.error('[Theme] Update error:', e));
+        return nextMode;
+      });
     }
   }), [mode]);
   return (

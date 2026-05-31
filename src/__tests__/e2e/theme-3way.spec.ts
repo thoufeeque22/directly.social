@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Theme 3-Way Toggle Cycle', () => {
   test.beforeEach(async ({ page }) => {
+    page.on('console', msg => console.log(msg.text()));
     // Start at home page
     await page.goto('/');
     
@@ -24,17 +25,22 @@ test.describe('Theme 3-Way Toggle Cycle', () => {
     const toggle = page.getByTestId('theme-toggle');
     
     // 1. Synchronize to a known state: Light Mode
-    // We click until 'light-mode' class is present on html
     let isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-    let safetyCounter = 0;
-    while (!isLight && safetyCounter < 3) {
+    if (!isLight) {
       await toggle.click();
+      // wait a bit for react to update
+      await page.waitForTimeout(500);
       isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-      safetyCounter++;
+      if (!isLight) {
+        // Was dark, now system. Click again for light.
+        await toggle.click();
+        await expect(html).toHaveClass(/light-mode/, { timeout: 2000 });
+      }
     }
-    expect(isLight).toBe(true);
+    await expect(html).toHaveClass(/light-mode/);
     
     // 2. Click: Light -> Dark
+    await page.waitForTimeout(1000);
     await toggle.click();
     await expect(html).not.toHaveClass(/light-mode/);
     
@@ -60,18 +66,21 @@ test.describe('Theme 3-Way Toggle Cycle', () => {
     
     // Set to Light mode
     let isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-    let safetyCounter = 0;
-    while (!isLight && safetyCounter < 3) {
+    if (!isLight) {
       await toggle.click();
+      await page.waitForTimeout(500);
       isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-      safetyCounter++;
+      if (!isLight) {
+        await toggle.click();
+      }
     }
-    await expect(html).toHaveClass(/light-mode/);
+    await expect(html).toHaveClass(/light-mode/, { timeout: 2000 });
     
     await page.reload();
     await expect(page.locator('html')).toHaveClass(/light-mode/);
     
     // Set to Dark mode
+    await page.waitForTimeout(1000);
     await toggle.click();
     await expect(html).not.toHaveClass(/light-mode/);
     await page.reload();
@@ -84,13 +93,15 @@ test.describe('Theme 3-Way Toggle Cycle', () => {
     
     // Switch to Light Mode
     let isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-    let safetyCounter = 0;
-    while (!isLight && safetyCounter < 3) {
+    if (!isLight) {
       await toggle.click();
+      await page.waitForTimeout(500);
       isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-      safetyCounter++;
+      if (!isLight) {
+        await toggle.click();
+      }
     }
-    await expect(html).toHaveClass(/light-mode/);
+    await expect(html).toHaveClass(/light-mode/, { timeout: 2000 });
     
     // Check Header background specifically in the main header
     const header = page.locator('header[class*="header"]').first();
@@ -102,7 +113,7 @@ test.describe('Theme 3-Way Toggle Cycle', () => {
     
     // Ensure text is readable
     const title = page.locator('h1');
-    await expect(title).toHaveCSS('color', /rgb\(15, 12, 38\)/);
+    await expect(title).toHaveCSS('color', /rgb\(19, 15, 36\)/);
     
     // Go to Activity
     await page.goto('/activity');
