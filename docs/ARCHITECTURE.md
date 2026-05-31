@@ -22,6 +22,7 @@ This document provides a high-level index of the Social Studio application archi
     *   Global Search & Refresh
     *   BYOK/BYOS Wizards
     *   Standard View Pattern (Server Shell / Client Content)
+    *   [Internal User Credits](features/INTERNAL_USER_CREDITS.md)
 6.  **[Security & RBAC](architecture/SECURITY.md)**
     *   Role-Based Access Control
     *   File System Security

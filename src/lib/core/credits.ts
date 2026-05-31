@@ -59,7 +59,7 @@ export async function consumeAiCredit(
     throw new Error("User not found after update");
   }
 
-  const newBalance = updatedUser.aiCredits;
+  const newBalance = updatedUser!.aiCredits;
 
   if (newBalance === LOW_CREDIT_THRESHOLD || newBalance === 0) {
     await prisma.notification.create({

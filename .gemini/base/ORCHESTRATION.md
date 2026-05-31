@@ -2,11 +2,12 @@
 
 ## Core Mandates
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST:
-  1. Check the current branch. If NOT on the target feature branch (`feature/<id>-...`):
+  1. Check for any existing open PRs related to the task (`gh pr list` or similar) to avoid duplicate work.
+  2. Check the current branch. If NOT on the target feature branch (`feature/<id>-...`):
      a. Switch to `main` and pull latest (`git checkout main && git pull`).
      b. Create the dedicated feature branch (`git checkout -b feature/<id>-<desc>`).
-  2. If ALREADY on the target feature branch, skip the `main` synchronization and branch creation steps.
-  3. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template** (skip if state already exists).
+  3. If ALREADY on the target feature branch, skip the `main` synchronization and branch creation steps.
+  4. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template** (skip if state already exists).
 - **Manual Environment Management:** The User always manages the development server (`npm run dev`) and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, or check the connectivity of these services.
 - **Strict Sequential Workflow:** ALL tickets MUST follow this exact sequence:
   `Discovery` -> `Development` -> `Review` -> `QA` -> `Documentation` -> `Project Management`.
