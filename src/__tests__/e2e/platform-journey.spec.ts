@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Platform Sequential Journey', () => {
+test.describe('Platform Sequential Journey @regression', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to settings
     await page.goto('/settings');

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Mobile Emulation Smoke Test', () => {
+test.describe('Mobile Emulation Smoke Test @smoke', () => {
   // Only run this suite for mobile projects
   test.skip(({ isMobile }) => !isMobile, 'Skipping on non-mobile devices');
 

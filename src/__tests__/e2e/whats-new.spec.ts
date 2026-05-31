@@ -12,7 +12,7 @@ function runDbScript(scriptName: string) {
   }
 }
 
-test.describe("What's New Option A E2E & Visual Verification", () => {
+test.describe("What's New Option A E2E & Visual Verification @regression", () => {
   test.beforeAll(async () => {
     const dir = path.join(process.cwd(), 'verification');
     if (!fs.existsSync(dir)) {

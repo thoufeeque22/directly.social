@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Global Search', () => {
+test.describe('Global Search @regression', () => {
   test('should filter activity items by search query', async ({ page }) => {
     await page.goto('/activity');
     

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('AI Nudge E2E Tests', () => {
+test.describe('AI Nudge E2E Tests @regression', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to dashboard
     await page.goto('/');

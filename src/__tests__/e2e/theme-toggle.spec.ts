@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Theme Toggle', () => {
+test.describe('Theme Toggle @smoke @regression', () => {
   test.beforeEach(async ({ page }) => {
     // Start at home page
     await page.goto('/');

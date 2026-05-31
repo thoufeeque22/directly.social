@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { format, addMonths, subMonths, startOfWeek, endOfWeek } from 'date-fns';
 
-test.describe('Calendar Content Planner Refinements', () => {
+test.describe('Calendar Content Planner Refinements @regression', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to schedule page
     await page.goto('/schedule');

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Activity Domain Modularization Verification', () => {
+test.describe('Activity Domain Modularization Verification @regression', () => {
   test.beforeEach(async ({ page }) => {
     // We assume the user is already logged in via auth.setup.ts or similar
     // For local dev, we might need to handle login if not using reuse-auth
