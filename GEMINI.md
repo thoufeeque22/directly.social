@@ -5,11 +5,11 @@ This document serves as the root entry point for all AI agents. It defines the g
 ## Global Mandates
 
 - **Phase Throttling (Human-in-the-Loop):** The Orchestrator MUST terminate its turn after calling exactly one sub-agent. NEVER chain sub-agents autonomously. ALL transitions between phases (`Discovery` -> `Dev` -> `Review` -> `QA` -> `Doc` -> `Project`) MUST be approved by the user. If any phase fails, the round stops immediately and recovery must begin in a new round (starting from `Development` for `Review`/`QA` failures).
-- **State-First Protocol:** Before invoking any sub-agent or performing any action, the Orchestrator MUST create or update the Markdown state file in `.gemini/state/ticket-<id>.md`.
+- **State-First Protocol:** Before invoking any sub-agent or performing any action, the Orchestrator MUST create or update the Markdown state file in `.gemini/state/ticket-<id>/MAIN.md`.
 - **Initialization Precedence:** Every new ticket MUST begin with: 
   1. `git checkout main && git pull`.
   2. `git checkout -b feature/<id>-<desc>`.
-  3. Creation of the `.md` state file. 
+  3. Creation of the `.gemini/state/ticket-<id>/` directory and `MAIN.md` state file. 
   This sequence MUST complete before the first sub-agent is invoked.
 - **Explicit Commit Permission:** AI agents MUST NEVER commit changes to the repository without explicit, per-commit permission from the user. Sub-agents (Dev, QA, Doc) ARE encouraged to commit their specific artifacts after successful verification and user approval, rather than waiting for the Project Agent. Before every commit, the agent MUST present a summary of changes and wait for user approval.
 - **Verification Integrity:** Local verification MUST be exhaustive (e.g., `npm run build`, `npm run lint`). NEVER use 'surgical' or 'token-optimized' checks unless explicitly instructed by the user.

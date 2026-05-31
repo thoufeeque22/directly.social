@@ -13,7 +13,7 @@
   3. **Immediate Stop on Failure:** If any phase (especially `Review` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately. No further agents (Doc, Project, etc.) can be invoked in that round.
   4. **Round 2+ Entry Point:** If a round fails during `Review` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
 - **Human-in-the-Loop Workflow:** ALL transitions between agent phases MUST be mediated by the user. 
-  1. **Update State File First:** The active agent MUST update the `ticket.md` file with the results/verdicts before presenting for review.
+  1. **Update State File First:** The active agent MUST update the `MAIN.md` file with the results/verdicts before presenting for review.
   2. **Manual Review:** The user reviews the changes and the ticket state.
   3. **Explicit Approval:** The user provides approval to proceed to the *next* phase in the sequence.
 - **Traceable Status:** EVERY agent MUST update their section with a clear **Verdict** before handoff.

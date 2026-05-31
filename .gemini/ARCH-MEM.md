@@ -8,4 +8,4 @@
   - `qa-agent`: Test Writing & Execution.
   - `doc-agent`: PRs & living docs.
 - **Hooks:** `.gemini/hooks/post-task.sh` (auto-lint/test).
-- **State:** `.gemini/state/ticket-<id>.md` (transient workflow state). Markdown only; JSON is forbidden.
+- **State:** `.gemini/state/ticket-<id>/MAIN.md` (transient workflow state). Markdown only; JSON is forbidden.
