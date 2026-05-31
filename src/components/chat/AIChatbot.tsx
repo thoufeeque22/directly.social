@@ -220,7 +220,14 @@ const ChatWindowContent = ({
       {error && (
         <Box sx={{ p: 1.5, textAlign: 'center' }}>
           <Typography data-testid="chat-error-message" variant="caption" color="error">
-            Failed to connect. Please check your connection and try again.
+            {(() => {
+              try {
+                const parsed = JSON.parse(error.message);
+                return parsed.error || error.message;
+              } catch {
+                return error.message || 'Failed to connect. Please check your connection and try again.';
+              }
+            })()}
           </Typography>
         </Box>
       )}

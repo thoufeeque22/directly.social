@@ -41,8 +41,9 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 ## State Management & Isolation (Directory-First)
 - **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `.gemini/state/ticket-<id>/`.
 - **State Manager Hook:** Agents MUST NOT manually edit `MAIN.md` or their individual round files. Instead, agents MUST execute the state manager hook before terminating:
-  `npm run state:update -- --agent="dev" --verdict="SUCCESS" --summary="Implemented UI toggle" [--status="review"]`
-  *The script will automatically update the `MAIN.md` timeline and append your detailed summary to the correct `round-<N>` file.*
+  `npm run state:update -- --agent="dev" --verdict="SUCCESS" --summary="<FULL_CONTENT>" [--status="review"]`
+  *The script will automatically update the `MAIN.md` timeline and append your summary to the correct `round-<N>` file.*
+  - **CRITICAL:** The `<FULL_CONTENT>` passed to `--summary` MUST contain the **entire** generated report/blueprint/audit for that phase, not just a high-level summary. This ensures context persistence for subsequent agents.
 - **State Layout:**
 
   ```

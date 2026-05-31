@@ -219,6 +219,7 @@ model User {
   preferredAIProvider  String               @default("gemini")
   role                 Role                 @default(USER)
   preferredTheme       Theme                @default(SYSTEM)
+  aiCredits            Int                  @default(100)
   accounts              Account[]
   byokCredentials       ByokCredential[]
   byosConfig           ByosConfig?

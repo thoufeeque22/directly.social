@@ -62,6 +62,11 @@ export async function getMultiPlatformAIPreviews(
     // 2. Rate Limiting
     await checkRateLimit(aiRateLimit, userId, "AI Generation limit reached. Please wait a minute.");
 
+    // 3. AI Credits
+    const { consumeAiCredit } = await import("@/lib/core/credits");
+    const activeProvider = aiProvider || (process.env.ACTIVE_AI_PROVIDER as AIProvider) || 'gemini';
+    await consumeAiCredit(userId, activeProvider, byokConfigs);
+
     logger.info(`Generating AI previews for user ${userId}`, { platforms: vPlatforms, tier: vTier, mode: vMode, provider: aiProvider });
 
     const results: { platform: string, result: AIWriteResult }[] = [];

@@ -78,11 +78,26 @@ export async function POST(req: Request) {
     // 2. Determine which model to use
     const primaryProvider = (process.env.ACTIVE_AI_PROVIDER as AIProvider) || 'gemini';
     const byok = byokConfigs?.[primaryProvider];
+
+    // 3. Consume AI credit
+    const { consumeAiCredit } = await import('@/lib/core/credits');
+    try {
+      await consumeAiCredit(userId, primaryProvider, byokConfigs);
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === "Insufficient AI Credits") {
+        return new Response(JSON.stringify({ error: error.message }), { 
+          status: 402,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+      throw error;
+    }
+
     const model = getAIModel(primaryProvider, byok ? byok.modelId : undefined, byok ? byok.apiKey : undefined);
 
     logger.info("Starting AI chat session", { userId, primaryProvider });
 
-    // 3. Initialize streaming with Vercel AI SDK
+    // 4. Initialize streaming with Vercel AI SDK
     const result = streamText({
       model,
       messages: modelMessages,

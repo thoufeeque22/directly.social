@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
-import { Menu, MenuItem } from '@mui/material';
+import { Menu, MenuItem, Chip, Tooltip } from '@mui/material';
+import BoltIcon from '@mui/icons-material/Bolt';
 import { WhatsNewPopover } from '../WhatsNew/WhatsNewPopover';
 import NotificationBell from '../Notifications/NotificationBell';
 import styles from './Header.module.css';
@@ -15,6 +16,17 @@ export function UserActions({ session }: { session: Session | null }) {
 
   return (
     <>
+      {session?.user && (
+        <Tooltip title="AI Credits remaining">
+          <Chip 
+            icon={<BoltIcon sx={{ color: '#FFD700 !important' }} />} 
+            label={`${session.user.aiCredits ?? 0} Credits`} 
+            variant="outlined"
+            size="small"
+            sx={{ mr: 1, borderColor: 'rgba(255,255,255,0.2)' }}
+          />
+        </Tooltip>
+      )}
       <NotificationBell />
       <button className={styles.createBtn} onClick={() => { window.location.hash = 'create-post-section'; }}>
         + Create Post

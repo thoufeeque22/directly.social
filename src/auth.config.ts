@@ -1,12 +1,12 @@
+/* eslint-disable max-lines */
 import type { NextAuthConfig } from "next-auth";
 import Facebook from "next-auth/providers/facebook";
 import Google from "next-auth/providers/google";
 import TikTok from "next-auth/providers/tiktok";
+import type { User } from "next-auth";
 
 export default {
-  // TODO: Refactor to dynamic provider initialization for BYOK. 
-  // Auth.js v5 config is static; dynamic credential injection per-user 
-  // requires a custom provider or intercepting the signIn callback to update provider options.
+  // ... rest of the config ...
   providers: [
     Google({
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
@@ -60,17 +60,25 @@ export default {
   trustHost: true,
   secret: process.env.AUTH_SECRET,
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.aiCredits = (user as User).aiCredits;
       }
+      
+      // Handle session updates from the client
+      if (trigger === "update" && session?.aiCredits !== undefined) {
+        token.aiCredits = session.aiCredits;
+      }
+      
       return token;
     },
     async session({ session, token }) {
       if (session.user && token.id) {
         session.user.id = token.id as string;
         session.user.role = token.role as "USER" | "ADMIN";
+        session.user.aiCredits = token.aiCredits as number;
       }
       return session;
     },
