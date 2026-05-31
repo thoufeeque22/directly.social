@@ -79,18 +79,18 @@ The Activity domain manages the record of all past and upcoming posts.
 
 ## 7. Complex UI Form Architecture (Modular Engine)
 
-Complex forms (like the Upload Form) follow a "Modular Engine" pattern to manage deep state and UI complexity while adhering to the 50-line rule.
+Complex forms (like the Upload Form) follow a "Modular Engine" pattern to manage deep state and UI complexity while adhering to the 100-line rule.
 
 - **Provider-Consumer Pattern:** The form is wrapped in a dedicated `UploadFormProvider` (Context) that consolidates state from props, custom hooks, and local signals.
 - **Atomic Decomposition:** Large forms are broken down into a hierarchy of atomic, single-responsibility components.
 
 ## 8. Standard View Pattern (Server Shell / Client Content)
 
-To optimize for SEO (Metadata API) and maintain strict modularity (50-line rule), all primary views follow a standard decomposition pattern:
+To optimize for SEO (Metadata API) and maintain strict modularity (100-line rule), all primary views follow a standard decomposition pattern:
 
 - **Server Shell (`page.tsx`):** A server component that exports static or dynamic `metadata`, handles initial server-side auth/data fetching, and renders a `Suspense` boundary around the client content.
 - **Client Content (`*Content.tsx`):** A focused client component (marked with `'use client'`) that manages interactive state, hooks, and complex UI logic.
-- **Benefits:** This separation ensures that logic-heavy client components don't block the export of static metadata and makes it easier to stay within the 50-line modularity limit.
+- **Benefits:** This separation ensures that logic-heavy client components don't block the export of static metadata and makes it easier to stay within the 100-line modularity limit.
 
 ## 9. Theme Management System
 

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { useState, useEffect, useMemo } from 'react';
 import { StyleMode, AITier } from '@/lib/core/constants';
 import { AIProvider } from '@/lib/core/ai';

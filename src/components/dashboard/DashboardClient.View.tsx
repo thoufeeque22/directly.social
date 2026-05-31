@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 'use client';
 
 import React from 'react';
@@ -26,6 +25,7 @@ interface ViewProps {
   videoFormat: 'short' | 'long';
   videoDuration: number | null;
   draftFileName: string | null;
+  draftFile: File | null;
   isScheduled: boolean;
   scheduledAt: string;
   customStyleText: string;
@@ -55,7 +55,7 @@ export const DashboardView: React.FC<ViewProps> = (p) => (
         </div>
       ) : (
         <UploadForm 
-          isUploading={p.isUploading} accounts={p.devAccounts} preferences={p.preferences} selectedAccountIds={p.selectedAccountIds} contentMode={p.contentMode} aiTier={p.aiTier} aiProvider={p.aiProvider} videoFormat={p.videoFormat} videoDuration={p.videoDuration} draftFileName={p.draftFileName}
+          isUploading={p.isUploading} accounts={p.devAccounts} preferences={p.preferences} selectedAccountIds={p.selectedAccountIds} contentMode={p.contentMode} aiTier={p.aiTier} aiProvider={p.aiProvider} videoFormat={p.videoFormat} videoDuration={p.videoDuration} draftFileName={p.draftFileName} draftFile={p.draftFile}
           onVisualScan={p.onVisualScan} onTierChange={p.onTierChange} onProviderChange={p.onProviderChange} onModeChange={p.onModeChange} onToggleAccount={p.onToggleAccount}
           onFileChange={p.onFileChange} onGallerySelect={p.onGallerySelect} onSubmit={p.onSubmit} isScheduled={p.isScheduled} scheduledAt={p.scheduledAt} onSchedulingChange={p.onSchedulingChange}
           customStyleText={p.customStyleText} onCustomStyleChange={p.onCustomStyleChange} hasCachedPreviews={Object.keys(p.aiPreviews).length > 0} onResumeReview={p.onResumeReview}

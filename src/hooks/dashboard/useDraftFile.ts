@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { useState, useEffect, useRef } from 'react';
 import { storeDraftFile, getDraftFile } from '@/lib/upload/file-store';
 import { updateVideoFormatPreference } from '@/app/actions/user';
@@ -8,11 +7,13 @@ export function useDraftFile(userId?: string) {
   const [videoFormat, setVideoFormat] = useState<'short' | 'long'>('short');
   const [videoDuration, setVideoDuration] = useState<number | null>(null);
   const draftFileRef = useRef<File | null>(null);
+  const [draftFile, setDraftFile] = useState<File | null>(null);
 
   useEffect(() => {
     getDraftFile().then(file => {
       if (file) {
         draftFileRef.current = file;
+        setDraftFile(file);
         setDraftFileName(file.name);
       }
     });
@@ -54,6 +55,7 @@ export function useDraftFile(userId?: string) {
 
   const handleFileChange = async (file: File | null) => {
     draftFileRef.current = file;
+    setDraftFile(file);
     setDraftFileName(file?.name || null);
     
     if (file) {
@@ -69,6 +71,7 @@ export function useDraftFile(userId?: string) {
 
   return {
     draftFileRef,
+    draftFile,
     draftFileName,
     videoFormat,
     setVideoFormat,

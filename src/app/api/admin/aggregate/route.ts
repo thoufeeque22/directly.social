@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { redis } from "@/lib/core/redis";

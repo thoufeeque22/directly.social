@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { S3Client, CompleteMultipartUploadCommand } from '@aws-sdk/client-s3';
 import { prisma } from '@/lib/core/prisma';
 import { randomUUID } from 'crypto';

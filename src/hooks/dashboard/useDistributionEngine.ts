@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { useState, useCallback, useRef } from 'react';
 import { Account } from '@/lib/core/types';
 import { StyleMode } from '@/lib/core/constants';

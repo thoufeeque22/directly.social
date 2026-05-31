@@ -31,7 +31,7 @@ This document provides a high-level index of the Social Studio application archi
 8.  **[Testing & Quality Assurance](architecture/TESTING_QA.md)**
     *   E2E (Playwright) & Unit (Vitest)
     *   Agent Orchestration
-    *   Modularity Enforcement (50-Line Rule)
+    *   Modularity Enforcement (100-Line Rule)
 9.  **[Deployment & Infrastructure](architecture/INFRASTRUCTURE.md)**
     *   Hosting (Vercel/VPS)
     *   API Architecture (Route Handlers vs. Server Actions)
@@ -42,6 +42,6 @@ This document provides a high-level index of the Social Studio application archi
 ## Architecture Principles
 
 - **State-First Protocol:** Every task begins with a defined state in `.gemini/state/`.
-- **Modularity Mandate:** All source files must be ≤ 50 lines.
+- **Modularity Mandate:** All source files must be ≤ 100 lines.
 - **Strict Typing:** Zero-Any policy for TypeScript.
 - **Centralized Validation:** Shared schemas in `src/lib/schemas/`.

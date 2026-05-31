@@ -1,18 +1,15 @@
-/* eslint-disable max-lines */
 'use client';
 
 import React from 'react';
 import MovieIcon from '@mui/icons-material/Movie';
 import { useUploadFormContext } from './UploadFormContext';
-import { VideoFileDisplay } from './VideoFileDisplay';
+import { VideoPlayerPreview } from './VideoPlayerPreview';
 
 export const VideoSelection: React.FC = () => {
   const { 
     isUploading, 
     setShowGallery, 
     draftFileName, 
-    videoFormat, 
-    videoDuration, 
     onFileChange 
   } = useUploadFormContext();
 
@@ -44,7 +41,7 @@ export const VideoSelection: React.FC = () => {
           </button>
         )}
       </div>
-      <VideoFileDisplay fileName={draftFileName} format={videoFormat} duration={videoDuration} />
+      <VideoPlayerPreview />
       <input 
         id="file-upload"
         type="file" 

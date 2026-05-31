@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import React from 'react';
 import StopIcon from '@mui/icons-material/Stop';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';

@@ -75,7 +75,7 @@ if (platform === '[platform-name]') {
 ## Best Practices
 
 - **Strict TypeScript:** Ensure all functions are typed and avoid `any`. Use interfaces from `src/lib/core/platforms/types.ts`.
-- **Modular Logic:** Keep files under 50 lines. Extract complex API logic into separate utility files within the platform directory.
+- **Modular Logic:** Keep files under 100 lines. Extract complex API logic into separate utility files within the platform directory.
 - **Error Handling:** Wrap API calls in try-catch blocks and throw descriptive errors. Use the platform's error messages where possible.
 - **Logging:** Use the centralized `logger` from `@/lib/core/logger` to track the distribution process.
 - **Shared Utilities:** Check `src/lib/core/platforms/` for existing utilities (especially for Meta-based platforms) before implementing new ones.

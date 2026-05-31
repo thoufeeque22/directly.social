@@ -23,7 +23,7 @@ Stores individual alerts.
 
 ## Components & Architecture
 
-The feature follows the strict 50-line modularity rule, utilizing Material UI (MUI) components exclusively.
+The feature follows the strict 100-line modularity rule, utilizing Material UI (MUI) components exclusively.
 
 ### `NotificationProvider` & `NotificationContext`
 A React Context provider located in `src/components/Notifications/NotificationContext.tsx`. It acts as the single source of truth, polling the server every 60 seconds and distributing the state (`notifications`, `unreadCount`) and actions (`markAsRead`, `markAllAsRead`) to consumers.

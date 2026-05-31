@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /**
  * DISTRIBUTOR UTILITIES
  * Centralized helpers for platform distribution shared between 

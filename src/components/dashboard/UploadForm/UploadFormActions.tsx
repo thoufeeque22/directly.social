@@ -1,5 +1,4 @@
 'use client';
-/* eslint-disable max-lines */
 import React from 'react';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';

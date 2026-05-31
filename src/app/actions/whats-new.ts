@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 "use server";
 
 import { auth } from '@/auth';
