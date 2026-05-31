@@ -9,8 +9,9 @@
   `Discovery` -> `Development` -> `Review` -> `QA` -> `Documentation` -> `Project Management`.
 - **Phase Termination & Failure Protocol:**
   1. **Atomic Phases:** An agent MUST NOT proceed to the next phase in the sequence. It MUST update the state file, set its **Verdict**, and return control to the Orchestrator.
-  2. **Immediate Stop on Failure:** If any phase (especially `Review` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately. No further agents (Doc, Project, etc.) can be invoked in that round.
-  3. **Round 2+ Entry Point:** If a round fails during `Review` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
+  2. **Next Step Suggestion:** Upon completing a phase, the agent MUST explicitly suggest the next sub-agent in the sequence to the user (e.g., "Next step: Invoke `dev-agent` for implementation").
+  3. **Immediate Stop on Failure:** If any phase (especially `Review` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately. No further agents (Doc, Project, etc.) can be invoked in that round.
+  4. **Round 2+ Entry Point:** If a round fails during `Review` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
 - **Human-in-the-Loop Workflow:** ALL transitions between agent phases MUST be mediated by the user. 
   1. **Update State File First:** The active agent MUST update the `ticket.md` file with the results/verdicts before presenting for review.
   2. **Manual Review:** The user reviews the changes and the ticket state.
@@ -34,6 +35,7 @@ ticket_id: 123
 branch_name: feature/...
 goal: Concise goal statement
 status: in-progress
+next_agent: dev-agent
 ---
 
 # 📋 Ticket Metadata
