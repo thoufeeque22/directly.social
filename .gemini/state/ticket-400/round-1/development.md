@@ -4,3 +4,6 @@ Implemented NotificationProvider to centralize state, refactored useNotification
 
 ## [2026-05-31 18:14:16] Verdict: SUCCESS
 Fixed lint errors regarding react-hooks/set-state-in-effect in ThemeContextProvider and useUploadForm by adding eslint-disable-next-line directives.
+
+## [2026-05-31 18:33:28] Verdict: SUCCESS
+Fixed type imports in WhatsNew module following Round 4 refactoring. Verified with tsc.
