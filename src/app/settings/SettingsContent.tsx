@@ -10,6 +10,7 @@ import AiByokWizard from '@/components/AiByokWizard';
 import { ByosWizard } from '@/components/settings/ByosWizard';
 import { DestinationsTab } from '@/components/settings/DestinationsTab';
 import { SettingsTabs } from '@/components/settings/SettingsTabs';
+import { SupportTab } from '@/components/settings/SupportTab';
 import styles from './Settings.module.css';
 
 const SettingsContent = () => {
@@ -46,6 +47,7 @@ const SettingsContent = () => {
           </GlassCard>
         )}
         {activeTab === 'storage' && <ByosWizard />}
+        {activeTab === 'support' && <SupportTab />}
       </Box>
     </div>
   );
