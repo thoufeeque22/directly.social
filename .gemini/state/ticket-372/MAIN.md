@@ -1,16 +1,16 @@
 # Ticket #372: API Rate Limiting
 
 ## Status
-- Phase: Discovery
-- Verdict: IN_PROGRESS
+- Phase: QA
+- Verdict: PASS (Internal Dev)
 
 ## Description
 Add middleware to protect API routes from abuse and ensure compliance with platform quotas.
 
 ## Round 1
-- Discovery: [[discovery.md]]
-- Development: PENDING
-- Review: PENDING
+- Discovery: [[discovery.md]] (COMPLETE)
+- Development: [[development.md]] (COMPLETE)
+- Review: [[review.md]] (COMPLETE)
 - QA: PENDING
 - Documentation: PENDING
 
@@ -64,3 +64,26 @@ Add middleware to protect API routes from abuse and ensure compliance with platf
 - Authenticated user hits AI limit but not Global limit.
 - Unauthenticated user attempts brute force on `/api/auth/*` -> Blocked by IP.
 - Upstash environment variables missing -> Requests proceed (Fail-open).
+- **[2026-06-01 23:26:15]**: QA [FAIL] - # QA Report: Ticket #372 - API Rate Limiting
+
+## Verdict: FAIL
+
+## Test Scenarios Covered
+1.  **Unit Tests**:
+    *   getLimiterForPath: Verified correct limiter assignment for AI, Upload, Media, Auth, and Sensitive routes. (PASS)
+    *   shouldBypassRateLimit: Verified bypass logic for E2E, Test, CI, and missing Redis URL scenarios. (PASS)
+2.  **E2E Smoke Test**:
+    *   Attempted to run Playwright E2E tests to verify API accessibility. (FAIL - Build Blocker)
+3.  **Build Verification**:
+    *   Executed npm run build to verify middleware integration. (FAIL)
+
+## FAILED TESTS
+1.  **Build Conflict**: 
+    *   Error: Both middleware file ./src/src/middleware.ts and proxy file ./src/src/proxy.ts are detected. Please use ./src/src/proxy.ts only.
+    *   Reason: Next.js 15/16 does not support multiple middleware files. src/proxy.ts (used for Auth) and src/middleware.ts (introduced for Rate Limiting) are in conflict.
+    *   Impact: The application cannot be built or started in production mode.
+
+## Test Gap Analysis
+- Missing Build Check: The implementation phase did not include a full npm run build which would have revealed the middleware conflict.
+- Middleware Redundancy: src/proxy.ts was already acting as a middleware for authentication. The new src/middleware.ts was added without merging the existing logic or deleting the conflicting file.
+- Architectural Oversight: The registry-based approach in middleware.ts is good, but it must be the ONLY middleware file.
