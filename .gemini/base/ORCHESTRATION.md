@@ -77,7 +77,7 @@ current_round: 1
 - **Current Status**: in-progress
 
 # 🔄 Round History
-- **Round 1**: [FAILED @ Review] - Violated 50-line rule.
+- **Round 1**: [FAILED @ Review] - Violated 100-line rule.
 - **Round 2**: [IN-PROGRESS]
 
 # 📅 Timeline
@@ -98,7 +98,7 @@ current_round: 1
 
 ### development.md
 - **Verdict**: [SUCCESS / BLOCKED]
-- **Root Cause Analysis (Round 2+ only)**: Explicitly identify WHY the previous round was rejected (e.g., "Violated 50-line rule").
+- **Root Cause Analysis (Round 2+ only)**: Explicitly identify WHY the previous round was rejected (e.g., "Violated 100-line rule").
 - **Remediation Strategy (Round 2+ only)**: Detail the specific changes made to address the failure and prevent regression.
 - **Summary**: ...
 

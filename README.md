@@ -1,56 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Social Studio App
+
+Social Studio is a multi-platform social media management application that allows users to schedule and distribute video content (Shorts/Reels/TikToks) across various platforms simultaneously.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript
+- **Authentication:** Auth.js (NextAuth)
+- **Database:** PostgreSQL with Prisma ORM
+- **UI:** Material UI (MUI), Framer Motion
+- **Testing:** Playwright (E2E), Vitest (Unit/Integration)
+- **Monitoring:** Sentry
 
 ## Getting Started
 
-First, run the development server:
+### 1. Prerequisites
+- Node.js 20+
+- pnpm
 
+### 2. Installation
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Development
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+- `src/app/`: Next.js App Router (Pages, API Routes, Server Actions)
+- `src/components/`: Reusable UI components
+- `src/lib/`: Core logic, schemas, and utilities
+- `src/__tests__/`: Comprehensive test suite (E2E, Unit, Integration) and test scripts
+- `.gemini/`: AI Agent orchestration and standards
 
-To learn more about Next.js, take a look at the following resources:
+## Core Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run build`: Production build
+- `npm run lint`: ESLint check (enforces 100-line modularity rule)
+- `npm run test`: Run unit and integration tests
+- `npm run test:smoke`: Run critical path E2E tests
+- `npm run test:regression`: Run full regression E2E tests
+- `npm run cleanup:neon`: Purge old Neon database branches
 
 ## API Documentation
 
 Social Studio features a centralized API documentation system powered by Swagger/OpenAPI.
-
-- **Live Docs:** Access the interactive Swagger UI at `/api/docs` in your local development environment.
-- **Specification:** The OpenAPI specification is dynamically generated from route configurations and Zod schemas.
-- **Standard:** All new Route Handlers MUST be documented in the OpenAPI registry.
-
-## Centralized Schemas
-
-Validation logic is centralized in `src/lib/schemas/` to ensure consistency between API routes, Server Actions, and the client-side UI.
-
-- **Location:** `src/lib/schemas/*.ts`
-- **Technology:** [Zod](https://zod.dev/)
-- **Usage:** Always import schemas from this directory for request validation and type inference.
+Access the interactive Swagger UI at `/api/docs` in your local development environment.
 
 ## AI Agent Orchestration
 
 This project uses an agentic workflow defined in `.gemini/GEMINI.md` and `.gemini/base/ORCHESTRATION.md`. The workflow ensures high-quality code delivery through distinct phases: Discovery, Development, Review, QA, and Documentation.
+For more details, see [docs/ORCHESTRATION.md](docs/ORCHESTRATION.md).
+
+## Documentation Index
+
+Comprehensive documentation is available in the `docs/` directory:
+- [Architecture Overview](docs/architecture/OVERVIEW.md)
+- [Testing & QA](docs/architecture/TESTING_QA.md)
+- [Deployment Guide](docs/LAUNCH_GUIDE.md)
+- [Mobile Architecture](docs/architecture/MOBILE.md)
