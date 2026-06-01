@@ -1,6 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# Dependencies
 /node_modules
 /.pnp
 .pnp.*
@@ -10,57 +8,62 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
+# Next.js
+/.next/
+/.next-e2e/
+/out/
+/build/
+
+# Testing
 /playwright-report
 /test-results
 /test-results-unit
 /verification
+/coverage
 /.auth
 
-# next.js
-/.next/
-/.next-e2e/
-/out/
-
-# Production
-.next
-out
-build
-
-# Deployment
+# Production & Deployment
+/.vercel/
 next-deploy.tar.gz
 next-build.tar.gz
 
-# misc
+# IDEs & OS
+.idea/
+.vscode/
+.antigravitycli/
 .DS_Store
+*.swp
+*.swo
 *.pem
 
-# debug
+# Environment & Secrets
+.env*
+!.env.example
+.env.sentry-build-plugin
+
+# Debug & Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+lint_output.txt
+lint_results.txt
 
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
+# TypeScript
 *.tsbuildinfo
 next-env.d.ts
 
+# Database
 /src/generated/prisma
 *.db
 *.db-journal
-/tmp
-/coverage
-/test-results
-/scratch
 
-# Sentry Config File
-.env.sentry-build-plugin
+# Temporary Artifacts
+/tmp/*
+!tmp/.gitignore
+!tmp/chunks/
+/scratch
 
 # Capacitor
 /ios/App/build
@@ -72,19 +75,7 @@ next-env.d.ts
 /ios/App/App/public
 /capacitor.config.json
 
-# IDEs
-.idea/
-.vscode/
-*.swp
-*.swo
-.env*.local
-
-# Logs and Diagnostic Reports
-*.log
-lint_output.txt
-lint_results.txt
-
-# Gemini Context
+# AI Agent Orchestration
 !.gemini/incidental_observations.json
-.gemini/state/ticket-*.json
-! .gemini/state/ticket-*.json
+!.gemini/state/
+.gemini/tmp/

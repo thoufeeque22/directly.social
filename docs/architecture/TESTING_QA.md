@@ -19,18 +19,28 @@ Unit tests for utilities and integration tests for server actions are in `src/__
 - **Test Environment:** Mock `ENCRYPTION_KEY` injected globally for credential-related tests.
 - **Mocking Strategy:** External APIs and platform dependencies are heavily mocked.
 
-## 3. Agent Orchestration
+## 3. Database & Test Utilities
+
+Utility scripts for database management and test data seeding are located in `src/__tests__/scripts/`. These scripts are exposed via `package.json` for ease of use:
+
+- **Cleanup Neon DB:** `npm run cleanup:neon` (Dry Run) or `npm run cleanup:neon:force`. Purges old Neon database branches.
+- **E2E Seeding:** `npm run seed:e2e`. Seeds a standard test user and session.
+- **Activity Cleanup:** `npm run clear-activity`. Clears all activity records for a clean state.
+- **Feature Seeding:** `npm run seed:schedule` and `npm run seed:whats-new`. Seeds specific feature data for development and testing.
+
+## 4. Agent Orchestration
 
 The project uses specialized AI agents (Discovery, Dev, Review, QA) to manage the development lifecycle. Core orchestration rules are modularized in `.gemini/base/`.
 
-## 4. Modularity Enforcement (The 100-Line Rule)
+## 5. Modularity Enforcement (The 100-Line Rule)
 
 The project enforces a strict 100-line limit for all source files to ensure high maintainability.
 - **Automation:** Enforced via ESLint's `max-lines` rule.
-- **Exceptions:** Test files are exempt.
+- **Exceptions:** Test files and scripts in `src/__tests__/**` are exempt.
 - **Legacy Support:** Existing files exceed limit use `/* eslint-disable max-lines */`.
+- **Debt Reduction Protocol:** Any interaction with a legacy file MUST include logic extraction into new, compliant modules.
 
-## 5. Modern Web Standards
+## 6. Modern Web Standards
 
 Adherence to modern web performance and quality standards is ensured via specialized audits during Review and QA phases.
 - **Optimization Focus:** Continuous monitoring of Core Web Vitals (LCP, INP, CLS).
