@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { shouldBypassRateLimit } from '@/lib/core/bypass-utils';
 import { getLimiterForPath } from '@/lib/core/rate-limit-registry';
@@ -9,6 +9,7 @@ import { getLimiterForPath } from '@/lib/core/rate-limit-registry';
  */
 export default auth(async (req) => {
   const pathname = req.nextUrl.pathname;
+  const nextReq = req as unknown as NextRequest;
 
   // 1. Rate Limiting for API routes
   if (pathname.startsWith('/api')) {
@@ -18,9 +19,9 @@ export default auth(async (req) => {
     }
 
     try {
-      // In NextAuth v5 middleware, the session is available on req.auth
       const userId = req.auth?.user?.id;
-      const ip = req.ip ?? '127.0.0.1';
+      // Use a safer access pattern for IP to satisfy the compiler
+      const ip = (req as any).ip ?? '127.0.0.1';
 
       // (CA-003): Use registry to find appropriate limiter
       const { limiter, useIpOnly } = getLimiterForPath(pathname);

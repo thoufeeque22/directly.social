@@ -1,4 +1,5 @@
 import { prisma } from "../core/prisma";
+import { Prisma } from "@prisma/client";
 
 export interface CreateActivityParams {
   userId: string;
@@ -8,7 +9,7 @@ export interface CreateActivityParams {
   platforms: {
     platform: string;
     accountId: string;
-    customContent?: any;
+    customContent?: Prisma.JsonValue;
   }[];
 }
 
@@ -36,7 +37,7 @@ export class ActivityService {
             platform: p.platform,
             accountId: p.accountId,
             status: 'pending',
-            metadata: p.customContent ? { customContent: p.customContent } : undefined,
+            metadata: p.customContent ?? Prisma.JsonNull,
           })),
         },
       },

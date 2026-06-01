@@ -55,7 +55,7 @@ describe('Bypass Utils', () => {
   });
 
   it('should bypass in test environment', () => {
-    process.env.NODE_ENV = 'test';
+    (process.env as any).NODE_ENV = 'test';
     expect(shouldBypassRateLimit()).toBe(true);
   });
 
@@ -70,7 +70,7 @@ describe('Bypass Utils', () => {
   });
 
   it('should NOT bypass in production with Redis URL configured', () => {
-    process.env.NODE_ENV = 'production';
+    (process.env as any).NODE_ENV = 'production';
     process.env.NEXT_PUBLIC_E2E = 'false';
     process.env.CI = 'false';
     process.env.VITEST = undefined;

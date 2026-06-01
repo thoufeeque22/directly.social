@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { z } from "zod";
 import { logger } from "@/lib/core/logger";
 import { UploadInitSchema } from "@/lib/schemas/upload";
-import { activityService } from "@/lib/services/activity-service";
+import { CreateActivityParams, activityService } from "@/lib/services/activity-service";
 
 /**
  * Upload Initialization API
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       title,
       description,
       videoFormat,
-      platforms,
+      platforms: platforms as CreateActivityParams['platforms'],
     });
 
     return NextResponse.json({ success: true, data: { activityId: activity.id } });
