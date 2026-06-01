@@ -1,13 +1,13 @@
 # Ticket 399: Add Support / Help Link
 
-**Status:** IN_PROGRESS (Doc Phase)
+**Status:** COMPLETED
 
 ## Technical Specifications
 
 - **Sidebar:** Modify `src/components/layout/Sidebar.tsx` to add a "Support" menu item linking to `/settings?tab=support` using a `HelpOutlineIcon`.
 - **Settings Tabs:** Modify `src/components/settings/SettingsTabs.tsx` to include a new "Support" tab.
 - **Settings Content:** Update `src/app/settings/SettingsContent.tsx` to conditionally render a new `<SupportTab />` component.
-- **Support Component:** Create `src/components/settings/SupportTab.tsx` using MUI components (GlassCard, Typography, Button). It will feature a "Contact Us" button with `href="mailto:support@socialstudio.app"` (User has chosen Zoho Mail to host this inbox) and a placeholder section for "Help & FAQ".
+- **Support Component:** Create `src/components/settings/SupportTab.tsx` using MUI components (GlassCard, Typography, Button). It will feature a "Contact Us" button with `href="mailto:socialstudio.support@gmail.com"` and a placeholder section for "Help & FAQ".
 
 ## Test Specifications
 
@@ -33,3 +33,4 @@ All technical specifications for Ticket 399 are met.
 - Verify the presence of Frequently Asked Questions in the tab content.
 **FAILED TESTS:** None
 - **[2026-06-01 18:37:42]**: DOC [COMPLETE] - Documentation complete for Support Hub. Added docs/features/SUPPORT_HELP.md to detail the new Sidebar link and Settings tab functionality. Updated docs/README.md to link to the new feature file and the existing UAT manual test script docs/manual_tests/ticket-399.md. No incidental observations found.
+- **[2026-06-01 18:45:00]**: PROJECT [SUCCESS] - Finalized ticket. Created PR summarizing the feature and the move to Gmail (socialstudio.support@gmail.com). Closed issue #399 and synced with project board.
