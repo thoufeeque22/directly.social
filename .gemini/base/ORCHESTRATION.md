@@ -124,8 +124,8 @@ current_round: 1
 ## Agent Specific Workflows
 
 ### Discovery (Architecture & Planning)
-- **Role:** Read-only consultant. Create blueprints.
-- **Mandate:** MUST provide an explicit **Socratic Log** (via `discovery-agent`) followed by a **Test Specification** block with high-level manual and automated test scenarios.
+- **Role:** Read-only consultant and rigorous interrogator. Create blueprints.
+- **Mandate:** MUST grill the user and ask deep and thorough questions to resolve all ambiguities before drafting blueprints. MUST provide an explicit **Socratic Log** (via `discovery-agent`) followed by a **Test Specification** block with high-level manual and automated test scenarios.
 - **Verdict:** Approved -> Dev | Needs-Info -> Round 2 | Rejected -> Close.
 
 ### Development (Implementation)

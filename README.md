@@ -50,3 +50,7 @@ Validation logic is centralized in `src/lib/schemas/` to ensure consistency betw
 - **Location:** `src/lib/schemas/*.ts`
 - **Technology:** [Zod](https://zod.dev/)
 - **Usage:** Always import schemas from this directory for request validation and type inference.
+
+## AI Agent Orchestration
+
+This project uses an agentic workflow defined in `.gemini/GEMINI.md` and `.gemini/base/ORCHESTRATION.md`. The workflow ensures high-quality code delivery through distinct phases: Discovery, Development, Review, QA, and Documentation.

@@ -5,6 +5,7 @@ Welcome to the Social Studio project documentation. This folder contains archite
 ## Core Documentation
 
 - [Architecture Overview](ARCHITECTURE.md) - Deep dive into system design, data models, and workflows.
+- [AI Agent Orchestration](ORCHESTRATION.md) - Points to the AI agent workflows and instructions.
 
 ## Features
 
@@ -13,6 +14,7 @@ Welcome to the Social Studio project documentation. This folder contains archite
 - [Notification Utility](features/NOTIFICATIONS.md) - Transactional alerts and bell icon system.
 - [Global Refresh](features/GLOBAL_REFRESH.md) - Unified sync mechanism and Pull-to-Refresh gesture.
 - [Manual Mode AI Polish](features/MANUAL_MODE_AI_ENHANCEMENT.md) - Seamless transition from Manual drafting to AI Enrich.
+- [Support Hub](features/SUPPORT_HELP.md) - Centralized help and resources accessible from the sidebar.
 
 ## Guides & Troubleshooting
 
@@ -30,4 +32,5 @@ Welcome to the Social Studio project documentation. This folder contains archite
 - [UAT: Upcoming Posts Navigation](manual_tests/verify-upcoming-posts-navigation.md) - Dashboard-to-Schedule deep linking.
 - [UAT: Video Lifecycle](manual_tests/verify-video-lifecycle.md) - End-to-end publishing flow.
 - [UAT: Notification Utility](manual_tests/ticket-400.md) - Functional verification of the bell icon and state sync.
+- [UAT: Support Hub](manual_tests/ticket-399.md) - Support link and tab functionality.
 - [UAT: Manual Mode AI Polish](manual_tests/514-enrich-title-description-button.md) - Action button UAT under issue #514.
