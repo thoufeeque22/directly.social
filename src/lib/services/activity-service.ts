@@ -8,7 +8,7 @@ export interface CreateActivityParams {
   platforms: {
     platform: string;
     accountId: string;
-    customContent?: string;
+    customContent?: any;
   }[];
 }
 

@@ -14,7 +14,7 @@ Implemented centralized rate limiting via Next.js middleware and refactored API 
 - **`src/middleware.ts`**: Implemented global and path-specific rate limiting for all `/api/*` routes. Features IP-based fallback for unauthenticated users and fail-open logic for high availability.
 
 ### Services & Modularity
-- **`src/lib/services/activity-service.ts`**: Extracted persistence logic from route handlers to satisfy CA-001.
+- **`src/lib/services/activity-service.ts`**: Extracted persistence logic from route handlers to satisfy CA-001. Fixed type mismatch for `customContent` (changed to `any` to support JSON metadata).
 - **`src/lib/testing/mock-ai-service.ts`**: Extracted E2E mock logic from the chat route to satisfy OO-001.
 - **`src/lib/actions/ai-chat-tools.ts`**: Extracted tool definitions from the chat route to satisfy CA-002 and the 100-line modularity rule.
 
