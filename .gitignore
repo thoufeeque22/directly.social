@@ -23,12 +23,14 @@
 /.auth
 
 # Production & Deployment
+/.vercel/
 next-deploy.tar.gz
 next-build.tar.gz
 
 # IDEs & OS
 .idea/
 .vscode/
+.antigravitycli/
 .DS_Store
 *.swp
 *.swo
