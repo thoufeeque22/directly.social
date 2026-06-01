@@ -3,11 +3,12 @@
 ## Core Mandates
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST:
   1. Check for any existing open PRs related to the task (`gh pr list` or similar) to avoid duplicate work.
-  2. Check the current branch. If NOT on the target feature branch (`feature/<id>-...`):
+  2. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue`).
+  3. Check the current branch. If NOT on the target feature branch (`feature/<id>-...`):
      a. Switch to `main` and pull latest (`git checkout main && git pull`).
      b. Create the dedicated feature branch (`git checkout -b feature/<id>-<desc>`).
-  3. If ALREADY on the target feature branch, skip the `main` synchronization and branch creation steps.
-  4. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template** (skip if state already exists).
+  4. If ALREADY on the target feature branch, skip the `main` synchronization and branch creation steps.
+  5. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template** (skip if state already exists).
 - **Manual Environment Management:** The User always manages the development server (`npm run dev`) and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, or check the connectivity of these services.
 - **Strict Sequential Workflow:** ALL tickets MUST follow this exact sequence:
   `Discovery` -> `Development` -> `Review` -> `QA` -> `Documentation` -> `Project Management`.
@@ -30,20 +31,20 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 - **Full Suite:** The complete test directory, including long-running E2E and edge-case unit tests.
 
 ### Agent Test Mandates
-- **dev-agent:** MUST run `npm run test:smoke` and `npm run lint`.
-- **review-agent:** READ-ONLY.
+- **dev-agent:** MUST use the `arxitect:architect` skill for all changes. MUST run `npm run test:smoke` and `npm run lint`.
+- **review-agent:** READ-ONLY. Focus on Security, Performance, and Runtime (Hydration) audits.
 - **qa-agent:** MUST run `npm run test:regression`. For features with specific impact, they may also run relevant individual tests.
 - **Human-in-the-Loop:** The **User** SHOULD run the full suite (`npm test`) before the final merge.
 
 ### package.json Scripts (Implementation)
-- `test:smoke`: `npx playwright test --grep @smoke` (and vitest equivalent if applicable)
+- `test:smoke`: `npx playwright test --grep @smoke`
 - `test:regression`: `npx playwright test --grep @regression`
 
 ## State Management & Isolation (Directory-First)
 - **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `.gemini/state/ticket-<id>/`.
 - **State Manager Hook:** Agents MUST NOT manually edit `MAIN.md` or their individual round files. Instead, agents MUST execute the state manager hook before terminating:
   `npm run state:update -- --agent="dev" --verdict="SUCCESS" --summary="<FULL_CONTENT>" [--status="review"]`
-  *The script will automatically update the `MAIN.md` timeline and append your summary to the correct `round-<N>` file.*
+  *The script will automatically update the `MAIN.md timeline and append your summary to the correct `round-<N>` file.*
   - **CRITICAL:** The `<FULL_CONTENT>` passed to `--summary` MUST contain the **entire** generated report/blueprint/audit for that phase, not just a high-level summary. This ensures context persistence for subsequent agents.
 - **State Layout:**
 
@@ -75,6 +76,9 @@ current_round: 1
 - **Branch**: `feature/...`
 - **Goal**: Concise goal statement
 - **Current Status**: in-progress
+
+# 📝 Ticket Description
+<INSERT_FULL_ISSUE_BODY_HERE>
 
 # 🔄 Round History
 - **Round 1**: [FAILED @ Review] - Violated 100-line rule.
@@ -130,6 +134,7 @@ current_round: 1
 
 ### Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular code.
+- **Mandate:** MUST execute all implementation via the `arxitect:architect` skill. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops before the phase is considered complete.
 - **Verdict:** Success -> Review | Blocked -> Discovery/Manual.
 - **Exhaustive Verification:** MUST run `npm run build` and `npm run lint`.
 

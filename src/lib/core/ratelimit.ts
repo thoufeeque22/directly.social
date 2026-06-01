@@ -1,25 +1,16 @@
 import { Ratelimit } from "@upstash/ratelimit";
+import { shouldBypassRateLimit } from "./bypass-utils";
 
 /**
  * Utility to check rate limit and throw if exceeded.
+ * (OO-002): Now uses centralized bypass logic.
  */
 export async function checkRateLimit(
   limiter: Ratelimit,
   identifier: string,
   errorMessage: string = "Too many requests. Please try again later."
 ) {
-  // Skip rate limiting in E2E/test environments
-  if (
-    process.env.NEXT_PUBLIC_E2E === 'true' || 
-    process.env.NODE_ENV === 'test' || 
-    process.env.CI === 'true' ||
-    process.env.VITEST === 'true'
-  ) {
-    return;
-  }
-
-  // Skip rate limiting if environment variables are not set (e.g. local dev without Upstash)
-  if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
+  if (shouldBypassRateLimit()) {
     return;
   }
 

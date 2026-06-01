@@ -33,8 +33,17 @@ For automated and manual verification, dedicated identities are used:
 
 ## 4. Rate Limiting & Abuse Prevention
 
-The application protects its public and authenticated endpoints from brute-force and exhaustion attacks using an Upstash-backed rate-limiting system.
+The application protects its public and authenticated endpoints from brute-force and exhaustion attacks using a centralized, Upstash-backed rate-limiting system.
 
-- **Modular Configuration:** Rate-limiting instances are centrally managed in `src/lib/core/ratelimit-config.ts`, allowing for granular control over different API tiers (e.g., standard, heavy-AI, or media uploads).
-- **Environment Awareness:** The system is aware of the `E2E_RATE_LIMIT_BYPASS` secret, which allows Playwright tests to execute exhaustive verification without being blocked by throttling, while maintaining full security in production.
-- **Graceful Throttling:** When a limit is hit, the API returns a standard `429 Too Many Requests` status, which is handled gracefully by the UI and monitored via Sentry.
+### Enforcement Mechanism
+
+Rate limiting is enforced at the **Middleware layer** (`src/proxy.ts`), ensuring 100% coverage across all `/api/*` routes before they reach the handler logic.
+
+- **Modular Configuration:** Rate-limiting instances (e.g., Global, AI, Upload, Auth, Sensitive) are centrally managed in `src/lib/core/ratelimit-config.ts`.
+- **Dynamic Routing:** A registry (`src/lib/core/rate-limit-registry.ts`) maps path patterns (regex) to specific limiters, allowing for granular control over high-cost or sensitive endpoints.
+- **Identity Awareness:**
+    - **Authenticated Users:** Limited by `userId`, ensuring fair usage across the platform.
+    - **Unauthenticated/Auth Routes:** Limited by `IP address` to prevent brute-force attacks on login/registration endpoints.
+- **Fail-Open Resilience:** The system includes fail-open logic to ensure application availability if the rate-limiting infrastructure (Redis) is unreachable or misconfigured.
+- **Test Optimization:** Rate limiting is automatically bypassed in E2E, CI, and test environments via `shouldBypassRateLimit()` to ensure fast and reliable testing.
+- **Standardized Feedback:** When a limit is hit, the API returns a standard `429 Too Many Requests` status with a `Retry-After` header.

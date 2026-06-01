@@ -16,7 +16,13 @@ describe('getMultiPlatformAIPreviews', () => {
   });
 
   it('throws an error if tier is Manual', async () => {
-    await expect(getMultiPlatformAIPreviews('Title', 'Desc', 'Manual', 'Smart', ['youtube']))
+    await expect(getMultiPlatformAIPreviews({
+      title: 'Title',
+      description: 'Desc',
+      tier: 'Manual',
+      mode: 'Smart',
+      platforms: ['youtube']
+    }))
       .rejects.toThrow('Cannot generate previews in Manual mode.');
   });
 
@@ -24,15 +30,15 @@ describe('getMultiPlatformAIPreviews', () => {
     const mockResult = { title: 'AI Title', description: 'AI Desc', hashtags: ['#test'] };
     vi.mocked(generatePostContent).mockResolvedValue(mockResult);
 
-    const result = await getMultiPlatformAIPreviews(
-      'My Video',
-      'Original Desc',
-      'Generate',
-      'SEO',
-      ['youtube', 'tiktok'],
-      undefined,
-      'My Custom Vibe'
-    );
+    const result = await getMultiPlatformAIPreviews({
+      title: 'My Video',
+      description: 'Original Desc',
+      tier: 'Generate',
+      mode: 'SEO',
+      platforms: ['youtube', 'tiktok'],
+      visualData: undefined,
+      customStyleText: 'My Custom Vibe'
+    });
 
     expect(result).toEqual({
       youtube: mockResult,
@@ -46,15 +52,15 @@ describe('getMultiPlatformAIPreviews', () => {
       .mockResolvedValueOnce({ title: 'YT Title', description: 'YT Desc', hashtags: [] })
       .mockRejectedValueOnce(new Error('AI Busy'));
 
-    const result = await getMultiPlatformAIPreviews(
-      'My Video',
-      'Test Description',
-      'Enrich',
-      'Smart',
-      ['youtube', 'instagram'],
-      undefined,
-      undefined
-    );
+    const result = await getMultiPlatformAIPreviews({
+      title: 'My Video',
+      description: 'Test Description',
+      tier: 'Enrich',
+      mode: 'Smart',
+      platforms: ['youtube', 'instagram'],
+      visualData: undefined,
+      customStyleText: undefined
+    });
 
     expect(result.youtube.title).toBe('YT Title');
     expect(result.instagram.description).toContain('AI Error: AI Busy');
@@ -66,15 +72,15 @@ describe('getMultiPlatformAIPreviews', () => {
     vi.mocked(generatePostContent).mockResolvedValue(mockResult);
 
     const customVibe = "Sassy and Puns";
-    await getMultiPlatformAIPreviews(
-      'Title',
-      'Desc',
-      'Generate',
-      'Custom',
-      ['youtube'],
-      undefined,
-      customVibe
-    );
+    await getMultiPlatformAIPreviews({
+      title: 'Title',
+      description: 'Desc',
+      tier: 'Generate',
+      mode: 'Custom',
+      platforms: ['youtube'],
+      visualData: undefined,
+      customStyleText: customVibe
+    });
 
     expect(generatePostContent).toHaveBeenCalledWith(
       'Generate',
@@ -84,6 +90,7 @@ describe('getMultiPlatformAIPreviews', () => {
       'youtube',
       undefined,
       customVibe,
+      undefined,
       undefined
     );
   });

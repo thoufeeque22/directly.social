@@ -33,3 +33,25 @@ export const uploadRateLimit = new Ratelimit({
   analytics: true,
   prefix: "ratelimit:upload",
 });
+
+/**
+ * Authentication rate limiter: 5 attempts per 5 minutes.
+ * Protects against brute-force attacks.
+ */
+export const authRateLimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, "5 m"),
+  analytics: true,
+  prefix: "ratelimit:auth",
+});
+
+/**
+ * Sensitive metadata rate limiter: 5 requests per 60 seconds.
+ * Protects platform-proxy and validation endpoints.
+ */
+export const sensitiveRateLimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, "60 s"),
+  analytics: true,
+  prefix: "ratelimit:sensitive",
+});
