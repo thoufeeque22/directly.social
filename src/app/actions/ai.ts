@@ -21,20 +21,38 @@ const AIPreviewSchema = z.object({
 });
 
 /**
+ * Parameters for generating AI previews.
+ * (API-002): Parameter object to avoid long positional argument lists.
+ */
+export interface MultiPlatformAIPreviewParams {
+  title: string;
+  description: string;
+  tier: AITier;
+  mode: StyleMode;
+  platforms: string[];
+  visualData?: string[];
+  customStyleText?: string;
+  byokConfigs?: Record<string, { apiKey: string; modelId: string }>;
+  aiProvider?: AIProvider;
+}
+
+/**
  * GENERATES PREVIEWS FOR ALL SELECTED PLATFORMS.
  * used for the AI Review Step.
  */
-export async function getMultiPlatformAIPreviews(
-  title: string,
-  description: string,
-  tier: AITier,
-  mode: StyleMode,
-  platforms: string[],
-  visualData?: string[],
-  customStyleText?: string,
-  byokConfigs?: Record<string, { apiKey: string; modelId: string }>,
-  aiProvider?: AIProvider
-) {
+export async function getMultiPlatformAIPreviews(params: MultiPlatformAIPreviewParams) {
+  const {
+    title,
+    description,
+    tier,
+    mode,
+    platforms,
+    visualData,
+    customStyleText,
+    byokConfigs,
+    aiProvider,
+  } = params;
+
   return protectedAction(async function generatePreviews(userId) {
     // 1. Runtime Validation
     const validated = AIPreviewSchema.parse({ 
@@ -59,7 +77,7 @@ export async function getMultiPlatformAIPreviews(
       throw new Error("Cannot generate previews in Manual mode.");
     }
 
-    // 2. Rate Limiting
+    // 2. Rate Limiting (Server Action - not caught by middleware)
     await checkRateLimit(aiRateLimit, userId, "AI Generation limit reached. Please wait a minute.");
 
     // 3. AI Credits
@@ -105,4 +123,3 @@ export async function getMultiPlatformAIPreviews(
     }, {} as Record<string, AIWriteResult>);
   });
 }
-

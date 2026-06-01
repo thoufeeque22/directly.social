@@ -242,7 +242,16 @@ export function ScheduleContent() {
       const currentTitle = formData?.get('title') as string || editingPost.title;
       const currentDesc = formData?.get('description') as string || editingPost.description || '';
       const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
-      const previews = await getMultiPlatformAIPreviews(currentTitle, currentDesc, 'Enrich', 'Smart', pNames, [], undefined, byokConfigs);
+      const previews = await getMultiPlatformAIPreviews({
+        title: currentTitle,
+        description: currentDesc,
+        tier: 'Enrich',
+        mode: 'Smart',
+        platforms: pNames,
+        visualData: [],
+        customStyleText: undefined,
+        byokConfigs
+      });
       
       const { getAiBalance } = await import('@/app/actions/credits');
       const newBalance = await getAiBalance();

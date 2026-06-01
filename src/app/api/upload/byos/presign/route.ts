@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import { checkRateLimit } from '@/lib/core/ratelimit';
-import { uploadRateLimit } from '@/lib/core/ratelimit-config';
 import { getByosConfig } from '@/lib/byos/service';
 import { createS3Client } from '@/lib/upload/s3/client';
 import { initializeUpload, getPartPresignedUrl } from '@/lib/byos/presign-service';
@@ -13,7 +11,6 @@ export async function POST(req: Request) {
     if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     const userId = session.user.id;
 
-    await checkRateLimit(uploadRateLimit, userId, 'Upload limit reached');
     const body = await req.json();
     const result = ByosPresignSchema.safeParse(body);
     if (!result.success) return NextResponse.json({ error: result.error.issues[0].message }, { status: 400 });

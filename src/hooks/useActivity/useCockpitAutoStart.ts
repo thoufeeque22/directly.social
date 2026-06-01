@@ -41,7 +41,16 @@ export function useCockpitAutoStart({ setPosts, fetchActivity, setActiveResuming
       let reviewed: Record<string, AIWriteResult> | undefined;
       if (post.aiTier !== 'Manual' && post.skipReview) {
         const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
-        reviewed = await getMultiPlatformAIPreviews(post.title, post.description || '', post.aiTier as AITier, post.contentMode || 'Smart', post.platforms.map(p => p.platform), [], post.customStyleText, byokConfigs);
+        reviewed = await getMultiPlatformAIPreviews({
+          title: post.title,
+          description: post.description || '',
+          tier: post.aiTier as AITier,
+          mode: post.contentMode || 'Smart',
+          platforms: post.platforms.map(p => p.platform),
+          visualData: [],
+          customStyleText: post.customStyleText,
+          byokConfigs
+        });
         const { getAiBalance } = await import('@/app/actions/credits');
         const newBalance = await getAiBalance();
         await update({ aiCredits: newBalance });

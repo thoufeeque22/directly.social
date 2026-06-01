@@ -87,17 +87,17 @@ export const useDashboardHandlers = (
         const description = fd.get('description') as string;
         const platformsNames = platforms.map((p) => p.platform);
 
-        const previews = await getMultiPlatformAIPreviews(
+        const previews = await getMultiPlatformAIPreviews({
           title,
           description,
-          aiTier,
-          contentMode,
-          platformsNames,
-          [],
+          tier: aiTier,
+          mode: contentMode,
+          platforms: platformsNames,
+          visualData: [],
           customStyleText,
           byokConfigs,
-          aiProvider
-        );
+          aiProvider,
+        });
 
         const { getAiBalance } = await import('@/app/actions/credits');
         const newBalance = await getAiBalance();
@@ -186,17 +186,17 @@ export const useDashboardHandlers = (
       const frames = await extractVideoFrames(file);
       const pl = (preferences || []).filter((pr) => pr.isEnabled);
       const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
-      const previews = await getMultiPlatformAIPreviews(
-        '',
-        '',
-        'Generate',
-        contentMode,
-        pl.map((pr) => pr.platformId),
-        frames,
+      const previews = await getMultiPlatformAIPreviews({
+        title: '',
+        description: '',
+        tier: 'Generate',
+        mode: contentMode,
+        platforms: pl.map((pr) => pr.platformId),
+        visualData: frames,
         customStyleText,
         byokConfigs,
-        aiProvider
-      );
+        aiProvider,
+      });
 
       const { getAiBalance } = await import('@/app/actions/credits');
       const newBalance = await getAiBalance();
