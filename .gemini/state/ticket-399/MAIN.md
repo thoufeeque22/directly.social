@@ -1,6 +1,6 @@
 # Ticket 399: Add Support / Help Link
 
-**Status:** IN_PROGRESS (Review Phase)
+**Status:** IN_PROGRESS (QA Phase)
 
 ## Technical Specifications
 
@@ -24,3 +24,11 @@
 - Verification: Build successfully compiled. Lint passed with 0 errors (existing warnings are unrelated).
 
 All technical specifications for Ticket 399 are met.
+- **[2026-06-01 18:27:38]**: QA [PASS] - **VERDICT:** PASS
+**TEST SCENARIOS COVERED:**
+- Verify Support link in sidebar for desktop and mobile views.
+- Verify navigation to /settings?tab=support correctly functions.
+- Verify Support tab content, specifically 'Support & Help' title.
+- Verify 'Email Support' button has the correct mailto: href.
+- Verify the presence of Frequently Asked Questions in the tab content.
+**FAILED TESTS:** None
