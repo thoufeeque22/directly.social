@@ -1,6 +1,6 @@
 # Ticket 399: Add Support / Help Link
 
-**Status:** IN_PROGRESS (QA Phase)
+**Status:** IN_PROGRESS (Doc Phase)
 
 ## Technical Specifications
 
@@ -32,3 +32,4 @@ All technical specifications for Ticket 399 are met.
 - Verify 'Email Support' button has the correct mailto: href.
 - Verify the presence of Frequently Asked Questions in the tab content.
 **FAILED TESTS:** None
+- **[2026-06-01 18:37:42]**: DOC [COMPLETE] - Documentation complete for Support Hub. Added docs/features/SUPPORT_HELP.md to detail the new Sidebar link and Settings tab functionality. Updated docs/README.md to link to the new feature file and the existing UAT manual test script docs/manual_tests/ticket-399.md. No incidental observations found.
