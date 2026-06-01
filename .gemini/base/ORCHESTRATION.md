@@ -31,8 +31,8 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 - **Full Suite:** The complete test directory, including long-running E2E and edge-case unit tests.
 
 ### Agent Test Mandates
-- **dev-agent:** MUST run `npm run test:smoke` and `npm run lint`.
-- **review-agent:** READ-ONLY.
+- **dev-agent:** MUST use the `arxitect:architect` skill for all changes. MUST run `npm run test:smoke` and `npm run lint`.
+- **review-agent:** READ-ONLY. Focus on Security, Performance, and Runtime (Hydration) audits.
 - **qa-agent:** MUST run `npm run test:regression`. For features with specific impact, they may also run relevant individual tests.
 - **Human-in-the-Loop:** The **User** SHOULD run the full suite (`npm test`) before the final merge.
 
@@ -134,6 +134,7 @@ current_round: 1
 
 ### Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular code.
+- **Mandate:** MUST execute all implementation via the `arxitect:architect` skill. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops before the phase is considered complete.
 - **Verdict:** Success -> Review | Blocked -> Discovery/Manual.
 - **Exhaustive Verification:** MUST run `npm run build` and `npm run lint`.
 
