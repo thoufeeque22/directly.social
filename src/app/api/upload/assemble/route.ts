@@ -18,13 +18,13 @@ export async function POST(req: NextRequest) {
     if (!result.success) return NextResponse.json({ error: "Invalid data" }, { status: 400 });
 
     const p = result.data;
-    const { fileId, finalPath, size } = await assembleChunks(p.uploadId, p.fileName, p.totalChunks, p.totalSize);
+    const { fileId, finalPath, size, checksum } = await assembleChunks(p.uploadId, p.fileName, p.totalChunks, p.totalSize);
 
     let videoMetadata = null;
     try { videoMetadata = await getVideoMetadata(finalPath); } 
     catch (e) { logger.warn("Metadata extraction failed:", e); }
 
-    try { await registerGalleryAsset({ userId: session.user.id, fileId, fileName: p.fileName, size, finalPath, scheduledAt: p.scheduledAt, videoMetadata }); } 
+    try { await registerGalleryAsset({ userId: session.user.id, fileId, fileName: p.fileName, size, finalPath, checksum, scheduledAt: p.scheduledAt, videoMetadata }); } 
     catch (e) { logger.warn("Gallery registration failed:", e); }
 
     const transcodeResults = p.platforms ? (await checkTranscodeRequirement(finalPath, p.platforms.map(x => x.platform))).results : {};

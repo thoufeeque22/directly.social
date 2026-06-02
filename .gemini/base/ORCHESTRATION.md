@@ -1,6 +1,7 @@
 # Agent Orchestration & Workflow
 
 ## Core Mandates
+- **Active Inquisitiveness (Collaborative Inquiry):** AI agents MUST act as collaborative partners, not just execution machines. If any request, requirement, or technical path is ambiguous, the agent MUST stop and ask the user for clarification before proceeding. "Guessing" is a terminal violation.
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST:
   1. Check for any existing open PRs related to the task (`gh pr list` or similar) to avoid duplicate work.
   2. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue`).
@@ -11,16 +12,17 @@
   5. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template** (skip if state already exists).
 - **Manual Environment Management:** The User always manages the development server (`npm run dev`) and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, or check the connectivity of these services.
 - **Strict Sequential Workflow:** ALL tickets MUST follow this exact sequence:
-  `Discovery` -> `Development` -> `Review` -> `QA` -> `Documentation` -> `Project Management`.
+  `Product` -> `Discovery` -> `Development` -> `Audit` -> `QA` -> `Documentation`.
 - **Phase Termination & Failure Protocol:**
   1. **Atomic Phases:** An agent MUST NOT proceed to the next phase in the sequence. It MUST update the state file, set its **Verdict**, and return control to the Orchestrator.
-  2. **Next Step Suggestion:** Upon completing a phase, the agent MUST explicitly suggest the next sub-agent in the sequence to the user (e.g., "Next step: Invoke `dev-agent` for implementation").
-  3. **Immediate Stop on Failure:** If any phase (especially `Review` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately. No further agents (Doc, Project, etc.) can be invoked in that round.
-  4. **Round 2+ Entry Point:** If a round fails during `Review` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
+  2. **Next Step Suggestion:** Upon completing a phase, the agent MUST explicitly suggest the next sub-agent in the sequence to the user (e.g., "Next step: Invoke `discovery-agent` for technical planning").
+  3. **Immediate Stop on Failure:** If any phase (especially `Audit` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately. No further agents (Doc, Project, etc.) can be invoked in that round.
+  4. **Round 2+ Entry Point:** If a round fails during `Audit` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
 - **Human-in-the-Loop Workflow:** ALL transitions between agent phases MUST be mediated by the user. 
-  1. **Update State File First:** The active agent MUST update the `MAIN.md` file with the results/verdicts before presenting for review.
-  2. **Manual Review:** The user reviews the changes and the ticket state.
-  3. **Explicit Approval & Auto-Commit:** When the User provides approval to proceed to the *next* phase (e.g., "Invoke dev-agent"), the Orchestrator MUST automatically commit any pending changes from the current phase before starting the next one. The commit message MUST be dynamic and descriptive (e.g., `feat(ticket-400): complete development phase - added notification utility`), derived from the `MAIN.md` status or the summary of the completed phase. This commit is implicitly approved by the user's directive to proceed.
+  1. **Inquiry-First Protocol:** The initial turn of any planning agent (`Product`, `Discovery`) SHOULD focus on asking questions to resolve ambiguity. If the agent is in doubt, it MUST set its Verdict to **NEEDS-INFO** and present its questions to the user.
+  2. **Update State File First:** The active agent MUST update the `MAIN.md` file with the results/verdicts before presenting for review.
+  3. **Manual Review:** The user reviews the changes and the ticket state.
+  4. **Explicit Approval & Auto-Commit:** When the User provides approval to proceed to the *next* phase (e.g., "Invoke discovery-agent"), the Orchestrator MUST automatically commit any pending changes from the current phase before starting the next one. The commit message MUST be dynamic and descriptive (e.g., `feat(ticket-400): complete product phase - defined UX layout`), derived from the `MAIN.md` status or the summary of the completed phase. This commit is implicitly approved by the user's directive to proceed.
 - **Traceable Status:** EVERY agent MUST update their section with a clear **Verdict** before handoff.
 
 ## Tiered Testing Strategy
@@ -32,7 +34,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 
 ### Agent Test Mandates
 - **dev-agent:** MUST use the `arxitect:architect` skill for all changes. MUST run `npm run test:smoke` and `npm run lint`.
-- **review-agent:** READ-ONLY. Focus on Security, Performance, and Runtime (Hydration) audits.
+- **audit-agent:** READ-ONLY. Focus on Security, Privacy (PII), and Performance (Web Vitals) audits.
 - **qa-agent:** MUST run `npm run test:regression`. For features with specific impact, they may also run relevant individual tests.
 - **Human-in-the-Loop:** The **User** SHOULD run the full suite (`npm test`) before the final merge.
 
@@ -43,7 +45,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 ## State Management & Isolation (Directory-First)
 - **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `.gemini/state/ticket-<id>/`.
 - **State Manager Hook:** Agents MUST NOT manually edit `MAIN.md` or their individual round files. Instead, agents MUST execute the state manager hook before terminating:
-  `npm run state:update -- --agent="dev" --verdict="SUCCESS" --summary="<FULL_CONTENT>" [--status="review"]`
+  `npm run state:update -- --agent="dev" --verdict="SUCCESS" --summary="<FULL_CONTENT>" [--status="audit"]`
   *The script will automatically update the `MAIN.md timeline and append your summary to the correct `round-<N>` file.*
   - **CRITICAL:** The `<FULL_CONTENT>` passed to `--summary` MUST contain the **entire** generated report/blueprint/audit for that phase, not just a high-level summary. This ensures context persistence for subsequent agents.
 - **State Layout:**
@@ -52,9 +54,10 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
   .gemini/state/ticket-<id>/
   ├── MAIN.md              # Global Metadata, Status, History, and TIMELINE
   ├── round-1/
+  │   ├── product.md       # Product agent only
   │   ├── discovery.md     # Discovery agent only
   │   ├── development.md   # Dev agent only
-  │   ├── review.md        # Review agent only
+  │   ├── audit.md         # Audit agent only
   │   └── qa.md            # QA agent only
   └── round-2/
       ├── development.md
@@ -67,7 +70,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 ticket_id: <id>
 branch_name: feature/...
 goal: Concise goal statement
-status: [discovery|development|review|qa|doc|pm]
+status: [product|discovery|development|audit|qa|doc|pm]
 current_round: 1
 ---
 
@@ -81,23 +84,29 @@ current_round: 1
 <INSERT_FULL_ISSUE_BODY_HERE>
 
 # 🔄 Round History
-- **Round 1**: [FAILED @ Review] - Violated 100-line rule.
+- **Round 1**: [FAILED @ Audit] - Violated 100-line rule.
 - **Round 2**: [IN-PROGRESS]
 
 # 📅 Timeline
+- **[YYYY-MM-DD HH:mm:ss]**: Product phase started by `product-agent`.
 - **[YYYY-MM-DD HH:mm:ss]**: Discovery started by `discovery-agent`.
 - **[YYYY-MM-DD HH:mm:ss]**: Development completed by `dev-agent`.
-- **[YYYY-MM-DD HH:mm:ss]**: Review FAIL: Modularity regression in `page.tsx`.
+- **[YYYY-MM-DD HH:mm:ss]**: Audit FAIL: Modularity regression in `page.tsx`.
 ```
 
 
 ## Agent Specific State Files
 
+### product.md
+- **Verdict**: [APPROVED / NEEDS-INFO / REJECTED]
+- **UX Strategy**: Analysis of the best solution/flow.
+- **Industry Standards**: Research on competitive benchmarks.
+- **UI Layout**: Detailed instructions on element placement.
+
 ### discovery.md
 - **Verdict**: [APPROVED / NEEDS-INFO / REJECTED]
 - **Feedback Analysis (Round 2+ only)**: Analyze why the previous blueprint was rejected or revised.
-- **Socratic Log**: ...
-- **Technical Blueprint**: ...
+- **Technical Blueprint**: Architecture based on the Product Spec.
 - **Test Specification**: ...
 
 ### development.md
@@ -106,7 +115,7 @@ current_round: 1
 - **Remediation Strategy (Round 2+ only)**: Detail the specific changes made to address the failure and prevent regression.
 - **Summary**: ...
 
-### review.md
+### audit.md
 - **Verdict**: [PASS / FAIL]
 - **Audit Gap Analysis (Round 2+ only)**: If the previous audit was overridden or if QA found issues missed here, analyze the gap in the audit protocol.
 - **Security Audit**: ...
@@ -121,11 +130,16 @@ current_round: 1
 
 ## Phase Termination & Failure Protocol
 1. **Atomic Phases:** An agent MUST NOT proceed to the next phase. It MUST update its specific `.md` file in the current `round-N/` folder, update the `status` and `current_round` in `MAIN.md`, and return control.
-2. **Failure Recovery:** If `review.md` or `qa.md` results in a **FAIL**, the user MUST trigger a new round. The `dev-agent` will then start by creating `round-(N+1)/` and initializing `development.md`.
-3. **Traceable Fixes:** Dev agents in Round 2+ MUST read the previous round's `review.md` or `qa.md` to ensure all reported issues are addressed.
+2. **Failure Recovery:** If `audit.md` or `qa.md` results in a **FAIL**, the user MUST trigger a new round. The `dev-agent` will then start by creating `round-(N+1)/` and initializing `development.md`.
+3. **Traceable Fixes:** Dev agents in Round 2+ MUST read the previous round's `audit.md` or `qa.md` to ensure all reported issues are addressed.
 
 
 ## Agent Specific Workflows
+
+### Product (Design & Benchmarking)
+- **Role:** Product Designer & UX Strategist.
+- **Mandate:** MUST research industry standards and competitive benchmarks (using `google_web_search` or `web_fetch`). MUST define the optimal UX flow and UI placement BEFORE any technical planning occurs.
+- **Verdict:** Approved -> Discovery | Needs-Info -> Round 2.
 
 ### Discovery (Architecture & Planning)
 - **Role:** Read-only consultant and rigorous interrogator. Create blueprints.
@@ -135,10 +149,10 @@ current_round: 1
 ### Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular code.
 - **Mandate:** MUST execute all implementation via the `arxitect:architect` skill. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops before the phase is considered complete.
-- **Verdict:** Success -> Review | Blocked -> Discovery/Manual.
+- **Verdict:** Success -> Audit | Blocked -> Discovery/Manual.
 - **Exhaustive Verification:** MUST run `npm run build` and `npm run lint`.
 
-### Review (QA & Security Audit)
+### Audit (QA & Security Audit)
 - **Role:** Senior Auditor. **READ-ONLY**.
 - **Mandate:** 
   1. **Security & Quality**: MUST NOT modify code. If issues exist, Verdict MUST be "FAIL".

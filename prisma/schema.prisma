@@ -66,6 +66,8 @@ model GalleryAsset {
   fileName         String
   fileSize         BigInt?
   mimeType         String?
+  checksum         String?
+  checksumType     String?
   expiresAt        DateTime
   createdAt        DateTime @default(now())
   metadata         Json?
@@ -145,6 +147,7 @@ model PostPlatformResult {
   optimizedFileId String?
   transcodeStatus String?     @default("skipped")
   metadata        Json?
+  metadataHash    String?
   progress        Int         @default(0)
   postActivity     PostActivity @relation(fields: [postActivityId], references: [id], onDelete: Cascade)
 

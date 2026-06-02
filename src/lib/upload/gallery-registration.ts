@@ -14,28 +14,49 @@ export interface GalleryRegistrationParams {
   fileName: string;
   size: number;
   finalPath: string;
+  checksum?: string;
   scheduledAt?: string | null;
   videoMetadata?: VideoMetadata | null;
 }
 
 export async function registerGalleryAsset(params: GalleryRegistrationParams) {
-  const { userId, fileId, fileName, size, scheduledAt, videoMetadata } = params;
+  const { userId, fileId, fileName, size, checksum, scheduledAt, videoMetadata } = params;
   const expiresAt = getExpiryDate(scheduledAt);
-  const existingAsset = await prisma.galleryAsset.findFirst({ 
-    where: { userId, fileName, fileSize: BigInt(size) } 
-  });
+  
+  // Enhanced deduplication using checksum if available, fallback to fileName + size
+  const existingAsset = checksum 
+    ? await prisma.galleryAsset.findFirst({ where: { userId, checksum } })
+    : await prisma.galleryAsset.findFirst({ where: { userId, fileName, fileSize: BigInt(size) } });
 
   const metadata = videoMetadata as unknown as Record<string, unknown> | undefined;
 
   if (existingAsset) {
-    logger.info(`🔄 [GALLERY] Updating existing asset to prevent duplicate: ${fileName}`);
+    logger.info(`🔄 [GALLERY] Updating existing asset to prevent duplicate: ${fileName} (Checksum: ${checksum || 'N/A'})`);
     await prisma.galleryAsset.update({
       where: { id: existingAsset.id },
-      data: { fileId, expiresAt, createdAt: new Date(), metadata },
+      data: { 
+        fileId, 
+        fileName, // Update name in case it changed
+        expiresAt, 
+        createdAt: new Date(), 
+        metadata,
+        checksum,
+        checksumType: checksum ? "sha256" : undefined
+      },
     });
   } else {
     await prisma.galleryAsset.create({
-      data: { userId, fileId, fileName, fileSize: BigInt(size), mimeType: "video/mp4", expiresAt, metadata },
+      data: { 
+        userId, 
+        fileId, 
+        fileName, 
+        fileSize: BigInt(size), 
+        mimeType: "video/mp4", 
+        expiresAt, 
+        metadata,
+        checksum,
+        checksumType: checksum ? "sha256" : undefined
+      },
     });
   }
 }
