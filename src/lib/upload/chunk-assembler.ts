@@ -3,6 +3,7 @@ import fsSync from "fs";
 import path from "path";
 import { logger } from "@/lib/core/logger";
 import { writeChunk } from "./stream-utils";
+import { calculateChecksum } from "@/lib/utils/checksum";
 
 export class UploadAssemblyError extends Error {
   constructor(message: string) { super(message); this.name = "UploadAssemblyError"; }
@@ -41,6 +42,7 @@ export async function assembleChunks(
 
   await new Promise<void>((res, rej) => { writeStream.on("finish", res); writeStream.on("error", rej); });
 
+  const checksum = await calculateChecksum(finalPath);
   const stats = await fs.stat(finalPath);
   if (totalSize && stats.size !== totalSize) {
     await fs.unlink(finalPath);
@@ -48,5 +50,5 @@ export async function assembleChunks(
   }
 
   await fs.rmdir(chunkDir);
-  return { fileId, finalPath, size: stats.size };
+  return { fileId, finalPath, size: stats.size, checksum };
 }

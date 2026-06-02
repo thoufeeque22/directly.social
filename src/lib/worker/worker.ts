@@ -5,6 +5,7 @@ import path from "path";
 import { readFileSync, existsSync, promises as fs } from "fs";
 import { logger } from "@/lib/core/logger";
 import { refreshTokenIfNecessary } from "@/lib/auth/token-refresher";
+import { AuditService } from "@/lib/services/audit-service";
 
 declare global {
    
@@ -13,6 +14,8 @@ declare global {
   var _ss_worker_interval: NodeJS.Timeout | undefined;
    
   var _ss_cleanup_interval: NodeJS.Timeout | undefined;
+   
+  var _ss_audit_interval: NodeJS.Timeout | undefined;
    
   var _ss_worker_version: number | undefined;
 }
@@ -128,6 +131,9 @@ export async function startPublishingWorker() {
     }
     if (global._ss_cleanup_interval) {
         clearInterval(global._ss_cleanup_interval);
+    }
+    if (global._ss_audit_interval) {
+        clearInterval(global._ss_audit_interval);
     }
   }
   
@@ -270,9 +276,22 @@ export async function startPublishingWorker() {
     await purgeExpiredAssets();
   }, 60 * 60 * 1000);
 
+  // Data Integrity Audit Interval (Every 12 hours)
+  const auditInterval = setInterval(async () => {
+    if (global._ss_worker_version !== currentVersion) {
+      clearInterval(auditInterval);
+      return;
+    }
+    await AuditService.runFullAudit().catch(err => {
+      logger.error("🕵️ [WORKER] Audit failed:", err);
+    });
+  }, 12 * 60 * 60 * 1000);
+
   // Run cleanup immediately on start
   purgeExpiredAssets();
+  AuditService.runFullAudit().catch(() => {});
 
   global._ss_worker_interval = interval;
   global._ss_cleanup_interval = cleanupInterval;
+  global._ss_audit_interval = auditInterval;
 }
