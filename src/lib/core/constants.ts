@@ -36,7 +36,8 @@ export const MAX_STORAGE_PER_USER = 2 * 1024 * 1024 * 1024; // 2GB in bytes
 // Metadata Constraints
 export const PLATFORM_LIMITS: Record<string, { title?: number; description: number }> = {
   youtube: { title: 100, description: 5000 },
-  instagram: { description: 2200 },
-  tiktok: { description: 4000 },
-  facebook: { description: 5000 },
+  instagram: { title: 100, description: 2200 },
+  tiktok: { title: 100, description: 4000 },
+  facebook: { title: 100, description: 5000 },
+  default: { title: 100, description: 2000 },
 };

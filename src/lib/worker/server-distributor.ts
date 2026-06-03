@@ -1,217 +1,63 @@
-/* eslint-disable max-lines */
-import { prisma } from '@/lib/core/prisma';
 import path from 'path';
 import { logger } from '@/lib/core/logger';
-import { 
-  extractPlatformPostId, 
-  generatePermalink
-} from '@/lib/core/distributor-utils';
+import { extractPlatformPostId, generatePermalink } from '@/lib/core/distributor-utils';
 import { distributeSinglePlatform } from '@/lib/core/distributor-server';
-import { getOptimizedVideoPath } from '@/lib/video/transcode-manager';
+import { fetchExistingResult, upsertPlatformResult, updatePlatformProgress, recordPlatformFailure } from './server-distributor.db';
+import { preparePlatformMetadata, resolveVideoPath } from './server-distributor.logic';
 
 export interface DistributionResult {
-  platform: string;
-  accountId: string;
-  accountName?: string | null;
-  platformPostId?: string | null;
-  permalink?: string | null;
+  platform: string; accountId: string; accountName?: string | null; platformPostId?: string | null; permalink?: string | null;
   status: 'success' | 'failed' | 'cancelled' | 'pending' | 'uploading' | 'processing' | 'retrying';
-  errorMessage?: string;
-  resumableUrl?: string | null;
-  videoId?: string | null;
-  creationId?: string | null;
+  errorMessage?: string; resumableUrl?: string | null; videoId?: string | null; creationId?: string | null;
 }
 
 export interface ServerDistributeParams {
-  stagedFileId: string;
-  userId: string;
-  activityId: string;
-  title: string;
-  description: string;
-  videoFormat: 'short' | 'long';
-  platforms: {
-    platform: string;
-    accountId: string;
-    accountName: string | null;
-  }[];
+  stagedFileId: string; userId: string; activityId: string; title: string; description: string; videoFormat: 'short' | 'long';
+  platforms: { platform: string; accountId: string; accountName: string | null; }[];
   reviewedContent?: Record<string, { title: string; description: string; hashtags?: string[] }>;
 }
 
 /**
- * SERVER-ONLY logic for distributing posts.
- * Bypasses internal HTTP APIs and talks directly to platform SDKs/Logic.
+ * (CA-002): Lean orchestrator for server-side distribution.
+ * Logic extracted to .db and .logic modules to meet 100-line limit.
  */
 export async function distributeToPlatformsServer(params: ServerDistributeParams) {
   const { stagedFileId, userId, activityId, title, description, videoFormat, platforms } = params;
-
-      logger.info(`👷 [SERVER-DISTRIBUTOR] Starting distribution for post ${activityId}`);
+  logger.info(`👷 [SERVER-DISTRIBUTOR] Starting distribution for post ${activityId}`);
 
   const filePath = path.join(/*turbopackIgnore: true*/ process.cwd(), "tmp", stagedFileId);
   const results: DistributionResult[] = [];
 
   await Promise.allSettled(platforms.map(async (p) => {
     try {
-      logger.info(`🚀 [SERVER-DISTRIBUTOR] Processing platform: ${p.platform} for Activity ID: ${activityId}`);
-      
-      // 1. Fetch existing result to see if we have a resumable session or cancellation
-      const existingResult = await prisma.postPlatformResult.findUnique({
-        where: {
-          postActivityId_platform_accountId: {
-            postActivityId: activityId,
-            platform: p.platform,
-            accountId: p.accountId
-          }
-        }
-      });
-
-      logger.info(`🚀 [SERVER-DISTRIBUTOR] Existing result status for ${p.platform}: ${existingResult?.status || 'none'}`);
-
-      if (existingResult?.status === 'cancelled') {
-        logger.info(`⏹️ [SERVER-DISTRIBUTOR] Skipping ${p.platform} - User cancelled distribution.`);
-        results.push({
-          platform: p.platform,
-          accountId: p.accountId,
-          accountName: existingResult.accountName,
-          status: 'cancelled',
-          errorMessage: existingResult.errorMessage || undefined,
-          resumableUrl: existingResult.resumableUrl,
-          videoId: existingResult.videoId,
-          creationId: existingResult.creationId
-        });
+      const existing = await fetchExistingResult(activityId, p.platform, p.accountId);
+      if (existing?.status === 'cancelled') {
+        results.push({ platform: p.platform, accountId: p.accountId, accountName: existing.accountName, status: 'cancelled', resumableUrl: existing.resumableUrl });
         return;
       }
 
-      let finalTitle = title;
-      let finalDesc = description;
-      
-      const metadata = existingResult?.metadata as { 
-        customContent?: { title?: string; description?: string; hashtags?: string[] } 
-      } | null;
-      const customContent = metadata?.customContent || params.reviewedContent?.[p.platform];
-      
-      if (customContent) {
-        finalTitle = customContent.title || title;
-        const hashText = customContent.hashtags && customContent.hashtags.length > 0 ? `\n\n${customContent.hashtags.join(' ')}` : '';
-        finalDesc = (customContent.description || description) + hashText;
-      }
+      const { finalTitle, finalDesc } = preparePlatformMetadata(p.platform, title, description, existing?.metadata, params.reviewedContent);
+      const currentResult = await upsertPlatformResult(activityId, p.platform, p.accountId, { status: 'uploading', accountName: p.accountName });
+      const activeFilePath = await resolveVideoPath(stagedFileId, p.platform, activityId, p.accountId, filePath);
 
-      logger.info(`🚀 [SERVER-DISTRIBUTOR] Publishing to ${p.platform} (${p.accountName || p.accountId}) ${existingResult?.resumableUrl ? '[RESUMING]' : ''}`);
-      
-      // 1.5 Ensure the record exists for onProgress updates
-      logger.info(`🚀 [SERVER-DISTRIBUTOR] Updating status to uploading for ${p.platform}`);
-      const currentResult = await prisma.postPlatformResult.upsert({
-        where: {
-          postActivityId_platform_accountId: {
-            postActivityId: activityId,
-            platform: p.platform,
-            accountId: p.accountId
-          }
-        },
-        update: { status: 'uploading' },
-        create: {
-          postActivityId: activityId,
-          platform: p.platform,
-          accountId: p.accountId,
-          accountName: p.accountName,
-          status: 'uploading'
-        }
-      });
-      
-      // 2. Optimization check
-      logger.info(`🚀 [SERVER-DISTRIBUTOR] Starting optimization check for ${p.platform}`);
-      let activeFilePath = filePath;
-      try {
-        activeFilePath = await getOptimizedVideoPath(stagedFileId, p.platform, activityId, p.accountId);
-      } catch (optErr: unknown) {
-        logger.warn(`⚠️ [SERVER-DISTRIBUTOR] Optimization failed for ${p.platform}, using original. Reason: ${optErr instanceof Error ? optErr.message : String(optErr)}`);
-      }
-
-      logger.info(`🚀 [SERVER-DISTRIBUTOR] Calling distributeSinglePlatform for ${p.platform}`);
       const rawData = await distributeSinglePlatform({
-        platform: p.platform,
-        userId,
-        filePath: activeFilePath,
-        title: finalTitle,
-        description: finalDesc,
-        videoFormat,
-        accountId: p.accountId,
-        fields: {
-          resumableUrl: existingResult?.resumableUrl,
-          videoId: existingResult?.videoId,
-          creationId: existingResult?.creationId
-        },
-        onProgress: async (percent) => {
-          await prisma.postPlatformResult.update({
-            where: { id: currentResult.id },
-            data: { progress: Math.round(percent) }
-          }).catch((e: Error) => console.error("Failed to update progress:", e));
-        }
+        platform: p.platform, userId, filePath: activeFilePath, title: finalTitle, description: finalDesc, videoFormat, accountId: p.accountId,
+        fields: { resumableUrl: existing?.resumableUrl, videoId: existing?.videoId, creationId: existing?.creationId },
+        onProgress: (pct) => updatePlatformProgress(currentResult.id, pct)
       });
 
-      const platformResult: DistributionResult = {
-        platform: p.platform,
-        accountId: p.accountId,
-        accountName: p.accountName,
-        platformPostId: extractPlatformPostId(p.platform, rawData),
-        permalink: generatePermalink(p.platform, rawData),
-        status: 'success' as const,
-        videoId: rawData?.videoId || rawData?.id,
-        creationId: rawData?.creationId
+      const res: DistributionResult = {
+        platform: p.platform, accountId: p.accountId, accountName: p.accountName,
+        platformPostId: extractPlatformPostId(p.platform, rawData), permalink: generatePermalink(p.platform, rawData),
+        status: 'success', videoId: rawData?.videoId || rawData?.id, creationId: rawData?.creationId
       };
 
-      // In-lined database logic to avoid importing from Server Actions files
-      await prisma.postPlatformResult.upsert({
-        where: {
-          postActivityId_platform_accountId: {
-            postActivityId: activityId,
-            platform: p.platform,
-            accountId: p.accountId
-          }
-        },
-        update: { ...platformResult, postActivityId: activityId },
-        create: { ...platformResult, postActivityId: activityId }
-      });
-
-      results.push(platformResult);
-
+      await upsertPlatformResult(activityId, p.platform, p.accountId, res);
+      results.push(res);
     } catch (err: unknown) {
-      const error = err as { 
-        message?: string; 
-        resumableUrl?: string; 
-        videoId?: string; 
-        creationId?: string 
-      };
-      logger.error(`❌ [SERVER-DISTRIBUTOR] Failed to publish to ${p.platform}: ${error.message}`);
-      
-      const errorPayload = {
-        platform: p.platform,
-        accountId: p.accountId,
-        status: 'failed' as const,
-        errorMessage: error.message,
-        resumableUrl: error.resumableUrl,
-        videoId: error.videoId,
-        creationId: error.creationId,
-        lastRetryAt: new Date()
-      };
-
-      await prisma.postPlatformResult.upsert({
-        where: {
-          postActivityId_platform_accountId: {
-            postActivityId: activityId,
-            platform: p.platform,
-            accountId: p.accountId
-          }
-        },
-        update: { 
-          ...errorPayload, 
-          retryCount: { increment: 1 } 
-        },
-        create: { 
-          ...errorPayload, 
-          postActivityId: activityId,
-          retryCount: 1
-        }
-      });
+      const msg = err instanceof Error ? err.message : String(err);
+      logger.error(`❌ [SERVER-DISTRIBUTOR] Failed to publish to ${p.platform}: ${msg}`);
+      await recordPlatformFailure(activityId, p.platform, p.accountId, err);
     }
   }));
 

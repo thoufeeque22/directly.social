@@ -1,9 +1,11 @@
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/core/prisma";
 import { buildInitialPlatformData, getFinalScheduledAt } from "./activity-helpers";
 
 export interface PlatformInput {
   platform: string;
   accountId: string;
+  metadata?: Prisma.JsonValue;
 }
 
 export interface ActivityRegistrationParams {
@@ -38,7 +40,11 @@ export async function upsertUploadActivity(params: ActivityRegistrationParams) {
         platforms: {
           upsert: initialPlatformData.map((p) => ({
             where: { postActivityId_platform_accountId: { postActivityId: activityId, platform: p.platform, accountId: p.accountId } },
-            update: { accountId: p.accountId, transcodeStatus: p.transcodeStatus },
+            update: { 
+              accountId: p.accountId, 
+              transcodeStatus: p.transcodeStatus,
+              metadata: p.metadata ?? Prisma.JsonNull
+            },
             create: p,
           })),
         },

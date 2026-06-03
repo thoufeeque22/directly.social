@@ -39,11 +39,9 @@ export async function updatePlatformResultsAction(activityId: string, reviewedCo
         where: { id: p.id },
         data: {
           metadata: {
-            customContent: {
-              title: custom.title,
-              description: custom.description,
-              hashtags: custom.hashtags
-            }
+            title: custom.title,
+            description: custom.description,
+            hashtags: custom.hashtags
           }
         }
       });

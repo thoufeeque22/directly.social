@@ -10,6 +10,7 @@ export function buildInitialPlatformData(
     accountId: p.accountId,
     status: "pending",
     transcodeStatus: transcodeResults[p.platform]?.needsTranscode ? "pending" : "skipped",
+    metadata: p.metadata || undefined,
   }));
 }
 

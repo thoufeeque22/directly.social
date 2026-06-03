@@ -38,8 +38,8 @@ export interface UploadFormContextType extends UploadFormProps {
   platformTitles: Record<string, string>;
   platformDescriptions: Record<string, string>;
   isPlatformSpecific: boolean;
-  titleUndo: string | null;
-  descUndo: string | null;
+  titleUndo: { val: string; platform?: string } | null;
+  descUndo: { val: string; platform?: string } | null;
   handleTitleChange: (val: string) => void;
   handleDescriptionChange: (val: string) => void;
   appendDescription: (val: string, platform?: string) => void;
@@ -50,6 +50,8 @@ export interface UploadFormContextType extends UploadFormProps {
   handleUndoTitle: () => void;
   handleClearDesc: () => void;
   handleUndoDesc: () => void;
+  handleClearPlatformTitle: (platform: string) => void;
+  handleClearPlatformDesc: (platform: string) => void;
   selectedPlatforms: string[];
   byosActive: boolean;
   byosProvider: 'S3' | 'R2' | null;

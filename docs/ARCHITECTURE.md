@@ -16,6 +16,7 @@ This document provides a high-level index of the Social Studio application archi
 4.  **[Publishing Workflows](architecture/PUBLISHING_WORKFLOWS.md)**
     *   Post Distribution (Publishing)
     *   Modular Distribution Layer
+    *   [Metadata Pipeline Architecture](architecture/METADATA_PIPELINE.md)
     *   Automated Token Refresh
 5.  **[UI & Feature Components](architecture/UI_COMPONENTS.md)**
     *   AI Chatbot Assistant

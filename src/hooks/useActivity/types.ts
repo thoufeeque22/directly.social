@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { AIWriteResult } from '@/lib/utils/ai-writer';
 import { StyleMode } from '@/lib/core/constants';
 
 // TODO: Refactor: logic extraction needed
@@ -10,6 +9,10 @@ export const PendingPostSchema = z.object({
   platforms: z.array(z.object({
     platform: z.string(),
     accountId: z.string().nullable(),
+    metadata: z.object({
+      title: z.string().nullable().optional(),
+      description: z.string().nullable().optional(),
+    }).nullable().optional(),
   })),
 });
 
@@ -23,6 +26,10 @@ export interface PlatformResult {
   progress: number;
   errorMessage: string | null;
   accountId: string | null;
+  metadata?: {
+    title?: string | null;
+    description?: string | null;
+  } | null;
 }
 
 export interface PostActivityEntry {

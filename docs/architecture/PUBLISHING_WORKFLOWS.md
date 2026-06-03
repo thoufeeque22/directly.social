@@ -44,9 +44,14 @@ sequenceDiagram
     end
 ```
 
-## 2. Modular Distribution Layer
+## 2. Metadata Pipeline
 
-The platform distribution logic is organized into a modular architecture that separates shared infrastructure from platform-specific implementation details. This ensures maintainability and simplifies the addition of new platforms.
+The system supports granular control over platform-specific content (titles, descriptions, hashtags). This flow is documented in detail in:
+- **[Metadata Pipeline Architecture](METADATA_PIPELINE.md)**
+
+## 3. Modular Distribution Layer
+
+The platform distribution logic is organized into a modular architecture that separates shared infrastructure from platform-specific implementation details.
 
 ### Core Infrastructure (`src/lib/core/platforms/`)
 
@@ -67,9 +72,14 @@ Each platform follows a modular subdirectory pattern (e.g., `src/lib/platforms/i
 
 ### Server Orchestration
 
-The `distributor-server.ts` acts as the high-level router, using dynamic imports to load platform orchestrators only when needed. This keeps the worker process lightweight and isolates platform-specific dependencies.
+The `server-distributor.ts` acts as the high-level worker orchestrator. To comply with modularity standards, it is decomposed into functional modules:
+- **`server-distributor.ts`**: Orchestrates the multi-platform loop.
+- **`server-distributor.db.ts`**: Handles all Prisma database interactions.
+- **`server-distributor.logic.ts`**: Resolves metadata and file paths.
 
-## 3. Automated Token Refresh
+This decomposition ensures that the core distribution logic remains lean and testable.
+
+## 4. Automated Token Refresh
 
 To maintain long-term connectivity without requiring frequent user re-authentication, the system implements an automated token refresh mechanism.
 

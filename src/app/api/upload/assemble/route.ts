@@ -4,7 +4,7 @@ import { logger } from "@/lib/core/logger";
 import { UploadAssembleSchema } from "@/lib/schemas/upload-pipeline";
 import { assembleChunks } from "@/lib/upload/chunk-assembler";
 import { registerGalleryAsset } from "@/lib/upload/gallery-registration";
-import { upsertUploadActivity } from "@/lib/upload/activity-registration";
+import { upsertUploadActivity, PlatformInput } from "@/lib/upload/activity-registration";
 import { getVideoMetadata, checkTranscodeRequirement } from "@/lib/video/processor";
 
 export const maxDuration = 300; 
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const transcodeResults = p.platforms ? (await checkTranscodeRequirement(finalPath, p.platforms.map(x => x.platform))).results : {};
 
     const activity = await upsertUploadActivity({
-      userId: session.user.id, fileId, fileName: p.fileName, finalPath, activityId: p.activityId, title: p.title, description: p.description, videoFormat: p.videoFormat, platforms: p.platforms, scheduledAt: p.scheduledAt, transcodeResults
+      userId: session.user.id, fileId, fileName: p.fileName, finalPath, activityId: p.activityId, title: p.title, description: p.description, videoFormat: p.videoFormat, platforms: p.platforms as PlatformInput[], scheduledAt: p.scheduledAt, transcodeResults
     });
 
     return NextResponse.json({ success: true, data: { fileId, fileName: p.fileName, activityId: activity.id } });

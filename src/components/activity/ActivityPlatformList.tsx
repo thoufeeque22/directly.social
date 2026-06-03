@@ -24,9 +24,9 @@ export function ActivityPlatformList({
     <div className={styles.platformRow}>
       {[...post.platforms]
         .sort((a, b) => a.platform.localeCompare(b.platform))
-        .map(p => (
+        .map((p, idx) => (
           <PlatformResultItem
-            key={p.id}
+            key={p.id || `${p.platform}-${p.accountId}-${idx}`}
             p={p}
             post={post}
             cancelledIds={cancelledIds}

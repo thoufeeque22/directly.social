@@ -72,7 +72,7 @@ export function PlatformResultItem({ p, post, cancelledIds, processingIds, onRet
                   `Status: ${p.status}${p.progress > 0 ? ` (${p.progress}%)` : ''}`;
 
   return hasLink ? (
-    <a href={p.permalink!} target="_blank" rel="noopener noreferrer" className={pillClasses} title={`View on ${meta.label}`}>{content}</a>
+    <a href={p.permalink!} target="_blank" rel="noopener noreferrer" className={pillClasses} title={tooltip}>{content}</a>
   ) : (
     <span className={pillClasses} data-error={isFailed ? p.errorMessage || 'Upload failed' : undefined} title={tooltip}>{content}</span>
   );
