@@ -3,13 +3,12 @@
 ## Core Mandates
 - **Active Inquisitiveness (Collaborative Inquiry):** AI agents MUST act as collaborative partners, not just execution machines. If any request, requirement, or technical path is ambiguous, the agent MUST stop and ask the user for clarification before proceeding. "Guessing" is a terminal violation.
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST:
-  1. Check for any existing open PRs related to the task (`gh pr list` or similar) to avoid duplicate work.
-  2. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue`).
-  3. Check the current branch. If NOT on the target feature branch (`feature/<id>-...`):
+  1. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue`).
+  2. Check the current branch. If NOT on the target feature branch (`feature/<id>-...`):
      a. Switch to `main` and pull latest (`git checkout main && git pull`).
      b. Create the dedicated feature branch (`git checkout -b feature/<id>-<desc>`).
-  4. If ALREADY on the target feature branch, skip the `main` synchronization and branch creation steps.
-  5. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template** (skip if state already exists).
+  3. If ALREADY on the target feature branch, skip the `main` synchronization and branch creation steps.
+  4. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template** (skip if state already exists).
 - **Manual Environment Management:** The User always manages the development server (`npm run dev`) and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, or check the connectivity of these services.
 - **Strict Sequential Workflow:** ALL tickets MUST follow this exact sequence:
   `Product` -> `Discovery` -> `Development` -> `Audit` -> `QA` -> `Documentation`.
@@ -145,6 +144,7 @@ current_round: 1
 ### Discovery (Architecture & Planning)
 - **Role:** Read-only consultant and rigorous interrogator. Create blueprints.
 - **Mandate:** MUST grill the user and ask deep and thorough questions to resolve all ambiguities before drafting blueprints. MUST provide an explicit **Socratic Log** (via `discovery-agent`) followed by a **Test Specification** block with high-level manual and automated test scenarios.
+- **NotebookLM Synthesis:** For tickets involving complex integrations, legacy refactors, or deep architectural changes, the agent SHOULD recommend a NotebookLM synthesis step. Use `npm run notebook:package` to bundle context for high-fidelity research.
 - **Verdict:** Approved -> Dev | Needs-Info -> Round 2 | Rejected -> Close.
 
 ### Development (Implementation)

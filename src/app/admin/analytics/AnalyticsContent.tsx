@@ -26,7 +26,11 @@ export function AnalyticsContent() {
         const bData = await bRes.json();
         setMetrics(aData.metrics || []);
         setBilling(bData.billingProviders || []);
-      } catch (err: any) { setError(err.message); } finally { setLoading(false); }
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "An unknown error occurred");
+      } finally {
+        setLoading(false);
+      }
     }
     fetchDashboard();
   }, []);

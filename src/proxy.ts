@@ -21,7 +21,7 @@ export default auth(async (req) => {
     try {
       const userId = req.auth?.user?.id;
       // Use a safer access pattern for IP to satisfy the compiler
-      const ip = (req as any).ip ?? '127.0.0.1';
+      const ip = (req as Request & { ip?: string }).ip ?? '127.0.0.1';
 
       // (CA-003): Use registry to find appropriate limiter
       const { limiter, useIpOnly } = getLimiterForPath(pathname);

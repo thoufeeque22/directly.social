@@ -20,7 +20,7 @@ export async function GET() {
     }));
 
     return NextResponse.json({ billingProviders });
-  } catch (error: any) {
+  } catch (error: unknown) {
     Sentry.captureException(error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

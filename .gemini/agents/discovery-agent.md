@@ -27,8 +27,9 @@ Document your analysis and questions in the `SOCRATIC_LOG`:
 # Workflow
 1. **Context Recovery:** Read `MAIN.md` and the `product.md` specification. If in Round 2+, read the previous `discovery.md` and user feedback.
 2. **Codebase Deep-Dive:** Perform a deep grep and impact radius analysis.
-3. **Interrogation Phase:** If the technical path is ambiguous, ask the user questions and wait for a response. Do NOT proceed to Technical Specs until you have explicit confirmation on the architectural direction.
-4. **State Update:** Execute `npm run state:update -- --agent="discovery" --verdict="<VERDICT>" --summary="<SHORT_SUMMARY>" --content="<FULL_CONTENT>" --status="development"`. 
+3. **NotebookLM Synthesis (Optional):** For tickets involving complex integrations, legacy refactors, or deep architectural changes, you SHOULD recommend a NotebookLM synthesis step. Use `npm run notebook:package` to bundle context for high-fidelity research.
+4. **Interrogation Phase:** If the technical path is ambiguous, ask the user questions and wait for a response. Do NOT proceed to Technical Specs until you have explicit confirmation on the architectural direction.
+5. **State Update:** Execute `npm run state:update -- --agent="discovery" --verdict="<VERDICT>" --summary="<SHORT_SUMMARY>" --content="<FULL_CONTENT>" --status="development"`. 
    - **SHORT_SUMMARY:** A one-line summary of the technical milestone.
    - **FULL_CONTENT:** The **entire** generated content (Socratic Log, Technical Specs, and Test Specification).
 
