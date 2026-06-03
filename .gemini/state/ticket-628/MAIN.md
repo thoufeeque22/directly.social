@@ -2,7 +2,7 @@
 ticket_id: 628
 branch_name: feature/628-monitor-google-ai-billing
 goal: Implement a monitoring and alerting system for external Google AI Studio API billing balance.
-status: development
+status: review
 current_round: 1
 ---
 
@@ -10,12 +10,13 @@ current_round: 1
 - **ID**: 628
 - **Branch**: `feature/628-monitor-google-ai-billing`
 - **Goal**: Implement a monitoring and alerting system for external Google AI Studio API billing balance.
-- **Current Status**: development
+- **Current Status**: review
 
 # 📝 Ticket Description
 Routine check of prepaid billing / credits in AI studio (Platform-level external API) to avoid unexpected stoppage.
 
 ### 🔍 Discovery (Phase 0)
+- **Tooling:** Establish a NotebookLM "Billing Hub" with raw documentation from Google Cloud and OpenAI.
 - **Plan Selection:** Research and select the optimal Google AI Studio / OpenAI tier (Free vs. Pay-as-you-go) to ensure API limits support our user-level rate limiting and that balance monitoring APIs are available for the cron job.
 
 ### 🛠️ Implementation
@@ -31,3 +32,4 @@ Routine check of prepaid billing / credits in AI studio (Platform-level external
 - **[2026-06-03 17:40:37]**: DISCOVERY [APPROVED] - Technical blueprint defined. Using Google Cloud Budgets API, background worker sync, and Resend alerts.
 
 - **[2026-06-03 17:40:37]**: DISCOVERY [NECESSARY] - Implemented Discovery for Ticket #628. Strategy involves using the Google Cloud Budgets API via googleapis. Data model will track monthly spend vs threshold. Background worker will sync every 4 hours.
+- **[2026-06-03 18:13:28]**: DEV [SUCCESS] - Refined billing monitoring and added unit tests.
