@@ -17,10 +17,10 @@ export const UploadAssembleSchema = z.object({
   fileName: z.string().openapi({ example: 'video.mp4' }),
   totalChunks: z.number().openapi({ example: 10 }),
   totalSize: z.number().optional().openapi({ example: 10485760 }),
-  title: z.string().optional(),
-  description: z.string().optional(),
+  title: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
   videoFormat: z.string().optional(),
-  activityId: z.string().optional(),
+  activityId: z.string().nullable().optional(),
   platforms: z.array(z.object({
     platform: z.string(),
     accountId: z.string()
