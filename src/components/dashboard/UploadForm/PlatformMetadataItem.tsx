@@ -7,6 +7,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import { labelStyle } from './PlatformMetadataFields.styles';
 import { PlatformTitleField } from './PlatformMetadataItem.Title';
 import { PlatformDescriptionField } from './PlatformMetadataItem.Description';
+import { AITier } from '@/lib/core/constants';
 
 const getPlatformIcon = (p: string) => {
   switch (p) {
@@ -32,7 +33,7 @@ interface PlatformMetadataItemProps {
   handleClearPlatformDesc: (p: string) => void;
   handleUndoTitle: () => void;
   handleUndoDesc: () => void;
-  onTierChange: (t: any) => void;
+  onTierChange: (t: AITier) => void;
   appendDescription: (v: string, p: string) => void;
 }
 

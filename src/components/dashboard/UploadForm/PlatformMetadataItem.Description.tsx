@@ -6,6 +6,8 @@ import { PLATFORM_LIMITS } from '@/lib/core/constants';
 import { inputStyle } from './PlatformMetadataFields.styles';
 import { clearButtonStyle as globalClearStyle, undoButtonStyle } from './StandardMetadataFields.Title.styles';
 
+import { AITier } from '@/lib/core/constants';
+
 interface PlatformDescriptionFieldProps {
   platform: string;
   isUploading: boolean;
@@ -15,7 +17,7 @@ interface PlatformDescriptionFieldProps {
   onChange: (p: string, v: string) => void;
   onClear: (p: string) => void;
   onUndo: () => void;
-  onTierChange: (t: any) => void;
+  onTierChange: (t: AITier) => void;
   appendDescription: (v: string, p: string) => void;
 }
 
