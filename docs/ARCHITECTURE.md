@@ -37,6 +37,9 @@ This document provides a high-level index of the Social Studio application archi
     *   Hosting (Vercel/VPS)
     *   API Architecture (Route Handlers vs. Server Actions)
     *   Production Readiness (Sentry/Redis)
+10. **Billing & Cost Monitoring**
+    *   API Spend Tracking (Google/OpenAI)
+    *   Threshold Alerts & Health Status
 
 ---
 

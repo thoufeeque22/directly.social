@@ -32,7 +32,7 @@ export const rateLimitRegistry: RateLimitRoute[] = [
     useIpOnly: true,
   },
   {
-    pattern: /\/(tiktok-proxy|validate-key)/,
+    pattern: /^\/api\/proxy\/(tiktok|validate-key)/,
     limiter: sensitiveRateLimit,
   },
 ];

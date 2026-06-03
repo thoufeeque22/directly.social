@@ -175,6 +175,24 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model SystemBilling {
+  id           String        @id @default(cuid())
+  provider     String        @unique // e.g., "gemini", "openai"
+  currentSpend Float         @default(0.0)
+  threshold    Float         @default(10.0)
+  currency     String        @default("USD")
+  lastSynced   DateTime      @default(now())
+  status       BillingStatus @default(HEALTHY)
+  updatedAt    DateTime      @updatedAt
+}
+
+enum BillingStatus {
+  HEALTHY
+  WARNING
+  CRITICAL
+  UNKNOWN
+}
+
 model SystemMetric {
   id        String   @id @default(cuid())
   name      String
