@@ -30,11 +30,12 @@ async function run() {
   const agent = params.agent;
   const verdict = params.verdict;
   const summary = params.summary;
+  const content = params.content;
   let ticketId = params.ticket;
   const newStatus = params.status;
 
   if (!agent || !verdict || !summary) {
-    console.error("❌ Usage: npm run state:update -- --agent=<agent> --verdict=<verdict> --summary=\"<summary>\" [--status=<status>] [--ticket=<id>]");
+    console.error("❌ Usage: npm run state:update -- --agent=<agent> --verdict=<verdict> --summary=\"<summary>\" [--content=\"<full_content>\"] [--status=<status>] [--ticket=<id>]");
     process.exit(1);
   }
 
@@ -99,7 +100,9 @@ current_round: 1
   const pad = (n: number) => n.toString().padStart(2, '0');
   const formattedDate = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
   
-  const timelineEntry = `- **[${formattedDate}]**: ${agent.toUpperCase()} [${verdict}] - ${summary}\n`;
+  // Use a clean summary for the timeline (first line only or truncated)
+  const timelineSummary = summary.split('\n')[0].slice(0, 200);
+  const timelineEntry = `- **[${formattedDate}]**: ${agent.toUpperCase()} [${verdict}] - ${timelineSummary}\n`;
   
   if (!mainMdContent.includes('# 📅 Timeline')) {
     mainMdContent += '\n# 📅 Timeline\n';
@@ -118,6 +121,7 @@ current_round: 1
   await fs.mkdir(roundDir, { recursive: true });
 
   const fileMap: Record<string, string> = {
+    'product': 'product.md',
     'discovery': 'discovery.md',
     'dev': 'development.md',
     'review': 'review.md',
@@ -129,7 +133,8 @@ current_round: 1
   const fileName = fileMap[agent.toLowerCase()] || `${agent.toLowerCase()}.md`;
   const agentFilePath = path.join(roundDir, fileName);
 
-  const agentEntry = `\n## [${formattedDate}] Verdict: ${verdict}\n${summary}\n`;
+  const finalContent = content || summary;
+  const agentEntry = `\n## [${formattedDate}] Verdict: ${verdict}\n${finalContent}\n`;
   await fs.appendFile(agentFilePath, agentEntry, 'utf-8');
 
   console.log(`✅ State updated successfully for Ticket #${ticketId} (Round ${currentRound})`);
