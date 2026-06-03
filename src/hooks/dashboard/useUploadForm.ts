@@ -1,144 +1,13 @@
-/* eslint-disable max-lines */
-import { useState, useEffect } from 'react';
+import { useUploadFormState } from './useUploadFormState';
+import { useUploadFormHandlers } from './useUploadFormHandlers';
 
-interface FormState {
-  title: string;
-  description: string;
-  platformTitles: Record<string, string>;
-  platformDescriptions: Record<string, string>;
-  isPlatformSpecific: boolean;
-}
-
+/**
+ * (CA-002): Composable hook for Upload Form state management.
+ * Logic extracted to State and Handlers modules to meet 100-line limit.
+ */
 export function useUploadForm() {
-  const initialState = {
-    title: '',
-    description: '',
-    platformTitles: {},
-    platformDescriptions: {},
-    isPlatformSpecific: false
-  };
-
-  const [form, setForm] = useState<FormState>(initialState);
-
-  useEffect(() => {
-    try {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setForm({
-        title: localStorage.getItem('SS_DRAFT_TITLE') || '',
-        description: localStorage.getItem('SS_DRAFT_DESC') || '',
-        isPlatformSpecific: localStorage.getItem('SS_METADATA_SPECIFIC') === 'true',
-        platformTitles: JSON.parse(localStorage.getItem('SS_PLATFORM_TITLES') || '{}'),
-        platformDescriptions: JSON.parse(localStorage.getItem('SS_PLATFORM_DESCS') || '{}')
-      });
-    } catch (e) {
-      console.error("Failed to load metadata from localStorage", e);
-    }
-  }, []);
-  
-  const [titleUndo, setTitleUndo] = useState<{ val: string; platform?: string } | null>(null);
-  const [descUndo, setDescUndo] = useState<{ val: string; platform?: string } | null>(null);
-
-  const handleTitleChange = (val: string) => {
-    setForm(prev => ({ ...prev, title: val }));
-    localStorage.setItem('SS_DRAFT_TITLE', val);
-  };
-
-  const handleDescriptionChange = (val: string) => {
-    setForm(prev => ({ ...prev, description: val }));
-    localStorage.setItem('SS_DRAFT_DESC', val);
-  };
-
-  const appendDescription = (val: string, platform?: string) => {
-    setForm(prev => {
-      if (platform) {
-        const current = prev.platformDescriptions[platform] || '';
-        const separator = current && !current.endsWith('\n') ? '\n' : '';
-        const nextDescs = { ...prev.platformDescriptions, [platform]: current + separator + val };
-        localStorage.setItem('SS_PLATFORM_DESCS', JSON.stringify(nextDescs));
-        return { ...prev, platformDescriptions: nextDescs };
-      } else {
-        const current = prev.description || '';
-        const separator = current && !current.endsWith('\n') ? '\n' : '';
-        const nextDesc = current + separator + val;
-        localStorage.setItem('SS_DRAFT_DESC', nextDesc);
-        return { ...prev, description: nextDesc };
-      }
-    });
-  };
-
-  const handlePlatformTitleChange = (platform: string, val: string) => {
-    setForm(prev => {
-      const nextTitles = { ...prev.platformTitles, [platform]: val };
-      localStorage.setItem('SS_PLATFORM_TITLES', JSON.stringify(nextTitles));
-      return { ...prev, platformTitles: nextTitles };
-    });
-  };
-
-  const handlePlatformDescriptionChange = (platform: string, val: string) => {
-    setForm(prev => {
-      const nextDescs = { ...prev.platformDescriptions, [platform]: val };
-      localStorage.setItem('SS_PLATFORM_DESCS', JSON.stringify(nextDescs));
-      return { ...prev, platformDescriptions: nextDescs };
-    });
-  };
-
-  const togglePlatformSpecific = (val: boolean) => {
-    setForm(prev => ({ ...prev, isPlatformSpecific: val }));
-    localStorage.setItem('SS_METADATA_SPECIFIC', String(val));
-  };
-
-  const handleClearTitle = () => {
-    setTitleUndo({ val: form.title });
-    handleTitleChange('');
-    setTimeout(() => setTitleUndo(null), 5000);
-  };
-
-  const handleUndoTitle = () => {
-    if (titleUndo) {
-      if (titleUndo.platform) {
-        handlePlatformTitleChange(titleUndo.platform, titleUndo.val);
-      } else {
-        handleTitleChange(titleUndo.val);
-      }
-      setTitleUndo(null);
-    }
-  };
-
-  const handleClearDesc = () => {
-    setDescUndo({ val: form.description });
-    handleDescriptionChange('');
-    setTimeout(() => setDescUndo(null), 5000);
-  };
-
-  const handleUndoDesc = () => {
-    if (descUndo) {
-      if (descUndo.platform) {
-        handlePlatformDescriptionChange(descUndo.platform, descUndo.val);
-      } else {
-        handleDescriptionChange(descUndo.val);
-      }
-      setDescUndo(null);
-    }
-  };
-
-  const handleClearPlatformTitle = (platform: string) => {
-    setTitleUndo({ val: form.platformTitles[platform] || '', platform });
-    handlePlatformTitleChange(platform, '');
-    setTimeout(() => setTitleUndo(null), 5000);
-  };
-
-  const handleClearPlatformDesc = (platform: string) => {
-    setDescUndo({ val: form.platformDescriptions[platform] || '', platform });
-    handlePlatformDescriptionChange(platform, '');
-    setTimeout(() => setDescUndo(null), 5000);
-  };
-
-  const resetForm = () => {
-    handleTitleChange('');
-    handleDescriptionChange('');
-    setTitleUndo(null);
-    setDescUndo(null);
-  };
+  const { form, setForm } = useUploadFormState();
+  const handlers = useUploadFormHandlers(form, setForm);
 
   return {
     title: form.title,
@@ -146,20 +15,6 @@ export function useUploadForm() {
     platformTitles: form.platformTitles,
     platformDescriptions: form.platformDescriptions,
     isPlatformSpecific: form.isPlatformSpecific,
-    titleUndo,
-    descUndo,
-    handleTitleChange,
-    handleDescriptionChange,
-    appendDescription,
-    handlePlatformTitleChange,
-    handlePlatformDescriptionChange,
-    togglePlatformSpecific,
-    handleClearTitle,
-    handleUndoTitle,
-    handleClearDesc,
-    handleUndoDesc,
-    handleClearPlatformTitle,
-    handleClearPlatformDesc,
-    resetForm
+    ...handlers
   };
 }
