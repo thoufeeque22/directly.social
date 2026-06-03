@@ -2,13 +2,7 @@ import { tool } from 'ai';
 import { z } from 'zod';
 import * as Sentry from '@sentry/nextjs';
 import { logger } from '@/lib/core/logger';
-import { 
-  listUpcomingPostsTool, 
-  getMediaGalleryTool, 
-  scheduleVideoTool, 
-  updatePostTool, 
-  cancelPostTool 
-} from '@/lib/actions/ai-chat';
+import { listUpcomingPostsTool, getMediaGalleryTool, scheduleVideoTool, updatePostTool, cancelPostTool } from '@/lib/actions/ai-chat';
 
 /**
  * (CA-002): Extracted tool definitions for the AI Chat assistant.
@@ -23,10 +17,7 @@ export const chatTools = {
       try {
         const res = await listUpcomingPostsTool();
         logger.info('Tool result: list_upcoming_posts', { count: res?.length });
-        if (!res || res.length === 0) {
-          return 'No upcoming posts found.';
-        }
-        return res;
+        return (!res || res.length === 0) ? 'No upcoming posts found.' : res;
       } catch (error: unknown) {
         Sentry.captureException(error);
         return { error: 'Failed to list upcoming posts.' };

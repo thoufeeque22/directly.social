@@ -47,7 +47,7 @@ describe("BillingService", () => {
       provider: "gemini", 
       threshold: 10.0,
       currentSpend: 5.0
-    } as never);
+    } as unknown as ReturnType<typeof mockRepository.upsert> extends Promise<infer T> ? T : never);
 
     await billingService.syncAll();
 
@@ -65,7 +65,7 @@ describe("BillingService", () => {
       provider: "gemini", 
       threshold: 10.0,
       currentSpend: 8.5
-    } as any);
+    } as unknown as ReturnType<typeof mockRepository.upsert> extends Promise<infer T> ? T : never);
 
     await billingService.syncAll();
 
@@ -84,7 +84,7 @@ describe("BillingService", () => {
       provider: "gemini", 
       threshold: 10.0,
       currentSpend: 12.0
-    } as any);
+    } as unknown as ReturnType<typeof mockRepository.upsert> extends Promise<infer T> ? T : never);
 
     await billingService.syncAll();
 
@@ -124,7 +124,7 @@ describe("BillingService", () => {
     vi.mocked(mockRepository.upsert).mockResolvedValue({ 
       provider: "gemini", 
       threshold: 10.0 
-    } as any);
+    } as unknown as ReturnType<typeof mockRepository.upsert> extends Promise<infer T> ? T : never);
 
     await serviceWithTwoProviders.syncAll();
 

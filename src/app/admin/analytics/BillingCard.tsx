@@ -26,7 +26,7 @@ interface BillingCardProps {
 }
 
 export function BillingCard({ billing }: BillingCardProps) {
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string): "success" | "warning" | "error" | "default" => {
     switch (status) {
       case "HEALTHY": return "success";
       case "WARNING": return "warning";
@@ -51,7 +51,7 @@ export function BillingCard({ billing }: BillingCardProps) {
         <Chip 
           label={billing.status} 
           size="small" 
-          color={getStatusColor(billing.status) as any}
+          color={getStatusColor(billing.status)}
           sx={{ fontWeight: 'bold', height: 20, fontSize: '0.65rem' }}
         />
       </Box>
