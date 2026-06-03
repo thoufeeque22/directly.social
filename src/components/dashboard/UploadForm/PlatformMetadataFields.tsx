@@ -76,6 +76,7 @@ export const PlatformMetadataFields: React.FC = () => {
                 <div style={{ position: 'relative' }}>
                   <input 
                     type="text" 
+                    name={`title_${platform}`}
                     placeholder={`Catchy ${platform} title...`} 
                     value={titleVal} 
                     onChange={(e) => handlePlatformTitleChange(platform, e.target.value)} 
@@ -115,6 +116,7 @@ export const PlatformMetadataFields: React.FC = () => {
               </div>
               <div style={{ position: 'relative' }}>
                 <textarea 
+                  name={`description_${platform}`}
                   placeholder={`Specific ${platform} description...`} 
                   value={descVal} 
                   onChange={(e) => handlePlatformDescriptionChange(platform, e.target.value)} 

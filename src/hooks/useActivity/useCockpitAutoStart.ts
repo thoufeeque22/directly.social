@@ -35,7 +35,17 @@ export function useCockpitAutoStart({ setPosts, fetchActivity, setActiveResuming
       if (!stagedFileId) {
         const file = await getDraftFile();
         if (!file) throw new Error("Video file not found");
-        const res = await stageVideoFile({ file, onStatusUpdate: () => {}, metadata: { title: post.title, description: post.description, videoFormat: post.videoFormat }, platforms: post.platforms.map(p => ({ platform: p.platform, accountId: p.accountId || '' })), resumeActivityId: post.resumeActivityId });
+        const res = await stageVideoFile({ 
+          file, 
+          onStatusUpdate: () => {}, 
+          metadata: { title: post.title, description: post.description, videoFormat: post.videoFormat }, 
+          platforms: post.platforms.map(p => ({ 
+            platform: p.platform, 
+            accountId: p.accountId || '',
+            metadata: p.metadata
+          })), 
+          resumeActivityId: post.resumeActivityId 
+        });
         stagedFileId = res.stagedFileId; fileName = res.fileName; activityId = res.activityId;
       }
       let reviewed: Record<string, AIWriteResult> | undefined;

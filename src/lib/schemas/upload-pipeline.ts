@@ -23,7 +23,8 @@ export const UploadAssembleSchema = z.object({
   activityId: z.string().nullable().optional(),
   platforms: z.array(z.object({
     platform: z.string(),
-    accountId: z.string()
+    accountId: z.string(),
+    metadata: z.unknown().optional()
   })).optional(),
   scheduledAt: z.string().optional().openapi({ example: '2026-05-26T10:00:00Z' }),
 }).openapi('UploadAssemble');

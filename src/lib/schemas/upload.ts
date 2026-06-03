@@ -7,6 +7,6 @@ export const UploadInitSchema = z.object({
   platforms: z.array(z.object({
     platform: z.string().openapi({ example: 'youtube' }),
     accountId: z.string().openapi({ example: 'acc_123' }),
-    customContent: z.unknown().optional()
+    metadata: z.unknown().optional()
   })).min(1, "At least one platform is required")
 }).openapi('UploadInit');

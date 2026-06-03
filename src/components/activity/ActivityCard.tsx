@@ -27,7 +27,7 @@ export function ActivityCard(props: ActivityCardProps) {
       <GlassCard className={styles.cardInner} style={{ position: 'relative', overflow: 'hidden', opacity: isOptimistic ? 0.7 : 1 }}>
         <PreparationBar isActiveStaging={isActiveStaging} isOptimistic={isOptimistic} isCardActive={isCardActive} allPending={allPending} stagingStatus={stagingStatus} />
         <div className={styles.cardHeader} style={((allPending || isOptimistic) && isCardActive) || isActiveStaging ? { paddingTop: '1.75rem' } : {}}>
-          <ActivityCardHeader title={post.title} description={post.description} isCardActive={isCardActive} isOptimistic={isOptimistic} isPostCancelled={isPostCancelled} />
+          <ActivityCardHeader title={post.title} description={post.description} isCardActive={isCardActive} isOptimistic={isOptimistic} isPostCancelled={isPostCancelled} platforms={post.platforms} />
           {!isOptimistic ? (
             <ActivityCardActions post={post} isCardActive={isCardActive} isActiveStaging={isActiveStaging} activeResumingId={activeResumingId} onCancelAll={onCancelAll} onInPlaceResume={onInPlaceResume} now={now} />
           ) : isCardActive && (

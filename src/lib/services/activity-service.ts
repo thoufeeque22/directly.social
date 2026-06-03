@@ -10,7 +10,7 @@ export interface CreateActivityParams {
   platforms: {
     platform: string;
     accountId: string;
-    customContent?: Prisma.JsonValue;
+    metadata?: Prisma.JsonValue;
   }[];
 }
 
@@ -39,7 +39,7 @@ export class ActivityService {
             platform: p.platform,
             accountId: p.accountId,
             status: 'pending',
-            metadata: p.customContent ?? Prisma.JsonNull,
+            metadata: p.metadata ?? Prisma.JsonNull,
           })),
         },
       },

@@ -47,14 +47,14 @@ export const useDashboardHandlers = (
 
         const provider = isSplit && platformKey ? platformKey : acc.provider === 'google' ? 'youtube' : acc.provider;
 
-        const customContent = specific
+        const metadata = specific
           ? {
               title: (fd.get(`title_${provider}`) || fd.get('title')) as string,
               description: (fd.get(`description_${provider}`) || fd.get('description')) as string,
             }
           : undefined;
 
-        return { platform: provider, accountId: accId, customContent };
+        return { platform: provider, accountId: accId, metadata };
       })
       .filter((pl): pl is NonNullable<typeof pl> => !!pl);
 
@@ -72,8 +72,8 @@ export const useDashboardHandlers = (
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: fd.get('title'),
-          description: fd.get('description'),
+          title: fd.get('title') || (platforms.length > 0 ? platforms[0].metadata?.title : null),
+          description: fd.get('description') || (platforms.length > 0 ? platforms[0].metadata?.description : null),
           videoFormat,
           platforms,
         }),
