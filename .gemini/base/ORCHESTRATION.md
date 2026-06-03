@@ -20,7 +20,7 @@
   4. **Round 2+ Entry Point:** If a round fails during `Audit` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
 - **Human-in-the-Loop Workflow:** ALL transitions between agent phases MUST be mediated by the user. 
   1. **Inquiry-First Protocol:** The initial turn of any planning agent (`Product`, `Discovery`) SHOULD focus on asking questions to resolve ambiguity. If the agent is in doubt, it MUST set its Verdict to **NEEDS-INFO** and present its questions to the user.
-  2. **Update State File First:** The active agent MUST update the `MAIN.md` file with the results/verdicts before presenting for review.
+  2. **Update State File ONLY via Hook:** The active agent MUST execute the state manager hook (see below) to update `MAIN.md` and their round-specific file. Agents are STRICTLY FORBIDDEN from manually editing these files using `write_file` or `replace` tools.
   3. **Manual Review:** The user reviews the changes and the ticket state.
   4. **Explicit Approval & Auto-Commit:** When the User provides approval to proceed to the *next* phase (e.g., "Invoke discovery-agent"), the Orchestrator MUST automatically commit any pending changes from the current phase before starting the next one. The commit message MUST be dynamic and descriptive (e.g., `feat(ticket-400): complete product phase - defined UX layout`), derived from the `MAIN.md` status or the summary of the completed phase. This commit is implicitly approved by the user's directive to proceed.
 - **Traceable Status:** EVERY agent MUST update their section with a clear **Verdict** before handoff.
@@ -42,13 +42,14 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 - `test:smoke`: `npx playwright test --grep @smoke`
 - `test:regression`: `npx playwright test --grep @regression`
 
-## State Management & Isolation (Directory-First)
+## State Management & Isolation (Hook-Only)
 - **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `.gemini/state/ticket-<id>/`.
-- **State Manager Hook:** Agents MUST NOT manually edit `MAIN.md` or their individual round files. Instead, agents MUST execute the state manager hook before terminating:
-  `npm run state:update -- --agent="dev" --verdict="SUCCESS" --summary="<FULL_CONTENT>" [--status="audit"]`
-  *The script will automatically update the `MAIN.md timeline and append your summary to the correct `round-<N>` file.*
-  - **CRITICAL:** The `<FULL_CONTENT>` passed to `--summary` MUST contain the **entire** generated report/blueprint/audit for that phase, not just a high-level summary. This ensures context persistence for subsequent agents.
-- **State Layout:**
+- **State Manager Hook:** Agents MUST NOT manually edit `MAIN.md` or their individual round files. Instead, agents MUST execute the state manager hook as their final action:
+  `npm run state:update -- --agent="dev" --verdict="SUCCESS" --summary="<SHORT_TIMELINE_SUMMARY>" --content="<FULL_REPORT_CONTENT>" [--status="audit"]`
+  *The script will automatically update the `MAIN.md` timeline and append your content to the correct `round-<N>` file.*
+  - **TIMELINE SUMMARY:** A concise, one-line summary of the milestone for the `MAIN.md` timeline.
+  - **FULL CONTENT:** The **entire** generated report/blueprint/audit for that phase. This ensures context persistence for subsequent agents in the round file.
+- **State Layout:****
 
   ```
   .gemini/state/ticket-<id>/
@@ -129,7 +130,7 @@ current_round: 1
 - **Manual Script**: [Link to doc/manual_tests/ticket-<id>.md]
 
 ## Phase Termination & Failure Protocol
-1. **Atomic Phases:** An agent MUST NOT proceed to the next phase. It MUST update its specific `.md` file in the current `round-N/` folder, update the `status` and `current_round` in `MAIN.md`, and return control.
+1. **Atomic Phases:** An agent MUST NOT proceed to the next phase. It MUST execute the state manager hook to update the `status` and `current_round` in `MAIN.md` and record its progress, then return control.
 2. **Failure Recovery:** If `audit.md` or `qa.md` results in a **FAIL**, the user MUST trigger a new round. The `dev-agent` will then start by creating `round-(N+1)/` and initializing `development.md`.
 3. **Traceable Fixes:** Dev agents in Round 2+ MUST read the previous round's `audit.md` or `qa.md` to ensure all reported issues are addressed.
 
