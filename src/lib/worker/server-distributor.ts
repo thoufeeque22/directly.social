@@ -55,7 +55,8 @@ export async function distributeToPlatformsServer(params: ServerDistributeParams
       await upsertPlatformResult(activityId, p.platform, p.accountId, res);
       results.push(res);
     } catch (err: unknown) {
-      logger.error(`❌ [SERVER-DISTRIBUTOR] Failed to publish to ${p.platform}: ${(err as any).message}`);
+      const msg = err instanceof Error ? err.message : String(err);
+      logger.error(`❌ [SERVER-DISTRIBUTOR] Failed to publish to ${p.platform}: ${msg}`);
       await recordPlatformFailure(activityId, p.platform, p.accountId, err);
     }
   }));

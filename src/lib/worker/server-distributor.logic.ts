@@ -5,8 +5,8 @@ export function preparePlatformMetadata(
   platform: string, 
   baseTitle: string, 
   baseDesc: string, 
-  existingMetadata: any, 
-  reviewedContent?: any
+  existingMetadata: unknown, 
+  reviewedContent?: Record<string, { title: string; description: string; hashtags?: string[] }>
 ) {
   let finalTitle = baseTitle;
   let finalDesc = baseDesc;

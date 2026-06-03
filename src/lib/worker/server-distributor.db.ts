@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/core/prisma';
+import { Prisma } from '@prisma/client';
 import { DistributionResult } from './server-distributor';
 
 export async function fetchExistingResult(activityId: string, platform: string, accountId: string) {
@@ -23,7 +24,7 @@ export async function upsertPlatformResult(activityId: string, platform: string,
       }
     },
     update: { ...data, postActivityId: activityId },
-    create: { ...data, platform, accountId, postActivityId: activityId } as any
+    create: { ...data, platform, accountId, postActivityId: activityId } as Prisma.PostPlatformResultUncheckedCreateInput
   });
 }
 
@@ -34,15 +35,22 @@ export async function updatePlatformProgress(resultId: string, percent: number) 
   });
 }
 
-export async function recordPlatformFailure(activityId: string, platform: string, accountId: string, error: any) {
+export async function recordPlatformFailure(activityId: string, platform: string, accountId: string, error: unknown) {
+  const err = error as { 
+    message?: string; 
+    resumableUrl?: string | null; 
+    videoId?: string | null; 
+    creationId?: string | null 
+  };
+
   const errorPayload = {
     platform,
     accountId,
     status: 'failed' as const,
-    errorMessage: error.message,
-    resumableUrl: error.resumableUrl,
-    videoId: error.videoId,
-    creationId: error.creationId,
+    errorMessage: err.message || 'Unknown error',
+    resumableUrl: err.resumableUrl,
+    videoId: err.videoId,
+    creationId: err.creationId,
     lastRetryAt: new Date()
   };
 
