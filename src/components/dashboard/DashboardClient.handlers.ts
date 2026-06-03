@@ -5,6 +5,7 @@ import { AIWriteResult } from '@/lib/utils/ai-writer';
 import { AITier, StyleMode } from '@/lib/core/constants';
 import { AIProvider } from '@/lib/core/ai';
 import { extractVideoFrames } from '@/lib/utils/video-analysis';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 export const useDashboardHandlers = (
   resumeId: string | null,
@@ -32,7 +33,8 @@ export const useDashboardHandlers = (
   handleFileChange: (f: File | null) => void,
   setGalleryFileId: (id: string | null) => void,
   setGalleryFileName: (n: string | null) => void,
-  updateSession: (data: Record<string, unknown>) => Promise<unknown>
+  updateSession: (data: Record<string, unknown>) => Promise<unknown>,
+  router: AppRouterInstance
 ) => {
   const mapPlatforms = (ids: string[], accs: Account[], specific: boolean, fd: FormData) =>
     ids
@@ -139,7 +141,7 @@ export const useDashboardHandlers = (
           resumeActivityId: activityId,
         })
       );
-      window.location.href = '/activity?action=distribute';
+      router.push('/activity?action=distribute');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setUploadStatus(` Error: ${msg}`);
@@ -172,7 +174,7 @@ export const useDashboardHandlers = (
           resumeActivityId: context.activityId,
         })
       );
-      window.location.href = '/activity?action=distribute';
+      router.push('/activity?action=distribute');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       setUploadStatus(` Error: ${msg}`);
