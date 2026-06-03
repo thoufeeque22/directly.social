@@ -85,9 +85,9 @@ export async function distributeToPlatformsServer(params: ServerDistributeParams
       let finalDesc = description;
       
       const metadata = existingResult?.metadata as { 
-        customContent?: { title?: string; description?: string; hashtags?: string[] } 
+        title?: string; description?: string; hashtags?: string[] 
       } | null;
-      const customContent = metadata?.customContent || params.reviewedContent?.[p.platform];
+      const customContent = metadata || params.reviewedContent?.[p.platform];
       
       if (customContent) {
         finalTitle = customContent.title || title;

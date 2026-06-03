@@ -33,10 +33,6 @@ export function ActivityCardHeader({
     ? platformTitles[0]
     : title;
 
-  const displayDescription = (description === null || description === '') && platforms.length > 0
-    ? platforms.find(p => p.metadata?.description)?.metadata?.description
-    : description;
-
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
       <h3 className={styles.postTitle} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
