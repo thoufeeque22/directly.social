@@ -35,8 +35,8 @@ export function useUploadForm() {
     }
   }, []);
   
-  const [titleUndo, setTitleUndo] = useState<string | null>(null);
-  const [descUndo, setDescUndo] = useState<string | null>(null);
+  const [titleUndo, setTitleUndo] = useState<{ val: string; platform?: string } | null>(null);
+  const [descUndo, setDescUndo] = useState<{ val: string; platform?: string } | null>(null);
 
   const handleTitleChange = (val: string) => {
     setForm(prev => ({ ...prev, title: val }));
@@ -88,29 +88,49 @@ export function useUploadForm() {
   };
 
   const handleClearTitle = () => {
-    setTitleUndo(form.title);
+    setTitleUndo({ val: form.title });
     handleTitleChange('');
     setTimeout(() => setTitleUndo(null), 5000);
   };
 
   const handleUndoTitle = () => {
     if (titleUndo) {
-      handleTitleChange(titleUndo);
+      if (titleUndo.platform) {
+        handlePlatformTitleChange(titleUndo.platform, titleUndo.val);
+      } else {
+        handleTitleChange(titleUndo.val);
+      }
       setTitleUndo(null);
     }
   };
 
   const handleClearDesc = () => {
-    setDescUndo(form.description);
+    setDescUndo({ val: form.description });
     handleDescriptionChange('');
     setTimeout(() => setDescUndo(null), 5000);
   };
 
   const handleUndoDesc = () => {
     if (descUndo) {
-      handleDescriptionChange(descUndo);
+      if (descUndo.platform) {
+        handlePlatformDescriptionChange(descUndo.platform, descUndo.val);
+      } else {
+        handleDescriptionChange(descUndo.val);
+      }
       setDescUndo(null);
     }
+  };
+
+  const handleClearPlatformTitle = (platform: string) => {
+    setTitleUndo({ val: form.platformTitles[platform] || '', platform });
+    handlePlatformTitleChange(platform, '');
+    setTimeout(() => setTitleUndo(null), 5000);
+  };
+
+  const handleClearPlatformDesc = (platform: string) => {
+    setDescUndo({ val: form.platformDescriptions[platform] || '', platform });
+    handlePlatformDescriptionChange(platform, '');
+    setTimeout(() => setDescUndo(null), 5000);
   };
 
   const resetForm = () => {
@@ -138,6 +158,8 @@ export function useUploadForm() {
     handleUndoTitle,
     handleClearDesc,
     handleUndoDesc,
+    handleClearPlatformTitle,
+    handleClearPlatformDesc,
     resetForm
   };
 }
