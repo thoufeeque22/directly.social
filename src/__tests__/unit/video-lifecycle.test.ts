@@ -39,8 +39,8 @@ vi.mock('fs', () => {
   };
 });
 
-// Now import the worker
-import { purgeExpiredAssets } from '../../lib/worker/worker';
+// Now import the worker tasks
+import { purgeExpiredAssets } from '../../lib/worker/tasks/cleanup';
 
 describe('Video Lifecycle Logic', () => {
   beforeEach(() => {

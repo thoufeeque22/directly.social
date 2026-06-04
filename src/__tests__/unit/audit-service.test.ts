@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 import { AuditService } from "../../lib/services/audit-service";
 import { prisma } from "../../lib/core/prisma";
 import fs from "fs";
@@ -41,7 +41,7 @@ describe("AuditService", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Default existsSync to true to avoid breaking logger etc.
-    (fs.existsSync as vi.Mock).mockReturnValue(true);
+    (fs.existsSync as Mock).mockReturnValue(true);
   });
 
   it("should detect missing files in storage integrity check", async () => {
@@ -51,7 +51,7 @@ describe("AuditService", () => {
     ]);
     vi.mocked(prisma.postActivity.findMany).mockResolvedValue([]);
     
-    (fs.existsSync as vi.Mock).mockImplementation((path: string) => path.endsWith("exists-1"));
+    (fs.existsSync as Mock).mockImplementation((path: string) => path.endsWith("exists-1"));
 
     const missingCount = await AuditService.verifyStorageIntegrity();
     
@@ -66,7 +66,7 @@ describe("AuditService", () => {
       { id: "1", fileId: "file-1", fileName: "video1.mp4", checksum: "expected-hash" } as never,
     ]);
     
-    (fs.existsSync as vi.Mock).mockReturnValue(true);
+    (fs.existsSync as Mock).mockReturnValue(true);
     vi.mocked(calculateChecksum).mockResolvedValue("wrong-hash");
 
     const mismatchCount = await AuditService.verifyChecksums();

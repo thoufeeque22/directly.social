@@ -1,9 +1,9 @@
 # Ticket #644: Implement Marketing Landing Page
 
 ## Metadata
-- **Status:** development
+- **Status:** QA
 - **Priority:** High
-- **Owner:** Project Agent
+- **Owner:** QA Agent
 - **Branch:** `feature/644-landing-page`
 - **Issue:** [644](https://github.com/thoufeeque22/directly.social/issues/644)
 - **Current Round:** 2
@@ -43,10 +43,10 @@ Design and implement a high-converting landing page for Directly.social. Based o
 - Trending Music Sound-Check
 
 ## Phases
-- [ ] Discovery
-- [ ] Development
-- [ ] Audit
-- [ ] QA
+- [x] Discovery
+- [x] Development
+- [x] Audit
+- [/] QA
 - [ ] Documentation
 
 ## Technical Mandates

@@ -17,6 +17,7 @@ export const LandingHeader = () => {
       position="sticky" 
       elevation={trigger ? 4 : 0}
       component="header"
+      data-testid="landing-header"
       sx={{ 
         backgroundColor: trigger ? theme.palette.background.paper : 'transparent',
         backgroundImage: 'none',
