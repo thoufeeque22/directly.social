@@ -1,37 +1,44 @@
 import fs from 'fs';
 import path from 'path';
 
-const LOG_FILE = path.join(/*turbopackIgnore: true*/ process.cwd(), 'tmp/app.log');
+const LOG_ROOT = path.join(/*turbopackIgnore: true*/ process.cwd(), 'logs');
 const IS_VERCEL = !!process.env.VERCEL;
 
-// Ensure the directory exists (Skip on Vercel as it's a read-only filesystem)
-if (!IS_VERCEL) {
-  const logDir = path.dirname(LOG_FILE);
-  if (!fs.existsSync(logDir)) {
-    try {
-      fs.mkdirSync(logDir, { recursive: true });
-    } catch (err) {
-      console.error('❌ Failed to create log directory:', err);
-    }
-  }
-}
+type LogScope = 'app' | 'worker' | 'audit' | 'auth';
 
-export const logger = {
+/**
+ * Returns the current date in YYYY-MM-DD format for folder organization.
+ */
+const getDateFolder = () => new Date().toISOString().split('T')[0];
+
+/**
+ * Ensures the target directory exists and appends the message to the scope-specific log file.
+ */
+const writeToFile = (scope: LogScope, message: string) => {
+  if (IS_VERCEL) return;
+
+  const dateDir = path.join(LOG_ROOT, getDateFolder());
+  const logFile = path.join(dateDir, `${scope}.log`);
+
+  try {
+    // 1. Ensure the daily directory exists
+    if (!fs.existsSync(dateDir)) {
+      fs.mkdirSync(dateDir, { recursive: true });
+    }
+    // 2. Append the message
+    fs.appendFileSync(logFile, message);
+  } catch (err) {
+    console.error(`❌ [LOGGER] Failed to write to ${scope}.log:`, err);
+  }
+};
+
+export const createLogger = (defaultScope: LogScope = 'app') => ({
   info: (message: string, ...args: unknown[]) => {
     const timestamp = new Date().toISOString();
     const formattedMessage = `[${timestamp}] [INFO] ${message} ${args.length ? JSON.stringify(args) : ''}\n`;
     
-    // 1. Print to console for real-time visibility
     console.log(`[INFO] ${message}`, ...args);
-    
-    // 2. Append to file for persistence (Skip on Vercel)
-    if (!IS_VERCEL) {
-      try {
-        fs.appendFileSync(LOG_FILE, formattedMessage);
-      } catch (err) {
-        console.error('❌ Failed to write to app.log:', err);
-      }
-    }
+    writeToFile(defaultScope, formattedMessage);
   },
 
   error: (message: string, error?: unknown) => {
@@ -39,51 +46,23 @@ export const logger = {
     const errorDetail = error instanceof Error ? error.stack : JSON.stringify(error);
     const formattedMessage = `[${timestamp}] [ERROR] ${message} | Detail: ${errorDetail}\n`;
     
-    // 1. Print to console
     console.error(`❌ [ERROR] ${message}`, error);
-    
-    // 2. Capture in Sentry (Temporarily disabled for debugging)
-    /*
-    if (error instanceof Error) {
-      import('@sentry/nextjs').then(Sentry => {
-        Sentry.captureException(error, {
-          extra: { message }
-        });
-      });
-    } else {
-      import('@sentry/nextjs').then(Sentry => {
-        Sentry.captureMessage(message, {
-          level: 'error',
-          extra: { errorDetail }
-        });
-      });
-    }
-    */
-    
-    // 3. Append to file (Skip on Vercel)
-    if (!IS_VERCEL) {
-      try {
-        fs.appendFileSync(LOG_FILE, formattedMessage);
-      } catch (err) {
-        console.error('❌ Failed to write to app.log:', err);
-      }
-    }
+    writeToFile(defaultScope, formattedMessage);
   },
 
   warn: (message: string, ...args: unknown[]) => {
     const timestamp = new Date().toISOString();
     const formattedMessage = `[${timestamp}] [WARN] ${message} ${args.length ? JSON.stringify(args) : ''}\n`;
     
-    // 1. Print to console
     console.warn(`⚠️ [WARN] ${message}`, ...args);
-    
-    // 2. Append to file (Skip on Vercel)
-    if (!IS_VERCEL) {
-      try {
-        fs.appendFileSync(LOG_FILE, formattedMessage);
-      } catch (err) {
-        console.error('❌ Failed to write to app.log:', err);
-      }
-    }
+    writeToFile(defaultScope, formattedMessage);
   }
-};
+});
+
+// Default shared logger
+export const logger = createLogger('app');
+
+// Specialized loggers
+export const workerLogger = createLogger('worker');
+export const auditLogger = createLogger('audit');
+export const authLogger = createLogger('auth');
