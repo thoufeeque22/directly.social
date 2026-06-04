@@ -46,7 +46,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           
           if (
             expectedPassword &&
-            (credentials?.email === "tester@directly.so" || credentials?.email === "admin@directly.so") && 
+            (credentials?.email === "tester@directly.social" || credentials?.email === "admin@directly.social") && 
             credentials?.password === expectedPassword
           ) {
             const user = await prisma.user.findFirst({
