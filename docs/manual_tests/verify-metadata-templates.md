@@ -20,7 +20,7 @@ This script verifies the ability to save, reuse, and manage metadata snippets (s
 ## Scenario 2: Saving and Using a Global Snippet (Happy Path)
 1. **Navigate** to the Upload Dashboard (`/`).
 2. **Select** a video file (or browse gallery).
-3. **Type** a standard description in the "Description" field (e.g., "Follow me on IG: @socialstudio").
+3. **Type** a standard description in the "Description" field (e.g., "Follow me on IG: @directly").
 4. **Click** the "Snippets" button (bookmark icon) next to the description label.
 5. **Click** "Save Current as Snippet".
 6. **Enter** a name: "My IG Link".
@@ -29,7 +29,7 @@ This script verifies the ability to save, reuse, and manage metadata snippets (s
 9. **Click** "Snippets" button again.
 10. **Verify** "My IG Link" appears in the list.
 11. **Select** "My IG Link".
-12. **Expected Result:** The description field is automatically populated with "Follow me on IG: @socialstudio".
+12. **Expected Result:** The description field is automatically populated with "Follow me on IG: @directly".
 
 ## Scenario 3: Platform-Specific Snippets & Limits
 1. **Enable** "Separate titles/descriptions per platform" toggle.

@@ -8,7 +8,7 @@ export interface AIByokConfig {
 
 export type AIByokState = Record<string, AIByokConfig>;
 
-const STORAGE_KEY = 'social-studio-ai-byok';
+const STORAGE_KEY = 'directly-ai-byok';
 
 export function useAiByok() {
   const [configs, setConfigs] = useState<AIByokState>({});

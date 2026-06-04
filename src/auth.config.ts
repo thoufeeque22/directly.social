@@ -47,7 +47,7 @@ export default {
           token_endpoint_auth_method: "client_secret_post",
         },
         token: {
-          url: (process.env.AUTH_URL || process.env.NEXTAUTH_URL || "https://social-studio-app.vercel.app") + "/api/tiktok-proxy",
+          url: (process.env.AUTH_URL || process.env.NEXTAUTH_URL || "https://directly-app.vercel.app") + "/api/tiktok-proxy",
         },
         userinfo: {
           url: "https://open.tiktokapis.com/v2/user/info/?fields=open_id,avatar_url,display_name",

@@ -13,7 +13,7 @@ function AuthCallbackContent() {
     if (isNative) {
       console.log("[Auth] Native user detected, redirecting to app scheme...");
       // This triggers the deep link back to the Android/iOS app
-      window.location.href = 'socialstudio://';
+      window.location.href = 'directly://';
       
       // Fallback: If the user is still here after 3 seconds, they might have clicked 'Cancel' 
       // or the deep link failed. Show them a manual button.
@@ -38,7 +38,7 @@ function AuthCallbackContent() {
           <button 
             className={styles.primaryAction} 
             style={{ marginTop: '20px' }}
-            onClick={() => window.location.href = 'socialstudio://'}
+            onClick={() => window.location.href = 'directly://'}
           >
             Click here if not redirected
           </button>

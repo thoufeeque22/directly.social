@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# Social Studio Rollback Script
+# Directly.social Rollback Script
 # This script rolls back the 'current' symlink to a previous release.
 
 set -e
 
 # Setup paths
-BASE_DIR="${DEPLOY_BASE_DIR:-$HOME/social-studio-app}"
+BASE_DIR="${DEPLOY_BASE_DIR:-$HOME/directly-app}"
 CURRENT_DIR="$BASE_DIR/current"
 RELEASES_DIR="$BASE_DIR/releases"
 
-echo "🔙 Starting Social Studio Rollback..."
+echo "🔙 Starting Directly.social Rollback..."
 
 if [ ! -d "$RELEASES_DIR" ]; then
     echo "❌ Error: Releases directory does not exist at $RELEASES_DIR"
@@ -58,7 +58,7 @@ echo "🔄 Restarting PM2 processes from $CURRENT_DIR..."
 cd "$CURRENT_DIR"
 
 # Try to restart specific processes, fallback to start if they don't exist
-pm2 restart social-studio --update-env || pm2 start "npm run start" --name "social-studio"
-pm2 restart social-studio-worker --update-env || pm2 start "npm run worker" --name "social-studio-worker"
+pm2 restart directly --update-env || pm2 start "npm run start" --name "directly"
+pm2 restart directly-worker --update-env || pm2 start "npm run worker" --name "directly-worker"
 
-echo "✅ Rollback complete! Social Studio is now running version: $TARGET_RELEASE"
+echo "✅ Rollback complete! Directly.social is now running version: $TARGET_RELEASE"

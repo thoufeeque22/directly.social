@@ -50,7 +50,7 @@ jobs:
         
         echo "Syncing build artifacts to Oracle Cloud VM..."
         # Create base and releases directory
-        ssh ${VPS_USERNAME}@${VPS_HOST} "mkdir -p ~/social-studio-app/releases/${{ github.sha }}"
+        ssh ${VPS_USERNAME}@${VPS_HOST} "mkdir -p ~/directly-app/releases/${{ github.sha }}"
         
         rsync -avz --delete \
           --exclude '.git' \
@@ -58,7 +58,7 @@ jobs:
           --exclude '.env' \
           --exclude '.env.local' \
           --exclude 'tmp' \
-          ./ ${VPS_USERNAME}@${VPS_HOST}:~/social-studio-app/releases/${{ github.sha }}/
+          ./ ${VPS_USERNAME}@${VPS_HOST}:~/directly-app/releases/${{ github.sha }}/
 
     - name: Install Production Deps & Restart Server
       uses: appleboy/ssh-action@master
@@ -70,7 +70,7 @@ jobs:
           set -e
           
           # 1. Setup paths
-          BASE_DIR="~/social-studio-app"
+          BASE_DIR="~/directly-app"
           RELEASE_DIR="$BASE_DIR/releases/${{ github.sha }}"
           CURRENT_DIR="$BASE_DIR/current"
           
@@ -104,8 +104,8 @@ jobs:
           echo "🔄 Restarting PM2 processes..."
           cd $CURRENT_DIR
           # Note: PM2 still uses node/npm under the hood for 'npm start'
-          pm2 restart social-studio --update-env || pm2 start "pnpm start" --name "social-studio"
-          pm2 restart social-studio-worker --update-env || pm2 start "pnpm run worker" --name "social-studio-worker"
+          pm2 restart directly --update-env || pm2 start "pnpm start" --name "directly"
+          pm2 restart directly-worker --update-env || pm2 start "pnpm run worker" --name "directly-worker"
           
           # 6. Cleanup old releases (keep last 5)
           echo "🧹 Cleaning up old releases..."

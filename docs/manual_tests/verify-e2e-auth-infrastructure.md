@@ -9,7 +9,7 @@ This script verifies the infrastructure enabling automated E2E authentication fo
 - `.env.local` configured with:
   - `NEXT_PUBLIC_E2E=true`
   - `E2E=true`
-  - `E2E_TEST_PASSWORD=social-studio-e2e-secret`
+  - `E2E_TEST_PASSWORD=directly-e2e-secret`
 
 ## Scenario 1: Local E2E Login Form Visibility
 1. **Run** the app locally: `npm run dev`.
@@ -33,7 +33,7 @@ This script verifies the infrastructure enabling automated E2E authentication fo
 6. **Expected Result:** Infrastructure is physically removed in non-development environments.
 
 ## Scenario 4: Automated Setup Execution
-1. **Run** command: `E2E=true NEXT_PUBLIC_E2E=true E2E_TEST_PASSWORD=social-studio-e2e-secret npx playwright test src/__tests__/e2e/auth.setup.ts`.
+1. **Run** command: `E2E=true NEXT_PUBLIC_E2E=true E2E_TEST_PASSWORD=directly-e2e-secret npx playwright test src/__tests__/e2e/auth.setup.ts`.
 2. **Check** that the folder `.auth/` is created and contains `user.json`.
 3. **Verify** that subsequent tests run without re-authenticating.
 4. **Expected Result:** `[setup] › src/__tests__/e2e/auth.setup.ts:5:6 › authenticate` passes.

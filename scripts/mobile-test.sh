@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Social Studio: Full Native Automation Script
+# Directly.social: Full Native Automation Script
 # This script builds, installs, and runs Maestro tests on a running simulator/emulator.
 
 PLATFORM=${1:-ios} # Default to ios

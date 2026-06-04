@@ -19,7 +19,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         console.log('[App] Deep link received:', event.url);
 
         try {
-          // Handle both socialstudio://login-success and intent://...
+          // Handle both directly://login-success and intent://...
           if (event.url.includes('login-success')) {
             const url = new URL(event.url);
             const token = url.searchParams.get('token');

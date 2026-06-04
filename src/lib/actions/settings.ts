@@ -22,7 +22,7 @@ export async function saveByosConfigAction(data: unknown) {
           success: true, 
           config: { 
             provider: 'R2', 
-            bucketName: 'social-studio-test-bucket',
+            bucketName: 'directly-test-bucket',
             region: 'auto',
             endpoint: 'https://test-account.r2.cloudflarestorage.com',
             accessKeyId: 'test-access-key',

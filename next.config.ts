@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: [
     "khalilah-spritelike-flossily.ngrok-free.dev",
     "*.trycloudflare.com",
-    "social-studio.duckdns.org",
+    "directly.duckdns.org",
     "roohis-mac.tail8a2e7d.ts.net"
   ],
   experimental: {
@@ -47,8 +47,8 @@ export default useSentry
       // For all available options, see:
       // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-      org: "social-studio-pt",
-      project: "social-studio",
+      org: "directly-pt",
+      project: "directly",
 
       // Only print logs for uploading source maps in CI
       silent: !process.env.CI,

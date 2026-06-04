@@ -64,35 +64,35 @@ sudo npm install -g pm2
 ## 4. Deploy the Code
 ```bash
 # Setup directory structure
-mkdir -p ~/social-studio-app/releases
-cd ~/social-studio-app
+mkdir -p ~/directly-app/releases
+cd ~/directly-app
 
 # Clone the repository for the first time
-git clone https://github.com/your-username/social-studio-app.git current
+git clone https://github.com/your-username/directly-app.git current
 
 # Transfer your .env and dev.db from your LOCAL Mac to the server
 # (Run this on your Mac terminal, not the server)
-# NOTE: The .env should live in the parent directory ~/social-studio-app/
+# NOTE: The .env should live in the parent directory ~/directly-app/
 # Example using your current key and IP:
-scp -i ~/Documents/keys/ssh-key-2026-04-23.key .env ubuntu@130.162.57.229:~/social-studio-app/.env
-scp -i ~/Documents/keys/ssh-key-2026-04-23.key prisma/dev.db ubuntu@130.162.57.229:~/social-studio-app/current/prisma/dev.db
+scp -i ~/Documents/keys/ssh-key-2026-04-23.key .env ubuntu@130.162.57.229:~/directly-app/.env
+scp -i ~/Documents/keys/ssh-key-2026-04-23.key prisma/dev.db ubuntu@130.162.57.229:~/directly-app/current/prisma/dev.db
 
 # Build and Launch (on the server)
-cd ~/social-studio-app/current
+cd ~/directly-app/current
 ln -sfn ../.env .env
 npm install
 npx prisma generate
 npm run build
-pm2 start npm --name "social-studio" -- run start
+pm2 start npm --name "directly" -- run start
 pm2 save
 pm2 startup
 ```
 
 ### Atomic Symlink Deploys
 The project now uses an **Atomic Symlink Deployment** strategy.
-- **`~/social-studio-app/.env`**: The shared environment file.
-- **`~/social-studio-app/releases/`**: Stores timestamped or SHA-named build folders.
-- **`~/social-studio-app/current`**: A symlink that always points to the active release.
+- **`~/directly-app/.env`**: The shared environment file.
+- **`~/directly-app/releases/`**: Stores timestamped or SHA-named build folders.
+- **`~/directly-app/current`**: A symlink that always points to the active release.
 
 This ensures zero-downtime during `npm install` and allows for instant rollbacks.
 

@@ -34,7 +34,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     // Login as Tester
     await page.goto('/login');
     await page.getByTestId('e2e-email-input').fill('tester@directly.social');
-    await page.getByTestId('e2e-password-input').fill('social-studio-e2e-secret');
+    await page.getByTestId('e2e-password-input').fill('directly-e2e-secret');
     await page.getByTestId('e2e-login-submit').click();
     
     // Wait for redirect to dashboard
@@ -64,7 +64,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     // Login again to get new session with ADMIN role
     await page.goto('/login');
     await page.getByTestId('e2e-email-input').fill('admin@directly.social');
-    await page.getByTestId('e2e-password-input').fill('social-studio-e2e-secret');
+    await page.getByTestId('e2e-password-input').fill('directly-e2e-secret');
     await page.getByTestId('e2e-login-submit').click();
     
     await expect(page.locator('h2:has-text("Upload & Automate")').first()).toBeVisible({ timeout: 15000 });

@@ -17,7 +17,7 @@ The core configuration is located in `capacitor.config.ts`.
 To point the app to your live site, ensure the `url` in `capacitor.config.ts` is set to your Vercel domain:
 ```typescript
 server: {
-  url: 'https://social-studio-app.vercel.app',
+  url: 'https://directly-app.vercel.app',
   cleartext: true,
   allowNavigation: ['*']
 }

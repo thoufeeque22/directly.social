@@ -36,7 +36,7 @@ test.describe('BYOS - Bring Your Own Storage @regression', () => {
     await page.getByRole('button', { name: /continue/i }).click();
 
     // Step 2: Enter Credentials
-    await page.locator('#byos-bucket-name').fill('social-studio-test-bucket');
+    await page.locator('#byos-bucket-name').fill('directly-test-bucket');
     await page.locator('#byos-endpoint').fill('https://test-account.r2.cloudflarestorage.com');
     await page.locator('#byos-access-key-id').fill('test-access-key-id');
     await page.locator('#byos-secret-access-key').fill('test-secret-access-key');

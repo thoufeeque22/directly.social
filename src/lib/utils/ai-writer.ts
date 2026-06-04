@@ -117,7 +117,7 @@ export async function generatePostContent(
     return {
       title: rawText || 'Untitled Video',
       description: videoContext || '',
-      hashtags: ['#socialstudio'],
+      hashtags: ['#directly'],
     };
   }
 

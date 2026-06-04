@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Social Studio: Mobile Developer Mode
+# Directly.social: Mobile Developer Mode
 # This script points the mobile app to a local tunnel URL for branch testing.
 
 PLATFORM=${1:-ios}

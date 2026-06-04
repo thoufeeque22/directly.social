@@ -49,8 +49,8 @@ In a "Remote Shell" architecture, the app's WebView (the app) and the System Bro
 - **Root Cause**: Android's `intent://` URLs default to the Play Store if the exact package/scheme match isn't found or is too complex (e.g., used strict `host` matching).
 - **Fix**: 
   - Simplified `AndroidManifest.xml` by removing `android:host` requirements.
-  - Used a "Scheme-First" redirect strategy (`socialstudio://`) which Chrome is less likely to block.
-  - Added the package-name scheme `com.thoufeeque.socialstudio://` as a fallback.
+  - Used a "Scheme-First" redirect strategy (`directly://`) which Chrome is less likely to block.
+  - Added the package-name scheme `com.thoufeeque.directly://` as a fallback.
 
 ### 6. Build Failures & 500 Errors (Edge Runtime)
 - **Issue**: Deployments failed or returned 500 errors when accessing auth routes.
@@ -81,7 +81,7 @@ In a "Remote Shell" architecture, the app's WebView (the app) and the System Bro
 3. **Browser**: Client-side JS triggers `signIn('google')`.
 4. **Google**: User authenticates.
 5. **Browser**: Redirects to `/auth/success`.
-6. **Browser**: Extracts JWT -> Redirects to `socialstudio://login-success?token=...`
+6. **Browser**: Extracts JWT -> Redirects to `directly://login-success?token=...`
 7. **App**: Receives deep link -> Injects Cookie -> Reloads.
 8. **App**: Dashboard loads successfully. ✅
 
