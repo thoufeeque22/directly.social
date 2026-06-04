@@ -12,6 +12,11 @@
 - **Manual Environment Management:** The User always manages the development server (`npm run dev`) and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, or check the connectivity of these services.
 - **Strict Sequential Workflow:** ALL tickets MUST follow this exact sequence:
   `Product` -> `Discovery` -> `Development` -> `Audit` -> `QA` -> `Documentation`.
+- **Guardrail Mandates (Terminal Violations):**
+  1. **Issue-First Protocol:** Before starting any work, the Orchestrator MUST ensure a corresponding GitHub issue exists. If the task is new or doesn't have an ID, the Orchestrator MUST invoke the `project-agent` to create the issue FIRST.
+  2. **No Direct Main Push:** AI agents are STRICTLY FORBIDDEN from merging into or pushing directly to the `main` branch. ALL code changes MUST live on a dedicated feature branch (`feature/<id>-...`).
+  3. **PR-Only Handoff:** The final handoff to the user MUST be for **Pull Request creation**. The agent must never perform the final merge locally.
+  4. **State-First Protocol:** NEVER start work without initializing the state directory and `MAIN.md`.
 - **Phase Termination & Failure Protocol:**
   1. **Atomic Phases:** An agent MUST NOT proceed to the next phase in the sequence. It MUST update the state file, set its **Verdict**, and return control to the Orchestrator.
   2. **Next Step Suggestion:** Upon completing a phase, the agent MUST explicitly suggest the next sub-agent in the sequence to the user (e.g., "Next step: Invoke `discovery-agent` for technical planning").
