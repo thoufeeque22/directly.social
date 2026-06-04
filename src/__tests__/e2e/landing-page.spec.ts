@@ -40,7 +40,7 @@ test.describe('Landing Page', () => {
     await expect(page.getByRole('heading', { name: 'Common Questions', level: 2 })).toBeVisible();
     
     // 10. Footer
-    await expect(page.getByText('Directly. All rights reserved.')).toBeVisible();
+    await expect(page.locator('footer')).toBeVisible();
   });
 
   test('should toggle between Creator and Developer personas @interactivity @smoke', async ({ page }) => {

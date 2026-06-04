@@ -20,6 +20,14 @@ export default defineConfig({
   projects: [
     { name: 'setup', testMatch: /.*\.setup\.ts/, use: { launchOptions: { slowMo: 0 } } },
     {
+      name: 'landing-page',
+      testMatch: /landing-page\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: { cookies: [], origins: [] },
+      },
+    },
+    {
       name: 'chromium',
       use: { 
         ...devices['Desktop Chrome'],

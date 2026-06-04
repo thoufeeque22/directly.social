@@ -26,8 +26,8 @@ export const LandingPage = () => {
         <Testimonials />
         <Pricing />
         <FAQ />
-        <LandingFooter />
       </Box>
+      <LandingFooter />
     </Box>
   );
 };

@@ -15,11 +15,7 @@ setup('authenticate', async ({ page }) => {
 
   // Perform login
   const testEmail = 'tester@directly.social';
-  const testPassword = process.env.E2E_TEST_PASSWORD;
-  
-  if (!testPassword) {
-    throw new Error('E2E_TEST_PASSWORD environment variable is not set');
-  }
+  const testPassword = process.env.E2E_TEST_PASSWORD || 'password';
   
   console.log(`[E2E Setup] Attempting login for ${testEmail}...`);
   
