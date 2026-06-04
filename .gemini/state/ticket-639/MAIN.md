@@ -2,7 +2,7 @@
 ticket_id: 639
 branch_name: feature/639-login-ui-audit
 goal: Resolve theme mismatch on login screen and analyze industry standards for theme toggling.
-status: qa
+status: doc
 current_round: 1
 ---
 
@@ -10,7 +10,7 @@ current_round: 1
 - **ID**: 639
 - **Branch**: `feature/639-login-ui-audit`
 - **Goal**: Resolve theme mismatch on login screen and analyze industry standards for theme toggling.
-- **Current Status**: qa
+- **Current Status**: doc
 
 # 📝 Ticket Description
 User reported a visual discrepancy on the login screen: "dark on left, light on right".
@@ -27,3 +27,4 @@ Analysis needed for:
 - **[2026-06-04 12:50:42]**: DISCOVERY [NECESSARY] - Discovery complete for login screen theme-awareness fix.
 - **[2026-06-04 12:58:05]**: DEV [SUCCESS] - Implemented theme-awareness fix for the login screen (Ticket #639).
 - **[2026-06-04 13:03:35]**: AUDIT [PASS] - Security and Performance audit passed for Ticket #639.
+- **[2026-06-04 13:14:19]**: QA [PASS] - Login screen theme alignment verified (E2E + Manual Script).
