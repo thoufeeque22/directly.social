@@ -2,7 +2,7 @@
 ticket_id: 639
 branch_name: feature/639-login-details-expansion
 goal: Expand login page with comprehensive application details and a global footer.
-status: development
+status: pm
 current_round: 2
 ---
 
@@ -10,7 +10,7 @@ current_round: 2
 - **ID**: 639
 - **Branch**: `feature/639-login-details-expansion`
 - **Goal**: Expand login page with comprehensive application details and a global footer.
-- **Current Status**: development
+- **Current Status**: pm
 
 # 📝 Ticket Description
 Following the theme alignment and layout refinements, we want to enrich the login/landing page with more "Application Details" similar to GitHub or other premium SaaS products.
@@ -35,3 +35,4 @@ The previous "phantom scroll" issue is now moot as scrolling will be intentional
 - **[2026-06-04 16:09:43]**: PRODUCT [APPROVED] - Phase 3 Strategy: 'Trust as a Service'. Implementing Activity Hub mockups, 3-step workflow, and high-trust FAQ.
 - **[2026-06-04 16:15:24]**: DISCOVERY [NECESSARY] - Discovery complete for Dashboard Preview, 3-step Workflow, and FAQ section.
 - **[2026-06-04 16:19:00]**: DISCOVERY [NECESSARY] - Discovery complete for SaaS Masterclass Expansion. Blueprint ready for Dashboard Mockup, Workflow steps, and FAQ.
+- **[2026-06-04 16:24:01]**: PROJECT [ISSUES-MANAGED] - Legacy Neon database references tracked and cleared.
