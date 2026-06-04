@@ -52,3 +52,15 @@ Full Discovery complete for Ticket #639. Technical path for below-the-fold expan
 
 3. Negative Scenarios
 - Ensure no layout shift (CLS) for the mockup container.
+
+## [2026-06-04 16:19:00] Verdict: NECESSARY
+## Technical Blueprint: Phase 3
+
+### New Components
+1. **DashboardMockup.tsx**: Browser-framed CSS mockup of the Activity Hub with live pulse animations.
+2. **WorkflowSection.tsx**: 1-2-3 guide (Connect -> Compose -> Publish) using horizontal connectors.
+3. **FAQSection.tsx**: Glassmorphic MUI Accordion for high-trust security/storage Q&A.
+
+### Styles
+- Brand-specific glows for platform pills.
+- Global keyframes for 'pulse' and 'heartbeat' animations.
