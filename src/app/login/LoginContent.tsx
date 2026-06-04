@@ -19,6 +19,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { IntegrationsStrip } from '@/components/login/IntegrationsStrip';
 import { PhilosophySection } from '@/components/login/PhilosophySection';
 import { FeaturesSection } from '@/components/login/FeaturesSection';
+import { DashboardMockup } from '@/components/login/DashboardMockup';
+import { WorkflowSection } from '@/components/login/WorkflowSection';
+import { FAQSection } from '@/components/login/FAQSection';
 import { Footer } from '@/components/layout/Footer';
 
 type AuthProvider = 'google' | 'facebook' | 'tiktok';
@@ -163,7 +166,7 @@ export function LoginContent() {
 
       <div className={styles.heroWrapper}>
         <div className={styles.contentWrapper}>
-          <section className={styles.featuresSection}>
+          <section className={styles.heroFeatureSection}>
             <div className={styles.heroContent}>
               <h1 className={styles.heroTitle}>
                 Automate your <br />
@@ -291,11 +294,15 @@ export function LoginContent() {
             </div>
           </div>
         </div>
+
+        <DashboardMockup />
       </div>
 
       <IntegrationsStrip />
+      <WorkflowSection />
       <FeaturesSection />
       <PhilosophySection />
+      <FAQSection />
       <Footer />
     </div>
   );
