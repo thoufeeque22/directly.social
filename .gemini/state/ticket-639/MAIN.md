@@ -2,7 +2,7 @@
 ticket_id: 639
 branch_name: feature/639-login-details-expansion
 goal: Expand login page with comprehensive application details and a global footer.
-status: qa
+status: doc
 current_round: 2
 ---
 
@@ -10,7 +10,7 @@ current_round: 2
 - **ID**: 639
 - **Branch**: `feature/639-login-details-expansion`
 - **Goal**: Expand login page with comprehensive application details and a global footer.
-- **Current Status**: qa
+- **Current Status**: doc
 
 # 📝 Ticket Description
 Following the theme alignment and layout refinements, we want to enrich the login/landing page with more "Application Details" similar to GitHub or other premium SaaS products.
@@ -27,3 +27,4 @@ The previous "phantom scroll" issue is now moot as scrolling will be intentional
 - **[2026-06-04 14:37:21]**: DISCOVERY [NECESSARY] - Refactored login into landing page with Tech Stack, Philosophy, and Footer.
 - **[2026-06-04 14:43:52]**: DEV [SUCCESS] - Expanded login page with tech stack, philosophy, and global footer using modular components.
 - **[2026-06-04 14:48:50]**: AUDIT [PASS] - Security and Performance audit passed for Login expansion components.
+- **[2026-06-04 14:56:14]**: QA [PASS] - Verified login landing page expansion (Tech Stack, Philosophy, Footer) and scrollability across all viewports.
