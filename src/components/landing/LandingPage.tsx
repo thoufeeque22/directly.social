@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Box } from '@mui/material';
 import { LandingHeader } from './Header';
 import { Hero } from './Hero';
 import { SocialProof } from './SocialProof';
@@ -14,9 +15,9 @@ import { LandingFooter } from './Footer';
 
 export const LandingPage = () => {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <LandingHeader />
-      <main style={{ flexGrow: 1 }}>
+      <Box component="main" sx={{ flexGrow: 1 }}>
         <Hero />
         <SocialProof />
         <Features />
@@ -26,7 +27,7 @@ export const LandingPage = () => {
         <Pricing />
         <FAQ />
         <LandingFooter />
-      </main>
-    </div>
+      </Box>
+    </Box>
   );
 };

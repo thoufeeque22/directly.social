@@ -12,8 +12,14 @@ export const LandingFooter = () => {
   const theme = useTheme();
 
   return (
-    <footer style={{ borderTop: `1px solid ${theme.palette.divider}`, backgroundColor: theme.palette.background.paper }}>
-      <Box sx={{ py: 8 }}>
+    <Box 
+      component="footer" 
+      sx={{ 
+        py: 8, 
+        borderTop: `1px solid ${theme.palette.divider}`, 
+        bgcolor: 'background.paper' 
+      }}
+    >
       <Container maxWidth="lg">
         <Grid container spacing={4} sx={{ mb: 8 }}>
           <Grid size={{ xs: 12, md: 4 }}>
@@ -45,7 +51,6 @@ export const LandingFooter = () => {
           </Typography>
         </Box>
       </Container>
-      </Box>
-    </footer>
+    </Box>
   );
 };
