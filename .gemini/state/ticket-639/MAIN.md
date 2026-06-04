@@ -2,7 +2,7 @@
 ticket_id: 639
 branch_name: feature/639-login-ui-audit
 goal: Resolve theme mismatch on login screen and analyze industry standards for theme toggling.
-status: doc
+status: project
 current_round: 1
 ---
 
@@ -10,7 +10,7 @@ current_round: 1
 - **ID**: 639
 - **Branch**: `feature/639-login-ui-audit`
 - **Goal**: Resolve theme mismatch on login screen and analyze industry standards for theme toggling.
-- **Current Status**: doc
+- **Current Status**: project
 
 # 📝 Ticket Description
 User reported a visual discrepancy on the login screen: "dark on left, light on right".
@@ -27,4 +27,9 @@ Analysis needed for:
 - **[2026-06-04 12:50:42]**: DISCOVERY [NECESSARY] - Discovery complete for login screen theme-awareness fix.
 - **[2026-06-04 12:58:05]**: DEV [SUCCESS] - Implemented theme-awareness fix for the login screen (Ticket #639).
 - **[2026-06-04 13:03:35]**: AUDIT [PASS] - Security and Performance audit passed for Ticket #639.
-- **[2026-06-04 13:14:19]**: QA [PASS] - Login screen theme alignment verified (E2E + Manual Script).
+- [2026-06-04 13:14:19]: QA [PASS] - Login screen theme alignment verified (E2E + Manual Script).
+
+# 🏗️ Architectural Decisions
+- **Login Screen Theme Awareness**: The login screen was refactored to use system-wide HSL variables (`--background`, etc.) instead of hardcoded hex values or fixed gradients. This ensures the background color is consistently applied across the full viewport.
+- **Toggle Omission**: Based on industry standards for authentication entry points (e.g., Vercel, Stripe), a manual theme toggle was intentionally excluded from the login screen to reduce cognitive load and maintain layout simplicity. The screen relies on `prefers-color-scheme` and local storage state.
+- **[2026-06-04 13:24:52]**: DOC [COMPLETE] - Documented Login Screen theme-awareness and toggle omission policy.
