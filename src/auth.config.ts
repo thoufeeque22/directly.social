@@ -104,10 +104,12 @@ export default {
         return true;
       }
 
-      const isOnDashboard = nextUrl.pathname === "/";
       const isOnSettings = nextUrl.pathname.startsWith("/settings");
+      const isOnSchedule = nextUrl.pathname.startsWith("/schedule");
+      const isOnActivity = nextUrl.pathname.startsWith("/activity");
+      const isOnMedia = nextUrl.pathname.startsWith("/media");
 
-      if (isOnDashboard || isOnSettings) {
+      if (isOnSettings || isOnSchedule || isOnActivity || isOnMedia) {
         return isLoggedIn ? true : Response.redirect(new URL("/login", nextUrl));
       }
 
