@@ -1,6 +1,6 @@
 # Bring Your Own Storage (BYOS)
 
-Bring Your Own Storage (BYOS) allows power users and enterprises to connect their own S3-compatible object storage to Social Studio. This bypasses server-side storage limits, eliminates double-bandwidth egress costs, and ensures users maintain full ownership of their original media assets.
+Bring Your Own Storage (BYOS) allows power users and enterprises to connect their own S3-compatible object storage to Directly. This bypasses server-side storage limits, eliminates double-bandwidth egress costs, and ensures users maintain full ownership of their original media assets.
 
 ## Key Benefits
 
@@ -11,7 +11,7 @@ Bring Your Own Storage (BYOS) allows power users and enterprises to connect thei
 
 ## Supported Providers
 
-Social Studio supports any standardized S3-compatible Object Storage, with optimized templates for:
+Directly supports any standardized S3-compatible Object Storage, with optimized templates for:
 - **Cloudflare R2** (Recommended - Zero Egress)
 - **AWS S3**
 - **Google Cloud Storage** (via S3 XML API)
@@ -26,7 +26,7 @@ Credentials (Access Key, Secret Key) are encrypted at rest using **AES-256-GCM**
 - **Masking:** Secret keys are masked in the UI and never returned in full after initial configuration.
 
 ### 2. Direct Upload Pipeline
-To protect server resources, Social Studio uses a **Direct-to-Bucket** upload flow:
+To protect server resources, Directly uses a **Direct-to-Bucket** upload flow:
 
 ```mermaid
 sequenceDiagram
@@ -54,11 +54,11 @@ sequenceDiagram
 ```
 
 ### 3. Distribution Stream
-When publishing a video to platforms (YouTube, TikTok, etc.), Social Studio streams the file directly from your bucket to the destination platform API, ensuring a minimal memory footprint (< 50MB).
+When publishing a video to platforms (YouTube, TikTok, etc.), Directly streams the file directly from your bucket to the destination platform API, ensuring a minimal memory footprint (< 50MB).
 
 ## Configuration Requirements
 
-To use BYOS, your bucket must have **CORS (Cross-Origin Resource Sharing)** enabled to allow the Social Studio web client to perform direct PUT requests.
+To use BYOS, your bucket must have **CORS (Cross-Origin Resource Sharing)** enabled to allow the Directly web client to perform direct PUT requests.
 
 ### Recommended CORS Policy
 ```json

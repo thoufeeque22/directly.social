@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  const email = 'tester@socialstudio.ai';
+  const email = 'tester@directly.social';
 
   const user = await prisma.user.findUnique({
     where: { email },

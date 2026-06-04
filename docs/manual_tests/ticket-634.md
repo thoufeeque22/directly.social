@@ -49,13 +49,13 @@ This test verifies the NotebookLM documentation synthesis workflow, including th
 ### 4. Allowed Domain Exception (Positive Test)
 **Steps:**
 1. Create a temporary file: `docs/test_allowed.md`.
-2. Add an allowed email: `support@socialstudio.app`.
+2. Add an allowed email: `support@directly.social`.
 3. Run `npm run notebook:package`.
 4. Verify the command succeeds.
 
 **Expected Result:**
 - The command exits with code 0.
-- `support@socialstudio.app` does not trigger the PII scanner.
+- `support@directly.social` does not trigger the PII scanner.
 
 ## Cleanup
 - Delete any temporary files created in `docs/` during testing.

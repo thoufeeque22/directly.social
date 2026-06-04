@@ -4,7 +4,7 @@ This test plan verifies that user-provided BYOK credentials are correctly utiliz
 
 ## Prerequisites
 
-1. Access to the Social Studio application (development or staging).
+1. Access to the Directly application (development or staging).
 2. A valid platform developer account with an app created (e.g., YouTube/Google Cloud).
 3. BYOK credentials (Client ID, Secret, Redirect URI) for the platform.
 4. Access to server logs or Sentry to verify credential resolution if needed (optional).
@@ -21,7 +21,7 @@ This test plan verifies that user-provided BYOK credentials are correctly utiliz
   6. Monitor the publication process.
 - **Expected Results:**
   - The video should be successfully uploaded to the user's personal YouTube channel (associated with their BYOK app).
-  - The OAuth consent screen (if triggered) should display the name of the user's personal app, not "Social Studio".
+  - The OAuth consent screen (if triggered) should display the name of the user's personal app, not "Directly".
   - Verify in the `PostPlatformResult` that the upload succeeded.
 
 ### 2. Fallback Mechanism: Missing BYOK

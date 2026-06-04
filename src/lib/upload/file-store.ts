@@ -4,7 +4,7 @@
  * Cleared only after a successful upload.
  */
 
-const DB_NAME = 'SocialStudioDrafts';
+const DB_NAME = 'DirectlyDrafts';
 const STORE_NAME = 'files';
 const FILE_KEY = 'draft_video';
 

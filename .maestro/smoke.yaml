@@ -1,4 +1,4 @@
-appId: com.thoufeeque.socialstudio
+appId: com.thoufeeque.directly
 ---
 - launchApp
 - assertVisible: "Upload & Automate"

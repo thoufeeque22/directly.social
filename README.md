@@ -1,6 +1,6 @@
-# Social Studio App
+# Directly App
 
-Social Studio is a multi-platform social media management application that allows users to schedule and distribute video content (Shorts/Reels/TikToks) across various platforms simultaneously.
+Directly is a multi-platform social media management application that allows users to schedule and distribute video content (Shorts/Reels/TikToks) across various platforms simultaneously.
 
 ## Tech Stack
 
@@ -49,7 +49,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 ## API Documentation
 
-Social Studio features a centralized API documentation system powered by Swagger/OpenAPI.
+Directly features a centralized API documentation system powered by Swagger/OpenAPI.
 Access the interactive Swagger UI at `/api/docs` in your local development environment.
 
 ## AI Agent Orchestration

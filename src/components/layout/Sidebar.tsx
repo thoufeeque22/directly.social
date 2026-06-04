@@ -41,7 +41,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
           <div className={styles.logoIcon}>
             <AutoAwesomeIcon sx={{ fontSize: 24, color: 'hsl(var(--primary))' }} />
           </div>
-          <span className={styles.logoText}>SocialStudio</span>
+          <span className={styles.logoText}>Directly</span>
           <button className={styles.closeButton} onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }}>
             <CloseIcon sx={{ fontSize: 20 }} />
           </button>

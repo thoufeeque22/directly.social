@@ -2,7 +2,7 @@
 
 ## 1. Role-Based Access Control (RBAC)
 
-Social Studio implements a strict Role-Based Access Control (RBAC) system to ensure data integrity and restrict access to sensitive administrative features.
+Directly implements a strict Role-Based Access Control (RBAC) system to ensure data integrity and restrict access to sensitive administrative features.
 
 ### User Roles
 
@@ -28,8 +28,8 @@ To prevent unauthorized file access and data leakage, the application implements
 ## 3. Testing Identity
 
 For automated and manual verification, dedicated identities are used:
-- **Tester (`tester@socialstudio.ai`):** A standard `USER` account used for E2E testing of common user flows.
-- **Admin (`admin@socialstudio.ai`):** A dedicated `ADMIN` account used for verifying administrative access and system health monitoring.
+- **Tester (`tester@directly.social`):** A standard `USER` account used for E2E testing of common user flows.
+- **Admin (`admin@directly.social`):** A dedicated `ADMIN` account used for verifying administrative access and system health monitoring.
 
 ## 4. Rate Limiting & Abuse Prevention
 

@@ -9,8 +9,8 @@ import { execSync } from 'child_process';
  * 2. Admin role (verified by elevating tester to ADMIN) can access admin routes and see admin links.
  * 3. Deleted routes (/roadmap, /launch) return 404.
  * 
- * Note: admin@socialstudio.ai is not currently supported in the E2E credentials provider,
- * so we verify the role logic using the tester@socialstudio.ai account with toggled roles.
+ * Note: admin@directly.social is not currently supported in the E2E credentials provider,
+ * so we verify the role logic using the tester@directly.social account with toggled roles.
  */
 
 test.describe('Ticket #538: Security Roles and Cleanup', () => {
@@ -33,7 +33,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
 
     // Login as Tester
     await page.goto('/login');
-    await page.getByTestId('e2e-email-input').fill('tester@socialstudio.ai');
+    await page.getByTestId('e2e-email-input').fill('tester@directly.social');
     await page.getByTestId('e2e-password-input').fill('social-studio-e2e-secret');
     await page.getByTestId('e2e-login-submit').click();
     
@@ -63,7 +63,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
 
     // Login again to get new session with ADMIN role
     await page.goto('/login');
-    await page.getByTestId('e2e-email-input').fill('admin@socialstudio.ai');
+    await page.getByTestId('e2e-email-input').fill('admin@directly.social');
     await page.getByTestId('e2e-password-input').fill('social-studio-e2e-secret');
     await page.getByTestId('e2e-login-submit').click();
     

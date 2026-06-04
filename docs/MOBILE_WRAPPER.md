@@ -1,9 +1,9 @@
-# 📱 Social Studio Mobile Wrapper (Capacitor)
+# 📱 Directly Mobile Wrapper (Capacitor)
 
-This document outlines the architecture and developer workflow for the native iOS and Android versions of Social Studio.
+This document outlines the architecture and developer workflow for the native iOS and Android versions of Directly.
 
 ## 🏗️ Architecture: Remote Shell
-Social Studio uses a **Remote Shell** approach. Instead of bundling all web assets locally, the native app acts as a high-performance wrapper that loads the live production dashboard. This allows for:
+Directly uses a **Remote Shell** approach. Instead of bundling all web assets locally, the native app acts as a high-performance wrapper that loads the live production dashboard. This allows for:
 - **Instant Updates**: Changes to the web dashboard are reflected in the app immediately without a new App Store submission.
 - **Full Backend Support**: Server Actions and API routes work seamlessly as they are executed on the live server.
 - **Native Experience**: Native splash screens, status bar configurations, and viewport optimizations make it feel like a real app.

@@ -1,6 +1,6 @@
 # Graceful Error Handling
 
-Social Studio uses a multi-layered error handling strategy to provide a resilient user experience and detailed observability.
+Directly uses a multi-layered error handling strategy to provide a resilient user experience and detailed observability.
 
 ## Standardized Error Reporting
 

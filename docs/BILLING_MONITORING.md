@@ -1,6 +1,6 @@
 # Billing & Cost Monitoring
 
-The Social Studio application includes a centralized system for monitoring external API spending (e.g., Google AI Studio, OpenAI) and alerting administrators when budget thresholds are reached.
+The Directly application includes a centralized system for monitoring external API spending (e.g., Google AI Studio, OpenAI) and alerting administrators when budget thresholds are reached.
 
 ## Architecture
 

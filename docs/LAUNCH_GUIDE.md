@@ -1,4 +1,4 @@
-# Social Studio: Ultimate Deployment Guide (Oracle Cloud Free Tier)
+# Directly: Ultimate Deployment Guide (Oracle Cloud Free Tier)
 
 This guide covers the 100% free, "Always On" deployment method using Oracle Cloud. It includes fixes for common bugs like "greyed out networking" and "out of capacity" errors.
 
@@ -11,7 +11,7 @@ This guide covers the 100% free, "Always On" deployment method using Oracle Clou
 2. Click the **Hamburger Menu (≡)** -> **Networking** -> **Virtual cloud networks**.
 3. Click **Start VCN Wizard**.
 4. Select **VCN with Internet Connectivity** and click **Start VCN Wizard**.
-5. Name it `SocialStudioVCN` and click **Next** -> **Create**.
+5. Name it `DirectlyVCN` and click **Next** -> **Create**.
    - *This creates your Public Subnet and Internet Gateway automatically.*
 
 ---
@@ -25,8 +25,8 @@ This guide covers the 100% free, "Always On" deployment method using Oracle Clou
    - **Shape:** Click **Change Shape**. Select **Ampere** -> **VM.Standard.A1.Flex**.
    - **Specs:** Slide OCPU to **4** and Memory to **24 GB**.
 4. **Networking:**
-   - Select **Select existing virtual cloud network** -> `SocialStudioVCN`.
-   - Select **Select existing subnet** -> `Public Subnet-SocialStudioVCN`.
+   - Select **Select existing virtual cloud network** -> `DirectlyVCN`.
+   - Select **Select existing subnet** -> `Public Subnet-DirectlyVCN`.
    - Ensure **Assign a public IPv4 address** is **ON**.
 5. **SSH Keys:** Click **Save private key** and download the file. **Do not lose this!**
 6. **Storage:** Toggle **Specify a custom boot volume size** and set it to **100 GB**.

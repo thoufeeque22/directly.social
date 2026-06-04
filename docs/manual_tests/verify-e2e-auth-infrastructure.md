@@ -1,11 +1,11 @@
 # UAT Script: E2E Authentication Infrastructure (#374)
 
 ## Overview
-This script verifies the infrastructure enabling automated E2E authentication for the Social Studio application. It ensures the test user can log in locally but is blocked in production.
+This script verifies the infrastructure enabling automated E2E authentication for the Directly application. It ensures the test user can log in locally but is blocked in production.
 
 ## Prerequisites
 - Local development environment.
-- Database seeded with user `tester@socialstudio.ai`.
+- Database seeded with user `tester@directly.social`.
 - `.env.local` configured with:
   - `NEXT_PUBLIC_E2E=true`
   - `E2E=true`
@@ -18,7 +18,7 @@ This script verifies the infrastructure enabling automated E2E authentication fo
 4. **Expected Result:** Section appears with Email/Password inputs and "Authenticate Tester" button.
 
 ## Scenario 2: Successful E2E Authentication
-1. **Enter** `tester@socialstudio.ai` and the password from `.env`.
+1. **Enter** `tester@directly.social` and the password from `.env`.
 2. **Click** "Authenticate Tester".
 3. **Verify** you are redirected to the Dashboard (`/`).
 4. **Verify** that linked accounts "Tester Alpha" and "Tester Beta" are visible in the platform selection.

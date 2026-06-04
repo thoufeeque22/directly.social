@@ -1,6 +1,6 @@
 # 🌍 3rd-Party Platform Integrations
 
-This document details the configuration, credentials, and requirements for all external services integrated into **Social Studio**.
+This document details the configuration, credentials, and requirements for all external services integrated into **Directly**.
 
 ---
 
@@ -55,7 +55,7 @@ Used for TikTok video publishing.
 
 ## 🔄 Automated Token Refresh
 
-Social Studio implements a background refresh mechanism to ensure that scheduled posts do not fail due to expired OAuth tokens.
+Directly implements a background refresh mechanism to ensure that scheduled posts do not fail due to expired OAuth tokens.
 
 ### Refresh Mechanism
 - **Service**: `src/lib/auth/token-refresher.ts`
@@ -102,5 +102,5 @@ Social Studio implements a background refresh mechanism to ensure that scheduled
 
 ## 📱 Mobile Wrapper (Capacitor)
 - **Scheme**: `socialstudio://`
-- **User-Agent**: `SocialStudioApp` (Used to trigger native browser redirects).
+- **User-Agent**: `DirectlyApp` (Used to trigger native browser redirects).
 - **Plugins**: `@capacitor/browser` for secure OAuth.

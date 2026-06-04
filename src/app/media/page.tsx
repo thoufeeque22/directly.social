@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { MediaLibrary } from "@/components/media/MediaLibrary";
 
 export const metadata: Metadata = {
-  title: "Media Library | SocialStudio",
+  title: "Media Library | Directly",
 };
 
 export default async function MediaPage() {

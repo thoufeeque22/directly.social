@@ -5,7 +5,7 @@
 
 ## Prerequisites
 1. Ensure the application is running locally (`npm run dev`) or deployed to a staging environment.
-2. Ensure you have an active user session (log in using `tester@socialstudio.ai` or your own account).
+2. Ensure you have an active user session (log in using `tester@directly.social` or your own account).
 
 ## Test Cases
 

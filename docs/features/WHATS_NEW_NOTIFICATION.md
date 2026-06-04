@@ -1,6 +1,6 @@
 # What's New Notification System
 
-The "What's New" notification system keeps users informed about the latest features, improvements, and bug fixes in Social Studio. It uses a non-intrusive badge in the header and a modular profile actions dropdown menu to provide both highly visible alerts and persistent, on-demand access to the changelog.
+The "What's New" notification system keeps users informed about the latest features, improvements, and bug fixes in Directly. It uses a non-intrusive badge in the header and a modular profile actions dropdown menu to provide both highly visible alerts and persistent, on-demand access to the changelog.
 
 ## Overview
 

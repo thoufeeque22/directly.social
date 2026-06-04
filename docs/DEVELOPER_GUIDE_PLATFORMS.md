@@ -1,10 +1,10 @@
 # Developer Guide: Adding a New Platform
 
-This guide outlines the process for integrating a new social media platform into Social Studio using the modular distribution architecture.
+This guide outlines the process for integrating a new social media platform into Directly using the modular distribution architecture.
 
 ## Architecture Overview
 
-Social Studio uses a modular pattern for platform distribution to ensure code maintainability and separation of concerns.
+Directly uses a modular pattern for platform distribution to ensure code maintainability and separation of concerns.
 
 - **Shared Core:** `src/lib/core/platforms/` contains utilities like account resolution and Meta-specific uploaders.
 - **Platform Modules:** `src/lib/platforms/[platform-name]/` contains the granular logic for a specific platform.

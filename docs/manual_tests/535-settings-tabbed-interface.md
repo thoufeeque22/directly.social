@@ -4,7 +4,7 @@ This test plan verifies the reorganized Settings page, including tab-based navig
 
 ## Prerequisites
 
-1. Access to the Social Studio application.
+1. Access to the Directly application.
 2. An account with at least one platform connected (optional, but recommended).
 
 ## Test Cases

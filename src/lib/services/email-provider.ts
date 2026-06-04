@@ -10,9 +10,9 @@ export class ResendEmailProvider implements EmailProvider {
   constructor(apiKey: string) { this.client = new Resend(apiKey); }
 
   async send(options: EmailOptions) {
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@socialstudio.app';
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@directly.social';
     await this.client.emails.send({
-      from: 'Social Studio <alerts@socialstudio.app>',
+      from: 'Directly <alerts@directly.social>',
       to: options.to || adminEmail,
       subject: options.subject,
       html: options.html,

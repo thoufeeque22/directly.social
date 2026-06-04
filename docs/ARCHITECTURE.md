@@ -1,6 +1,6 @@
-# Social Studio Architecture
+# Directly Architecture
 
-This document provides a high-level index of the Social Studio application architecture, data models, and core workflows.
+This document provides a high-level index of the Directly application architecture, data models, and core workflows.
 
 ## Table of Contents
 

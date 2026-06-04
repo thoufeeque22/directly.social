@@ -60,7 +60,7 @@ export function generateOpenApiDocument() {
     openapi: '3.0.0',
     info: {
       version: '1.0.0',
-      title: 'Social Studio API',
+      title: 'Directly API',
       description: 'Centralized API Documentation for Next.js Route Handlers. Most routes require a valid session cookie.',
     },
     servers: [{ url: '/api' }],

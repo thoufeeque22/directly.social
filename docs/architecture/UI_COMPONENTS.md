@@ -63,7 +63,7 @@ Users can connect their own S3/R2 storage to bypass server limits.
 
 ## 5. Global Refresh Mechanism
 
-Social Studio implements a unified refresh system to ensure data consistency between server-side state and client-side components.
+Directly implements a unified refresh system to ensure data consistency between server-side state and client-side components.
 
 - **Centralized Logic:** The `useAppRefresh` hook handles the orchestration of `router.refresh()` (for server components) and the dispatching of custom events (for client components).
 - **Event Synchronization:** Components can synchronize their state by listening to the `app:refresh` event on `globalThis`.

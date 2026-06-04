@@ -31,7 +31,7 @@ test.describe('BYOK Wizard Visual Audit', () => {
     // 4. Success state for YouTube
     await youtubeWizard.locator('[data-testid="client-id-input"] input').fill('valid');
     await youtubeWizard.locator('[data-testid="client-secret-input"] input').fill('valid-secret');
-    await youtubeWizard.locator('[data-testid="redirect-uri-input"] input').fill('https://socialstudio.ai/callback');
+    await youtubeWizard.locator('[data-testid="redirect-uri-input"] input').fill('https://directly.social/callback');
     await youtubeWizard.locator('[data-testid="save-button"]').click();
     await expect(youtubeWizard.locator('[data-testid="success-message"]')).toBeVisible();
     await page.screenshot({ path: 'verification/byok-wizard-success.png', fullPage: true });

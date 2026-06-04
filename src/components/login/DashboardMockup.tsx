@@ -14,7 +14,7 @@ export function DashboardMockup() {
           <span style={{ background: '#ffbd2e' }} />
           <span style={{ background: '#27c93f' }} />
         </div>
-        <div className={styles.mockupAddress}>socialstudio.ai/activity</div>
+        <div className={styles.mockupAddress}>directly.social/activity</div>
       </div>
       
       <div className={styles.mockupBody}>

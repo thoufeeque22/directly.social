@@ -34,7 +34,7 @@ test.describe('BYOK Integration Wizard E2E @regression', () => {
     // Fill credentials - 'valid' is a special keyword in our local validator mock
     await youtubeWizard.locator('[data-testid="client-id-input"] input').fill('valid');
     await youtubeWizard.locator('[data-testid="client-secret-input"] input').fill('valid-secret');
-    await youtubeWizard.locator('[data-testid="redirect-uri-input"] input').fill('https://socialstudio.ai/callback');
+    await youtubeWizard.locator('[data-testid="redirect-uri-input"] input').fill('https://directly.social/callback');
 
     // Click save
     await youtubeWizard.locator('[data-testid="save-button"]').click();
@@ -52,7 +52,7 @@ test.describe('BYOK Integration Wizard E2E @regression', () => {
     // Fill invalid credentials - 'invalid-id' triggers our Server Action bypass
     await tiktokWizard.locator('[data-testid="client-id-input"] input').fill('invalid-id');
     await tiktokWizard.locator('[data-testid="client-secret-input"] input').fill('wrong-secret');
-    await tiktokWizard.locator('[data-testid="redirect-uri-input"] input').fill('https://socialstudio.ai/callback');
+    await tiktokWizard.locator('[data-testid="redirect-uri-input"] input').fill('https://directly.social/callback');
 
     // Click save
     await tiktokWizard.locator('[data-testid="save-button"]').click();
@@ -76,7 +76,7 @@ test.describe('BYOK Integration Wizard E2E @regression', () => {
     // Save and check success layout
     await youtubeWizard.locator('[data-testid="client-id-input"] input').fill('valid');
     await youtubeWizard.locator('[data-testid="client-secret-input"] input').fill('valid');
-    await youtubeWizard.locator('[data-testid="redirect-uri-input"] input').fill('https://socialstudio.ai/callback');
+    await youtubeWizard.locator('[data-testid="redirect-uri-input"] input').fill('https://directly.social/callback');
     await youtubeWizard.locator('[data-testid="save-button"]').click();
     
     await page.screenshot({ path: 'verification/byok-wizard-success.png', fullPage: true });

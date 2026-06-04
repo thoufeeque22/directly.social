@@ -1,6 +1,6 @@
-# Social Studio Documentation
+# Directly Documentation
 
-Welcome to the Social Studio project documentation. This folder contains architectural blueprints, setup guides, and feature specifications.
+Welcome to the Directly project documentation. This folder contains architectural blueprints, setup guides, and feature specifications.
 
 ## Core Documentation
 

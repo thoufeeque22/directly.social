@@ -11,7 +11,7 @@ test.describe('Parallel Distribution Channels', () => {
       import { PrismaClient } from '@prisma/client';
       const prisma = new PrismaClient();
       async function main() {
-        const user = await prisma.user.findUnique({ where: { email: 'tester@socialstudio.ai' } });
+        const user = await prisma.user.findUnique({ where: { email: 'tester@directly.social' } });
         if (user) {
           await prisma.account.upsert({
             where: { provider_providerAccountId: { provider: 'google', providerAccountId: 'e2e-google' } },

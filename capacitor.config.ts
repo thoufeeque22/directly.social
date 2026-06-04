@@ -1,16 +1,16 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.thoufeeque.socialstudio',
-  appName: 'Social Studio',
+  appId: 'com.thoufeeque.directly',
+  appName: 'Directly',
   webDir: 'out',
   server: {
     // IMPORTANT: Defaults to production. Use CAPACITOR_URL env var for local/tunnel testing.
-    url: process.env.CAPACITOR_URL || 'https://social-studio-app.vercel.app',
+    url: process.env.CAPACITOR_URL || 'https://directly-app.vercel.app',
     cleartext: true,
     allowNavigation: ['*']
   },
-  appendUserAgent: 'SocialStudioApp',
+  appendUserAgent: 'DirectlyApp',
   ios: {
     scheme: 'App'
   },

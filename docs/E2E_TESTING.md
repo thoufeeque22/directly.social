@@ -1,6 +1,6 @@
 # End-to-End (E2E) Testing Guide
 
-This guide explains how to run and maintain E2E tests in Social Studio using Playwright.
+This guide explains how to run and maintain E2E tests in Directly using Playwright.
 
 ## Core Philosophy
 
@@ -15,7 +15,7 @@ Our E2E tests are designed to be **production-reflective** and **idempotent**.
 You must have the following environment variables configured in your local `.env` or passed to the command:
 
 - `NEXT_PUBLIC_E2E=true`: Enables the test-specific credentials provider.
-- `E2E_TEST_PASSWORD`: The password for the dedicated tester account (`tester@socialstudio.ai`).
+- `E2E_TEST_PASSWORD`: The password for the dedicated tester account (`tester@directly.social`).
 
 ### Running Tests
 
@@ -61,7 +61,7 @@ We use a "Setup Project" pattern. Playwright runs `auth.setup.ts` first, which l
 
 ### Worker Isolation
 
-When running tests in parallel, Social Studio uses the `TEST_WORKER_INDEX` environment variable to create isolated temporary directories (e.g., `tmp/e2e/worker-0/`). This prevents race conditions during file upload and processing tests.
+When running tests in parallel, Directly uses the `TEST_WORKER_INDEX` environment variable to create isolated temporary directories (e.g., `tmp/e2e/worker-0/`). This prevents race conditions during file upload and processing tests.
 
 ## Troubleshooting
 

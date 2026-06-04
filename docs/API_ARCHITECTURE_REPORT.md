@@ -1,7 +1,7 @@
 # Architectural Evaluation: Route Handlers vs. Server Actions
 
 ## Overview
-This report evaluates the current usage of Next.js Route Handlers (API Routes) in the Social Studio App and provides a strategy for which endpoints should be migrated to Server Actions and which should remain as Route Handlers.
+This report evaluates the current usage of Next.js Route Handlers (API Routes) in the Directly App and provides a strategy for which endpoints should be migrated to Server Actions and which should remain as Route Handlers.
 
 ## Current State
 - **Route Handlers:** 27 endpoints (documented in Swagger).
@@ -32,4 +32,4 @@ This report evaluates the current usage of Next.js Route Handlers (API Routes) i
 - **`/chat`:** Due to the streaming nature of AI responses.
 
 ## Future Proofing
-The implementation of **OpenAPI/Swagger** provides a "Living Source of Truth" for the Route Handlers. Even as we migrate internal logic to Server Actions, maintaining Route Handlers for the core "Publishing Pipeline" ensures that Social Studio can eventually expose a Public Developer API with minimal friction.
+The implementation of **OpenAPI/Swagger** provides a "Living Source of Truth" for the Route Handlers. Even as we migrate internal logic to Server Actions, maintaining Route Handlers for the core "Publishing Pipeline" ensures that Directly can eventually expose a Public Developer API with minimal friction.

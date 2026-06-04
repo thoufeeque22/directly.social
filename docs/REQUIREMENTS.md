@@ -1,7 +1,7 @@
-# Social Studio App: Requirements Specification
+# Directly App: Requirements Specification
 
 ## 1. Project Overview
-Social Studio is a professional-grade multi-platform video distribution platform designed to help creators publish content to YouTube Shorts, Instagram Reels, and TikTok simultaneously. The platform focuses on high-performance uploads, AI-driven content optimization, and robust background publishing.
+Directly is a professional-grade multi-platform video distribution platform designed to help creators publish content to YouTube Shorts, Instagram Reels, and TikTok simultaneously. The platform focuses on high-performance uploads, AI-driven content optimization, and robust background publishing.
 
 ## 2. Functional Requirements
 

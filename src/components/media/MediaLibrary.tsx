@@ -443,7 +443,7 @@ export const MediaLibrary: React.FC = () => {
 
       <div style={{ padding: '1rem', borderRadius: '0.75rem', background: 'hsla(var(--warning) / 0.05)', border: '1px solid hsla(var(--warning) / 0.15)' }}>
         <p style={{ margin: 0, fontSize: '0.85rem', color: 'hsl(var(--warning))', textAlign: 'center' }}>
-          <strong>Note:</strong> Social Studio uses a &quot;Lean Gallery&quot; approach. Videos are automatically purged after 7 days to keep performance high and storage costs low.
+          <strong>Note:</strong> Directly uses a &quot;Lean Gallery&quot; approach. Videos are automatically purged after 7 days to keep performance high and storage costs low.
         </p>
       </div>
 

@@ -19,10 +19,10 @@ export default function AuthSuccessPage() {
           const token = result.token;
 
           // Strategy 1: Custom Scheme (Simple)
-          const deepLink = `socialstudio://login-success?token=${token}`;
+          const deepLink = `directly://login-success?token=${token}`;
 
           // Strategy 2: Package-specific Scheme (Capacitor default style)
-          const packageLink = `com.thoufeeque.socialstudio://login-success?token=${token}`;
+          const packageLink = `com.thoufeeque.directly://login-success?token=${token}`;
 
           // Try both
           window.location.href = deepLink;
@@ -33,7 +33,7 @@ export default function AuthSuccessPage() {
 
           // Strategy 3: Intent as absolute last resort
           setTimeout(() => {
-            const intentLink = `intent://login-success?token=${token}#Intent;scheme=socialstudio;package=com.thoufeeque.socialstudio;S.browser_fallback_url=${encodeURIComponent(window.location.origin)};end`;
+            const intentLink = `intent://login-success?token=${token}#Intent;scheme=directly;package=com.thoufeeque.directly;S.browser_fallback_url=${encodeURIComponent(window.location.origin)};end`;
             window.location.href = intentLink;
           }, 1500);
 
@@ -51,7 +51,7 @@ export default function AuthSuccessPage() {
 
   const manualRedirect = () => {
     if (debugToken) {
-       window.location.href = `socialstudio://login-success?token=${debugToken}`;
+       window.location.href = `directly://login-success?token=${debugToken}`;
     }
   };
 
@@ -87,7 +87,7 @@ export default function AuthSuccessPage() {
             boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)'
           }}
         >
-          Open Social Studio
+          Open Directly
         </button>
       )}
 

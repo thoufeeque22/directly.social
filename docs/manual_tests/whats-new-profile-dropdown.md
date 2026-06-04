@@ -3,7 +3,7 @@
 This manual test suite verifies the profile actions dropdown menu in the header and its integration with the persistent "What's New" changelog popover (Option A persistent notifications).
 
 ## Prerequisites
-- The user is logged in to Social Studio.
+- The user is logged in to Directly.
 - The database contains at least one update in the `UpdateLog` table.
 - A test user exists.
 

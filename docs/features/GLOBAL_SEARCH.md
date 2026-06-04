@@ -2,7 +2,7 @@
 
 ## Overview
 
-Global Search provides a unified and consistent filtering mechanism across the core media and activity views in Social Studio. It allows users to quickly locate past posts, scheduled content, and uploaded media assets using keywords.
+Global Search provides a unified and consistent filtering mechanism across the core media and activity views in Directly. It allows users to quickly locate past posts, scheduled content, and uploaded media assets using keywords.
 
 ## Implementation Details
 

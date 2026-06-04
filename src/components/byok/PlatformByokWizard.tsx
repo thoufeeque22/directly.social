@@ -149,7 +149,7 @@ export const PlatformByokWizard = ({ platform }: PlatformByokWizardProps) => {
               data-testid="redirect-uri-input" 
               value={credentials.redirectUri} 
               onChange={(e) => setCredentials({ ...credentials, redirectUri: e.target.value })}
-              placeholder="https://socialstudio.ai/callback"
+              placeholder="https://directly.social/callback"
               size="small"
               helperText="Must match the authorized redirect URI in your dev portal."
             />

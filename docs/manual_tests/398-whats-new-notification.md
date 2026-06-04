@@ -1,14 +1,14 @@
 # Manual Test: What's New Notification (Issue #398)
 
 ## Prerequisites
-- Logged in to Social Studio.
+- Logged in to Directly.
 - At least one `UpdateLog` entry exists in the database that the user has NOT seen.
 
 ## Setup (Optional: Seed Update)
 If no updates exist, run the following in the database (or via a temporary script):
 ```sql
 INSERT INTO "UpdateLog" (id, version, title, description, "createdAt")
-VALUES ('test-update-1', '1.0.0', 'Welcome to Social Studio', 'This is your first update notification.', NOW());
+VALUES ('test-update-1', '1.0.0', 'Welcome to Directly', 'This is your first update notification.', NOW());
 ```
 
 ## Test Steps

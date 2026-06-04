@@ -20,7 +20,7 @@ test.describe('Analytics Dashboard', () => {
 
   test.beforeAll(async () => {
     // Elevate user to ADMIN so middleware allows access to /admin/analytics
-    safeExec('npx tsx src/__tests__/scripts/make-admin.ts tester@socialstudio.ai');
+    safeExec('npx tsx src/__tests__/scripts/make-admin.ts tester@directly.social');
 
     // Seed mock data before running tests
     await prisma.systemMetric.deleteMany();
@@ -86,7 +86,7 @@ test.describe('Analytics Dashboard', () => {
     test('admin can view analytics dashboard with populated data', async ({ page }) => {
       // Login to get the new session token with ADMIN role
       await page.goto('/login');
-      await page.getByTestId('e2e-email-input').fill('admin@socialstudio.ai');
+      await page.getByTestId('e2e-email-input').fill('admin@directly.social');
       await page.getByTestId('e2e-password-input').fill('social-studio-e2e-secret');
       await page.getByTestId('e2e-login-submit').click();
       await page.waitForURL('/');

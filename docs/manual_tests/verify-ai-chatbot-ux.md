@@ -1,7 +1,7 @@
 # UAT: AI Chatbot UX & Conversational Flow
 
 ## Prerequisites
-- User is logged into the Social Studio App.
+- User is logged into the Directly App.
 - At least one video is present in the "Staged Media" gallery.
 - Some posts are already scheduled (to test "Show my schedule").
 
@@ -19,7 +19,7 @@
 - **Step 1:** Type "Hello" and press Enter.
 - **Expected:** User message appears on the right. AI response appears on the left, streaming in character-by-character or word-by-word.
 - **Step 2:** Ask "Who are you?".
-- **Expected:** AI identifies as "Social Studio AI Assistant" and briefly mentions its capabilities (listing/scheduling posts).
+- **Expected:** AI identifies as "Directly AI Assistant" and briefly mentions its capabilities (listing/scheduling posts).
 
 ### 3. Tool: List Upcoming Posts
 - **Step 1:** Type "Show my upcoming posts" or "What's on my schedule?".

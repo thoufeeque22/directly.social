@@ -8,7 +8,7 @@ async function main() {
   const updates = [
     {
       version: '1.0.0',
-      title: 'Welcome to Social Studio',
+      title: 'Welcome to Directly',
       description: 'We are excited to have you here!'
     },
     {

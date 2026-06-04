@@ -1,7 +1,7 @@
 # Manual Test Script: Ticket #400 Notification Utility
 
 ## Prerequisites
-- Logged in as `tester@socialstudio.ai`.
+- Logged in as `tester@directly.social`.
 - Notifications seeded in the database.
 
 ## Test Case 1: Notification Visibility & Badge Count

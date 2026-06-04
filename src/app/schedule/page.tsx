@@ -4,7 +4,7 @@ import { ScheduleContent } from './ScheduleContent';
 import styles from './schedule.module.css';
 
 export const metadata: Metadata = {
-  title: "Schedule | SocialStudio",
+  title: "Schedule | Directly",
 };
 
 export default function SchedulePage() {

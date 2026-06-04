@@ -16,7 +16,7 @@ describe('LoginPage', () => {
   it('renders the login page with all social options', () => {
     render(<LoginPage />);
     
-    expect(screen.getByText('Social Studio')).toBeInTheDocument();
+    expect(screen.getByText('Directly')).toBeInTheDocument();
     expect(screen.getByText('Continue with Google')).toBeInTheDocument();
     expect(screen.getByText('Continue with Facebook')).toBeInTheDocument();
     expect(screen.getByText('Continue with TikTok')).toBeInTheDocument();

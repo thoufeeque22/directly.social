@@ -3,7 +3,7 @@ import { prisma } from '../../lib/core/prisma';
 import { Page } from '@playwright/test';
 
 test.describe('AI Studio Billing & Credits Check @regression', () => {
-  const TEST_EMAIL = 'tester@socialstudio.ai';
+  const TEST_EMAIL = 'tester@directly.social';
 
   test.beforeEach(async ({ page }) => {
     // Clean up before test

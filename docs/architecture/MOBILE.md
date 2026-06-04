@@ -6,7 +6,7 @@ The application is wrapped using **Capacitor**, allowing it to run as a native a
 
 ## 2. Mobile UI/UX Standards
 
-To ensure a premium, native-like experience on iOS and Android devices, Social Studio follows specific mobile UI/UX standards.
+To ensure a premium, native-like experience on iOS and Android devices, Directly follows specific mobile UI/UX standards.
 
 ### 2.1 Safe Area Insets
 

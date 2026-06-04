@@ -10,7 +10,7 @@ This test verifies the successful configuration of Bring Your Own Storage (BYOS)
 ## Test Steps
 
 ### 1. Wizard Navigation
-1. Log in to Social Studio.
+1. Log in to Directly.
 2. Navigate to **Settings** (Gear Icon).
 3. Click on the **Storage** tab (4th tab).
 4. **Expected Result:** The "Bring Your Own Storage" wizard is displayed.

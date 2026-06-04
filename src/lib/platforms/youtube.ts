@@ -38,7 +38,7 @@ export const uploadToYouTube = async ({
 
   if (!uploadUrl) {
     uploadUrl = await initYouTubeSession(youtube, fileSize, {
-      snippet: { title, description, tags: ["SocialStudio"], categoryId: "22" },
+      snippet: { title, description, tags: ["Directly"], categoryId: "22" },
       status: { privacyStatus: privacy, selfDeclaredMadeForKids: false },
     });
   }

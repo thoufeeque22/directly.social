@@ -7,7 +7,7 @@ This script verifies two core pieces of functionality:
 
 ## Prerequisites
 - The application must be running in a local development environment.
-- The E2E test user (`tester@socialstudio.ai`) must exist in the database.
+- The E2E test user (`tester@directly.social`) must exist in the database.
 - A clean database state is recommended for the template management tests.
 
 ## Scenario 1: E2E Authentication and Session Reuse

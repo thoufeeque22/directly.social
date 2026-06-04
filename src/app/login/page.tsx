@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { LoginContent } from './LoginContent';
 
 export const metadata: Metadata = {
-  title: "Login | SocialStudio",
+  title: "Login | Directly",
 };
 
 export default function LoginPage() {

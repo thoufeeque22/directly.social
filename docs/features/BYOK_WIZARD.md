@@ -1,10 +1,10 @@
 # Platform BYOK Integration Wizard
 
-The BYOK (Bring Your Own Key) Integration Wizard empowers power users and developers to use their own platform-specific API credentials (e.g., YouTube Client ID, TikTok Client Secret) within Social Studio.
+The BYOK (Bring Your Own Key) Integration Wizard empowers power users and developers to use their own platform-specific API credentials (e.g., YouTube Client ID, TikTok Client Secret) within Directly.
 
 ## Overview
 
-By default, Social Studio uses its own managed API keys to facilitate uploads. However, these shared keys are subject to global rate limits. The BYOK feature allows users to "Bring Their Own Key" to:
+By default, Directly uses its own managed API keys to facilitate uploads. However, these shared keys are subject to global rate limits. The BYOK feature allows users to "Bring Their Own Key" to:
 - **Bypass Global Rate Limits:** Use your own project's quota.
 - **Enhanced Privacy:** Maintain full control over your API credentials.
 - **Developer Flexibility:** Test integrations with personal developer accounts.
@@ -60,5 +60,5 @@ To ensure both security and cross-device availability, BYOK credentials are stor
 ## Benefits for Power Users
 
 - **High Throughput:** Ideal for users uploading dozens of videos daily who need their own dedicated quota.
-- **Custom Branding:** OAuth consent screens will show the user's own application name instead of Social Studio.
+- **Custom Branding:** OAuth consent screens will show the user's own application name instead of Directly.
 - **Zero-Cost Scaling:** Leverage personal or business API tiers without application-level restrictions.

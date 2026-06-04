@@ -1,6 +1,6 @@
 # Manual Mode AI Enhancement (Polish with AI)
 
-Social Studio provides multiple AI tiers for drafting post metadata: Manual, Enrich, and Generate. The **Manual Mode AI Enhancement** feature introduces an in-context upgrade path from the Manual drafting workflow directly to the Enrich AI workflow.
+Directly provides multiple AI tiers for drafting post metadata: Manual, Enrich, and Generate. The **Manual Mode AI Enhancement** feature introduces an in-context upgrade path from the Manual drafting workflow directly to the Enrich AI workflow.
 
 ## Overview
 

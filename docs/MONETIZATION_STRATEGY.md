@@ -1,6 +1,6 @@
-# SocialStudio: Monetization & Business Strategy (2025)
+# Directly: Monetization & Business Strategy (2025)
 
-Strategic roadmap for turning the SocialStudio open-source core into a sustainable business.
+Strategic roadmap for turning the Directly open-source core into a sustainable business.
 
 ## 💰 Monetization Models
 
@@ -18,8 +18,8 @@ Monetize the expensive AI computing needed for the "Magic" features.
 *   **Monetization:** Pay-per-use credits. (e.g., 50 Magic-Credits for $10).
 
 ### 3. Managed SaaS (Convenience Tier)
-For creators who want the power of SocialStudio without the setup of a local development environment.
-*   **The Offer:** A hosted version of the dashboard where SocialStudio manages the servers, security, and updates.
+For creators who want the power of Directly without the setup of a local development environment.
+*   **The Offer:** A hosted version of the dashboard where Directly manages the servers, security, and updates.
 *   **Target:** Professional creators who value their time over technical setup.
 *   **Estimated Price:** $19/mo.
 
@@ -49,7 +49,7 @@ Meta and TikTok API credentials can be difficult for non-technical users to conf
 ---
 
 ## 🎯 Competitive Edge
-SocialStudio wins by being:
+Directly wins by being:
 1.  **Privacy-First:** Content stays on user disk until the moment of upload.
 2.  **Native-First:** Direct API calls mean faster uploads and higher quality than "cloud middleware" tools.
 3.  **Self-Owned:** A permanent tool in the creator's stack, not just another subscription.

@@ -1,7 +1,7 @@
 # AI Chatbot Feature
 
 ## Overview
-The AI Chatbot introduces an intelligent, conversational interface into Social Studio, enabling users to effortlessly manage their content, explore staged media, and schedule video distribution via natural language commands. The chatbot appears as a Floating Action Button (FAB) in the bottom-right corner and opens a glassmorphism chat interface.
+The AI Chatbot introduces an intelligent, conversational interface into Directly, enabling users to effortlessly manage their content, explore staged media, and schedule video distribution via natural language commands. The chatbot appears as a Floating Action Button (FAB) in the bottom-right corner and opens a glassmorphism chat interface.
 
 ## Core Capabilities
 The assistant leverages tool-calling capabilities provided by the Vercel AI SDK to perform several discrete actions:

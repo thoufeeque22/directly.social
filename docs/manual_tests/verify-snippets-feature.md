@@ -3,7 +3,7 @@
 This test verifies the ability to save, reuse, and manage reusable description snippets (e.g., bio links, credits).
 
 ## Prerequisites
-- User: `tester@socialstudio.ai`
+- User: `tester@directly.social`
 - Environment: Local development server (`npm run dev`)
 - Platform Access: `local1` and `local2` enabled.
 
@@ -11,7 +11,7 @@ This test verifies the ability to save, reuse, and manage reusable description s
 
 ### 1. Creating a New Snippet
 1.  **Navigate** to the Dashboard (`/`).
-2.  **Type** "This is my standard link in bio: https://socialstudio.ai" into the Description field.
+2.  **Type** "This is my standard link in bio: https://directly.social" into the Description field.
 3.  **Click** the **Snippets** button (bookmark icon) next to the Description label.
 4.  **Click** **Save Current as Snippet**.
 5.  **Enter** "Bio Link" as the snippet name.

@@ -7,7 +7,7 @@ describe('OpenAPI API Route', () => {
     const data = await response.json();
 
     expect(data.openapi).toBe('3.0.0');
-    expect(data.info.title).toBe('Social Studio API');
+    expect(data.info.title).toBe('Directly API');
     expect(data.paths['/upload/init']).toBeDefined();
     expect(data.paths['/ai/validate-key']).toBeDefined();
     expect(data.paths['/chat']).toBeDefined();

@@ -14,7 +14,7 @@ setup('authenticate', async ({ page }) => {
   await expect(emailInput).toBeVisible();
 
   // Perform login
-  const testEmail = 'tester@socialstudio.ai';
+  const testEmail = 'tester@directly.social';
   const testPassword = process.env.E2E_TEST_PASSWORD;
   
   if (!testPassword) {

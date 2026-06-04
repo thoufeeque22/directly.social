@@ -10,7 +10,7 @@
 
 ## 2. API Architecture
 
-Social Studio utilizes a hybrid API architecture consisting of Next.js Route Handlers and Server Actions.
+Directly utilizes a hybrid API architecture consisting of Next.js Route Handlers and Server Actions.
 
 ### Route Handlers vs. Server Actions
 

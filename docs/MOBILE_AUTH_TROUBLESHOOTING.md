@@ -15,7 +15,7 @@ In a "Remote Shell" architecture, the app's WebView (the app) and the System Bro
 - **Issue**: Google blocked the login with a "disallowed_useragent" error.
 - **Root Cause**: Google blocks OAuth requests from within embedded WebViews (like Capacitor's default view) for security.
 - **Fix**: **The "Secret Handshake" + Native Browser**. 
-  - Added a custom User-Agent (`SocialStudioApp`) in `capacitor.config.ts`.
+  - Added a custom User-Agent (`DirectlyApp`) in `capacitor.config.ts`.
   - Updated the login page to detect this string and use `@capacitor/browser` to open the login flow in the **System Browser** (Chrome/Safari) instead of the app's internal view.
 
 

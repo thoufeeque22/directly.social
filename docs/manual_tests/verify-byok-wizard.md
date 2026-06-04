@@ -4,14 +4,14 @@ This test plan verifies the functionality, validation, and persistence of the Pl
 
 ## Prerequisites
 
-1. Access to the Social Studio application (development or staging).
+1. Access to the Directly application (development or staging).
 2. A valid platform developer account (e.g., Google Cloud Console for YouTube) or mock credentials for testing validation.
 
 ## Test Cases
 
 ### 1. Navigation and Initial State
 - **Steps:**
-  1. Log in to Social Studio.
+  1. Log in to Directly.
   2. Navigate to **Settings**.
   3. Ensure the **Destinations** tab is active.
   4. Find a platform (e.g., YouTube) and toggle it to **Enabled**.
@@ -54,7 +54,7 @@ This test plan verifies the functionality, validation, and persistence of the Pl
 - **Steps:**
   1. Enter "valid" for Client ID.
   2. Enter any value for Client Secret.
-  3. Enter `https://socialstudio.ai/api/auth/callback/youtube` for Redirect URI.
+  3. Enter `https://directly.social/api/auth/callback/youtube` for Redirect URI.
   4. Click **Validate & Save Credentials**.
 - **Expected Results:**
   - A loading spinner should appear inside the button.

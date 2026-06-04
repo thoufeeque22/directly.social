@@ -10,19 +10,7 @@ import { useSearchParams } from 'next/navigation';
 
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import LockIcon from '@mui/icons-material/Lock';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import CloseIcon from '@mui/icons-material/Close';
-
-import { IntegrationsStrip } from '@/components/login/IntegrationsStrip';
-import { PhilosophySection } from '@/components/login/PhilosophySection';
-import { FeaturesSection } from '@/components/login/FeaturesSection';
-import { DashboardMockup } from '@/components/login/DashboardMockup';
-import { WorkflowSection } from '@/components/login/WorkflowSection';
-import { FAQSection } from '@/components/login/FAQSection';
-import { Footer } from '@/components/layout/Footer';
 
 type AuthProvider = 'google' | 'facebook' | 'tiktok';
 
@@ -42,7 +30,7 @@ export function LoginContent() {
   }, [searchParams]);
 
   const startNativeLogin = async (provider: string) => {
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://social-studio-app.vercel.app';
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://directly.social';
     const bridgeUrl = `${baseUrl}/login?bridge=true&provider=${provider}&native=true`;
 
     console.log(`[Auth] Opening native bridge for ${provider}:`, bridgeUrl);
@@ -58,7 +46,7 @@ export function LoginContent() {
   const handleLoginClick = async (provider: AuthProvider) => {
     const isNative = typeof window !== 'undefined' && 
                      Capacitor.getPlatform() !== 'web' &&
-                     (Capacitor.isNativePlatform() || navigator.userAgent.includes('SocialStudioApp'));
+                     (Capacitor.isNativePlatform() || navigator.userAgent.includes('DirectlyApp'));
 
     if (isNative) {
       await startNativeLogin(provider);
@@ -115,7 +103,7 @@ export function LoginContent() {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       {showWarning && (
         <div className={styles.overlay} onClick={() => setShowWarning(false)}>
           <div className={styles.warningModal} onClick={(e) => e.stopPropagation()}>
@@ -142,7 +130,7 @@ export function LoginContent() {
                 onClick={async () => {
                   const isNative = typeof window !== 'undefined' && 
                                    Capacitor.getPlatform() !== 'web' &&
-                                   (Capacitor.isNativePlatform() || navigator.userAgent.includes('SocialStudioApp'));
+                                   (Capacitor.isNativePlatform() || navigator.userAgent.includes('DirectlyApp'));
                   setShowWarning(false);
                   if (isNative) {
                     await startNativeLogin('google');
@@ -164,146 +152,79 @@ export function LoginContent() {
         </div>
       )}
 
-      <div className={styles.heroWrapper}>
-        <div className={styles.contentWrapper}>
-          <section className={styles.heroFeatureSection}>
-            <div className={styles.heroContent}>
-              <h1 className={styles.heroTitle}>
-                Automate your <br />
-                Social presence.
-              </h1>
-              <p className={styles.heroSubtitle}>
-                One-click distribution to TikTok, Instagram, and YouTube Shorts without the automation fees.
-              </p>
-            </div>
-
-            <div className={styles.featureList}>
-              <div className={styles.featureItem}>
-                <div className={styles.featureIcon}>
-                  <RocketLaunchIcon sx={{ fontSize: 24, color: 'hsl(var(--primary))' }} />
-                </div>
-                <div className={styles.featureText}>
-                  <span className={styles.featureTitle}>Native Publishing</span>
-                  <span className={styles.featureDesc}>Direct API hooks for maximum reliability and speed.</span>
-                </div>
-              </div>
-
-              <div className={styles.featureItem}>
-                <div className={styles.featureIcon}>
-                  <WorkspacePremiumIcon sx={{ fontSize: 24, color: 'hsl(var(--primary))' }} />
-                </div>
-                <div className={styles.featureText}>
-                  <span className={styles.featureTitle}>Zero Maintenance</span>
-                  <span className={styles.featureDesc}>No need for complex n8n or Zapier workflows.</span>
-                </div>
-              </div>
-
-              <div className={styles.featureItem}>
-                <div className={styles.featureIcon}>
-                  <BarChartIcon sx={{ fontSize: 24, color: 'hsl(var(--primary))' }} />
-                </div>
-                <div className={styles.featureText}>
-                  <span className={styles.featureTitle}>Unified Analytics</span>
-                  <span className={styles.featureDesc}>Track performance across all platforms in one view.</span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <div className={styles.loginCard}>
-            <div className={styles.header}>
-              <div className={styles.logo}>
-                <AutoAwesomeIcon sx={{ fontSize: 48, color: 'hsl(var(--primary))' }} />
-              </div>
-              <h1 className={styles.title}>Social Studio</h1>
-              <p className={styles.subtitle}>Sign in to manage your automated distribution.</p>
-            </div>
-
-            <div className={styles.buttonGroup}>
-              <button 
-                onClick={() => handleLoginClick("google")}
-                className={`${styles.loginBtn} ${styles.googleBtn}`}
-              >
-                <span className={styles.btnIcon}>G</span>
-                Continue with Google
-              </button>
-
-              <button 
-                onClick={() => handleLoginClick("facebook")}
-                className={`${styles.loginBtn} ${styles.facebookBtn}`}
-              >
-                <span className={styles.btnIcon}>f</span>
-                Continue with Facebook
-              </button>
-
-              <button 
-                onClick={() => handleLoginClick("tiktok")}
-                className={`${styles.loginBtn} ${styles.tiktokBtn}`}
-              >
-                <span className={styles.btnIcon}>d</span>
-                Continue with TikTok
-              </button>
-            </div>
-
-            {process.env.NEXT_PUBLIC_E2E === 'true' && (
-              <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid hsla(var(--border)/0.5)' }}>
-                <h3 style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'hsl(var(--muted-foreground))', marginBottom: '1rem', letterSpacing: '0.05em' }}>E2E Test Login</h3>
-                <form onSubmit={handleE2ELogin} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    <input 
-                      name="email" 
-                      type="email" 
-                      placeholder="Test Email" 
-                      defaultValue="tester@socialstudio.ai"
-                      required
-                      data-testid="e2e-email-input"
-                      style={{ background: 'hsla(var(--muted)/0.3)', border: '1px solid hsla(var(--border)/0.5)', padding: '0.75rem', borderRadius: '0.5rem', color: 'hsl(var(--foreground))' }}
-                    />
-                    <input 
-                      name="password" 
-                      type="password" 
-                      placeholder="Test Password" 
-                      required
-                      data-testid="e2e-password-input"
-                      style={{ background: 'hsla(var(--muted)/0.3)', border: '1px solid hsla(var(--border)/0.5)', padding: '0.75rem', borderRadius: '0.5rem', color: 'hsl(var(--foreground))' }}
-                    />
-                    <button 
-                      type="submit"
-                      data-testid="e2e-login-submit"
-                      style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontWeight: 600, cursor: 'pointer' }}
-                    >
-                      Authenticate Tester
-                    </button>
-                </form>
-              </div>
-            )}
-
-            <div className={styles.footer}>
-              By continuing, you agree to our 
-              <br />
-              <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-            </div>
-
-            <div className={styles.linkingTip}>
-              <span className={styles.tipIcon}>
-                <LightbulbIcon sx={{ fontSize: 20, color: 'hsl(var(--primary))' }} />
-              </span>
-              <div className={styles.tipContent}>
-                <strong>One Dashboard for All Platforms</strong>
-                To manage all your platforms in one place, log in with a primary method first, then connect others in <strong>Settings</strong>.
-              </div>
-            </div>
+      <div className={styles.loginCard} style={{ margin: '0 auto' }}>
+        <div className={styles.header}>
+          <div className={styles.logo}>
+            <AutoAwesomeIcon sx={{ fontSize: 48, color: 'hsl(var(--primary))' }} />
           </div>
+          <h1 className={styles.title}>directly.social</h1>
+          <p className={styles.subtitle}>Sign in to manage your automated distribution.</p>
         </div>
 
-        <DashboardMockup />
-      </div>
+        <div className={styles.buttonGroup}>
+          <button 
+            onClick={() => handleLoginClick("google")}
+            className={`${styles.loginBtn} ${styles.googleBtn}`}
+          >
+            <span className={styles.btnIcon}>G</span>
+            Continue with Google
+          </button>
 
-      <IntegrationsStrip />
-      <WorkflowSection />
-      <FeaturesSection />
-      <PhilosophySection />
-      <FAQSection />
-      <Footer />
+          <button 
+            onClick={() => handleLoginClick("facebook")}
+            className={`${styles.loginBtn} ${styles.facebookBtn}`}
+          >
+            <span className={styles.btnIcon}>f</span>
+            Continue with Facebook
+          </button>
+
+          <button 
+            onClick={() => handleLoginClick("tiktok")}
+            className={`${styles.loginBtn} ${styles.tiktokBtn}`}
+          >
+            <span className={styles.btnIcon}>d</span>
+            Continue with TikTok
+          </button>
+        </div>
+
+        {process.env.NEXT_PUBLIC_E2E === 'true' && (
+          <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid hsla(var(--border)/0.5)' }}>
+            <h3 style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'hsl(var(--muted-foreground))', marginBottom: '1rem', letterSpacing: '0.05em' }}>E2E Test Login</h3>
+            <form onSubmit={handleE2ELogin} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <input 
+                  name="email" 
+                  type="email" 
+                  placeholder="Test Email" 
+                  defaultValue="tester@directly.social"
+                  required
+                  data-testid="e2e-email-input"
+                  style={{ background: 'hsla(var(--muted)/0.3)', border: '1px solid hsla(var(--border)/0.5)', padding: '0.75rem', borderRadius: '0.5rem', color: 'hsl(var(--foreground))' }}
+                />
+                <input 
+                  name="password" 
+                  type="password" 
+                  placeholder="Test Password" 
+                  required
+                  data-testid="e2e-password-input"
+                  style={{ background: 'hsla(var(--muted)/0.3)', border: '1px solid hsla(var(--border)/0.5)', padding: '0.75rem', borderRadius: '0.5rem', color: 'hsl(var(--foreground))' }}
+                />
+                <button 
+                  type="submit"
+                  data-testid="e2e-login-submit"
+                  style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontWeight: 600, cursor: 'pointer' }}
+                >
+                  Authenticate Tester
+                </button>
+            </form>
+          </div>
+        )}
+
+        <div className={styles.footer}>
+          By continuing, you agree to our 
+          <br />
+          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+        </div>
+      </div>
     </div>
   );
 }

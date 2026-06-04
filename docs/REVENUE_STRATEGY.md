@@ -1,4 +1,4 @@
-# Social Studio: Scaling & Revenue Strategy
+# Directly: Scaling & Revenue Strategy
 
 ## Part 1: Technical Scaling (Handling Public Load)
 When transitioning from local development to a public app, you must protect your infrastructure and your wallet from API abuse.
@@ -22,28 +22,28 @@ To get users through the door, you must completely remove the friction of adopti
 
 ### Phase 2: Finding Your Early Adopters
 Don't run paid ads yet. Target people who are actively frustrated.
-* **"Eat Your Own Dog Food":** Build a TikTok/Reels presence documenting the building of Social Studio, and use Social Studio to publish those videos! 
+* **"Eat Your Own Dog Food":** Build a TikTok/Reels presence documenting the building of Directly, and use Directly to publish those videos! 
 * **Product Hunt Launch:** Position the app as the "AI-Native, affordable alternative to Metricool & Buffer."
 * **Direct Outreach:** Search Twitter/X and Reddit for creators complaining about how expensive or clunky existing social media schedulers are, and offer them lifetime free access in exchange for beta feedback.
 
-### Phase 3: The Subscription Tiers
-Keep pricing simple and highly competitive against legacy tools.
+### Phase 3: The Subscription Tiers (Disruptive Pricing)
+With competitors like Buffer charging $30/mo for 5 channels, Directly wins by offering a flat-rate, high-volume model enabled by **BYOK** and **BYOS**.
 
-**1. Starter / Creator ($9 - $12 / month)**
-* Target: Solo YouTubers and TikTokers.
-* Up to 5 social connections.
-* Unlimited manual posting.
-* ~50 AI Auto-Scans per month.
+**1. Creator Pro ($7 / month)**
+*   **Target:** Solo YouTubers and TikTokers.
+*   **Capacity:** Up to 10 social connections (2x Buffer for 25% of the price).
+*   **The "Bring Your Own" Advantage:** Unlimited AI use via **BYOK** and unlimited media storage via **BYOS** (Google Drive/S3/Local).
+*   **Message:** "All your channels for the price of ONE Buffer channel."
 
-**2. Pro / Agency ($29 - $39 / month)**
-* Target: Freelancers managing social media for small businesses.
-* Up to 15 social connections (enough for 3-4 clients).
-* Unlimited AI generation.
-* Priority support.
+**2. Agency / Business ($24 - $29 / month)**
+*   **Target:** Freelancers managing social media for multiple clients.
+*   **Capacity:** Unlimited social connections.
+*   **Managed Services:** Includes a base pool of platform-provided AI credits and managed cloud storage for those who don't want to set up their own.
+*   **Team Access:** Up to 5 team members with role-based permissions.
 
-### Phase 4: The Alternative "Lifetime Deal" (LTD)
+### Phase 4: The "Subscription Killer" Lifetime Deal (LTD)
 Many creators suffer from "subscription fatigue". You can offer a massive win-win:
-* **$99 One-Time Payment + BYOK (Bring Your Own Key)**
-* Users pay you $99 once for lifetime access to the software.
-* They plug in their *own* Gemini API key.
-* **Why it works:** You get an instant injection of cash to fund development, and because they are paying for their own API usage, they cost you absolutely $0 to maintain forever.
+*   **$89 One-Time Payment + BYOK/BYOS**
+*   **The Offer:** Lifetime access to the Directly desktop/web portal.
+*   **Zero Marginal Cost:** Users plug in their *own* Gemini API key and *own* storage (S3/GDrive).
+*   **Why it works:** You get an instant injection of cash (LTDs are magnets for early adopters), and because the user handles their own API and storage costs, they cost you $0/mo to maintain. This is your primary weapon against legacy SaaS tools.

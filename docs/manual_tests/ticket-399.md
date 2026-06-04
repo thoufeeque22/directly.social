@@ -4,7 +4,7 @@
 
 ## Pre-requisites
 1. Application is running.
-2. User is logged in to Social Studio.
+2. User is logged in to Directly.
 
 ## Test Cases
 
@@ -37,7 +37,7 @@ The "Support" link is clearly visible in the sidebar navigation.
 **Expected Result:**
 - The heading "Support & Help" is visible.
 - The "Email Support" button is visible.
-- Clicking the "Email Support" button opens the default email client with the `to:` field set to `support@socialstudio.app`.
+- Clicking the "Email Support" button opens the default email client with the `to:` field set to `support@directly.social`.
 
 ### Scenario 4: Verify FAQs Section
 **Steps:**

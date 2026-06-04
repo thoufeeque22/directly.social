@@ -31,7 +31,7 @@ test.describe('Support Tab (Ticket 399)', () => {
     // Verify the "Email Support" button
     const emailSupportBtn = page.getByRole('link', { name: 'Email Support' });
     await expect(emailSupportBtn).toBeVisible();
-    await expect(emailSupportBtn).toHaveAttribute('href', 'mailto:support@socialstudio.app');
+    await expect(emailSupportBtn).toHaveAttribute('href', 'mailto:support@directly.social');
 
     // Verify Frequently Asked Questions are present
     await expect(page.getByRole('heading', { name: 'Frequently Asked Questions' })).toBeVisible();
