@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'out',
   server: {
     // IMPORTANT: Defaults to production. Use CAPACITOR_URL env var for local/tunnel testing.
-    url: process.env.CAPACITOR_URL || 'https://directly.social.vercel.app',
+    url: process.env.CAPACITOR_URL || 'https://directly-social.vercel.app',
     cleartext: true,
     allowNavigation: ['*']
   },
