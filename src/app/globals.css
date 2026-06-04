@@ -70,7 +70,7 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  height: 100%;
+  height: 100dvh;
   -webkit-text-size-adjust: 100%;
   overscroll-behavior-y: none;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -83,6 +83,7 @@ body {
 body {
   color: hsl(var(--foreground));
   background: hsl(var(--background));
+  height: 100dvh;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -191,7 +192,7 @@ a {
 /* Layout Styles */
 .layout-wrapper {
   display: flex;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .main-content {

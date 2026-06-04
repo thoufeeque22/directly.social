@@ -99,4 +99,21 @@ The application uses a unified 3-way toggle (Light, Dark, System) for theme mana
 - **State Management:** The `ThemeContextProvider` manages the active theme, applying `dark` or `light` classes to the `html` element based on user preference or OS-level `prefers-color-scheme`.
 - **CSS Variables:** All components must use theme-aware CSS variables (e.g., `var(--background)`, `var(--card)`, `var(--text-primary)`) rather than hardcoded hex values to ensure visual consistency across both modes.
 - **Persistence:** Theme preferences are persisted locally via `localStorage` and synchronized with the database using Server Actions for cross-device consistency.
-- **Auth Boundary Policy (Login Screen):** The Login screen is fully theme-aware and aligns automatically with the system preference or previously saved local preference. To maintain a clean, high-conversion entry point, a manual theme toggle is intentionally omitted from the login view.
+- **Auth Boundary Policy:** To maintain a clean, high-conversion entry point, a manual theme toggle is intentionally omitted from the initial landing/login view.
+
+## 10. Landing Page & Authentication Boundary
+
+The entry point of the application has been transformed from a simple login screen into a comprehensive Landing Page that serves both as a high-conversion marketing surface and an authentication boundary.
+
+- **Dual-Purpose Layout:** The page combines marketing content (Tech Stack, Philosophy, Features) with a centralized authentication card.
+- **Theme Awareness:** The landing page is fully theme-aware and aligns automatically with the system preference or previously saved local preference.
+- **Scrollable Content:** Unlike the main application dashboard, the landing page is designed for intentional vertical scrolling to reveal deep technical and philosophical details.
+
+## 11. Global Footer Architecture
+
+A premium, multi-column global footer is implemented to provide platform-wide navigation, social links, and legal information.
+
+- **Structure:** Follows a 4-column layout (Brand, Navigation, Resources, Legal) on desktop, collapsing to a stacked layout on mobile.
+- **Theme Integration:** Uses semantic colors (`var(--text-secondary)`, `var(--background-alt)`) to ensure readability and visual integration across light and dark modes.
+- **Consistency:** The footer is shared across the landing page and public-facing routes, maintaining a consistent brand identity.
+
