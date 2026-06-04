@@ -62,13 +62,30 @@ async function main() {
 
   // Media Gallery Data
   const farFuture = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000);
+  const fileIds = ['grand_canyon_vlog.mp4', 'pasta_tutorial.mov', 'smartphone_unboxing.mp4'];
+  
   await prisma.galleryAsset.createMany({
-    data: [
-      { userId: user.id, fileId: 'grand_canyon_vlog.mp4', fileName: 'grand_canyon_vlog.mp4', expiresAt: farFuture },
-      { userId: user.id, fileId: 'pasta_tutorial.mov', fileName: 'pasta_tutorial.mov', expiresAt: farFuture },
-      { userId: user.id, fileId: 'smartphone_unboxing.mp4', fileName: 'smartphone_unboxing.mp4', expiresAt: farFuture },
-    ]
+    data: fileIds.map(fileId => ({
+      userId: user.id,
+      fileId,
+      fileName: fileId,
+      expiresAt: farFuture
+    }))
   });
+
+  // Create dummy physical files to satisfy AuditService
+  const fs = await import('fs');
+  const path = await import('path');
+  const tempDir = path.join(process.cwd(), "tmp");
+  if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true });
+
+  for (const fileId of fileIds) {
+    const filePath = path.join(tempDir, fileId);
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, Buffer.from('dummy-e2e-content'));
+      console.log(`Created dummy file: ${filePath}`);
+    }
+  }
 
   await prisma.postActivity.upsert({
     where: { id: 'e2e-post-1' },
