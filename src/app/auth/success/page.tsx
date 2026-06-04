@@ -61,7 +61,7 @@ export default function AuthSuccessPage() {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      height: '100vh',
+      height: '100dvh',
       backgroundColor: '#0F172A',
       color: 'white',
       fontFamily: 'sans-serif',
