@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/core/prisma";
 import path from "path";
 import { existsSync, promises as fs } from "fs";
-import { logger } from "@/lib/core/logger";
+import { workerLogger as logger } from "@/lib/core/logger";
 
 const getTempDir = () => {
   const base = process.env.UPLOAD_TEMP_DIR || path.join(/*turbopackIgnore: true*/ process.cwd(), "tmp");

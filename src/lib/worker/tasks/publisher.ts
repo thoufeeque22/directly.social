@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/core/prisma";
-import { logger } from "@/lib/core/logger";
+import { workerLogger as logger } from "@/lib/core/logger";
 import * as Sentry from "@sentry/nextjs";
 import path from "path";
 import { readFileSync, existsSync } from "fs";

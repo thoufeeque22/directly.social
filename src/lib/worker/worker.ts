@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/core/prisma";
 import * as Sentry from "@sentry/nextjs";
-import { logger } from "@/lib/core/logger";
+import { workerLogger as logger } from "@/lib/core/logger";
 import { AuditService } from "@/lib/services/audit-service";
 import { purgeExpiredAssets } from "./tasks/cleanup";
 import { processPendingPosts } from "./tasks/publisher";
