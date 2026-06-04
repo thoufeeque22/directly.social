@@ -245,7 +245,7 @@ export function LoginContent() {
                     defaultValue="tester@socialstudio.ai"
                     required
                     data-testid="e2e-email-input"
-                    style={{ background: 'hsla(var(--muted)/0.3)', border: '1px solid hsla(var(--border)/0.5)', padding: '0.75rem', borderRadius: '0.5rem', color: 'white' }}
+                    style={{ background: 'hsla(var(--muted)/0.3)', border: '1px solid hsla(var(--border)/0.5)', padding: '0.75rem', borderRadius: '0.5rem', color: 'hsl(var(--foreground))' }}
                   />
                   <input 
                     name="password" 
@@ -253,12 +253,12 @@ export function LoginContent() {
                     placeholder="Test Password" 
                     required
                     data-testid="e2e-password-input"
-                    style={{ background: 'hsla(var(--muted)/0.3)', border: '1px solid hsla(var(--border)/0.5)', padding: '0.75rem', borderRadius: '0.5rem', color: 'white' }}
+                    style={{ background: 'hsla(var(--muted)/0.3)', border: '1px solid hsla(var(--border)/0.5)', padding: '0.75rem', borderRadius: '0.5rem', color: 'hsl(var(--foreground))' }}
                   />
                   <button 
                     type="submit"
                     data-testid="e2e-login-submit"
-                    style={{ background: 'hsl(var(--primary))', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontWeight: 600, cursor: 'pointer' }}
+                    style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontWeight: 600, cursor: 'pointer' }}
                   >
                     Authenticate Tester
                   </button>

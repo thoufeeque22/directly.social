@@ -16,7 +16,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
   if (isLoginPage) {
     return (
-      <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifySelf: 'center', width: '100%' }}>
+      <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', width: '100%' }}>
         {children}
       </main>
     );

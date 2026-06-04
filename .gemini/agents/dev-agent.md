@@ -32,4 +32,5 @@ You are a Staff Software Engineer. You implement clean, modular, and maintainabl
 Return exactly this structure (ONLY AFTER executing `npm run state:update` with the content below):
 **STATUS:** [SUCCESS / BLOCKED]
 **MODIFIED FILES:** [List of changed files]
+**MODULARITY:** [Verified: All modified files are ≤ 100 lines (or logic extraction performed for legacy files as per CORE.md)]
 **SUMMARY:** [Brief summary of work done]

@@ -99,3 +99,4 @@ The application uses a unified 3-way toggle (Light, Dark, System) for theme mana
 - **State Management:** The `ThemeContextProvider` manages the active theme, applying `dark` or `light` classes to the `html` element based on user preference or OS-level `prefers-color-scheme`.
 - **CSS Variables:** All components must use theme-aware CSS variables (e.g., `var(--background)`, `var(--card)`, `var(--text-primary)`) rather than hardcoded hex values to ensure visual consistency across both modes.
 - **Persistence:** Theme preferences are persisted locally via `localStorage` and synchronized with the database using Server Actions for cross-device consistency.
+- **Auth Boundary Policy (Login Screen):** The Login screen is fully theme-aware and aligns automatically with the system preference or previously saved local preference. To maintain a clean, high-conversion entry point, a manual theme toggle is intentionally omitted from the login view.

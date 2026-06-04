@@ -2,7 +2,7 @@
 ticket_id: 639
 branch_name: feature/639-login-ui-audit
 goal: Resolve theme mismatch on login screen and analyze industry standards for theme toggling.
-status: project
+status: done
 current_round: 1
 ---
 
