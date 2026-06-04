@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: [
     "khalilah-spritelike-flossily.ngrok-free.dev",
     "*.trycloudflare.com",
-    "directly.duckdns.org",
+    "direcly-social.duckdns.org",
     "roohis-mac.tail8a2e7d.ts.net"
   ],
   experimental: {
