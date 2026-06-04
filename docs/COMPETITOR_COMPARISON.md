@@ -4,16 +4,29 @@ Detailed analysis of the "One-Click Multi-Platform" landscape, focusing on video
 
 ## 📊 Comparison Matrix
 
-| Player | Target Audience | Key Platforms | Popularity / Scale | Key Limitation | Pricing (Approx.) |
+| Player | Target Audience | Website | Popularity / Scale | Key Limitation | Pricing |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Metricool** | Data Agencies | IG, FB, LI, X, TT, YT, TW | 2M+ Professionals | Rigid media management | Free - $22/mo+ |
-| **Publer** | Budget/High-Vol | FB, IG, TT, X, LI, Pin, YT | 500k+ Registered | UI Clutter / API Glitches | Free - $12/mo+ |
-| **Buffer** | Solopreneurs | IG, FB, X, LI, Pin, TT, YT | 190k+ Active Users | Video is just "another file" | Free - $6/channel |
-| **VistaSocial** | Agencies | IG, FB, TT, LI, X, YT, Threads | Top-Rated (Agency scale) | Steep learning curve | $15/profile |
-| **SocialBee** | Evergreen | IG, FB, X, LI, Pin, TT, Threads | 15k+ Brands / Niche | No unified engagement inbox | $29/mo+ |
-| **Ocoya** | AI-First | FB, IG, LI, X, TT, Pin, YT | Niche / AI-Growth | Platform stability issues | $15/mo+ |
-| **ShortSync** | Video Specialists | TT, IG, YT | Emerging (Video-Niche) | No text/image support | $15/month flat |
-| **SocialStudio** | Native Creators | IG, TT, FB, YT | Stealth / MVP | Early Stage / Custom Setup | Free (Self-Owned) |
+| **Metricool** | Data Agencies | [metricool.com](https://metricool.com) | 2M+ Professionals | Rigid media management | Free - $22/mo+ |
+| **Publer** | Budget/High-Vol | [publer.io](https://publer.io) | 500k+ Registered | UI Clutter / API Glitches | Free - $12/mo+ |
+| **Buffer** | Solopreneurs | [buffer.com](https://buffer.com) | 190k+ Active Users | Video is just "another file" | Free - $6/channel |
+| **VistaSocial** | Agencies | [vistasocial.com](https://vistasocial.com) | Top-Rated (Agency scale) | Steep learning curve | $15/profile |
+| **SocialBee** | Evergreen | [socialbee.com](https://socialbee.com) | 15k+ Brands / Niche | No unified engagement inbox | $29/mo+ |
+| **Ocoya** | AI-First | [ocoya.com](https://ocoya.com) | Niche / AI-Growth | Platform stability issues | $15/mo+ |
+| **ShortSync** | Video Specialists | [shortsync.app](https://shortsync.app) | Emerging (Video-Niche) | No text/image support | $15/month flat |
+| **SocialStudio** | Native Creators | [socialstudio.dev](https://socialstudio.dev) | Stealth / MVP | Early Stage / Custom Setup | Free (Self-Owned) |
+
+---
+
+## 🔓 Open-Source & Self-Hosted Alternatives
+
+For developers and privacy-conscious users who prefer public repositories and self-hosting over commercial SaaS.
+
+| Project | GitHub Repo | Website | Focus | Key Advantage |
+| :--- | :--- | :--- | :--- | :--- |
+| **Postiz** | [gitroomhq/postiz-app](https://github.com/gitroomhq/postiz-app) | [postiz.com](https://postiz.com) | AI-Agentic / Multi-Platform | Most popular open-source social tool in 2025. |
+| **Mixpost** | [inovector/mixpost](https://github.com/inovector/mixpost) | [mixpost.app](https://mixpost.app) | Self-Hosted PHP/Laravel | Extremely clean, Pro-UI for self-hosters. |
+| **TryPost** | [trypostit/trypost](https://github.com/trypostit/trypost) | [trypost.it](https://trypost.it) | Buffer/Hootsuite Clone | Direct feature-for-feature open-source clone. |
+| **Socioboard** | [socioboard/Socioboard](https://github.com/socioboard/Socioboard-5.0) | [socioboard.com](https://socioboard.com) | Enterprise Grade | Scalable for large team distributions. |
 
 ---
 
