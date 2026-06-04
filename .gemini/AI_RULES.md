@@ -17,7 +17,8 @@ To ensure production-level stability and prevent build failures or linting warni
 ### 2. Modern React & Next.js Conventions
 - **React 19 / Next.js 15 Forms:** Use `action={...}` passing `FormData` instead of the legacy `onSubmit={...}` paired with `React.FormEvent`.
 - **Client/Server boundaries:** Ensure `'use client'` is only used when hooks (`useState`, `useEffect`) or browser APIs are required.
-- Do not use `window` for global variables; use `globalThis` instead to avoid SSR hydration errors.
+- **Hydration & Storage:** Do not use `window` for global variables; use `globalThis` instead. **NEVER** read from `localStorage` or `sessionStorage` in a `useState` initializer or directly in the component body during render. Always use a `useEffect` hook to synchronize state with browser storage after the initial client-side mount to avoid SSR hydration mismatches.
+
 
 ### 3. Strict Accessibility (A11y) Compliance
 - Follow `eslint-plugin-jsx-a11y` rules flawlessly.

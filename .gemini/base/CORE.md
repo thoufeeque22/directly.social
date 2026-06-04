@@ -19,6 +19,7 @@
 - **Component Composition:** Prefer composition over deep prop-drilling. Use React Context or state management (Zustand) when sharing data across non-adjacent components.
 - **Immutability:** Treat all state and props as immutable. Use functional updates (`setState(prev => ...)`) and array methods like `map`, `filter`, and `reduce` instead of mutations.
 - **Type Safety:** Handle `null`/`undefined` explicitly using optional chaining (`?.`) or type guards.
+- **Hydration Integrity:** NEVER initialize state from `localStorage`, `window`, or other browser-only APIs in the `useState` initializer. To prevent SSR hydration mismatches, always initialize with a default value and use `useEffect` to load data from browser storage after the initial mount.
 - **Functional Purity:** Keep components "pure". Extract business logic into custom hooks (`src/hooks/`) to separate side effects from rendering.
 - **Naming Conventions:**
   - **Components:** PascalCase (e.g., `UploadHud.tsx`).

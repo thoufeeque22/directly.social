@@ -9,30 +9,29 @@ export interface FormState {
 }
 
 export const useUploadFormState = () => {
-  const [form, setForm] = useState<FormState>(() => {
-    const base = {
-      title: '',
-      description: '',
-      platformTitles: {},
-      platformDescriptions: {},
-      isPlatformSpecific: false
-    };
+  const [form, setForm] = useState<FormState>({
+    title: '',
+    description: '',
+    platformTitles: {},
+    platformDescriptions: {},
+    isPlatformSpecific: false
+  });
 
-    if (typeof window === 'undefined') return base;
-
+  useEffect(() => {
     try {
-      return {
+      const saved = {
         title: localStorage.getItem('SS_DRAFT_TITLE') || '',
         description: localStorage.getItem('SS_DRAFT_DESC') || '',
         isPlatformSpecific: localStorage.getItem('SS_METADATA_SPECIFIC') === 'true',
         platformTitles: JSON.parse(localStorage.getItem('SS_PLATFORM_TITLES') || '{}'),
         platformDescriptions: JSON.parse(localStorage.getItem('SS_PLATFORM_DESCS') || '{}')
       };
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setForm(saved);
     } catch (e) {
       console.error("Failed to load metadata from localStorage", e);
-      return base;
     }
-  });
+  }, []);
 
   return { form, setForm };
 };
