@@ -8,7 +8,7 @@ set -e
 echo "🚀 Starting Directly.social Atomic Update..."
 
 # 1. Setup paths
-BASE_DIR="${DEPLOY_BASE_DIR:-$HOME/directly-app}"
+BASE_DIR="${DEPLOY_BASE_DIR:-$HOME/directly.social}"
 TIMESTAMP=$(date +%Y%m%d%H%M%S)
 RELEASE_DIR="$BASE_DIR/releases/$TIMESTAMP"
 CURRENT_DIR="$BASE_DIR/current"
@@ -21,7 +21,7 @@ echo "📂 Creating new release at $RELEASE_DIR..."
 # 2. Prepare new release directory
 # We clone from GitHub to ensure a clean state for the new release.
 echo "📥 Cloning from GitHub..."
-git clone --depth 1 --branch main https://github.com/thoufeeque22/directly-app.git "$RELEASE_DIR"
+git clone --depth 1 --branch main https://github.com/thoufeeque22/directly.social.git "$RELEASE_DIR"
 
 cd "$RELEASE_DIR"
 

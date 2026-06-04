@@ -19,7 +19,7 @@ Used for unified login and native YouTube Shorts publishing.
   - `profile`: For user details.
   - `https://www.googleapis.com/auth/youtube.upload`: **Critical** for direct video publishing.
 - **Redirect URIs**:
-  - `https://directly-app.vercel.app/api/auth/callback/google`
+  - `https://directly.social.vercel.app/api/auth/callback/google`
   - `http://localhost:3000/api/auth/callback/google` (Dev)
 
 ### 2. Facebook & Instagram
@@ -34,7 +34,7 @@ Used for Facebook Page posts and Instagram Reel distribution.
   - `instagram_basic`, `instagram_content_publish`: For Reels.
   - `pages_show_list`, `pages_read_engagement`, `pages_manage_posts`: For Page distribution.
 - **Redirect URIs**:
-  - `https://directly-app.vercel.app/api/auth/callback/facebook`
+  - `https://directly.social.vercel.app/api/auth/callback/facebook`
   - `http://localhost:3000/api/auth/callback/facebook` (Dev)
 
 ### 3. TikTok
@@ -49,7 +49,7 @@ Used for TikTok video publishing.
   - `user.info.basic`
   - `video.upload`, `video.publish`
 - **Redirect URIs**:
-  - `https://directly-app.vercel.app/api/auth/callback/tiktok`
+  - `https://directly.social.vercel.app/api/auth/callback/tiktok`
 
 ---
 

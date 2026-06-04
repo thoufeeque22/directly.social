@@ -28,7 +28,7 @@ Use this skill to create high-quality GitHub issues and automatically link them 
    - If critical info missing, ask 2-3 targeted questions.
 
 2. **Creation:**
-   - Use `mcp_github_create_issue` in `thoufeeque22/directly-app`.
+   - Use `mcp_github_create_issue` in `thoufeeque22/directly.social`.
    - Labels: `roadmap`, `bug`/`feature`.
 
 3. **Project Linking & Priority:**

@@ -64,21 +64,21 @@ sudo npm install -g pm2
 ## 4. Deploy the Code
 ```bash
 # Setup directory structure
-mkdir -p ~/directly-app/releases
-cd ~/directly-app
+mkdir -p ~/directly.social/releases
+cd ~/directly.social
 
 # Clone the repository for the first time
-git clone https://github.com/your-username/directly-app.git current
+git clone https://github.com/your-username/directly.social.git current
 
 # Transfer your .env and dev.db from your LOCAL Mac to the server
 # (Run this on your Mac terminal, not the server)
-# NOTE: The .env should live in the parent directory ~/directly-app/
+# NOTE: The .env should live in the parent directory ~/directly.social/
 # Example using your current key and IP:
-scp -i ~/Documents/keys/ssh-key-2026-04-23.key .env ubuntu@130.162.57.229:~/directly-app/.env
-scp -i ~/Documents/keys/ssh-key-2026-04-23.key prisma/dev.db ubuntu@130.162.57.229:~/directly-app/current/prisma/dev.db
+scp -i ~/Documents/keys/ssh-key-2026-04-23.key .env ubuntu@130.162.57.229:~/directly.social/.env
+scp -i ~/Documents/keys/ssh-key-2026-04-23.key prisma/dev.db ubuntu@130.162.57.229:~/directly.social/current/prisma/dev.db
 
 # Build and Launch (on the server)
-cd ~/directly-app/current
+cd ~/directly.social/current
 ln -sfn ../.env .env
 npm install
 npx prisma generate
@@ -90,9 +90,9 @@ pm2 startup
 
 ### Atomic Symlink Deploys
 The project now uses an **Atomic Symlink Deployment** strategy.
-- **`~/directly-app/.env`**: The shared environment file.
-- **`~/directly-app/releases/`**: Stores timestamped or SHA-named build folders.
-- **`~/directly-app/current`**: A symlink that always points to the active release.
+- **`~/directly.social/.env`**: The shared environment file.
+- **`~/directly.social/releases/`**: Stores timestamped or SHA-named build folders.
+- **`~/directly.social/current`**: A symlink that always points to the active release.
 
 This ensures zero-downtime during `npm install` and allows for instant rollbacks.
 

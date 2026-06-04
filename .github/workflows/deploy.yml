@@ -50,7 +50,7 @@ jobs:
         
         echo "Syncing build artifacts to Oracle Cloud VM..."
         # Create base and releases directory
-        ssh ${VPS_USERNAME}@${VPS_HOST} "mkdir -p ~/directly-app/releases/${{ github.sha }}"
+        ssh ${VPS_USERNAME}@${VPS_HOST} "mkdir -p ~/directly.social/releases/${{ github.sha }}"
         
         rsync -avz --delete \
           --exclude '.git' \
@@ -58,7 +58,7 @@ jobs:
           --exclude '.env' \
           --exclude '.env.local' \
           --exclude 'tmp' \
-          ./ ${VPS_USERNAME}@${VPS_HOST}:~/directly-app/releases/${{ github.sha }}/
+          ./ ${VPS_USERNAME}@${VPS_HOST}:~/directly.social/releases/${{ github.sha }}/
 
     - name: Install Production Deps & Restart Server
       uses: appleboy/ssh-action@master
@@ -70,7 +70,7 @@ jobs:
           set -e
           
           # 1. Setup paths
-          BASE_DIR="~/directly-app"
+          BASE_DIR="~/directly.social"
           RELEASE_DIR="$BASE_DIR/releases/${{ github.sha }}"
           CURRENT_DIR="$BASE_DIR/current"
           

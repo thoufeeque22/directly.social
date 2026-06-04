@@ -6,7 +6,7 @@
 set -e
 
 # Setup paths
-BASE_DIR="${DEPLOY_BASE_DIR:-$HOME/directly-app}"
+BASE_DIR="${DEPLOY_BASE_DIR:-$HOME/directly.social}"
 CURRENT_DIR="$BASE_DIR/current"
 RELEASES_DIR="$BASE_DIR/releases"
 
