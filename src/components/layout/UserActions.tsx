@@ -25,7 +25,7 @@ export function UserActions({ session }: { session: Session | null }) {
       )*/}
       <NotificationBell />
       <button className={styles.createBtn} onClick={() => { window.location.hash = 'create-post-section'; }}>
-        + Create Post
+        <span className={styles.btnPlus}>+</span> <span>Create Post</span>
       </button>
       {session?.user && (
         <div className={styles.userProfile}>

@@ -87,7 +87,7 @@ test.describe('Analytics Dashboard', () => {
       // Login to get the new session token with ADMIN role
       await page.goto('/login');
       await page.getByTestId('e2e-email-input').fill('admin@directly.social');
-      await page.getByTestId('e2e-password-input').fill('social-studio-e2e-secret');
+      await page.getByTestId('e2e-password-input').fill('directly-e2e-secret');
       await page.getByTestId('e2e-login-submit').click();
       await page.waitForURL('/');
 

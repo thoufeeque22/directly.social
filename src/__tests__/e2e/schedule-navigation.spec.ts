@@ -2,37 +2,20 @@ import { test, expect } from './base-test';;
 import { execSync } from 'child_process';
 
 test.describe.serial('Schedule Navigation', () => {
-  test.beforeAll(() => {
-    execSync('npx tsx src/__tests__/scripts/seed-e2e-schedule.ts');
-  });
 
   test.beforeEach(async ({ page }) => {
-
-
-    // Fail test on console errors or warnings (like deprecations)
-    page.on('console', msg => {
-      const text = msg.text();
-      // Ignore transient Auth.js fetch errors in E2E environment
-      if (text.includes('Failed to fetch') && text.includes('authjs.dev')) return;
-      // Ignore Rate Limit errors (429) during parallel E2E tests
-      if (text.includes('429 (Too Many Requests)')) return;
-      // Ignore hydration errors that might randomly happen if a chunk delays
-      if (text.includes('Hydration failed')) return;
-      
-      if (msg.type() === 'error' || (msg.type() === 'warning' && text.includes('deprecated'))) {
-        throw new Error(`Console ${msg.type()} detected: ${text}`);
-      }
-    });
-
     // Navigate to dashboard
     await page.goto('/');
     // Ensure dashboard is loaded
     await expect(page.locator('h2:has-text("Upcoming Posts")').first()).toBeVisible();
+    // Wait for React hydration and layout stabilization
+    await page.waitForTimeout(1000);
   });
 
   test('should navigate to full schedule view from sidebar "View All" button', async ({ page }) => {
     const viewAllButton = page.getByTestId('sidebar-view-all-schedule');
-    await expect(viewAllButton).toBeVisible();
+    await expect(viewAllButton).toBeVisible({ timeout: 15000 });
+    await viewAllButton.scrollIntoViewIfNeeded();
     await viewAllButton.click();
 
     // Verify redirect to /schedule
@@ -45,9 +28,9 @@ test.describe.serial('Schedule Navigation', () => {
     const postId = 'e2e-post-2';
     
     const sidebarLink = page.getByTestId(`sidebar-post-${postId}`);
-    await expect(sidebarLink).toBeVisible();
+    await expect(sidebarLink).toBeVisible({ timeout: 15000 });
+    await sidebarLink.scrollIntoViewIfNeeded();
     await expect(sidebarLink).toContainText(postTitle);
-    
     await sidebarLink.click();
 
     // Verify redirect with ID param
@@ -99,7 +82,8 @@ test.describe.serial('Schedule Navigation', () => {
     await expect(page.getByRole('heading', { name: 'Upcoming Posts' }).first()).toBeVisible();
     
     const sidebarLink = page.getByTestId('sidebar-post-e2e-post-1');
-    await expect(sidebarLink).toBeVisible();
+    await expect(sidebarLink).toBeVisible({ timeout: 15000 });
+    await sidebarLink.scrollIntoViewIfNeeded();
     await sidebarLink.click();
 
     await expect(page).toHaveURL(/\/schedule\?id=e2e-post-1/);

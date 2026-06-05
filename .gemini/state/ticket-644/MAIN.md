@@ -46,7 +46,7 @@ Design and implement a high-converting landing page for Directly.social. Based o
 - [x] Discovery
 - [x] Development
 - [x] Audit
-- [x] QA: Investigating failure in src/__tests__/e2e/landing-page.spec.ts
+- [/] QA: Verifying all E2E tests pass after changing password to `directly-e2e-secret` and fixing flaky tests (Safari save snippet, Console 429 errors)
 - [ ] Documentation
 
 ## Technical Mandates
@@ -73,3 +73,5 @@ Design and implement a high-converting landing page for Directly.social. Based o
 - **[2026-06-04 23:39:31]**: AUDIT [PASS] - Verified modularity fix for Footer and confirmed performance/security compliance.
 - **[2026-06-05 09:00:00]**: QA [IN-PROGRESS] - Investigating failure in `src/__tests__/e2e/landing-page.spec.ts`.
 - **[2026-06-05 20:13:25]**: QA [PASS] - Generated missing visual snapshots. All Playwright tests pass.
+- **[2026-06-05 22:38:00]**: QA [IN-PROGRESS] - Verifying entire E2E test suite after E2E password migration to `directly-e2e-secret` and patching flaky tests.
+- **[2026-06-05 22:43:00]**: QA [IN-PROGRESS] - Updating visual regression snapshots and running the full E2E verification suite with mobile-viewport and input fixes.

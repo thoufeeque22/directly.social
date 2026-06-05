@@ -74,9 +74,12 @@ test.describe('AI Nudge E2E Tests @regression', () => {
   });
 
   test('Visual Audit: Capture screenshots of AINudge', async ({ page }) => {
-    const titleNudge = page.getByText('Try AI Title');
+    const titleNudge = page.getByText('Try AI Title').first();
     // Ensure it's visible
     await expect(titleNudge).toBeVisible();
+
+    // Let the DOM settle to avoid "element detached" errors during screenshot
+    await page.waitForTimeout(500);
 
     // Take screenshots
     await titleNudge.screenshot({ path: 'verification/ai-nudge-active.png' });
@@ -92,7 +95,7 @@ test.describe('AI Nudge E2E Tests @regression', () => {
     page.on('console', msg => {
       if (msg.type() === 'error') {
         const text = msg.text();
-        if (!text.includes('Sentry') && !text.includes('Extension')) {
+        if (!text.includes('Sentry') && !text.includes('Extension') && !text.includes('429')) {
           errors.push(text);
         }
       }

@@ -13,8 +13,8 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     await manualTierButton.click();
 
     // 2. Select platforms
-    const youtubeButton = page.getByRole('button', { name: /YouTube:/i });
-    const tiktokButton = page.getByRole('button', { name: /Instagram:/i });
+    const youtubeButton = page.getByRole('button', { name: /YouTube:/i }).first();
+    const tiktokButton = page.getByRole('button', { name: /Instagram:/i }).first();
     
     // Wait for buttons to be present
     await expect(youtubeButton).toBeVisible();
@@ -67,7 +67,7 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     await page.getByRole('button', { name: 'Manual', exact: true }).click();
 
     // 2. Select YouTube
-    const youtubeButton = page.getByRole('button', { name: /YouTube:/i });
+    const youtubeButton = page.getByRole('button', { name: /YouTube:/i }).first();
     if (await youtubeButton.getAttribute('aria-pressed') !== 'true') {
       await youtubeButton.click();
     }
@@ -96,8 +96,8 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     // 8. Go back and test Multi-Title badge
     await page.goto('/');
     await page.getByRole('button', { name: 'Manual', exact: true }).click();
-    const ytBtn = page.getByRole('button', { name: /YouTube:/i });
-    const igBtn = page.getByRole('button', { name: /Instagram:/i });
+    const ytBtn = page.getByRole('button', { name: /YouTube:/i }).first();
+    const igBtn = page.getByRole('button', { name: /Instagram:/i }).first();
     if (await ytBtn.getAttribute('aria-pressed') !== 'true') await ytBtn.click();
     if (await igBtn.getAttribute('aria-pressed') !== 'true') await igBtn.click();
     await page.getByLabel('Separate titles/descriptions per platform').check();

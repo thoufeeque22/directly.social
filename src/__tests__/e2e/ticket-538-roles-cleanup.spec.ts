@@ -58,7 +58,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     console.log('[E2E] Direct access denied and redirected to home.');
   });
 
-  test('Account with ADMIN role can access admin analytics', async ({ page }) => {
+  test('Account with ADMIN role can access admin analytics', async ({ page, isMobile }) => {
     console.log('[E2E] Testing ADMIN access...');
 
     // Login again to get new session with ADMIN role
@@ -70,6 +70,15 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     await expect(page.locator('h2:has-text("Upload & Automate")').first()).toBeVisible({ timeout: 15000 });
     console.log('[E2E] Logged in as Admin.');
 
+    // If on mobile, the sidebar is hidden, so we need to open it
+    if (isMobile) {
+      const menuButton = page.getByRole('button', { name: '☰' });
+      if (await menuButton.isVisible()) {
+        await menuButton.click();
+        await page.waitForTimeout(500); // Wait for open transition
+      }
+    }
+
     // 1. Verify Sidebar SHOWS Analytics
     const analyticsLink = page.getByRole('link', { name: 'Analytics' });
     await expect(analyticsLink).toBeVisible();
@@ -79,8 +88,12 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     await page.screenshot({ path: 'verification/admin-sidebar.png' });
 
     // 2. Access /admin/analytics
-    await analyticsLink.scrollIntoViewIfNeeded();
-    await analyticsLink.click();
+    if (isMobile) {
+      await analyticsLink.evaluate((el) => (el as HTMLElement).click());
+    } else {
+      await analyticsLink.scrollIntoViewIfNeeded();
+      await analyticsLink.click();
+    }
     await page.waitForURL('/admin/analytics');
     
     // 3. Verify Admin Analytics Dashboard is visible

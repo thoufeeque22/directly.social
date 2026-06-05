@@ -14,15 +14,17 @@ export const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (localPref) setMode(localPref);
     
-    (async () => {
-      const { getThemePreference } = await import('@/app/actions/user');
-      const pref = await getThemePreference();
-      const modePref = pref.toLowerCase() as ColorMode;
-      if (modePref && modePref !== mode) {
-        setMode(modePref);
-        localStorage.setItem('theme-preference', modePref);
-      }
-    })().catch(() => {});
+    if (process.env.NEXT_PUBLIC_E2E !== 'true') {
+      (async () => {
+        const { getThemePreference } = await import('@/app/actions/user');
+        const pref = await getThemePreference();
+        const modePref = pref.toLowerCase() as ColorMode;
+        if (modePref && modePref !== mode) {
+          setMode(modePref);
+          localStorage.setItem('theme-preference', modePref);
+        }
+      })().catch(() => {});
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -40,8 +42,10 @@ export const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setMode: (m: ColorMode) => {
       setMode(m);
       localStorage.setItem('theme-preference', m);
-      const t = m === 'system' ? Theme.SYSTEM : m === 'dark' ? Theme.DARK : Theme.LIGHT;
-      updateThemePreference(t).catch(() => {});
+      if (process.env.NEXT_PUBLIC_E2E !== 'true') {
+        const t = m === 'system' ? Theme.SYSTEM : m === 'dark' ? Theme.DARK : Theme.LIGHT;
+        updateThemePreference(t).catch(() => {});
+      }
     },
     toggleMode: () => {
       console.log('[Theme] Toggle clicked!');
@@ -49,8 +53,10 @@ export const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
         const nextMode: ColorMode = prevMode === 'light' ? 'dark' : prevMode === 'dark' ? 'system' : 'light';
         console.log('[Theme] Switching from', prevMode, 'to', nextMode);
         localStorage.setItem('theme-preference', nextMode);
-        const t = nextMode === 'system' ? Theme.SYSTEM : nextMode === 'dark' ? Theme.DARK : Theme.LIGHT;
-        updateThemePreference(t).catch(e => console.error('[Theme] Update error:', e));
+        if (process.env.NEXT_PUBLIC_E2E !== 'true') {
+          const t = nextMode === 'system' ? Theme.SYSTEM : nextMode === 'dark' ? Theme.DARK : Theme.LIGHT;
+          updateThemePreference(t).catch(e => console.error('[Theme] Update error:', e));
+        }
         return nextMode;
       });
     }

@@ -33,9 +33,11 @@ test.describe.serial('Metadata Templates (Snippets)', () => {
     const snippetName = `Name ${Date.now()}`;
 
     // Type content to save
-    await descriptionField.focus();
-    await page.keyboard.type(testContent, { delay: 10 });
+    await descriptionField.click();
+    await descriptionField.fill('');
+    await descriptionField.pressSequentially(testContent, { delay: 50 });
     await descriptionField.blur();
+    await page.waitForTimeout(1000); // Wait for React state sync
 
     // Open menu
     await page.getByTestId('snippets-trigger').first().click();
@@ -61,9 +63,11 @@ test.describe.serial('Metadata Templates (Snippets)', () => {
 
   test('should append snippet content to description and close menu', async ({ page }) => {
     const descriptionField = page.getByTestId('video-description').first();
-    await descriptionField.focus();
-    await page.keyboard.type('Initial text.');
+    await descriptionField.click();
+    await descriptionField.fill('');
+    await descriptionField.pressSequentially('Initial text.', { delay: 50 });
     await descriptionField.blur();
+    await page.waitForTimeout(500);
 
     // Open menu
     await page.getByTestId('snippets-trigger').first().click();

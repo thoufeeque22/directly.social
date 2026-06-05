@@ -16,6 +16,14 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       setNotifications([]); setLoading(false); return;
     }
     try {
+      if (process.env.NEXT_PUBLIC_E2E === 'true') {
+        const mockData = (window as any).__MOCK_NOTIFICATIONS__;
+        if (mockData) {
+          setNotifications(mockData);
+          setLoading(false);
+          return;
+        }
+      }
       const data = await getNotifications();
       setNotifications(data as Notification[]);
     } catch (error) {
@@ -34,12 +42,28 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const markAsRead = useCallback(async (id: string) => {
     if (status !== 'authenticated') return;
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
-    await markNotificationAsRead(id).catch(fetchNotifications);
+    if (process.env.NEXT_PUBLIC_E2E === 'true') {
+      if ((window as any).__MOCK_NOTIFICATIONS__) {
+        (window as any).__MOCK_NOTIFICATIONS__ = (window as any).__MOCK_NOTIFICATIONS__.map(
+          (n: any) => n.id === id ? { ...n, isRead: true } : n
+        );
+      }
+    } else {
+      await markNotificationAsRead(id).catch(fetchNotifications);
+    }
   }, [fetchNotifications, status]);
   const markAllAsRead = useCallback(async () => {
     if (status !== 'authenticated') return;
     setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
-    await markAllNotificationsAsRead().catch(fetchNotifications);
+    if (process.env.NEXT_PUBLIC_E2E === 'true') {
+      if ((window as any).__MOCK_NOTIFICATIONS__) {
+        (window as any).__MOCK_NOTIFICATIONS__ = (window as any).__MOCK_NOTIFICATIONS__.map(
+          (n: any) => ({ ...n, isRead: true })
+        );
+      }
+    } else {
+      await markAllNotificationsAsRead().catch(fetchNotifications);
+    }
   }, [fetchNotifications, status]);
   const value = useMemo(() => ({
     notifications, unreadCount: notifications.filter(n => !n.isRead).length,

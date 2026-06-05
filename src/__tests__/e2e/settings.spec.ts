@@ -3,6 +3,8 @@ import { test, expect } from './base-test';;
 test.describe('Settings Page - Template Management @regression', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/settings');
+    await expect(page.locator('h1').first()).toBeVisible({ timeout: 15000 });
+    await page.waitForTimeout(1000);
   });
 
   test('should display the template manager', async ({ page }) => {
@@ -26,8 +28,13 @@ test.describe('Settings Page - Template Management @regression', () => {
     
     // Save a new snippet
     const descriptionField = page.getByTestId('video-description').first();
-    await descriptionField.fill(templateContent);
+    await descriptionField.click();
+    await descriptionField.fill('');
+    await descriptionField.pressSequentially(templateContent, { delay: 50 });
+    await descriptionField.blur();
+    await page.waitForTimeout(500); // Give context a moment to update
     await page.getByTestId('snippets-trigger').first().click();
+    await expect(page.getByTestId('save-snippet-form-trigger').first()).toBeEnabled({ timeout: 10000 });
     await page.getByTestId('save-snippet-form-trigger').first().click();
     await page.getByTestId('new-snippet-name-input').first().fill(templateName);
     await page.getByTestId('confirm-save-snippet').first().click();
@@ -50,8 +57,14 @@ test.describe('Settings Page - Template Management @regression', () => {
     });
     await page.reload();
     
-    await page.getByTestId('video-description').first().fill('content');
+    const descField = page.getByTestId('video-description').first();
+    await descField.click();
+    await descField.fill('');
+    await descField.pressSequentially('content', { delay: 50 });
+    await descField.blur();
+    await page.waitForTimeout(500);
     await page.getByTestId('snippets-trigger').first().click();
+    await expect(page.getByTestId('save-snippet-form-trigger').first()).toBeEnabled({ timeout: 10000 });
     await page.getByTestId('save-snippet-form-trigger').first().click();
     await page.getByTestId('new-snippet-name-input').first().fill(templateName);
     await page.getByTestId('confirm-save-snippet').first().click();

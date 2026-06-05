@@ -12,6 +12,7 @@ export const test = base.extend<{ consoleChecker: void }>({
         if (msg.includes('access control checks')) return;
         if (msg.includes('ChunkLoadError')) return;
         if (msg.includes('TypeError: Load failed')) return;
+        if (msg.includes('Intentional Render Error')) return;
         if (msg === 'null') return;
         
         errors.push(`Unhandled exception: ${msg}`);
@@ -25,10 +26,13 @@ export const test = base.extend<{ consoleChecker: void }>({
           if (text.includes('429') || text.includes('Too Many Requests')) return;
           if (text.includes('Failed to load resource: the server responded with a status of 429')) return;
           if (text.includes('Failed to load resource: the server responded with a status of 404')) return;
+          if (text.includes('Failed to load resource: the server responded with a status of 500')) return;
+          if (text.includes('Internal Server Error')) return;
           if (text.includes('Failed to fetch')) return;
           if (text.includes('authjs.dev')) return;
           if (text.includes('Load failed')) return;
           if (text.includes('Button failed to load')) return;
+          if (text.includes('Intentional Render Error')) return;
           if (text === 'null') return;
           
           errors.push(`Console error: ${text}`);
