@@ -23,9 +23,10 @@ test.describe.serial('Schedule Navigation', () => {
     await expect(page.getByRole('heading', { name: 'Scheduled Posts', level: 1 })).toBeVisible();
   });
 
-  test('should navigate to specific post in schedule view and highlight it', async ({ page }) => {
+  test('should navigate to specific post in schedule view and highlight it', async ({ page, workerEmail }) => {
     const postTitle = 'Scheduled Post 2';
-    const postId = 'e2e-post-2';
+    const workerSuffix = workerEmail === 'tester@directly.social' ? 'legacy' : workerEmail.split('@')[0].split('-')[1];
+    const postId = `e2e-post-2-${workerSuffix}`;
     
     const sidebarLink = page.getByTestId(`sidebar-post-${postId}`);
     await expect(sidebarLink).toBeVisible({ timeout: 15000 });
@@ -61,18 +62,19 @@ test.describe.serial('Schedule Navigation', () => {
     await expect(page.getByRole('heading', { name: 'Scheduled Posts', level: 1 })).toBeVisible();
   });
 
-  test('should load all posts when no ID is provided', async ({ page }) => {
+  test('should load all posts when no ID is provided', async ({ page, workerEmail }) => {
     await page.goto('/schedule');
     
     // Should show the list of posts (since we seeded 3)
-    await expect(page.getByTestId('schedule-post-e2e-post-1')).toBeVisible();
+    const workerSuffix = workerEmail === 'tester@directly.social' ? 'legacy' : workerEmail.split('@')[0].split('-')[1];
+    await expect(page.getByTestId(`schedule-post-e2e-post-1-${workerSuffix}`)).toBeVisible();
     
     // None should be highlighted
     const highlighted = page.locator('.highlightedPost');
     await expect(highlighted).toHaveCount(0);
   });
 
-  test('should work on mobile viewport', async ({ page }) => {
+  test('should work on mobile viewport', async ({ page, workerEmail }) => {
     // Set viewport to mobile
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/');
@@ -81,12 +83,13 @@ test.describe.serial('Schedule Navigation', () => {
     // Let's check if "Upcoming Posts" section is visible.
     await expect(page.getByRole('heading', { name: 'Upcoming Posts' }).first()).toBeVisible();
     
-    const sidebarLink = page.getByTestId('sidebar-post-e2e-post-1');
+    const workerSuffix = workerEmail === 'tester@directly.social' ? 'legacy' : workerEmail.split('@')[0].split('-')[1];
+    const sidebarLink = page.getByTestId(`sidebar-post-e2e-post-1-${workerSuffix}`);
     await expect(sidebarLink).toBeVisible({ timeout: 15000 });
     await sidebarLink.scrollIntoViewIfNeeded();
     await sidebarLink.click();
 
-    await expect(page).toHaveURL(/\/schedule\?id=e2e-post-1/);
-    await expect(page.getByTestId('schedule-post-e2e-post-1')).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`/schedule\\?id=e2e-post-1-${workerSuffix}`));
+    await expect(page.getByTestId(`schedule-post-e2e-post-1-${workerSuffix}`)).toBeVisible();
   });
 });

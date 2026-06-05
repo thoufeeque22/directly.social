@@ -31,7 +31,6 @@ export default defineConfig({
       name: 'chromium',
       use: { 
         ...devices['Desktop Chrome'],
-        storageState: '.auth/user.json',
       },
       dependencies: ['setup'],
     },
@@ -39,7 +38,6 @@ export default defineConfig({
       name: 'Mobile Chrome',
       use: {
         ...devices['Pixel 5'],
-        storageState: '.auth/user.json',
       },
       dependencies: ['setup'],
     },
@@ -47,7 +45,6 @@ export default defineConfig({
       name: 'Mobile Safari',
       use: {
         ...devices['iPhone 13'],
-        storageState: '.auth/user.json',
       },
       dependencies: ['setup'],
     },

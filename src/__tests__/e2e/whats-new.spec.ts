@@ -12,6 +12,8 @@ function runDbScript(scriptName: string) {
   }
 }
 
+import { prisma } from '../../lib/core/prisma';
+
 test.describe("What's New Option A E2E & Visual Verification @regression", () => {
   test.beforeAll(async () => {
     const dir = path.join(process.cwd(), 'verification');
@@ -20,10 +22,14 @@ test.describe("What's New Option A E2E & Visual Verification @regression", () =>
     }
   });
 
-  test('E2E Flow: Unread Badge, Popover Dismissal, Profile Link, and Activity State', async ({ page }) => {
-    // 1. Reset database to have clean unseen updates
-    runDbScript('cleanup-whats-new.ts');
-    runDbScript('seed-whats-new.ts');
+  test('E2E Flow: Unread Badge, Popover Dismissal, Profile Link, and Activity State', async ({ page, workerEmail }) => {
+    // 1. Reset user-specific seen state to ensure updates are unread for this test run
+    // This is safer than global cleanup-whats-new.ts which truncates the UpdateLog table
+    console.log(`[E2E] Resetting seen updates for ${workerEmail}...`);
+    const user = await prisma.user.findUnique({ where: { email: workerEmail } });
+    if (user) {
+      await prisma.userSeenUpdate.deleteMany({ where: { userId: user.id } });
+    }
 
     // 2. Navigate to dashboard and verify the unread badge exists
     console.log('Navigating to dashboard...');

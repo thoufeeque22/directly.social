@@ -16,14 +16,17 @@ function safeExec(command: string, retries = 3) {
 }
 
 test.describe('Analytics Dashboard', () => {
-  test.use({ storageState: '.auth/user.json' });
+  // Use worker-specific admin account
+  test.use({ 
+    storageState: async ({}, use, testInfo) => {
+      const workerIndex = testInfo.workerIndex;
+      await use(`.auth/admin-${workerIndex % 10}.json`);
+    }
+  });
 
   test.beforeAll(async () => {
-    // Elevate user to ADMIN so middleware allows access to /admin/analytics
-    safeExec('npx tsx src/__tests__/scripts/make-admin.ts tester@directly.social');
-
-    // Seed mock data before running tests
-    await prisma.systemMetric.deleteMany();
+    // Seed mock data for the charts
+    // We don't deleteMany() anymore to avoid breaking other parallel tests
     
     const today = new Date();
     
@@ -71,26 +74,12 @@ test.describe('Analytics Dashboard', () => {
   });
 
   test.afterAll(async () => {
-    // Revert user to normal USER
-    try {
-      safeExec('npx tsx src/__tests__/scripts/seed-e2e-user.ts');
-    } catch (e) {
-      console.warn('Failed to reset user role in afterAll', e);
-    }
     await prisma.$disconnect();
   });
 
   test.describe('admin access', () => {
-    test.use({ storageState: { cookies: [], origins: [] } });
-
+    // No need to override storageState here, the describe-level one is admin.json
     test('admin can view analytics dashboard with populated data', async ({ page }) => {
-      // Login to get the new session token with ADMIN role
-      await page.goto('/login');
-      await page.getByTestId('e2e-email-input').fill('admin@directly.social');
-      await page.getByTestId('e2e-password-input').fill('directly-e2e-secret');
-      await page.getByTestId('e2e-login-submit').click();
-      await page.waitForURL('/');
-
       await page.goto('/admin/analytics');
       
       // Check for dashboard component
@@ -108,11 +97,18 @@ test.describe('Analytics Dashboard', () => {
 
 
   test.describe('non-admin access', () => {
-    test.use({ storageState: { cookies: [], origins: [] } });
+    // For non-admin, use worker-specific regular tester account
+    test.use({ 
+      storageState: async ({}, use, testInfo) => {
+        const workerIndex = testInfo.workerIndex;
+        await use(`.auth/user-${workerIndex % 10}.json`);
+      }
+    });
 
-    test('unauthenticated user is redirected to login', async ({ page }) => {
+    test('non-admin user is redirected or denied access', async ({ page }) => {
       await page.goto('/admin/analytics');
-      await expect(page).toHaveURL(/.*\/login.*/);
+      // Our middleware redirects to login or shows unauthorized
+      await expect(page).not.toHaveURL(/\/admin\/analytics/);
     });
   });
 });

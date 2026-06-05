@@ -13,6 +13,7 @@ async function globalSetup(config: FullConfig) {
     console.log('🌱 [GLOBAL SETUP] Seeding database for E2E tests...');
     execSync('npm run seed:e2e', { stdio: 'inherit' });
     execSync('npm run seed:schedule', { stdio: 'inherit' });
+    execSync('npm run seed:whats-new', { stdio: 'inherit' });
     
     console.log('✅ [GLOBAL SETUP] Environment ready.');
   } catch (error) {

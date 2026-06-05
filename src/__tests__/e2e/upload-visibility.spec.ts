@@ -1,9 +1,6 @@
 import { test, expect } from './base-test';;
 
 test.describe('Activity Hub: Upload Preparation Bar', () => {
-  // Use existing auth state for all tests
-  test.use({ storageState: '.auth/user.json' });
-
   // Enable console logs for debugging
   test.beforeEach(async ({ page }) => {
     page.on('console', msg => {

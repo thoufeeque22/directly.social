@@ -14,26 +14,16 @@ import { execSync } from 'child_process';
  */
 
 test.describe('Ticket #538: Security Roles and Cleanup', () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
 
-  test.beforeAll(async () => {
-    console.log('[E2E] Resetting DB state...');
-    try {
-      execSync('npx tsx src/__tests__/scripts/seed-e2e-user.ts');
-    } catch (error) {
-      console.error('[E2E] Failed to seed database:', error);
-    }
-  });
-
-  test('Tester account (USER) is denied access to admin analytics', async ({ page }) => {
-    console.log('[E2E] Testing Tester (USER) access...');
+  test('Tester account (USER) is denied access to admin analytics', async ({ page, workerEmail }) => {
+    console.log(`[E2E] Testing Tester (${workerEmail}) access...`);
     
     // Ensure tester is USER
-    execSync('npx tsx src/__tests__/scripts/seed-e2e-user.ts');
+    execSync(`npx tsx src/__tests__/scripts/seed-e2e-user.ts ${workerEmail} USER`);
 
     // Login as Tester
     await page.goto('/login');
-    await page.getByTestId('e2e-email-input').fill('tester@directly.social');
+    await page.getByTestId('e2e-email-input').fill(workerEmail);
     await page.getByTestId('e2e-password-input').fill(process.env.E2E_TEST_PASSWORD || 'password');
     await page.getByTestId('e2e-login-submit').click();
     
@@ -58,12 +48,12 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     console.log('[E2E] Direct access denied and redirected to home.');
   });
 
-  test('Account with ADMIN role can access admin analytics', async ({ page, isMobile }) => {
-    console.log('[E2E] Testing ADMIN access...');
+  test('Account with ADMIN role can access admin analytics', async ({ page, isMobile, adminEmail }) => {
+    console.log(`[E2E] Testing ADMIN access with ${adminEmail}...`);
 
     // Login again to get new session with ADMIN role
     await page.goto('/login');
-    await page.getByTestId('e2e-email-input').fill('admin@directly.social');
+    await page.getByTestId('e2e-email-input').fill(adminEmail);
     await page.getByTestId('e2e-password-input').fill(process.env.E2E_TEST_PASSWORD || 'password');
     await page.getByTestId('e2e-login-submit').click();
     

@@ -1,9 +1,6 @@
 import { test, expect } from './base-test';;
 
 test.describe('Manual Mode: Polish with AI Button', () => {
-  // Use existing auth state for tests
-  test.use({ storageState: '.auth/user.json' });
-
   test.beforeEach(async ({ page }) => {
     // Navigate to dashboard
     await page.goto('/');

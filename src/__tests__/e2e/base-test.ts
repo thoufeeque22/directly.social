@@ -1,6 +1,49 @@
 import { test as base, expect } from '@playwright/test';
 
-export const test = base.extend<{ consoleChecker: void }>({
+export const test = base.extend<{ consoleChecker: void; workerEmail: string }>({
+  // Unique email for this worker
+  workerEmail: async ({}, use, testInfo) => {
+    const workerIndex = testInfo.workerIndex;
+    await use(`tester-${workerIndex % 10}@directly.social`);
+  },
+
+  // Unique admin email for this worker
+  adminEmail: async ({}, use, testInfo) => {
+    const workerIndex = testInfo.workerIndex;
+    await use(`admin-${workerIndex % 10}@directly.social`);
+  },
+
+  // Automatic storage state selection based on worker index
+  storageState: async ({}, use, testInfo) => {
+    // If we're in a setup project or similar, we might not want this
+    const isSetup = testInfo.project.name === 'setup' || testInfo.project.name === 'landing-page';
+    if (isSetup) {
+      // Landing page specifically wants no auth
+      if (testInfo.project.name === 'landing-page') {
+        await use({ cookies: [], origins: [] });
+      } else {
+        await use(undefined);
+      }
+      return;
+    }
+
+    const workerIndex = testInfo.workerIndex;
+    const authFile = `.auth/user-${workerIndex % 10}.json`;
+    
+    // Check if file exists, fallback to user.json if not
+    const fs = require('fs');
+    const path = require('path');
+    const fullPath = path.resolve(process.cwd(), authFile);
+    
+    if (fs.existsSync(fullPath)) {
+      console.log(`[Worker ${workerIndex}] Using auth state: ${authFile}`);
+      await use(authFile);
+    } else {
+      console.warn(`[Worker ${workerIndex}] Auth state NOT FOUND: ${authFile}. Falling back to .auth/user.json`);
+      await use('.auth/user.json');
+    }
+  },
+
   consoleChecker: [
     async ({ page }, use) => {
       const errors: string[] = [];
