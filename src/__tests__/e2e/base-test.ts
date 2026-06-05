@@ -1,6 +1,11 @@
 import { test as base, expect } from '@playwright/test';
 
-export const test = base.extend<{ consoleChecker: void; workerEmail: string }>({
+export const test = base.extend<{ consoleChecker: void; workerEmail: string; adminEmail: string; workerIndex: number }>({
+  // Worker index fixture
+  workerIndex: async ({}, use, testInfo) => {
+    await use(testInfo.workerIndex);
+  },
+
   // Unique email for this worker
   workerEmail: async ({}, use, testInfo) => {
     const workerIndex = testInfo.workerIndex;

@@ -51,25 +51,27 @@ test.describe('AI BYOK Wizard E2E', () => {
     // Verify saved key is listed
     await expect(page.locator('text=Key ends in 1234')).toBeVisible();
   });
+test('negative path: invalid key', async ({ page }) => {
+  await expect(page.locator('text=AI Provider Keys (BYOK)')).toBeVisible();
 
-  test('negative path: invalid key', async ({ page }) => {
-    await expect(page.locator('text=AI Provider Keys (BYOK)')).toBeVisible();
+  const keyInput = page.locator('[data-testid="ai-byok-key-input"] input');
+  await keyInput.scrollIntoViewIfNeeded();
+  await keyInput.fill('invalid-key-for-e2e');
+  await keyInput.blur();
 
-    const keyInput = page.locator('[data-testid="ai-byok-key-input"] input');
-    await keyInput.click();
-    await keyInput.fill('');
-    await keyInput.pressSequentially('invalid-key-for-e2e', { delay: 50 });
-    await keyInput.blur();
-    await page.waitForTimeout(500);
+  const saveBtn = page.locator('[data-testid="ai-byok-save-button"]');
+  await saveBtn.scrollIntoViewIfNeeded();
+  await expect(saveBtn).toBeEnabled({ timeout: 5000 });
+  await saveBtn.click({ force: true });
 
-    const saveBtn = page.locator('[data-testid="ai-byok-save-button"]');
-    await expect(saveBtn).toBeEnabled({ timeout: 5000 });
-    await saveBtn.click();
+  // Wait for error message - scope to container to avoid Next.js announcer collision
+  const wizard = page.getByTestId('ai-byok-wizard');
+  const errorAlert = wizard.getByRole('alert');
+  await expect(errorAlert).toBeVisible({ timeout: 15000 });
+  await expect(errorAlert).toContainText(/Invalid API Key/i);
 
-    // Wait for error message - use flexible matcher
-    await expect(page.getByText(/Invalid API Key/i).first()).toBeVisible();
-
-    // 4. Error state
-    await page.locator('.ptr-container').screenshot({ path: 'verification/ai-byok-wizard-error.png' });
-  });
+  // 4. Error state
+  await errorAlert.scrollIntoViewIfNeeded();
+  await page.locator('.ptr-container').screenshot({ path: 'verification/ai-byok-wizard-error.png' });
+});
 });

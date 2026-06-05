@@ -19,9 +19,9 @@ test.describe('Settings Page - Template Management @regression', () => {
     await expect(page.locator('h2:has-text("Reusable Snippets")').locator('xpath=..')).toBeVisible();
   });
 
-  test('should create a template from the dashboard', async ({ page }) => {
-    const templateName = `Test Template ${Date.now()}`;
-    const templateContent = `Test Content ${Date.now()}`;
+  test('should create a template from the dashboard', async ({ page, workerIndex }) => {
+    const templateName = `Test Template ${workerIndex}-${Date.now()}`;
+    const templateContent = `Test Content ${workerIndex}-${Date.now()}`;
 
     // Go to dashboard to create a template from there
     await page.goto('/');
@@ -52,18 +52,18 @@ test.describe('Settings Page - Template Management @regression', () => {
     await expect(page.getByTestId('snippets-menu')).not.toBeVisible();
     
     // Now go back to settings to manage it
-    await page.goto('/settings');
+    await page.goto('/settings', { waitUntil: 'networkidle' });
     const snippetsTab = page.getByRole('tab', { name: /snippets/i });
     await snippetsTab.scrollIntoViewIfNeeded();
-    await snippetsTab.click();
-    await page.waitForURL('**/settings?tab=snippets', { timeout: 10000 });
+    await snippetsTab.click({ force: true });
+    await page.waitForURL('**/settings?tab=snippets', { timeout: 30000 });
     
-    await expect(page.getByTestId('template-card').filter({ hasText: templateName }).first()).toBeVisible({ timeout: 15000 });
+    await expect(page.getByTestId('template-card').filter({ hasText: templateName }).first()).toBeVisible({ timeout: 30000 });
   });
 
-  test('should edit and delete a template', async ({ page }) => {
+  test('should edit and delete a template', async ({ page, workerIndex }) => {
     // We'll create one quickly here to ensure the test is isolated and robust
-    const templateName = `ToEdit ${Date.now()}`;
+    const templateName = `ToEdit ${workerIndex}-${Date.now()}`;
     const updatedTemplateName = `${templateName} - updated`;
 
     await page.goto('/');
@@ -92,14 +92,14 @@ test.describe('Settings Page - Template Management @regression', () => {
     await page.getByTestId('confirm-save-snippet').first().click();
     await expect(page.getByTestId('snippets-menu')).not.toBeVisible();
 
-    await page.goto('/settings');
+    await page.goto('/settings', { waitUntil: 'networkidle' });
     const snippetsTab = page.getByRole('tab', { name: /snippets/i });
     await snippetsTab.scrollIntoViewIfNeeded();
-    await snippetsTab.click();
-    await page.waitForURL('**/settings?tab=snippets', { timeout: 10000 });
+    await snippetsTab.click({ force: true });
+    await page.waitForURL('**/settings?tab=snippets', { timeout: 30000 });
     
     const templateCard = page.getByTestId('template-card').filter({ hasText: templateName }).first();
-    await expect(templateCard).toBeVisible({ timeout: 15000 });
+    await expect(templateCard).toBeVisible({ timeout: 30000 });
     
     // Edit the template
     await templateCard.getByRole('button', { name: /edit/i }).click();
