@@ -19,6 +19,9 @@ setup('authenticate', async ({ page }) => {
   
   console.log(`[E2E Setup] Attempting login for ${testEmail}...`);
   
+  // Wait for React hydration to complete to avoid the form being cleared
+  await page.waitForTimeout(1000);
+  
   await emailInput.fill(testEmail);
   await page.getByTestId('e2e-password-input').fill(testPassword);
   await page.getByTestId('e2e-login-submit').click();

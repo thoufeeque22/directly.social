@@ -38,7 +38,7 @@ test.describe("What's New Option A E2E & Visual Verification @regression", () =>
     console.log(`Unread badge count is: ${badgeContent}`);
     expect(parseInt(badgeContent)).toBeGreaterThan(0);
 
-    await page.screenshot({ path: 'verification/whats-new-badge.png', fullPage: true });
+    await page.screenshot({ path: 'verification/whats-new-badge.png' });
 
     // 3. Click the badge to open the Popover and instantly clear the count
     const badgeButton = page.getByTestId('whats-new-badge');
@@ -65,7 +65,7 @@ test.describe("What's New Option A E2E & Visual Verification @regression", () =>
     const badgeDot = badgeContainer.locator('.MuiBadge-badge');
     await expect(badgeDot).toBeHidden();
 
-    await page.screenshot({ path: 'verification/whats-new-popover-unread.png', fullPage: true });
+    await page.screenshot({ path: 'verification/whats-new-popover-unread.png' });
 
     // 4. Close the popover and verify the permanent profile link
     const closeButton = page.getByTestId('whats-new-modal-close');
@@ -81,7 +81,7 @@ test.describe("What's New Option A E2E & Visual Verification @regression", () =>
     const profileLink = page.getByTestId('whats-new-profile-link');
     await expect(profileLink).toBeVisible();
 
-    await page.screenshot({ path: 'verification/whats-new-profile-link.png', fullPage: true });
+    await page.screenshot({ path: 'verification/whats-new-profile-link.png' });
 
     // 5. Open popover from Profile Link showing historical updates
     // Since we cleared the updates when opening the popover earlier, the unread count is 0
@@ -91,7 +91,7 @@ test.describe("What's New Option A E2E & Visual Verification @regression", () =>
     const activityList = page.getByTestId('whats-new-activity-list');
     await expect(activityList).toBeVisible({ timeout: 10000 });
 
-    await page.screenshot({ path: 'verification/whats-new-popover-activity.png', fullPage: true });
+    await page.screenshot({ path: 'verification/whats-new-popover-activity.png' });
 
     await closeButton.click();
     await expect(popover).not.toBeVisible();

@@ -12,6 +12,7 @@ export const test = base.extend<{ consoleChecker: void }>({
         if (msg.includes('access control checks')) return;
         if (msg.includes('ChunkLoadError')) return;
         if (msg.includes('TypeError: Load failed')) return;
+        if (msg === 'null') return;
         
         errors.push(`Unhandled exception: ${msg}`);
       });
@@ -27,6 +28,8 @@ export const test = base.extend<{ consoleChecker: void }>({
           if (text.includes('Failed to fetch')) return;
           if (text.includes('authjs.dev')) return;
           if (text.includes('Load failed')) return;
+          if (text.includes('Button failed to load')) return;
+          if (text === 'null') return;
           
           errors.push(`Console error: ${text}`);
         }

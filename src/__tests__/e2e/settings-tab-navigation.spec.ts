@@ -27,7 +27,7 @@ test.describe('Settings Page Tab Interface', () => {
       }
       
       // Visual audit
-      await page.screenshot({ path: `verification/settings-tab-${tab.id}.png`, fullPage: true });
+      await page.locator('.ptr-container').screenshot({ path: `verification/settings-tab-${tab.id}.png` });
     }
   });
 

@@ -22,14 +22,14 @@ export const SupportTab = () => {
             variant="contained"
             color="primary"
             startIcon={<EmailIcon />}
-            href="mailto:directly.support@gmail.com"
+            href="mailto:support.directly.social@gmail.com"
             target="_blank"
             rel="noopener noreferrer"
           >
             Email Support
           </Button>
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
-            Reach out to us directly at directly.support@gmail.com
+            Reach out to us directly at support.directly.social@gmail.com
           </Typography>
         </Box>
 

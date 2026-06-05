@@ -23,7 +23,7 @@ test.describe('Platform Sequential Journey @regression', () => {
     }
     
     await expect(muiSwitch).not.toBeChecked();
-    await page.screenshot({ path: 'verification/journey-1-disabled.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/journey-1-disabled.png' });
 
     // 2. Toggle it "On". Verify that the "Configuration" accordion appears.
     // Use evaluate to bypass any interception or event issues
@@ -34,7 +34,7 @@ test.describe('Platform Sequential Journey @regression', () => {
     
     // Now look for the configuration section
     await expect(youtubeCard.getByText('Configuration')).toBeVisible({ timeout: 10000 });
-    await page.screenshot({ path: 'verification/journey-2-enabled.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/journey-2-enabled.png' });
 
     // 3. Verify that the "Account Connection" section is visible inside the configuration area.
     await expect(youtubeCard.getByText('Account Connection')).toBeVisible({ timeout: 10000 });
@@ -56,6 +56,6 @@ test.describe('Platform Sequential Journey @regression', () => {
 
     // Verify success message
     await expect(youtubeCard.getByTestId('success-message')).toBeVisible({ timeout: 10000 });
-    await page.screenshot({ path: 'verification/journey-3-byok-saved.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/journey-3-byok-saved.png' });
   });
 });

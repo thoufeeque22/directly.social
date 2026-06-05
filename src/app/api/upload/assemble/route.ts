@@ -27,8 +27,14 @@ export async function POST(req: NextRequest) {
     try { await registerGalleryAsset({ userId: session.user.id, fileId, fileName: p.fileName, size, finalPath, checksum, scheduledAt: p.scheduledAt, videoMetadata }); } 
     catch (e) { logger.warn("Gallery registration failed:", e); }
 
-    const transcodeResults = p.platforms ? (await checkTranscodeRequirement(finalPath, p.platforms.map(x => x.platform))).results : {};
-
+    let transcodeResults = {};
+    if (p.platforms) {
+      try {
+        transcodeResults = (await checkTranscodeRequirement(finalPath, p.platforms.map(x => x.platform))).results;
+      } catch (e) {
+        logger.warn("Transcode check failed:", e);
+      }
+    }
     const activity = await upsertUploadActivity({
       userId: session.user.id, fileId, fileName: p.fileName, finalPath, activityId: p.activityId, title: p.title, description: p.description, videoFormat: p.videoFormat, platforms: p.platforms as PlatformInput[], scheduledAt: p.scheduledAt, transcodeResults
     });

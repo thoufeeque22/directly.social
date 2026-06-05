@@ -18,6 +18,10 @@ test.describe('Theme 3-Way Toggle Cycle', () => {
     
     // Ensure the toggle is loaded
     await page.waitForSelector('[data-testid="theme-toggle"]', { timeout: 15000 });
+    
+    // Wait for the asynchronous server action (getThemePreference) to complete
+    // so it doesn't overwrite our synchronized test state mid-flight!
+    await page.waitForTimeout(2000);
   });
 
   test('should cycle through Light -> Dark -> System -> Light', async ({ page }) => {

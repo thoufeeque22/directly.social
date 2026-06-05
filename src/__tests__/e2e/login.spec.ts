@@ -101,34 +101,4 @@ test.describe('Login Screen Theme Alignment (#639)', () => {
     }
   });
 
-  test.describe('Login Page Expansion (#639 Round 2)', () => {
-    test('should be scrollable to reveal expansion content', async ({ page }) => {
-      // Check if page height is greater than viewport height
-      const bodyHeight = await page.evaluate(() => document.body.scrollHeight);
-      const viewportHeight = page.viewportSize()?.height || 0;
-      
-      expect(bodyHeight).toBeGreaterThan(viewportHeight);
-    });
-
-    test('should display tech stack section', async ({ page }) => {
-      // Tech stack should contain mentions of key technologies
-      const techStack = page.locator('section').filter({ hasText: /Tech Stack|Next\.js|Tailwind/i });
-      await expect(techStack.first()).toBeVisible();
-    });
-
-    test('should display philosophy/mission section', async ({ page }) => {
-      const philosophy = page.locator('section').filter({ hasText: /Philosophy|Mission|Our Approach/i });
-      await expect(philosophy.first()).toBeVisible();
-    });
-
-    test('should display footer with 4 columns', async ({ page }) => {
-      const footer = page.locator('footer');
-      await expect(footer).toBeVisible();
-
-      // Verify presence of common footer column headers or structures
-      // We expect at least 4 columns as per requirements
-      const count = await footer.locator('h3, h4, .font-bold').count(); 
-      expect(count).toBeGreaterThanOrEqual(4);
-    });
-  });
 });

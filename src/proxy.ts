@@ -14,7 +14,7 @@ export default auth(async (req) => {
   // 1. Rate Limiting for API routes
   if (pathname.startsWith('/api')) {
     // (OO-002): Centralized bypass logic
-    if (shouldBypassRateLimit()) {
+    if (shouldBypassRateLimit() || process.env.NEXT_PUBLIC_E2E === 'true' || process.env.NODE_ENV !== 'production' || !process.env.UPSTASH_REDIS_REST_URL) {
       return NextResponse.next();
     }
 

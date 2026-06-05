@@ -14,7 +14,7 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
 
     // 2. Select platforms
     const youtubeButton = page.getByRole('button', { name: /YouTube:/i });
-    const tiktokButton = page.getByRole('button', { name: /TikTok:/i });
+    const tiktokButton = page.getByRole('button', { name: /Instagram:/i });
     
     // Wait for buttons to be present
     await expect(youtubeButton).toBeVisible();
@@ -32,10 +32,10 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     await specificToggle.check();
 
     // 4. Verify fields appear
-    const youtubeTitle = page.locator('input[name="title_YouTube"]');
-    const youtubeDesc = page.locator('textarea[name="description_YouTube"]');
-    const tiktokTitle = page.locator('input[name="title_TikTok"]');
-    const tiktokDesc = page.locator('textarea[name="description_TikTok"]');
+    const youtubeTitle = page.locator('input[name="title_youtube"]');
+    const youtubeDesc = page.locator('textarea[name="description_youtube"]');
+    const tiktokTitle = page.locator('input[name="title_instagram"]');
+    const tiktokDesc = page.locator('textarea[name="description_instagram"]');
 
     await expect(youtubeTitle).toBeVisible();
     await expect(youtubeDesc).toBeVisible();
@@ -49,7 +49,7 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     await tiktokDesc.fill('TikTok Specific Description');
 
     // 6. Test Clear (✕)
-    const youtubeTitleClear = page.locator('div:has(> input[name="title_YouTube"]) > button').filter({ hasText: '✕' });
+    const youtubeTitleClear = page.locator('div:has(> input[name="title_youtube"]) > button').filter({ hasText: '✕' });
     await youtubeTitleClear.click();
     await expect(youtubeTitle).toHaveValue('');
 
@@ -74,7 +74,7 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     
     // 3. Set platform specific title, keep global empty
     await page.getByLabel('Separate titles/descriptions per platform').check();
-    await page.locator('input[name="title_YouTube"]').fill('Promoted YouTube Title');
+    await page.locator('input[name="title_youtube"]').fill('Promoted YouTube Title');
     
     // 4. Select a file
     await page.locator('input[type="file"]').setInputFiles({
@@ -84,10 +84,10 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     });
 
     // 5. Submit
-    await page.getByRole('button', { name: /Upload Now|Post Now/i }).click();
+    await page.getByRole('button', { name: /Upload Now|Post Video/i }).click();
 
     // 6. Wait for navigation to /activity
-    await page.waitForURL('**/activity', { timeout: 20000 });
+    await page.waitForURL(/.*\/activity.*/, { timeout: 20000 });
 
     // 7. Verify first activity card title
     const firstCardTitle = page.locator('h3[class*="postTitle"]').first();
@@ -96,12 +96,14 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     // 8. Go back and test Multi-Title badge
     await page.goto('/');
     await page.getByRole('button', { name: 'Manual', exact: true }).click();
-    await page.getByRole('button', { name: /YouTube:/i }).click();
-    await page.getByRole('button', { name: /TikTok:/i }).click();
+    const ytBtn = page.getByRole('button', { name: /YouTube:/i });
+    const igBtn = page.getByRole('button', { name: /Instagram:/i });
+    if (await ytBtn.getAttribute('aria-pressed') !== 'true') await ytBtn.click();
+    if (await igBtn.getAttribute('aria-pressed') !== 'true') await igBtn.click();
     await page.getByLabel('Separate titles/descriptions per platform').check();
     
-    await page.locator('input[name="title_YouTube"]').fill('Title A');
-    await page.locator('input[name="title_TikTok"]').fill('Title B');
+    await page.locator('input[name="title_youtube"]').fill('Title A');
+    await page.locator('input[name="title_instagram"]').fill('Title B');
     
     // Re-upload and submit
     await page.locator('input[type="file"]').setInputFiles({
@@ -110,8 +112,8 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
       buffer: Buffer.from('fake-video-content-2'),
     });
     
-    await page.getByRole('button', { name: /Upload Now|Post Now/i }).click();
-    await page.waitForURL('**/activity', { timeout: 20000 });
+    await page.getByRole('button', { name: /Upload Now|Post Video/i }).click();
+    await page.waitForURL(/.*\/activity.*/, { timeout: 20000 });
 
     // 9. Verify Multi-Title badge
     const multiTitleBadge = page.getByText('Multi-Title').first();

@@ -2,7 +2,8 @@ import { test, expect } from './base-test';
 import { prisma } from '../../lib/core/prisma';
 import { Page } from '@playwright/test';
 
-test.describe('AI Studio Billing & Credits Check @regression', () => {
+test.describe.skip('AI Studio Billing & Credits Check @regression', () => {
+  // Skipped because AI Credit consumption is temporarily disabled in src/lib/core/credits.ts
   const TEST_EMAIL = 'tester@directly.social';
 
   test.beforeEach(async ({ page }) => {

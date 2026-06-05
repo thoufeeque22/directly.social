@@ -1,12 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
-
+import 'dotenv/config';
 export default defineConfig({
   testDir: './src/__tests__/e2e',
   globalSetup: './src/__tests__/e2e/global-setup.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: 1,
+  workers: 8,
   reporter: [['html', { open: 'never' }]],
   snapshotDir: 'docs/visual/goldens',
   use: {

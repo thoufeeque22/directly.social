@@ -54,7 +54,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
     const progressBar = postCard.getByTestId('preparation-progress');
     await expect(progressBar).toBeVisible();
     
-    await page.screenshot({ path: 'verification/activity-card-final.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/activity-card-final.png' });
   });
 
   test('Interaction: STOP ALL broadcasts abort', async ({ page }) => {
@@ -136,7 +136,7 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
     await expect(ghostCard).toBeVisible();
     await expect(page.getByText(/Initializing/i).first()).toBeVisible();
     
-    await page.screenshot({ path: 'verification/optimistic-ghost-card.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/optimistic-ghost-card.png' });
   });
 
   test('Optimistic UI: Ghost card persists after fetch without record', async ({ page }) => {
@@ -309,6 +309,6 @@ test.describe('Activity Hub: Upload Preparation Bar', () => {
     await expect(facebookBar).toHaveAttribute('style', /width: 0%/);
     await expect(postCard.getByText(/Facebook \(In Queue\)/i)).toBeVisible();
 
-    await page.screenshot({ path: 'verification/individual-platform-progress.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/individual-platform-progress.png' });
   });
 });

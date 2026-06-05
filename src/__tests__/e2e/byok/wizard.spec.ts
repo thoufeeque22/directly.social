@@ -63,7 +63,7 @@ test.describe('BYOK Integration Wizard E2E @regression', () => {
 
   test('visual audit: verify layout state', async ({ page }) => {
     await page.waitForLoadState('networkidle');
-    await page.screenshot({ path: 'verification/byok-wizard-idle.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/byok-wizard-idle.png' });
     
     const youtubeWizard = page.locator('[data-testid="byok-wizard-youtube"]');
     await expect(youtubeWizard.locator('text=Step 1: Get Your Keys')).toBeVisible();
@@ -71,7 +71,7 @@ test.describe('BYOK Integration Wizard E2E @regression', () => {
     
     // Fill something to check dirty state
     await youtubeWizard.locator('[data-testid="client-id-input"] input').fill('test');
-    await page.screenshot({ path: 'verification/byok-wizard-dirty.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/byok-wizard-dirty.png' });
 
     // Save and check success layout
     await youtubeWizard.locator('[data-testid="client-id-input"] input').fill('valid');
@@ -79,7 +79,7 @@ test.describe('BYOK Integration Wizard E2E @regression', () => {
     await youtubeWizard.locator('[data-testid="redirect-uri-input"] input').fill('https://directly.social/callback');
     await youtubeWizard.locator('[data-testid="save-button"]').click();
     
-    await page.screenshot({ path: 'verification/byok-wizard-success.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/byok-wizard-success.png' });
     await expect(youtubeWizard.locator('[data-testid="success-message"]')).toBeVisible();
   });
 });

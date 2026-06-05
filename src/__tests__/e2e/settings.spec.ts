@@ -31,6 +31,7 @@ test.describe('Settings Page - Template Management @regression', () => {
     await page.getByTestId('save-snippet-form-trigger').first().click();
     await page.getByTestId('new-snippet-name-input').first().fill(templateName);
     await page.getByTestId('confirm-save-snippet').first().click();
+    await expect(page.getByTestId('snippets-menu')).not.toBeVisible();
     
     // Now go back to settings to manage it
     await page.goto('/settings');
@@ -54,6 +55,7 @@ test.describe('Settings Page - Template Management @regression', () => {
     await page.getByTestId('save-snippet-form-trigger').first().click();
     await page.getByTestId('new-snippet-name-input').first().fill(templateName);
     await page.getByTestId('confirm-save-snippet').first().click();
+    await expect(page.getByTestId('snippets-menu')).not.toBeVisible();
 
     await page.goto('/settings');
     await page.getByRole('tab', { name: /snippets/i }).click();

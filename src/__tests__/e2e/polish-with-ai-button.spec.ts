@@ -27,7 +27,7 @@ test.describe('Manual Mode: Polish with AI Button', () => {
     await expect(postVideoButton).toBeVisible();
 
     // Capture visual audit screenshot
-    await page.screenshot({ path: 'verification/514-enrich-button.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/514-enrich-button.png' });
 
     // Click the Polish with AI button
     await polishButton.click();

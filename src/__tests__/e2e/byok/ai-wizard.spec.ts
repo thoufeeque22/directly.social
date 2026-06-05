@@ -37,14 +37,14 @@ test.describe('AI BYOK Wizard E2E', () => {
     await expect(page.locator('text=AI Provider Keys (BYOK)')).toBeVisible();
 
     // 1. Idle state
-    await page.screenshot({ path: 'verification/ai-byok-wizard-idle.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/ai-byok-wizard-idle.png' });
 
     // Fill in a key
     const keyInput = page.locator('[data-testid="ai-byok-key-input"] input');
     await keyInput.fill('sk-mock-key-1234');
 
     // 2. Filled state
-    await page.screenshot({ path: 'verification/ai-byok-wizard-filled.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/ai-byok-wizard-filled.png' });
 
     // Click save - using real Server Action with sk-mock-key
     await page.locator('[data-testid="ai-byok-save-button"]').click();
@@ -53,7 +53,7 @@ test.describe('AI BYOK Wizard E2E', () => {
     await expect(page.locator('text=Successfully saved')).toBeVisible();
 
     // 3. Success state
-    await page.screenshot({ path: 'verification/ai-byok-wizard-success.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/ai-byok-wizard-success.png' });
     
     // Verify saved key is listed
     await expect(page.locator('text=Key ends in 1234')).toBeVisible();
@@ -71,6 +71,6 @@ test.describe('AI BYOK Wizard E2E', () => {
     await expect(page.getByText(/Invalid API Key/i).first()).toBeVisible();
 
     // 4. Error state
-    await page.screenshot({ path: 'verification/ai-byok-wizard-error.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/ai-byok-wizard-error.png' });
   });
 });

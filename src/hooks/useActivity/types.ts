@@ -3,8 +3,8 @@ import { StyleMode } from '@/lib/core/constants';
 
 // TODO: Refactor: logic extraction needed
 export const PendingPostSchema = z.object({
-  title: z.string(),
-  description: z.string().optional(),
+  title: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
   videoFormat: z.string(),
   platforms: z.array(z.object({
     platform: z.string(),

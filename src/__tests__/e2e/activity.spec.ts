@@ -126,7 +126,7 @@ test.describe('Activity Domain Modularization Verification @regression', () => {
       });
     });
     await page.reload();
-    await page.screenshot({ path: 'verification/activity-refactor/empty-state.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/activity-refactor/empty-state.png' });
 
     // 2. List View with items
     await page.route('**/api/activity*', async (route) => {
@@ -169,6 +169,6 @@ test.describe('Activity Domain Modularization Verification @regression', () => {
       });
     });
     await page.reload();
-    await page.screenshot({ path: 'verification/activity-refactor/list-view.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/activity-refactor/list-view.png' });
   });
 });

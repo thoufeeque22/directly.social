@@ -16,7 +16,7 @@ test('Visual capture of calendar contrast fix', async ({ page }) => {
   await page.waitForSelector('.calendarPost', { state: 'visible', timeout: 10000 }).catch(() => console.log('No .calendarPost found within timeout'));
   
   // Take screenshot
-  await page.screenshot({ path: 'verification/calendar-month.png', fullPage: true });
+  await page.locator('.ptr-container').screenshot({ path: 'verification/calendar-month.png' });
 
   // Click Week
   const weekBtn = page.getByRole('button', { name: 'Week' });
@@ -30,5 +30,5 @@ test('Visual capture of calendar contrast fix', async ({ page }) => {
   await page.waitForTimeout(1000);
 
   // Take screenshot
-  await page.screenshot({ path: 'verification/calendar-week.png', fullPage: true });
+  await page.locator('.ptr-container').screenshot({ path: 'verification/calendar-week.png' });
 });

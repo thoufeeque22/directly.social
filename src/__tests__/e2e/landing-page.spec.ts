@@ -84,15 +84,34 @@ test.describe('Landing Page', () => {
   test('should look correct in Light Mode @visual', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'light' });
     await page.goto('/');
+    
+    // Force the page to be scrollable and naturally sized for the screenshot
+    await page.evaluate(() => {
+      document.documentElement.style.setProperty('height', 'auto', 'important');
+      document.body.style.setProperty('height', 'auto', 'important');
+      document.documentElement.style.setProperty('overflow', 'visible', 'important');
+      document.body.style.setProperty('overflow', 'visible', 'important');
+    });
+    
     await expect(page).toHaveScreenshot('landing-light-mode.png', { fullPage: true });
   });
 
   test('should look correct in Dark Mode @visual', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'dark' });
     await page.goto('/');
+    
     // Verify dark background
     const body = page.locator('body');
-    await expect(body).toHaveCSS('background-color', /rgb\([0-9], [0-9], 1[0-9]\)/); // Adjusting for actual value rgb(9, 8, 18)
+    await expect(body).toHaveCSS('background-color', /rgb\([0-9], [0-9], 1[0-9]\)/);
+    
+    // Force the page to be scrollable and naturally sized for the screenshot
+    await page.evaluate(() => {
+      document.documentElement.style.setProperty('height', 'auto', 'important');
+      document.body.style.setProperty('height', 'auto', 'important');
+      document.documentElement.style.setProperty('overflow', 'visible', 'important');
+      document.body.style.setProperty('overflow', 'visible', 'important');
+    });
+
     await expect(page).toHaveScreenshot('landing-dark-mode.png', { fullPage: true });
   });
 });
