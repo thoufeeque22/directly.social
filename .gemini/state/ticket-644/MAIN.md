@@ -76,3 +76,4 @@ Design and implement a high-converting landing page for Directly.social. Based o
 - **[2026-06-05 22:38:00]**: QA [IN-PROGRESS] - Verifying entire E2E test suite after E2E password migration to `directly-e2e-secret` and patching flaky tests.
 - **[2026-06-05 22:43:00]**: QA [IN-PROGRESS] - Updating visual regression snapshots and running the full E2E verification suite with mobile-viewport and input fixes.
 - **[2026-06-05 23:13:35]**: QA [PASS] - Verified E2E test specs individually to prevent database race conditions.
+- **[2026-06-05 23:23:30]**: QA [PASS] - Fixed and verified failing E2E tests (video-preview-390, byos) individually on Mobile Chrome/Safari.
