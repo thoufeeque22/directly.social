@@ -14,6 +14,8 @@ import { execSync } from 'child_process';
  */
 
 test.describe('Ticket #538: Security Roles and Cleanup', () => {
+  // We must start unauthenticated to test the manual login and role-based redirects
+  test.use({ storageState: { cookies: [], origins: [] } });
 
   test('Tester account (USER) is denied access to admin analytics', async ({ page, workerEmail }) => {
     console.log(`[E2E] Testing Tester (${workerEmail}) access...`);

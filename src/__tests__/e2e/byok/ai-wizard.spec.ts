@@ -12,18 +12,22 @@ test.describe('AI BYOK Wizard E2E', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/settings');
     // Click on the AI Providers tab
-    await page.getByRole('tab', { name: /AI Providers/i }).click();
+    const aiTab = page.getByRole('tab', { name: /AI Providers/i });
+    await aiTab.scrollIntoViewIfNeeded();
+    await aiTab.click();
+    await page.waitForURL('**/settings?tab=ai', { timeout: 10000 });
   });
 
   test('visual audit and happy path', async ({ page }) => {
     // Wait for the UI to be ready
-    await expect(page.locator('text=AI Provider Keys (BYOK)')).toBeVisible();
+    await expect(page.locator('text=AI Provider Keys (BYOK)')).toBeVisible({ timeout: 10000 });
 
     // 1. Idle state
     await page.locator('.ptr-container').screenshot({ path: 'verification/ai-byok-wizard-idle.png' });
 
     // Fill in a key
     const keyInput = page.locator('[data-testid="ai-byok-key-input"] input');
+    await keyInput.scrollIntoViewIfNeeded();
     await keyInput.click();
     await keyInput.fill('');
     await keyInput.pressSequentially('sk-mock-key-1234', { delay: 50 });

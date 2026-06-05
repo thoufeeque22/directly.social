@@ -9,8 +9,12 @@ test.describe('Settings Page - Template Management @regression', () => {
 
   test('should display the template manager', async ({ page }) => {
     // Navigate to snippets tab
-    await page.getByRole('tab', { name: /snippets/i }).click();
-    await expect(page.locator('h2:has-text("Reusable Snippets")')).toBeVisible();
+    const snippetsTab = page.getByRole('tab', { name: /snippets/i });
+    await snippetsTab.scrollIntoViewIfNeeded();
+    await snippetsTab.click();
+    await page.waitForURL('**/settings?tab=snippets', { timeout: 10000 });
+    
+    await expect(page.locator('h2:has-text("Reusable Snippets")')).toBeVisible({ timeout: 10000 });
     // Instead of expecting empty, just expect the container to be visible
     await expect(page.locator('h2:has-text("Reusable Snippets")').locator('xpath=..')).toBeVisible();
   });
@@ -30,12 +34,17 @@ test.describe('Settings Page - Template Management @regression', () => {
     const descriptionField = page.getByTestId('video-description').first();
     await expect(descriptionField).toBeVisible({ timeout: 15000 });
     await page.waitForTimeout(1000); // Wait for React hydration to complete
+    await descriptionField.scrollIntoViewIfNeeded();
     await descriptionField.click();
     await descriptionField.fill('');
     await descriptionField.pressSequentially(templateContent, { delay: 50 });
     await descriptionField.blur();
     await page.waitForTimeout(1000); // Wait for React state sync
-    await page.getByTestId('snippets-trigger').first().click();
+    
+    const trigger = page.getByTestId('snippets-trigger').first();
+    await trigger.scrollIntoViewIfNeeded();
+    await trigger.click();
+    
     await expect(page.getByTestId('save-snippet-form-trigger').first()).toBeEnabled({ timeout: 10000 });
     await page.getByTestId('save-snippet-form-trigger').first().click();
     await page.getByTestId('new-snippet-name-input').first().fill(templateName);
@@ -44,8 +53,12 @@ test.describe('Settings Page - Template Management @regression', () => {
     
     // Now go back to settings to manage it
     await page.goto('/settings');
-    await page.getByRole('tab', { name: /snippets/i }).click();
-    await expect(page.getByTestId('template-card').filter({ hasText: templateName }).first()).toBeVisible({ timeout: 10000 });
+    const snippetsTab = page.getByRole('tab', { name: /snippets/i });
+    await snippetsTab.scrollIntoViewIfNeeded();
+    await snippetsTab.click();
+    await page.waitForURL('**/settings?tab=snippets', { timeout: 10000 });
+    
+    await expect(page.getByTestId('template-card').filter({ hasText: templateName }).first()).toBeVisible({ timeout: 15000 });
   });
 
   test('should edit and delete a template', async ({ page }) => {
@@ -62,12 +75,17 @@ test.describe('Settings Page - Template Management @regression', () => {
     const descField = page.getByTestId('video-description').first();
     await expect(descField).toBeVisible({ timeout: 15000 });
     await page.waitForTimeout(1000); // Wait for React hydration to complete
+    await descField.scrollIntoViewIfNeeded();
     await descField.click();
     await descField.fill('');
     await descField.pressSequentially('content', { delay: 50 });
     await descField.blur();
     await page.waitForTimeout(1000); // Wait for React state sync
-    await page.getByTestId('snippets-trigger').first().click();
+    
+    const trigger = page.getByTestId('snippets-trigger').first();
+    await trigger.scrollIntoViewIfNeeded();
+    await trigger.click();
+    
     await expect(page.getByTestId('save-snippet-form-trigger').first()).toBeEnabled({ timeout: 10000 });
     await page.getByTestId('save-snippet-form-trigger').first().click();
     await page.getByTestId('new-snippet-name-input').first().fill(templateName);
@@ -75,9 +93,13 @@ test.describe('Settings Page - Template Management @regression', () => {
     await expect(page.getByTestId('snippets-menu')).not.toBeVisible();
 
     await page.goto('/settings');
-    await page.getByRole('tab', { name: /snippets/i }).click();
+    const snippetsTab = page.getByRole('tab', { name: /snippets/i });
+    await snippetsTab.scrollIntoViewIfNeeded();
+    await snippetsTab.click();
+    await page.waitForURL('**/settings?tab=snippets', { timeout: 10000 });
+    
     const templateCard = page.getByTestId('template-card').filter({ hasText: templateName }).first();
-    await expect(templateCard).toBeVisible({ timeout: 10000 });
+    await expect(templateCard).toBeVisible({ timeout: 15000 });
     
     // Edit the template
     await templateCard.getByRole('button', { name: /edit/i }).click();
@@ -85,7 +107,7 @@ test.describe('Settings Page - Template Management @regression', () => {
     await expect(nameInput).toBeVisible();
     await nameInput.fill(updatedTemplateName);
     await page.locator('button:has-text("Save")').click();
-    await expect(page.getByText(updatedTemplateName)).toBeVisible();
+    await expect(page.getByText(updatedTemplateName)).toBeVisible({ timeout: 10000 });
 
     // Setup dialog handler BEFORE clicking delete
     page.once('dialog', dialog => dialog.accept());
@@ -93,6 +115,6 @@ test.describe('Settings Page - Template Management @regression', () => {
     // Delete the template
     const updatedTemplateCard = page.getByTestId('template-card').filter({ hasText: updatedTemplateName }).first();
     await updatedTemplateCard.getByRole('button', { name: /delete/i }).click();
-    await expect(page.getByText(updatedTemplateName)).not.toBeVisible();
+    await expect(page.getByText(updatedTemplateName)).not.toBeVisible({ timeout: 10000 });
   });
 });

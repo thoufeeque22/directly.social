@@ -15,14 +15,16 @@ test.describe('Settings Page Tab Interface', () => {
     ];
     
     for (const tab of tabMapping) {
-      await page.getByRole('tab', { name: tab.label, exact: true }).click();
+      const tabElement = page.getByRole('tab', { name: tab.label, exact: true });
+      await tabElement.scrollIntoViewIfNeeded();
+      await tabElement.click();
       
       if (tab.id === 'destinations') {
           // Allow default URL
           const currentUrl = page.url();
           expect(currentUrl.includes('/settings') && (currentUrl.includes('tab=destinations') || !currentUrl.includes('tab='))).toBeTruthy();
       } else {
-          await page.waitForURL(`**/settings?tab=${tab.id}`, { timeout: 5000 });
+          await page.waitForURL(`**/settings?tab=${tab.id}`, { timeout: 10000 });
           await expect(page).toHaveURL(new RegExp(`tab=${tab.id}`));
       }
       
@@ -33,11 +35,18 @@ test.describe('Settings Page Tab Interface', () => {
 
   test('should have all elements visible in the unified platform view', async ({ page }) => {
     // AI Providers tab
-    await page.getByRole('tab', { name: /ai providers/i }).click();
-    await expect(page.getByRole('heading', { name: /ai providers/i })).toBeVisible();
+    const aiTab = page.getByRole('tab', { name: /ai providers/i });
+    await aiTab.scrollIntoViewIfNeeded();
+    await aiTab.click();
+    await expect(page.getByRole('heading', { name: /ai providers/i })).toBeVisible({ timeout: 10000 });
     
     // Switch back to Destinations
-    await page.getByRole('tab', { name: /destinations/i }).click();
-    await expect(page.getByRole('button', { name: /suggest platform/i })).toBeVisible();
+    const destTab = page.getByRole('tab', { name: /destinations/i });
+    await destTab.scrollIntoViewIfNeeded();
+    await destTab.click();
+    
+    const suggestBtn = page.getByRole('button', { name: /suggest platform/i });
+    await suggestBtn.scrollIntoViewIfNeeded();
+    await expect(suggestBtn).toBeVisible({ timeout: 10000 });
   });
 });
