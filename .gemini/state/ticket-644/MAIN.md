@@ -46,7 +46,7 @@ Design and implement a high-converting landing page for Directly.social. Based o
 - [x] Discovery
 - [x] Development
 - [x] Audit
-- [/] QA
+- [x] QA: Investigating failure in src/__tests__/e2e/landing-page.spec.ts
 - [ ] Documentation
 
 ## Technical Mandates
@@ -71,3 +71,5 @@ Design and implement a high-converting landing page for Directly.social. Based o
 - **[2026-06-04 23:34:48]**: DEV [SUCCESS] - Refactored Footer into modular sub-components to comply with 100-line rule.
 - **[2026-06-04 23:38:42]**: AUDIT [PASS] - Audit PASS: Footer refactored into index.tsx (49 lines), FooterColumn.tsx (34 lines), and constants.ts (47 lines). All 11 landing page components strictly follow the 100-line rule. Security and Perfor
 - **[2026-06-04 23:39:31]**: AUDIT [PASS] - Verified modularity fix for Footer and confirmed performance/security compliance.
+- **[2026-06-05 09:00:00]**: QA [IN-PROGRESS] - Investigating failure in `src/__tests__/e2e/landing-page.spec.ts`.
+- **[2026-06-05 20:13:25]**: QA [PASS] - Generated missing visual snapshots. All Playwright tests pass.
