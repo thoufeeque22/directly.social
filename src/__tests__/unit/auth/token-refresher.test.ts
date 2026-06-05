@@ -80,7 +80,7 @@ describe('Token Refresher', () => {
     const result = await refreshTokenIfNecessary('acc-1');
     
     expect(result).toBe(true);
-    expect(refreshGoogleToken).toHaveBeenCalledWith('ref-123', { clientId: 'id', clientSecret: 'secret' });
+    expect(refreshGoogleToken).toHaveBeenCalledWith('ref-123', { clientId: 'id', clientSecret: 'secret', redirectUri: 'uri' });
     expect(prisma.account.update).toHaveBeenCalledWith({
       where: { id: 'acc-1' },
       data: {

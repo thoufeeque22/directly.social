@@ -5,6 +5,15 @@ import { useVideoPlayer } from './useVideoPlayer';
 import { VideoPlayerView } from './VideoPlayerView';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
+const formatDuration = (seconds: number | null): string => {
+  if (seconds === null) return '';
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.round(seconds % 60);
+  if (h > 0) return `${h}h ${m}m ${s}s`;
+  return m > 0 ? `${m}m ${s}s` : `${s}s`;
+};
+
 export const VideoPlayerPreview: React.FC = () => {
   const { draftFile, videoFormat, videoDuration, draftFileName } = useUploadFormContext();
   const player = useVideoPlayer(draftFile);
@@ -19,7 +28,7 @@ export const VideoPlayerPreview: React.FC = () => {
       </div>
       <VideoPlayerView {...player} />
       <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ fontSize: '0.8rem', color: 'hsl(var(--muted-foreground))' }}>Format: <strong>{videoFormat === 'short' ? 'Short-Form' : 'Long-Form'}</strong>{videoDuration && ` • Duration: ${Math.round(videoDuration)}s`}</div>
+        <div style={{ fontSize: '0.8rem', color: 'hsl(var(--muted-foreground))' }}>Format: <strong>{videoFormat === 'short' ? 'Short-Form' : 'Long-Form'}</strong>{videoDuration && ` • ${formatDuration(videoDuration)}`}</div>
         {(videoFormat === 'short' && videoDuration && videoDuration > 90) && <div style={{ color: 'hsl(var(--destructive))', fontSize: '0.8rem', fontWeight: 600 }}>Warning: Exceeds 90s short limit</div>}
       </div>
       {player.thumbnailUrl && (

@@ -21,35 +21,42 @@ export function useDraftFile(userId?: string) {
 
   const detectVideoMetadata = (file: File): Promise<{ format: 'short' | 'long', duration: number }> => {
     return new Promise((resolve) => {
-      const video = document.createElement('video');
-      video.preload = 'metadata';
-      video.muted = true;
-      video.playsInline = true;
-      
-      const cleanup = () => {
-        video.onloadedmetadata = null;
-        video.onerror = null;
-        if (video.src) {
-          globalThis.URL.revokeObjectURL(video.src);
-          video.src = '';
-        }
-        video.remove();
-      };
+      try {
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        video.muted = true;
+        video.playsInline = true;
+        
+        const cleanup = () => {
+          video.onloadedmetadata = null;
+          video.onerror = null;
+          if (video.src) {
+            try {
+              globalThis.URL.revokeObjectURL(video.src);
+            } catch (e) {}
+            video.src = '';
+          }
+          video.remove();
+        };
 
-      video.onloadedmetadata = () => {
-        const isVertical = video.videoHeight > video.videoWidth;
-        const duration = video.duration;
-        cleanup();
-        const format = (isVertical && duration <= 90) ? 'short' : 'long';
-        resolve({ format, duration });
-      };
+        video.onloadedmetadata = () => {
+          const isVertical = video.videoHeight > video.videoWidth;
+          const duration = video.duration;
+          cleanup();
+          const format = (isVertical && duration <= 90) ? 'short' : 'long';
+          resolve({ format, duration });
+        };
 
-      video.onerror = () => {
+        video.onerror = () => {
+          resolve({ format: 'long', duration: 0 });
+          cleanup();
+        };
+
+        video.src = globalThis.URL.createObjectURL(file);
+      } catch (err) {
+        console.error("detectVideoMetadata error:", err);
         resolve({ format: 'long', duration: 0 });
-        cleanup();
-      };
-
-      video.src = globalThis.URL.createObjectURL(file);
+      }
     });
   };
 

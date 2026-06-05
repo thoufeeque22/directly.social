@@ -28,11 +28,13 @@ test.describe('Settings Page - Template Management @regression', () => {
     
     // Save a new snippet
     const descriptionField = page.getByTestId('video-description').first();
+    await expect(descriptionField).toBeVisible({ timeout: 15000 });
+    await page.waitForTimeout(1000); // Wait for React hydration to complete
     await descriptionField.click();
     await descriptionField.fill('');
     await descriptionField.pressSequentially(templateContent, { delay: 50 });
     await descriptionField.blur();
-    await page.waitForTimeout(500); // Give context a moment to update
+    await page.waitForTimeout(1000); // Wait for React state sync
     await page.getByTestId('snippets-trigger').first().click();
     await expect(page.getByTestId('save-snippet-form-trigger').first()).toBeEnabled({ timeout: 10000 });
     await page.getByTestId('save-snippet-form-trigger').first().click();
@@ -58,11 +60,13 @@ test.describe('Settings Page - Template Management @regression', () => {
     await page.reload();
     
     const descField = page.getByTestId('video-description').first();
+    await expect(descField).toBeVisible({ timeout: 15000 });
+    await page.waitForTimeout(1000); // Wait for React hydration to complete
     await descField.click();
     await descField.fill('');
     await descField.pressSequentially('content', { delay: 50 });
     await descField.blur();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000); // Wait for React state sync
     await page.getByTestId('snippets-trigger').first().click();
     await expect(page.getByTestId('save-snippet-form-trigger').first()).toBeEnabled({ timeout: 10000 });
     await page.getByTestId('save-snippet-form-trigger').first().click();

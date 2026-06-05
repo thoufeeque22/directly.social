@@ -1,6 +1,8 @@
 import { vi } from 'vitest';
 import '@testing-library/jest-dom';
 
+process.env.NEXT_PUBLIC_E2E = 'false';
+
 // Mock Next-Auth
 vi.mock('next-auth', () => ({
   default: vi.fn(() => ({

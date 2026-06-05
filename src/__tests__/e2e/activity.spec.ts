@@ -5,6 +5,8 @@ test.describe('Activity Domain Modularization Verification @regression', () => {
     // We assume the user is already logged in via auth.setup.ts or similar
     // For local dev, we might need to handle login if not using reuse-auth
     await page.goto('/activity');
+    await expect(page.getByRole('heading', { name: 'Activity Hub' })).toBeVisible({ timeout: 15000 });
+    await page.waitForTimeout(1000);
   });
 
   test('should load activity page and display items', async ({ page }) => {

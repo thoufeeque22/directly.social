@@ -3,6 +3,8 @@ import { test, expect } from './base-test';;
 test.describe('BYOS - Bring Your Own Storage @regression', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/settings');
+    await expect(page.locator('h1').first()).toBeVisible({ timeout: 15000 });
+    await page.waitForTimeout(1000);
   });
 
   test('should complete the full BYOS configuration stepper successfully', async ({ page }) => {

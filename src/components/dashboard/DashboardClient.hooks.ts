@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { StyleMode, AITier } from '@/lib/core/constants';
+import { StyleMode, AITier, STYLE_MODES } from '@/lib/core/constants';
 import { AIProvider } from '@/lib/core/ai';
 import { Account } from '@/lib/core/types';
 import { useUploadStatus } from '@/hooks/useUploadStatus';
@@ -35,7 +35,7 @@ export const useDashboardAIState = (initialAITier: AITier, initialAIStyle: Style
     if (savedProvider && ['gemini', 'groq', 'ollama', 'openai', 'anthropic'].includes(savedProvider)) setAiProviderInternal(savedProvider);
     const savedMode = localStorage.getItem('SS_AI_MODE') as StyleMode;
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (savedMode && ['Smart', 'Creative', 'Balanced'].includes(savedMode)) setContentModeInternal(savedMode);
+    if (savedMode && (STYLE_MODES as string[]).includes(savedMode)) setContentModeInternal(savedMode);
   }, []);
 
   const setAiTier = async (newTier: AITier) => {

@@ -64,14 +64,28 @@ vi.mock('fs', () => {
     removeListener: vi.fn(),
   });
 
+  const mockReadStream = {
+    on: vi.fn(function(event, cb) {
+      if (event === "data") cb(Buffer.from("chunk data"));
+      if (event === "end") cb();
+      return this;
+    }),
+  };
+
   return {
     promises,
     createWriteStream: vi.fn(createMockStream),
+    createReadStream: vi.fn().mockReturnValue(mockReadStream),
     existsSync: vi.fn().mockReturnValue(true),
+    appendFileSync: vi.fn(),
+    mkdirSync: vi.fn(),
     default: {
       promises,
       existsSync: vi.fn().mockReturnValue(true),
       createWriteStream: vi.fn(createMockStream),
+      createReadStream: vi.fn().mockReturnValue(mockReadStream),
+      appendFileSync: vi.fn(),
+      mkdirSync: vi.fn(),
     }
   };
 });

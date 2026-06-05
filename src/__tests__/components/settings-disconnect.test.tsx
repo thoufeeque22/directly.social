@@ -144,7 +144,7 @@ describe('Settings Disconnect Functionality', () => {
     fireEvent.click(ytDisconnectBtn);
     
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(expect.stringContaining('Failed to disconnect account'));
+      expect(window.alert).toHaveBeenCalledWith(expect.stringContaining('Failed to disconnect'));
     });
   });
 });

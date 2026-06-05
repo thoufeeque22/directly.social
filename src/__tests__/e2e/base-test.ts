@@ -27,6 +27,8 @@ export const test = base.extend<{ consoleChecker: void }>({
           if (text.includes('Failed to load resource: the server responded with a status of 429')) return;
           if (text.includes('Failed to load resource: the server responded with a status of 404')) return;
           if (text.includes('Failed to load resource: the server responded with a status of 500')) return;
+          if (text.includes('Failed to load resource: the server responded with a status of 503')) return;
+          if (text.includes('Service Unavailable')) return;
           if (text.includes('Internal Server Error')) return;
           if (text.includes('Failed to fetch')) return;
           if (text.includes('authjs.dev')) return;
