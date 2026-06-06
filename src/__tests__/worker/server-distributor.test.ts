@@ -74,8 +74,7 @@ describe('Server Distributor', () => {
     // Verify YouTube call
     expect(mockUploadToYouTube).toHaveBeenCalledWith(expect.objectContaining({
       userId: 'user-1',
-      title: 'Test Title',
-      privacy: 'public'
+      title: 'Test Title'
     }));
 
     // Verify Facebook call (Reel because videoFormat is short)

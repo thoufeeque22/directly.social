@@ -15,12 +15,6 @@ export const maxDuration = 30;
  * (OO-001, CA-002): Refactored to extract mock logic and tools for SRP and modularity.
  */
 export async function POST(req: Request) {
-  // (OO-001): Extracted E2E mock logic
-  if (req.headers.get('x-e2e-test') === 'true') {
-    const result = await getMockAiResponse();
-    return result.toUIMessageStreamResponse();
-  }
-
   const session = await auth();
   if (!session?.user?.id) return new Response('Unauthorized', { status: 401 });
   const userId = session.user.id;
@@ -45,6 +39,11 @@ export async function POST(req: Request) {
         });
       }
       throw error;
+    }
+
+    if (req.headers.get('x-e2e-test') === 'true') {
+      const result = await getMockAiResponse();
+      return result.toUIMessageStreamResponse();
     }
 
     const model = getAIModel(primaryProvider, byok ? byok.modelId : undefined, byok ? byok.apiKey : undefined);

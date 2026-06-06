@@ -10,6 +10,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import LayoutWrapper from '@/components/layout/LayoutWrapper';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 // Mock next/navigation specifically for control
 vi.mock('next/navigation', () => ({
@@ -31,7 +32,7 @@ vi.mock('@/components/chat/AIChatbot', () => ({
 
 // Mock NextAuth useSession to avoid errors in real components
 vi.mock('next-auth/react', () => ({
-  useSession: () => ({ data: null, status: 'unauthenticated' }),
+  useSession: vi.fn(() => ({ data: null, status: 'unauthenticated' })),
 }));
 
 describe('LayoutWrapper', () => {
@@ -41,6 +42,7 @@ describe('LayoutWrapper', () => {
 
   it('renders only children when on the /login page (no sidebar/header)', () => {
     vi.mocked(usePathname).mockReturnValue('/login');
+    vi.mocked(useSession).mockReturnValue({ data: null, status: 'unauthenticated' });
     
     render(
       <LayoutWrapper>
@@ -55,6 +57,7 @@ describe('LayoutWrapper', () => {
 
   it('renders sidebar, header, and content when on the dashboard (/)', () => {
     vi.mocked(usePathname).mockReturnValue('/');
+    vi.mocked(useSession).mockReturnValue({ data: { user: { name: 'Test User' } }, status: 'authenticated' } as any);
     
     render(
       <LayoutWrapper>
@@ -69,6 +72,7 @@ describe('LayoutWrapper', () => {
 
   it('renders layout components on internal pages like /settings', () => {
     vi.mocked(usePathname).mockReturnValue('/settings');
+    vi.mocked(useSession).mockReturnValue({ data: { user: { name: 'Test User' } }, status: 'authenticated' } as any);
     
     render(
       <LayoutWrapper>

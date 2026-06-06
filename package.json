@@ -24,6 +24,7 @@
     "seed:whats-new": "npx tsx src/__tests__/scripts/seed-whats-new.ts",
     "test:smoke": "npx playwright test --grep @smoke",
     "test:regression": "npx playwright test --grep @regression",
+    "test:e2e:server": "NODE_ENV=test NEXT_DIST_DIR=.next-e2e npm run start -- -p 3005",
     "test:visual": "npx playwright test --grep @visual",
     "test:native": "maestro test .maestro/",
     "test:native:full": "bash scripts/mobile-test.sh",

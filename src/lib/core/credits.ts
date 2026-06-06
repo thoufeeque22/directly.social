@@ -21,7 +21,7 @@ export async function consumeAiCredit(
   // Feature temporarily disabled.
   return { success: true };
   
-  /* 
+  /*
   if (byokConfigs && byokConfigs[activeProvider]) {
     return { success: true };
   }

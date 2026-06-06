@@ -8,6 +8,7 @@ test.describe('Ticket 390: Video Player Preview', () => {
 
     // Ensure we are on the dashboard
     await expect(page.locator('h2:has-text("Upload & Automate")')).toBeVisible();
+    await page.waitForTimeout(1000); // Wait for React hydration to complete
 
     // Create a dummy file buffer to simulate upload. 
     // Note: Real video metadata extraction requires an actual valid video file. 

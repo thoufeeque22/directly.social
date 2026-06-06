@@ -2,9 +2,11 @@ import { test, expect } from './base-test';;
 
 test.describe('Theme 3-Way Toggle Cycle', () => {
   test.beforeEach(async ({ page }) => {
-    page.on('console', msg => console.log(msg.text()));
     // Start at home page
     await page.goto('/');
+    // Clear localStorage to ensure clean state
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
     
     // Disable transitions to make tests faster and more reliable
     await page.addStyleTag({
@@ -24,29 +26,17 @@ test.describe('Theme 3-Way Toggle Cycle', () => {
     const html = page.locator('html');
     const toggle = page.getByTestId('theme-toggle');
     
-    // 1. Synchronize to a known state: Light Mode
-    let isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-    if (!isLight) {
-      await toggle.click();
-      // wait a bit for react to update
-      await page.waitForTimeout(500);
-      isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-      if (!isLight) {
-        // Was dark, now system. Click again for light.
-        await toggle.click();
-        await expect(html).toHaveClass(/light-mode/, { timeout: 2000 });
-      }
-    }
+    // 1. Initial state is System. Click once to go to Light.
+    await toggle.click();
     await expect(html).toHaveClass(/light-mode/);
     
     // 2. Click: Light -> Dark
-    await page.waitForTimeout(1000);
     await toggle.click();
     await expect(html).not.toHaveClass(/light-mode/);
     
     // 3. Click: Dark -> System
     await toggle.click();
-    // In System mode, class depends on emulateMedia. Playwright default is dark.
+    // In System mode, class depends on system preference.
     await page.emulateMedia({ colorScheme: 'dark' });
     await expect(html).not.toHaveClass(/light-mode/);
     await page.emulateMedia({ colorScheme: 'light' });
@@ -64,25 +54,17 @@ test.describe('Theme 3-Way Toggle Cycle', () => {
     const toggle = page.getByTestId('theme-toggle');
     const html = page.locator('html');
     
-    // Set to Light mode
-    let isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-    if (!isLight) {
-      await toggle.click();
-      await page.waitForTimeout(500);
-      isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-      if (!isLight) {
-        await toggle.click();
-      }
-    }
-    await expect(html).toHaveClass(/light-mode/, { timeout: 2000 });
+    // 1. Start: System. Click once -> Light
+    await toggle.click();
+    await expect(html).toHaveClass(/light-mode/);
     
     await page.reload();
     await expect(page.locator('html')).toHaveClass(/light-mode/);
     
-    // Set to Dark mode
-    await page.waitForTimeout(1000);
+    // 2. Click -> Dark
     await toggle.click();
     await expect(html).not.toHaveClass(/light-mode/);
+    
     await page.reload();
     await expect(page.locator('html')).not.toHaveClass(/light-mode/);
   });
@@ -91,17 +73,9 @@ test.describe('Theme 3-Way Toggle Cycle', () => {
     const toggle = page.getByTestId('theme-toggle');
     const html = page.locator('html');
     
-    // Switch to Light Mode
-    let isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-    if (!isLight) {
-      await toggle.click();
-      await page.waitForTimeout(500);
-      isLight = await html.evaluate(el => el.classList.contains('light-mode'));
-      if (!isLight) {
-        await toggle.click();
-      }
-    }
-    await expect(html).toHaveClass(/light-mode/, { timeout: 2000 });
+    // Start: System. Click once -> Light
+    await toggle.click();
+    await expect(html).toHaveClass(/light-mode/);
     
     // Check Header background specifically in the main header
     const header = page.locator('header[class*="header"]').first();

@@ -16,14 +16,12 @@ function safeExec(command: string, retries = 3) {
 }
 
 test.describe('Analytics Dashboard', () => {
-  test.use({ storageState: '.auth/user.json' });
+  // Use admin role for this file by default
+  test.use({ authRole: 'admin' });
 
   test.beforeAll(async () => {
-    // Elevate user to ADMIN so middleware allows access to /admin/analytics
-    safeExec('npx tsx src/__tests__/scripts/make-admin.ts tester@directly.social');
-
-    // Seed mock data before running tests
-    await prisma.systemMetric.deleteMany();
+    // Seed mock data for the charts
+    // We don't deleteMany() anymore to avoid breaking other parallel tests
     
     const today = new Date();
     
@@ -71,48 +69,49 @@ test.describe('Analytics Dashboard', () => {
   });
 
   test.afterAll(async () => {
-    // Revert user to normal USER
-    try {
-      safeExec('npx tsx src/__tests__/scripts/seed-e2e-user.ts');
-    } catch (e) {
-      console.warn('Failed to reset user role in afterAll', e);
-    }
     await prisma.$disconnect();
   });
 
   test.describe('admin access', () => {
-    test.use({ storageState: { cookies: [], origins: [] } });
-
+    // No need to override storageState here, the describe-level one is admin.json
     test('admin can view analytics dashboard with populated data', async ({ page }) => {
-      // Login to get the new session token with ADMIN role
-      await page.goto('/login');
-      await page.getByTestId('e2e-email-input').fill('admin@directly.social');
-      await page.getByTestId('e2e-password-input').fill('directly-e2e-secret');
-      await page.getByTestId('e2e-login-submit').click();
-      await page.waitForURL('/');
+      await page.goto('/admin/analytics', { waitUntil: 'networkidle' });
 
-      await page.goto('/admin/analytics');
-      
       // Check for dashboard component
-      await expect(page.getByTestId('admin-analytics-dashboard')).toBeVisible();
-      await expect(page.getByTestId('feature-adoption-chart')).toBeVisible();
+      const dashboard = page.getByTestId('admin-analytics-dashboard');
+      await expect(dashboard).toBeVisible({ timeout: 20000 });
+      await expect(page.getByTestId('feature-adoption-chart')).toBeVisible({ timeout: 10000 });
 
       // Wait a brief moment to ensure charts render animations
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(2000);
 
       // Take screenshot
-      await page.screenshot({ path: 'verification/admin-analytics-dashboard.png', fullPage: true });
+      await dashboard.screenshot({ path: 'verification/admin-analytics-dashboard.png' });
     });
-  });
-    
-
-
-  test.describe('non-admin access', () => {
-    test.use({ storageState: { cookies: [], origins: [] } });
-
-    test('unauthenticated user is redirected to login', async ({ page }) => {
-      await page.goto('/admin/analytics');
-      await expect(page).toHaveURL(/.*\/login.*/);
     });
-  });
+
+
+
+    test.describe('non-admin access', () => {
+      // Force a regular user session for this block
+      test.use({ authRole: 'tester' });
+
+      test('non-admin user is redirected or denied access', async ({ page }) => {
+        // First go to dashboard to confirm we are logged in and healthy
+        await page.goto('/', { waitUntil: 'networkidle' });
+        await expect(page.locator('h2:has-text("Upload & Automate")').first()).toBeVisible();
+
+        // Now try to access admin analytics
+        try {
+          await page.goto('/admin/analytics', { waitUntil: 'commit' });
+        } catch (e) {
+          // Ignore fast-redirect network aborts
+          console.log('[E2E] Handled fast redirect abort during goto.');
+        }
+
+        // Our middleware redirects to home
+        await expect(page).toHaveURL(/\/$/, { timeout: 15000 });
+        await expect(page.getByTestId('admin-analytics-dashboard')).not.toBeVisible();
+      });
+    });
 });

@@ -1,4 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
+import 'dotenv/config';
+import dns from 'node:dns';
+dns.setDefaultResultOrder('ipv4first');
 
 export default defineConfig({
   testDir: './src/__tests__/e2e',
@@ -6,7 +9,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: 1,
+  workers: 8,
   reporter: [['html', { open: 'never' }]],
   snapshotDir: 'docs/visual/goldens',
   use: {
@@ -18,34 +21,37 @@ export default defineConfig({
     },
   },
   projects: [
-    { name: 'setup', testMatch: /.*\.setup\.ts/, use: { launchOptions: { slowMo: 0 } } },
+    {
+      name: 'landing-page',
+      testMatch: /landing-page\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: { cookies: [], origins: [] },
+      },
+    },
     {
       name: 'chromium',
       use: { 
         ...devices['Desktop Chrome'],
-        storageState: '.auth/user.json',
       },
-      dependencies: ['setup'],
     },
     {
       name: 'Mobile Chrome',
       use: {
         ...devices['Pixel 5'],
-        storageState: '.auth/user.json',
       },
-      dependencies: ['setup'],
     },
     {
       name: 'Mobile Safari',
       use: {
         ...devices['iPhone 13'],
-        storageState: '.auth/user.json',
       },
-      dependencies: ['setup'],
     },
   ],
   webServer: {
-    command: 'npm run build && npm run start -- -p 3005',
+    command: process.env.CI 
+      ? 'npm run build && npx next start -p 3005' 
+      : '[ -d .next-e2e ] && npx next start -p 3005 || (npm run build && npx next start -p 3005)',
     env: {
       NEXT_DIST_DIR: '.next-e2e',
       NEXT_PUBLIC_E2E: 'true',

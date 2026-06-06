@@ -29,9 +29,9 @@ export function ActivityCardHeader({
   
   // If the main title is just the date fallback and we have platform-specific titles
   // Let's use the first platform title as the primary one
-  const displayTitle = (title.match(/^\d+ [A-Z][a-z]+ \d{4}$/) && platformTitles.length > 0)
+  const displayTitle = ((!title || title.trim() === '' || title === 'Untitled Post' || title.match(/^\d+ [A-Z][a-z]+ \d{4}$/)) && platformTitles.length > 0)
     ? platformTitles[0]
-    : title;
+    : (title || 'Untitled Post');
 
   return (
     <div style={{ flex: 1, minWidth: 0 }}>

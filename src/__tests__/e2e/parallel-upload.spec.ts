@@ -2,28 +2,32 @@ import { test, expect } from './base-test';;
 import { execSync } from 'child_process';
 
 test.describe('Parallel Distribution Channels', () => {
-  // Use existing auth state
-  test.use({ storageState: '.auth/user.json' });
 
-  test.beforeAll(() => {
-    // Seed an account to ensure accounts.length > 0 in useAccounts
+  test.beforeAll(async ({}, testInfo) => {
+    const workerIndex = testInfo.workerIndex;
+    const email = `tester-${workerIndex % 10}@directly.social`;
+    // Seed accounts to ensure platforms are recognized for this worker
     execSync(`npx tsx -e "
       import { PrismaClient } from '@prisma/client';
       const prisma = new PrismaClient();
       async function main() {
-        const user = await prisma.user.findUnique({ where: { email: 'tester@directly.social' } });
+        const user = await prisma.user.findUnique({ where: { email: '${email}' } });
         if (user) {
-          await prisma.account.upsert({
-            where: { provider_providerAccountId: { provider: 'google', providerAccountId: 'e2e-google' } },
-            update: {},
-            create: {
-              userId: user.id,
-              type: 'oauth',
-              provider: 'google',
-              providerAccountId: 'e2e-google',
-              access_token: 'mock-token'
-            }
-          });
+          const platforms = ['youtube', 'facebook', 'instagram', 'tiktok'];
+          for (let i = 0; i < platforms.length; i++) {
+            const p = platforms[i];
+            await prisma.account.upsert({
+              where: { provider_providerAccountId: { provider: p, providerAccountId: p + ':local-dev-' + (i+1) } },
+              update: { userId: user.id },
+              create: {
+                userId: user.id,
+                type: 'oauth',
+                provider: p,
+                providerAccountId: p + ':local-dev-' + (i+1),
+                access_token: 'mock-token'
+              }
+            });
+          }
         }
       }
       main().finally(() => prisma.\\$disconnect());

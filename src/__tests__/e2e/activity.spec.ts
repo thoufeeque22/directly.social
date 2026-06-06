@@ -5,6 +5,8 @@ test.describe('Activity Domain Modularization Verification @regression', () => {
     // We assume the user is already logged in via auth.setup.ts or similar
     // For local dev, we might need to handle login if not using reuse-auth
     await page.goto('/activity');
+    await expect(page.getByRole('heading', { name: 'Activity Hub' })).toBeVisible({ timeout: 15000 });
+    await page.waitForTimeout(1000);
   });
 
   test('should load activity page and display items', async ({ page }) => {
@@ -52,23 +54,29 @@ test.describe('Activity Domain Modularization Verification @regression', () => {
   });
 
   test('should filter activity items by search query', async ({ page }) => {
-    await page.route('**/api/activity?*search=Post+1*', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          data: [
-            {
-              id: 'post-1',
-              title: 'Test Post 1',
-              description: 'Description 1',
-              createdAt: new Date().toISOString(),
-              platforms: [{ id: 'res-1', platform: 'youtube', status: 'completed' }]
-            }
-          ],
-          nextCursor: null
-        })
-      });
+    await page.route(url => url.pathname.includes('/api/activity'), async (route) => {
+      const urlObj = new URL(route.request().url());
+      const searchParam = urlObj.searchParams.get('search');
+      if (searchParam === 'Post 1') {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            data: [
+              {
+                id: 'post-1',
+                title: 'Test Post 1',
+                description: 'Description 1',
+                createdAt: new Date().toISOString(),
+                platforms: [{ id: 'res-1', platform: 'youtube', status: 'completed' }]
+              }
+            ],
+            nextCursor: null
+          })
+        });
+      } else {
+        await route.continue();
+      }
     });
 
     const searchField = page.getByPlaceholder('Search activity by title or description...');
@@ -126,7 +134,7 @@ test.describe('Activity Domain Modularization Verification @regression', () => {
       });
     });
     await page.reload();
-    await page.screenshot({ path: 'verification/activity-refactor/empty-state.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/activity-refactor/empty-state.png' });
 
     // 2. List View with items
     await page.route('**/api/activity*', async (route) => {
@@ -169,6 +177,6 @@ test.describe('Activity Domain Modularization Verification @regression', () => {
       });
     });
     await page.reload();
-    await page.screenshot({ path: 'verification/activity-refactor/list-view.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/activity-refactor/list-view.png' });
   });
 });

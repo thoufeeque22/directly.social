@@ -1,9 +1,6 @@
 import { test, expect } from './base-test';;
 
 test.describe('Manual Mode: Polish with AI Button', () => {
-  // Use existing auth state for tests
-  test.use({ storageState: '.auth/user.json' });
-
   test.beforeEach(async ({ page }) => {
     // Navigate to dashboard
     await page.goto('/');
@@ -27,7 +24,7 @@ test.describe('Manual Mode: Polish with AI Button', () => {
     await expect(postVideoButton).toBeVisible();
 
     // Capture visual audit screenshot
-    await page.screenshot({ path: 'verification/514-enrich-button.png', fullPage: true });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/514-enrich-button.png' });
 
     // Click the Polish with AI button
     await polishButton.click();

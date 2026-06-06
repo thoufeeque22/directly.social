@@ -14,27 +14,20 @@ import { execSync } from 'child_process';
  */
 
 test.describe('Ticket #538: Security Roles and Cleanup', () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
+  // We must start unauthenticated to test the manual login and role-based redirects
+  test.use({ authRole: 'none' });
 
-  test.beforeAll(async () => {
-    console.log('[E2E] Resetting DB state...');
-    try {
-      execSync('npx tsx src/__tests__/scripts/seed-e2e-user.ts');
-    } catch (error) {
-      console.error('[E2E] Failed to seed database:', error);
-    }
-  });
-
-  test('Tester account (USER) is denied access to admin analytics', async ({ page }) => {
-    console.log('[E2E] Testing Tester (USER) access...');
+  test('Tester account (USER) is denied access to admin analytics', async ({ page, workerEmail }) => {
+    console.log(`[E2E] Testing Tester (${workerEmail}) access...`);
     
     // Ensure tester is USER
-    execSync('npx tsx src/__tests__/scripts/seed-e2e-user.ts');
+    execSync(`npx tsx src/__tests__/scripts/seed-e2e-user.ts ${workerEmail} USER`);
 
     // Login as Tester
     await page.goto('/login');
-    await page.getByTestId('e2e-email-input').fill('tester@directly.social');
-    await page.getByTestId('e2e-password-input').fill('directly-e2e-secret');
+    await page.getByTestId('e2e-email-input').fill(workerEmail);
+    await page.getByTestId('e2e-password-input').fill(process.env.E2E_TEST_PASSWORD || 'password');
+    await page.waitForTimeout(2000); // Wait for CSRF token fetch
     await page.getByTestId('e2e-login-submit').click();
     
     // Wait for redirect to dashboard
@@ -50,25 +43,38 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     
     // 2. Try to access /admin/analytics directly
     console.log('[E2E] Attempting direct access to /admin/analytics...');
-    await page.goto('/admin/analytics');
+    try {
+      await page.goto('/admin/analytics', { waitUntil: 'commit' });
+    } catch (e) {
+      console.log('[E2E] Handled fast redirect abort during goto.');
+    }
     
     // 3. Verify redirect to / (as per authorized callback in auth.config.ts)
-    await page.waitForURL('/', { timeout: 10000 });
-    expect(page.url()).toContain('://127.0.0.1:3005/');
+    await expect(page).toHaveURL(/\/$/, { timeout: 15000 });
     console.log('[E2E] Direct access denied and redirected to home.');
   });
 
-  test('Account with ADMIN role can access admin analytics', async ({ page }) => {
-    console.log('[E2E] Testing ADMIN access...');
+  test('Account with ADMIN role can access admin analytics', async ({ page, isMobile, adminEmail }) => {
+    console.log(`[E2E] Testing ADMIN access with ${adminEmail}...`);
 
     // Login again to get new session with ADMIN role
     await page.goto('/login');
-    await page.getByTestId('e2e-email-input').fill('admin@directly.social');
-    await page.getByTestId('e2e-password-input').fill('directly-e2e-secret');
+    await page.getByTestId('e2e-email-input').fill(adminEmail);
+    await page.getByTestId('e2e-password-input').fill(process.env.E2E_TEST_PASSWORD || 'password');
+    await page.waitForTimeout(2000); // Wait for CSRF token fetch
     await page.getByTestId('e2e-login-submit').click();
     
     await expect(page.locator('h2:has-text("Upload & Automate")').first()).toBeVisible({ timeout: 15000 });
     console.log('[E2E] Logged in as Admin.');
+
+    // If on mobile, the sidebar is hidden, so we need to open it
+    if (isMobile) {
+      const menuButton = page.getByRole('button', { name: '☰' });
+      if (await menuButton.isVisible()) {
+        await menuButton.click();
+        await page.waitForTimeout(500); // Wait for open transition
+      }
+    }
 
     // 1. Verify Sidebar SHOWS Analytics
     const analyticsLink = page.getByRole('link', { name: 'Analytics' });
@@ -79,8 +85,12 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     await page.screenshot({ path: 'verification/admin-sidebar.png' });
 
     // 2. Access /admin/analytics
-    await analyticsLink.scrollIntoViewIfNeeded();
-    await analyticsLink.click();
+    if (isMobile) {
+      await analyticsLink.evaluate((el) => (el as HTMLElement).click());
+    } else {
+      await analyticsLink.scrollIntoViewIfNeeded();
+      await analyticsLink.click();
+    }
     await page.waitForURL('/admin/analytics');
     
     // 3. Verify Admin Analytics Dashboard is visible
@@ -88,7 +98,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     console.log('[E2E] Admin Analytics dashboard is visible.');
     
     // Take screenshot of Admin Analytics Page
-    await page.screenshot({ path: 'verification/admin-analytics-page.png' });
+    await page.locator('.ptr-container').screenshot({ path: 'verification/admin-analytics-page.png' });
   });
 
   test('Cleanup: Deleted routes return 404', async ({ page }) => {

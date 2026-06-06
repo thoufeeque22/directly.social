@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { StyleMode, AITier } from '@/lib/core/constants';
+import { StyleMode, AITier, STYLE_MODES } from '@/lib/core/constants';
 import { AIProvider } from '@/lib/core/ai';
 import { Account } from '@/lib/core/types';
 import { useUploadStatus } from '@/hooks/useUploadStatus';
@@ -8,12 +8,15 @@ export { useAIPreviewCache as useDashboardAIPreviews } from '@/hooks/useAIPrevie
 
 export const useDashboardDevAccounts = (accounts: Account[], userId?: string) => {
   return useMemo(() => {
-    if (process.env.NODE_ENV !== 'development' || accounts.some(a => a.id.startsWith('local-dev-'))) return accounts;
+    if (
+      (process.env.NODE_ENV !== 'development' && process.env.NEXT_PUBLIC_E2E !== 'true') || 
+      accounts.some(a => a.id.startsWith('local-dev-'))
+    ) return accounts;
     return [
       ...accounts, 
-      { id: 'local-dev-1', userId: userId || 'dev-user', provider: 'local1', providerAccountId: 'local-1', name: 'Tester Alpha', accountName: 'Tester Alpha', email: 'alpha@local.host', image: null, access_token: null, refresh_token: null, expires_at: null, token_type: null, scope: null, id_token: null, session_state: null, isDistributionEnabled: true },
-      { id: 'local-dev-2', userId: userId || 'dev-user', provider: 'local2', providerAccountId: 'local-2', name: 'Tester Beta', accountName: 'Tester Beta', email: 'beta@local.host', image: null, access_token: null, refresh_token: null, expires_at: null, token_type: null, scope: null, id_token: null, session_state: null, isDistributionEnabled: true },
-      { id: 'local-dev-3', userId: userId || 'dev-user', provider: 'local3', providerAccountId: 'local-3', name: 'Local Gamma', accountName: 'Local Gamma', email: 'gamma@local.host', image: null, access_token: null, refresh_token: null, expires_at: null, token_type: null, scope: null, id_token: null, session_state: null, isDistributionEnabled: true }
+      { id: 'local-dev-1', userId: userId || 'dev-user', provider: 'youtube', providerAccountId: 'local-1', name: 'Tester Alpha', accountName: 'Tester Alpha', email: 'alpha@local.host', image: null, access_token: null, refresh_token: null, expires_at: null, token_type: null, scope: null, id_token: null, session_state: null, isDistributionEnabled: true },
+      { id: 'local-dev-2', userId: userId || 'dev-user', provider: 'tiktok', providerAccountId: 'local-2', name: 'Tester Beta', accountName: 'Tester Beta', email: 'beta@local.host', image: null, access_token: null, refresh_token: null, expires_at: null, token_type: null, scope: null, id_token: null, session_state: null, isDistributionEnabled: true },
+      { id: 'local-dev-3', userId: userId || 'dev-user', provider: 'facebook', providerAccountId: 'local-3', name: 'Local Gamma', accountName: 'Local Gamma', email: 'gamma@local.host', image: null, access_token: null, refresh_token: null, expires_at: null, token_type: null, scope: null, id_token: null, session_state: null, isDistributionEnabled: true }
     ];
   }, [accounts, userId]);
 };
@@ -32,7 +35,7 @@ export const useDashboardAIState = (initialAITier: AITier, initialAIStyle: Style
     if (savedProvider && ['gemini', 'groq', 'ollama', 'openai', 'anthropic'].includes(savedProvider)) setAiProviderInternal(savedProvider);
     const savedMode = localStorage.getItem('SS_AI_MODE') as StyleMode;
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (savedMode && ['Smart', 'Creative', 'Balanced'].includes(savedMode)) setContentModeInternal(savedMode);
+    if (savedMode && (STYLE_MODES as string[]).includes(savedMode)) setContentModeInternal(savedMode);
   }, []);
 
   const setAiTier = async (newTier: AITier) => {

@@ -15,12 +15,21 @@ vi.mock("fs", () => {
     stat: vi.fn(),
     rmdir: vi.fn().mockResolvedValue(undefined),
   };
+  const mockReadStream = {
+    on: vi.fn(function(event, cb) {
+      if (event === "data") cb(Buffer.from("chunk data"));
+      if (event === "end") cb();
+      return this;
+    }),
+  };
   return {
     promises: mockPromises,
     createWriteStream: vi.fn(),
+    createReadStream: vi.fn().mockReturnValue(mockReadStream),
     default: {
       promises: mockPromises,
       createWriteStream: vi.fn(),
+      createReadStream: vi.fn().mockReturnValue(mockReadStream),
     },
   };
 });

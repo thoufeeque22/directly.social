@@ -23,7 +23,8 @@ export async function POST(req: NextRequest) {
     if (!uploadId || !chunkIndex || !/^\d+$/.test(chunkIndex)) {
       return NextResponse.json({ error: "Invalid or missing x-upload-id or x-chunk-index" }, { status: 400 });
     }
-    const chunkDir = path.join(process.cwd(), "tmp/chunks", path.basename(uploadId));
+    const baseDir = process.env.UPLOAD_TEMP_DIR || path.join(process.cwd(), "tmp");
+    const chunkDir = path.join(baseDir, "chunks", path.basename(uploadId));
     await fs.mkdir(chunkDir, { recursive: true });
 
     const chunkPath = path.join(chunkDir, `${chunkIndex.padStart(8, '0')}.part`);

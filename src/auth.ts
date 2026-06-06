@@ -43,14 +43,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           if (process.env.NEXT_PUBLIC_E2E === 'true' && !expectedPassword) {
             throw new Error("CRITICAL: E2E_TEST_PASSWORD is not set in environment.");
           }
+
+          const email = credentials?.email as string;
+          const isE2EEmail = email === "tester@directly.social" || 
+                           email === "admin@directly.social" || 
+                           (email && (email.startsWith("tester-") || email.startsWith("admin-")) && email.endsWith("@directly.social"));
           
           if (
             expectedPassword &&
-            (credentials?.email === "tester@directly.so" || credentials?.email === "admin@directly.so") && 
+            isE2EEmail && 
             credentials?.password === expectedPassword
           ) {
             const user = await prisma.user.findFirst({
-              where: { email: credentials.email }
+              where: { email }
             });
 
             if (user) {

@@ -17,8 +17,8 @@ test.describe('Support Tab (Ticket 399)', () => {
     const supportLink = page.getByRole('link', { name: 'Support' });
     await expect(supportLink).toBeVisible();
 
-    // Click the Support link
-    await supportLink.click();
+    // Click the Support link (use JS click on mobile to bypass strict viewport checks)
+    await supportLink.evaluate((el) => (el as HTMLElement).click());
 
     // Verify it navigates to /settings?tab=support
     await page.waitForURL('**/settings?tab=support');
@@ -31,7 +31,7 @@ test.describe('Support Tab (Ticket 399)', () => {
     // Verify the "Email Support" button
     const emailSupportBtn = page.getByRole('link', { name: 'Email Support' });
     await expect(emailSupportBtn).toBeVisible();
-    await expect(emailSupportBtn).toHaveAttribute('href', 'mailto:support@directly.social');
+    await expect(emailSupportBtn).toHaveAttribute('href', 'mailto:support.directly.social@gmail.com');
 
     // Verify Frequently Asked Questions are present
     await expect(page.getByRole('heading', { name: 'Frequently Asked Questions' })).toBeVisible();

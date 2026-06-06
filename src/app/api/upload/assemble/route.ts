@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { logger } from "@/lib/core/logger";
 import { UploadAssembleSchema } from "@/lib/schemas/upload-pipeline";
-import { assembleChunks } from "@/lib/upload/chunk-assembler";
+import { assembleChunks, UploadAssemblyError } from "@/lib/upload/chunk-assembler";
 import { registerGalleryAsset } from "@/lib/upload/gallery-registration";
 import { upsertUploadActivity, PlatformInput } from "@/lib/upload/activity-registration";
 import { getVideoMetadata, checkTranscodeRequirement } from "@/lib/video/processor";
@@ -27,8 +27,14 @@ export async function POST(req: NextRequest) {
     try { await registerGalleryAsset({ userId: session.user.id, fileId, fileName: p.fileName, size, finalPath, checksum, scheduledAt: p.scheduledAt, videoMetadata }); } 
     catch (e) { logger.warn("Gallery registration failed:", e); }
 
-    const transcodeResults = p.platforms ? (await checkTranscodeRequirement(finalPath, p.platforms.map(x => x.platform))).results : {};
-
+    let transcodeResults = {};
+    if (p.platforms) {
+      try {
+        transcodeResults = (await checkTranscodeRequirement(finalPath, p.platforms.map(x => x.platform))).results;
+      } catch (e) {
+        logger.warn("Transcode check failed:", e);
+      }
+    }
     const activity = await upsertUploadActivity({
       userId: session.user.id, fileId, fileName: p.fileName, finalPath, activityId: p.activityId, title: p.title, description: p.description, videoFormat: p.videoFormat, platforms: p.platforms as PlatformInput[], scheduledAt: p.scheduledAt, transcodeResults
     });
@@ -36,6 +42,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, data: { fileId, fileName: p.fileName, activityId: activity.id } });
   } catch (error: unknown) {
     logger.error("Assembly Error:", error);
+    if (error instanceof UploadAssemblyError) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
     return NextResponse.json({ error: error instanceof Error ? error.message : "Unknown error" }, { status: 500 });
   }
 }
