@@ -20,7 +20,7 @@ export const Pricing = () => {
 
         <Grid container spacing={4} sx={{ justifyContent: 'center' }}>
           {pricingTiers.map((tier, index) => (
-            <Grid item xs={12} md={5} key={index}>
+            <Grid size={{ xs: 12, md: 5 }} key={index}>
               <PricingCard tier={tier} />
             </Grid>
           ))}

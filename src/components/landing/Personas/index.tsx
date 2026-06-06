@@ -20,7 +20,7 @@ const personas = {
     title: 'For the Self-Hoster & Dev',
     description: 'Tired of closed SaaS ecosystems? Directly is open-core, extensible, and designed for those who want to own their infrastructure.',
     benefits: [
-      'By-Your-Own-Key (BYOK) architecture',
+      'Bring-Your-Own-Key (BYOK) architecture',
       'Self-hostable or Local-only execution',
       'Extensible platform adapter system',
       'Zero-latency direct API integration'

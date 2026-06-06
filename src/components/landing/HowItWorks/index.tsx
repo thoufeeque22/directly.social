@@ -39,7 +39,7 @@ export const HowItWorks = () => {
 
         <Grid container spacing={4}>
           {howItWorksSteps.map((step, index) => (
-            <Grid item xs={12} md={4} key={index}>
+            <Grid size={{ xs: 12, md: 4 }} key={index}>
               <Paper 
                 elevation={0}
                 sx={{ 
