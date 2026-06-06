@@ -10,7 +10,7 @@ import { AIProvider } from "@/lib/core/ai";
 // New Landing Page Component
 import { LandingPage } from '@/components/landing/LandingPage';
 
-export const metadata: Metadata = { title: "Directly.social | The Native Social Client" };
+export const metadata: Metadata = { title: "Directly Social | The Native Social Client" };
 
 export default async function Home() {
   const session = await auth();

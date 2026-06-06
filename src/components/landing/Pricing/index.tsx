@@ -3,38 +3,7 @@
 import React from 'react';
 import { Box, Container, Typography, Grid } from '@mui/material';
 import { PricingCard } from './PricingCard';
-
-const tiers = [
-  {
-    name: 'Local Core',
-    price: '$0',
-    description: 'Perfect for solo creators who value privacy and control.',
-    features: [
-      'Unlimited Local Projects',
-      'By-Your-Own-Key (BYOK)',
-      'Native API Distribution',
-      'AI Vibe Sync (Local)',
-      'Community Support'
-    ],
-    cta: 'Get Started',
-    highlighted: true
-  },
-  {
-    name: 'Cloud Pro',
-    price: '$15',
-    period: '/mo',
-    description: 'For power users who need sync and team collaboration.',
-    features: [
-      'Everything in Local Core',
-      'Cloud Backup & Sync',
-      'Team Shared Vaults',
-      'Priority Support',
-      'Managed AI Endpoints'
-    ],
-    cta: 'Coming Soon',
-    disabled: true
-  }
-];
+import { pricingTiers } from '../data';
 
 export const Pricing = () => {
   return (
@@ -50,8 +19,8 @@ export const Pricing = () => {
         </Box>
 
         <Grid container spacing={4} sx={{ justifyContent: 'center' }}>
-          {tiers.map((tier, index) => (
-            <Grid size={{ xs: 12, md: 5 }} key={index}>
+          {pricingTiers.map((tier, index) => (
+            <Grid item xs={12} md={5} key={index}>
               <PricingCard tier={tier} />
             </Grid>
           ))}

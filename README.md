@@ -1,4 +1,4 @@
-# Directly App
+# Directly Social App
 
 Directly is a multi-platform social media management application that allows users to schedule and distribute video content (Shorts/Reels/TikToks) across various platforms simultaneously.
 

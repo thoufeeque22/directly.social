@@ -6,6 +6,7 @@ import { LandingHeader } from './Header';
 import { Hero } from './Hero';
 import { SocialProof } from './SocialProof';
 import { Features } from './Features';
+import { HowItWorks } from './HowItWorks';
 import { Comparison } from './Comparison';
 import { Personas } from './Personas';
 import { Testimonials } from './Testimonials';
@@ -21,6 +22,7 @@ export const LandingPage = () => {
         <Hero />
         <SocialProof />
         <Features />
+        <HowItWorks />
         <Comparison />
         <Personas />
         <Testimonials />

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Container, Typography, Button, Stack, useTheme } from '@mui/material';
+import { Box, Container, Typography, Button, Stack } from '@mui/material';
 import Link from 'next/link';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import { DashboardMockup } from './DashboardMockup';
@@ -20,7 +20,7 @@ export const Hero = () => {
               letterSpacing: '-0.02em'
             }}
           >
-            The <Box component="span" sx={{ color: 'primary.main' }}>Native</Box> Social Media Client
+            The <Box component="span" sx={{ color: 'primary.main' }}>Native</Box> Creator Client
           </Typography>
           
           <Typography 
@@ -32,7 +32,7 @@ export const Hero = () => {
               fontSize: { xs: '1.1rem', md: '1.25rem' }
             }}
           >
-            Take back control of your content. Privacy-first, local-vault, and direct API access. No middlemen, no SaaS tax.
+            Stop paying the SaaS tax for your **Shorts, Reels, and TikToks**. Native platform publishing with a local vault and Bring-Your-Own-Key (BYOK) privacy.
           </Typography>
           
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ width: { xs: '100%', sm: 'auto' } }}>

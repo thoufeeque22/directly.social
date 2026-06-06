@@ -1,4 +1,4 @@
-# Directly: User Personas & Modular Pricing Strategy
+# Directly Social: User Personas & Modular Pricing Strategy
 
 This document maps the various combinations of user behaviors, technical setups, and collaboration needs into distinct personas, and outlines a pricing model designed to capture each segment effectively.
 

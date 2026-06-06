@@ -13,7 +13,7 @@ Detailed analysis of the "One-Click Multi-Platform" landscape, focusing on video
 | **SocialBee** | Evergreen | [socialbee.com](https://socialbee.com) | 15k+ Brands / Niche | No unified engagement inbox | $29/mo |
 | **Ocoya** | AI-First | [ocoya.com](https://ocoya.com) | Niche / AI-Growth | Platform stability issues | $15/mo |
 | **ShortSync** | Video Specialists | [shortsync.app](https://shortsync.app) | Emerging (Video-Niche) | No text/image support | $0 - €14.99/mo |
-| **Directly** | Native Creators | [directly-social.vercel.app](https://directly-social.vercel.app) | Stealth / MVP | Early Stage / Custom Setup | $0 (Self-Owned) |
+| **Directly Social** | Native Creators | [directly-social.vercel.app](https://directly-social.vercel.app) | Stealth / MVP | Early Stage / Custom Setup | $0 (Self-Owned) |
 
 ---
 

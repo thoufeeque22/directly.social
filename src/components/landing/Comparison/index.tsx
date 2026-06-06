@@ -4,6 +4,7 @@ import React from 'react';
 import { Box, Container, Typography, Grid, Paper, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
+import { comparisonBad, comparisonGood } from '../data';
 
 const ComparisonColumn = ({ title, items, type }: { title: string, items: string[], type: 'bad' | 'good' }) => {
   const isGood = type === 'good';
@@ -15,21 +16,23 @@ const ComparisonColumn = ({ title, items, type }: { title: string, items: string
         p: 4, 
         height: '100%',
         borderRadius: 4,
-        border: '2px solid',
-        borderColor: isGood ? 'success.light' : 'error.light',
-        bgcolor: isGood ? 'success.main' : 'error.main',
-        opacity: isGood ? 1 : 0.8,
-        color: 'white'
+        border: '1px solid',
+        borderColor: isGood ? 'success.main' : 'error.main',
+        bgcolor: isGood ? 'hsla(145, 70%, 50%, 0.05)' : 'hsla(0, 70%, 50%, 0.05)',
+        color: 'text.primary'
       }}
     >
-      <Typography variant="h4" sx={{ fontWeight: 800, mb: 4 }}>
+      <Typography variant="h4" sx={{ fontWeight: 800, mb: 4, color: isGood ? 'success.main' : 'error.main' }}>
         {title}
       </Typography>
       <Stack spacing={3}>
         {items.map((item, i) => (
           <Stack key={i} direction="row" spacing={2} sx={{ alignItems: 'flex-start' }}>
-            {isGood ? <CheckIcon /> : <CloseIcon />}
-            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+            {isGood ? 
+              <CheckIcon sx={{ color: 'success.main', mt: 0.2 }} /> : 
+              <CloseIcon sx={{ color: 'error.main', mt: 0.2 }} />
+            }
+            <Typography variant="body1" sx={{ fontWeight: 500, color: 'text.secondary' }}>
               {item}
             </Typography>
           </Stack>
@@ -48,35 +51,23 @@ export const Comparison = () => {
             Break the Cycle
           </Typography>
           <Typography variant="h6" color="text.secondary">
-            Why creators are switching to the Native Freedom of Directly.
+            Why creators are switching to the Native Freedom of Directly Social.
           </Typography>
         </Box>
 
         <Grid container spacing={4}>
           <Grid size={{ xs: 12, md: 6 }}>
             <ComparisonColumn 
-              title="Legacy Middlemen"
+              title={comparisonBad.title}
               type="bad"
-              items={[
-                "Monthly subscription fees ($50+/mo)",
-                "They own your distribution keys",
-                "Your content is stored on their servers",
-                "Limited to their 'approved' platforms",
-                "Slow API proxies and delays"
-              ]}
+              items={comparisonBad.items}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <ComparisonColumn 
-              title="Native Freedom"
+              title={comparisonGood.title}
               type="good"
-              items={[
-                "Zero platform fees (Free Core)",
-                "You own your distribution keys",
-                "Content stays in your local vault",
-                "Native API access for peak speed",
-                "Connect anything with Direct Access"
-              ]}
+              items={comparisonGood.items}
             />
           </Grid>
         </Grid>

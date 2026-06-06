@@ -1,4 +1,4 @@
-# Directly.social App: Agent Instructions & Standards
+# Directly Social App: Agent Instructions & Standards
 
 This document serves as the root entry point for all AI agents. It defines the global management policies and links to domain-specific standards.
 

@@ -2,33 +2,7 @@
 
 import React from 'react';
 import { Box, Container, Typography, Grid, Card, CardContent, useTheme } from '@mui/material';
-import SecurityIcon from '@mui/icons-material/Security';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
-import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
-
-const features = [
-  {
-    title: 'Native & Privacy-First',
-    description: 'Direct API access with no middleware. Your data stays in your local vault, giving you absolute control.',
-    icon: <SecurityIcon fontSize="large" color="primary" />,
-  },
-  {
-    title: 'Global Vibe Sync',
-    description: 'AI-powered tone shifting that adapts your content to the specific vibe of each platform and region.',
-    icon: <PsychologyIcon fontSize="large" color="primary" />,
-  },
-  {
-    title: 'Sound-Check',
-    description: 'Algorithmic boost via native trend scanning. Find and sync the trending music that drives reach.',
-    icon: <LibraryMusicIcon fontSize="large" color="primary" />,
-  },
-  {
-    title: 'Unified Local Inbox',
-    description: 'Cross-platform engagement managed entirely on your machine. No shared servers, no data leaks.',
-    icon: <AllInclusiveIcon fontSize="large" color="primary" />,
-  },
-];
+import { features } from '../data';
 
 export const Features = () => {
   const theme = useTheme();
@@ -44,13 +18,13 @@ export const Features = () => {
             The SaaS Tax is Over
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
-            Stop paying for middlemen to hold your data. Directly connects you to the platforms you love.
+            Stop paying for middlemen to hold your data. Directly Social connects your local vault to the platforms you love.
           </Typography>
         </Box>
 
         <Grid container spacing={4}>
           {features.map((feature, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
+            <Grid item xs={12} sm={6} md={3} key={index}>
               <Card 
                 elevation={0} 
                 sx={{ 

@@ -32,7 +32,7 @@ export const LandingHeader = () => {
             <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
               <RocketLaunchIcon color="primary" />
               <Typography variant="h6" component="div" sx={{ fontWeight: 700 }}>
-                Directly
+                Directly Social
               </Typography>
             </Stack>
           </Link>

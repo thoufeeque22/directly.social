@@ -1,4 +1,4 @@
-# Directly Documentation
+# Directly Social Documentation
 
 Welcome to the Directly project documentation. This folder contains architectural blueprints, setup guides, and feature specifications.
 

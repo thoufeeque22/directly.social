@@ -11,6 +11,8 @@ import { useSearchParams } from 'next/navigation';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import LockIcon from '@mui/icons-material/Lock';
 import CloseIcon from '@mui/icons-material/Close';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import FlashOnIcon from '@mui/icons-material/FlashOn';
 
 type AuthProvider = 'google' | 'facebook' | 'tiktok';
 
@@ -170,7 +172,7 @@ export function LoginContent() {
           <div className={styles.logo}>
             <AutoAwesomeIcon sx={{ fontSize: 48, color: 'hsl(var(--primary))' }} />
           </div>
-          <h1 className={styles.title}>directly.social</h1>
+          <h1 className={styles.title}>Directly Social</h1>
           <p className={styles.subtitle}>Sign in to manage your automated distribution.</p>
         </div>
 
@@ -198,6 +200,23 @@ export function LoginContent() {
             <span className={styles.btnIcon}>d</span>
             Continue with TikTok
           </button>
+        </div>
+
+        <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', background: 'hsla(var(--primary)/0.05)', padding: '1.25rem', borderRadius: '1rem', border: '1px solid hsla(var(--primary)/0.1)' }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <VerifiedUserIcon sx={{ color: 'hsl(var(--primary))', fontSize: 24 }} />
+            <div>
+              <p style={{ fontSize: '0.85rem', fontWeight: 600, margin: 0 }}>Privacy First</p>
+              <p style={{ fontSize: '0.75rem', color: 'hsl(var(--muted-foreground))', margin: 0 }}>Your media stays in your local vault.</p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <FlashOnIcon sx={{ color: 'hsl(var(--primary))', fontSize: 24 }} />
+            <div>
+              <p style={{ fontSize: '0.85rem', fontWeight: 600, margin: 0 }}>Native Publishing</p>
+              <p style={{ fontSize: '0.75rem', color: 'hsl(var(--muted-foreground))', margin: 0 }}>Direct platform connection, no middlemen.</p>
+            </div>
+          </div>
         </div>
 
         {process.env.NEXT_PUBLIC_E2E === 'true' && (
