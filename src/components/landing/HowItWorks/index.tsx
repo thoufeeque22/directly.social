@@ -28,9 +28,9 @@ export const HowItWorks = () => {
       <Box sx={{ position: 'absolute', bottom: '-20%', right: '-10%', width: '50%', height: '50%', background: 'radial-gradient(circle, hsla(var(--primary), 0.05) 0%, transparent 70%)', filter: 'blur(80px)', zIndex: 0, pointerEvents: 'none' }} />
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
         <Box sx={{ textAlign: 'center', mb: 8 }}>
-          <Typography variant="overline" color="primary" sx={{ letterSpacing: '0.1em', fontWeight: 700 }}>The Workflow</Typography>
+          <Typography variant="overline" color="primary" sx={{ fontWeight: 800, letterSpacing: '0.2em' }}>The Workflow</Typography>
           <Typography variant="h2" sx={{ mt: 2, mb: 3, fontWeight: 800 }}>How Native Publishing Works</Typography>
-          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>Three simple steps to take back control of your distribution.</Typography>
+          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>Three simple steps to take back control of your distribution.</Typography>
         </Box>
         <Grid container spacing={4}>
           {howItWorksSteps.map((step, index) => (

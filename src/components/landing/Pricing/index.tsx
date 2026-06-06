@@ -10,10 +10,10 @@ export const Pricing = () => {
     <Box id="pricing" sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.default' }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', mb: 8 }}>
-          <Typography variant="h2" gutterBottom sx={{ fontWeight: 800 }}>
+          <Typography variant="h2" sx={{ fontWeight: 800, mb: 3 }}>
             Simple, Honest Pricing
           </Typography>
-          <Typography variant="h6" color="text.secondary">
+          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>
             No hidden fees. No middleman markup.
           </Typography>
         </Box>

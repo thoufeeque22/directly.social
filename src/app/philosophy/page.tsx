@@ -45,13 +45,13 @@ export default function PhilosophyPage() {
       <Box component="main" sx={{ flexGrow: 1, py: { xs: 8, md: 12 }, bgcolor: 'background.default' }}>
         <Container maxWidth="lg">
           <Box sx={{ mb: 10, textAlign: 'center' }}>
-            <Typography variant="overline" color="primary" sx={{ letterSpacing: '0.1em', fontWeight: 700 }}>
+            <Typography variant="overline" color="primary" sx={{ fontWeight: 800, letterSpacing: '0.2em' }}>
               Our Philosophy
             </Typography>
             <Typography variant="h2" sx={{ mt: 2, mb: 3, fontWeight: 800 }}>
               Pro Tools. No SaaS Tax.
             </Typography>
-            <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 850, mx: 'auto' }}>
+            <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 850, mx: 'auto', fontWeight: 400 }}>
               We believe social media management should be a <strong>Studio Tool</strong> (like VS Code or Photoshop), not a &quot;Middleman Service.&quot; Here is why Directly Social is built differently.
             </Typography>
           </Box>
