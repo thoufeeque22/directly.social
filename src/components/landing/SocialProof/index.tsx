@@ -1,39 +1,76 @@
 'use client';
 
 import React from 'react';
-import { Box, Container, Typography, Stack, useTheme } from '@mui/material';
+import { Box, Container, Typography, Stack, Tooltip } from '@mui/material';
 import { PlatformIcon } from '@/components/ui/PlatformIcon';
+import { activePlatforms, upcomingPlatforms } from '../data';
 
-const platforms = ['tiktok', 'instagram', 'youtube', 'facebook', 'linkedin', 'threads', 'x', 'reddit'];
-
-export const SocialProof = () => {
-  const theme = useTheme();
+const PlatformLogo = ({ id, isUpcoming }: { id: string, isUpcoming?: boolean }) => {
+  // Map internal IDs to brand colors for a subtle pop
+  const brandColors: Record<string, string> = {
+    tiktok: '#000000',
+    instagram: '#E4405F',
+    youtube: '#FF0000',
+    facebook: '#1877F2',
+    linkedin: '#0A66C2',
+    threads: '#000000',
+    x: '#000000',
+    reddit: '#FF4500'
+  };
 
   return (
-    <Box sx={{ py: 6, bgcolor: 'action.hover', borderTop: `1px solid ${theme.palette.divider}`, borderBottom: `1px solid ${theme.palette.divider}` }}>
+    <Tooltip title={isUpcoming ? `${id} (Coming Soon)` : `Native ${id} Support`} arrow>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: isUpcoming ? 0.2 : 0.6,
+          filter: isUpcoming ? 'grayscale(100%)' : 'none',
+          transition: 'all 0.3s ease',
+          '&:hover': { 
+            opacity: 1, 
+            filter: 'none',
+            transform: 'scale(1.1)'
+          },
+          px: { xs: 2, md: 4 },
+          py: 2
+        }}
+      >
+        <PlatformIcon 
+          platformId={id} 
+          sx={{ 
+            fontSize: { xs: 32, md: 40 },
+            color: isUpcoming ? 'inherit' : brandColors[id.toLowerCase()] || 'inherit'
+          }} 
+        />
+      </Box>
+    </Tooltip>
+  );
+};
+
+export const SocialProof = () => {
+  return (
+    <Box sx={{ py: 4, bgcolor: 'background.paper', borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'divider' }}>
       <Container maxWidth="lg">
-        <Stack spacing={4} sx={{ alignItems: 'center' }}>
-          <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 600, letterSpacing: '0.1em' }}>
-            Trusted by creators on every platform
+        <Stack spacing={2} sx={{ alignItems: 'center' }}>
+          <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 700, letterSpacing: '0.2em', opacity: 0.8 }}>
+            Native Integration
           </Typography>
           <Stack 
             direction="row" 
-            spacing={{ xs: 4, md: 8 }} 
             sx={{ 
               flexWrap: 'wrap', 
               justifyContent: 'center', 
               alignItems: 'center',
-              opacity: 0.6, 
-              filter: 'grayscale(100%)' 
+              width: '100%'
             }}
           >
-            {platforms.map((p) => (
-              <Stack key={p} direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-                <PlatformIcon platformId={p} sx={{ fontSize: 32 }} />
-                <Typography variant="h6" sx={{ display: { xs: 'none', sm: 'block' }, textTransform: 'capitalize', fontWeight: 700 }}>
-                  {p}
-                </Typography>
-              </Stack>
+            {activePlatforms.map((p) => (
+              <PlatformLogo key={p} id={p} />
+            ))}
+            {upcomingPlatforms.map((p) => (
+              <PlatformLogo key={p} id={p} isUpcoming />
             ))}
           </Stack>
         </Stack>
