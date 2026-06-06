@@ -75,11 +75,24 @@ export function LoginContent() {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     
-    const result = await signIn('credentials', { 
+    let result = await signIn('credentials', { 
       email, 
       password, 
       redirect: false 
     });
+
+    // Retry multiple times for MissingCSRF which happens in fast automated E2E runs (especially Safari)
+    let retries = 0;
+    while ((result?.error === 'MissingCSRF' || result?.error === 'Configuration') && retries < 3) {
+      console.warn(`[E2E] MissingCSRF encountered. Retrying login (Attempt ${retries + 1})...`);
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second between retries
+      result = await signIn('credentials', { 
+        email, 
+        password, 
+        redirect: false 
+      });
+      retries++;
+    }
 
     if (result?.error) {
       console.error("[E2E] Login failed:", result.error);

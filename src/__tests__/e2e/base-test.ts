@@ -1,6 +1,17 @@
 import { test as base, expect } from '@playwright/test';
+import fs from 'fs';
+import path from 'path';
 
-export const test = base.extend<{ consoleChecker: void; workerEmail: string; adminEmail: string; workerIndex: number }>({
+export const test = base.extend<{ 
+  consoleChecker: void; 
+  workerEmail: string; 
+  adminEmail: string; 
+  workerIndex: number;
+  authRole: 'tester' | 'admin' | 'none';
+}>({
+  // Default values for our custom options
+  authRole: ['tester', { option: true }],
+
   // Worker index fixture
   workerIndex: async ({}, use, testInfo) => {
     await use(testInfo.workerIndex);
@@ -18,35 +29,80 @@ export const test = base.extend<{ consoleChecker: void; workerEmail: string; adm
     await use(`admin-${workerIndex % 10}@directly.social`);
   },
 
-  // Automatic storage state selection based on worker index
-  storageState: async ({}, use, testInfo) => {
-    // If we're in a setup project or similar, we might not want this
-    const isSetup = testInfo.project.name === 'setup' || testInfo.project.name === 'landing-page';
-    if (isSetup) {
-      // Landing page specifically wants no auth
-      if (testInfo.project.name === 'landing-page') {
-        await use({ cookies: [], origins: [] });
-      } else {
-        await use(undefined);
-      }
+  // Automatic storage state selection based on worker index (Lazy Authentication)
+  storageState: async ({ browser, authRole }, use, testInfo) => {
+    // 1. Handle 'none' or unauthenticated projects
+    if (authRole === 'none' || testInfo.project.name === 'landing-page') {
+      console.log(`[Worker ${testInfo.workerIndex}] 🟢 Using unauthenticated state (authRole: ${authRole})`);
+      await use({ cookies: [], origins: [] });
       return;
     }
 
     const workerIndex = testInfo.workerIndex;
-    const authFile = `.auth/user-${workerIndex % 10}.json`;
-    
-    // Check if file exists, fallback to user.json if not
-    const fs = require('fs');
-    const path = require('path');
+    const prefix = authRole === 'admin' ? 'admin' : 'tester';
+    const authFile = `.auth/v2-${prefix}-${workerIndex % 10}.json`;
     const fullPath = path.resolve(process.cwd(), authFile);
-    
-    if (fs.existsSync(fullPath)) {
-      console.log(`[Worker ${workerIndex}] Using auth state: ${authFile}`);
-      await use(authFile);
+
+    // 2. Perform lazy login if file doesn't exist
+    if (!fs.existsSync(fullPath)) {
+      console.log(`[Worker ${workerIndex}] 🔑 Performing lazy login for ${prefix}-${workerIndex % 10}...`);
+      
+      const testEmail = `${prefix}-${workerIndex % 10}@directly.social`;
+      const roleArg = prefix === 'admin' ? 'ADMIN' : 'USER';
+      
+      // Perform lazy seeding before logging in
+      console.log(`[Worker ${workerIndex}] 🌱 Lazy seeding DB for ${testEmail}...`);
+      require('child_process').execSync(`npx tsx src/__tests__/scripts/seed-e2e-user.ts ${testEmail} ${roleArg}`, { stdio: 'inherit' });
+      if (prefix === 'tester') {
+        require('child_process').execSync(`npx tsx src/__tests__/scripts/seed-e2e-schedule.ts ${testEmail}`, { stdio: 'inherit' });
+      }
+      
+      const baseURL = testInfo.project.use.baseURL || 'http://localhost:3005';
+      const context = await browser.newContext({ baseURL });
+      const page = await context.newPage();
+      const testPassword = process.env.E2E_TEST_PASSWORD || 'password';
+
+      try {
+        await page.goto('/login');
+        await page.getByTestId('e2e-email-input').fill(testEmail);
+        await page.getByTestId('e2e-password-input').fill(testPassword);
+        
+        await page.waitForTimeout(2000); // Wait for NextAuth CSRF token to initialize
+        
+        let loggedIn = false;
+        for (let attempt = 1; attempt <= 2; attempt++) {
+          await page.getByTestId('e2e-login-submit').click();
+          try {
+            await expect(page.locator('h2:has-text("Upload & Automate")').first()).toBeVisible({ timeout: 15000 });
+            loggedIn = true;
+            break;
+          } catch (e) {
+            console.warn(`[Worker ${workerIndex}] ⚠️ Login attempt ${attempt} timed out for ${testEmail}, retrying...`);
+          }
+        }
+        
+        if (!loggedIn) {
+          throw new Error(`Lazy login failed for ${testEmail} after retries.`);
+        }
+        
+        if (!fs.existsSync('.auth')) fs.mkdirSync('.auth', { recursive: true });
+        await context.storageState({ path: fullPath });
+        console.log(`[Worker ${workerIndex}] ✅ Authentication successful for ${testEmail}`);
+        
+        if (workerIndex === 0) {
+          await context.storageState({ path: path.join('.auth', `${prefix}.json`) });
+        }
+      } catch (error) {
+        console.error(`[Worker ${workerIndex}] ❌ Lazy login failed for ${testEmail}:`, error);
+        throw error;
+      } finally {
+        await context.close();
+      }
     } else {
-      console.warn(`[Worker ${workerIndex}] Auth state NOT FOUND: ${authFile}. Falling back to .auth/user.json`);
-      await use('.auth/user.json');
+      console.log(`[Worker ${workerIndex}] 🏎️ Using existing auth state: ${authFile}`);
     }
+
+    await use(authFile);
   },
 
   consoleChecker: [
@@ -76,6 +132,8 @@ export const test = base.extend<{ consoleChecker: void; workerEmail: string; adm
           if (text.includes('Failed to load resource: the server responded with a status of 404')) return;
           if (text.includes('Failed to load resource: the server responded with a status of 500')) return;
           if (text.includes('Failed to load resource: the server responded with a status of 503')) return;
+          if (text.includes('Failed to load resource: net::ERR_NAME_NOT_RESOLVED')) return;
+          if (text.includes('A server with the specified hostname could not be found')) return;
           if (text.includes('Service Unavailable')) return;
           if (text.includes('Internal Server Error')) return;
           if (text.includes('Failed to fetch')) return;

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';
 
 /**
  * Ticket #639: Login Screen Theme Alignment
@@ -6,8 +6,8 @@ import { test, expect } from '@playwright/test';
  */
 test.describe('Login Screen Theme Alignment (#639)', () => {
   // Use unauthenticated state to ensure we stay on the login page
-  test.use({ storageState: { cookies: [], origins: [] } });
-  
+  test.use({ authRole: 'none' });
+
   test.beforeEach(async ({ page }) => {
     // Navigate to the login page before each test
     await page.goto('/login');

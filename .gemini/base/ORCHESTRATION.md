@@ -38,6 +38,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 
 ### Agent Test Mandates
 - **dev-agent:** MUST use the `arxitect:architect` skill for all changes. MUST run `npm run test:smoke` and `npm run lint`.
+  - **Fast-Track Verification:** If the user explicitly requests to save time or if in a fast-iteration loop, the agent MAY skip `npm run build` IF they have already run it once for the current set of changes and no relevant files have changed.
 - **audit-agent:** READ-ONLY. Focus on Security, Privacy (PII), and Performance (Web Vitals) audits.
 - **qa-agent:** MUST run `npm run test:regression`. For features with specific impact, they may also run relevant individual tests.
 - **Human-in-the-Loop:** The **User** SHOULD run the full suite (`npm test`) before the final merge.

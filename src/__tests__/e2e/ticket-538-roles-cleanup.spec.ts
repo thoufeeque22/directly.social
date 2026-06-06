@@ -15,7 +15,7 @@ import { execSync } from 'child_process';
 
 test.describe('Ticket #538: Security Roles and Cleanup', () => {
   // We must start unauthenticated to test the manual login and role-based redirects
-  test.use({ storageState: { cookies: [], origins: [] } });
+  test.use({ authRole: 'none' });
 
   test('Tester account (USER) is denied access to admin analytics', async ({ page, workerEmail }) => {
     console.log(`[E2E] Testing Tester (${workerEmail}) access...`);
@@ -27,6 +27,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     await page.goto('/login');
     await page.getByTestId('e2e-email-input').fill(workerEmail);
     await page.getByTestId('e2e-password-input').fill(process.env.E2E_TEST_PASSWORD || 'password');
+    await page.waitForTimeout(2000); // Wait for CSRF token fetch
     await page.getByTestId('e2e-login-submit').click();
     
     // Wait for redirect to dashboard
@@ -42,11 +43,14 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     
     // 2. Try to access /admin/analytics directly
     console.log('[E2E] Attempting direct access to /admin/analytics...');
-    await page.goto('/admin/analytics');
+    try {
+      await page.goto('/admin/analytics', { waitUntil: 'commit' });
+    } catch (e) {
+      console.log('[E2E] Handled fast redirect abort during goto.');
+    }
     
     // 3. Verify redirect to / (as per authorized callback in auth.config.ts)
-    await page.waitForURL('/', { timeout: 10000 });
-    expect(page.url()).toContain('://127.0.0.1:3005/');
+    await expect(page).toHaveURL(/\/$/, { timeout: 15000 });
     console.log('[E2E] Direct access denied and redirected to home.');
   });
 
@@ -57,6 +61,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     await page.goto('/login');
     await page.getByTestId('e2e-email-input').fill(adminEmail);
     await page.getByTestId('e2e-password-input').fill(process.env.E2E_TEST_PASSWORD || 'password');
+    await page.waitForTimeout(2000); // Wait for CSRF token fetch
     await page.getByTestId('e2e-login-submit').click();
     
     await expect(page.locator('h2:has-text("Upload & Automate")').first()).toBeVisible({ timeout: 15000 });

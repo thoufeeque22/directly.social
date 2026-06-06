@@ -16,13 +16,8 @@ function safeExec(command: string, retries = 3) {
 }
 
 test.describe('Analytics Dashboard', () => {
-  // Use worker-specific admin account
-  test.use({ 
-    storageState: async ({}, use, testInfo) => {
-      const workerIndex = testInfo.workerIndex;
-      await use(`.auth/admin-${workerIndex % 10}.json`);
-    }
-  });
+  // Use admin role for this file by default
+  test.use({ authRole: 'admin' });
 
   test.beforeAll(async () => {
     // Seed mock data for the charts
@@ -80,35 +75,43 @@ test.describe('Analytics Dashboard', () => {
   test.describe('admin access', () => {
     // No need to override storageState here, the describe-level one is admin.json
     test('admin can view analytics dashboard with populated data', async ({ page }) => {
-      await page.goto('/admin/analytics');
-      
+      await page.goto('/admin/analytics', { waitUntil: 'networkidle' });
+
       // Check for dashboard component
-      await expect(page.getByTestId('admin-analytics-dashboard')).toBeVisible();
-      await expect(page.getByTestId('feature-adoption-chart')).toBeVisible();
+      const dashboard = page.getByTestId('admin-analytics-dashboard');
+      await expect(dashboard).toBeVisible({ timeout: 20000 });
+      await expect(page.getByTestId('feature-adoption-chart')).toBeVisible({ timeout: 10000 });
 
       // Wait a brief moment to ensure charts render animations
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(2000);
 
       // Take screenshot
-      await page.locator('.ptr-container').screenshot({ path: 'verification/admin-analytics-dashboard.png' });
+      await dashboard.screenshot({ path: 'verification/admin-analytics-dashboard.png' });
     });
-  });
-    
-
-
-  test.describe('non-admin access', () => {
-    // For non-admin, use worker-specific regular tester account
-    test.use({ 
-      storageState: async ({}, use, testInfo) => {
-        const workerIndex = testInfo.workerIndex;
-        await use(`.auth/user-${workerIndex % 10}.json`);
-      }
     });
 
-    test('non-admin user is redirected or denied access', async ({ page }) => {
-      await page.goto('/admin/analytics');
-      // Our middleware redirects to login or shows unauthorized
-      await expect(page).not.toHaveURL(/\/admin\/analytics/);
+
+
+    test.describe('non-admin access', () => {
+      // Force a regular user session for this block
+      test.use({ authRole: 'tester' });
+
+      test('non-admin user is redirected or denied access', async ({ page }) => {
+        // First go to dashboard to confirm we are logged in and healthy
+        await page.goto('/', { waitUntil: 'networkidle' });
+        await expect(page.locator('h2:has-text("Upload & Automate")').first()).toBeVisible();
+
+        // Now try to access admin analytics
+        try {
+          await page.goto('/admin/analytics', { waitUntil: 'commit' });
+        } catch (e) {
+          // Ignore fast-redirect network aborts
+          console.log('[E2E] Handled fast redirect abort during goto.');
+        }
+
+        // Our middleware redirects to home
+        await expect(page).toHaveURL(/\/$/, { timeout: 15000 });
+        await expect(page.getByTestId('admin-analytics-dashboard')).not.toBeVisible();
+      });
     });
-  });
 });

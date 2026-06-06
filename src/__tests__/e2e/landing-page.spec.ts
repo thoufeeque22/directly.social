@@ -2,7 +2,7 @@ import { test, expect } from './base-test';
 
 test.describe('Landing Page', () => {
   // Ensure we start unauthenticated to see the landing page
-  test.use({ storageState: { cookies: [], origins: [] } });
+  test.use({ authRole: 'none' });
 
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();
