@@ -57,7 +57,7 @@ export const test = base.extend<{
         require('child_process').execSync(`npx tsx src/__tests__/scripts/seed-e2e-schedule.ts ${testEmail}`, { stdio: 'inherit' });
       }
       
-      const baseURL = testInfo.project.use.baseURL || 'http://localhost:3005';
+      const baseURL = testInfo.project.use.baseURL || 'http://127.0.0.1:3005';
       const context = await browser.newContext({ baseURL });
       const page = await context.newPage();
       const testPassword = process.env.E2E_TEST_PASSWORD || 'password';
@@ -135,6 +135,7 @@ export const test = base.extend<{
           if (text.includes('Failed to load resource: net::ERR_NAME_NOT_RESOLVED')) return;
           if (text.includes('A server with the specified hostname could not be found')) return;
           if (text.includes('Service Unavailable')) return;
+          if (text.includes('MissingCSRF')) return; // Ignore NextAuth CSRF retries
           if (text.includes('Internal Server Error')) return;
           if (text.includes('Failed to fetch')) return;
           if (text.includes('authjs.dev')) return;

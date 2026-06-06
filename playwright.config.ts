@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 import 'dotenv/config';
+import dns from 'node:dns';
+dns.setDefaultResultOrder('ipv4first');
+
 export default defineConfig({
   testDir: './src/__tests__/e2e',
   globalSetup: './src/__tests__/e2e/global-setup.ts',
@@ -18,7 +21,6 @@ export default defineConfig({
     },
   },
   projects: [
-    { name: 'setup', testMatch: /.*\.setup\.ts/, use: { launchOptions: { slowMo: 0 } } },
     {
       name: 'landing-page',
       testMatch: /landing-page\.spec\.ts/,
@@ -32,25 +34,24 @@ export default defineConfig({
       use: { 
         ...devices['Desktop Chrome'],
       },
-      dependencies: ['setup'],
     },
     {
       name: 'Mobile Chrome',
       use: {
         ...devices['Pixel 5'],
       },
-      dependencies: ['setup'],
     },
     {
       name: 'Mobile Safari',
       use: {
         ...devices['iPhone 13'],
       },
-      dependencies: ['setup'],
     },
   ],
   webServer: {
-    command: 'npm run build && npm run start -- -p 3005',
+    command: process.env.CI 
+      ? 'npm run build && npx next start -p 3005' 
+      : '[ -d .next-e2e ] && npx next start -p 3005 || (npm run build && npx next start -p 3005)',
     env: {
       NEXT_DIST_DIR: '.next-e2e',
       NEXT_PUBLIC_E2E: 'true',
