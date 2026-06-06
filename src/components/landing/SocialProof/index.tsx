@@ -5,8 +5,7 @@ import { Box, Container, Typography, Stack, Tooltip } from '@mui/material';
 import { PlatformIcon } from '@/components/ui/PlatformIcon';
 import { activePlatforms, upcomingPlatforms } from '../data';
 
-const PlatformLogo = ({ id, isUpcoming }: { id: string, isUpcoming?: boolean }) => {
-  // Map internal IDs to brand colors for a subtle pop
+const PlatformItem = ({ id, isUpcoming }: { id: string, isUpcoming?: boolean }) => {
   const brandColors: Record<string, string> = {
     tiktok: '#000000',
     instagram: '#E4405F',
@@ -20,57 +19,84 @@ const PlatformLogo = ({ id, isUpcoming }: { id: string, isUpcoming?: boolean }) 
 
   return (
     <Tooltip title={isUpcoming ? `${id} (Coming Soon)` : `Native ${id} Support`} arrow>
-      <Box 
+      <Stack 
+        spacing={1}
         sx={{ 
-          display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          opacity: isUpcoming ? 0.2 : 0.6,
+          opacity: isUpcoming ? 0.3 : 0.7,
           filter: isUpcoming ? 'grayscale(100%)' : 'none',
           transition: 'all 0.3s ease',
           '&:hover': { 
             opacity: 1, 
             filter: 'none',
-            transform: 'scale(1.1)'
+            transform: 'translateY(-2px)'
           },
-          px: { xs: 2, md: 4 },
-          py: 2
+          cursor: 'default'
         }}
       >
-        <PlatformIcon 
-          platformId={id} 
+        <Box sx={{ 
+          p: 1, 
+          borderRadius: 2, 
+          bgcolor: 'background.default',
+          display: 'flex',
+          border: '1px solid',
+          borderColor: 'divider'
+        }}>
+          <PlatformIcon 
+            platformId={id} 
+            sx={{ 
+              fontSize: { xs: 24, md: 28 },
+              color: isUpcoming ? 'text.secondary' : brandColors[id.toLowerCase()] || 'inherit'
+            }} 
+          />
+        </Box>
+        <Typography 
+          variant="caption" 
           sx={{ 
-            fontSize: { xs: 32, md: 40 },
-            color: isUpcoming ? 'inherit' : brandColors[id.toLowerCase()] || 'inherit'
-          }} 
-        />
-      </Box>
+            fontWeight: 700, 
+            textTransform: 'uppercase', 
+            fontSize: '0.65rem', 
+            letterSpacing: '0.05em',
+            color: 'text.secondary'
+          }}
+        >
+          {id}
+        </Typography>
+      </Stack>
     </Tooltip>
   );
 };
 
 export const SocialProof = () => {
   return (
-    <Box sx={{ py: 4, bgcolor: 'background.paper', borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'divider' }}>
+    <Box sx={{ py: { xs: 6, md: 8 }, bgcolor: 'background.paper', borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'divider' }}>
       <Container maxWidth="lg">
-        <Stack spacing={2} sx={{ alignItems: 'center' }}>
-          <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 700, letterSpacing: '0.2em', opacity: 0.8 }}>
-            Native Integration
+        <Stack spacing={4} sx={{ alignItems: 'center' }}>
+          <Typography variant="overline" color="primary" sx={{ fontWeight: 800, letterSpacing: '0.2em' }}>
+            Multi-Platform Native Support
           </Typography>
+          
           <Stack 
             direction="row" 
+            spacing={{ xs: 3, md: 5 }} 
             sx={{ 
               flexWrap: 'wrap', 
               justifyContent: 'center', 
               alignItems: 'center',
-              width: '100%'
+              rowGap: 3
             }}
           >
+            {/* Active Platforms */}
             {activePlatforms.map((p) => (
-              <PlatformLogo key={p} id={p} />
+              <PlatformItem key={p} id={p} />
             ))}
+            
+            {/* Visual Separator */}
+            <Box sx={{ height: 30, width: '1px', bgcolor: 'divider', mx: 2, display: { xs: 'none', sm: 'block' } }} />
+
+            {/* Upcoming Platforms */}
             {upcomingPlatforms.map((p) => (
-              <PlatformLogo key={p} id={p} isUpcoming />
+              <PlatformItem key={p} id={p} isUpcoming />
             ))}
           </Stack>
         </Stack>
