@@ -8,8 +8,24 @@ import { DashboardMockup } from './DashboardMockup';
 
 export const Hero = () => {
   return (
-    <Box sx={{ pt: { xs: 8, md: 12 }, pb: { xs: 6, md: 10 }, overflow: 'hidden' }}>
-      <Container maxWidth="lg">
+    <Box sx={{ pt: { xs: 8, md: 12 }, pb: { xs: 6, md: 10 }, overflow: 'hidden', position: 'relative' }}>
+      {/* Studio Aura Glow */}
+      <Box 
+        sx={{ 
+          position: 'absolute', 
+          top: '10%', 
+          left: '50%', 
+          transform: 'translateX(-50%)', 
+          width: '80%', 
+          height: '60%', 
+          background: 'radial-gradient(circle, hsla(var(--primary), 0.08) 0%, transparent 70%)', 
+          filter: 'blur(100px)',
+          zIndex: 0,
+          pointerEvents: 'none'
+        }} 
+      />
+      
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
         <Stack spacing={4} sx={{ textAlign: 'center', alignItems: 'center' }}>
           <Typography 
             variant="h1" 

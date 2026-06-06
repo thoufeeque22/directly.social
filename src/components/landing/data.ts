@@ -45,7 +45,7 @@ export const comparisonGood = {
     "You own your distribution keys",
     "Content stays in your local vault",
     "Native Publishing for peak speed",
-    "Connect anything with Direct Access"
+    "Connect all accounts natively"
   ]
 };
 
@@ -53,15 +53,14 @@ export const pricingTiers = [
   {
     name: 'Local Core',
     price: '$0',
-    description: 'Perfect for solo creators who value privacy and control.',
+    description: 'Free Forever. Perfect for solo creators who value privacy and control.',
     features: [
       'Unlimited Local Projects',
-      'By-Your-Own-Key (BYOK)',
+      'Bring Your Own Key (BYOK)',
       'Native Platform Publishing',
       'AI Vibe Sync (Local)',
       'Community Support'
     ],
-
     cta: 'Get Started',
     highlighted: true
   },
@@ -69,11 +68,11 @@ export const pricingTiers = [
     name: 'Cloud Pro',
     price: '$15',
     period: '/mo',
-    description: 'For power users who need sync and team collaboration.',
+    description: 'For power users who need sync and advanced AI.',
     features: [
       'Everything in Local Core',
       'Cloud Backup & Sync',
-      'Team Shared Vaults',
+      'Encrypted Remote Vaults',
       'Priority Support',
       'Managed AI Endpoints'
     ],
@@ -91,7 +90,7 @@ export const howItWorksSteps = [
   {
     step: 2,
     title: 'Bring Your Own Key',
-    description: 'Plug in your own official platform API keys. You own the relationship with the platforms, not us.'
+    description: 'Plug in your official platform API keys using our simple setup wizards. No coding required.'
   },
   {
     step: 3,

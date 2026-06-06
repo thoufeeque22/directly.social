@@ -8,8 +8,23 @@ export const HowItWorks = () => {
   const theme = useTheme();
 
   return (
-    <Box id="how-it-works" sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.paper' }}>
-      <Container maxWidth="lg">
+    <Box id="how-it-works" sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.paper', position: 'relative', overflow: 'hidden' }}>
+      {/* Subtle Glow */}
+      <Box 
+        sx={{ 
+          position: 'absolute', 
+          bottom: '-20%', 
+          right: '-10%', 
+          width: '50%', 
+          height: '50%', 
+          background: 'radial-gradient(circle, hsla(var(--primary), 0.05) 0%, transparent 70%)', 
+          filter: 'blur(80px)',
+          zIndex: 0,
+          pointerEvents: 'none'
+        }} 
+      />
+
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
         <Box sx={{ textAlign: 'center', mb: 8 }}>
           <Typography variant="overline" color="primary" sx={{ letterSpacing: '0.1em', fontWeight: 700 }}>
             The Workflow
