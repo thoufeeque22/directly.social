@@ -36,9 +36,9 @@ export const Hero = () => {
               letterSpacing: '-0.02em'
             }}
           >
-            The <Box component="span" sx={{ color: 'primary.main' }}>Native</Box> Creator Client
+            The <Box component="span" sx={{ color: 'primary.main' }}>Local-First</Box> Creator Studio
           </Typography>
-          
+
           <Typography 
             variant="h5" 
             color="text.secondary" 
@@ -48,8 +48,9 @@ export const Hero = () => {
               fontSize: { xs: '1.1rem', md: '1.25rem' }
             }}
           >
-            Stop paying the SaaS tax for your **Shorts, Reels, and TikToks**. Native platform publishing with a local vault and Bring-Your-Own-Key (BYOK) privacy.
+            <strong>Pro Tools. No SaaS Tax.</strong> Stop paying markups on your <strong>Shorts, Reels, and TikToks</strong>. No per-channel fees, no AI surcharges, and no data middlemen. Just your local vault and the platforms you love.
           </Typography>
+
           
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ width: { xs: '100%', sm: 'auto' } }}>
             <Button

@@ -22,10 +22,10 @@ const docCategories = [
     links: ['TikTok API Key Guide', 'Meta Developer Portal', 'YouTube OAuth Setup']
   },
   {
-    title: 'Support & FAQ',
-    description: 'Common troubleshooting steps and answers to frequently asked questions.',
+    title: 'Philosophy & Reach',
+    description: 'Understand the "SaaS Tax" and how Native Publishing boosts your algorithmic reach.',
     icon: <HelpCenterIcon color="primary" sx={{ fontSize: 32 }} />,
-    links: ['Troubleshooting Uploads', 'Privacy FAQ', 'System Requirements']
+    links: ['The SaaS Tax Explained', 'Why Native Matters', 'Algorithmic Boost']
   }
 ];
 

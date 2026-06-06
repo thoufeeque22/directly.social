@@ -95,6 +95,6 @@ export const howItWorksSteps = [
   {
     step: 3,
     title: 'Native Publishing',
-    description: 'Push directly from your device to TikTok, Instagram, and YouTube. Maximum reach, zero SaaS tax with Directly Social.'
+    description: 'Push directly from your device to TikTok, Instagram, and YouTube. Maximum reach, zero SaaS tax with Directly Social. [Learn why this matters](/philosophy)'
   }
 ];
