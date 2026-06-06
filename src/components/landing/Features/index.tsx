@@ -18,7 +18,7 @@ export const Features = () => {
             The SaaS Tax is Over
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
-            Stop paying for middlemen to hold your data. Directly Social connects your local vault to the platforms you love.
+            Stop paying for middlemen to hold your data. Directly Social connects your own cloud storage or local disk to the platforms you love.
           </Typography>
         </Box>
 

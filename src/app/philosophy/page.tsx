@@ -13,7 +13,7 @@ const philosophyPoints = [
   {
     title: 'The Middleman Tax',
     problem: 'SaaS tools force you to upload your videos to their servers. They own your files, track your data, and add latency to every post.',
-    solution: 'Directly Social uses a Local Vault. Your videos never touch our servers. Your machine talks directly to the platforms.',
+    solution: 'Directly Social supports Bring Your Own Storage (BYOS). Connect your own S3 bucket or local drive. Your videos never touch our servers.',
     icon: <NoEncryptionIcon color="primary" sx={{ fontSize: 40 }} />
   },
   {

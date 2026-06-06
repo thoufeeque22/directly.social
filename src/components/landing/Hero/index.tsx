@@ -48,8 +48,9 @@ export const Hero = () => {
               fontSize: { xs: '1.1rem', md: '1.25rem' }
             }}
           >
-            <strong>Pro Tools. No SaaS Tax.</strong> Stop paying markups on your <strong>Shorts, Reels, and TikToks</strong>. No per-channel fees, no AI surcharges, and no data middlemen. Just your local vault and the platforms you love.
+            <strong>Pro Tools. No SaaS Tax.</strong> Stop paying markups on your <strong>Shorts, Reels, and TikToks</strong>. No middlemen, no markups, just your own storage and the platforms you love.
           </Typography>
+
 
           
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ width: { xs: '100%', sm: 'auto' } }}>
