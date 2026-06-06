@@ -4,6 +4,53 @@ import React from 'react';
 import { Box, Container, Typography, Stack, Tooltip } from '@mui/material';
 import { PlatformIcon } from '@/components/ui/PlatformIcon';
 import { activePlatforms, upcomingPlatforms } from '../data';
+import AddIcon from '@mui/icons-material/Add';
+
+const RequestPlatformItem = () => (
+  <Tooltip title="Don't see your platform? Request it here." arrow>
+    <Stack 
+      spacing={1}
+      sx={{ 
+        alignItems: 'center',
+        opacity: 0.3,
+        transition: 'all 0.3s ease',
+        '&:hover': { 
+          opacity: 0.8,
+          transform: 'translateY(-2px)'
+        },
+        cursor: 'pointer'
+      }}
+      onClick={() => window.location.href = 'mailto:support.directly.social@gmail.com?subject=Platform Request'}
+    >
+      <Box sx={{ 
+        p: 1, 
+        borderRadius: 2, 
+        bgcolor: 'background.default',
+        display: 'flex',
+        border: '1px dashed',
+        borderColor: 'divider',
+        width: 42,
+        height: 42,
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <AddIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+      </Box>
+      <Typography 
+        variant="caption" 
+        sx={{ 
+          fontWeight: 700, 
+          textTransform: 'uppercase', 
+          fontSize: '0.65rem', 
+          letterSpacing: '0.05em',
+          color: 'text.secondary'
+        }}
+      >
+        Your App?
+      </Typography>
+    </Stack>
+  </Tooltip>
+);
 
 const PlatformItem = ({ id, isUpcoming }: { id: string, isUpcoming?: boolean }) => {
   const brandColors: Record<string, string> = {
@@ -31,7 +78,8 @@ const PlatformItem = ({ id, isUpcoming }: { id: string, isUpcoming?: boolean }) 
             filter: 'none',
             transform: 'translateY(-2px)'
           },
-          cursor: 'default'
+          cursor: 'default',
+          position: 'relative'
         }}
       >
         <Box sx={{ 
@@ -40,7 +88,8 @@ const PlatformItem = ({ id, isUpcoming }: { id: string, isUpcoming?: boolean }) 
           bgcolor: 'background.default',
           display: 'flex',
           border: '1px solid',
-          borderColor: 'divider'
+          borderColor: 'divider',
+          position: 'relative'
         }}>
           <PlatformIcon 
             platformId={id} 
@@ -49,6 +98,24 @@ const PlatformItem = ({ id, isUpcoming }: { id: string, isUpcoming?: boolean }) 
               color: isUpcoming ? 'text.secondary' : brandColors[id.toLowerCase()] || 'inherit'
             }} 
           />
+          {isUpcoming && (
+            <Box sx={{
+              position: 'absolute',
+              top: -8,
+              right: -8,
+              bgcolor: 'primary.main',
+              color: 'white',
+              fontSize: '0.5rem',
+              fontWeight: 900,
+              px: 0.6,
+              py: 0.2,
+              borderRadius: 1,
+              boxShadow: 2,
+              letterSpacing: 0.5
+            }}>
+              SOON
+            </Box>
+          )}
         </Box>
         <Typography 
           variant="caption" 
@@ -98,6 +165,9 @@ export const SocialProof = () => {
             {upcomingPlatforms.map((p) => (
               <PlatformItem key={p} id={p} isUpcoming />
             ))}
+
+            {/* Request Placeholder */}
+            <RequestPlatformItem />
           </Stack>
         </Stack>
       </Container>
