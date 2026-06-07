@@ -18,7 +18,7 @@ export const LandingPage = () => {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <LandingHeader />
-      <Box component="main" sx={{ flexGrow: 1 }}>
+      <Box component="main" sx={{ flexGrow: 1, pt: '64px' }}>
         <Hero />
         <SocialProof />
         <Features />

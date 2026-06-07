@@ -3,33 +3,50 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Container, Stack, useTheme, useScrollTrigger, Box } from '@mui/material';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 
 export const LandingHeader = () => {
   const theme = useTheme();
+  const pathname = usePathname();
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 50,
   });
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (pathname === '/') {
+      e.preventDefault();
+      // Most reliable way to scroll to top across all browsers
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Fallback for some mobile browsers
+      document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <AppBar 
-      position="sticky" 
+      position="fixed" 
       elevation={trigger ? 4 : 0}
       component="header"
       data-testid="landing-header"
       sx={{ 
-        backgroundColor: trigger ? theme.palette.background.paper : 'transparent',
+        backgroundColor: trigger ? 'hsla(var(--background), 0.8)' : 'transparent',
         backgroundImage: 'none',
-        transition: theme.transitions.create(['background-color', 'box-shadow']),
-        borderBottom: trigger ? 'none' : `1px solid ${theme.palette.divider}`,
+        backdropFilter: trigger ? 'blur(12px)' : 'none',
+        transition: theme.transitions.create(['background-color', 'box-shadow', 'backdrop-filter']),
+        borderBottom: trigger ? `1px solid ${theme.palette.divider}` : 'none',
         color: theme.palette.text.primary,
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: theme.zIndex.appBar
       }}
     >
       <Container maxWidth="lg">
         <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
           <Box sx={{ flexShrink: 0 }}>
-            <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link href="/" onClick={handleLogoClick} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                 <RocketLaunchIcon color="primary" />
                 <Typography variant="h6" component="div" sx={{ fontWeight: 700 }}>
