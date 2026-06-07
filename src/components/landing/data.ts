@@ -8,22 +8,22 @@ export const features = [
   {
     title: 'Native & Privacy-First',
     description: 'Native platform publishing with no middleware. Your data stays in your local vault, giving you absolute control.',
-    icon: React.createElement(SecurityIcon, { fontSize: "large", color: "primary" }),
+    icon: React.createElement(SecurityIcon, { fontSize: "large" }),
   },
   {
     title: 'Global Vibe Sync',
     description: 'AI-powered tone shifting that adapts your Shorts, Reels, and TikToks to the specific vibe of each platform.',
-    icon: React.createElement(PsychologyIcon, { fontSize: "large", color: "primary" }),
+    icon: React.createElement(PsychologyIcon, { fontSize: "large" }),
   },
   {
     title: 'Sound-Check',
     description: 'Algorithmic boost via native trend scanning. Find and sync the trending music that drives reach.',
-    icon: React.createElement(LibraryMusicIcon, { fontSize: "large", color: "primary" }),
+    icon: React.createElement(LibraryMusicIcon, { fontSize: "large" }),
   },
   {
     title: 'Unified Local Inbox',
     description: 'Cross-platform engagement managed entirely on your machine. No shared servers, no data leaks.',
-    icon: React.createElement(AllInclusiveIcon, { fontSize: "large", color: "primary" }),
+    icon: React.createElement(AllInclusiveIcon, { fontSize: "large" }),
   },
 ];
 
@@ -98,6 +98,3 @@ export const howItWorksSteps = [
     description: 'Push directly from your device to TikTok, Instagram, and YouTube. Maximum reach, zero SaaS tax with Directly Social. [Learn why this matters](/philosophy)'
   }
 ];
-
-export const activePlatforms = ['tiktok', 'instagram', 'youtube', 'facebook'];
-export const upcomingPlatforms = ['linkedin', 'threads', 'x', 'reddit'];

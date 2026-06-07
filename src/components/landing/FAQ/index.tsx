@@ -3,25 +3,11 @@
 import React from 'react';
 import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails, useTheme } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { motion } from 'framer-motion';
+import { faqs } from '../data-secondary';
 
-const faqs = [
-  {
-    question: "What does 'Native' actually mean?",
-    answer: "Most social media tools act as a middleman. They store your data and passwords on their servers and then send them to the platforms. Directly connects your computer directly to the platforms using their official APIs, meaning your data never leaves your control."
-  },
-  {
-    question: "Is Directly really free?",
-    answer: "Yes, our Local Core tier is free forever. Since the app runs on your machine and uses your own API keys, our overhead is low, and we pass those savings directly to you."
-  },
-  {
-    question: "How do I get my own API keys?",
-    answer: "We provide step-by-step guides for creating developer accounts on TikTok, Instagram, and YouTube. It's a one-time setup that gives you total independence from SaaS middlemen."
-  },
-  {
-    question: "Can I use Directly for team collaboration?",
-    answer: "Team features are coming soon to our Cloud Pro tier, which will allow for shared local vaults and synchronized workflows while maintaining our privacy-first architecture."
-  }
-];
+const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } };
+const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } };
 
 export const FAQ = () => {
   const theme = useTheme();
@@ -29,36 +15,56 @@ export const FAQ = () => {
   return (
     <Box sx={{ py: { xs: 8, md: 12 } }}>
       <Container maxWidth="md">
-        <Box sx={{ textAlign: 'center', mb: 8 }}>
-          <Typography variant="h2" gutterBottom sx={{ fontWeight: 800 }}>
+        <Box 
+          component={motion.div}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+          sx={{ textAlign: 'center', mb: 8 }}
+        >
+          <Typography variant="overline" color="primary" sx={{ fontWeight: 800, letterSpacing: '0.2em' }}>
+            Support & Clarity
+          </Typography>
+          <Typography variant="h2" sx={{ mt: 2, mb: 3, fontWeight: 800 }}>
             Common Questions
           </Typography>
-          <Typography variant="h6" color="text.secondary">
+          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>
             Everything you need to know about the native social revolution.
           </Typography>
         </Box>
 
-        <Box>
+        <Box 
+          component={motion.div}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+        >
           {faqs.map((faq, i) => (
-            <Accordion 
-              key={i} 
-              elevation={0} 
-              sx={{ 
-                border: `1px solid ${theme.palette.divider}`,
-                borderRadius: '8px !important',
-                mb: 2,
-                '&:before': { display: 'none' }
-              }}
-            >
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography sx={{ fontWeight: 700 }}>{faq.question}</Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ borderTop: `1px solid ${theme.palette.divider}` }}>
-                <Typography color="text.secondary" sx={{ lineHeight: 1.6 }}>
-                  {faq.answer}
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
+            <motion.div key={i} variants={itemVariants}>
+              <Accordion 
+                elevation={0} 
+                sx={{ 
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: '8px !important',
+                  mb: 2,
+                  '&:before': { display: 'none' },
+                  bgcolor: 'background.paper',
+                  transition: 'border-color 0.2s',
+                  '&:hover': { borderColor: 'primary.main' }
+                }}
+              >
+                <AccordionSummary expandIcon={<ExpandMoreIcon color="primary" />}>
+                  <Typography sx={{ fontWeight: 700 }}>{faq.question}</Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ borderTop: `1px solid ${theme.palette.divider}` }}>
+                  <Typography color="text.secondary" sx={{ lineHeight: 1.6 }}>
+                    {faq.answer}
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            </motion.div>
           ))}
         </Box>
       </Container>
