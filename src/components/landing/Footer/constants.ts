@@ -14,7 +14,23 @@ export const FOOTER_COLUMNS: FooterColumnData[] = [
     links: [
       { label: 'Features', href: '/#features' },
       { label: 'Pricing', href: '/#pricing' },
+      { label: 'Native Proxy-Push', href: '/philosophy' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Documentation', href: '/docs' },
+      { label: 'BYOK Setup Guide', href: '/docs#configuration-byok' },
+      { label: 'Local Vault Guide', href: '/docs#getting-started' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
       { label: 'Why Directly Social?', href: '/philosophy' },
+      { label: 'System Status', href: '#' },
+      { label: 'Contact Support', href: 'mailto:support@directly.social' },
     ],
   },
   {

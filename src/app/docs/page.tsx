@@ -10,18 +10,21 @@ import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 
 const docCategories = [
   {
+    id: 'getting-started',
     title: 'Getting Started',
     description: 'Learn how to set up your local vault and connect your first social account.',
     icon: <MenuBookIcon color="primary" sx={{ fontSize: 32 }} />,
     links: ['Local Vault Setup', 'Account Connection', 'Publishing Your First Video']
   },
   {
+    id: 'configuration-byok',
     title: 'Configuration (BYOK)',
     description: 'Detailed guides on bringing your own API keys for TikTok, Instagram, and YouTube.',
     icon: <SettingsSuggestIcon color="primary" sx={{ fontSize: 32 }} />,
     links: ['TikTok API Key Guide', 'Meta Developer Portal', 'YouTube OAuth Setup']
   },
   {
+    id: 'philosophy',
     title: 'Philosophy & Reach',
     description: 'Understand the "SaaS Tax" and how Native Publishing boosts your algorithmic reach.',
     icon: <HelpCenterIcon color="primary" sx={{ fontSize: 32 }} />,
@@ -53,6 +56,7 @@ export default function DocsPage() {
             {docCategories.map((cat, index) => (
               <Grid size={{ xs: 12, md: 4 }} key={index}>
                 <Paper 
+                  id={cat.id}
                   elevation={0}
                   sx={{ 
                     p: 4, 

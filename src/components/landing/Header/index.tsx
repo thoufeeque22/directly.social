@@ -63,7 +63,12 @@ export const LandingHeader = () => {
             <Button component={Link} href="/docs" color="inherit" sx={{ textTransform: 'none', fontWeight: 500 }}>Docs</Button>
           </Stack>
 
-          <Box sx={{ flexShrink: 0 }}>
+          <Stack direction="row" spacing={3} sx={{ alignItems: 'center', flexShrink: 0 }}>
+            <Link href="/login" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>
+              <Typography sx={{ fontWeight: 600, fontSize: '0.9rem', '&:hover': { color: 'primary.main' } }}>
+                Login
+              </Typography>
+            </Link>
             <Button
               component={Link}
               href="/login"
@@ -73,7 +78,7 @@ export const LandingHeader = () => {
             >
               Get Started
             </Button>
-          </Box>
+          </Stack>
         </Toolbar>
       </Container>
     </AppBar>
