@@ -2,50 +2,43 @@
 
 import React from 'react';
 import { Box, Container, Typography, Paper, Stack, Avatar, useTheme } from '@mui/material';
+import { motion } from 'framer-motion';
+import { testimonials } from '../data-secondary';
 
-const testimonials = [
-  {
-    name: 'Sarah J.',
-    role: 'Lifestyle Creator',
-    content: 'Switching from Buffer to Directly saved me $40/month and my videos actually go live instantly. The AI tone shifter is magic.',
-    avatar: 'S'
-  },
-  {
-    name: 'Mike D.',
-    role: 'Tech YouTuber',
-    content: 'As a developer, I love that I can own my data and use my own API keys. No middleware means no security risks.',
-    avatar: 'M'
-  },
-  {
-    name: 'Elena R.',
-    role: 'Social Media Manager',
-    content: 'The unified inbox being local-first is a game changer for client privacy. Best social tool of 2025.',
-    avatar: 'E'
-  },
-  {
-    name: 'David W.',
-    role: 'Growth Hacker',
-    content: 'Direct API access means I never hit those weird rate limits or delays. My content goes viral while others are still uploading.',
-    avatar: 'D'
-  }
-];
+const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } } as const;
+const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } } as const;
 
 export const Testimonials = () => {
   const theme = useTheme();
 
   return (
-    <Box sx={{ py: { xs: 8, md: 12 } }}>
+    <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.default' }}>
       <Container maxWidth="lg">
-        <Box sx={{ textAlign: 'center', mb: 8 }}>
-          <Typography variant="h2" gutterBottom sx={{ fontWeight: 800 }}>
+        <Box 
+          component={motion.div}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+          sx={{ textAlign: 'center', mb: 8 }}
+        >
+          <Typography variant="overline" color="primary" sx={{ fontWeight: 800, letterSpacing: '0.2em' }}>
             The Wall of Love
           </Typography>
-          <Typography variant="h6" color="text.secondary">
-            Join 1,000+ creators who took the native pill.
+          <Typography variant="h2" sx={{ mt: 2, mb: 3, fontWeight: 800 }}>
+            Join 1,000+ Native Creators
+          </Typography>
+          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>
+            See why power users are leaving legacy tools for the freedom of Directly Social.
           </Typography>
         </Box>
 
         <Box 
+          component={motion.div}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
           sx={{ 
             display: 'grid', 
             gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, 
@@ -53,29 +46,33 @@ export const Testimonials = () => {
           }}
         >
           {testimonials.map((t, i) => (
-            <Paper 
-              key={i} 
-              elevation={0} 
-              sx={{ 
-                p: 4, 
-                borderRadius: 4, 
-                border: `1px solid ${theme.palette.divider}`,
-                bgcolor: 'background.paper'
-              }}
-            >
-              <Stack spacing={3}>
-                <Typography variant="body1" sx={{ fontStyle: 'italic', fontSize: '1.1rem' }}>
-                  &quot;{t.content}&quot;
-                </Typography>
-                <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-                  <Avatar sx={{ bgcolor: 'primary.main' }}>{t.avatar}</Avatar>
-                  <Box>
-                    <Typography sx={{ fontWeight: 700 }}>{t.name}</Typography>
-                    <Typography variant="body2" color="text.secondary">{t.role}</Typography>
-                  </Box>
+            <motion.div key={i} variants={itemVariants}>
+              <Paper 
+                elevation={0} 
+                sx={{ 
+                  p: 4, 
+                  borderRadius: 4, 
+                  border: `1px solid ${theme.palette.divider}`,
+                  bgcolor: 'background.paper',
+                  transition: 'transform 0.2s',
+                  height: '100%',
+                  '&:hover': { transform: 'translateY(-4px)', borderColor: 'primary.main' }
+                }}
+              >
+                <Stack spacing={3} sx={{ height: '100%', justifyContent: 'space-between' }}>
+                  <Typography variant="body1" sx={{ fontStyle: 'italic', fontSize: '1.1rem', lineHeight: 1.7 }}>
+                    &quot;{t.content}&quot;
+                  </Typography>
+                  <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+                    <Avatar sx={{ bgcolor: 'primary.main', fontWeight: 800 }}>{t.avatar}</Avatar>
+                    <Box>
+                      <Typography sx={{ fontWeight: 700 }}>{t.name}</Typography>
+                      <Typography variant="body2" color="text.secondary">{t.role}</Typography>
+                    </Box>
+                  </Stack>
                 </Stack>
-              </Stack>
-            </Paper>
+              </Paper>
+            </motion.div>
           ))}
         </Box>
       </Container>

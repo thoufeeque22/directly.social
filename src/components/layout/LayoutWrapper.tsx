@@ -22,18 +22,18 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
   if (isPublicRoute || (isUnauthenticated && pathname !== '/login')) {
     return (
-      <main style={{ width: '100%' }}>
+      <main style={{ width: '100%', minHeight: '100vh' }}>
         {children}
       </main>
     );
   }
 
   return (
-    <div className="layout-wrapper">
+    <div className="layout-wrapper" style={{ height: '100dvh', overflow: 'hidden' }}>
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <div className="main-content">
+      <div className="main-content" style={{ height: '100%', overflow: 'hidden' }}>
         <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <main className="page-content">
+        <main className="page-content" style={{ height: '100%', overflow: 'hidden' }}>
           <PullToRefresh onRefresh={refresh} className="ptr-container">
             {children}
           </PullToRefresh>

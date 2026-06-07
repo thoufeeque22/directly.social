@@ -16,7 +16,7 @@ export function Footer() {
     {
       title: 'Product',
       links: [
-        { label: 'Features', href: '#features' },
+        { label: 'Features', href: '/#features' },
         { label: 'Roadmap', href: '#' },
         { label: 'Changelog', href: '#' },
       ],

@@ -4,7 +4,7 @@ import React from 'react';
 import { Box, Container, Typography, Grid, Paper, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
-import { comparisonBad, comparisonGood } from '../data';
+import { comparisonBad, comparisonGood } from '../data-secondary';
 
 const ComparisonColumn = ({ title, items, type }: { title: string, items: string[], type: 'bad' | 'good' }) => {
   const isGood = type === 'good';
@@ -51,7 +51,7 @@ export const Comparison = () => {
             Break the Cycle
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>
-            Why creators are switching to the Native Freedom of Directly Social.
+            Why creators are switching to the Native Freedom of <strong>Directly Social</strong>.
           </Typography>
         </Box>
 

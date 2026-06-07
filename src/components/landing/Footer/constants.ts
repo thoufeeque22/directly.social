@@ -12,28 +12,25 @@ export const FOOTER_COLUMNS: FooterColumnData[] = [
   {
     title: 'Product',
     links: [
-      { label: 'Features', href: '#features' },
-      { label: 'Pricing', href: '#pricing' },
-      { label: 'Roadmap', href: '/roadmap' },
-      { label: 'Self-Hosting', href: '/docs/self-hosting' },
+      { label: 'Features', href: '/#features' },
+      { label: 'Pricing', href: '/#pricing' },
+      { label: 'Native Proxy-Push', href: '/philosophy' },
     ],
   },
   {
-    title: 'Compare',
-    links: [
-      { label: 'vs Metricool', href: '/vs/metricool' },
-      { label: 'vs Buffer', href: '/vs/buffer' },
-      { label: 'vs Publer', href: '/vs/publer' },
-      { label: 'vs Hootsuite', href: '/vs/hootsuite' },
-    ],
-  },
-  {
-    title: 'Developers',
+    title: 'Resources',
     links: [
       { label: 'Documentation', href: '/docs' },
-      { label: 'API Reference', href: '/docs/api' },
-      { label: 'Open Source', href: 'https://github.com' },
-      { label: 'Contributing', href: '/docs/contributing' },
+      { label: 'BYOK Setup Guide', href: '/docs#configuration-byok' },
+      { label: 'Local Vault Guide', href: '/docs#getting-started' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'Why Directly Social?', href: '/philosophy' },
+      { label: 'System Status', href: '#' },
+      { label: 'Contact Support', href: 'mailto:support@directly.social' },
     ],
   },
   {

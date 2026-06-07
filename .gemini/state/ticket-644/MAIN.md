@@ -22,7 +22,7 @@ Design and implement a high-converting landing page for Directly.social. Based o
 4.  **Core Feature Grid:** Highlighting the "Magic Features":
     - **Native & Privacy-First:** Direct API, local vault.
     - **Global Vibe Sync:** AI-powered tone shifting.
-    - **Trending Music Sound-Check:** Algorithmic boost via native trend scanning.
+
     - **Unified Engagement Inbox:** Cross-platform local management.
 5.  **Persona Target:** Dedicated blocks for "Native Creators" and "Developers/Self-Hosters".
 6.  **Testimonials:** Masonry grid ("Wall of Love") of user reviews.
@@ -40,7 +40,7 @@ Design and implement a high-converting landing page for Directly.social. Based o
 ### Key Differentiators
 - Native & Privacy-First (Local Vault, no middleware)
 - One-Click Global Vibe Sync (AI tone shifting)
-- Trending Music Sound-Check
+
 
 ## Phases
 - [x] Discovery

@@ -9,7 +9,6 @@ import { Features } from './Features';
 import { HowItWorks } from './HowItWorks';
 import { Comparison } from './Comparison';
 import { Personas } from './Personas';
-import { Testimonials } from './Testimonials';
 import { Pricing } from './Pricing';
 import { FAQ } from './FAQ';
 import { LandingFooter } from './Footer';
@@ -18,14 +17,13 @@ export const LandingPage = () => {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <LandingHeader />
-      <Box component="main" sx={{ flexGrow: 1 }}>
+      <Box component="main" sx={{ flexGrow: 1, pt: '64px' }}>
         <Hero />
         <SocialProof />
-        <Features />
-        <HowItWorks />
         <Comparison />
         <Personas />
-        <Testimonials />
+        <Features />
+        <HowItWorks />
         <Pricing />
         <FAQ />
       </Box>

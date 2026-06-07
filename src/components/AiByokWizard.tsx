@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, CircularProgress } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { useAiByok } from '@/hooks/useAiByok';
 import { AIProvider } from '@/lib/core/ai';
 import { AddKeyForm } from './byok/AddKeyForm';
@@ -27,8 +27,8 @@ export default function AiByokWizard() {
 
   return (
     <SettingsWizardCard
-      title="AI Provider Keys (BYOK)"
-      subtitle="Bring your own API keys to bypass platform rate limits and access higher-tier models. Keys are securely stored only in your local browser storage."
+      title="Zero-Markup AI (BYOK)"
+      subtitle="Connect your own ChatGPT or Gemini account to generate metadata without paying marked-up SaaS fees. Your connection is securely stored only in your local browser."
       data-testid="ai-byok-wizard"
     >
       <AddKeyForm onSave={handleSave} />

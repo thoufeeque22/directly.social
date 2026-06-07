@@ -1,53 +1,31 @@
 import React from 'react';
-import SecurityIcon from '@mui/icons-material/Security';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
-import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import StorageIcon from '@mui/icons-material/Storage';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 
 export const features = [
   {
-    title: 'Native & Privacy-First',
-    description: 'Native platform publishing with no middleware. Your data stays in your local vault, giving you absolute control.',
-    icon: React.createElement(SecurityIcon, { fontSize: "large", color: "primary" }),
+    title: 'Your Own Storage (BYOS)',
+    description: "We don't store your videos. Keep them securely on your device or connect a private cloud bucket to manage your media.",
+    icon: React.createElement(StorageIcon, { fontSize: "large" }),
   },
   {
-    title: 'Global Vibe Sync',
-    description: 'AI-powered tone shifting that adapts your Shorts, Reels, and TikToks to the specific vibe of each platform.',
-    icon: React.createElement(PsychologyIcon, { fontSize: "large", color: "primary" }),
+    title: 'Direct Connections (BYOK)',
+    description: 'Connect directly to TikTok, YouTube, and Meta using your own keys. No middleware, no rate limit throttling, and you own the relationship.',
+    icon: React.createElement(VpnKeyIcon, { fontSize: "large" }),
   },
   {
-    title: 'Sound-Check',
-    description: 'Algorithmic boost via native trend scanning. Find and sync the trending music that drives reach.',
-    icon: React.createElement(LibraryMusicIcon, { fontSize: "large", color: "primary" }),
+    title: 'Zero-Markup AI (BYOK)',
+    description: 'Connect your own ChatGPT or Gemini account. Polish your content and generate viral hashtags without paying expensive monthly AI subscription fees.',
+    icon: React.createElement(AutoAwesomeIcon, { fontSize: "large" }),
   },
   {
-    title: 'Unified Local Inbox',
-    description: 'Cross-platform engagement managed entirely on your machine. No shared servers, no data leaks.',
-    icon: React.createElement(AllInclusiveIcon, { fontSize: "large", color: "primary" }),
+    title: 'Metadata Snippets',
+    description: 'Save and inject your most used hashtags, disclaimers, and calls-to-action with a single click. Stop retyping the same descriptions.',
+    icon: React.createElement(ContentPasteIcon, { fontSize: "large" }),
   },
 ];
-
-export const comparisonBad = {
-  title: "Legacy Middlemen",
-  items: [
-    "Monthly subscription fees ($50+/mo)",
-    "They own your distribution keys",
-    "Your content is stored on their servers",
-    "Limited to their 'approved' platforms",
-    "Slow API proxies and delays"
-  ]
-};
-
-export const comparisonGood = {
-  title: "Native Freedom",
-  items: [
-    "Zero platform fees (Free Core)",
-    "You own your distribution keys",
-    "Content stays in your local vault",
-    "Native Publishing for peak speed",
-    "Connect all accounts natively"
-  ]
-};
 
 export const pricingTiers = [
   {
@@ -84,20 +62,17 @@ export const pricingTiers = [
 export const howItWorksSteps = [
   {
     step: 1,
-    title: 'Secure Local Vault',
-    description: 'Connect your local drive. Your videos and metadata never leave your machine unless you say so.'
+    title: 'Your Media, Your Storage',
+    description: 'Keep your videos securely on your device or connect your own private cloud storage. We never hold your files hostage.'
   },
   {
     step: 2,
-    title: 'Bring Your Own Key',
-    description: 'Plug in your official platform API keys using our simple setup wizards. No coding required.'
+    title: 'Direct Platform Sync',
+    description: 'Link your TikTok, YouTube, and Meta accounts directly using our simple setup wizards. No coding required, and you own the connection.'
   },
   {
     step: 3,
     title: 'Native Publishing',
-    description: 'Push directly from your device to TikTok, Instagram, and YouTube. Maximum reach, zero SaaS tax with Directly Social. [Learn why this matters](/philosophy)'
+    description: 'Push directly from your device to the platforms. Enjoy maximum algorithmic reach with zero SaaS tax. [Learn why this matters](/philosophy)'
   }
 ];
-
-export const activePlatforms = ['tiktok', 'instagram', 'youtube', 'facebook'];
-export const upcomingPlatforms = ['linkedin', 'threads', 'x', 'reddit'];

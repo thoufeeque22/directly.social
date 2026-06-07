@@ -1,10 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Box, Container, Typography, Grid, Stack, IconButton, useTheme } from '@mui/material';
+import { Box, Container, Typography, Grid, Stack, useTheme } from '@mui/material';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import XIcon from '@mui/icons-material/X';
 import { FooterColumn } from './FooterColumn';
 import { FOOTER_COLUMNS } from './constants';
 
@@ -31,10 +29,6 @@ export const LandingFooter = () => {
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 300 }}>
                 The native social media client designed for privacy, speed, and total creator freedom.
               </Typography>
-              <Stack direction="row" spacing={1}>
-                <IconButton color="inherit" size="small"><GitHubIcon /></IconButton>
-                <IconButton color="inherit" size="small"><XIcon /></IconButton>
-              </Stack>
             </Stack>
           </Grid>
           
