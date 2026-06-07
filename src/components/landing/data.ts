@@ -6,6 +6,11 @@ import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 
 export const features = [
   {
+    title: 'Your Own Storage (BYOS)',
+    description: "We don't store your videos. Keep them securely on your device or connect a private cloud bucket to manage your media.",
+    icon: React.createElement(StorageIcon, { fontSize: "large" }),
+  },
+  {
     title: 'Direct Connections (BYOK)',
     description: 'Connect directly to TikTok, YouTube, and Meta using your own keys. No middleware, no rate limit throttling, and you own the relationship.',
     icon: React.createElement(VpnKeyIcon, { fontSize: "large" }),
@@ -14,11 +19,6 @@ export const features = [
     title: 'Zero-Markup AI (BYOK)',
     description: 'Connect your own ChatGPT or Gemini account. Polish your content and generate viral hashtags without paying expensive monthly AI subscription fees.',
     icon: React.createElement(AutoAwesomeIcon, { fontSize: "large" }),
-  },
-  {
-    title: 'Your Own Storage (BYOS)',
-    description: "We don't store your videos. Keep them securely on your device or connect a private cloud bucket to manage your media.",
-    icon: React.createElement(StorageIcon, { fontSize: "large" }),
   },
   {
     title: 'Metadata Snippets',

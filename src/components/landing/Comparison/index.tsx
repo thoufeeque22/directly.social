@@ -51,7 +51,7 @@ export const Comparison = () => {
             Break the Cycle
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>
-            Why creators are switching to the Native Freedom of Directly Social.
+            Why creators are switching to the Native Freedom of <strong>Directly Social</strong>.
           </Typography>
         </Box>
 

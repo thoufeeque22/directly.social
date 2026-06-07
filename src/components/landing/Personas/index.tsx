@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import { Box, Container, Typography, Stack, ToggleButton, ToggleButtonGroup, Paper, useTheme, Grid } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import BrushIcon from '@mui/icons-material/Brush';
-import CodeIcon from '@mui/icons-material/Code';
+import BoltIcon from '@mui/icons-material/Bolt';
 import { personas } from '../data-secondary';
 
 export const Personas = () => {
-  const [view, setView] = useState<'creator' | 'developer'>('creator');
+  const [view, setView] = useState<'creator' | 'powerUser'>('creator');
   const theme = useTheme();
   const content = personas[view];
 
@@ -35,10 +35,10 @@ export const Personas = () => {
                   <Typography sx={{ fontWeight: 600 }}>Creators</Typography>
                 </Stack>
               </ToggleButton>
-              <ToggleButton value="developer" sx={{ px: { xs: 3, md: 5 }, py: 1.5, textTransform: 'none', borderRadius: '10px !important', border: 'none', '&.Mui-selected': { bgcolor: 'primary.main', color: 'primary.foreground' } }}>
+              <ToggleButton value="powerUser" sx={{ px: { xs: 3, md: 5 }, py: 1.5, textTransform: 'none', borderRadius: '10px !important', border: 'none', '&.Mui-selected': { bgcolor: 'primary.main', color: 'primary.foreground' } }}>
                 <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-                  <CodeIcon fontSize="small" />
-                  <Typography sx={{ fontWeight: 600 }}>Developers</Typography>
+                  <BoltIcon fontSize="small" />
+                  <Typography sx={{ fontWeight: 600 }}>Power Users</Typography>
                 </Stack>
               </ToggleButton>
             </ToggleButtonGroup>

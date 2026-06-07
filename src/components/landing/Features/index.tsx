@@ -25,7 +25,7 @@ export const Features = () => {
           <Typography variant="overline" color="primary" sx={{ fontWeight: 800, letterSpacing: '0.2em' }}>Core Magic</Typography>
           <Typography variant="h2" sx={{ mt: 2, mb: 3, fontWeight: 800 }}>The SaaS Tax is Over</Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>
-            Stop paying for middlemen to hold your data. Directly Social connects your own cloud storage or local disk to the platforms you love.
+            Stop paying for middlemen to hold your data. <strong>Directly Social</strong> connects your own cloud storage or local disk to the platforms you love.
           </Typography>
         </Box>
 
