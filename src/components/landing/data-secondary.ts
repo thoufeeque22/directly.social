@@ -12,6 +12,10 @@ export const faqs = [
     answer: "We provide step-by-step guides for creating developer accounts on TikTok, Instagram, and YouTube. It's a one-time setup that gives you total independence from SaaS middlemen."
   },
   {
+    question: "Do I have to use my own AI keys and Cloud Storage?",
+    answer: "Not at all! You only need to connect your social media accounts to start publishing. However, adding your own AI key unlocks our 'Vibe Sync' feature to instantly rewrite your captions, and connecting your own storage lets you easily organize your media without paying us a cent for hosting."
+  },
+  {
     question: "Can I use Directly Social for team collaboration?",
     answer: "Team features are coming soon to our Cloud Pro tier, which will allow for shared local vaults and synchronized workflows while maintaining our privacy-first architecture."
   }
@@ -66,6 +70,28 @@ export const testimonials = [
     avatar: 'D'
   }
 ];
+
+export const comparisonBad = {
+  title: "Legacy Middlemen",
+  items: [
+    "Monthly subscription fees ($50+/mo)",
+    "They own your distribution keys",
+    "Your content is stored on their servers",
+    "Limited to their 'approved' platforms",
+    "Slow API proxies and delays"
+  ]
+};
+
+export const comparisonGood = {
+  title: "Native Freedom",
+  items: [
+    "Zero platform fees (Free Core)",
+    "You own your distribution keys",
+    "Content stays in your local vault",
+    "Native Publishing for peak speed",
+    "Connect all accounts natively"
+  ]
+};
 
 export const activePlatforms = ['tiktok', 'instagram', 'youtube', 'facebook'];
 export const upcomingPlatforms = ['linkedin', 'threads', 'x', 'reddit'];

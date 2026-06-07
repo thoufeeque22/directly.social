@@ -4,7 +4,7 @@ import React from 'react';
 import { Box, Container, Typography, Grid, Paper, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
-import { comparisonBad, comparisonGood } from '../data';
+import { comparisonBad, comparisonGood } from '../data-secondary';
 
 const ComparisonColumn = ({ title, items, type }: { title: string, items: string[], type: 'bad' | 'good' }) => {
   const isGood = type === 'good';
