@@ -11,20 +11,20 @@ export const Features = () => {
     <Box id="features" sx={{ py: { xs: 8, md: 12 } }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', mb: 8 }}>
-          <Typography variant="overline" color="primary" sx={{ letterSpacing: '0.1em', fontWeight: 700 }}>
+          <Typography variant="overline" color="primary" sx={{ fontWeight: 800, letterSpacing: '0.2em' }}>
             Core Magic
           </Typography>
           <Typography variant="h2" sx={{ mt: 2, mb: 3, fontWeight: 800 }}>
             The SaaS Tax is Over
           </Typography>
-          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
-            Stop paying for middlemen to hold your data. Directly Social connects your local vault to the platforms you love.
+          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>
+            Stop paying for middlemen to hold your data. Directly Social connects your own cloud storage or local disk to the platforms you love.
           </Typography>
         </Box>
 
         <Grid container spacing={4}>
           {features.map((feature, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
               <Card 
                 elevation={0} 
                 sx={{ 

@@ -4,8 +4,12 @@ import Link from 'next/link';
 import { Typography, Box, Button } from '@mui/material';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { GlassCard } from '@/components/ui/GlassCard';
+import { useSession } from 'next-auth/react';
 
 export default function NotFound() {
+  const { status } = useSession();
+  const isAuth = status === 'authenticated';
+
   return (
     <div style={{ 
       minHeight: '80vh', 
@@ -37,7 +41,7 @@ export default function NotFound() {
               fontSize: '1rem'
             }}
           >
-            Return to Dashboard
+            {isAuth ? 'Return to Dashboard' : 'Back to Home'}
           </Button>
         </Box>
       </GlassCard>

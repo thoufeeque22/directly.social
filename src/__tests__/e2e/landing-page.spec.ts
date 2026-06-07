@@ -51,7 +51,7 @@ test.describe('Landing Page', () => {
     // Switch to Developer
     await page.getByRole('button', { name: 'Developers' }).click();
     await expect(page.getByText('For the Self-Hoster & Dev')).toBeVisible();
-    await expect(page.getByText('By-Your-Own-Key (BYOK) architecture')).toBeVisible();
+    await expect(page.getByText('Bring-Your-Own-Key (BYOK) architecture')).toBeVisible();
   });
 
   test('should expand FAQ items @interactivity @smoke', async ({ page }) => {

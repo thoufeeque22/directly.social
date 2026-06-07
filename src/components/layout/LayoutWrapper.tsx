@@ -11,17 +11,16 @@ import { useAppRefresh } from '@/hooks/useAppRefresh';
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { data: session, status } = useSession();
-  const isLoginPage = pathname === '/login';
-  
-  // Hide layout for login page, or for unauthenticated users on the root page.
-  // We also hide it while loading on the root page to prevent flashing the sidebar.
-  const isLandingPage = pathname === '/' && (status === 'unauthenticated' || status === 'loading');
+  const { status } = useSession();
+  // Hide layout for login page, or for unauthenticated users on any page.
+  // We also hide it while loading to prevent flashing the sidebar.
+  const isPublicRoute = pathname === '/login' || pathname === '/docs' || (pathname === '/' && status === 'unauthenticated');
+  const isUnauthenticated = status === 'unauthenticated' || status === 'loading';
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { refresh } = useAppRefresh();
 
-  if (isLoginPage || isLandingPage) {
+  if (isPublicRoute || (isUnauthenticated && pathname !== '/login')) {
     return (
       <main style={{ width: '100%' }}>
         {children}

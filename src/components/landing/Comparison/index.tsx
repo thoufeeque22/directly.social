@@ -47,10 +47,10 @@ export const Comparison = () => {
     <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.default' }}>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', mb: 8 }}>
-          <Typography variant="h2" gutterBottom sx={{ fontWeight: 800 }}>
+          <Typography variant="h2" sx={{ fontWeight: 800, mb: 3 }}>
             Break the Cycle
           </Typography>
-          <Typography variant="h6" color="text.secondary">
+          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>
             Why creators are switching to the Native Freedom of Directly Social.
           </Typography>
         </Box>
