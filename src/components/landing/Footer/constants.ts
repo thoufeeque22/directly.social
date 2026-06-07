@@ -12,8 +12,8 @@ export const FOOTER_COLUMNS: FooterColumnData[] = [
   {
     title: 'Product',
     links: [
-      { label: 'Features', href: '#features' },
-      { label: 'Pricing', href: '#pricing' },
+      { label: 'Features', href: '/#features' },
+      { label: 'Pricing', href: '/#pricing' },
       { label: 'Roadmap', href: '/roadmap' },
       { label: 'Self-Hosting', href: '/docs/self-hosting' },
     ],

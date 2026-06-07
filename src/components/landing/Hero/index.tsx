@@ -66,7 +66,7 @@ export const Hero = () => {
             </Button>
             <Button
               component={Link}
-              href="#features"
+              href="/#features"
               variant="outlined"
               size="large"
               sx={{ py: 1.5, px: 4, borderRadius: 2, fontSize: '1.1rem', textTransform: 'none' }}
