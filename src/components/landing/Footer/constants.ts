@@ -21,8 +21,8 @@ export const FOOTER_COLUMNS: FooterColumnData[] = [
     title: 'Resources',
     links: [
       { label: 'Documentation', href: '/docs' },
-      { label: 'BYOK Setup Guide', href: '/docs#configuration-byok' },
-      { label: 'Local Vault Guide', href: '/docs#getting-started' },
+      { label: 'BYOK Setup Guide', href: '/docs/byok-guide' },
+      { label: 'Local Vault Guide', href: '/docs/vault-setup' },
     ],
   },
   {

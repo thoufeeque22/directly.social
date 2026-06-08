@@ -33,7 +33,7 @@ export default function ApiDocsPage() {
           API Documentation
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-          Interactive OpenAPI explorer for Directly App Route Handlers.
+          Interactive OpenAPI explorer for Directly Social App Route Handlers.
         </Typography>
         <Box sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 1, overflow: 'hidden' }}>
           <SwaggerUI url="/api/openapi.json" />

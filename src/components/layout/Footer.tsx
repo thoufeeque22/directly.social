@@ -55,7 +55,7 @@ export function Footer() {
         ))}
       </div>
       <div className={styles.footerBottom}>
-        <p>© 2026 Directly. All rights reserved.</p>
+        <p>© 2026 Directly Social. All rights reserved.</p>
       </div>
     </footer>
   );

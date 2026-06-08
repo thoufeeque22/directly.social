@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { AnalyticsContent } from "./AnalyticsContent";
 
 export const metadata: Metadata = {
-  title: "Admin Analytics | Directly",
+  title: "Admin Analytics | Directly Social",
 };
 
 export default function AnalyticsPage() {

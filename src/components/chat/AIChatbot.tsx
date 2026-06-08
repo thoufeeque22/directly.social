@@ -61,7 +61,7 @@ const ChatWindowContent = ({
         </Avatar>
         <Box>
           <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'white' }}>
-            Directly AI
+            Directly Social AI
           </Typography>
           <Typography variant="caption" sx={{ color: 'hsl(var(--muted-foreground))' }}>
             Always active
@@ -105,7 +105,7 @@ const ChatWindowContent = ({
         }}>
           <AutoAwesomeIcon sx={{ fontSize: 40, mb: 2, opacity: 0.5, color: 'primary.main' }} />
           <Typography variant="body2" sx={{ fontWeight: 500 }}>
-            Hello! I&apos;m your Directly assistant.
+            Hello! I&apos;m your Directly Social assistant.
           </Typography>
 
           <Typography variant="caption" sx={{ mt: 1 }}>

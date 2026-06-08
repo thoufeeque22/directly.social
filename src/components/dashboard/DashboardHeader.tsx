@@ -12,7 +12,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ session }) => 
       <div>
         <Heading level={1}>Dashboard Overview</Heading>
         <p style={{ color: 'hsl(var(--muted-foreground))' }}>
-          {session ? `Welcome back, ${session.user?.name}.` : "Welcome to Directly. Connect your account to get started."}
+          {session ? `Welcome back, ${session.user?.name}.` : "Welcome to Directly Social. Connect your account to get started."}
         </p>
       </div>
     </header>
