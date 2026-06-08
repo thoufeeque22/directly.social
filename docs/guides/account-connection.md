@@ -1,18 +1,21 @@
-# Support & Help Hub
+# Connecting Your Social Accounts
 
-## Overview
-The Support Hub provides users with immediate access to assistance, documentation, and troubleshooting resources directly within the application. It acts as a centralized location for addressing user inquiries and resolving common issues.
+To begin publishing, you need to grant Directly Social permission to post on your behalf. We use secure **OAuth 2.0** flows, which means we never see or store your social media passwords.
 
-## Location & Access
-- **Sidebar Navigation:** A dedicated "Support" link is available in the main application sidebar, easily recognizable by the `HelpOutlinedIcon`.
-- **Settings Tab:** The Support link deep-links the user to the Settings page with the Support tab active (`/settings?tab=support`), ensuring a seamless transition into the administrative context.
+## How to Connect
 
-## Core Capabilities
-- **Quick Links:** Immediate access to common documentation, including user guides, FAQ, and API docs.
-- **Contact Channels:** Direct channels for users to reach out to the support team or community forums.
-- **Centralized Administration:** Integrated into the Settings tab architecture for a unified user experience.
+1. Go to **Settings** -> **Destinations**.
+2. Click the **Connect** button next to the platform you want to link.
+3. You will be redirected to the platform's official login page (TikTok, Google, or Meta).
+4. Review the permissions requested and click **Authorize** or **Allow**.
+5. You will be automatically returned to Directly Social, and your account will now appear as "Connected."
 
-## Technical Implementation
-- **Routing:** Built using Next.js 15 query parameters. The Sidebar passes `?tab=support`, which the Settings page parses to render the `SupportTab` component.
-- **UI Component:** The `SupportTab` component is located in the Settings module, following the application's Modular Engine architecture for form and tab management.
-- **Iconography:** Utilizes Material UI's `HelpOutlinedIcon` for visual consistency.
+## Troubleshooting
+
+- **Expired Tokens:** For security, platforms periodically expire their connection tokens. If you see a "Connection Expired" error, simply click **Reconnect** in Settings.
+- **Permissions Error:** Ensure you have accepted all required permissions during the OAuth flow. If publishing fails, try disconnecting and reconnecting the account to refresh permissions.
+- **Business vs Personal:** For Instagram, you must have a **Professional (Business or Creator)** account linked to a Facebook Page to use the API.
+
+## Removing an Account
+
+You can disconnect any account at any time by clicking the **Disconnect** icon in the Destinations tab. This will immediately revoke our access to that specific account.

@@ -50,7 +50,9 @@ export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
           ),
           li: ({ children }) => (
             <Box component="li" sx={{ mb: 1 }}>
-              <Typography variant="body1">{children}</Typography>
+              <Typography variant="body1" component="div">
+                {children}
+              </Typography>
             </Box>
           ),
           code: (props) => {

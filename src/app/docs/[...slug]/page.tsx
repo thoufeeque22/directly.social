@@ -26,12 +26,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function DocGuidePage({ params }: PageProps) {
   const { slug } = await params;
   
-  // RESTRICTION: Only allow files from docs/
-  const docsDir = path.join(process.cwd(), 'docs');
-  const docPath = path.normalize(path.join(docsDir, ...slug) + '.md');
+  // RESTRICTION: Only allow files from docs/guides/
+  const guidesDir = path.join(process.cwd(), 'docs', 'guides');
+  const docPath = path.normalize(path.join(guidesDir, ...slug) + '.md');
   
-  // Security check: ensure the normalized path is still within the docs directory
-  if (!docPath.startsWith(docsDir) || !fs.existsSync(docPath)) {
+  // Security check: ensure the normalized path is still within the guides directory
+  if (!docPath.startsWith(guidesDir) || !fs.existsSync(docPath)) {
     notFound();
   }
 

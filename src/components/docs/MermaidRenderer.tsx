@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useId } from 'react';
 import mermaid from 'mermaid';
 import { Box } from '@mui/material';
 
@@ -18,15 +18,15 @@ interface MermaidRendererProps {
 
 export const MermaidRenderer: React.FC<MermaidRendererProps> = ({ chart }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const stableId = useId().replace(/:/g, '-');
+  const mermaidId = `mermaid-${stableId}`;
 
   useEffect(() => {
     if (containerRef.current && chart) {
       // Clear previous content
       containerRef.current.innerHTML = '';
       
-      const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
-      
-      mermaid.render(id, chart).then(({ svg }) => {
+      mermaid.render(mermaidId, chart).then(({ svg }) => {
         if (containerRef.current) {
           containerRef.current.innerHTML = svg;
         }
@@ -37,7 +37,7 @@ export const MermaidRenderer: React.FC<MermaidRendererProps> = ({ chart }) => {
         }
       });
     }
-  }, [chart]);
+  }, [chart, mermaidId]);
 
   return (
     <Box 

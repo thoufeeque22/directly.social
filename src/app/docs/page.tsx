@@ -27,9 +27,9 @@ const docCategories = [
     description: 'Detailed guides on bringing your own API keys for TikTok, Instagram, and YouTube.',
     icon: <SettingsSuggestIcon color="primary" sx={{ fontSize: 32 }} />,
     links: [
-      { label: 'TikTok API Key Guide', href: '/docs/byok-guide' },
-      { label: 'Meta Developer Portal', href: 'https://developers.facebook.com/' },
-      { label: 'YouTube OAuth Setup', href: '/docs/byok-guide' }
+      { label: 'TikTok API Configuration', href: '/docs/byok-guide' },
+      { label: 'Meta API Configuration', href: '/docs/meta-guide' },
+      { label: 'YouTube API Configuration', href: '/docs/byok-guide' }
     ]
   },
   {

@@ -1,74 +1,35 @@
-# Bring Your Own Storage (BYOS)
+# Setting Up Your Storage Vault (BYOS)
 
-Bring Your Own Storage (BYOS) allows power users and enterprises to connect their own S3-compatible object storage to Directly. This bypasses server-side storage limits, eliminates double-bandwidth egress costs, and ensures users maintain full ownership of their original media assets.
+Directly Social is built on a "Privacy First" architecture. Unlike other social media tools, we don't force you to upload your videos to our servers. Instead, you can connect your own private storage—this is what we call **Bring Your Own Storage (BYOS)**.
 
-## Key Benefits
+## Why use your own storage?
 
-- **Unlimited Storage:** Bound only by your storage provider's limits.
-- **Cost Efficiency:** Directly upload to zero-egress providers like Cloudflare R2.
-- **Data Sovereignty:** All media stays in your own infrastructure.
-- **High Performance:** Direct browser-to-bucket multi-part uploads.
+- **Total Ownership:** Your original high-quality videos stay in your infrastructure.
+- **No Extra Costs:** You don't pay us for storage or bandwidth. You pay your provider directly at wholesale rates.
+- **Privacy:** We only stream your files during the brief moment of publishing.
 
 ## Supported Providers
 
-Directly supports any standardized S3-compatible Object Storage, with optimized templates for:
-- **Cloudflare R2** (Recommended - Zero Egress)
+We support any S3-compatible object storage. We recommend:
+- **Cloudflare R2** (Highly recommended: zero egress fees means it's often the cheapest).
 - **AWS S3**
-- **Google Cloud Storage** (via S3 XML API)
+- **Google Cloud Storage**
 - **Backblaze B2**
-- **DigitalOcean Spaces**
 
-## Technical Architecture
+## Step-by-Step Setup
 
-### 1. Credentials Security
-Credentials (Access Key, Secret Key) are encrypted at rest using **AES-256-GCM**.
-- **Encryption Key:** Managed via the server-side `BYOS_ENCRYPTION_KEY` environment variable.
-- **Masking:** Secret keys are masked in the UI and never returned in full after initial configuration.
+1. **Create a Bucket:** Log into your storage provider (e.g., Cloudflare or AWS) and create a new "Bucket."
+2. **Configure CORS:** This is the most important step. To allow Directly Social to upload directly from your browser to your bucket, you must enable **CORS (Cross-Origin Resource Sharing)**.
+   - Use the following settings in your provider's CORS configuration:
+     - Allowed Origins: `*` (or your specific domain)
+     - Allowed Methods: `PUT`, `POST`, `GET`, `HEAD`
+     - Allowed Headers: `*`
+     - Expose Headers: `ETag`
+3. **Get Your Keys:** Generate an **Access Key ID** and a **Secret Access Key** with read/write permissions for that bucket.
+4. **Connect to Directly:**
+   - Open **Settings** in Directly Social.
+   - Navigate to the **Storage** tab.
+   - Enter your Bucket Name, Region, Endpoint, and your Access Keys.
+   - Click **Save Configuration**.
 
-### 2. Direct Upload Pipeline
-To protect server resources, Directly uses a **Direct-to-Bucket** upload flow:
-
-```mermaid
-sequenceDiagram
-    participant U as Browser (UI)
-    participant S as Next.js Server
-    participant B as Object Storage Bucket
-
-    U->>S: Request Upload Initialization (POST /api/upload/byos/presign)
-    S->>S: Validate Session & Credentials
-    S->>B: Initialize Multipart Upload
-    B-->>S: Return UploadId
-    S-->>U: Return UploadId & S3 Key
-
-    loop For each 5MB Chunk
-        U->>S: Request Presigned URL (POST /api/upload/byos/presign)
-        S-->>U: Return Temporary PUT URL
-        U->>B: Direct PUT (Binary Data)
-        B-->>U: Return ETag
-    end
-
-    U->>S: Finalize Upload (POST /api/upload/byos/complete)
-    S->>B: Assemble Parts
-    S->>DB: Create GalleryAsset Record
-    S-->>U: Success
-```
-
-### 3. Distribution Stream
-When publishing a video to platforms (YouTube, TikTok, etc.), Directly streams the file directly from your bucket to the destination platform API, ensuring a minimal memory footprint (< 50MB).
-
-## Configuration Requirements
-
-To use BYOS, your bucket must have **CORS (Cross-Origin Resource Sharing)** enabled to allow the Directly web client to perform direct PUT requests.
-
-### Recommended CORS Policy
-```json
-[
-  {
-    "AllowedHeaders": ["*"],
-    "AllowedMethods": ["PUT", "POST", "GET", "HEAD"],
-    "AllowedOrigins": ["*"],
-    "ExposeHeaders": ["ETag"],
-    "MaxAgeSeconds": 3000
-  }
-]
-```
+Once connected, every video you upload in the **Media** tab will go directly to your own vault!
