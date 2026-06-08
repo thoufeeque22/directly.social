@@ -14,7 +14,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const { status } = useSession();
   // Hide layout for login page, or for unauthenticated users on any page.
   // We also hide it while loading to prevent flashing the sidebar.
-  const isPublicRoute = pathname === '/login' || pathname?.startsWith('/docs') || (pathname === '/' && status === 'unauthenticated');
+  const isPublicRoute = pathname === '/login' || pathname === '/philosophy' || pathname?.startsWith('/docs') || (pathname === '/' && status === 'unauthenticated');
   const isUnauthenticated = status === 'unauthenticated' || status === 'loading';
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
