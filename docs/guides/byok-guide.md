@@ -29,7 +29,7 @@ To get your keys for TikTok:
 - Copy your **Client Key** and **Client Secret**.
 - **Redirect URI:** `http://localhost:3000/api/auth/callback/tiktok` (or your production URL).
 
-## How to Configure in Directly
+## How to Configure in Directly Social
 
 1. Open **Settings** and go to the **Destinations** tab.
 2. Find the platform you want to configure and click **Enable**.

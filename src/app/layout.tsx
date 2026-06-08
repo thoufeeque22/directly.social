@@ -16,7 +16,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Directly | Automated Poster",
+  title: "Directly Social | Automated Poster",
   description: "Next-gen social media distribution dashboard",
   appleWebApp: {
     capable: true,

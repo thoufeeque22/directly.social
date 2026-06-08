@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const title = slug[slug.length - 1].replace(/_/g, ' ').replace(/-/g, ' ');
   return {
-    title: `${title} | Directly Docs`,
+    title: `${title} | Directly Social Docs`,
     description: `Learn more about ${title} in the Directly Social documentation.`
   };
 }

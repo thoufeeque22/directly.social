@@ -26,7 +26,7 @@ We support any S3-compatible object storage. We recommend:
      - Allowed Headers: `*`
      - Expose Headers: `ETag`
 3. **Get Your Keys:** Generate an **Access Key ID** and a **Secret Access Key** with read/write permissions for that bucket.
-4. **Connect to Directly:**
+4. **Connect to Directly Social:**
    - Open **Settings** in Directly Social.
    - Navigate to the **Storage** tab.
    - Enter your Bucket Name, Region, Endpoint, and your Access Keys.

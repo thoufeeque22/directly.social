@@ -7,11 +7,11 @@ export function FAQSection() {
   const faqs = [
     {
       q: "Is my data and social account safe?",
-      a: "Absolutely. We use official platform APIs and OAuth2 for all connections. Directly never sees or stores your passwords, and you can revoke access at any time directly from the platform's settings."
+      a: "Absolutely. We use official platform APIs and OAuth2 for all connections. Directly Social never sees or stores your passwords, and you can revoke access at any time directly from the platform's settings."
     },
     {
       q: "How does the 'Bring Your Own Storage' (BYOS) work?",
-      a: "Unlike other platforms that lock your media in their proprietary cloud, Directly allows you to connect your own AWS S3 or Cloudflare R2 buckets. You maintain 100% ownership and control over your source files."
+      a: "Unlike other platforms that lock your media in their proprietary cloud, Directly Social allows you to connect your own AWS S3 or Cloudflare R2 buckets. You maintain 100% ownership and control over your source files."
     },
     {
       q: "Is there a subscription fee?",

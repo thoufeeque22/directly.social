@@ -4,7 +4,7 @@ import { ActivityContent } from './ActivityContent';
 import styles from './activity.module.css';
 
 export const metadata: Metadata = {
-  title: "History | Directly",
+  title: "Activity Hub | Directly Social",
 };
 
 export default function ActivityPage() {
