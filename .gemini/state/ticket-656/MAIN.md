@@ -25,3 +25,4 @@ Investigate whether the Header and Sidebar should be hidden or replaced after us
 - **[2026-06-12 18:34:06]**: DISCOVERY [NECESSARY] - Identified layout-flashing bug in LayoutWrapper and proposed Mini-Footer for Sidebar.
 - **[2026-06-12 18:49:24]**: DEV [SUCCESS] - Fixed layout loading and added Sidebar mini-footer
 - **[2026-06-12 19:01:57]**: DEV [SUCCESS] - Refined Ticket #656: Moved Docs/Legal links to User Profile menu (ChatGPT-style)
+- **[2026-06-12 19:21:11]**: DEV [SUCCESS] - Finalized Ticket #656: Nested Help menu inside Profile popover (True ChatGPT style)
