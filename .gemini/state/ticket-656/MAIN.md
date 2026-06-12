@@ -27,3 +27,4 @@ Investigate whether the Header and Sidebar should be hidden or replaced after us
 - **[2026-06-12 19:01:57]**: DEV [SUCCESS] - Refined Ticket #656: Moved Docs/Legal links to User Profile menu (ChatGPT-style)
 - **[2026-06-12 19:21:11]**: DEV [SUCCESS] - Finalized Ticket #656: Nested Help menu inside Profile popover (True ChatGPT style)
 - **[2026-06-12 19:30:51]**: AUDIT [PASS] - Completed security and performance audit for #656
+- **[2026-06-12 19:58:52]**: QA [FAIL] - Automated tests failed: Sidebar 'aside' not found and Smoke suite regressions.
