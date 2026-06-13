@@ -5,6 +5,8 @@ import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import { Providers } from "@/components/Providers";
 import { ThemeScript } from "@/components/layout/ThemeScript";
 
+import { auth } from "@/auth";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
@@ -24,19 +26,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <ThemeScript />
       </head>
       <body className={inter.className}>
-        <Providers>
-          <LayoutWrapper>
+        <Providers session={session}>
+          <LayoutWrapper session={session}>
             {children}
           </LayoutWrapper>
         </Providers>

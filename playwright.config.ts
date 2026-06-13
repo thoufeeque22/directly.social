@@ -58,6 +58,8 @@ export default defineConfig({
       NEXT_RUNTIME: 'nodejs',
       NEXTAUTH_URL: 'http://127.0.0.1:3005',
       AUTH_URL: 'http://127.0.0.1:3005',
+      AUTH_SECRET: process.env.AUTH_SECRET || 'secret',
+      NEXTAUTH_SECRET: process.env.AUTH_SECRET || 'secret',
       UPLOAD_TEMP_DIR: './tmp/e2e',
       E2E_TEST_PASSWORD: process.env.E2E_TEST_PASSWORD || 'password',
       NEXT_PUBLIC_SENTRY_DSN: '',

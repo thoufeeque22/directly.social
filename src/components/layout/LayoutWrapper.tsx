@@ -8,33 +8,30 @@ import { Header } from "@/components/layout/Header";
 import { AIChatbot } from "@/components/chat/AIChatbot";
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useAppRefresh } from '@/hooks/useAppRefresh';
+import { Session } from 'next-auth';
 
-export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
+export default function LayoutWrapper({ children, session: initialSession }: { children: React.ReactNode, session: Session | null }) {
   const pathname = usePathname();
-  const { status } = useSession();
+  const { status, data: clientSession } = useSession();
   
-  // Public routes that never show the app shell
+  // Use either the server-side session OR the client-side session
+  const session = clientSession || initialSession;
+  const isAuthenticated = !!session;
+  
+  // Routes that should NEVER show the app shell (Marketing/Auth)
   const isAlwaysPublic = pathname === '/login' || pathname === '/philosophy' || pathname?.startsWith('/docs');
   
-  // Root page is public ONLY if unauthenticated
-  const isRootPublic = pathname === '/' && status === 'unauthenticated';
-  
-  const isPublicRoute = isAlwaysPublic || isRootPublic;
-
-  // We show the shell if:
-  // 1. Not a public route
-  // 2. AND (Authenticated OR Loading)
-  const shouldShowShell = !isPublicRoute && (status === 'authenticated' || status === 'loading');
+  // We hide the shell ONLY if:
+  // 1. It's an always-public route
+  // 2. OR we are on the root route AND confirmed unauthenticated (status resolved)
+  const shouldHideShell = isAlwaysPublic || (pathname === '/' && status === 'unauthenticated' && !isAuthenticated);
+  const shouldShowShell = !shouldHideShell;
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { refresh } = useAppRefresh();
 
   if (!shouldShowShell) {
-    return (
-      <main style={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        {children}
-      </main>
-    );
+    return <>{children}</>;
   }
 
   return (

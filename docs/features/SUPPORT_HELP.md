@@ -4,8 +4,12 @@
 The Support Hub provides users with immediate access to assistance, documentation, and troubleshooting resources directly within the application. It acts as a centralized location for addressing user inquiries and resolving common issues.
 
 ## Location & Access
-- **Sidebar Navigation:** A dedicated "Support" link is available in the main application sidebar, easily recognizable by the `HelpOutlinedIcon`.
-- **Settings Tab:** The Support link deep-links the user to the Settings page with the Support tab active (`/settings?tab=support`), ensuring a seamless transition into the administrative context.
+- **User Profile Menu:** Access to documentation and help resources is consolidated within the User Profile popover (top-right corner).
+- **Nested Help Menu:** Clicking the "Help" item (indicated by `HelpOutlinedIcon`) opens a sub-menu containing links to:
+    - Documentation
+    - Privacy Policy
+    - Terms of Service
+- **Settings Tab:** The primary Support Hub remains accessible via the Settings page (`/settings?tab=support`), which can be reached via the "Settings" link in the sidebar.
 
 ## Core Capabilities
 - **Quick Links:** Immediate access to common documentation, including user guides, FAQ, and API docs.
