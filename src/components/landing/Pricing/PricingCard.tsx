@@ -4,6 +4,7 @@ import React from 'react';
 import { Box, Typography, Card, CardContent, Button, Stack, useTheme } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 interface PricingTier {
   name: string;
@@ -18,6 +19,8 @@ interface PricingTier {
 
 export const PricingCard = ({ tier }: { tier: PricingTier }) => {
   const theme = useTheme();
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
 
   return (
     <Card 
@@ -73,11 +76,11 @@ export const PricingCard = ({ tier }: { tier: PricingTier }) => {
           variant={tier.highlighted ? 'contained' : 'outlined'} 
           size="large"
           component={Link}
-          href={tier.disabled ? '#' : '/login'}
+          href={tier.disabled ? '#' : (isAuthenticated ? '/' : '/login')}
           disabled={tier.disabled}
           sx={{ py: 1.5, borderRadius: 2, textTransform: 'none', fontWeight: 700 }}
         >
-          {tier.cta}
+          {tier.disabled ? tier.cta : (isAuthenticated ? 'Go to Dashboard' : tier.cta)}
         </Button>
       </CardContent>
     </Card>

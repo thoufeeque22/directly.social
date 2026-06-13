@@ -57,7 +57,7 @@ export const test = base.extend<{
         require('child_process').execSync(`npx tsx src/__tests__/scripts/seed-e2e-schedule.ts ${testEmail}`, { stdio: 'inherit' });
       }
       
-      const baseURL = testInfo.project.use.baseURL || 'http://127.0.0.1:3005';
+      const baseURL = testInfo.project.use.baseURL || 'http://localhost:3000';
       const context = await browser.newContext({ baseURL });
       const page = await context.newPage();
       const testPassword = process.env.E2E_TEST_PASSWORD || 'password';

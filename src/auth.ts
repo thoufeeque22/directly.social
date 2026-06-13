@@ -27,6 +27,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/login",
   },
+  useSecureCookies: process.env.NEXT_PUBLIC_E2E !== 'true',
   ...authConfig,
   providers: [
     ...authConfig.providers,

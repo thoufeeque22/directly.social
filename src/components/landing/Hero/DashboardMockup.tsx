@@ -5,31 +5,8 @@ import { motion } from 'framer-motion';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
-const StatItem = ({ icon, label, color, progress, delay }: { icon: React.ReactNode, label: string, color: string, progress: string, delay: number }) => (
-  <Stack direction="row" spacing={2} sx={{ width: '100%', mb: 1, alignItems: 'center' }}>
-    <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 24 }}>{icon}</Box>
-    <Typography variant="caption" sx={{ minWidth: 60, fontWeight: 600, fontSize: '0.7rem' }}>{label}</Typography>
-    <Box sx={{ flexGrow: 1, height: 6, bgcolor: 'divider', borderRadius: 3, overflow: 'hidden' }}>
-      <Box 
-        component={motion.div}
-        initial={{ width: '0%' }}
-        animate={{ width: progress }}
-        transition={{ duration: 1.5, delay, ease: "easeOut" }}
-        sx={{ height: '100%', bgcolor: color, borderRadius: 3 }} 
-      />
-    </Box>
-    <Box 
-      component={motion.div}
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ delay: delay + 1.2 }}
-    >
-      <CheckCircleIcon sx={{ fontSize: 14, color: 'success.main', display: 'flex' }} />
-    </Box>
-  </Stack>
-);
+import { StatItem } from './StatItem';
+import { VibeSyncMockup } from './VibeSyncMockup';
 
 export const DashboardMockup = () => {
   const theme = useTheme();
@@ -96,24 +73,7 @@ export const DashboardMockup = () => {
                 <StatItem icon={<MusicNoteIcon sx={{ color: '#00F2EA', fontSize: 18 }} />} label="TikTok" color="#00F2EA" progress="100%" delay={0.5} />
                 <StatItem icon={<InstagramIcon sx={{ color: '#E1306C', fontSize: 18 }} />} label="Reels" color="#E1306C" progress="100%" delay={0.8} />
               </Paper>
-
-              <Paper elevation={0} sx={{ width: 200, p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: 'background.paper', display: { xs: 'none', md: 'block' } }}>
-                <Typography variant="caption" sx={{ fontWeight: 700, mb: 2, display: 'block' }}>Vibe Sync AI</Typography>
-                <Box sx={{ height: 100, bgcolor: 'action.hover', borderRadius: 1, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed', borderColor: 'divider', overflow: 'hidden', position: 'relative' }}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.6rem', zIndex: 1 }}>VIDEO_PREVIEW.mp4</Typography>
-                  <Box 
-                    component={motion.div}
-                    animate={{ x: ['-100%', '200%'] }}
-                    transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}
-                    sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(90deg, transparent, hsla(var(--primary), 0.1), transparent)' }}
-                  />
-                </Box>
-                <Stack spacing={1}>
-                  <Box sx={{ height: 6, bgcolor: 'primary.main', opacity: 0.4, borderRadius: 1, width: '100%' }} />
-                  <Box sx={{ height: 6, bgcolor: 'primary.main', opacity: 0.2, borderRadius: 1, width: '80%' }} />
-                  <Box sx={{ height: 6, bgcolor: 'primary.main', opacity: 0.1, borderRadius: 1, width: '90%' }} />
-                </Stack>
-              </Paper>
+              <VibeSyncMockup />
             </Stack>
           </Box>
         </Box>

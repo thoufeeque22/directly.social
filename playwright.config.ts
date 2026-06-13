@@ -13,7 +13,7 @@ export default defineConfig({
   reporter: [['html', { open: 'never' }]],
   snapshotDir: 'docs/visual/goldens',
   use: {
-    baseURL: 'http://127.0.0.1:3005',
+    baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     launchOptions: {
@@ -48,28 +48,4 @@ export default defineConfig({
       },
     },
   ],
-  webServer: {
-    command: process.env.CI 
-      ? 'npm run build && npx next start -p 3005' 
-      : '[ -d .next-e2e ] && npx next start -p 3005 || (npm run build && npx next start -p 3005)',
-    env: {
-      NEXT_DIST_DIR: '.next-e2e',
-      NEXT_PUBLIC_E2E: 'true',
-      NEXT_RUNTIME: 'nodejs',
-      NEXTAUTH_URL: 'http://127.0.0.1:3005',
-      AUTH_URL: 'http://127.0.0.1:3005',
-      AUTH_SECRET: process.env.AUTH_SECRET || 'secret',
-      NEXTAUTH_SECRET: process.env.AUTH_SECRET || 'secret',
-      UPLOAD_TEMP_DIR: './tmp/e2e',
-      E2E_TEST_PASSWORD: process.env.E2E_TEST_PASSWORD || 'password',
-      NEXT_PUBLIC_SENTRY_DSN: '',
-      DEBUG: 'prisma:client:pool',
-      TEST_WORKER_INDEX: '0',
-    },
-    url: 'http://127.0.0.1:3005',
-    reuseExistingServer: !process.env.CI,
-    stdout: 'pipe',
-    stderr: 'pipe',
-    timeout: 600 * 1000,
-  },
 });

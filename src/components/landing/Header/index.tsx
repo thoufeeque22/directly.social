@@ -5,10 +5,13 @@ import { AppBar, Toolbar, Typography, Button, Container, Stack, useTheme, useScr
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import { useSession } from 'next-auth/react';
 
 export const LandingHeader = () => {
   const theme = useTheme();
   const pathname = usePathname();
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 50,
@@ -64,20 +67,34 @@ export const LandingHeader = () => {
           </Stack>
 
           <Stack direction="row" spacing={3} sx={{ alignItems: 'center', flexShrink: 0 }}>
-            <Link href="/login" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>
-              <Typography sx={{ fontWeight: 600, fontSize: '0.9rem', '&:hover': { color: 'primary.main' } }}>
-                Login
-              </Typography>
-            </Link>
-            <Button
-              component={Link}
-              href="/login"
-              variant="contained"
-              color="primary"
-              sx={{ borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 600 }}
-            >
-              Get Started
-            </Button>
+            {isAuthenticated ? (
+              <Button
+                component={Link}
+                href="/"
+                variant="contained"
+                color="primary"
+                sx={{ borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 600 }}
+              >
+                Dashboard
+              </Button>
+            ) : (
+              <>
+                <Link href="/login" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>
+                  <Typography sx={{ fontWeight: 600, fontSize: '0.9rem', '&:hover': { color: 'primary.main' } }}>
+                    Login
+                  </Typography>
+                </Link>
+                <Button
+                  component={Link}
+                  href="/login"
+                  variant="contained"
+                  color="primary"
+                  sx={{ borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 600 }}
+                >
+                  Get Started
+                </Button>
+              </>
+            )}
           </Stack>
         </Toolbar>
       </Container>

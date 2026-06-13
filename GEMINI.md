@@ -11,7 +11,7 @@ This document serves as the root entry point for all AI agents. It defines the g
 - **Verification Integrity:** Local verification MUST be exhaustive (e.g., `npm run build`, `npm run lint`). NEVER use 'surgical' or 'token-optimized' checks unless explicitly instructed by the user.
 - **Technical Excellence:** ALL code MUST adhere to the standards in [CORE.md](.gemini/base/CORE.md) (TypeScript Zero-Any, 100-Line Modularity, Centralized Schemas, Swagger Docs). **MANDATORY:** Invoke the `arxitect:architect` skill for ALL new feature implementations and refactors, regardless of size, to ensure design integrity via multi-persona review loops.
 - **Aesthetic Integrity:** ALL UI MUST adhere to the standards in [UI_UX.md](.gemini/base/UI_UX.md) (MUI, Theme Awareness, No Emojis).
-- **Manual Environment Management:** The User manages the dev server and tunnels manually. Agents MUST NOT interfere, as defined in [ORCHESTRATION.md](.gemini/base/ORCHESTRATION.md).
+- **Manual Environment Management:** The User manages the dev server, the E2E test server (http://localhost:3000), and tunnels manually. Agents MUST NOT interfere, as defined in [ORCHESTRATION.md](.gemini/base/ORCHESTRATION.md).
 - **Context Preservation:** Agents must never destructively overwrite state files.
 
 ## Table of Contents

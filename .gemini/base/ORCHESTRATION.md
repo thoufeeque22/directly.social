@@ -9,7 +9,7 @@
      b. Create the dedicated feature branch (`git checkout -b feature/<id>-<desc>`).
   3. If ALREADY on the target feature branch, skip the `main` synchronization and branch creation steps.
   4. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template** (skip if state already exists).
-- **Manual Environment Management:** The User always manages the development server (`npm run dev`) and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, or check the connectivity of these services.
+- **Manual Environment Management:** The User always manages the development server (`npm run dev`), the E2E test server (`http://localhost:3000`), and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, check the connectivity of these services, or modify/enable any Playwright `webServer` configuration. ALL E2E tests are strictly bound to `http://localhost:3000`.
 - **Strict Sequential Workflow:** ALL tickets MUST follow this exact sequence:
   `Product` -> `Discovery` -> `Development` -> `Audit` -> `QA` -> `Documentation`.
 - **Guardrail Mandates (Terminal Violations):**

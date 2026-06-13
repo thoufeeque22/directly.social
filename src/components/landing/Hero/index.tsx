@@ -4,9 +4,14 @@ import React from 'react';
 import { Box, Container, Typography, Button, Stack } from '@mui/material';
 import Link from 'next/link';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import { useSession } from 'next-auth/react';
 import { DashboardMockup } from './DashboardMockup';
 
 export const Hero = () => {
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
+
   return (
     <Box sx={{ pt: { xs: 8, md: 12 }, pb: { xs: 6, md: 10 }, overflow: 'hidden', position: 'relative' }}>
       {/* Studio Aura Glow */}
@@ -54,16 +59,29 @@ export const Hero = () => {
 
           
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ width: { xs: '100%', sm: 'auto' } }}>
-            <Button
-              component={Link}
-              href="/login"
-              variant="contained"
-              size="large"
-              startIcon={<RocketLaunchIcon />}
-              sx={{ py: 1.5, px: 4, borderRadius: 2, fontSize: '1.1rem', textTransform: 'none' }}
-            >
-              Get Started for Free
-            </Button>
+            {isAuthenticated ? (
+              <Button
+                component={Link}
+                href="/"
+                variant="contained"
+                size="large"
+                startIcon={<DashboardIcon />}
+                sx={{ py: 1.5, px: 4, borderRadius: 2, fontSize: '1.1rem', textTransform: 'none' }}
+              >
+                Go to Dashboard
+              </Button>
+            ) : (
+              <Button
+                component={Link}
+                href="/login"
+                variant="contained"
+                size="large"
+                startIcon={<RocketLaunchIcon />}
+                sx={{ py: 1.5, px: 4, borderRadius: 2, fontSize: '1.1rem', textTransform: 'none' }}
+              >
+                Get Started for Free
+              </Button>
+            )}
             <Button
               component={Link}
               href="/#features"

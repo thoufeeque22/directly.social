@@ -6,6 +6,7 @@ The application maintains a high standard of quality through automated testing a
 
 End-to-End tests are located in `src/__tests__/e2e/`.
 
+- **Manual Environment Mandate:** To ensure stability and prevent server collisions, the E2E suite strictly targets `http://localhost:3000`. The server MUST be started manually by the developer/user. Agents are prohibited from using Playwright's `webServer` feature or attempting to manage the server lifecycle.
 - **Production Mode Stability:** E2E suite runs against a production build (`npm run build && npm run start`).
 - **Global Setup & Seeding:** Full database cleanup and idempotent seeding performed once before tests.
 - **Automated Authentication:** Setup project performs login and saves session state.

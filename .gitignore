@@ -9,8 +9,7 @@
 !.yarn/versions
 
 # Next.js
-/.next/
-/.next-e2e/
+/.next*/
 /out/
 /build/
 
