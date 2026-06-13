@@ -1,11 +1,39 @@
 .container {
-  max-width: 900px;
+  max-width: 1400px;
   margin: 0 auto;
+  padding: 2rem;
   animation: fadeIn 0.5s ease forwards;
 }
 
+.settingsLayout {
+  display: flex;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .settingsLayout {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .sidebar {
+    width: 100%;
+  }
+}
+
 .header {
-  margin-bottom: 2.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .title {

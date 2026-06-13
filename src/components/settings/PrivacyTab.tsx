@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { requestDataExportAction, deleteAccountAction } from '@/app/actions/privacy';
+import { downloadDataExportAction, deleteAccountAction } from '@/app/actions/privacy';
 import { signOut } from 'next-auth/react';
 import { DeleteConfirmationDialog } from './PrivacyTab.DeleteDialog';
 import { 
@@ -22,11 +22,27 @@ export const PrivacyTab = () => {
     setExportLoading(true);
     setExportMessage(null);
     try {
-      const result = await requestDataExportAction() as { success: boolean, message?: string };
-      if (result.success) {
-        setExportMessage({ type: 'success', text: result.message || 'Export requested successfully.' });
+      const result = await downloadDataExportAction() as { success: boolean, data?: Record<string, unknown>, message?: string };
+      if (result.success && result.data) {
+        // Create a blob from the data
+        const jsonString = JSON.stringify(result.data, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        // Trigger download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `social-studio-export-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(link);
+        link.click();
+        
+        // Cleanup
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        setExportMessage({ type: 'success', text: 'Data export downloaded successfully.' });
       } else {
-        setExportMessage({ type: 'error', text: 'Failed to request export.' });
+        setExportMessage({ type: 'error', text: result.message || 'Failed to generate export.' });
       }
     } catch {
       setExportMessage({ type: 'error', text: 'An unexpected error occurred.' });

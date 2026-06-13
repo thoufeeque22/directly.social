@@ -23,9 +23,50 @@ interface SettingsTabsProps {
 }
 
 export const SettingsTabs: React.FC<SettingsTabsProps> = ({ activeTab, onChange }) => (
-  <Tabs value={activeTab} onChange={onChange} variant="scrollable" scrollButtons="auto">
+  <Tabs 
+    value={activeTab} 
+    onChange={onChange} 
+    orientation="vertical"
+    sx={{ 
+      borderRight: 0,
+      '& .MuiTabs-indicator': {
+        left: 0,
+        right: 'auto',
+        width: 4,
+        borderRadius: '0 4px 4px 0'
+      },
+      '& .MuiTab-root': {
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        textAlign: 'left',
+        minHeight: 48,
+        py: 1.5,
+        px: 2,
+        borderRadius: 1,
+        mb: 0.5,
+        transition: 'all 0.2s ease',
+        '&:hover': {
+          bgcolor: 'action.hover',
+        },
+        '&.Mui-selected': {
+          bgcolor: 'primary.main',
+          color: 'primary.contrastText',
+          '& .MuiSvgIcon-root': {
+            color: 'inherit'
+          }
+        }
+      }
+    }}
+  >
     {TABS.map((tab) => (
-      <Tab key={tab.id} value={tab.id} icon={tab.icon} iconPosition="start" label={tab.label} />
+      <Tab 
+        key={tab.id} 
+        value={tab.id} 
+        icon={tab.icon} 
+        iconPosition="start" 
+        label={tab.label} 
+        disableRipple
+      />
     ))}
   </Tabs>
 );

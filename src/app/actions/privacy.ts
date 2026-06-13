@@ -2,17 +2,18 @@
 
 import { protectedAction } from "@/lib/core/action-utils";
 import { PrivacyService } from "@/lib/services/privacy";
+import { PrivacyExportHelper } from "@/lib/services/privacy-export";
 import { revalidatePath } from "next/cache";
 
 const privacyService = new PrivacyService();
 
 /**
- * Server action to request a data export.
+ * Server action to generate and download a data export.
  */
-export async function requestDataExportAction() {
-  return protectedAction(async function requestExport(userId) {
-    await privacyService.requestDataExport(userId);
-    return { success: true, message: "Data export requested. You will receive an email shortly." };
+export async function downloadDataExportAction() {
+  return protectedAction(async function downloadExport(userId) {
+    const data = await PrivacyExportHelper.getExportData(userId);
+    return { success: true, data };
   });
 }
 

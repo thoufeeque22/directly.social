@@ -29,28 +29,32 @@ const SettingsContent = () => {
         title="Settings" 
         subtitle="Configure your video distribution and automation preferences." 
       />
-      <Box sx={{ width: '100%', mt: 4 }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+      
+      <div className={styles.settingsLayout}>
+        <aside className={styles.sidebar}>
           <SettingsTabs activeTab={activeTab} onChange={handleTabChange} />
-        </Box>
-        {activeTab === 'destinations' && <DestinationsTab />}
-        {activeTab === 'snippets' && (
-          <GlassCard style={{ padding: '2rem' }}>
-            <TemplateManager />
-          </GlassCard>
-        )}
-        {activeTab === 'ai' && (
-          <GlassCard style={{ padding: '2rem' }}>
-            <Box>
-              <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>AI Providers</Typography>
-              <AiByokWizard />
-            </Box>
-          </GlassCard>
-        )}
-        {activeTab === 'storage' && <ByosWizard />}
-        {activeTab === 'privacy' && <PrivacyTab />}
-        {activeTab === 'support' && <SupportTab />}
-      </Box>
+        </aside>
+
+        <main className={styles.content}>
+          {activeTab === 'destinations' && <DestinationsTab />}
+          {activeTab === 'snippets' && (
+            <GlassCard style={{ padding: '2rem' }}>
+              <TemplateManager />
+            </GlassCard>
+          )}
+          {activeTab === 'ai' && (
+            <GlassCard style={{ padding: '2rem' }}>
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>AI Providers</Typography>
+                <AiByokWizard />
+              </Box>
+            </GlassCard>
+          )}
+          {activeTab === 'storage' && <ByosWizard />}
+          {activeTab === 'privacy' && <PrivacyTab />}
+          {activeTab === 'support' && <SupportTab />}
+        </main>
+      </div>
     </div>
   );
 };

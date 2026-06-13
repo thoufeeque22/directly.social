@@ -28,8 +28,8 @@ export const DataExportSection: React.FC<DataExportSectionProps> = ({
       <DownloadIcon color="primary" /> Data Export
     </Typography>
     <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-      You can request a full export of your data, including your profile information, connected accounts, and activity logs.
-      The export will be prepared and sent to your registered email address as a JSON file.
+      You can download a machine-readable export of your data immediately, including your profile information, connected accounts, and activity logs.
+      The export will be generated in JSON format.
     </Typography>
     {message && (
       <Alert severity={message.type} sx={{ mb: 2 }}>
@@ -77,7 +77,9 @@ export const DangerZoneSection: React.FC<DangerZoneSectionProps> = ({ onDelete }
         <DeleteForeverIcon /> Danger Zone
       </Typography>
       <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-        Deleting your account is permanent and cannot be undone. All your data, including connected accounts and uploaded media, will be permanently removed from our servers.
+        Deleting your account is permanent and your existing data cannot be recovered. 
+        <br/>
+        <strong>However, you are always welcome back—you can create a fresh account later using the same email address if you choose to return.</strong>
       </Typography>
       <Button 
         variant="contained" 
