@@ -27,6 +27,7 @@ This document provides a high-level index of the Directly application architectu
 6.  **[Security & RBAC](architecture/SECURITY.md)**
     *   Role-Based Access Control
     *   File System Security
+    *   Privacy & GDPR Compliance
 7.  **[Mobile Architecture](architecture/MOBILE.md)**
     *   Capacitor Wrapper
     *   Mobile UI/UX Standards (Safe Areas)

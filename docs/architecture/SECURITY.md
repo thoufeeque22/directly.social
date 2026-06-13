@@ -47,3 +47,27 @@ Rate limiting is enforced at the **Middleware layer** (`src/proxy.ts`), ensuring
 - **Fail-Open Resilience:** The system includes fail-open logic to ensure application availability if the rate-limiting infrastructure (Redis) is unreachable or misconfigured.
 - **Test Optimization:** Rate limiting is automatically bypassed in E2E, CI, and test environments via `shouldBypassRateLimit()` to ensure fast and reliable testing.
 - **Standardized Feedback:** When a limit is hit, the API returns a standard `429 Too Many Requests` status with a `Retry-After` header.
+
+## 5. Privacy & GDPR Compliance
+
+Directly follows a "Privacy Maximalist" philosophy, ensuring users have full control over their data without invasive tracking.
+
+### Data Portability (Right to Access)
+
+Users can immediately export all their personal data stored on the platform.
+- **Scope:** The export includes Profile data, connected Social Accounts, Media Gallery metadata, Activity logs, and custom Templates.
+- **Format:** Data is provided in a standardized JSON format for easy portability.
+- **Access:** Available via `Settings > Privacy > Export My Data`.
+
+### Right to Erasure (Account Deletion)
+
+The application provides a self-service account deletion mechanism with immediate effect.
+- **Enforcement:** Account deletion triggers an automated cascading purge in the database (via Prisma `onDelete: Cascade`), ensuring no orphaned personal data remains.
+- **Safety:** The "Danger Zone" includes double-confirmation to prevent accidental deletion.
+
+### Cookie-less Implementation
+
+To respect user privacy and eliminate intrusive banners, the application is designed to be "Cookie-less" for all non-essential features.
+- **Essential Cookies:** Only strictly necessary cookies (Authentication and CSRF protection) are used.
+- **Banner-Free:** No cookie consent banner is required as no tracking or marketing cookies are utilized.
+- **Anonymous Telemetry:** All feature usage analytics (e.g., total posts published) are tracked using anonymous, server-side counters that are not linked to individual user identities.

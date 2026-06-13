@@ -49,10 +49,19 @@ export const PrivacyContent = () => (
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>4. Data Deletion</Typography>
-      <Typography variant="body1" gutterBottom>
-        <strong>Data Deletion:</strong> You may request the deletion of your account and all associated data by emailing us at privacy@directly.social or by using the &quot;Delete Account&quot; feature in your settings.
-      </Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>4. Data Portability & Deletion</Typography>
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Right to Access (Data Export)</Typography>
+        <Typography variant="body1" gutterBottom>
+          You have the right to access and download a copy of your data at any time. We provide an automated &quot;Export My Data&quot; feature in your Privacy Settings which generates a JSON file containing your profile info, social account metadata, gallery details, activity logs, and templates.
+        </Typography>
+      </Box>
+      <Box>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Right to Erasure (Account Deletion)</Typography>
+        <Typography variant="body1" gutterBottom>
+          You can delete your account and all associated data permanently via the &quot;Danger Zone&quot; in your Settings. Once confirmed, your data is immediately purged from our database. This process is automated and irreversible.
+        </Typography>
+      </Box>
     </section>
 
     <section>

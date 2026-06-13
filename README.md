@@ -38,6 +38,14 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 - `src/__tests__/`: Comprehensive test suite (E2E, Unit, Integration) and test scripts
 - `.gemini/`: AI Agent orchestration and standards
 
+## Privacy & Security
+
+**Directly Social** is built with a "Privacy Maximalist" philosophy:
+- **GDPR Compliant:** Self-service data portability (Immediate JSON Export) and Right to Erasure (Automated Account Purge).
+- **Cookie-less:** No tracking, marketing, or 3rd-party cookies. No intrusive consent banners.
+- **Anonymous Telemetry:** Server-side aggregate metrics only, ensuring zero linkage to user identities.
+- **Secure RBAC:** Strict role-based access control and ownership verification for all media assets.
+
 ## Core Scripts
 
 - `npm run build`: Production build
