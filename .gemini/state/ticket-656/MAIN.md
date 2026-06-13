@@ -2,7 +2,7 @@
 ticket_id: 656
 branch_name: feature/656-navigation-layout-investigation
 goal: Investigate post-login navigation patterns (Header/Sidebar vs Bottom Bar).
-status: doc
+status: project
 current_round: 2
 ---
 
@@ -10,7 +10,7 @@ current_round: 2
 - **ID**: 656
 - **Branch**: `feature/656-navigation-layout-investigation`
 - **Goal**: Investigate post-login navigation patterns (Header/Sidebar vs Bottom Bar).
-- **Current Status**: doc
+- **Current Status**: project
 
 # 📝 Ticket Description
 Investigate whether the Header and Sidebar should be hidden or replaced after user login (e.g., bottom navigation bar) to improve post-login UX. Reference: src/components/layout/LayoutWrapper.tsx and .gemini/base/UI_UX.md.
@@ -31,3 +31,4 @@ Investigate whether the Header and Sidebar should be hidden or replaced after us
 - **[2026-06-12 19:58:52]**: QA [FAIL] - Automated tests failed: Sidebar 'aside' not found and Smoke suite regressions.
 - **[2026-06-12 20:05:00]**: Round 2 started to address QA regressions.
 - **[2026-06-13 13:49:14]**: QA [SUCCESS] - Verified Zen navigation and layout fix for #656
+- **[2026-06-13 14:02:01]**: DOC [PASS] - Finalized documentation for #656 navigation updates
