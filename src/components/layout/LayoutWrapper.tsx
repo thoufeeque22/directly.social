@@ -8,32 +8,38 @@ import { Header } from "@/components/layout/Header";
 import { AIChatbot } from "@/components/chat/AIChatbot";
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useAppRefresh } from '@/hooks/useAppRefresh';
+import { Session } from 'next-auth';
 
-export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
+export default function LayoutWrapper({ children, session: initialSession }: { children: React.ReactNode, session: Session | null }) {
   const pathname = usePathname();
-  const { status } = useSession();
-  // Hide layout for login page, or for unauthenticated users on any page.
-  // We also hide it while loading to prevent flashing the sidebar.
-  const isPublicRoute = pathname === '/login' || pathname === '/philosophy' || pathname?.startsWith('/docs') || (pathname === '/' && status === 'unauthenticated');
-  const isUnauthenticated = status === 'unauthenticated' || status === 'loading';
+  const { status, data: clientSession } = useSession();
+  
+  // Use either the server-side session OR the client-side session
+  const session = clientSession || initialSession;
+  const isAuthenticated = !!session;
+  
+  // Routes that should NEVER show the app shell (Marketing/Auth)
+  const isAlwaysPublic = pathname === '/login' || pathname === '/philosophy' || pathname?.startsWith('/docs');
+  
+  // We hide the shell ONLY if:
+  // 1. It's an always-public route
+  // 2. OR we are on the root route AND confirmed unauthenticated (status resolved)
+  const shouldHideShell = isAlwaysPublic || (pathname === '/' && status === 'unauthenticated' && !isAuthenticated);
+  const shouldShowShell = !shouldHideShell;
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { refresh } = useAppRefresh();
 
-  if (isPublicRoute || (isUnauthenticated && pathname !== '/login')) {
-    return (
-      <main style={{ width: '100%', minHeight: '100vh' }}>
-        {children}
-      </main>
-    );
+  if (!shouldShowShell) {
+    return <>{children}</>;
   }
 
   return (
-    <div className="layout-wrapper" style={{ height: '100dvh', overflow: 'hidden' }}>
+    <div className="layout-wrapper" style={{ display: 'flex', height: '100dvh', width: '100vw', overflow: 'hidden' }}>
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <div className="main-content" style={{ height: '100%', overflow: 'hidden' }}>
+      <div className="main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
         <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <main className="page-content" style={{ height: '100%', overflow: 'hidden' }}>
+        <main className="page-content" style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
           <PullToRefresh onRefresh={refresh} className="ptr-container">
             {children}
           </PullToRefresh>

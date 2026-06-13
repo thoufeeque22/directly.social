@@ -117,3 +117,19 @@ A premium, multi-column global footer is implemented to provide platform-wide na
 - **Theme Integration:** Uses semantic colors (`var(--text-secondary)`, `var(--background-alt)`) to ensure readability and visual integration across light and dark modes.
 - **Consistency:** The footer is shared across the landing page and public-facing routes, maintaining a consistent brand identity.
 
+## 12. Zen Layout Architecture
+
+To maximize user focus and minimize interface clutter, the application implements a "Zen Layout" pattern that distinguishes between public marketing surfaces and the authenticated workspace.
+
+- **Dynamic Visibility:** The multi-column marketing footer and the primary landing page header are programmatically hidden for authenticated users.
+- **Workspace Focus:** Once logged in, the user is presented with a streamlined dashboard environment that prioritizes content creation and management tools.
+- **Loading Optimization:** Server-side session propagation (`auth()`) ensures that the correct layout is rendered immediately on the first byte, preventing "empty screen blinks" or layout shifts during the authentication handshake.
+
+## 13. Nested Help & Navigation
+
+Navigation complexity is managed by delegating auxiliary and legal links to a secondary "Help" sub-menu.
+
+- **Location:** Integrated into the User Profile popover (`UserActions.tsx`) to keep the primary sidebar focused on core workflow tasks.
+- **Sub-Menu Pattern:** Utilizes a nested MUI `Menu` structure, providing a hierarchical browsing experience for Documentation, Privacy Policy, and Terms of Service.
+- **Aesthetic Consistency:** Uses the standard `HelpOutlinedIcon` and chevron indicators to provide clear visual cues for further interaction.
+

@@ -14,7 +14,7 @@ Welcome to the Directly project documentation. This folder contains architectura
 - [Notification Utility](features/NOTIFICATIONS.md) - Transactional alerts and bell icon system.
 - [Global Refresh](features/GLOBAL_REFRESH.md) - Unified sync mechanism and Pull-to-Refresh gesture.
 - [Manual Mode AI Polish](features/MANUAL_MODE_AI_ENHANCEMENT.md) - Seamless transition from Manual drafting to AI Enrich.
-- [Support Hub](features/SUPPORT_HELP.md) - Centralized help and resources accessible from the sidebar.
+- [Support Hub](features/SUPPORT_HELP.md) - Documentation and help links relocated to the User Profile popover and Settings tab.
 
 ## Guides & Troubleshooting
 

@@ -9,7 +9,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { WhatsNewProvider } from "./WhatsNew/WhatsNewContext";
 import { NotificationProvider } from "./Notifications/NotificationContext";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+import { Session } from "next-auth";
+
+export function Providers({ children, session }: { children: React.ReactNode; session: Session | null }) {
   useEffect(() => {
     const setupDeepLinkListener = async () => {
       // Clean up any existing listeners first
@@ -66,7 +68,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeContextProvider>
       <CssBaseline />
-      <SessionProvider>
+      <SessionProvider session={session}>
         <WhatsNewProvider>
           <NotificationProvider>
             {children}

@@ -8,15 +8,15 @@ test.describe('Landing Page', () => {
     await context.clearCookies();
     await page.goto('/');
   });
+test('should display all 10 major sections @smoke', async ({ page }) => {
+  await page.goto('/');
 
-  test('should display all 10 major sections @smoke', async ({ page }) => {
-    // 1. Header
-    await expect(page.locator('header')).toBeVisible();
-    
-    // 2. Hero
-    await expect(page.getByRole('heading', { name: 'The Native Social Media Client', level: 1 })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Get Started for Free' })).toBeVisible();
-    
+  // 1. Header
+  await expect(page.locator('header')).toBeVisible();
+
+  // 2. Hero
+  await expect(page.getByRole('heading', { name: 'The Local-First Creator Studio', level: 1 })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Get Started for Free' })).toBeVisible();
     // 3. Social Proof
     await expect(page.getByText('Trusted by creators on every platform')).toBeVisible();
     
@@ -48,10 +48,10 @@ test.describe('Landing Page', () => {
     await expect(page.getByText('For the Native Creator')).toBeVisible();
     await expect(page.getByText('One-click distribution to TikTok, IG, YT')).toBeVisible();
 
-    // Switch to Developer
-    await page.getByRole('button', { name: 'Developers' }).click();
+    // Switch to Power Users
+    await page.getByRole('button', { name: 'Power Users' }).click();
     await expect(page.getByText('For the Self-Hoster & Dev')).toBeVisible();
-    await expect(page.getByText('Bring-Your-Own-Key (BYOK) architecture')).toBeVisible();
+    await expect(page.locator('text=/BYOK.*Architecture/')).toBeVisible();
   });
 
   test('should expand FAQ items @interactivity @smoke', async ({ page }) => {
@@ -77,7 +77,7 @@ test.describe('Landing Page', () => {
       // Check that desktop-only elements are hidden
       await expect(page.getByRole('button', { name: 'Features' })).not.toBeVisible();
       // Hero title should be smaller but visible
-      await expect(page.getByRole('heading', { name: 'The Native Social Media Client', level: 1 })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'The Local-First Creator Studio', level: 1 })).toBeVisible();
     }
   });
 
