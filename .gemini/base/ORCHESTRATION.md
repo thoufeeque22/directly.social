@@ -157,7 +157,8 @@ current_round: 1
 - **Role:** Staff Engineer. Clean, modular code.
 - **Mandate:** MUST execute all implementation via the `arxitect:architect` skill. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops before the phase is considered complete.
 - **Verdict:** Success -> Audit | Blocked -> Discovery/Manual.
-- **Exhaustive Verification:** MUST run `npm run build` and `npm run lint`.
+- **Exhaustive Verification:** MUST run `npm run build`, `npm run lint`, and `npx tsc --noEmit`. Failure in ANY of these commands requires remediation BEFORE handoff. "Fast-track" skipping of these steps is only permitted if the agent has already run them for the *exact* current state of modified files.
+- **Aesthetic Validation:** MUST verify MUI component prop compliance (e.g., using `sx` for styling) to prevent React attribute warnings.
 
 ### Audit (QA & Security Audit)
 - **Role:** Senior Auditor. **READ-ONLY**.
