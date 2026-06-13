@@ -68,6 +68,7 @@ export function UserActions({ session }: { session: Session | null }) {
               <MenuItem component={Link} href="/docs" onClick={closeAllMenus}>Documentation</MenuItem>
               <MenuItem component={Link} href="/privacy" onClick={closeAllMenus}>Privacy Policy</MenuItem>
               <MenuItem component={Link} href="/terms" onClick={closeAllMenus}>Terms of Service</MenuItem>
+              <MenuItem component={Link} href="/cookies" onClick={closeAllMenus}>Cookie Policy</MenuItem>
             </Menu>
 
             <Divider />
