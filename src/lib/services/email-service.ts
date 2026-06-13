@@ -16,6 +16,19 @@ export class EmailService {
       console.error('[EmailService] Failed to send email:', error);
     }
   }
+
+  async sendDataExportEmail(to: string, data: string) {
+    try {
+      await this.provider.send({
+        to,
+        subject: "Your Data Export - Social Studio",
+        text: `Your requested data export is ready.\n\n${data}`,
+        html: `<h1>Your Data Export</h1><p>Your requested data export is ready.</p><pre>${data}</pre>`,
+      });
+    } catch (error) {
+      console.error('[EmailService] Failed to send data export email:', error);
+    }
+  }
 }
 
 const emailService = new EmailService();

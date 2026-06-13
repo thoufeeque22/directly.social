@@ -16,12 +16,17 @@ export class ResendEmailProvider implements EmailProvider {
       to: options.to || adminEmail,
       subject: options.subject,
       html: options.html,
+      text: options.text,
     });
   }
 }
 
 export class ConsoleEmailProvider implements EmailProvider {
   async send(options: EmailOptions) {
-    console.log(`[Email] Subject: ${options.subject}\nBody: ${options.html}`);
+    console.log(`[Email] Subject: ${options.subject}`);
+    if (options.text) {
+      console.log(`Text Body: ${options.text}`);
+    }
+    console.log(`HTML Body: ${options.html}`);
   }
 }

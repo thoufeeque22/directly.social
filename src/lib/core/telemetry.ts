@@ -1,4 +1,5 @@
 import { redis } from "./redis";
+import { cookies } from "next/headers";
 
 /**
  * Standard telemetry event keys.
@@ -40,8 +41,24 @@ export type TelemetryEvent = typeof TELEMETRY_EVENTS[keyof typeof TELEMETRY_EVEN
  * @param event - The event to track (must be one of TELEMETRY_EVENTS)
  * @param incrementBy - Amount to increment the counter by (default: 1)
  */
-export function trackEvent(event: TelemetryEvent, incrementBy: number = 1): void {
+export async function trackEvent(event: TelemetryEvent, incrementBy: number = 1): Promise<void> {
   try {
+    // GDPR Check: Only track if consent is granted
+    let hasConsent = false;
+    try {
+      const cookieStore = await cookies();
+      const consent = cookieStore.get("ss-consent")?.value;
+      hasConsent = consent === "accepted";
+    } catch {
+      // If cookies() is not available (e.g. background worker), 
+      // we default to false for high-frequency analytics to be safe.
+      hasConsent = false;
+    }
+
+    if (!hasConsent) {
+      return;
+    }
+
     const today = new Date().toISOString().split("T")[0];
     const key = `telemetry:${today}:${event}`;
 

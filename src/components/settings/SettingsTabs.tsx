@@ -6,12 +6,14 @@ import TuneIcon from '@mui/icons-material/Tune';
 import StorageIcon from '@mui/icons-material/Storage';
 import AppsIcon from '@mui/icons-material/Apps';
 import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
+import SecurityIcon from '@mui/icons-material/Security';
 
 const TABS = [
   { id: 'destinations', label: 'Destinations', icon: <AppsIcon /> },
   { id: 'snippets', label: 'Snippets', icon: <TuneIcon /> },
   { id: 'ai', label: 'AI Providers', icon: <KeyIcon /> },
   { id: 'storage', label: 'Storage (BYOS)', icon: <StorageIcon /> },
+  { id: 'privacy', label: 'Privacy', icon: <SecurityIcon /> },
   { id: 'support', label: 'Support', icon: <HelpOutlinedIcon /> },
 ];
 

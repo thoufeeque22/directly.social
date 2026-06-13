@@ -11,6 +11,7 @@ import { ByosWizard } from '@/components/settings/ByosWizard';
 import { DestinationsTab } from '@/components/settings/DestinationsTab';
 import { SettingsTabs } from '@/components/settings/SettingsTabs';
 import { SupportTab } from '@/components/settings/SupportTab';
+import { PrivacyTab } from '@/components/settings/PrivacyTab';
 import styles from './Settings.module.css';
 
 const SettingsContent = () => {
@@ -47,6 +48,7 @@ const SettingsContent = () => {
           </GlassCard>
         )}
         {activeTab === 'storage' && <ByosWizard />}
+        {activeTab === 'privacy' && <PrivacyTab />}
         {activeTab === 'support' && <SupportTab />}
       </Box>
     </div>

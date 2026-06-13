@@ -42,11 +42,11 @@ describe('LayoutWrapper', () => {
 
   it('renders only children when on the /login page (no sidebar/header)', () => {
     vi.mocked(usePathname).mockReturnValue('/login');
-    vi.mocked(useSession).mockReturnValue({ data: null, status: 'unauthenticated' });
-    
+    vi.mocked(useSession).mockReturnValue({ data: null, status: 'unauthenticated', update: vi.fn() });
+
     render(
-      <LayoutWrapper>
-        <div data-testid="content">Login Page Content</div>
+      <LayoutWrapper session={null}>
+        <div data-testid="child">Child Content</div>
       </LayoutWrapper>
     );
     
@@ -60,7 +60,7 @@ describe('LayoutWrapper', () => {
     vi.mocked(useSession).mockReturnValue({ data: { user: { name: 'Test User' } }, status: 'authenticated' } as any);
     
     render(
-      <LayoutWrapper>
+      <LayoutWrapper session={null}>
         <div data-testid="content">Dashboard Content</div>
       </LayoutWrapper>
     );
@@ -75,7 +75,7 @@ describe('LayoutWrapper', () => {
     vi.mocked(useSession).mockReturnValue({ data: { user: { name: 'Test User' } }, status: 'authenticated' } as any);
     
     render(
-      <LayoutWrapper>
+      <LayoutWrapper session={null}>
         <div data-testid="content">Settings Content</div>
       </LayoutWrapper>
     );
