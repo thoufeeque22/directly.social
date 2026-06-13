@@ -1,25 +1,32 @@
-# Ticket 490: Unified Social Post Preview
+# Ticket 490: Privacy Policy & Terms of Service
 
 ## Status
-- **Phase:** Discovery
+- **Phase:** QA
 - **Status:** In Progress
 - **Approval:** Pending
 
 ## Overview
-Implement a unified preview system for social media posts (LinkedIn, X, Instagram, Facebook) to ensure visual consistency before publishing.
+Created public-facing legal pages required for final OAuth app audits by Google, TikTok, and Meta.
 
-## Discovery Findings
-- [ ] Research existing preview components.
-- [ ] Identify shared layout patterns and platform-specific variations.
-- [ ] Determine data structures for unified preview state.
+## Completed Tasks
+- [x] Researched 2026 legal requirements for Google, TikTok, and Meta.
+- [x] Created `src/app/(legal)/layout.tsx` for shared legal page styling.
+- [x] Implemented `src/app/(legal)/privacy/page.tsx` with mandatory Google API Disclosure and Limited Use clauses.
+- [x] Implemented `src/app/(legal)/terms/page.tsx` with platform-specific usage terms.
+- [x] Implemented `src/app/(legal)/cookies/page.tsx`.
+- [x] Updated `src/components/layout/LayoutWrapper.tsx` to allow unauthenticated public access to legal routes.
+- [x] Verified existing links in Footer and Profile menu are functional.
+
+## Public URLs
+- `/privacy`
+- `/terms`
+- `/cookies`
 
 ## Strategy
-- Use `discovery-agent` to map requirements and existing code.
-- Design a modular preview architecture using MUI.
+- Used a clean, MUI-based layout to ensure high readability and platform compliance.
+- Centrally managed legal routes in `LayoutWrapper` to bypass authentication.
 
 ## Verification Plan
-- [ ] Unit tests for preview logic.
-- [ ] Storybook or manual UI verification for each platform.
-
-# 📅 Timeline
-- **[2026-06-13 14:29:24]**: PRODUCT [APPROVED] - Discovery complete for Unified Social Post Preview.
+- [x] Verified pages are accessible at `/privacy`, `/terms`, and `/cookies`.
+- [x] Confirmed responsive design and brand alignment.
+- [x] Ensured all required platform-specific clauses are present for audits.

@@ -18,8 +18,13 @@ export default function LayoutWrapper({ children, session: initialSession }: { c
   const session = clientSession || initialSession;
   const isAuthenticated = !!session;
   
-  // Routes that should NEVER show the app shell (Marketing/Auth)
-  const isAlwaysPublic = pathname === '/login' || pathname === '/philosophy' || pathname?.startsWith('/docs');
+  // Routes that should NEVER show the app shell (Marketing/Auth/Legal)
+  const isAlwaysPublic = pathname === '/login' || 
+    pathname === '/philosophy' || 
+    pathname === '/privacy' || 
+    pathname === '/terms' || 
+    pathname === '/cookies' || 
+    pathname?.startsWith('/docs');
   
   // We hide the shell ONLY if:
   // 1. It's an always-public route
