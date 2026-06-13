@@ -101,13 +101,14 @@ The application uses a unified 3-way toggle (Light, Dark, System) for theme mana
 - **Persistence:** Theme preferences are persisted locally via `localStorage` and synchronized with the database using Server Actions for cross-device consistency.
 - **Auth Boundary Policy:** To maintain a clean, high-conversion entry point, a manual theme toggle is intentionally omitted from the initial landing/login view.
 
-## 10. Landing Page & Authentication Boundary
+## 10. Architectural Routing & Authentication Boundary
 
-The entry point of the application has been transformed from a simple login screen into a comprehensive Landing Page that serves both as a high-conversion marketing surface and an authentication boundary.
+The application uses an architectural separation between marketing surfaces and authentication logic, leveraging session-aware routing at the root level.
 
-- **Dual-Purpose Layout:** The page combines marketing content (Tech Stack, Philosophy, Features) with a centralized authentication card.
-- **Theme Awareness:** The landing page is fully theme-aware and aligns automatically with the system preference or previously saved local preference.
-- **Scrollable Content:** Unlike the main application dashboard, the landing page is designed for intentional vertical scrolling to reveal deep technical and philosophical details.
+- **Root Routing (`/`):** The root route is dynamic. Unauthenticated guests are served the high-conversion **Landing Page** (marketing content, tech stack, philosophy), while authenticated users are automatically served the primary **Dashboard**.
+- **Dedicated Login (`/login`):** A dedicated, minimal authentication screen exists at `/login` for users who need to sign in without being exposed to full marketing content.
+- **Theme Awareness:** Both the landing page and login screen are fully theme-aware, aligning with system preferences or saved local state.
+- **Smart CTAs:** The landing page features dynamic call-to-action buttons that transform into "Go to Dashboard" links if a session is detected.
 
 ## 11. Global Footer Architecture
 
@@ -121,8 +122,8 @@ A premium, multi-column global footer is implemented to provide platform-wide na
 
 To maximize user focus and minimize interface clutter, the application implements a "Zen Layout" pattern that distinguishes between public marketing surfaces and the authenticated workspace.
 
-- **Dynamic Visibility:** The multi-column marketing footer and the primary landing page header are programmatically hidden for authenticated users.
-- **Workspace Focus:** Once logged in, the user is presented with a streamlined dashboard environment that prioritizes content creation and management tools.
+- **Workspace Focus:** Once logged in, the user is presented with a streamlined dashboard environment that prioritizes content creation and management tools. Marketing components like the multi-column footer are programmatically hidden.
+- **Architectural Isolation:** Authenticated routing is handled by the root `page.tsx`, ensuring that the workspace and the landing page never overlap or cause layout shifts.
 - **Loading Optimization:** Server-side session propagation (`auth()`) ensures that the correct layout is rendered immediately on the first byte, preventing "empty screen blinks" or layout shifts during the authentication handshake.
 
 ## 13. Nested Help & Navigation

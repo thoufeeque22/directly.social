@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Box, Container, Typography, Stack, Grid, Paper, useTheme } from '@mui/material';
+import { Box, Container, Typography, Grid } from '@mui/material';
 import { LandingHeader } from '@/components/landing/Header';
 import { LandingFooter } from '@/components/landing/Footer';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
-import Link from 'next/link';
+import { DocCategoryCard } from './DocCategoryCard';
 
 const docCategories = [
   {
@@ -46,8 +46,6 @@ const docCategories = [
 ];
 
 export default function DocsPage() {
-  const theme = useTheme();
-
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <LandingHeader />
@@ -68,44 +66,7 @@ export default function DocsPage() {
           <Grid container spacing={4}>
             {docCategories.map((cat, index) => (
               <Grid size={{ xs: 12, md: 4 }} key={index}>
-                <Paper 
-                  id={cat.id}
-                  elevation={0}
-                  sx={{ 
-                    p: 4, 
-                    height: '100%', 
-                    borderRadius: 3, 
-                    border: `1px solid ${theme.palette.divider}`,
-                    bgcolor: 'background.paper',
-                    transition: 'transform 0.2s',
-                    '&:hover': { transform: 'translateY(-4px)' }
-                  }}
-                >
-                  <Box sx={{ mb: 2 }}>{cat.icon}</Box>
-                  <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>{cat.title}</Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
-                    {cat.description}
-                  </Typography>
-                  <Stack spacing={1.5}>
-                    {cat.links.map((link, i) => (
-                      <Typography 
-                        key={i} 
-                        component={Link}
-                        href={link.href}
-                        variant="body2" 
-                        sx={{ 
-                          color: 'primary.main', 
-                          fontWeight: 600, 
-                          textDecoration: 'none',
-                          display: 'block',
-                          '&:hover': { textDecoration: 'underline' }
-                        }}
-                      >
-                        {link.label} →
-                      </Typography>
-                    ))}
-                  </Stack>
-                </Paper>
+                <DocCategoryCard cat={cat} />
               </Grid>
             ))}
           </Grid>
