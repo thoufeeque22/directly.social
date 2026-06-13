@@ -82,3 +82,44 @@ The exported JSON file (`social-studio-data.json`) should follow this structure:
 - **Twitter/X:** Good example of 'Request' -> 'Wait' -> 'Download' flow.
 - **Intercom:** Clean single-page privacy settings.
 
+
+## [2026-06-13 15:56:12] Verdict: APPROVED
+VERDICT: APPROVED
+
+INTERROGATION LOG:
+1. Q: How granular should the cookie categories be?
+   A: Industry standard: Necessary, Analytics, and Marketing.
+2. Q: Should the banner be blocking (modal) or non-blocking (banner)?
+   A: Non-blocking banner at the bottom is preferred to reduce bounce rate while maintaining compliance.
+3. Q: Persistence method?
+   A: A functional cookie (e.g., ss-consent) is preferred over localStorage to allow the server (Next.js) to detect consent state and avoid UI flickering during hydration.
+
+UX STRATEGY:
+The Cookie Consent system will follow a two-tier approach. A non-intrusive banner will provide immediate choices, while a Manage Preferences dialog will offer granular control.
+- Visibility: Only visible if the ss-consent cookie is missing.
+- Compliance: Reject All will have equal prominence to Accept All to meet strict GDPR guidelines.
+- Persistence: Consent state will be stored as a JSON string in a 1-year functional cookie.
+- Re-consent: Trigger re-consent if the Privacy Policy version changes.
+
+INDUSTRY STANDARDS:
+- ePrivacy Directive and GDPR: Consent must be freely given, specific, informed, and unambiguous.
+- A11y: The banner must be at the end of the DOM order but accessible via keyboard navigation.
+
+UI LAYOUT:
+- Banner Placement: Fixed at bottom: 24, right: 24 on desktop; bottom: 0, left: 0, right: 0 on mobile.
+- Visual Style: 
+  - Glassmorphic surface using backdrop-filter blur.
+  - MUI Paper component with a subtle 1px border using divider color.
+  - Typography: body2 for the main description to keep it compact.
+- Components:
+  - CookieBanner: The main entry point.
+  - CookiePreferencesDialog: The granular settings modal.
+- Actions:
+  - Accept All: Primary Contained Button.
+  - Reject All: Secondary Outlined Button.
+  - Manage: Text Button.
+
+STATE PERSISTENCE:
+- Cookie Name: ss-consent
+- Structure: { strictlyNecessary: true, analytics: boolean, marketing: boolean, timestamp: string, version: string }
+- Lifecycle: 365 days expiration.
