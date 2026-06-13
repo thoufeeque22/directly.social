@@ -26,34 +26,16 @@ export const SettingsTabs: React.FC<SettingsTabsProps> = ({ activeTab, onChange 
   <Tabs 
     value={activeTab} 
     onChange={onChange} 
-    orientation="vertical"
+    variant="scrollable" 
+    scrollButtons="auto"
     sx={{ 
-      borderRight: 0,
-      '& .MuiTabs-indicator': {
-        left: 0,
-        right: 'auto',
-        width: 4,
-        borderRadius: '0 4px 4px 0'
-      },
       '& .MuiTab-root': {
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-        textAlign: 'left',
+        textTransform: 'none',
         minHeight: 48,
-        py: 1.5,
-        px: 2,
-        borderRadius: 1,
-        mb: 0.5,
-        transition: 'all 0.2s ease',
-        '&:hover': {
-          bgcolor: 'action.hover',
-        },
+        fontWeight: 500,
+        fontSize: '0.875rem',
         '&.Mui-selected': {
-          bgcolor: 'primary.main',
-          color: 'primary.contrastText',
-          '& .MuiSvgIcon-root': {
-            color: 'inherit'
-          }
+          fontWeight: 600,
         }
       }
     }}
@@ -65,7 +47,6 @@ export const SettingsTabs: React.FC<SettingsTabsProps> = ({ activeTab, onChange 
         icon={tab.icon} 
         iconPosition="start" 
         label={tab.label} 
-        disableRipple
       />
     ))}
   </Tabs>
