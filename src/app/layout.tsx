@@ -4,7 +4,6 @@ import "./globals.css";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import { Providers } from "@/components/Providers";
 import { ThemeScript } from "@/components/layout/ThemeScript";
-import { CookieBanner } from "@/components/gdpr/CookieBanner";
 
 import { auth } from "@/auth";
 
@@ -44,7 +43,6 @@ export default async function RootLayout({
           <LayoutWrapper session={session}>
             {children}
           </LayoutWrapper>
-          <CookieBanner />
         </Providers>
       </body>
     </html>

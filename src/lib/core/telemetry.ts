@@ -1,5 +1,4 @@
 import { redis } from "./redis";
-import { cookies } from "next/headers";
 
 /**
  * Standard telemetry event keys.
@@ -43,27 +42,12 @@ export type TelemetryEvent = typeof TELEMETRY_EVENTS[keyof typeof TELEMETRY_EVEN
  */
 export async function trackEvent(event: TelemetryEvent, incrementBy: number = 1): Promise<void> {
   try {
-    // GDPR Check: Only track if consent is granted
-    let hasConsent = false;
-    try {
-      const cookieStore = await cookies();
-      const consent = cookieStore.get("ss-consent")?.value;
-      hasConsent = consent === "accepted";
-    } catch {
-      // If cookies() is not available (e.g. background worker), 
-      // we default to false for high-frequency analytics to be safe.
-      hasConsent = false;
-    }
-
-    if (!hasConsent) {
-      return;
-    }
-
     const today = new Date().toISOString().split("T")[0];
     const key = `telemetry:${today}:${event}`;
 
-    // Fire-and-forget: we do not await the redis call to avoid blocking the main thread.
-    // Errors are caught and logged.
+    // FIRE-AND-FORGET: No cookies required. 
+    // This system only increments anonymous global counters in Redis. 
+    // It does not store user IDs, IP addresses, or PII.
     redis.incrby(key, incrementBy).catch((err: unknown) => {
       const errorMessage = err instanceof Error ? err.message : String(err);
       console.error(`[TELEMETRY_ERROR] Failed to track event ${event}: ${errorMessage}`);
