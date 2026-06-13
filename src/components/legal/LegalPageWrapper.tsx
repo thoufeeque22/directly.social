@@ -21,7 +21,7 @@ export function LegalPageWrapper({
           >
             Back to Home
           </Button>
-          <Typography variant="h5" fontWeight={700} color="primary">
+          <Typography variant="h5" sx={{ fontWeight: 700 }} color="primary">
             {title}
           </Typography>
         </Box>

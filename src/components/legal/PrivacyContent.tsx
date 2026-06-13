@@ -4,14 +4,14 @@ import { Box, Typography, Stack } from '@mui/material';
 export const PrivacyContent = () => (
   <Stack spacing={4} sx={{ mt: 4 }}>
     <section>
-      <Typography variant="h5" gutterBottom fontWeight={600}>1. Introduction</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>1. Introduction</Typography>
       <Typography variant="body1" gutterBottom>
         Directly Social (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share information when you use our web and mobile applications (the &quot;Service&quot;).
       </Typography>
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom fontWeight={600}>2. Data We Collect</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>2. Data We Collect</Typography>
       <Typography variant="body1" gutterBottom>
         We collect information that you provide directly to us, such as when you create an account, connect social media profiles, or upload content. This may include:
       </Typography>
@@ -24,9 +24,9 @@ export const PrivacyContent = () => (
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom fontWeight={600}>3. Use of Third-Party APIs</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>3. Use of Third-Party APIs</Typography>
       <Box sx={{ ml: 2, mb: 2 }}>
-        <Typography variant="subtitle1" fontWeight={700} gutterBottom>Google / YouTube API</Typography>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Google / YouTube API</Typography>
         <Typography variant="body1" gutterBottom>
           Our application uses Google API Services to allow you to upload videos to your YouTube channel. By using this feature, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">YouTube Terms of Service</a> and the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.
         </Typography>
@@ -35,13 +35,13 @@ export const PrivacyContent = () => (
         </Typography>
       </Box>
       <Box sx={{ ml: 2, mb: 2 }}>
-        <Typography variant="subtitle1" fontWeight={700} gutterBottom>TikTok API</Typography>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>TikTok API</Typography>
         <Typography variant="body1" gutterBottom>
           We use TikTok for Developers APIs to facilitate video posting and account management. We adhere to TikTok&apos;s Developer Terms.
         </Typography>
       </Box>
       <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle1" fontWeight={700} gutterBottom>Meta (Facebook/Instagram) API</Typography>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Meta (Facebook/Instagram) API</Typography>
         <Typography variant="body1" gutterBottom>
           We use Meta Graph APIs to publish content to your Facebook Pages and Instagram Business accounts.
         </Typography>
@@ -49,16 +49,16 @@ export const PrivacyContent = () => (
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom fontWeight={600}>4. Data Deletion</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>4. Data Deletion</Typography>
       <Typography variant="body1" gutterBottom>
         <strong>Data Deletion:</strong> You may request the deletion of your account and all associated data by emailing us at privacy@directly.social or by using the &quot;Delete Account&quot; feature in your settings.
       </Typography>
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom fontWeight={600}>5. Contact Us</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>5. Contact Us</Typography>
       <Typography variant="body1">If you have any questions, please contact us at:</Typography>
-      <Typography variant="body1" fontWeight={700}>Email: privacy@directly.social</Typography>
+      <Typography variant="body1" sx={{ fontWeight: 700 }}>Email: privacy@directly.social</Typography>
     </section>
   </Stack>
 );
