@@ -35,7 +35,7 @@ const docCategories = [
   {
     id: 'technical-setup',
     title: 'Power Users Setup',
-    description: 'Technical guides for advanced users and power users configuring their own infrastructure.',
+    description: 'Technical guides for advanced users configuring their own infrastructure.',
     icon: <EngineeringIcon color="primary" sx={{ fontSize: 32 }} />,
     links: [
       { label: 'AI Provider Keys (BYOK)', href: '/docs/dev/ai-byok-guide' },
@@ -46,7 +46,7 @@ const docCategories = [
   {
     id: 'philosophy-support',
     title: 'Philosophy & Support',
-    description: 'Understand the mission behind Directly Social and how to get the most out of it.',
+    description: 'Understand our mission and how to get the most out of Directly Social.',
     icon: <HelpCenterIcon color="primary" sx={{ fontSize: 32 }} />,
     links: [
       { label: 'The SaaS Tax Explained', href: '/philosophy' },
@@ -72,9 +72,9 @@ export default function DocsPage() {
           </Typography>
         </Box>
 
-        <Grid container spacing={4}>
+        <Grid container spacing={4} sx={{ justifyContent: 'center' }}>
           {docCategories.map((cat, index) => (
-            <Grid size={{ xs: 12, md: 4 }} key={index}>
+            <Grid size={{ xs: 12, md: 6 }} key={index}>
               <DocCategoryCard cat={cat} />
             </Grid>
           ))}
