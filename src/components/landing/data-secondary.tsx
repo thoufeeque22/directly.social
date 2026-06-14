@@ -35,8 +35,8 @@ export const personas = {
     benefits: [
       'One-click distribution to TikTok, IG, YT',
       'AI Vibe Sync for automated tone shifting',
-      'Native Proxy-Push for maximum reach',
-      'Privacy-first local media vault'
+      'Best possible reach via direct publishing',
+      'Secure & Private Media Storage'
     ]
   },
   powerUser: {
@@ -69,7 +69,7 @@ export const comparisonGood = {
     "Total Ownership: Keys stay on your own device",
     "Storage Freedom (BYOS - Bring Your Own Storage)",
     "Studio Speed: Direct publishing, zero middlemen",
-    "Maximum Reach: 100% Native Proxy-Push"
+    "Best possible reach via direct publishing"
   ]
 };
 
