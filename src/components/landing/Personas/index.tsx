@@ -20,7 +20,7 @@ export const Personas = () => {
             <Typography variant="overline" color="primary" sx={{ fontWeight: 800, letterSpacing: '0.2em' }}>
               Your Workflow
             </Typography>
-            <Typography variant="h2" sx={{ mt: 2, mb: 3, fontWeight: 800 }}>
+            <Typography variant="h3" sx={{ mt: 2, mb: 3, fontWeight: 800 }}>
               Built for Every Workflow
             </Typography>
             <ToggleButtonGroup

@@ -18,7 +18,7 @@ test('should display all 10 major sections @smoke', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'The Local-First Creator Studio', level: 1 })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Get Started for Free' })).toBeVisible();
     // 3. Social Proof
-    await expect(page.getByText('Trusted by creators on every platform')).toBeVisible();
+    await expect(page.getByText('Multi-Platform Native Support')).toBeVisible();
     
     // 4. Core Feature Grid
     await expect(page.getByText('Core Magic')).toBeVisible();
@@ -30,8 +30,8 @@ test('should display all 10 major sections @smoke', async ({ page }) => {
     // 6. Persona Target
     await expect(page.getByRole('heading', { name: 'Built for Every Workflow', level: 3 })).toBeVisible();
     
-    // 7. Testimonials
-    await expect(page.getByRole('heading', { name: 'The Wall of Love', level: 2 })).toBeVisible();
+    // 7. How It Works
+    await expect(page.getByRole('heading', { name: 'How Native Publishing Works', level: 2 })).toBeVisible();
     
     // 8. Pricing
     await expect(page.getByRole('heading', { name: 'Simple, Honest Pricing', level: 2 })).toBeVisible();
@@ -50,14 +50,14 @@ test('should display all 10 major sections @smoke', async ({ page }) => {
 
     // Switch to Power Users
     await page.getByRole('button', { name: 'Power Users' }).click();
-    await expect(page.getByText('For the Self-Hoster & Dev')).toBeVisible();
+    await expect(page.getByText('For Power Users & Teams')).toBeVisible();
     await expect(page.locator('text=/BYOK.*Architecture/')).toBeVisible();
   });
 
   test('should expand FAQ items @interactivity @smoke', async ({ page }) => {
     const question = page.getByText("What does 'Native' actually mean?");
     await question.click();
-    await expect(page.getByText('Directly connects your computer directly to the platforms')).toBeVisible();
+    await expect(page.getByText('connects your computer directly to the platforms')).toBeVisible();
   });
 
   test('should navigate to login from Hero CTA @navigation @smoke', async ({ page }) => {

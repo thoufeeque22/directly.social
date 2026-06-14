@@ -11,6 +11,7 @@ import { BRAND } from "@/lib/core/brand";
 
 // New Landing Page Component
 import { LandingPage } from '@/components/landing/LandingPage';
+import { LandingFallback } from '@/components/landing/LandingFallback';
 
 export const metadata: Metadata = { title: `${BRAND.name} | ${BRAND.tagline}` };
 
@@ -20,7 +21,7 @@ export default async function Home() {
   // If NOT authenticated, render the New Landing Page
   if (!session) {
     return (
-      <Suspense fallback={null}>
+      <Suspense fallback={<LandingFallback />}>
         <LandingPage />
       </Suspense>
     );
