@@ -7,18 +7,18 @@ import { CodeComponent } from './MarkdownRenderer.Code';
  * Custom MUI-based components for ReactMarkdown
  */
 export const markdownComponents: Components = {
-  h1: ({ children }) => (
-    <Typography variant="h3" sx={{ mt: 4, mb: 2, fontWeight: 800 }}>
+  h1: ({ children, id }) => (
+    <Typography id={id} variant="h3" sx={{ mt: 4, mb: 2, fontWeight: 800 }}>
       {children}
     </Typography>
   ),
-  h2: ({ children }) => (
-    <Typography variant="h4" sx={{ mt: 4, mb: 2, fontWeight: 700 }}>
+  h2: ({ children, id }) => (
+    <Typography id={id} variant="h4" sx={{ mt: 4, mb: 2, fontWeight: 700 }}>
       {children}
     </Typography>
   ),
-  h3: ({ children }) => (
-    <Typography variant="h5" sx={{ mt: 3, mb: 1, fontWeight: 600 }}>
+  h3: ({ children, id }) => (
+    <Typography id={id} variant="h5" sx={{ mt: 3, mb: 1, fontWeight: 600 }}>
       {children}
     </Typography>
   ),
@@ -44,6 +44,28 @@ export const markdownComponents: Components = {
     </Box>
   ),
   hr: () => <Divider sx={{ my: 4 }} />,
+  a: ({ children, href }) => {
+    const isExternal = href?.startsWith('http');
+    const isCriticalAction = href === '/login' || href === '/register';
+    const shouldOpenNewTab = isExternal || isCriticalAction;
+
+    return (
+      <Box 
+        component="a" 
+        href={href} 
+        target={shouldOpenNewTab ? "_blank" : undefined}
+        rel={shouldOpenNewTab ? "noopener noreferrer" : undefined}
+        sx={{ 
+          color: 'primary.main', 
+          textDecoration: 'none', 
+          fontWeight: 600,
+          '&:hover': { textDecoration: 'underline' } 
+        }}
+      >
+        {children}
+      </Box>
+    );
+  },
   ul: ({ children }) => (
     <Box component="ul" sx={{ pl: 4, mb: 2 }}>
       {children}

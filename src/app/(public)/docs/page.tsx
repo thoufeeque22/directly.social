@@ -4,20 +4,32 @@ import React from 'react';
 import { Box, Container, Typography, Grid } from '@mui/material';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import { DocCategoryCard } from './DocCategoryCard';
 import { BRAND } from '@/lib/core/brand';
 
 const docCategories = [
   {
-    id: 'user-guides',
-    title: 'User Guides',
-    description: 'Learn how to use Directly Social to manage your content and grow your reach.',
+    id: 'getting-started',
+    title: 'Getting Started',
+    description: 'The quickest path to your first native post. Start here if you are new.',
     icon: <MenuBookIcon color="primary" sx={{ fontSize: 32 }} />,
     links: [
-      { label: 'Video Storage Setup', href: '/docs/user/storage-setup' },
+      { label: 'How to Login', href: '/docs/user/login-guide' },
       { label: 'Account Connection', href: '/docs/user/account-connection' },
       { label: 'Publishing Your First Video', href: '/docs/user/publishing-first-video' }
+    ]
+  },
+  {
+    id: 'core-features',
+    title: 'Core Features',
+    description: 'Master the tools that make Directly Social powerful and efficient.',
+    icon: <AutoAwesomeIcon color="primary" sx={{ fontSize: 32 }} />,
+    links: [
+      { label: 'Metadata Snippets', href: '/docs/user/metadata-snippets' },
+      { label: 'AI Content Polish', href: '/docs/user/ai-content-polish' },
+      { label: 'Media Management & Cloud Sync', href: '/docs/user/storage-setup' }
     ]
   },
   {
@@ -26,20 +38,20 @@ const docCategories = [
     description: 'Technical guides for advanced users and power users configuring their own infrastructure.',
     icon: <EngineeringIcon color="primary" sx={{ fontSize: 32 }} />,
     links: [
-      { label: 'Storage Vault (BYOS)', href: '/docs/dev/vault-setup' },
-      { label: 'Bring Your Own Key (BYOK)', href: '/docs/dev/byok-guide' },
-      { label: 'Meta API Configuration', href: '/docs/dev/meta-guide' }
+      { label: 'AI Provider Keys (BYOK)', href: '/docs/dev/ai-byok-guide' },
+      { label: 'Social Platform Keys (BYOK)', href: '/docs/dev/byok-guide' },
+      { label: 'Cloud Storage Guide (BYOS)', href: '/docs/dev/vault-setup' }
     ]
   },
   {
-    id: 'philosophy',
-    title: 'Philosophy',
-    description: 'Understand why we built Directly Social and how it helps you.',
+    id: 'philosophy-support',
+    title: 'Philosophy & Support',
+    description: 'Understand the mission behind Directly Social and how to get the most out of it.',
     icon: <HelpCenterIcon color="primary" sx={{ fontSize: 32 }} />,
     links: [
+      { label: 'The SaaS Tax Explained', href: '/philosophy' },
       { label: 'Why Native Matters', href: '/philosophy' },
-      { label: 'Algorithmic Boost', href: '/philosophy' },
-      { label: 'Community & Support', href: '/docs/user/account-connection' }
+      { label: 'Community & Feedback', href: 'mailto:support@directly.social' }
     ]
   }
 ];

@@ -1,6 +1,6 @@
-# Technical Vault Setup (BYOS)
+# Cloud Storage Guide (BYOS)
 
-This guide provides the exact technical specifications required to connect an S3-compatible storage bucket to Directly Social. For a high-level overview of storage options, see the [User Storage Guide](/docs/user/storage-setup).
+This guide provides the exact technical specifications required to connect an S3-compatible storage bucket to Directly Social.
 
 ## S3 Compatibility Requirements
 
@@ -25,7 +25,7 @@ Since Directly Social is a web application, your storage bucket **must** allow c
   }
 ]
 ```
-> **Security Tip:** For production, replace `"*"` in `AllowedOrigins` with your actual application domain (e.g., `https://app.directly.social`).
+> **Security Tip:** For production, replace `"*"` in `AllowedOrigins` with your actual application domain (e.g., `https://directly.social`).
 
 ## IAM / Access Policy
 

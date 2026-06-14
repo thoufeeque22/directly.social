@@ -21,6 +21,6 @@ If you want to sync your media across devices or manage a large library, you can
 2. Generate an **Access Key** and **Secret Key**.
 3. Go to **Settings > Storage** in Directly Social and enter your details.
 
-> **Technical Note:** For cloud storage to work correctly with a web app, you must enable **CORS** in your provider's settings. See our [Technical Vault Setup](/docs/dev/vault-setup) for the exact settings.
+> **Technical Note:** For cloud storage to work correctly with a web app, you must enable **CORS** in your provider's settings. See our [Cloud Storage Guide (BYOS)](/docs/dev/vault-setup) for the exact settings.
 
 Once connected, your "Media" tab will automatically sync with your private cloud!

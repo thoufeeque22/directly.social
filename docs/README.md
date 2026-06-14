@@ -2,19 +2,26 @@
 
 Welcome to the Directly project documentation. This folder contains architectural blueprints, setup guides, and feature specifications.
 
-## 🚀 User Guides
+## 🚀 Getting Started
 
-Learn how to use Directly Social to manage your content and grow your reach.
+The quickest path to your first native post.
+- [How to Login](user/login-guide.md) - Securely accessing your dashboard.
 - [Account Connection](user/account-connection.md) - Linking your TikTok, YouTube, and Meta accounts.
-- [Video Storage Setup](user/storage-setup.md) - Connecting private cloud storage for your media.
 - [Publishing Your First Video](user/publishing-first-video.md) - Step-by-step guide to your first post.
+
+## 🎨 Core Features
+
+Master the tools that make Directly Social powerful and efficient.
+- [Metadata Snippets](user/metadata-snippets.md) - Saving and injecting reusable hashtags and bio links.
+- [AI Content Polish](user/ai-content-polish.md) - Using Vibe Sync and AI tools to enhance your captions.
+- [Media Management & Cloud Sync](user/storage-setup.md) - Connecting private cloud storage (BYOS).
 
 ## 🛠️ Power Users Setup
 
 Technical guides for advanced users and power users configuring their own infrastructure.
-- [Technical Vault Setup (BYOS)](dev/vault-setup.md) - Detailed S3 and CORS configuration.
-- [Bring Your Own Key (BYOK)](dev/byok-guide.md) - Configuring your own platform API keys.
-- [Meta API Configuration](dev/meta-guide.md) - Specific steps for Instagram and Facebook integration.
+- [AI Provider Keys (BYOK)](dev/ai-byok-guide.md) - Configuring your own AI API keys (OpenAI, Gemini, Anthropic, Groq).
+- [Social Platform Keys (BYOK)](dev/byok-guide.md) - Configuring your own platform API keys (TikTok, YouTube, Meta).
+- [Cloud Storage Guide (BYOS)](dev/vault-setup.md) - Detailed S3 and CORS configuration.
 
 ## 🏗️ Core Documentation
 
