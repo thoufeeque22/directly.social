@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Container, Typography, Link, Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { BRAND } from '@/lib/core/brand';
 
 export function LegalPageWrapper({
   children,
@@ -28,7 +29,7 @@ export function LegalPageWrapper({
         {children}
         <Box sx={{ mt: 8, pt: 4, borderTop: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
           <Typography variant="caption" color="text.secondary">
-            © {new Date().getFullYear()} Directly Social. All rights reserved.
+            © {new Date().getFullYear()} {BRAND.legal.copyrightOwner}. All rights reserved.
           </Typography>
         </Box>
       </Container>
