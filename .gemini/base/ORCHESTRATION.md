@@ -1,22 +1,23 @@
 # Agent Orchestration & Workflow
 
+> **MANDATORY:** All agents MUST use the centralized constants and patterns defined in [VARIABLES.md](VARIABLES.md). NEVER hardcode strings for branch names, state directories, verdicts, or commands.
+
 ## Core Mandates
 - **Active Inquisitiveness (Collaborative Inquiry):** AI agents MUST act as collaborative partners, not just execution machines. If any request, requirement, or technical path is ambiguous, the agent MUST stop and ask the user for clarification before proceeding. "Guessing" is a terminal violation.
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST:
   1. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue`).
-  2. Check the current branch. If NOT on the target feature branch (`feature/<id>-...`):
-     a. Switch to `main` and pull latest (`git checkout main && git pull`).
-     b. Create the dedicated feature branch (`git checkout -b feature/<id>-<desc>`).
-  3. If ALREADY on the target feature branch, skip the `main` synchronization and branch creation steps.
-  4. Create a state directory `.gemini/state/ticket-<id>/` with a `MAIN.md` file following the **MAIN.md Template** (skip if state already exists).
+  2. Check the current branch. If NOT on the target feature branch (`FEATURE_BRANCH_PATTERN`):
+     a. Switch to `MAIN_BRANCH` and pull latest (`git checkout main && git pull`).
+     b. Create the dedicated feature branch (`git checkout -b <FEATURE_BRANCH_PATTERN>`).
+  3. If ALREADY on the target feature branch, skip the `MAIN_BRANCH` synchronization and branch creation steps.
+  4. Create a state directory `TICKET_STATE_DIR` with a `MAIN_STATE_FILE` file following the **MAIN_STATE_FILE Template** (skip if state already exists).
 - **Manual Environment Management:** The User always manages the development server (`npm run dev`), the E2E test server (`http://localhost:3000`), and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, check the connectivity of these services, or modify/enable any Playwright `webServer` configuration. ALL E2E tests are strictly bound to `http://localhost:3000`.
-- **Strict Sequential Workflow:** ALL tickets MUST follow this exact sequence:
-  `Product` -> `Discovery` -> `Development` -> `Audit` -> `QA` -> `Documentation`.
+- **Strict Sequential Workflow:** ALL tickets MUST follow the `PHASE_ORDER`.
 - **Guardrail Mandates (Terminal Violations):**
   1. **Issue-First Protocol:** Before starting any work, the Orchestrator MUST ensure a corresponding GitHub issue exists. If the task is new or doesn't have an ID, the Orchestrator MUST invoke the `project-agent` to create the issue FIRST.
-  2. **No Direct Main Push:** AI agents are STRICTLY FORBIDDEN from merging into or pushing directly to the `main` branch. ALL code changes MUST live on a dedicated feature branch (`feature/<id>-...`).
+  2. **No Direct Main Push:** AI agents are STRICTLY FORBIDDEN from merging into or pushing directly to the `MAIN_BRANCH`. ALL code changes MUST live on a dedicated feature branch (`FEATURE_BRANCH_PATTERN`).
   3. **PR-Only Handoff:** The final handoff to the user MUST be for **Pull Request creation**. The agent must never perform the final merge locally.
-  4. **State-First Protocol:** NEVER start work without initializing the state directory and `MAIN.md`.
+  4. **State-First Protocol:** NEVER start work without initializing the state directory and `MAIN_STATE_FILE`.
 - **Phase Termination & Failure Protocol:**
   1. **Atomic Phases:** An agent MUST NOT proceed to the next phase in the sequence. It MUST update the state file, set its **Verdict**, and return control to the Orchestrator.
   2. **Next Step Suggestion:** Upon completing a phase, the agent MUST explicitly suggest the next sub-agent in the sequence to the user (e.g., "Next step: Invoke `discovery-agent` for technical planning").
@@ -24,9 +25,9 @@
   4. **Round 2+ Entry Point:** If a round fails during `Audit` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
 - **Human-in-the-Loop Workflow:** ALL transitions between agent phases MUST be mediated by the user. 
   1. **Inquiry-First Protocol:** The initial turn of any planning agent (`Product`, `Discovery`) SHOULD focus on asking questions to resolve ambiguity. If the agent is in doubt, it MUST set its Verdict to **NEEDS-INFO** and present its questions to the user.
-  2. **Update State File ONLY via Hook:** The active agent MUST execute the state manager hook (see below) to update `MAIN.md` and their round-specific file. Agents are STRICTLY FORBIDDEN from manually editing these files using `write_file` or `replace` tools.
+  2. **Update State File ONLY via Hook:** The active agent MUST execute the state manager hook (see below) to update `MAIN_STATE_FILE` and their round-specific file. Agents are STRICTLY FORBIDDEN from manually editing these files using `write_file` or `replace` tools.
   3. **Manual Review:** The user reviews the changes and the ticket state.
-  4. **Explicit Approval & Auto-Commit:** When the User provides approval to proceed to the *next* phase (e.g., "Invoke discovery-agent"), the Orchestrator MUST automatically commit any pending changes from the current phase before starting the next one. The commit message MUST be dynamic and descriptive (e.g., `feat(ticket-400): complete product phase - defined UX layout`), derived from the `MAIN.md` status or the summary of the completed phase. This commit is implicitly approved by the user's directive to proceed.
+  4. **Explicit Approval & Auto-Commit:** When the User provides approval to proceed to the *next* phase (e.g., "Invoke discovery-agent"), the Orchestrator MUST automatically commit any pending changes from the current phase before starting the next one. The commit message MUST follow the `COMMIT_MSG_PATTERN` (e.g., `feat(ticket-400): complete product phase - defined UX layout`), derived from the `MAIN_STATE_FILE` status or the summary of the completed phase. This commit is implicitly approved by the user's directive to proceed.
 - **Traceable Status:** EVERY agent MUST update their section with a clear **Verdict** before handoff.
 
 ## Tiered Testing Strategy
@@ -37,28 +38,28 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 - **Full Suite:** The complete test directory, including long-running E2E and edge-case unit tests.
 
 ### Agent Test Mandates
-- **dev-agent:** MUST use the `arxitect:architect` skill for all changes. MUST run `npm run test:smoke` and `npm run lint`.
-  - **Fast-Track Verification:** If the user explicitly requests to save time or if in a fast-iteration loop, the agent MAY skip `npm run build` IF they have already run it once for the current set of changes and no relevant files have changed.
+- **dev-agent:** MUST use the `ARCHITECT_SKILL` for all changes. MUST run `SMOKE_TEST_CMD` and `LINT_CMD`.
+  - **Fast-Track Verification:** If the user explicitly requests to save time or if in a fast-iteration loop, the agent MAY skip `BUILD_CMD` IF they have already run it once for the current set of changes and no relevant files have changed.
 - **audit-agent:** READ-ONLY. Focus on Security, Privacy (PII), and Performance (Web Vitals) audits.
-- **qa-agent:** MUST run `npm run test:regression`. For features with specific impact, they may also run relevant individual tests.
+- **qa-agent:** MUST run `REGRESSION_TEST_CMD`. For features with specific impact, they may also run relevant individual tests.
 - **Human-in-the-Loop:** The **User** SHOULD run the full suite (`npm test`) before the final merge.
 
 ### package.json Scripts (Implementation)
-- `test:smoke`: `npx playwright test --grep @smoke`
-- `test:regression`: `npx playwright test --grep @regression`
+- `test:smoke`: `SMOKE_TEST_CMD`
+- `test:regression`: `REGRESSION_TEST_CMD`
 
 ## State Management & Isolation (Hook-Only)
-- **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `.gemini/state/ticket-<id>/`.
-- **State Manager Hook:** Agents MUST NOT manually edit `MAIN.md` or their individual round files. Instead, agents MUST execute the state manager hook as their final action:
-  `npm run state:update -- --agent="dev" --verdict="SUCCESS" --summary="<SHORT_TIMELINE_SUMMARY>" --content="<FULL_REPORT_CONTENT>" [--status="audit"]`
-  *The script will automatically update the `MAIN.md` timeline and append your content to the correct `round-<N>` file.*
-  - **TIMELINE SUMMARY:** A concise, one-line summary of the milestone for the `MAIN.md` timeline.
+- **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `TICKET_STATE_DIR`.
+- **State Manager Hook:** Agents MUST NOT manually edit `MAIN_STATE_FILE` or their individual round files. Instead, agents MUST execute the `STATE_UPDATE_CMD` as their final action:
+  `STATE_UPDATE_CMD`
+  *The script will automatically update the `MAIN_STATE_FILE` timeline and append your content to the correct `ROUND_DIR_PATTERN` file.*
+  - **TIMELINE SUMMARY:** A concise, one-line summary of the milestone for the `MAIN_STATE_FILE` timeline.
   - **FULL CONTENT:** The **entire** generated report/blueprint/audit for that phase. This ensures context persistence for subsequent agents in the round file.
 - **State Layout:****
 
   ```
-  .gemini/state/ticket-<id>/
-  ├── MAIN.md              # Global Metadata, Status, History, and TIMELINE
+  TICKET_STATE_DIR
+  ├── MAIN_STATE_FILE      # Global Metadata, Status, History, and TIMELINE
   ├── round-1/
   │   ├── product.md       # Product agent only
   │   ├── discovery.md     # Discovery agent only
@@ -70,19 +71,18 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
       └── ...
   ```
 
-## MAIN.md Template
+## MAIN_STATE_FILE Template
 ```markdown
 ---
 ticket_id: <id>
-branch_name: feature/...
-goal: Concise goal statement
+branch_name: FEATURE_BRANCH_PATTERN
 status: [product|discovery|development|audit|qa|doc|pm]
 current_round: 1
 ---
 
 # 📋 Ticket Metadata
 - **ID**: <id>
-- **Branch**: `feature/...`
+- **Branch**: `FEATURE_BRANCH_PATTERN`
 - **Goal**: Concise goal statement
 - **Current Status**: in-progress
 
@@ -155,9 +155,9 @@ current_round: 1
 
 ### Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular code.
-- **Mandate:** MUST execute all implementation via the `arxitect:architect` skill. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops before the phase is considered complete.
+- **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops before the phase is considered complete.
 - **Verdict:** Success -> Audit | Blocked -> Discovery/Manual.
-- **Exhaustive Verification:** MUST run `npm run build`, `npm run lint`, and `npx tsc --noEmit`. Failure in ANY of these commands requires remediation BEFORE handoff. "Fast-track" skipping of these steps is only permitted if the agent has already run them for the *exact* current state of modified files.
+- **Exhaustive Verification:** MUST run `BUILD_CMD`, `LINT_CMD`, and `TYPE_CHECK_CMD`. Failure in ANY of these commands requires remediation BEFORE handoff. "Fast-track" skipping of these steps is only permitted if the agent has already run them for the *exact* current state of modified files.
 - **Aesthetic Validation:** MUST verify MUI component prop compliance (e.g., using `sx` for styling) to prevent React attribute warnings.
 
 ### Audit (QA & Security Audit)
@@ -171,14 +171,14 @@ current_round: 1
 - **Role:** Automation Engineer. **READ-ONLY (except for test files)**.
 - **Mandate:** 
   1. **Automation**: Write and execute Playwright/Maestro tests.
-  2. **Manual**: Formalize the Discovery test spec into a detailed step-by-step manual test script in `docs/manual_tests/ticket-<id>.md`.
+  2. **Manual**: Formalize the Discovery test spec into a detailed step-by-step manual test script in `MANUAL_TEST_FILE_PATTERN`.
   3. **No App Edits**: MUST NOT modify application source code.
 - **Verdict:** Pass -> Documentation | Fail -> Return to Dev.
 
 ### Documentation
 - **Role**: Tech Writer & Orchestration Architect. Finalize feature docs and optimize instruction layer.
-- **Orchestration Audit**: The agent MUST periodically run the `orchestration-auditor` skill to identify contradictions or redundancies in `GEMINI.md` and `.gemini/base/*.md`.
-- **Incidental Check**: After finishing work, the agent MUST read `.gemini/incidental_observations.json`.
+- **Orchestration Audit**: The agent MUST periodically run the `AUDITOR_SKILL` to identify contradictions or redundancies in `GEMINI.md` and `.gemini/base/*.md`.
+- **Incidental Check**: After finishing work, the agent MUST read `OBSERVATIONS_FILE`.
   - If **Observations exist**: Suggest invoking `project-agent` to resolve them.
   - If **No Observations exist**: Suggest the **User** for final PR creation.
 - **Verdict**: [COMPLETE].
@@ -187,7 +187,7 @@ current_round: 1
 - **Role**: Issue Architect. Specialized in resolving technical debt and requirement refinement.
 - **Mandate**: 
   1. **Direct Requests**: Can be invoked by the **User** at any time to create, update, or refine GitHub issues, even outside the standard ticket sequence.
-  2. **Incidental Resolution**: When invoked during the ticket lifecycle, it MUST read `.gemini/incidental_observations.json`. For each observation, verify the issue and create a new GitHub issue if appropriate. CLEAR the file (`[]`) after resolution.
+  2. **Incidental Resolution**: When invoked during the ticket lifecycle, it MUST read `OBSERVATIONS_FILE`. For each observation, verify the issue and create a new GitHub issue if appropriate. CLEAR the file (`[]`) after resolution.
   3. **Issue Enhancement**: When creating issues, the agent should include technical context, suggested implementation paths, and labels/priorities.
   4. **Next Step**: After processing requests or observations, suggest the **User** for the next logical step (e.g., final PR creation or returning to another task).
 - **No App Edits**: STRICTLY forbidden from modifying application code (`src/`).
@@ -195,7 +195,7 @@ current_round: 1
 
 ## Incidental Observations Protocol
 - **Purpose**: To capture bugs, technical debt, or optimization opportunities discovered *outside* the scope of the current ticket without derailing the primary task.
-- **Logging**: Any agent (Dev, Review, QA, etc.) that discovers an incidental issue MUST append it to `.gemini/incidental_observations.json`. 
+- **Logging**: Any agent (Dev, Review, QA, etc.) that discovers an incidental issue MUST append it to `OBSERVATIONS_FILE`. 
 - **Format**: 
   ```json
   {
@@ -212,9 +212,9 @@ current_round: 1
 - **Role**: User (Human).
 - **Mandate**: The user performs the final project synchronization and PR creation.
 - **Steps**:
-  1. Final review of the `.gemini/state/ticket-<id>/` directory.
-  2. `git add .gemini/state/ticket-<id>/ && git commit -m "docs: finalize ticket <id> state"`.
-  3. `git push origin feature/<branch>`.
+  1. Final review of the `TICKET_STATE_DIR` directory.
+  2. `git add TICKET_STATE_DIR && git commit -m "docs: finalize ticket <id> state"`.
+  3. `git push origin <FEATURE_BRANCH_PATTERN>`.
   4. `gh pr create --title "..." --body "..."`.
 
 

@@ -1,4 +1,4 @@
-# Directly Social App: Agent Instructions & Standards
+# <BRAND.name> App: Agent Instructions & Standards
 
 This document serves as the root entry point for all AI agents. It defines the global management policies and links to domain-specific standards.
 
@@ -31,6 +31,9 @@ This document serves as the root entry point for all AI agents. It defines the g
     *   Initialization logic & Git Branching.
     *   Phase Sequence, Failure Protocols, & Auto-Commit.
     *   Agent-specific mandates & Isolation.
+5.  **[Global Variables & Constants](.gemini/base/VARIABLES.md)**
+    *   Centralized strings for branching, state, and commands.
+    *   Mandatory source of truth for workflow patterns.
 
 ---
 

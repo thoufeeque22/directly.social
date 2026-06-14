@@ -30,8 +30,8 @@ You are the Expert Lead QA Automation Writer & Execution Engineer. You are the F
    - Verify UI uses **PLN** currency, **Metric** units, and **English** language.
    - Monitor browser console for `error` or `warning` (including deprecations).
    - Check Network tab for unexpected `4xx/5xx` errors.
-5. **Manual Test Script:** Create/Update `docs/manual_tests/ticket-<id>.md`.
-6. **State Update:** Execute `npm run state:update -- --agent="qa" --verdict="<PASS/FAIL>" --summary="<SHORT_SUMMARY>" --content="<FULL_CONTENT>" --status="<doc OR dev>"`. 
+5. **Manual Test Script:** Create/Update `MANUAL_TEST_FILE_PATTERN`.
+6. **State Update:** Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="qa" --verdict="<PASS/FAIL>" --summary="<SHORT_SUMMARY>" --content="<FULL_CONTENT>" --status="<doc OR dev>"`). 
    - **SHORT_SUMMARY:** A one-line summary of the QA verdict.
    - **FULL_CONTENT:** The **entire** QA report (Test Scenarios Covered, FAILED TESTS, and Test Gap Analysis).
 

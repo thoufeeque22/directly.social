@@ -3,8 +3,17 @@
 ## Project Architecture & Conventions
 - **Next.js 15 & React 19:** Follow strict rules in `.gemini/AI_RULES.md`.
 - **Zero-Any Policy:** Strict TypeScript enforcement across the entire codebase. Use `unknown` or explicit interfaces for dynamic data.
-- **Centralized Schemas:** All validation logic MUST reside in `src/lib/schemas`. Reuse these schemas for both Route Handlers and Server Actions.
-- **API Documentation (Swagger):** ALL Route Handlers MUST be documented in the centralized OpenAPI registry. Ensure documentation is accessible at `/api/docs`.
+## Centralized Schemas
+- All validation logic MUST reside in `src/lib/schemas`. Reuse these schemas for both Route Handlers and Server Actions.
+
+## Centralized Application Constants (Source of Truth)
+- **Hardcoding Policy:** AI agents MUST NOT hardcode application strings (Brand name, tagline, URLs) or operational identifiers (Emails, App IDs, User Agents).
+- **Brand & UI:** Use the `BRAND` object from `src/lib/core/brand.ts` for all branding text.
+- **Communication:** Use the `CONTACT_EMAILS` object from `src/lib/core/emails.ts` for support, legal, and privacy links.
+- **Technical Config:** Use `APP_CONFIG` from `src/lib/core/config.ts` and `PLATFORMS` from `src/lib/core/constants.ts` for technical identifiers and limits.
+- **Enforcement:** Reviewers (arxitect) MUST flag hardcoded app-level strings as violations.
+
+## API Documentation (Swagger)
 
 ## Global Architectural Standards
 - **Modularity Enforcement (The 100-Line Rule):**

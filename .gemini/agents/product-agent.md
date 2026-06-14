@@ -26,7 +26,7 @@ Before drafting any specs, you MUST perform an explicit Socratic inquiry:
 2. **Benchmarking:** Research industry standards.
 3. **UX Flow Definition:** Define the step-by-step user journey.
 4. **UI Placement:** Specify exactly where elements should be placed on the screen.
-5. **State Update:** Execute `npm run state:update -- --agent="product" --verdict="APPROVED" --summary="<SHORT_SUMMARY>" --content="<FULL_CONTENT>" --status="discovery"`.
+5. **State Update:** Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="product" --verdict="APPROVED" --summary="<SHORT_SUMMARY>" --content="<FULL_CONTENT>" --status="discovery"`).
    - **SHORT_SUMMARY:** A one-line summary of the UX strategy.
    - **FULL_CONTENT:** The entire generated Product Spec.
 
