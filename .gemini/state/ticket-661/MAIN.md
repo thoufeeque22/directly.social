@@ -2,7 +2,7 @@
 ticket_id: 661
 branch_name: feature/661-redirect-to-landing-on-signout
 goal: Redirect user to landing page (/) instead of login page (/login) upon sign-out.
-status: discovery
+status: dev
 current_round: 1
 ---
 
@@ -10,7 +10,7 @@ current_round: 1
 - **ID**: 661
 - **Branch**: `feature/661-redirect-to-landing-on-signout`
 - **Goal**: Redirect user to landing page (/) instead of login page (/login) upon sign-out.
-- **Current Status**: discovery
+- **Current Status**: dev
 
 # 📝 Ticket Description
 ### Description
@@ -31,3 +31,4 @@ This should be updated to `/` or the configured landing page URL.
 # 📅 Timeline
 - **[2026-06-14 15:29:24]**: PROJECT [ISSUES-MANAGED] - Created issue #661 for sign-out redirect and added to board 4.
 - **[2026-06-14 15:30:54]**: PRODUCT [APPROVED] - Redirect sign-out to landing page with success notification.
+- **[2026-06-14 15:54:00]**: AUDIT [FAIL] - E2E Smoke test failure: Heading level mismatch for 'Built for Every Workflow'.
