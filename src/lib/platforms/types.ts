@@ -9,7 +9,7 @@ export interface BaseParams {
   accountId: string;
 }
 
-export interface VerificationParams extends BaseParams {}
+export type VerificationParams = BaseParams;
 
 export interface InitiationParams extends BaseParams {
   title: string;

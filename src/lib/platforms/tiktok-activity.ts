@@ -43,6 +43,7 @@ export class TikTokActivity implements PlatformActivity {
     return { resumableUrl: params.resumableUrl };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async poll(params: PollingParams): Promise<void> {
     // TikTok doesn't have a specific poll in the current SDK implementation.
   }

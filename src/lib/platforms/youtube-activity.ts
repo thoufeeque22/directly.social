@@ -75,6 +75,7 @@ export class YouTubeActivity implements PlatformActivity {
     await getYouTubeClient(params.userId, params.accountId);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async finalize(params: FinalizationParams): Promise<{ id: string; permalink: string }> {
     // For YouTube, the "push" actually completes the publish if it's not a draft.
     // We return a placeholder permalink if we don't have the final one yet.

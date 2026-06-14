@@ -46,6 +46,8 @@ const eslintConfig = defineConfig([
       "src/app/actions/**/*.ts", 
       "src/lib/worker/**/*.ts",
       "src/lib/platforms/**/*.ts",
+      "src/lib/inngest/**/*.ts",
+      "src/lib/infrastructure/**/*.ts",
       "src/__tests__/**/*.ts", 
       "src/__tests__/**/*.tsx",
       "scripts/**/*.ts"

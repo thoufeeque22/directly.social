@@ -10,6 +10,7 @@
 
 import { describe, it, beforeEach, vi, expect } from 'vitest';
 import { distributeToPlatformsServer } from '../../lib/worker/server-distributor';
+import { inngest } from '../../lib/inngest/client';
 
 // Mock Dependencies
 const mockUpsert = vi.fn().mockResolvedValue({ id: 'res-1' });
@@ -27,24 +28,11 @@ vi.mock('../../lib/core/prisma', () => ({
   },
 }));
 
-// Remove unused mock
-
-// Mock Platform SDKs
-const mockUploadToYouTube = vi.fn().mockResolvedValue({ data: { id: 'yt-123' } });
-vi.mock('../../lib/platforms/youtube', () => ({
-  uploadToYouTube: (params: unknown) => mockUploadToYouTube(params),
-}));
-
-const mockPublishFacebookVideo = vi.fn().mockResolvedValue({ id: 'fb-123' });
-const mockPublishFacebookReel = vi.fn().mockResolvedValue({ id: 'fbr-123' });
-vi.mock('../../lib/platforms/facebook', () => ({
-  publishFacebookVideo: (params: unknown) => mockPublishFacebookVideo(params),
-  publishFacebookReel: (params: unknown) => mockPublishFacebookReel(params),
-}));
-
-const mockPublishInstagramReel = vi.fn().mockResolvedValue({ id: 'ig-123' });
-vi.mock('../../lib/platforms/instagram', () => ({
-  publishInstagramReel: (params: unknown) => mockPublishInstagramReel(params),
+// Mock Inngest
+vi.mock('../../lib/inngest/client', () => ({
+  inngest: {
+    send: vi.fn().mockResolvedValue({ ids: ['evt-1', 'evt-2'] }),
+  },
 }));
 
 describe('Server Distributor', () => {
@@ -63,86 +51,50 @@ describe('Server Distributor', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.TUNNEL_URL = 'https://mysubdomain.cloudflare.com';
   });
 
-  it('correctly distributes a Short/Reel to YouTube and Facebook', async () => {
+  it('correctly triggers durable workflows for Short/Reel', async () => {
     const results = await distributeToPlatformsServer(baseParams);
 
     expect(results).toHaveLength(2);
+    expect(results[0].status).toBe('pending');
 
-    // Verify YouTube call
-    expect(mockUploadToYouTube).toHaveBeenCalledWith(expect.objectContaining({
-      userId: 'user-1',
-      title: 'Test Title'
-    }));
-
-    // Verify Facebook call (Reel because videoFormat is short)
-    expect(mockPublishFacebookReel).toHaveBeenCalledWith(expect.objectContaining({
-      userId: 'user-1',
-      filePath: expect.stringContaining('file-123')
-    }));
-
-    // Verify DB updates
-    // expect(mockUpsert).toHaveBeenCalledTimes(2); // Removed due to new heartbeat system making 4 calls
-    expect(mockUpsert).toHaveBeenCalledWith(expect.objectContaining({
-      where: {
-        postActivityId_platform_accountId: {
-          postActivityId: 'activity-1',
+    // Verify Inngest events
+    expect(inngest.send).toHaveBeenCalledWith(expect.arrayContaining([
+      expect.objectContaining({
+        name: 'video.publish',
+        data: expect.objectContaining({
           platform: 'youtube',
-          accountId: 'acc-yt'
-        }
-      },
-      create: expect.objectContaining({
-        platform: 'youtube',
-        status: 'success'
+          activityId: 'activity-1'
+        })
+      }),
+      expect.objectContaining({
+        name: 'video.publish',
+        data: expect.objectContaining({
+          platform: 'facebook',
+          activityId: 'activity-1'
+        })
       })
-    }));
+    ]));
   });
 
-  it('distributes regular Video (not short) to Facebook Video API', async () => {
-    const longParams = { ...baseParams, videoFormat: 'long' as const };
-    await distributeToPlatformsServer(longParams);
-
-    expect(mockPublishFacebookVideo).toHaveBeenCalled();
-    expect(mockPublishFacebookReel).not.toHaveBeenCalled();
-  });
-
-  it('records failures in the database without throwing', async () => {
-    mockUploadToYouTube.mockRejectedValueOnce(new Error('YT API Down'));
-
-    await distributeToPlatformsServer(baseParams);
-
-    // Should have recorded error in DB
-    expect(mockUpsert).toHaveBeenCalledWith(expect.objectContaining({
-      where: {
-        postActivityId_platform_accountId: {
-          postActivityId: 'activity-1',
-          platform: 'youtube',
-          accountId: 'acc-yt'
-        }
-      },
-      create: expect.objectContaining({
-        platform: 'youtube',
-        status: 'failed',
-        errorMessage: 'YT API Down'
-      })
-    }));
-  });
-
-  it('resumes from an existing resumableUrl if found in DB', async () => {
-    mockFindUnique.mockResolvedValueOnce({
-      platform: 'youtube',
-      resumableUrl: 'https://youtube.com/resume-me'
-    });
-
-    await distributeToPlatformsServer({
+  it('handles platform metadata preparation', async () => {
+    const paramsWithReview = {
       ...baseParams,
-      platforms: [{ platform: 'youtube', accountId: 'acc-yt', accountName: 'YT' }]
-    });
+      reviewedContent: {
+        youtube: { title: 'Reviewed YT Title', description: 'Reviewed YT Desc' }
+      }
+    };
+    await distributeToPlatformsServer(paramsWithReview);
 
-    expect(mockUploadToYouTube).toHaveBeenCalledWith(expect.objectContaining({
-      resumableUrl: 'https://youtube.com/resume-me'
-    }));
+    expect(inngest.send).toHaveBeenCalledWith(expect.arrayContaining([
+      expect.objectContaining({
+        data: expect.objectContaining({
+          platform: 'youtube',
+          title: 'Reviewed YT Title'
+        })
+      })
+    ]));
   });
 });
+
