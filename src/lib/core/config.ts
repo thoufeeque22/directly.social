@@ -20,7 +20,6 @@ export const APP_CONFIG = {
    * URLs for environments
    */
   urls: {
-    production: 'https://directly.social',
-    vercel: 'https://directly-social.vercel.app',
+    production: 'https://directly-social.vercel.app', // Using Vercel for first launch
   }
 } as const;

@@ -1,5 +1,6 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 import { BRAND } from './src/lib/core/brand';
+import { APP_CONFIG } from './src/lib/core/config';
 
 const config: CapacitorConfig = {
   appId: 'com.thoufeeque.directly',
@@ -7,7 +8,7 @@ const config: CapacitorConfig = {
   webDir: 'out',
   server: {
     // IMPORTANT: Defaults to production. Use CAPACITOR_URL env var for local/tunnel testing.
-    url: process.env.CAPACITOR_URL || 'https://directly-social.vercel.app',
+    url: process.env.CAPACITOR_URL || APP_CONFIG.urls.production,
     cleartext: true,
     allowNavigation: ['*']
   },

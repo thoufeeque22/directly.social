@@ -5,12 +5,14 @@
  * rebranding or global updates across metadata, UI, and legal copy.
  */
 
+// Use Vercel URL for first launch, update to directly.social later
+const LAUNCH_URL = 'https://directly-social.vercel.app';
+
 export const BRAND = {
   name: 'Directly Social',
   shortName: 'Directly',
   tagline: 'The Native Social Client',
-  url: 'https://directly.social', // Primary domain (placeholder)
-  vercelUrl: 'https://directly-social.vercel.app', // Vercel deployment
+  url: LAUNCH_URL,
   social: {
     github: 'https://github.com/thoufeeque22/directly.social',
     twitter: 'https://x.com/directlysocial', // Placeholder
