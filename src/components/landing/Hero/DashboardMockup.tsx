@@ -7,6 +7,7 @@ import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import { StatItem } from './StatItem';
 import { VibeSyncMockup } from './VibeSyncMockup';
+import { BRAND } from '@/lib/core/brand';
 
 export const DashboardMockup = () => {
   const theme = useTheme();
@@ -34,7 +35,7 @@ export const DashboardMockup = () => {
             <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#ff5f56' }} />
             <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#ffbd2e' }} />
             <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#27c93f' }} />
-            <Typography variant="caption" sx={{ ml: 2, color: 'text.secondary', fontWeight: 500, fontSize: '0.7rem' }}>Activity Hub — Directly Social</Typography>
+            <Typography variant="caption" sx={{ ml: 2, color: 'text.secondary', fontWeight: 500, fontSize: '0.7rem' }}>Activity Hub — {BRAND.name}</Typography>
           </Stack>
         </Box>
         

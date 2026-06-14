@@ -1,8 +1,9 @@
 import type { CapacitorConfig } from '@capacitor/cli';
+import { BRAND } from './src/lib/core/brand';
 
 const config: CapacitorConfig = {
   appId: 'com.thoufeeque.directly',
-  appName: 'Directly Social',
+  appName: BRAND.name,
   webDir: 'out',
   server: {
     // IMPORTANT: Defaults to production. Use CAPACITOR_URL env var for local/tunnel testing.

@@ -4,6 +4,7 @@ import React from 'react';
 import { Box, Container, Typography, Grid, Card, CardContent, useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
 import { features } from '../data';
+import { BRAND } from '@/lib/core/brand';
 
 const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.15 } } } as const;
 const itemVariants = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } } as const;
@@ -25,7 +26,7 @@ export const Features = () => {
           <Typography variant="overline" color="primary" sx={{ fontWeight: 800, letterSpacing: '0.2em' }}>Core Magic</Typography>
           <Typography variant="h2" sx={{ mt: 2, mb: 3, fontWeight: 800 }}>The SaaS Tax is Over</Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>
-            Stop paying for middlemen to hold your data. <strong>Directly Social</strong> connects your own cloud storage or local disk to the platforms you love.
+            Stop paying for middlemen to hold your data. <strong>{BRAND.name}</strong> connects your own cloud storage or local disk to the platforms you love.
           </Typography>
         </Box>
 

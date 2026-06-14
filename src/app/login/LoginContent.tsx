@@ -11,6 +11,7 @@ import { NativeBridgeOverlay } from './NativeBridgeOverlay';
 import { UnifiedIdentityModal } from './UnifiedIdentityModal';
 import { E2ELoginForm } from './E2ELoginForm';
 import { BRAND } from '@/lib/core/brand';
+import { APP_CONFIG } from '@/lib/core/config';
 
 type AuthProvider = 'google' | 'facebook' | 'tiktok';
 
@@ -29,10 +30,10 @@ export function LoginContent() {
   const handleLoginClick = async (provider: AuthProvider) => {
     const isNative = typeof window !== 'undefined' && 
                      Capacitor.getPlatform() !== 'web' &&
-                     (Capacitor.isNativePlatform() || navigator.userAgent.includes('DirectlyApp'));
+                     (Capacitor.isNativePlatform() || navigator.userAgent.includes(APP_CONFIG.userAgent));
 
     if (isNative) {
-      const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://directly.social';
+      const baseUrl = typeof window !== 'undefined' ? window.location.origin : APP_CONFIG.urls.production;
       const bridgeUrl = `${baseUrl}/login?bridge=true&provider=${provider}&native=true`;
       try { await Browser.open({ url: bridgeUrl }); } catch { signIn(provider, { callbackUrl: '/auth/success' }); }
       return;
@@ -67,9 +68,9 @@ export function LoginContent() {
           onClose={() => setShowWarning(false)}
           onContinue={() => { if (pendingProvider) signIn(pendingProvider, { callbackUrl: '/' }); setShowWarning(false); }}
           onRecommended={async () => {
-            const isNative = typeof window !== 'undefined' && Capacitor.getPlatform() !== 'web' && (Capacitor.isNativePlatform() || navigator.userAgent.includes('DirectlyApp'));
+            const isNative = typeof window !== 'undefined' && Capacitor.getPlatform() !== 'web' && (Capacitor.isNativePlatform() || navigator.userAgent.includes(APP_CONFIG.userAgent));
             setShowWarning(false);
-            if (isNative) { const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://directly.social'; await Browser.open({ url: `${baseUrl}/login?bridge=true&provider=google&native=true` }); }
+            if (isNative) { const baseUrl = typeof window !== 'undefined' ? window.location.origin : APP_CONFIG.urls.production; await Browser.open({ url: `${baseUrl}/login?bridge=true&provider=google&native=true` }); }
             else { signIn('google', { callbackUrl: '/' }); }
           }}
         />

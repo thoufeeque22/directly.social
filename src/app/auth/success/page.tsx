@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { createSyncSession } from "@/lib/actions/auth";
+import { BRAND } from "@/lib/core/brand";
+import { APP_CONFIG } from "@/lib/core/config";
 
 export default function AuthSuccessPage() {
   const [status, setStatus] = useState("Securing session...");
@@ -22,7 +24,7 @@ export default function AuthSuccessPage() {
           const deepLink = `directly://login-success?token=${token}`;
 
           // Strategy 2: Package-specific Scheme (Capacitor default style)
-          const packageLink = `com.thoufeeque.directly://login-success?token=${token}`;
+          const packageLink = `${APP_CONFIG.appId}://login-success?token=${token}`;
 
           // Try both
           window.location.href = deepLink;
@@ -33,7 +35,7 @@ export default function AuthSuccessPage() {
 
           // Strategy 3: Intent as absolute last resort
           setTimeout(() => {
-            const intentLink = `intent://login-success?token=${token}#Intent;scheme=directly;package=com.thoufeeque.directly;S.browser_fallback_url=${encodeURIComponent(window.location.origin)};end`;
+            const intentLink = `intent://login-success?token=${token}#Intent;scheme=directly;package=${APP_CONFIG.appId};S.browser_fallback_url=${encodeURIComponent(window.location.origin)};end`;
             window.location.href = intentLink;
           }, 1500);
 
@@ -87,7 +89,7 @@ export default function AuthSuccessPage() {
             boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)'
           }}
         >
-          Open Directly Social
+          Open {BRAND.name}
         </button>
       )}
 

@@ -1,4 +1,5 @@
 import { test, expect } from './base-test';
+import { CONTACT_EMAILS } from '@/lib/core/emails';
 
 test.describe('Support Tab (Ticket 399)', () => {
   test('should verify Support link in sidebar, navigation, and content', async ({ page, isMobile }) => {
@@ -31,7 +32,7 @@ test.describe('Support Tab (Ticket 399)', () => {
     // Verify the "Email Support" button
     const emailSupportBtn = page.getByRole('link', { name: 'Email Support' });
     await expect(emailSupportBtn).toBeVisible();
-    await expect(emailSupportBtn).toHaveAttribute('href', 'mailto:support.directly.social@gmail.com');
+    await expect(emailSupportBtn).toHaveAttribute('href', `mailto:${CONTACT_EMAILS.support}`);
 
     // Verify Frequently Asked Questions are present
     await expect(page.getByRole('heading', { name: 'Frequently Asked Questions' })).toBeVisible();

@@ -4,6 +4,7 @@ import React from 'react';
 import { Box, Container, Typography, Paper, Stack, Avatar, useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
 import { testimonials } from '../data-secondary';
+import { BRAND } from '@/lib/core/brand';
 
 const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } } as const;
 const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } } as const;
@@ -29,7 +30,7 @@ export const Testimonials = () => {
             Join 1,000+ Native Creators
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>
-            See why power users are leaving legacy tools for the freedom of Directly Social.
+            See why power users are leaving legacy tools for the freedom of {BRAND.name}.
           </Typography>
         </Box>
 

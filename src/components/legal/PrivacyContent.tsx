@@ -2,13 +2,14 @@ import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 
 import { CONTACT_EMAILS } from '@/lib/core/emails';
+import { BRAND } from '@/lib/core/brand';
 
 export const PrivacyContent = () => (
   <Stack spacing={4} sx={{ mt: 4 }}>
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>1. Introduction</Typography>
       <Typography variant="body1" gutterBottom>
-        Directly Social (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share information when you use our web and mobile applications (the &quot;Service&quot;).
+        {BRAND.name} (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share information when you use our web and mobile applications (the &quot;Service&quot;).
       </Typography>
     </section>
 
@@ -33,7 +34,7 @@ export const PrivacyContent = () => (
           Our application uses Google API Services to allow you to upload videos to your YouTube channel. By using this feature, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">YouTube Terms of Service</a> and the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.
         </Typography>
         <Typography variant="body1" sx={{ fontStyle: 'italic', bgcolor: 'action.hover', p: 2, borderRadius: 1, borderLeft: '4px solid', borderColor: 'primary.main' }}>
-          <strong>Google API Disclosure:</strong> Directly Social&apos;s use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy#limited-use-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>, including the Limited Use requirements.
+          <strong>Google API Disclosure:</strong> {BRAND.name}&apos;s use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy#limited-use-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>, including the Limited Use requirements.
         </Typography>
       </Box>
       <Box sx={{ ml: 2, mb: 2 }}>

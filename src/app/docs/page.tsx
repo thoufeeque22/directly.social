@@ -8,6 +8,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import { DocCategoryCard } from './DocCategoryCard';
+import { BRAND } from '@/lib/core/brand';
 
 const docCategories = [
   {
@@ -59,7 +60,7 @@ export default function DocsPage() {
               Help Center & Guides
             </Typography>
             <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
-              Everything you need to know about Directly Social. From initial setup to mastering Native Publishing.
+              Everything you need to know about {BRAND.name}. From initial setup to mastering Native Publishing.
             </Typography>
           </Box>
 
