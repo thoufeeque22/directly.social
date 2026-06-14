@@ -1,6 +1,8 @@
 import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 
+import { CONTACT_EMAILS } from '@/lib/core/emails';
+
 export const PrivacyContent = () => (
   <Stack spacing={4} sx={{ mt: 4 }}>
     <section>
@@ -51,14 +53,14 @@ export const PrivacyContent = () => (
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>4. Data Deletion</Typography>
       <Typography variant="body1" gutterBottom>
-        <strong>Data Deletion:</strong> You may request the deletion of your account and all associated data by emailing us at privacy@directly.social or by using the &quot;Delete Account&quot; feature in your settings.
+        <strong>Data Deletion:</strong> You may request the deletion of your account and all associated data by emailing us at {CONTACT_EMAILS.privacy} or by using the &quot;Delete Account&quot; feature in your settings.
       </Typography>
     </section>
 
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>5. Contact Us</Typography>
       <Typography variant="body1">If you have any questions, please contact us at:</Typography>
-      <Typography variant="body1" sx={{ fontWeight: 700 }}>Email: privacy@directly.social</Typography>
+      <Typography variant="body1" sx={{ fontWeight: 700 }}>Email: {CONTACT_EMAILS.privacy}</Typography>
     </section>
   </Stack>
 );

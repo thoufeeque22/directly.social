@@ -1,6 +1,8 @@
 import React from 'react';
 import { Typography, Stack } from '@mui/material';
 
+import { CONTACT_EMAILS } from '@/lib/core/emails';
+
 export const TermsContent = () => (
   <Stack spacing={4} sx={{ mt: 4 }}>
     <section>
@@ -39,7 +41,7 @@ export const TermsContent = () => (
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>5. Contact Us</Typography>
       <Typography variant="body1">If you have any questions, please contact us at:</Typography>
-      <Typography variant="body1" sx={{ fontWeight: 700 }}>Email: legal@directly.social</Typography>
+      <Typography variant="body1" sx={{ fontWeight: 700 }}>Email: {CONTACT_EMAILS.legal}</Typography>
     </section>
   </Stack>
 );

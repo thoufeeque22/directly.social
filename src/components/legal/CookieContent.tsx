@@ -1,6 +1,8 @@
 import React from 'react';
 import { Typography, Stack } from '@mui/material';
 
+import { CONTACT_EMAILS } from '@/lib/core/emails';
+
 export const CookieContent = () => (
   <Stack spacing={4} sx={{ mt: 4 }}>
     <section>
@@ -22,7 +24,7 @@ export const CookieContent = () => (
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>3. Contact Us</Typography>
       <Typography variant="body1">If you have any questions, please contact us at:</Typography>
-      <Typography variant="body1" sx={{ fontWeight: 700 }}>Email: privacy@directly.social</Typography>
+      <Typography variant="body1" sx={{ fontWeight: 700 }}>Email: {CONTACT_EMAILS.privacy}</Typography>
     </section>
   </Stack>
 );

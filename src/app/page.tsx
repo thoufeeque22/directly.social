@@ -7,10 +7,12 @@ import { getByosConfigAction } from "@/lib/actions/settings";
 import { AITier, StyleMode } from "@/lib/core/constants";
 import { AIProvider } from "@/lib/core/ai";
 
+import { BRAND } from "@/lib/core/brand";
+
 // New Landing Page Component
 import { LandingPage } from '@/components/landing/LandingPage';
 
-export const metadata: Metadata = { title: "Directly Social | The Native Social Client" };
+export const metadata: Metadata = { title: `${BRAND.name} | ${BRAND.tagline}` };
 
 export default async function Home() {
   const session = await auth();

@@ -6,9 +6,11 @@ import { PlatformIcon } from '@/components/ui/PlatformIcon';
 import { activePlatforms, upcomingPlatforms } from '../data-secondary';
 import AddIcon from '@mui/icons-material/Add';
 
+import { CONTACT_EMAILS } from '@/lib/core/emails';
+
 const RequestPlatformItem = () => (
   <Tooltip title="Don't see your platform? Request it here." arrow>
-    <Stack spacing={1} sx={{ alignItems: 'center', opacity: 0.3, transition: 'all 0.3s ease', '&:hover': { opacity: 0.8, transform: 'translateY(-2px)' }, cursor: 'pointer' }} onClick={() => window.location.href = 'mailto:hello@directly.social?subject=Platform Request'}>
+    <Stack spacing={1} sx={{ alignItems: 'center', opacity: 0.3, transition: 'all 0.3s ease', '&:hover': { opacity: 0.8, transform: 'translateY(-2px)' }, cursor: 'pointer' }} onClick={() => window.location.href = `mailto:${CONTACT_EMAILS.hello}?subject=Platform Request`}>
       <Box sx={{ p: 1, borderRadius: 2, bgcolor: 'background.default', display: 'flex', border: '1px dashed', borderColor: 'divider', width: 42, height: 42, alignItems: 'center', justifyContent: 'center' }}>
         <AddIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
       </Box>

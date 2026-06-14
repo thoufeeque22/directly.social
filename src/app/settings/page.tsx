@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import SettingsPage from './SettingsContent';
 
 export const metadata: Metadata = {
-  title: "Settings | Directly Social",
+  title: "Settings",
 };
 
 const SettingsPageWrapper = () => {

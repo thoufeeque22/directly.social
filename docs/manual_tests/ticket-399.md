@@ -37,7 +37,7 @@ The "Support" link is clearly visible in the sidebar navigation.
 **Expected Result:**
 - The heading "Support & Help" is visible.
 - The "Email Support" button is visible.
-- Clicking the "Email Support" button opens the default email client with the `to:` field set to `support@directly.social`.
+- Clicking the "Email Support" button opens the default email client with the `to:` field set to `support.directly.social@gmail.com`.
 
 ### Scenario 4: Verify FAQs Section
 **Steps:**

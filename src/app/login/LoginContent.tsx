@@ -10,6 +10,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { NativeBridgeOverlay } from './NativeBridgeOverlay';
 import { UnifiedIdentityModal } from './UnifiedIdentityModal';
 import { E2ELoginForm } from './E2ELoginForm';
+import { BRAND } from '@/lib/core/brand';
 
 type AuthProvider = 'google' | 'facebook' | 'tiktok';
 
@@ -76,7 +77,7 @@ export function LoginContent() {
       <div className={styles.loginCard} style={{ margin: '0 auto' }}>
         <div className={styles.header}>
           <div className={styles.logo}><AutoAwesomeIcon sx={{ fontSize: 48, color: 'hsl(var(--primary))' }} /></div>
-          <h1 className={styles.title}>Directly Social</h1>
+          <h1 className={styles.title}>{BRAND.name}</h1>
           <p className={styles.subtitle}>Sign in to manage your automated distribution.</p>
         </div>
         <div className={styles.buttonGroup}>

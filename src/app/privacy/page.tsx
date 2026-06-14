@@ -1,11 +1,14 @@
 import React from 'react';
+import { Metadata } from 'next';
 import { Typography, Paper } from '@mui/material';
 import { LegalPageWrapper } from '@/components/legal/LegalPageWrapper';
 import { PrivacyContent } from '@/components/legal/PrivacyContent';
 
-export const metadata = {
-  title: 'Privacy Policy | Directly Social',
-  description: 'Privacy Policy and Google API Disclosure for Directly Social.',
+import { BRAND } from '@/lib/core/brand';
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  description: `Privacy Policy and Google API Disclosure for ${BRAND.name}.`,
 };
 
 export default function PrivacyPolicy() {
