@@ -43,7 +43,7 @@ export const personas = {
     title: 'For Power Users & Teams',
     description: <>Tired of closed SaaS ecosystems? <strong>{BRAND.name}</strong> gives you total control. Build custom automations, connect your own infrastructure, and escape the SaaS tax.</>,
     benefits: [
-      'BYOK & BYOS Architecture (Keys & Storage)',
+      'BYOK & BYOS (Use your own Keys & Storage)',
       'Self-Hostable & Privacy-Hardened',
       'Custom Integrations & Workflows',
       'Full API Access for Automation'
@@ -67,7 +67,7 @@ export const comparisonGood = {
   items: [
     "Zero Markup: Pay $0 for native distribution",
     "Total Ownership: Keys stay on your own device",
-    "Storage Freedom (BYOS): Keep videos on your disk",
+    "Storage Freedom (BYOS - Bring Your Own Storage)",
     "Studio Speed: Direct publishing, zero middlemen",
     "Maximum Reach: 100% Native Proxy-Push"
   ]

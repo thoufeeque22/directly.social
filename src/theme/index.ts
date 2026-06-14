@@ -26,7 +26,31 @@ export const getTheme = (mode: 'light' | 'dark') => createTheme({
           borderRadius: '0.75rem',
         }
       }
-    }
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          color: getPalette(mode).primary.main,
+          textDecoration: 'none',
+          fontWeight: 600,
+          '&:hover': {
+            textDecoration: 'underline',
+          },
+        },
+      },
+    },
+    MuiCssBaseline: {
+      styleOverrides: {
+        a: {
+          color: getPalette(mode).primary.main,
+          textDecoration: 'none',
+          fontWeight: 600,
+          '&:hover': {
+            textDecoration: 'underline',
+          },
+        },
+      },
+    },
   }
 });
 

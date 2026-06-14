@@ -19,6 +19,7 @@ export default function LayoutWrapper({ children, session: initialSession }: { c
   const isAuthenticated = !!session;
   
   // Routes that should NEVER show the app shell (Marketing/Auth/Legal)
+  // These are handled by the (public) route group or other specialized layouts.
   const isAlwaysPublic = pathname === '/login' || 
     pathname === '/philosophy' || 
     pathname === '/privacy' || 

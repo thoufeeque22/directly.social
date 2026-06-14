@@ -42,10 +42,10 @@ describe('LayoutWrapper', () => {
 
   it('renders only children when on the /login page (no sidebar/header)', () => {
     vi.mocked(usePathname).mockReturnValue('/login');
-    vi.mocked(useSession).mockReturnValue({ data: null, status: 'unauthenticated' });
+    vi.mocked(useSession).mockReturnValue({ data: null, status: 'unauthenticated' } as any);
     
     render(
-      <LayoutWrapper>
+      <LayoutWrapper session={null}>
         <div data-testid="content">Login Page Content</div>
       </LayoutWrapper>
     );
@@ -57,10 +57,11 @@ describe('LayoutWrapper', () => {
 
   it('renders sidebar, header, and content when on the dashboard (/)', () => {
     vi.mocked(usePathname).mockReturnValue('/');
-    vi.mocked(useSession).mockReturnValue({ data: { user: { name: 'Test User' } }, status: 'authenticated' } as any);
+    const mockSession = { user: { name: 'Test User' } };
+    vi.mocked(useSession).mockReturnValue({ data: mockSession, status: 'authenticated' } as any);
     
     render(
-      <LayoutWrapper>
+      <LayoutWrapper session={mockSession as any}>
         <div data-testid="content">Dashboard Content</div>
       </LayoutWrapper>
     );
@@ -72,10 +73,11 @@ describe('LayoutWrapper', () => {
 
   it('renders layout components on internal pages like /settings', () => {
     vi.mocked(usePathname).mockReturnValue('/settings');
-    vi.mocked(useSession).mockReturnValue({ data: { user: { name: 'Test User' } }, status: 'authenticated' } as any);
+    const mockSession = { user: { name: 'Test User' } };
+    vi.mocked(useSession).mockReturnValue({ data: mockSession, status: 'authenticated' } as any);
     
     render(
-      <LayoutWrapper>
+      <LayoutWrapper session={mockSession as any}>
         <div data-testid="content">Settings Content</div>
       </LayoutWrapper>
     );
