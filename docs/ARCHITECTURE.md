@@ -22,6 +22,7 @@ This document provides a high-level index of the Directly application architectu
     *   AI Chatbot Assistant
     *   Global Search & Refresh
     *   BYOK/BYOS Wizards
+    *   [Sign-out Redirect & Landing Notifications](features/SIGN_OUT_REDIRECT.md)
     *   Standard View Pattern (Server Shell / Client Content)
     *   [Internal User Credits](features/INTERNAL_USER_CREDITS.md)
 6.  **[Security & RBAC](architecture/SECURITY.md)**

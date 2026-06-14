@@ -15,6 +15,7 @@ Welcome to the Directly project documentation. This folder contains architectura
 - [Global Refresh](features/GLOBAL_REFRESH.md) - Unified sync mechanism and Pull-to-Refresh gesture.
 - [Manual Mode AI Polish](features/MANUAL_MODE_AI_ENHANCEMENT.md) - Seamless transition from Manual drafting to AI Enrich.
 - [Support Hub](features/SUPPORT_HELP.md) - Documentation and help links relocated to the User Profile popover and Settings tab.
+- [Sign-out Redirect](features/SIGN_OUT_REDIRECT.md) - UX improvement redirecting to landing page with success notification.
 
 ## Guides & Troubleshooting
 
@@ -34,3 +35,4 @@ Welcome to the Directly project documentation. This folder contains architectura
 - [UAT: Notification Utility](manual_tests/ticket-400.md) - Functional verification of the bell icon and state sync.
 - [UAT: Support Hub](manual_tests/ticket-399.md) - Support link and tab functionality.
 - [UAT: Manual Mode AI Polish](manual_tests/514-enrich-title-description-button.md) - Action button UAT under issue #514.
+- [UAT: Sign-out Redirect](manual_tests/ticket-661.md) - Verification of landing page redirect and notification.
