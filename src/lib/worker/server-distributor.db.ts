@@ -14,7 +14,7 @@ export async function fetchExistingResult(activityId: string, platform: string, 
   });
 }
 
-export async function upsertPlatformResult(activityId: string, platform: string, accountId: string, data: Partial<DistributionResult> & { accountName?: string | null }) {
+export async function upsertPlatformResult(activityId: string, platform: string, accountId: string, data: Partial<DistributionResult> & { accountName?: string | null, currentStep?: string }) {
   return prisma.postPlatformResult.upsert({
     where: {
       postActivityId_platform_accountId: {

@@ -146,6 +146,7 @@ model PostPlatformResult {
   createdAt       DateTime    @default(now())
   optimizedFileId String?
   transcodeStatus String?     @default("skipped")
+  currentStep     String?     @default("init")
   metadata        Json?
   metadataHash    String?
   progress        Int         @default(0)

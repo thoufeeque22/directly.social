@@ -17,7 +17,7 @@ export const uploadToYouTube = async ({
   let startByte = 0;
 
   if (resumableUrl) {
-    logger.info(`[YT-UPLOAD] Resuming session: ${resumableUrl}`);
+    logger.info(`[YT-UPLOAD] Resuming session: [REDACTED]`);
     const offsetRes = await fetch(resumableUrl, {
       method: "PUT",
       headers: { "Content-Range": `bytes */${fileSize}` },
