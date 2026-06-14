@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { auth } from "@/auth";
 import DashboardClient from "@/components/dashboard/DashboardClient";
 import { Suspense } from "react";
+import { Box } from "@mui/material";
 import { getUserAccounts, getPlatformPreferences, getAIStylePreference, getAIProviderPreference, getAIStyleModePreference } from "@/app/actions/user";
 import { getByosConfigAction } from "@/lib/actions/settings";
 import { AITier, StyleMode } from "@/lib/core/constants";
@@ -12,6 +13,8 @@ import { BRAND } from "@/lib/core/brand";
 // New Landing Page Component
 import { LandingPage } from '@/components/landing/LandingPage';
 import { LandingFallback } from '@/components/landing/LandingFallback';
+import { LandingHeader } from '@/components/landing/Header';
+import { LandingFooter } from '@/components/landing/Footer';
 
 export const metadata: Metadata = { title: `${BRAND.name} | ${BRAND.tagline}` };
 
@@ -21,9 +24,13 @@ export default async function Home() {
   // If NOT authenticated, render the New Landing Page
   if (!session) {
     return (
-      <Suspense fallback={<LandingFallback />}>
-        <LandingPage />
-      </Suspense>
+      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <LandingHeader />
+        <Suspense fallback={<LandingFallback />}>
+          <LandingPage />
+        </Suspense>
+        <LandingFooter />
+      </Box>
     );
   }
 

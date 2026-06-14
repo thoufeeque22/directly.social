@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { MermaidRenderer } from './MermaidRenderer';
 import { Components } from 'react-markdown';
+import MermaidComponent from './MarkdownCodeRenderer';
 
 /**
  * Custom Code component for ReactMarkdown.
@@ -13,7 +13,7 @@ export const CodeComponent: Components['code'] = (props) => {
   const isMermaid = match && match[1] === 'mermaid';
 
   if (isMermaid) {
-    return <MermaidRenderer chart={String(children).replace(/\n$/, '')} />;
+    return <MermaidComponent chart={String(children).replace(/\n$/, '')} />;
   }
 
   const isBlock = !!className || String(children).includes('\n');
