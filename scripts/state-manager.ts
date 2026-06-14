@@ -3,6 +3,14 @@ import fs from 'fs/promises';
 import path from 'path';
 import { execSync } from 'child_process';
 
+/**
+ * State Manager Script
+ * Handles updates to MAIN.md and agent-specific markdown files in the ticket state directory.
+ * 
+ * Usage: 
+ * npm run state:update -- --agent=<agent> --verdict=<verdict> --summary="<summary>" [--content="<content>"] [--file=<path_to_content_file>] [--status=<status>] [--ticket=<id>] [--round=<N>]
+ */
+
 async function run() {
   const args = process.argv.slice(2);
   const params: Record<string, string> = {};
@@ -30,13 +38,25 @@ async function run() {
   const agent = params.agent;
   const verdict = params.verdict;
   const summary = params.summary;
-  const content = params.content;
+  let content = params.content;
+  const contentFile = params.file;
   let ticketId = params.ticket;
   const newStatus = params.status;
+  const targetRound = params.round;
 
   if (!agent || !verdict || !summary) {
-    console.error("❌ Usage: npm run state:update -- --agent=<agent> --verdict=<verdict> --summary=\"<summary>\" [--content=\"<full_content>\"] [--status=<status>] [--ticket=<id>]");
+    console.error("❌ Usage: npm run state:update -- --agent=<agent> --verdict=<verdict> --summary=\"<summary>\" [--content=\"<content>\" | --file=<path>] [--status=<status>] [--ticket=<id>] [--round=<N>]");
     process.exit(1);
+  }
+
+  // Read content from file if provided
+  if (contentFile) {
+    try {
+      content = await fs.readFile(contentFile, 'utf-8');
+    } catch (e) {
+      console.error(`❌ Could not read content file: ${contentFile}`);
+      process.exit(1);
+    }
   }
 
   if (!ticketId) {
@@ -68,18 +88,25 @@ async function run() {
       currentRound = parseInt(roundMatch[1], 10);
     }
     
+    // Explicit round override
+    if (targetRound) {
+      currentRound = parseInt(targetRound, 10);
+      mainMdContent = mainMdContent.replace(/current_round:\s*\d+/, `current_round: ${currentRound}`);
+    }
+
     if (newStatus) {
-      mainMdContent = mainMdContent.replace(/status:\s*([a-zA-Z0-9_-]+)/, `status: ${newStatus}`);
+      mainMdContent = mainMdContent.replace(/status:\s*[a-zA-Z0-9_-]+/, `status: ${newStatus}`);
       mainMdContent = mainMdContent.replace(/- \*\*Current Status\*\*:.*$/m, `- **Current Status**: ${newStatus}`);
     }
   } catch (e) {
     // MAIN.md doesn't exist, create it
+    const roundToUse = targetRound ? parseInt(targetRound, 10) : 1;
     mainMdContent = `---
 ticket_id: ${ticketId}
 branch_name: feature/${ticketId}
 goal: Auto-generated state file
 status: ${newStatus || 'in-progress'}
-current_round: 1
+current_round: ${roundToUse}
 ---
 
 # 📋 Ticket Metadata
@@ -89,10 +116,11 @@ current_round: 1
 - **Current Status**: ${newStatus || 'in-progress'}
 
 # 🔄 Round History
-- **Round 1**: [IN-PROGRESS]
+- **Round ${roundToUse}**: [IN-PROGRESS]
 
 # 📅 Timeline
 `;
+    currentRound = roundToUse;
   }
 
   // Format Date: YYYY-MM-DD HH:mm:ss

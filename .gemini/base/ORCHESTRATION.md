@@ -25,7 +25,10 @@
   4. **Round 2+ Entry Point:** If a round fails during `Audit` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
 - **Human-in-the-Loop Workflow:** ALL transitions between agent phases MUST be mediated by the user. 
   1. **Inquiry-First Protocol:** The initial turn of any planning agent (`Product`, `Discovery`) SHOULD focus on asking questions to resolve ambiguity. If the agent is in doubt, it MUST set its Verdict to **NEEDS-INFO** and present its questions to the user.
-  2. **Update State File ONLY via Hook:** The active agent MUST execute the state manager hook (see below) to update `MAIN_STATE_FILE` and their round-specific file. Agents are STRICTLY FORBIDDEN from manually editing these files using `write_file` or `replace` tools.
+  2. **State-First Protocol (Robust Updates):** Agents MUST update the state directory BEFORE terminating. To prevent shell escaping issues or command length limits, agents MUST:
+     a. Write their full report/content to a temporary file (e.g., `.gemini/tmp/report.md`).
+     b. Execute the `STATE_UPDATE_CMD` using the `--file` parameter to point to that temporary file.
+     c. Verify the update by checking the targeted markdown file in `TICKET_STATE_DIR`.
   3. **Manual Review:** The user reviews the changes and the ticket state.
   4. **Explicit Approval & Auto-Commit:** When the User provides approval to proceed to the *next* phase (e.g., "Invoke discovery-agent"), the Orchestrator MUST automatically commit any pending changes from the current phase before starting the next one. The commit message MUST follow the `COMMIT_MSG_PATTERN` (e.g., `feat(ticket-400): complete product phase - defined UX layout`), derived from the `MAIN_STATE_FILE` status or the summary of the completed phase. This commit is implicitly approved by the user's directive to proceed.
 - **Traceable Status:** EVERY agent MUST update their section with a clear **Verdict** before handoff.

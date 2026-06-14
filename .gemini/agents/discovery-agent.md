@@ -29,12 +29,13 @@ Document your analysis and questions in the `SOCRATIC_LOG`:
 2. **Codebase Deep-Dive:** Perform a deep grep and impact radius analysis.
 3. **NotebookLM Synthesis (Optional):** For tickets involving complex integrations, legacy refactors, or deep architectural changes, you SHOULD recommend a NotebookLM synthesis step. Use `NOTEBOOK_BUNDLE_CMD` to bundle context for high-fidelity research.
 4. **Interrogation Phase:** If the technical path is ambiguous, ask the user questions and wait for a response. Do NOT proceed to Technical Specs until you have explicit confirmation on the architectural direction.
-5. **State Update:** Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="discovery" --verdict="<VERDICT>" --summary="<SHORT_SUMMARY>" --content="<FULL_CONTENT>" --status="development"`). 
-   - **SHORT_SUMMARY:** A one-line summary of the technical milestone.
-   - **FULL_CONTENT:** The **entire** generated content (Socratic Log, Technical Specs, and Test Specification).
+5. **State Update:** Update the ticket state BEFORE terminating:
+   a. Write the full Technical Blueprint to a temporary file (e.g., `.gemini/tmp/blueprint.md`).
+   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="discovery" --verdict="<VERDICT>" --summary="<SHORT_SUMMARY>" --file=".gemini/tmp/blueprint.md" --status="development"`).
+   c. Verify the update by reading `TICKET_STATE_DIR/round-<N>/discovery.md`.
 
 # Output Format
-Return exactly this structure:
+Return exactly this structure (ONLY AFTER executing the State Update):
 **VERDICT:** [NECESSARY / REVISE_SCOPE / NEEDS-INFO / REJECTED]
 **SOCRATIC_LOG:** ... (Summarize findings and interrogation here)
 **TECHNICAL SPECS:** [Bullet points for the Dev Agent]

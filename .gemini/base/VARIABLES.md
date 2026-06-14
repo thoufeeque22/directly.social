@@ -35,7 +35,7 @@ This file centralizes all global constants, patterns, and strings used in the pr
 - **TICKET_STATUSES**: `in-progress`, `completed`, `blocked`
 
 ## 🛠 Scripts & Commands
-- **STATE_UPDATE_CMD**: `npm run state:update -- --agent="<agent>" --verdict="<verdict>" --summary="<summary>" --content="<content>"`
+- **STATE_UPDATE_CMD**: `npm run state:update -- --agent="<agent>" --verdict="<verdict>" --summary="<summary>" [--file="<path_to_report>"] [--round="<N>"] [--status="<next_status>"]`
 - **SMOKE_TEST_CMD**: `npm run test:smoke`
 - **REGRESSION_TEST_CMD**: `npm run test:regression`
 - **LINT_CMD**: `npm run lint`
