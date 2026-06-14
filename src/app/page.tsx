@@ -19,7 +19,11 @@ export default async function Home() {
 
   // If NOT authenticated, render the New Landing Page
   if (!session) {
-    return <LandingPage />;
+    return (
+      <Suspense fallback={null}>
+        <LandingPage />
+      </Suspense>
+    );
   }
 
   // If authenticated, render the Dashboard

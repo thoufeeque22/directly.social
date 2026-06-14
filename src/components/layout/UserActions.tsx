@@ -72,7 +72,7 @@ export function UserActions({ session }: { session: Session | null }) {
             </Menu>
 
             <Divider />
-            <MenuItem onClick={() => signOut({ callbackUrl: '/login' })} data-testid="sign-out-button">Sign Out</MenuItem>
+            <MenuItem onClick={() => signOut({ callbackUrl: '/?loggedOut=true' })} data-testid="sign-out-button">Sign Out</MenuItem>
           </Menu>
           
           <WhatsNewPopover anchorEl={popoverAnchor} onClose={() => setPopoverAnchor(null)} />
