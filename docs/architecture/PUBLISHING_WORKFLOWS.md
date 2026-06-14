@@ -1,83 +1,90 @@
 # Publishing Workflows
 
-## 1. Post Distribution (Publishing)
+## 1. Durable Workflow Orchestration (Inngest)
 
-A background worker polls for scheduled posts and distributes them to selected platforms. It automatically refreshes OAuth tokens if they are nearing expiration (within 15 minutes) to ensure uninterrupted publishing.
+The application uses **Inngest** for durable, event-driven publishing workflows. This replaces simple timeout-based jobs with a resilient orchestration layer that handles platform outages, network glitches, and long-running asynchronous processes (e.g., video processing).
 
 ```mermaid
 sequenceDiagram
-    participant W as Worker (Polling)
-    participant TR as Token Refresher
+    participant W as Worker (Trigger)
+    participant I as Inngest (Workflow Engine)
     participant DB as Database (Prisma)
-    participant DIST as Server Distributor
+    participant ACT as Platform Activity (Factory)
     participant P as Platform APIs (YT, FB, IG, TT)
 
-    loop Every 10 Seconds
-        W->>DB: Query Overdue & Unpublished Posts
-        DB-->>W: List of Posts
-        
-        rect rgb(240, 240, 240)
-            note right of W: For each post (Parallel)
-            W->>DB: Mark as Published (Immediate Lock)
+    W->>I: Send "video.publish" event
+    I->>ACT: Resolve Activity for Platform
+    
+    rect rgb(240, 240, 240)
+        note right of I: Durable Step: preVerify
+        I->>ACT: preVerify(params)
+        ACT->>P: Validate Account/Permissions
+        ACT->>DB: Update State (pre_verify)
+    end
 
-            loop For each Platform Account
-                W->>TR: refreshTokenIfNecessary(accountId)
-                TR->>DB: Check expiry & refresh_token
-                alt Token Expiring (<15m)
-                   TR->>P: Request new access token
-                   P-->>TR: New tokens
-                   TR->>DB: Update Account (access_token, expires_at)
-                end
-                TR-->>W: Ready
-            end
+    rect rgb(240, 240, 240)
+        note right of I: Durable Step: init
+        I->>ACT: init(params)
+        ACT->>P: Create Media Container / Session
+        ACT->>DB: Update State (init, creationId)
+    end
 
-            W->>DIST: distributeToPlatformsServer(post)
-            
-            loop For each Platform
-                DIST->>P: Upload/Publish Video
-                P-->>DIST: Return Platform IDs / URL
-                DIST->>DB: Update PostPlatformResult (Success/Fail)
-            end
-            
-            W->>DB: Update GalleryAsset Expiry (Shorten)
+    rect rgb(240, 240, 240)
+        note right of I: Durable Step: push
+        I->>ACT: push(params)
+        loop Chunked Upload
+            ACT->>P: Upload Binary Data
+            ACT->>DB: updateProgress (Throttled 2s)
         end
+        ACT->>DB: Update State (push, platformPostId)
+    end
+
+    rect rgb(240, 240, 240)
+        note right of I: Durable Step: poll
+        I->>ACT: poll(params)
+        loop Polling with Backoff
+            ACT->>P: Check Processing Status
+        end
+        ACT->>DB: Update State (poll)
+    end
+
+    rect rgb(240, 240, 240)
+        note right of I: Durable Step: finalize
+        I->>ACT: finalize(params)
+        ACT->>P: Final Publish / Fetch Permalink
+        ACT->>DB: Update State (finalize, success)
     end
 ```
 
-## 2. Metadata Pipeline
+## 2. Platform Activity Pattern
 
-The system supports granular control over platform-specific content (titles, descriptions, hashtags). This flow is documented in detail in:
-- **[Metadata Pipeline Architecture](METADATA_PIPELINE.md)**
+The system follows a **Factory and Strategy Pattern** to decouple the durable workflow logic from platform-specific implementation details.
 
-## 3. Modular Distribution Layer
+### Standard Interface (`PlatformActivity`)
 
-The platform distribution logic is organized into a modular architecture that separates shared infrastructure from platform-specific implementation details.
+All publishing providers must implement the `PlatformActivity` interface:
 
-### Core Infrastructure (`src/lib/core/platforms/`)
+- **`preVerify`**: Validates account connectivity and platform-specific requirements.
+- **`init`**: Initializes the publishing session (e.g., creating a Meta container).
+- **`push`**: Handles the binary upload (supports resumable uploads).
+- **`poll`**: Waits for the platform to finish processing the media.
+- **`finalize`**: Completes the publication and retrieves the final permalink.
 
-Contains shared utilities and types used across multiple platforms:
-- **`account-utils.ts`**: Centralized logic for retrieving platform accounts and logging token usage audits.
-- **`meta-uploader.ts`**: Shared binary upload logic for Meta-based platforms (Facebook, Instagram).
-- **`meta-utils.ts`**: Common Meta Graph API helpers (polling status, fetching pages).
-- **`types.ts`**: Unified interfaces for publishing parameters and results.
+### Factory Resolution
 
-### Platform Modules (`src/lib/platforms/`)
+The `ActivityRegistry` (`src/lib/platforms/factory.ts`) resolves the correct implementation at runtime based on the target platform.
 
-Each platform follows a modular subdirectory pattern (e.g., `src/lib/platforms/instagram/`):
-- **`account.ts`**: Platform-specific account resolution and permission validation.
-- **`container.ts` / `reel.ts`**: Logic for initializing upload sessions or containers.
-- **`finalize.ts`**: Steps required to complete a publication (e.g., publishing a container, fetching permalinks).
-- **`stats.ts`**: Logic for fetching platform-specific engagement metrics.
-- **`[platform].ts`**: The main orchestrator file (e.g., `instagram.ts`) that exports the public API by composing the modular sub-units.
+## 3. Infrastructure Abstraction
 
-### Server Orchestration
+To ensure testability and modularity, the publishing system abstracts infrastructure behind interfaces:
 
-The `server-distributor.ts` acts as the high-level worker orchestrator. To comply with modularity standards, it is decomposed into functional modules:
-- **`server-distributor.ts`**: Orchestrates the multi-platform loop.
-- **`server-distributor.db.ts`**: Handles all Prisma database interactions.
-- **`server-distributor.logic.ts`**: Resolves metadata and file paths.
+- **`StorageProvider`**: Resolves file paths and retrieves file metadata.
+- **`PublishingRepository`**: Manages the persistence of publishing state and progress.
 
-This decomposition ensures that the core distribution logic remains lean and testable.
+These are resolved via a **Service Locator** (`src/lib/infrastructure/index.ts`), allowing for easy mocking in test environments.
+
+## 4. Metadata Pipeline
+...
 
 ## 4. Automated Token Refresh
 

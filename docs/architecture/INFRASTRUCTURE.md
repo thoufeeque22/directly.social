@@ -4,6 +4,7 @@
 
 - **Vercel:** Hosts the Next.js application and API routes.
 - **PostgreSQL:** Primary data store.
+- **Inngest:** Durable workflow engine for resilient background processing (e.g., publishing).
 - **Cloudflared:** Local development tunneling for webhooks.
 - **Worker Process:** Separate `tsx` process (`scripts/worker.ts`) for background logic.
 - **Atomic Symlink Deploys:** Zero-downtime updates on VPS by swapping symlinks.
