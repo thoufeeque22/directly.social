@@ -25,3 +25,34 @@
 
 ## [2026-06-14 19:13:49] Verdict: FAIL
 Audit found 5 critical/high failures: 1. Path traversal in StorageProvider. 2. Unthrottled DB writes in onProgress. 3. PII leak (upload tokens) in YouTube logs. 4. Multiple lint/type violations. 5. 100-line rule violation in workflow. Remediation required in Round 2.
+
+## [2026-06-14 19:17:19] Verdict: FAIL
+### Round 2 Audit Results
+
+#### 1. Security Audit
+- PASS: Path Traversal in FileSystemStorageProvider.resolvePath (src/lib/infrastructure/storage-provider.ts) is now mitigated with alphanumeric sanitization of stagedFileId.
+- PASS: Sensitive Data Logging in src/lib/platforms/youtube.ts is fixed; resumableUrl is now redacted in logs.
+
+#### 2. Performance Audit
+- PASS: Progress Throttling implemented in videoPublishingWorkflow. Updates are throttled to once per 2 seconds, preventing database overwhelming.
+
+#### 3. Modularity Audit
+- PASS: src/lib/inngest/functions/video-publishing.ts is now 84 lines, satisfying the 100-line rule.
+- FAIL: Restricted Imports in src/lib/inngest and src/lib/infrastructure. Files in these directories are importing from lib/platforms and lib/worker, violating the project's dependency boundaries defined in eslint.config.mjs.
+
+#### 4. Type Safety Audit
+- FAIL: Zero-Any Violations. Multiple any types remain:
+    - src/lib/inngest/client.ts: schemas: [] as any
+    - src/lib/inngest/functions/video-publishing.ts: step: any
+    - src/lib/infrastructure/publishing-repository.ts: Use of any in upsert logic.
+- PASS: @ts-ignore removed and replaced with @ts-expect-error where justified (streaming fetch).
+
+#### 5. Verification (Build/Lint)
+- BUILD: SUCCESS
+- LINT: FAIL (39 errors).
+    - no-restricted-imports violations in 3 files.
+    - no-explicit-any violations in core workflow files.
+
+REMEDIATION REQUIRED: 
+1. Fix no-restricted-imports by either updating eslint.config.mjs to allow lib/inngest and lib/infrastructure to import from platforms/workers, or by refactoring the dependencies.
+2. Replace any with specific types in Inngest client and workflow functions.
