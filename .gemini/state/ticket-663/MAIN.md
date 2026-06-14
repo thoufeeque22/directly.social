@@ -35,3 +35,4 @@ The application currently lacks a consistent UI for legal and documentation page
 - **[2026-06-14 16:18:20]**: PRODUCT [APPROVED] - Proposed unified public layout for legal pages and persona-split docs.
 - **[2026-06-14 16:42:20]**: DEVELOPMENT [SUCCESS] - Consolidated public routes under (public) group, implemented unified layout with headers/footers, and refactored documentation by persona.
 - **[2026-06-14 17:34:27]**: DEVELOPMENT [SUCCESS] - Finalized comprehensive documentation and UI package including smart links, ToC anchors, grid balancing, and expanded feature guides.
+- **[2026-06-14 17:36:27]**: DEVELOPMENT [SUCCESS] - Shortened card descriptions for better visual balance.
