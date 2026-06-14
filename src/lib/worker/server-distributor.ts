@@ -1,9 +1,8 @@
 import path from 'path';
 import { logger } from '@/lib/core/logger';
-import { extractPlatformPostId, generatePermalink } from '@/lib/core/distributor-utils';
-import { distributeSinglePlatform } from '@/lib/core/distributor-server';
-import { fetchExistingResult, upsertPlatformResult, updatePlatformProgress, recordPlatformFailure } from './server-distributor.db';
-import { preparePlatformMetadata, resolveVideoPath } from './server-distributor.logic';
+import { inngest } from '@/lib/inngest/client';
+import { fetchExistingResult, upsertPlatformResult, recordPlatformFailure } from './server-distributor.db';
+import { preparePlatformMetadata } from './server-distributor.logic';
 
 export interface DistributionResult {
   platform: string; accountId: string; accountName?: string | null; platformPostId?: string | null; permalink?: string | null;
@@ -18,48 +17,39 @@ export interface ServerDistributeParams {
 }
 
 /**
- * (CA-002): Lean orchestrator for server-side distribution.
- * Logic extracted to .db and .logic modules to meet 100-line limit.
+ * (CA-002): Triggers Inngest workflows for durable server-side distribution.
+ * Replaces direct execution with event-driven orchestration.
  */
 export async function distributeToPlatformsServer(params: ServerDistributeParams) {
   const { stagedFileId, userId, activityId, title, description, videoFormat, platforms } = params;
-  logger.info(`👷 [SERVER-DISTRIBUTOR] Starting distribution for post ${activityId}`);
+  logger.info(`👷 [SERVER-DISTRIBUTOR] Triggering durable workflows for post ${activityId}`);
 
-  const filePath = path.join(/*turbopackIgnore: true*/ process.cwd(), "tmp", stagedFileId);
-  const results: DistributionResult[] = [];
-
-  await Promise.allSettled(platforms.map(async (p) => {
-    try {
-      const existing = await fetchExistingResult(activityId, p.platform, p.accountId);
-      if (existing?.status === 'cancelled') {
-        results.push({ platform: p.platform, accountId: p.accountId, accountName: existing.accountName, status: 'cancelled', resumableUrl: existing.resumableUrl });
-        return;
+  const events = await Promise.all(platforms.map(async (p) => {
+    const existing = await fetchExistingResult(activityId, p.platform, p.accountId);
+    const { finalTitle, finalDesc } = preparePlatformMetadata(p.platform, title, description, existing?.metadata, params.reviewedContent);
+    
+    return {
+      name: "video.publish" as const,
+      data: {
+        activityId,
+        platform: p.platform,
+        accountId: p.accountId,
+        userId,
+        stagedFileId,
+        title: finalTitle,
+        description: finalDesc,
+        videoFormat,
+        reviewedContent: params.reviewedContent
       }
-
-      const { finalTitle, finalDesc } = preparePlatformMetadata(p.platform, title, description, existing?.metadata, params.reviewedContent);
-      const currentResult = await upsertPlatformResult(activityId, p.platform, p.accountId, { status: 'uploading', accountName: p.accountName });
-      const activeFilePath = await resolveVideoPath(stagedFileId, p.platform, activityId, p.accountId, filePath);
-
-      const rawData = await distributeSinglePlatform({
-        platform: p.platform, userId, filePath: activeFilePath, title: finalTitle, description: finalDesc, videoFormat, accountId: p.accountId,
-        fields: { resumableUrl: existing?.resumableUrl, videoId: existing?.videoId, creationId: existing?.creationId },
-        onProgress: (pct) => updatePlatformProgress(currentResult.id, pct)
-      });
-
-      const res: DistributionResult = {
-        platform: p.platform, accountId: p.accountId, accountName: p.accountName,
-        platformPostId: extractPlatformPostId(p.platform, rawData), permalink: generatePermalink(p.platform, rawData),
-        status: 'success', videoId: rawData?.videoId || rawData?.id, creationId: rawData?.creationId
-      };
-
-      await upsertPlatformResult(activityId, p.platform, p.accountId, res);
-      results.push(res);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      logger.error(`❌ [SERVER-DISTRIBUTOR] Failed to publish to ${p.platform}: ${msg}`);
-      await recordPlatformFailure(activityId, p.platform, p.accountId, err);
-    }
+    };
   }));
 
-  return results;
+  await inngest.send(events);
+
+  return platforms.map(p => ({
+    platform: p.platform,
+    accountId: p.accountId,
+    accountName: p.accountName,
+    status: 'pending' as const
+  }));
 }

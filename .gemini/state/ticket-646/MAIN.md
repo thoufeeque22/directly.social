@@ -1,25 +1,32 @@
 # Ticket #646: Implement Durable Workflow Orchestration for Video Publishing
 
 ## Status
-- **Current Phase:** Discovery
+- **Current Phase:** Development
 - **Round:** 1
 
 ## Summary
-Implement a durable workflow orchestration layer (inspired by Postiz's use of Temporal) to ensure that video publishing jobs are resilient, traceable, and automatically retried upon failure.
+Implement a durable workflow orchestration layer using **Inngest** to ensure that video publishing jobs are resilient, traceable, and automatically retried upon failure. Inngest was selected for its serverless-friendly architecture and seamless integration with Next.js 15.
 
 ## Goals
-- Evaluate and select a workflow engine (Temporal, Inngest, or BullMQ).
-- Decompose the publishing flow into distinct activities (`pre_verify`, `create_container`, `poll_processing`, `publish_broadcast`).
-- Implement state persistence for manual intervention or "Resume from Step X" functionality.
-- Use the Factory Pattern for a standard `Activity` interface across platform providers.
+- [x] Evaluate and select a workflow engine (Selected: **Inngest**).
+- [ ] Install and configure `@inngest/sdk`.
+- [ ] Decompose the publishing flow into distinct activities (`pre_verify`, `init`, `push`, `poll`, `finalize`).
+- [ ] Implement state persistence for manual intervention or "Resume from Step X" functionality.
+- [ ] Refactor platform providers to follow a standard `Activity` interface.
 
 ## Phase History
 
 ### Discovery (Round 1)
-- [ ] Research current video publishing implementation.
-- [ ] Evaluate workflow engine options (Inngest vs BullMQ).
-- [ ] Define the activity interface and decomposition.
-- [ ] Create discovery report.
+- [x] Research current video publishing implementation.
+- [x] Evaluate workflow engine options (Inngest selected).
+- [x] Define the activity interface and decomposition.
+- [x] Create discovery report.
+
+### Development (Round 1)
+- [ ] Setup Inngest client and event definitions.
+- [ ] Implement `videoPublishingWorkflow`.
+- [ ] Refactor platform modules.
+- [ ] Enhance database persistence.
 
 ## Artifacts
 - N/A
