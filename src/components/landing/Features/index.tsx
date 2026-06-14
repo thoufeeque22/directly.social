@@ -2,12 +2,8 @@
 
 import React from 'react';
 import { Box, Container, Typography, Grid, Card, CardContent, useTheme } from '@mui/material';
-import { motion } from 'framer-motion';
 import { features } from '../data';
 import { BRAND } from '@/lib/core/brand';
-
-const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.15 } } } as const;
-const itemVariants = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } } as const;
 
 export const Features = () => {
   const theme = useTheme();
@@ -16,11 +12,6 @@ export const Features = () => {
     <Box id="features" sx={{ py: { xs: 8, md: 12 }, position: 'relative' }}>
       <Container maxWidth="lg">
         <Box 
-          component={motion.div}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
           sx={{ textAlign: 'center', mb: 8 }}
         >
           <Typography variant="overline" color="primary" sx={{ fontWeight: 800, letterSpacing: '0.2em' }}>Core Magic</Typography>
@@ -30,17 +21,11 @@ export const Features = () => {
           </Typography>
         </Box>
 
-        <Box 
-          component={motion.div} 
-          variants={containerVariants} 
-          initial="hidden" 
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-        >
+        <Box>
           <Grid container spacing={4}>
             {features.map((feature, index) => (
               <Grid size={{ xs: 12, md: 6 }} key={index}>
-                <motion.div variants={itemVariants} style={{ height: '100%' }}>
+                <Box style={{ height: '100%' }}>
                   <Card 
                     elevation={0} 
                     sx={{ 
@@ -90,7 +75,7 @@ export const Features = () => {
                       <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>{feature.description}</Typography>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </Box>
               </Grid>
             ))}
           </Grid>

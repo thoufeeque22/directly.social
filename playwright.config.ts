@@ -15,7 +15,7 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    screenshot: { mode: 'only-on-failure', fullPage: true },
     launchOptions: {
       slowMo: process.env.SLOWMO ? parseInt(process.env.SLOWMO) : 0,
     },

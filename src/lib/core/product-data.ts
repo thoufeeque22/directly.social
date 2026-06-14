@@ -14,7 +14,7 @@ export const PRICING_TIERS = [
     description: 'Free Forever. Perfect for solo creators who value privacy and control.',
     features: [
       'Unlimited Local Projects',
-      'Bring Your Own Key (BYOK)',
+      'Bring Your Own Key (BYOK - Use your own API accounts)',
       'Native Platform Publishing',
       'AI Vibe Sync (Local)',
       'Community Support'
@@ -44,19 +44,19 @@ export const PRODUCT_FEATURES = [
   {
     id: 'byos',
     title: 'Your Own Storage (BYOS)',
-    description: "We don't store your videos. Keep them securely on your device or connect a private cloud bucket to manage your media.",
+    description: "We don't store your videos. Connect a private cloud bucket (Bring Your Own Storage) to manage your media directly.",
     iconName: 'Storage'
   },
   {
     id: 'byok-platforms',
     title: 'Direct Connections (BYOK)',
-    description: 'Connect directly to TikTok, YouTube, and Meta using your own keys. No middleware, no rate limit throttling, and you own the relationship.',
+    description: 'Connect directly to TikTok, YouTube, and Meta using your own keys (Bring Your Own Key). No middleware, no rate limits, you own the connection.',
     iconName: 'VpnKey'
   },
   {
     id: 'byok-ai',
     title: 'Zero-Markup AI (BYOK)',
-    description: 'Connect your own ChatGPT or Gemini account. Polish your content and generate viral hashtags without paying expensive monthly AI subscription fees.',
+    description: 'Connect your own ChatGPT or Gemini account (Bring Your Own Key). Polish content without paying expensive monthly subscription markups.',
     iconName: 'AutoAwesome'
   },
   {

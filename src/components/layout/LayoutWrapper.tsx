@@ -19,17 +19,18 @@ export default function LayoutWrapper({ children, session: initialSession }: { c
   const isAuthenticated = !!session;
   
   // Routes that should NEVER show the app shell (Marketing/Auth/Legal)
+  // These are handled by the (public) route group or other specialized layouts.
   const isAlwaysPublic = pathname === '/login' || 
     pathname === '/philosophy' || 
     pathname === '/privacy' || 
     pathname === '/terms' || 
     pathname === '/cookies' || 
+    pathname === '/' ||
     pathname?.startsWith('/docs');
   
   // We hide the shell ONLY if:
   // 1. It's an always-public route
-  // 2. OR we are on the root route AND confirmed unauthenticated (status resolved)
-  const shouldHideShell = isAlwaysPublic || (pathname === '/' && status === 'unauthenticated' && !isAuthenticated);
+  const shouldHideShell = isAlwaysPublic;
   const shouldShowShell = !shouldHideShell;
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

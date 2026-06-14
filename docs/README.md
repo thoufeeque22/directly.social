@@ -2,7 +2,28 @@
 
 Welcome to the Directly project documentation. This folder contains architectural blueprints, setup guides, and feature specifications.
 
-## Core Documentation
+## 🚀 Getting Started
+
+The quickest path to your first native post.
+- [How to Login](user/login-guide.md) - Securely accessing your dashboard.
+- [Account Connection](user/account-connection.md) - Linking your TikTok, YouTube, and Meta accounts.
+- [Publishing Your First Video](user/publishing-first-video.md) - Step-by-step guide to your first post.
+
+## 🎨 Core Features
+
+Master the tools that make Directly Social powerful and efficient.
+- [Metadata Snippets](user/metadata-snippets.md) - Saving and injecting reusable hashtags and bio links.
+- [AI Content Polish](user/ai-content-polish.md) - Using Vibe Sync and AI tools to enhance your captions.
+- [Media Management & Cloud Sync](user/storage-setup.md) - Connecting private cloud storage (BYOS).
+
+## 🛠️ Power Users Setup
+
+Technical guides for advanced users and power users configuring their own infrastructure.
+- [AI Provider Keys (BYOK)](dev/ai-byok-guide.md) - Configuring your own AI API keys (OpenAI, Gemini, Anthropic, Groq).
+- [Social Platform Keys (BYOK)](dev/byok-guide.md) - Configuring your own platform API keys (TikTok, YouTube, Meta).
+- [Cloud Storage Guide (BYOS)](dev/vault-setup.md) - Detailed S3 and CORS configuration.
+
+## 🏗️ Core Documentation
 
 - [Architecture Overview](ARCHITECTURE.md) - Deep dive into system design, data models, and workflows.
 - [AI Agent Orchestration](ORCHESTRATION.md) - Points to the AI agent workflows and instructions.
@@ -17,7 +38,7 @@ Welcome to the Directly project documentation. This folder contains architectura
 - [Support Hub](features/SUPPORT_HELP.md) - Documentation and help links relocated to the User Profile popover and Settings tab.
 - [Sign-out Redirect](features/SIGN_OUT_REDIRECT.md) - UX improvement redirecting to landing page with success notification.
 
-## Guides & Troubleshooting
+## ⚙️ Advanced & System Documentation
 
 - [Platform Integrations](PLATFORM_INTEGRATIONS.md) - Details on external API integrations.
 - [Adding a New Platform](DEVELOPER_GUIDE_PLATFORMS.md) - Guide for developers to integrate new social platforms.
@@ -25,12 +46,6 @@ Welcome to the Directly project documentation. This folder contains architectura
 - [Cloudflare Tunnel](CLOUDFLARE_TUNNEL_SETUP.md) - Local development and webhooks.
 
 ## Quality Assurance & Testing
-
-- [E2E Testing Guide](E2E_TESTING.md) - Playwright workflow and infrastructure.
-- [UAT: Metadata Templates](manual_tests/verify-metadata-templates.md) - Core snippet workflow.
-- [UAT: Global Search](manual_tests/verify-global-search.md) - Unified search field verification.
-- [UAT: Snippets UX Improvements](manual_tests/verify-snippets-ux-improvements.md) - UX closing logic.
-- [UAT: Upcoming Posts Navigation](manual_tests/verify-upcoming-posts-navigation.md) - Dashboard-to-Schedule deep linking.
 - [UAT: Video Lifecycle](manual_tests/verify-video-lifecycle.md) - End-to-end publishing flow.
 - [UAT: Notification Utility](manual_tests/ticket-400.md) - Functional verification of the bell icon and state sync.
 - [UAT: Support Hub](manual_tests/ticket-399.md) - Support link and tab functionality.

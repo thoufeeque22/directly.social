@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Snackbar, Alert } from '@mui/material';
 import { useSearchParams } from 'next/navigation';
-import { LandingHeader } from './Header';
 import { Hero } from './Hero';
 import { SocialProof } from './SocialProof';
 import { Features } from './Features';
@@ -12,7 +11,6 @@ import { Comparison } from './Comparison';
 import { Personas } from './Personas';
 import { Pricing } from './Pricing';
 import { FAQ } from './FAQ';
-import { LandingFooter } from './Footer';
 
 export const LandingPage = () => {
   const searchParams = useSearchParams();
@@ -33,9 +31,8 @@ export const LandingPage = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <LandingHeader />
-      <Box component="main" sx={{ flexGrow: 1, pt: '64px' }}>
+    <>
+      <Box component="div" sx={{ flexGrow: 1 }}>
         <Hero />
         <SocialProof />
         <Comparison />
@@ -45,7 +42,6 @@ export const LandingPage = () => {
         <Pricing />
         <FAQ />
       </Box>
-      <LandingFooter />
 
       <Snackbar
         open={open}
@@ -62,6 +58,6 @@ export const LandingPage = () => {
           Successfully signed out.
         </Alert>
       </Snackbar>
-    </Box>
+    </>
   );
 };
