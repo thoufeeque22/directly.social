@@ -8,8 +8,10 @@ import { promises as fs } from "fs";
  */
 export class FileSystemStorageProvider implements StorageProvider {
   async resolvePath(stagedFileId: string, platform: string, activityId: string, accountId: string): Promise<string> {
-    const baseTmpPath = path.join(process.cwd(), "tmp", stagedFileId);
-    return resolveVideoPath(stagedFileId, platform, activityId, accountId, baseTmpPath);
+    // Security (High): Sanitize stagedFileId to prevent path traversal
+    const safeFileId = stagedFileId.replace(/[^a-zA-Z0-9_-]/g, "");
+    const baseTmpPath = path.join(process.cwd(), "tmp", safeFileId);
+    return resolveVideoPath(safeFileId, platform, activityId, accountId, baseTmpPath);
   }
 
   async getFileSize(filePath: string): Promise<number> {

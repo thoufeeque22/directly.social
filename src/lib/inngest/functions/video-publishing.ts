@@ -21,12 +21,9 @@ export const videoPublishingWorkflow = inngest.createFunction(
     name: "Video Publishing Workflow",
     triggers: [{ event: "video.publish" }]
   },
-  // @ts-ignore - Inngest v4 type mismatch in some environments
   async ({ event, step }: { event: VideoPublishEvent; step: any }) => {
     const { activityId, platform, accountId, userId, stagedFileId, title, description, videoFormat } = event.data;
     const activity = getPlatformActivity(platform);
-    
-    // Infrastructure resolution
     const repository = getRepository();
     const storage = getStorage();
 
@@ -34,9 +31,7 @@ export const videoPublishingWorkflow = inngest.createFunction(
       return storage.resolvePath(stagedFileId, platform, activityId, accountId);
     });
 
-    await step.run("fetch-state", async () => {
-      return repository.fetchState(activityId, platform, accountId);
-    });
+    await step.run("fetch-state", async () => repository.fetchState(activityId, platform, accountId));
 
     const baseParams = { userId, activityId, platform, accountId };
 
@@ -47,69 +42,46 @@ export const videoPublishingWorkflow = inngest.createFunction(
     });
 
     const { creationId, resumableUrl: initialResumableUrl } = await step.run("init", async () => {
-      const params: InitiationParams = { 
-        ...baseParams, 
-        title, 
-        description, 
-        videoFormat, 
-        filePath: activeFilePath,
-        storage
-      };
+      const params: InitiationParams = { ...baseParams, title, description, videoFormat, filePath: activeFilePath, storage };
       const res = await activity.init(params);
       await repository.upsertState(activityId, platform, accountId, { 
-        currentStep: "init", 
-        creationId: res.creationId,
-        resumableUrl: res.resumableUrl 
+        currentStep: "init", creationId: res.creationId, resumableUrl: res.resumableUrl 
       });
       return res;
     });
 
     const { platformPostId } = await step.run("push", async () => {
+      let lastProgressUpdate = 0;
       const params: PushParams = {
-        ...baseParams,
-        title,
-        description,
-        videoFormat,
-        filePath: activeFilePath,
-        creationId,
-        resumableUrl: initialResumableUrl,
-        storage,
+        ...baseParams, title, description, videoFormat, filePath: activeFilePath, creationId,
+        resumableUrl: initialResumableUrl, storage,
         onProgress: async (pct) => {
-          await repository.updateProgress(activityId, platform, accountId, pct);
+          // Performance (High): Throttle DB writes to once per 2 seconds
+          const now = Date.now();
+          if (now - lastProgressUpdate > 2000 || pct === 100) {
+            await repository.updateProgress(activityId, platform, accountId, pct);
+            lastProgressUpdate = now;
+          }
         }
       };
       const res = await activity.push(params);
       await repository.upsertState(activityId, platform, accountId, { 
-        currentStep: "push", 
-        resumableUrl: res.resumableUrl,
-        platformPostId: res.platformPostId
+        currentStep: "push", resumableUrl: res.resumableUrl, platformPostId: res.platformPostId
       });
       return res;
     });
 
     await step.run("poll", async () => {
-      const params: PollingParams = { ...baseParams, creationId };
-      await activity.poll(params);
+      await activity.poll({ ...baseParams, creationId });
       await repository.upsertState(activityId, platform, accountId, { currentStep: "poll" });
     });
 
-    const result = await step.run("finalize", async () => {
-      const params: FinalizationParams = { 
-        ...baseParams, 
-        creationId,
-        title,
-        description
-      };
-      const res = await activity.finalize(params);
+    return await step.run("finalize", async () => {
+      const res = await activity.finalize({ ...baseParams, creationId, title, description });
       await repository.upsertState(activityId, platform, accountId, { 
-        currentStep: "finalize",
-        status: "success",
-        platformPostId: res.id || platformPostId,
-        permalink: res.permalink
+        currentStep: "finalize", status: "success", platformPostId: res.id || platformPostId, permalink: res.permalink
       });
       return res;
     });
-
-    return result;
   }
 );
