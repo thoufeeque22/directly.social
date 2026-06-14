@@ -5,18 +5,19 @@ import { fetchExistingResult, upsertPlatformResult, updatePlatformProgress } fro
  * (CA-001): Implementation of PublishingRepository using Prisma.
  */
 export class PrismaPublishingRepository implements PublishingRepository {
-  async fetchState(activityId: string, platform: string, accountId: string): Promise<any> {
-    return fetchExistingResult(activityId, platform, accountId);
+  async fetchState(activityId: string, platform: string, accountId: string): Promise<Record<string, unknown> | null> {
+    const res = await fetchExistingResult(activityId, platform, accountId);
+    return res ? (res as unknown as Record<string, unknown>) : null;
   }
 
-  async upsertState(activityId: string, platform: string, accountId: string, data: any): Promise<void> {
-    await upsertPlatformResult(activityId, platform, accountId, data);
+  async upsertState(activityId: string, platform: string, accountId: string, data: Record<string, unknown>): Promise<void> {
+    await upsertPlatformResult(activityId, platform, accountId, data as any);
   }
 
   async updateProgress(activityId: string, platform: string, accountId: string, percent: number): Promise<void> {
     const record = await this.fetchState(activityId, platform, accountId);
-    if (record) {
-      await updatePlatformProgress(record.id, percent);
+    if (record && record.id) {
+      await updatePlatformProgress(record.id as string, percent);
     }
   }
 }

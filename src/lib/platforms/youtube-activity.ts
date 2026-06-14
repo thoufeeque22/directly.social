@@ -9,8 +9,6 @@ import {
 import { getYouTubeClient } from "./youtube/account";
 import { initYouTubeSession } from "./youtube/session";
 import { pushYouTubeBinary } from "./youtube/push";
-import { promises as fs } from "fs";
-
 /**
  * (OO-003): YouTube implementation of PlatformActivity.
  * (CA-003): Uses specialized YouTube functions for stage execution.
@@ -22,7 +20,7 @@ export class YouTubeActivity implements PlatformActivity {
 
   async init(params: InitiationParams): Promise<{ creationId: string; resumableUrl: string }> {
     const youtube = await getYouTubeClient(params.userId, params.accountId);
-    const { size: fileSize } = await fs.stat(params.filePath);
+    const fileSize = await params.storage.getFileSize(params.filePath);
     
     const resumableUrl = await initYouTubeSession(youtube, fileSize, {
       snippet: { 
@@ -41,7 +39,7 @@ export class YouTubeActivity implements PlatformActivity {
   }
 
   async push(params: PushParams): Promise<{ resumableUrl: string; platformPostId: string }> {
-    const { size: fileSize } = await fs.stat(params.filePath);
+    const fileSize = await params.storage.getFileSize(params.filePath);
     
     // Resume logic
     const offsetRes = await fetch(params.creationId, {

@@ -16,6 +16,7 @@ export interface InitiationParams extends BaseParams {
   description: string;
   videoFormat: VideoFormat;
   filePath: string;
+  storage: StorageProvider;
 }
 
 export interface PushParams extends InitiationParams {
@@ -30,6 +31,8 @@ export interface PollingParams extends BaseParams {
 
 export interface FinalizationParams extends BaseParams {
   creationId: string;
+  title: string;
+  description: string;
 }
 
 /**
@@ -49,13 +52,14 @@ export interface PlatformActivity {
  */
 export interface StorageProvider {
   resolvePath(stagedFileId: string, platform: string, activityId: string, accountId: string): Promise<string>;
+  getFileSize(filePath: string): Promise<number>;
 }
 
 /**
  * (CA-001): Repository interface for publishing state.
  */
 export interface PublishingRepository {
-  fetchState(activityId: string, platform: string, accountId: string): Promise<any>;
-  upsertState(activityId: string, platform: string, accountId: string, data: any): Promise<void>;
+  fetchState(activityId: string, platform: string, accountId: string): Promise<Record<string, unknown> | null>;
+  upsertState(activityId: string, platform: string, accountId: string, data: Record<string, unknown>): Promise<void>;
   updateProgress(activityId: string, platform: string, accountId: string, percent: number): Promise<void>;
 }

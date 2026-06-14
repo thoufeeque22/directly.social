@@ -50,9 +50,7 @@ export class FacebookActivity implements PlatformActivity {
 
   async finalize(params: FinalizationParams): Promise<{ id: string; permalink: string }> {
     const { pageId, pageAccessToken } = await getFacebookPageAccount(params.userId, params.accountId);
-    // Note: description is not in FinalizationParams, we might need to fetch it from state if needed,
-    // or pass it through. For now, we'll use an empty string as a placeholder if not provided elsewhere.
-    await finalizeFacebookReel(pageId, params.creationId, "", pageAccessToken);
+    await finalizeFacebookReel(pageId, params.creationId, params.description || "", pageAccessToken);
     
     return { 
       id: params.creationId, 

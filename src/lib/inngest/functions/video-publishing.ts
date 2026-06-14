@@ -1,7 +1,5 @@
 import { inngest } from "../client";
 import { getPlatformActivity } from "@/lib/platforms/factory";
-import { PrismaPublishingRepository } from "@/lib/infrastructure/publishing-repository";
-import { FileSystemStorageProvider } from "@/lib/infrastructure/storage-provider";
 import { 
   VerificationParams, 
   InitiationParams, 
@@ -10,15 +8,12 @@ import {
   FinalizationParams 
 } from "@/lib/platforms/types";
 import { VideoPublishEvent } from "../events";
-
-// Dependencies
-const repository = new PrismaPublishingRepository();
-const storage = new FileSystemStorageProvider();
+import { getRepository, getStorage } from "@/lib/infrastructure";
 
 /**
  * (CA-001): Durable workflow for video publishing.
- * (CA-002): Uses StorageProvider for file resolution.
- * (API-001): Decomposed params for activity calls.
+ * (CA-002): Uses StorageProvider for file resolution and metadata.
+ * (DIP): Resolves repository and storage via Service Locator for testability.
  */
 export const videoPublishingWorkflow = inngest.createFunction(
   { 
@@ -30,12 +25,16 @@ export const videoPublishingWorkflow = inngest.createFunction(
   async ({ event, step }: { event: VideoPublishEvent; step: any }) => {
     const { activityId, platform, accountId, userId, stagedFileId, title, description, videoFormat } = event.data;
     const activity = getPlatformActivity(platform);
+    
+    // Infrastructure resolution
+    const repository = getRepository();
+    const storage = getStorage();
 
     const activeFilePath = await step.run("resolve-video-path", async () => {
       return storage.resolvePath(stagedFileId, platform, activityId, accountId);
     });
 
-    const existing = await step.run("fetch-state", async () => {
+    await step.run("fetch-state", async () => {
       return repository.fetchState(activityId, platform, accountId);
     });
 
@@ -47,18 +46,20 @@ export const videoPublishingWorkflow = inngest.createFunction(
       await repository.upsertState(activityId, platform, accountId, { currentStep: "pre_verify" });
     });
 
-    const { creationId } = await step.run("init", async () => {
+    const { creationId, resumableUrl: initialResumableUrl } = await step.run("init", async () => {
       const params: InitiationParams = { 
         ...baseParams, 
         title, 
         description, 
         videoFormat, 
-        filePath: activeFilePath 
+        filePath: activeFilePath,
+        storage
       };
       const res = await activity.init(params);
       await repository.upsertState(activityId, platform, accountId, { 
         currentStep: "init", 
-        creationId: res.creationId 
+        creationId: res.creationId,
+        resumableUrl: res.resumableUrl 
       });
       return res;
     });
@@ -71,6 +72,8 @@ export const videoPublishingWorkflow = inngest.createFunction(
         videoFormat,
         filePath: activeFilePath,
         creationId,
+        resumableUrl: initialResumableUrl,
+        storage,
         onProgress: async (pct) => {
           await repository.updateProgress(activityId, platform, accountId, pct);
         }
@@ -91,7 +94,12 @@ export const videoPublishingWorkflow = inngest.createFunction(
     });
 
     const result = await step.run("finalize", async () => {
-      const params: FinalizationParams = { ...baseParams, creationId };
+      const params: FinalizationParams = { 
+        ...baseParams, 
+        creationId,
+        title,
+        description
+      };
       const res = await activity.finalize(params);
       await repository.upsertState(activityId, platform, accountId, { 
         currentStep: "finalize",
