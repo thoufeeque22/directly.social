@@ -11,7 +11,7 @@ interface PricingTier {
   price: string;
   period?: string;
   description: string;
-  features: string[];
+  features: readonly string[];
   cta: string;
   highlighted?: boolean;
   disabled?: boolean;

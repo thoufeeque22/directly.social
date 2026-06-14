@@ -1,11 +1,14 @@
 import React from 'react';
+import { Metadata } from 'next';
 import { Typography, Paper } from '@mui/material';
 import { LegalPageWrapper } from '@/components/legal/LegalPageWrapper';
 import { TermsContent } from '@/components/legal/TermsContent';
 
-export const metadata = {
-  title: 'Terms of Service | Directly Social',
-  description: 'Terms of Service for Directly Social.',
+import { BRAND } from '@/lib/core/brand';
+
+export const metadata: Metadata = {
+  title: 'Terms of Service',
+  description: `Terms of Service for ${BRAND.name}.`,
 };
 
 export default function TermsOfService() {

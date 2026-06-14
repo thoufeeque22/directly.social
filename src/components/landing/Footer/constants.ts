@@ -1,3 +1,6 @@
+import { CONTACT_EMAILS } from '@/lib/core/emails';
+import { BRAND } from '@/lib/core/brand';
+
 export interface FooterLink {
   label: string;
   href: string;
@@ -28,9 +31,9 @@ export const FOOTER_COLUMNS: FooterColumnData[] = [
   {
     title: 'Company',
     links: [
-      { label: 'Why Directly Social?', href: '/philosophy' },
+      { label: `Why ${BRAND.name}?`, href: '/philosophy' },
       { label: 'System Status', href: '#' },
-      { label: 'Contact Support', href: 'mailto:support@directly.social' },
+      { label: 'Contact Support', href: `mailto:${CONTACT_EMAILS.support}` },
     ],
   },
   {

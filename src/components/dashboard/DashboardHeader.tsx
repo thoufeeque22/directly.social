@@ -1,6 +1,7 @@
 import React from 'react';
 import { Session } from 'next-auth';
 import { Heading } from '@/components/ui/Heading';
+import { BRAND } from '@/lib/core/brand';
 
 interface DashboardHeaderProps {
   session: Session | null;
@@ -12,7 +13,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ session }) => 
       <div>
         <Heading level={1}>Dashboard Overview</Heading>
         <p style={{ color: 'hsl(var(--muted-foreground))' }}>
-          {session ? `Welcome back, ${session.user?.name}.` : "Welcome to Directly Social. Connect your account to get started."}
+          {session ? `Welcome back, ${session.user?.name}.` : `Welcome to ${BRAND.name}. Connect your account to get started.`}
         </p>
       </div>
     </header>

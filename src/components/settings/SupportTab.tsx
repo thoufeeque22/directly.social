@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography, Button, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { GlassCard } from '@/components/ui/GlassCard';
 import EmailIcon from '@mui/icons-material/Email';
+import { CONTACT_EMAILS } from '@/lib/core/emails';
 
 export const SupportTab = () => {
   return (
@@ -22,14 +23,14 @@ export const SupportTab = () => {
             variant="contained"
             color="primary"
             startIcon={<EmailIcon />}
-            href="mailto:support.directly.social@gmail.com"
+            href={`mailto:${CONTACT_EMAILS.support}`}
             target="_blank"
             rel="noopener noreferrer"
           >
             Email Support
           </Button>
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
-            Reach out to us directly at support.directly.social@gmail.com
+            Reach out to us directly at {CONTACT_EMAILS.support}
           </Typography>
         </Box>
 

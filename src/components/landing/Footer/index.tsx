@@ -5,6 +5,7 @@ import { Box, Container, Typography, Grid, Stack, useTheme } from '@mui/material
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import { FooterColumn } from './FooterColumn';
 import { FOOTER_COLUMNS } from './constants';
+import { BRAND } from '@/lib/core/brand';
 
 export const LandingFooter = () => {
   const theme = useTheme();
@@ -24,7 +25,7 @@ export const LandingFooter = () => {
             <Stack spacing={3}>
               <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                 <RocketLaunchIcon color="primary" />
-                <Typography variant="h6" sx={{ fontWeight: 700 }}>Directly Social</Typography>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>{BRAND.name}</Typography>
               </Stack>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 300 }}>
                 The native social media client designed for privacy, speed, and total creator freedom.
@@ -41,7 +42,7 @@ export const LandingFooter = () => {
 
         <Box sx={{ pt: 4, borderTop: `1px solid ${theme.palette.divider}`, textAlign: 'center' }}>
           <Typography variant="caption" color="text.secondary">
-            © {new Date().getFullYear()} Directly Social. All rights reserved. Built for the native web.
+            © {new Date().getFullYear()} {BRAND.name}. All rights reserved. Built for the native web.
           </Typography>
         </Box>
       </Container>

@@ -1,4 +1,5 @@
 import { test, expect } from './base-test';
+import { BRAND } from '@/lib/core/brand';
 
 test.describe('Ticket #642: Architectural Separation of Landing Page and Login Page', () => {
 
@@ -39,7 +40,7 @@ test.describe('Ticket #642: Architectural Separation of Landing Page and Login P
 
     test('Login Page should be minimal', async ({ page }) => {
       await page.goto('/login');
-      await expect(page.getByRole('heading', { name: 'Directly Social', level: 1 })).toBeVisible();
+      await expect(page.getByRole('heading', { name: BRAND.name, level: 1 })).toBeVisible();
       await expect(page.getByText('Sign in to manage your automated distribution')).toBeVisible();
       
       // Verify that landing page elements are NOT present

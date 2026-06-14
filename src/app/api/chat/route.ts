@@ -5,6 +5,7 @@ import { logger } from '@/lib/core/logger';
 import { getAIModel, AIProvider } from '@/lib/core/ai';
 import { getMockAiResponse } from '@/lib/testing/mock-ai-service';
 import { chatTools } from '@/lib/actions/ai-chat-tools';
+import { BRAND } from '@/lib/core/brand';
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -56,7 +57,7 @@ export async function POST(req: Request) {
       onFinish: (event) => {
         logger.info("Chat finished", { text: event.text });
       },
-      system: `You are the Directly Social AI Assistant. You help users manage their social media content. 
+      system: `You are the ${BRAND.name} AI Assistant. You help users manage their social media content. 
       You can list upcoming posts, view staged media, schedule new posts, update existing ones, and cancel/delete schedules. 
       Always be professional, helpful, and concise. 
       

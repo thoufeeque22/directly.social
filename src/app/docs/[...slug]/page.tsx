@@ -7,6 +7,7 @@ import { LandingHeader } from '@/components/landing/Header';
 import { LandingFooter } from '@/components/landing/Footer';
 import { Metadata } from 'next';
 import { MarkdownRenderer } from '@/components/docs/MarkdownRenderer';
+import { BRAND } from '@/lib/core/brand';
 
 interface PageProps {
   params: Promise<{
@@ -18,8 +19,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const title = slug[slug.length - 1].replace(/_/g, ' ').replace(/-/g, ' ');
   return {
-    title: `${title} | Directly Social Docs`,
-    description: `Learn more about ${title} in the Directly Social documentation.`
+    title: `${title} | ${BRAND.name} Docs`,
+    description: `Learn more about ${title} in the ${BRAND.name} documentation.`
   };
 }
 

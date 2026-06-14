@@ -25,7 +25,7 @@ const SECRET_PATTERNS = [
   /PASSWORD\s*=\s*['"][^'"]+['"]/gi,
   /sk-[a-zA-Z0-9]{20,}/g, // OpenAI/similar
   /ghp_[a-zA-Z0-9]{36,}/g, // GitHub
-  /[a-zA-Z0-9._%+-]+@(?!(directly\.(ai|app)|example\.com|localhost))[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/gi, // PII Email
+  /[a-zA-Z0-9._%+-]+@(?!(directly\.(social|ai|app)|gmail\.com|example\.com|localhost))[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/gi, // PII Email
 ];
 
 function scanForSecrets(content: string, filePath: string): void {

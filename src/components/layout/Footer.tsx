@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Footer.module.css';
+import { BRAND } from '@/lib/core/brand';
 
 interface FooterLink {
   label: string;
@@ -55,7 +56,7 @@ export function Footer() {
         ))}
       </div>
       <div className={styles.footerBottom}>
-        <p>© 2026 Directly Social. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} {BRAND.legal.copyrightOwner}. All rights reserved.</p>
       </div>
     </footer>
   );

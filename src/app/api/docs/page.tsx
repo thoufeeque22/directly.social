@@ -5,6 +5,7 @@ import 'swagger-ui-react/swagger-ui.css';
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { CircularProgress, Box, Typography } from '@mui/material';
+import { BRAND } from '@/lib/core/brand';
 
 const SwaggerUI = dynamic(() => import('swagger-ui-react'), { 
   ssr: false,
@@ -33,7 +34,7 @@ export default function ApiDocsPage() {
           API Documentation
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-          Interactive OpenAPI explorer for Directly Social App Route Handlers.
+          Interactive OpenAPI explorer for {BRAND.name} App Route Handlers.
         </Typography>
         <Box sx={{ bgcolor: 'background.paper', borderRadius: 2, boxShadow: 1, overflow: 'hidden' }}>
           <SwaggerUI url="/api/openapi.json" />

@@ -13,6 +13,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MovieIcon from '@mui/icons-material/Movie';
+import { BRAND } from '@/lib/core/brand';
 
 interface GalleryAsset {
   id: string;
@@ -443,7 +444,7 @@ export const MediaLibrary: React.FC = () => {
 
       <div style={{ padding: '1rem', borderRadius: '0.75rem', background: 'hsla(var(--warning) / 0.05)', border: '1px solid hsla(var(--warning) / 0.15)' }}>
         <p style={{ margin: 0, fontSize: '0.85rem', color: 'hsl(var(--warning))', textAlign: 'center' }}>
-          <strong>Note:</strong> Directly Social uses a &quot;Lean Gallery&quot; approach. Videos are automatically purged after 7 days to keep performance high and storage costs low.
+          <strong>Note:</strong> {BRAND.name} uses a &quot;Lean Gallery&quot; approach. Videos are automatically purged after 7 days to keep performance high and storage costs low.
         </p>
       </div>
 

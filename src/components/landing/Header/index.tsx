@@ -7,6 +7,8 @@ import { usePathname } from 'next/navigation';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import { useSession } from 'next-auth/react';
 
+import { BRAND } from '@/lib/core/brand';
+
 export const LandingHeader = () => {
   const theme = useTheme();
   const pathname = usePathname();
@@ -53,7 +55,7 @@ export const LandingHeader = () => {
               <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                 <RocketLaunchIcon color="primary" />
                 <Typography variant="h6" component="div" sx={{ fontWeight: 700 }}>
-                  Directly Social
+                  {BRAND.name}
                 </Typography>
               </Stack>
             </Link>

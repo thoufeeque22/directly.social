@@ -7,6 +7,8 @@ import { ThemeScript } from "@/components/layout/ThemeScript";
 
 import { auth } from "@/auth";
 
+import { BRAND } from "@/lib/core/brand";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
@@ -18,7 +20,10 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Directly Social | Automated Poster",
+  title: {
+    default: `${BRAND.name} | Automated Poster`,
+    template: `%s | ${BRAND.name}`,
+  },
   description: "Next-gen social media distribution dashboard",
   appleWebApp: {
     capable: true,

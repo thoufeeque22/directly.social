@@ -14,6 +14,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import CloseIcon from '@mui/icons-material/Close';
 import InsightsIcon from '@mui/icons-material/Insights';
+import { BRAND } from '@/lib/core/brand';
 
 const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const { data: session } = useSession();
@@ -40,7 +41,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
           <div className={styles.logoIcon}>
             <AutoAwesomeIcon sx={{ fontSize: 24, color: 'hsl(var(--primary))' }} />
           </div>
-          <span className={styles.logoText}>Directly Social</span>
+          <span className={styles.logoText}>{BRAND.name}</span>
           <button className={styles.closeButton} onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }}>
             <CloseIcon sx={{ fontSize: 20 }} />
           </button>

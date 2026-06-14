@@ -1,19 +1,22 @@
 import React from 'react';
 import { Typography, Stack } from '@mui/material';
 
+import { CONTACT_EMAILS } from '@/lib/core/emails';
+import { BRAND } from '@/lib/core/brand';
+
 export const TermsContent = () => (
   <Stack spacing={4} sx={{ mt: 4 }}>
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>1. Acceptance of Terms</Typography>
       <Typography variant="body1" gutterBottom>
-        By accessing or using Directly Social (the &quot;Service&quot;), you agree to be bound by these Terms of Service.
+        By accessing or using {BRAND.name} (the &quot;Service&quot;), you agree to be bound by these Terms of Service.
       </Typography>
     </section>
 
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>2. Description of Service</Typography>
       <Typography variant="body1" gutterBottom>
-        Directly Social is a distribution platform that allows users to manage and post content to various social media platforms.
+        {BRAND.name} is a distribution platform that allows users to manage and post content to various social media platforms.
       </Typography>
     </section>
 
@@ -39,7 +42,7 @@ export const TermsContent = () => (
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>5. Contact Us</Typography>
       <Typography variant="body1">If you have any questions, please contact us at:</Typography>
-      <Typography variant="body1" sx={{ fontWeight: 700 }}>Email: legal@directly.social</Typography>
+      <Typography variant="body1" sx={{ fontWeight: 700 }}>Email: {CONTACT_EMAILS.legal}</Typography>
     </section>
   </Stack>
 );

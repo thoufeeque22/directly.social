@@ -1,11 +1,14 @@
 import React from 'react';
+import { Metadata } from 'next';
 import { Typography, Paper } from '@mui/material';
 import { LegalPageWrapper } from '@/components/legal/LegalPageWrapper';
 import { CookieContent } from '@/components/legal/CookieContent';
 
-export const metadata = {
-  title: 'Cookie Policy | Directly Social',
-  description: 'Cookie Policy for Directly Social.',
+import { BRAND } from '@/lib/core/brand';
+
+export const metadata: Metadata = {
+  title: 'Cookie Policy',
+  description: `Cookie Policy for ${BRAND.name}.`,
 };
 
 export default function CookiePolicy() {

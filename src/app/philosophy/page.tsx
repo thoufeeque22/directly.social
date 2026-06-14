@@ -8,12 +8,13 @@ import GppGoodIcon from '@mui/icons-material/GppGood';
 import NoEncryptionIcon from '@mui/icons-material/NoEncryption';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { BRAND } from '@/lib/core/brand';
 
 const philosophyPoints = [
   {
     title: 'The Middleman Tax',
     problem: 'SaaS tools force you to upload your videos to their servers. They own your files, track your data, and add latency to every post.',
-    solution: <><strong>Directly Social</strong> supports Bring Your Own Storage (BYOS). Connect your own S3 bucket or local drive. Your videos never touch our servers.</>,
+    solution: <><strong>{BRAND.name}</strong> supports Bring Your Own Storage (BYOS). Connect your own S3 bucket or local drive. Your videos never touch our servers.</>,
     icon: <NoEncryptionIcon color="primary" sx={{ fontSize: 40 }} />
   },
   {
@@ -52,7 +53,7 @@ export default function PhilosophyPage() {
               Pro Tools. No SaaS Tax.
             </Typography>
             <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 850, mx: 'auto', fontWeight: 400 }}>
-              We believe social media management should be a <strong>Studio Tool</strong> (like VS Code or Photoshop), not a &quot;Middleman Service.&quot; Here is why <strong>Directly Social</strong> is built differently.
+              We believe social media management should be a <strong>Studio Tool</strong> (like VS Code or Photoshop), not a &quot;Middleman Service.&quot; Here is why <strong>{BRAND.name}</strong> is built differently.
             </Typography>
           </Box>
 
