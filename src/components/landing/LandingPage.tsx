@@ -32,7 +32,7 @@ export const LandingPage = () => {
 
   return (
     <>
-      <Box component="main" sx={{ flexGrow: 1 }}>
+      <Box component="div" sx={{ flexGrow: 1 }}>
         <Hero />
         <SocialProof />
         <Comparison />

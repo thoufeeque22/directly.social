@@ -13,8 +13,6 @@ import { BRAND } from "@/lib/core/brand";
 // New Landing Page Component
 import { LandingPage } from '@/components/landing/LandingPage';
 import { LandingFallback } from '@/components/landing/LandingFallback';
-import { LandingHeader } from '@/components/landing/Header';
-import { LandingFooter } from '@/components/landing/Footer';
 
 export const metadata: Metadata = { title: `${BRAND.name} | ${BRAND.tagline}` };
 
@@ -24,13 +22,9 @@ export default async function Home() {
   // If NOT authenticated, render the New Landing Page
   if (!session) {
     return (
-      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <LandingHeader />
-        <Suspense fallback={<LandingFallback />}>
-          <LandingPage />
-        </Suspense>
-        <LandingFooter />
-      </Box>
+      <Suspense fallback={<LandingFallback />}>
+        <LandingPage />
+      </Suspense>
     );
   }
 
