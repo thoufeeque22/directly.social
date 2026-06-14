@@ -4,13 +4,15 @@
 
 ## Core Mandates
 - **Active Inquisitiveness (Collaborative Inquiry):** AI agents MUST act as collaborative partners, not just execution machines. If any request, requirement, or technical path is ambiguous, the agent MUST stop and ask the user for clarification before proceeding. "Guessing" is a terminal violation.
-- **Strict Initialization:** Before any work begins, the Orchestrator MUST:
+- **Strict Initialization:** Before any work begins, the Orchestrator MUST follow this **Dependency Rule**: `Ticket Description -> Git Branch -> State Directory`.
   1. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue`).
   2. Check the current branch. If NOT on the target feature branch (`FEATURE_BRANCH_PATTERN`):
      a. Switch to `MAIN_BRANCH` and pull latest (`git checkout main && git pull`).
      b. Create the dedicated feature branch (`git checkout -b <FEATURE_BRANCH_PATTERN>`).
-  3. If ALREADY on the target feature branch, skip the `MAIN_BRANCH` synchronization and branch creation steps.
-  4. Create a state directory `TICKET_STATE_DIR` with a `MAIN_STATE_FILE` file following the **MAIN_STATE_FILE Template** (skip if state already exists).
+  3. **MANDATORY:** Verify the branch exists and matches the full slug before proceeding.
+  4. Create a state directory `TICKET_STATE_DIR` with a `MAIN_STATE_FILE` file following the **MAIN_STATE_FILE Template**.
+  5. **MANDATORY:** The `MAIN_STATE_FILE` MUST contain the final, resolved `branch_name`. **NEVER** use placeholders or patterns like `FEATURE_BRANCH_PATTERN` in the final file.
+  6. Skip if state already exists.
 - **Manual Environment Management:** The User always manages the development server (`npm run dev`), the E2E test server (`http://localhost:3000`), and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, check the connectivity of these services, or modify/enable any Playwright `webServer` configuration. ALL E2E tests are strictly bound to `http://localhost:3000`.
 - **Strict Sequential Workflow:** ALL tickets MUST follow the `PHASE_ORDER`.
 - **Guardrail Mandates (Terminal Violations):**

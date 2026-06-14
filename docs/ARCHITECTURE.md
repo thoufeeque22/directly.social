@@ -15,9 +15,11 @@ This document provides a high-level index of the Directly application architectu
     *   Modular Upload Infrastructure
 4.  **[Publishing Workflows](architecture/PUBLISHING_WORKFLOWS.md)**
     *   Post Distribution (Publishing)
+    *   Durable Workflow Orchestration (Inngest)
     *   Modular Distribution Layer
     *   [Metadata Pipeline Architecture](architecture/METADATA_PIPELINE.md)
     *   Automated Token Refresh
+    *   **[Developer Guide: Adding Platforms](architecture/DEVELOPER_GUIDE_PLATFORMS.md)**
 5.  **[UI & Feature Components](architecture/UI_COMPONENTS.md)**
     *   AI Chatbot Assistant
     *   Global Search & Refresh
