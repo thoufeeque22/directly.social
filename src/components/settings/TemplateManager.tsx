@@ -156,7 +156,7 @@ export const TemplateManager = () => {
                     value={editName}
                     onChange={e => setEditName(e.target.value)}
                     placeholder="Name"
-                    style={{ background: 'hsla(var(--muted)/0.5)', border: '1px solid hsla(var(--border)/0.5)', borderRadius: '4px', padding: '4px 8px', fontSize: '0.85rem', color: 'white' }}
+                    style={{ background: 'hsla(var(--muted)/0.5)', border: '1px solid hsla(var(--border)/0.5)', borderRadius: '4px', padding: '4px 8px', fontSize: '0.85rem', color: 'hsl(var(--foreground))' }}
                   />
                   <textarea 
                     value={editContent}
@@ -169,7 +169,7 @@ export const TemplateManager = () => {
                     <button
                       onClick={() => handleUpdate(t.id)}
                       disabled={isUpdating}
-                      style={{ background: 'hsl(var(--primary))', color: 'white', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem' }}
+                      style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem' }}
                     >
                       {isUpdating ? <Loader2 size={14} className="animate-spin" /> : <><Check size={14} /> Save</>}
                     </button>

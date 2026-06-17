@@ -493,7 +493,8 @@ export const MediaLibrary: React.FC = () => {
                     padding: '0.5rem 1rem', borderRadius: '0.75rem',
                     transition: 'all 0.2s ease'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = 'white'}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'hsl(var(--primary))'}
+
                   onMouseLeave={(e) => e.currentTarget.style.color = 'hsl(var(--muted-foreground))'}
                 >
                   Cancel

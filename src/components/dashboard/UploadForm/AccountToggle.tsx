@@ -28,7 +28,7 @@ export const AccountToggle: React.FC<AccountToggleProps> = ({
           position: 'relative', padding: '0.6rem 1rem', borderRadius: '0.75rem',
           border: isSelected ? '2px solid hsl(var(--primary))' : '1px solid hsla(var(--border) / 0.5)',
           background: isSelected ? 'hsla(var(--primary) / 0.2)' : 'hsla(var(--muted) / 0.2)',
-          color: isSelected ? 'white' : 'hsl(var(--muted-foreground))',
+          color: isSelected ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
           cursor: isUploading || isSuccess ? 'not-allowed' : 'pointer',
           fontSize: '0.85rem', fontWeight: 700, transition: 'all 0.2s',
           display: 'flex', alignItems: 'center', gap: '0.4rem',
@@ -44,7 +44,7 @@ export const AccountToggle: React.FC<AccountToggleProps> = ({
           background: isSelected ? 'hsl(var(--primary))' : 'transparent',
           border: isSelected ? 'none' : '1px solid hsla(var(--muted-foreground) / 0.5)',
         }} />
-        <span style={{ opacity: 0.7, textTransform: 'capitalize' }}>{platform}:</span> {displayName}
+        <span style={{ opacity: 0.7, textTransform: 'capitalize', color: isSelected ? 'hsl(var(--primary))' : 'inherit' }}>{platform}:</span> {displayName}
         <StatusIcon status={status} />
       </button>
       {status === 'failed' && error && (

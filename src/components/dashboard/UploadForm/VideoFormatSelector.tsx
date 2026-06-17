@@ -18,9 +18,10 @@ export const VideoFormatSelector: React.FC<Props> = ({ videoFormat, onFormatChan
         <button key={f.id} type="button" aria-pressed={videoFormat === f.id} onClick={() => onFormatChange(f.id)}
           style={{
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '1rem',
-            borderRadius: '1rem', border: `1px solid ${videoFormat === f.id ? 'hsl(var(--primary))' : 'hsla(var(--border) / 0.5)'}`,
-            background: videoFormat === f.id ? 'hsla(var(--primary) / 0.1)' : 'hsla(var(--muted) / 0.1)',
-            color: videoFormat === f.id ? 'white' : 'hsl(var(--muted-foreground))', cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center'
+            border: `1px solid ${videoFormat === f.id ? 'hsl(var(--primary))' : 'hsla(var(--border) / 0.5)'}`,
+            background: videoFormat === f.id ? 'hsla(var(--primary) / 0.2)' : 'hsla(var(--muted) / 0.3)',
+            color: videoFormat === f.id ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))', cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center'
+
           }}
         >
           {f.icon}

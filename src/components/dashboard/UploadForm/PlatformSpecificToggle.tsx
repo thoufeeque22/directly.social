@@ -34,7 +34,7 @@ export const PlatformSpecificToggle: React.FC = () => {
         fontSize: '0.85rem', 
         fontWeight: 600, 
         cursor: 'pointer', 
-        color: isPlatformSpecific ? 'hsl(var(--primary))' : 'white' 
+        color: isPlatformSpecific ? 'hsl(var(--primary))' : 'hsl(var(--foreground))' 
       }}>
         Separate titles/descriptions per platform
       </label>

@@ -60,7 +60,7 @@ const ChatWindowContent = ({
           <BotIcon fontSize="small" />
         </Avatar>
         <Box>
-          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'white' }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'hsl(var(--foreground))' }}>
             {BRAND.name} AI
           </Typography>
           <Typography variant="caption" sx={{ color: 'hsl(var(--muted-foreground))' }}>
@@ -141,7 +141,7 @@ const ChatWindowContent = ({
               maxWidth: '85%',
               borderRadius: m.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
               bgcolor: m.role === 'user' ? 'primary.main' : 'hsla(var(--accent) / 0.5)',
-              color: 'white',
+              color: m.role === 'user' ? 'hsl(var(--primary-foreground))' : 'hsl(var(--foreground))',
               border: m.role === 'user' ? 'none' : '1px solid hsla(var(--border) / 0.3)',
             }}
           >

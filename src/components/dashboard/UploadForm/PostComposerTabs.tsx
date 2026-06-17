@@ -39,12 +39,18 @@ export const PostComposerTabs: React.FC<PostComposerTabsProps> = ({ children }) 
           onChange={handleTabChange} 
           variant="scrollable" 
           scrollButtons="auto"
+          textColor="primary"
+          indicatorColor="primary"
           sx={{
             '& .MuiTab-root': {
               textTransform: 'none',
               minWidth: 100,
               fontSize: '0.875rem',
-              fontWeight: 500
+              fontWeight: 500,
+              color: 'hsl(var(--muted-foreground))',
+              '&.Mui-selected': {
+                color: 'hsl(var(--primary))',
+              }
             }
           }}
         >
