@@ -12,13 +12,12 @@ export const FirstCommentField: React.FC = () => {
       <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'hsl(var(--muted-foreground))' }}>
         Global First Comment
       </label>
-      <input 
-        type="text" 
+      <textarea 
         name="firstComment"
-        placeholder="Coming soon..." 
+        placeholder="Write a first comment for all platforms..." 
         value={firstCommentText} 
         onChange={(e) => handleFirstCommentChange(e.target.value)} 
-        style={inputStyle} 
+        style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }} 
       />
     </div>
   );

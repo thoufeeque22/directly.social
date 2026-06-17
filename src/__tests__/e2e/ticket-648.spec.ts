@@ -65,4 +65,29 @@ test.describe('Ticket #648: Post Versioning & Multi-Platform Overrides', () => {
     // Should show the "using global settings" message again
     await expect(page.getByText(/using global settings/i)).toBeVisible();
   });
+
+  test('First Comment Persistence and Isolation', async ({ page }) => {
+    const globalComment = 'Check out our latest video!';
+    await page.locator('textarea[name="firstComment"]').fill(globalComment);
+    
+    // Switch to YouTube and verify inheritance
+    await page.getByRole('tab', { name: /youtube/i }).click();
+    await page.getByRole('button', { name: /customize for youtube/i }).click();
+    await expect(page.locator('textarea[name="first_comment_youtube"]')).toHaveValue(globalComment);
+    
+    // Change YouTube specific comment
+    const ytComment = 'YouTube exclusive comment!';
+    await page.locator('textarea[name="first_comment_youtube"]').fill(ytComment);
+    
+    // Verify Global remains unchanged
+    await page.getByRole('tab', { name: /global/i }).click();
+    await expect(page.locator('textarea[name="firstComment"]')).toHaveValue(globalComment);
+    
+    // Verify persistence after reload
+    await page.reload();
+    await expect(page.locator('textarea[name="firstComment"]')).toHaveValue(globalComment);
+    await page.getByRole('tab', { name: /youtube/i }).click();
+    // It should still be overridden
+    await expect(page.locator('textarea[name="first_comment_youtube"]')).toHaveValue(ytComment);
+  });
 });

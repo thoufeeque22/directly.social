@@ -15,13 +15,12 @@ export const PlatformFirstCommentField: React.FC<PlatformFirstCommentFieldProps>
       <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'hsl(var(--muted-foreground))' }}>
         {platform} First Comment
       </label>
-      <input 
-        type="text" 
+      <textarea 
         name={`first_comment_${platform}`}
-        placeholder="Coming soon..." 
+        placeholder={`Specific first comment for ${platform}...`} 
         value={value} 
         onChange={(e) => onChange(platform, e.target.value)} 
-        style={inputStyle} 
+        style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }} 
       />
     </div>
   );
