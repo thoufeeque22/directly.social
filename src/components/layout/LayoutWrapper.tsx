@@ -29,8 +29,8 @@ export default function LayoutWrapper({ children, session: initialSession }: { c
     pathname?.startsWith('/docs');
   
   // We hide the shell ONLY if:
-  // 1. It's an always-public route
-  const shouldHideShell = isAlwaysPublic;
+  // 1. It's an always-public route (EXCEPT root path when authenticated)
+  const shouldHideShell = isAlwaysPublic && !(pathname === '/' && isAuthenticated);
   const shouldShowShell = !shouldHideShell;
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
