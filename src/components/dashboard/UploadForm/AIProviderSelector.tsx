@@ -29,7 +29,7 @@ export const AIProviderSelector: React.FC<AIProviderSelectorProps> = ({ selected
               borderRadius: '0.5rem',
               border: `1px solid ${selectedProvider === provider.id ? 'hsl(var(--primary))' : 'hsla(var(--border) / 0.5)'}`,
               background: selectedProvider === provider.id ? 'hsla(var(--primary) / 0.2)' : 'hsla(var(--muted) / 0.3)',
-              color: selectedProvider === provider.id ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
+              color: selectedProvider === provider.id ? 'hsl(var(--foreground))' : 'hsl(var(--muted-foreground))',
               cursor: 'pointer',
               fontSize: '0.75rem',
               fontWeight: selectedProvider === provider.id ? 700 : 500,

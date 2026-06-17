@@ -25,7 +25,7 @@ export const AITierSelector: React.FC<AITierSelectorProps> = ({ selectedTier, on
               borderRadius: '0.75rem',
               border: `2px solid ${selectedTier === tier ? 'hsl(var(--primary))' : 'hsla(var(--border) / 0.5)'}`,
               background: selectedTier === tier ? 'hsla(var(--primary) / 0.2)' : 'hsla(var(--muted) / 0.3)',
-              color: selectedTier === tier ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
+              color: selectedTier === tier ? 'hsl(var(--foreground))' : 'hsl(var(--muted-foreground))',
               cursor: 'pointer',
               fontSize: '0.85rem',
               fontWeight: selectedTier === tier ? 700 : 500,

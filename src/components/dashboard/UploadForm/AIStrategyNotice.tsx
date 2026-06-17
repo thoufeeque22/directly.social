@@ -21,15 +21,15 @@ export const AIStrategyNotice: React.FC = () => {
     >
       <p style={{ 
         fontSize: '0.8rem', 
-        color: 'hsl(var(--primary))', 
+        color: 'hsl(var(--foreground))', 
         margin: 0, 
         display: 'flex', 
         alignItems: 'center', 
         gap: '0.5rem' 
       }}>
-        <AutoAwesomeIcon sx={{ fontSize: 16 }} />
+        <AutoAwesomeIcon sx={{ fontSize: 16, color: 'hsl(var(--primary))' }} />
         <span>
-          <strong>AI Strategy:</strong> {aiTier === 'Enrich' ? 'Refining draft' : 'Generating content'} in <strong>{contentMode}</strong> style using <strong>{aiProvider.charAt(0).toUpperCase() + aiProvider.slice(1)}</strong>.
+          <strong style={{ color: 'hsl(var(--primary))' }}>AI Strategy:</strong> {aiTier === 'Enrich' ? 'Refining draft' : 'Generating content'} in <strong style={{ color: 'hsl(var(--primary))' }}>{contentMode}</strong> style using <strong style={{ color: 'hsl(var(--primary))' }}>{aiProvider.charAt(0).toUpperCase() + aiProvider.slice(1)}</strong>.
         </span>
       </p>
     </div>

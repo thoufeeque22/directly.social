@@ -49,10 +49,10 @@ const ManageChannelsLink = ({ hasAccounts }: { hasAccounts: boolean }) => (
   <Link
     href="/settings"
     style={{
-      fontSize: '0.8rem', color: 'hsl(var(--primary))', textDecoration: 'none',
+      fontSize: '0.8rem', color: 'hsl(var(--foreground))', textDecoration: 'none',
       display: 'flex', alignItems: 'center', gap: '0.25rem', padding: '0.6rem 1rem',
       borderRadius: '0.75rem', background: 'hsla(var(--primary) / 0.1)',
-      border: '1px solid hsla(var(--primary) / 0.2)', fontWeight: 500, transition: 'all 0.2s ease',
+      border: '1px solid hsla(var(--primary) / 0.2)', fontWeight: 600, transition: 'all 0.2s ease',
     }}
   >
     {hasAccounts ? '⚙️ Manage Channels' : '➕ Connect Account'}
