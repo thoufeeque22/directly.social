@@ -2,8 +2,8 @@
 
 ## Aesthetic Principles
 - **Material UI Aesthetic:** Prioritize a "humanly", professional, and polished UI design using Material UI (MUI).
-- **Theme Awareness (Light/Dark/System):** Do NOT use hardcoded colors. Always use semantic CSS variables (e.g., `var(--background)`, `var(--text-primary)`) to ensure consistency across modes.
-- **Human-Centric Design:** Focus on accessibility (A11y), clean spacing, clear visual hierarchy, and intuitive user flows.
+- **Theme Awareness (Light/Dark/System):** STRICTLY PROHIBIT hardcoded color values (e.g., `white`, `#FFFFFF`, `black`). Always use theme-aware HSL variables (e.g., `hsl(var(--foreground))`, `hsl(var(--primary-foreground))`) defined in the global theme.
+- **Human-Centric Design:** Focus on accessibility (A11y), clean spacing, clear visual hierarchy, and intuitive user flows. Verify all UI changes for contrast and visibility in both Light and Dark modes.
 - **Strict "No Emojis" Policy:** Emojis are strictly FORBIDDEN in user-facing UI components, labels, and buttons. Use MUI Icons instead. Emojis are only permitted in backend logs, CLI output, and internal documentation.
 
 ## Visual Components

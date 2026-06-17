@@ -97,7 +97,11 @@ To optimize for SEO (Metadata API) and maintain strict modularity (100-line rule
 The application uses a unified 3-way toggle (Light, Dark, System) for theme management.
 
 - **State Management:** The `ThemeContextProvider` manages the active theme, applying `dark` or `light` classes to the `html` element based on user preference or OS-level `prefers-color-scheme`.
-- **CSS Variables:** All components must use theme-aware CSS variables (e.g., `var(--background)`, `var(--card)`, `var(--text-primary)`) rather than hardcoded hex values to ensure visual consistency across both modes.
+- **Theming & Styling Standards:** Strictly prohibit hardcoded color values (e.g., `white`, `#FFFFFF`, `black`). Use theme-aware CSS variables for all interactive and content components:
+  - `hsl(var(--foreground))` for primary text.
+  - `hsl(var(--primary-foreground))` for text on primary backgrounds.
+  - `hsl(var(--popover-foreground))` for dropdowns and popovers.
+- **Goal:** Ensure 100% visibility and accessibility across both Light and Dark modes.
 - **Persistence:** Theme preferences are persisted locally via `localStorage` and synchronized with the database using Server Actions for cross-device consistency.
 - **Auth Boundary Policy:** To maintain a clean, high-conversion entry point, a manual theme toggle is intentionally omitted from the initial landing/login view.
 
@@ -106,9 +110,8 @@ The application uses a unified 3-way toggle (Light, Dark, System) for theme mana
 The application uses an architectural separation between marketing surfaces and authentication logic, leveraging session-aware routing at the root level.
 
 - **Root Routing (`/`):** The root route is dynamic. Unauthenticated guests are served the high-conversion **Landing Page** (marketing content, tech stack, philosophy), while authenticated users are automatically served the primary **Dashboard**.
-- **Dedicated Login (`/login`):** A dedicated, minimal authentication screen exists at `/login` for users who need to sign in without being exposed to full marketing content.
-- **Theme Awareness:** Both the landing page and login screen are fully theme-aware, aligning with system preferences or saved local state.
-- **Smart CTAs:** The landing page features dynamic call-to-action buttons that transform into "Go to Dashboard" links if a session is detected.
+- **Layout Orchestration:** `LayoutWrapper.tsx` serves as the central orchestrator for layout visibility. For authenticated users on the root path, it automatically displays the **App Shell** (Sidebar, App Header). For guest users, the root page manually renders marketing components (`LandingHeader`, `LandingFooter`).
+- **Benefit:** Provides a seamless entry point while isolating the authenticated dashboard from public marketing assets, preventing layout overlaps.
 
 ## 11. Global Footer Architecture
 
