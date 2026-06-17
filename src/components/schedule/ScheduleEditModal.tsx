@@ -1,10 +1,9 @@
 import React from 'react';
 import { GlassCard } from '@/components/ui/GlassCard';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import styles from '@/app/schedule/schedule.module.css';
 import { PostActivityEntry } from '@/app/schedule/types';
+import { ScheduleEditModalActions } from './ScheduleEditModalActions';
 
 export interface ScheduleEditModalProps {
   editingPost: PostActivityEntry;
@@ -39,51 +38,12 @@ export function ScheduleEditModal({
       <GlassCard className={styles.modalContent}>
         <h2 className={styles.modalTitle}>Edit Scheduled Post</h2>
         <form action={onUpdate}>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem', gap: '0.75rem' }}>
-            {isCacheValid && (
-              <button
-                type="button"
-                onClick={onResumeReview}
-                style={{
-                  background: 'hsla(var(--primary)/0.05)',
-                  color: 'hsl(var(--primary))',
-                  border: '1px solid hsla(var(--primary)/0.2)',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '0.5rem',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  fontSize: '0.85rem',
-                  fontWeight: 500
-                }}
-              >
-                <SkipNextIcon sx={{ fontSize: 18 }} /> Resume Review
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={onAIBrainstorm}
-              disabled={isAILoading}
-              style={{
-                background: 'hsla(var(--primary)/0.1)',
-                color: 'hsl(var(--primary))',
-                border: '1px solid hsla(var(--primary)/0.3)',
-                padding: '0.5rem 1rem',
-                borderRadius: '0.5rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                fontSize: '0.85rem',
-                fontWeight: 500,
-                transition: 'all 0.2s',
-                opacity: isAILoading ? 0.7 : 1
-              }}
-            >
-              <RocketLaunchIcon sx={{ fontSize: 18 }} /> {isAILoading ? 'Brainstorming...' : (isCacheValid ? 'Regenerate Strategy' : 'Brainstorm Strategies & Polish')}
-            </button>
-          </div>
+          <ScheduleEditModalActions 
+            isAILoading={isAILoading}
+            isCacheValid={isCacheValid}
+            onAIBrainstorm={onAIBrainstorm}
+            onResumeReview={onResumeReview}
+          />
           <div className={styles.formGroup}>
             <label htmlFor="edit-title" className={styles.formLabel}>Title</label>
             <input 
@@ -125,18 +85,10 @@ export function ScheduleEditModal({
           </div>
           
           <div className={styles.formActions}>
-            <button 
-              type="button" 
-              className={`${styles.actionButton} ${styles.secondaryAction}`}
-              onClick={onCancel}
-            >
+            <button type="button" className={`${styles.actionButton} ${styles.secondaryAction}`} onClick={onCancel}>
               Cancel
             </button>
-            <button 
-              type="submit" 
-              className={`${styles.actionButton} ${styles.primaryAction}`}
-              disabled={isSaving}
-            >
+            <button type="submit" className={`${styles.actionButton} ${styles.primaryAction}`} disabled={isSaving}>
               {isSaving ? 'Saving...' : 'Save Changes'}
             </button>
           </div>

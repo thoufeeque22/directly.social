@@ -3,9 +3,8 @@ import { format, startOfWeek, endOfWeek } from 'date-fns';
 import { IconButton } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import styles from '@/app/schedule/schedule.module.css';
+import { ScheduleViewToggles } from './ScheduleViewToggles';
 
 export interface ScheduleHeaderProps {
   viewMode: 'timeline' | 'month' | 'week';
@@ -54,65 +53,7 @@ export function ScheduleHeader({
           </div>
         )}
 
-        <div style={{ display: 'flex', background: 'hsla(var(--muted)/0.1)', padding: '4px', borderRadius: '10px', border: '1px solid hsla(var(--border)/0.4)' }}>
-          <button 
-            onClick={() => onViewChange('timeline')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 16px',
-              borderRadius: '8px',
-              border: 'none',
-              background: viewMode === 'timeline' ? 'hsla(var(--primary)/0.15)' : 'transparent',
-              color: viewMode === 'timeline' ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-          >
-            <ViewHeadlineIcon sx={{ fontSize: 18 }} /> Timeline
-          </button>
-          <button 
-            onClick={() => onViewChange('month')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 16px',
-              borderRadius: '8px',
-              border: 'none',
-              background: viewMode === 'month' ? 'hsla(var(--primary)/0.15)' : 'transparent',
-              color: viewMode === 'month' ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-          >
-            <CalendarMonthIcon sx={{ fontSize: 18 }} /> Month
-          </button>
-          <button 
-            onClick={() => onViewChange('week')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 16px',
-              borderRadius: '8px',
-              border: 'none',
-              background: viewMode === 'week' ? 'hsla(var(--primary)/0.15)' : 'transparent',
-              color: viewMode === 'week' ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-          >
-            <CalendarMonthIcon sx={{ fontSize: 18 }} /> Week
-          </button>
-        </div>
+        <ScheduleViewToggles viewMode={viewMode} onViewChange={onViewChange} />
       </div>
     </div>
   );
