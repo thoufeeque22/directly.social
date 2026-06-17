@@ -16,23 +16,7 @@ import {
 import { Tooltip } from '@mui/material';
 import styles from './calendar.module.css';
 
-interface PlatformResult {
-  id: string;
-  platform: string;
-  accountId: string | null;
-}
-
-interface PostActivityEntry {
-  id: string;
-  title: string;
-  description: string | null;
-  videoFormat: string;
-  scheduledAt: string;
-  createdAt: string;
-  isPublished: boolean;
-  stagedFileId: string | null;
-  platforms: PlatformResult[];
-}
+import { PostActivityEntry, PlatformResult } from '@/app/schedule/types';
 
 interface CalendarViewProps {
   posts: PostActivityEntry[];
