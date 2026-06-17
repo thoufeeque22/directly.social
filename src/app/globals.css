@@ -266,7 +266,7 @@ a {
   background: hsla(var(--popover) / 0.95);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  color: white;
+  color: hsl(var(--popover-foreground));
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
   font-size: 0.75rem;

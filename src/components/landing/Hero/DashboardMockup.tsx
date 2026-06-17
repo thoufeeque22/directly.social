@@ -64,7 +64,7 @@ export const DashboardMockup = () => {
                     component={motion.div}
                     animate={{ opacity: [1, 0.4, 1] }}
                     transition={{ repeat: Infinity, duration: 2 }}
-                    sx={{ px: 1, py: 0.2, borderRadius: 0.5, bgcolor: 'error.main', color: 'white', fontSize: 8, fontWeight: 800 }}
+                    sx={{ px: 1, py: 0.2, borderRadius: 0.5, bgcolor: 'error.main', color: 'error.contrastText', fontSize: 8, fontWeight: 800 }}
                   >
                     LIVE
                   </Box>

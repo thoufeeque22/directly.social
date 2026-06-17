@@ -28,7 +28,7 @@ export function FeatureAdoptionChart({ metrics, featureNames, featureLabels }: F
   }));
 
   return (
-    <Paper elevation={3} sx={{ bgcolor: 'white', borderRadius: 2 }}>
+    <Paper elevation={3} sx={{ bgcolor: 'background.paper', borderRadius: 2 }}>
       <Box sx={{ p: 3 }} data-testid="feature-adoption-chart">
         <Typography variant="h6" gutterBottom sx={{ color: "primary.main", fontWeight: "bold" }}>
           Feature Adoption Trends

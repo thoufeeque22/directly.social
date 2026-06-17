@@ -64,8 +64,8 @@ export default function AuthSuccessPage() {
       alignItems: 'center',
       justifyContent: 'center',
       height: '100dvh',
-      backgroundColor: '#0F172A',
-      color: 'white',
+      backgroundColor: 'hsla(var(--background))',
+      color: 'hsl(var(--foreground))',
       fontFamily: 'sans-serif',
       textAlign: 'center',
       padding: '20px'

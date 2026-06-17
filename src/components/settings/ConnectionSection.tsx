@@ -46,7 +46,7 @@ export const ConnectionSection: React.FC<ConnectionSectionProps> = ({
             className={styles.connectBtn}
             style={{ 
               background: color, 
-              color: 'white', 
+              color: 'hsl(var(--primary-foreground))', 
               border: 'none', 
               padding: '0.75rem 1.5rem', 
               borderRadius: '0.5rem', 

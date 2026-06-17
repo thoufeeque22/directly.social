@@ -29,7 +29,7 @@ export function PlatformHealthChart({ metrics }: PlatformHealthChartProps) {
   });
 
   return (
-    <Paper elevation={3} sx={{ bgcolor: 'white', borderRadius: 2 }} data-testid="platform-health-chart">
+    <Paper elevation={3} sx={{ bgcolor: 'background.paper', borderRadius: 2 }} data-testid="platform-health-chart">
       <Box sx={{ p: 3 }}>
         <Typography variant="h6" gutterBottom sx={{ color: "primary.main", fontWeight: "bold" }}>
           Platform Distribution Health

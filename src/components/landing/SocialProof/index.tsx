@@ -27,7 +27,7 @@ const PlatformItem = ({ id, isUpcoming }: { id: string, isUpcoming?: boolean }) 
         <Box sx={{ p: 1, borderRadius: 2, bgcolor: 'background.default', display: 'flex', border: '1px solid', borderColor: 'divider', position: 'relative' }}>
           <PlatformIcon platformId={id} sx={{ fontSize: { xs: 24, md: 28 }, color: isUpcoming ? 'text.secondary' : brandColors[id.toLowerCase()] || 'inherit' }} />
           {isUpcoming && (
-            <Box sx={{ position: 'absolute', top: -8, right: -8, bgcolor: 'primary.main', color: 'white', fontSize: '0.5rem', fontWeight: 900, px: 0.6, py: 0.2, borderRadius: 1, boxShadow: 2, letterSpacing: 0.5 }}>SOON</Box>
+            <Box sx={{ position: 'absolute', top: -8, right: -8, bgcolor: 'primary.main', color: 'primary.contrastText', fontSize: '0.5rem', fontWeight: 900, px: 0.6, py: 0.2, borderRadius: 1, boxShadow: 2, letterSpacing: 0.5 }}>SOON</Box>
           )}
         </Box>
         <Typography variant="caption" sx={{ fontWeight: 700, textTransform: 'uppercase', fontSize: '0.65rem', letterSpacing: '0.05em', color: 'text.secondary' }}>{id}</Typography>

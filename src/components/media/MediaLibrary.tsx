@@ -88,7 +88,7 @@ const MediaPreview: React.FC<{ src?: string; isGrid?: boolean }> = ({ src, isGri
         <div style={{ 
           position: 'absolute', bottom: '8px', right: '8px', 
           background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
-          borderRadius: '4px', padding: '2px 6px', fontSize: '10px', color: 'white',
+          borderRadius: '4px', padding: '2px 6px', fontSize: '10px', color: 'hsl(var(--foreground))',
           fontWeight: 600, border: '1px solid rgba(255,255,255,0.1)'
         }}>
           {isVertical ? '9:16 PORTRAIT' : '16:9 LANDSCAPE'}
@@ -542,5 +542,7 @@ export const MediaLibrary: React.FC = () => {
         }
       `}</style>
     </div>
+  );
+};
   );
 };
