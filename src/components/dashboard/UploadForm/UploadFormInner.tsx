@@ -8,9 +8,9 @@ import { AIStyleSelector } from './AIStyleSelector';
 import { useUploadFormContext } from './UploadFormContext';
 import { UploadHeader } from './UploadHeader';
 import { VideoSelection } from './VideoSelection';
-import { PlatformSpecificToggle } from './PlatformSpecificToggle';
 import { StandardMetadataFields } from './StandardMetadataFields';
 import { PlatformMetadataFields } from './PlatformMetadataFields';
+import { PostComposerTabs } from './PostComposerTabs';
 import { AIStrategyNotice } from './AIStrategyNotice';
 import { UploadFormActions } from './UploadFormActions';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -21,7 +21,7 @@ export const UploadFormInner: React.FC = () => {
     onSubmit, showGallery, setShowGallery, onGallerySelect,
     contentMode, onModeChange, customStyleText, onCustomStyleChange,
     accounts, preferences, selectedAccountIds, onToggleAccount,
-    isScheduled, scheduledAt, onSchedulingChange
+    isScheduled, scheduledAt, onSchedulingChange, selectedPlatforms
   } = useUploadFormContext();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -37,9 +37,17 @@ export const UploadFormInner: React.FC = () => {
         {showGallery && <MediaPicker onClose={() => setShowGallery(false)} onSelect={(a) => { onGallerySelect(a.fileId, a.fileName); setShowGallery(false); }} />}
         <AITierSelector selectedTier={aiTier} onChange={onTierChange} />
         {aiTier !== 'Manual' && <AIProviderSelector selectedProvider={aiProvider} onChange={onProviderChange} />}
-        <PlatformSpecificToggle />
-        <StandardMetadataFields />
-        <PlatformMetadataFields />
+
+        <PostComposerTabs>
+          {(activeIndex) => {
+            if (activeIndex === 0) {
+              return <StandardMetadataFields />;
+            }
+            const platform = selectedPlatforms[activeIndex - 1];
+            return <PlatformMetadataFields activePlatform={platform} />;
+          }}
+        </PostComposerTabs>
+
         {aiTier !== 'Manual' && <AIStyleSelector contentMode={contentMode} onModeChange={onModeChange} customStyleText={customStyleText} onCustomStyleChange={onCustomStyleChange} />}
         <AIStrategyNotice />
         <PlatformSelection accounts={accounts} preferences={preferences} selectedAccountIds={selectedAccountIds} onToggleAccount={onToggleAccount} />

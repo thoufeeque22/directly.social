@@ -24,7 +24,7 @@ export const UploadFormActions: React.FC = () => {
         { title, description, platforms: selectedPlatforms, aiTier, contentMode },
         JSON.parse(savedContext)
       );
-    } catch (e) {
+    } catch {
       return false;
     }
   }, [hasCachedPreviews, title, description, selectedPlatforms, aiTier, contentMode]);

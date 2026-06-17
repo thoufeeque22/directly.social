@@ -10,6 +10,11 @@ export interface CreateActivityParams {
   platforms: {
     platform: string;
     accountId: string;
+    overrideTitle?: string | null;
+    overrideDescription?: string | null;
+    hashtags?: string | null;
+    firstCommentText?: string | null;
+    scheduledAt?: string | null;
     metadata?: Prisma.JsonValue;
   }[];
 }
@@ -38,6 +43,11 @@ export class ActivityService {
           create: platforms.map((p) => ({
             platform: p.platform,
             accountId: p.accountId,
+            overrideTitle: p.overrideTitle,
+            overrideDescription: p.overrideDescription,
+            hashtags: p.hashtags,
+            firstCommentText: p.firstCommentText,
+            scheduledAt: p.scheduledAt ? new Date(p.scheduledAt) : null,
             status: 'pending',
             metadata: p.metadata ?? Prisma.JsonNull,
           })),

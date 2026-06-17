@@ -1,0 +1,27 @@
+import React from 'react';
+import { inputStyle } from './PlatformMetadataFields.styles';
+
+interface PlatformFirstCommentFieldProps {
+  platform: string;
+  value: string;
+  onChange: (p: string, v: string) => void;
+}
+
+export const PlatformFirstCommentField: React.FC<PlatformFirstCommentFieldProps> = ({
+  platform, value, onChange
+}) => {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'hsl(var(--muted-foreground))' }}>
+        {platform} First Comment
+      </label>
+      <textarea 
+        name={`first_comment_${platform}`}
+        placeholder={`Specific first comment for ${platform}...`} 
+        value={value} 
+        onChange={(e) => onChange(platform, e.target.value)} 
+        style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }} 
+      />
+    </div>
+  );
+};

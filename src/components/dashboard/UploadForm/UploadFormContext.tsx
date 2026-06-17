@@ -40,11 +40,11 @@ export const UploadFormProvider: React.FC<{ children: React.ReactNode; props: Up
     [props.selectedAccountIds, props.accounts]
   );
 
-  const value = {
+  const value = useMemo(() => ({
     ...props, ...uploadFormState, selectedPlatforms, 
     byosActive: byos.active, byosProvider: byos.provider, 
     showGallery, setShowGallery
-  };
+  }), [props, uploadFormState, selectedPlatforms, byos.active, byos.provider, showGallery]);
 
   return <UploadFormContext.Provider value={value}>{children}</UploadFormContext.Provider>;
 };

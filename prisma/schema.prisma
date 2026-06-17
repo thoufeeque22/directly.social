@@ -150,6 +150,11 @@ model PostPlatformResult {
   metadata        Json?
   metadataHash    String?
   progress        Int         @default(0)
+  overrideTitle       String?
+  overrideDescription String?
+  hashtags            String?
+  firstCommentText    String?
+  scheduledAt         DateTime?
   postActivity     PostActivity @relation(fields: [postActivityId], references: [id], onDelete: Cascade)
 
   @@unique([postActivityId, platform, accountId], name: "postActivityId_platform_accountId")
