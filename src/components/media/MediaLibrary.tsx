@@ -503,7 +503,8 @@ export const MediaLibrary: React.FC = () => {
                 <button 
                   onClick={handleBulkDelete}
                   style={{ 
-                    background: '#EF4444', color: 'white', border: 'none', 
+                    background: '#EF4444', color: 'hsl(var(--primary-foreground))', border: 'none',
+ 
                     padding: '0.85rem 2rem', borderRadius: '1.1rem', 
                     fontSize: '0.95rem', fontWeight: 900, cursor: 'pointer',
                     transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',

@@ -347,7 +347,7 @@ export const AIChatbot = () => {
               sx={{
                 width: 56, height: 56,
                 background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, #a855f7 100%)',
-                color: 'white',
+                color: 'hsl(var(--primary-foreground))',
                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
                 '&:hover': { transform: 'scale(1.05)', background: 'linear-gradient(135deg, hsl(var(--primary)) 20%, #a855f7 100%)' },
                 transition: 'all 0.2s ease',

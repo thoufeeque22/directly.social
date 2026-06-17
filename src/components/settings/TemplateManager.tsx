@@ -101,7 +101,7 @@ export const TemplateManager = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', marginBottom: '0.5rem' }}>Reusable Snippets</h2>
+      <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'hsl(var(--foreground))', marginBottom: '0.5rem' }}>Reusable Snippets</h2>
       <div style={{ position: 'relative', marginBottom: '1rem' }}>
         <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'hsl(var(--muted-foreground))' }} />
         <input
@@ -114,7 +114,7 @@ export const TemplateManager = () => {
             borderRadius: '0.75rem',
             background: 'hsla(var(--muted)/0.1)',
             border: '1px solid hsla(var(--border)/0.3)',
-            color: 'white',
+            color: 'hsl(var(--foreground))',
             outline: 'none',
             fontSize: '0.9rem'
           }}
@@ -163,7 +163,7 @@ export const TemplateManager = () => {
                     onChange={e => setEditContent(e.target.value)}
                     placeholder="Content"
                     rows={3}
-                    style={{ background: 'hsla(var(--muted)/0.5)', border: '1px solid hsla(var(--border)/0.5)', borderRadius: '4px', padding: '4px 8px', fontSize: '0.8rem', color: 'white', resize: 'none' }}
+                    style={{ background: 'hsla(var(--muted)/0.5)', border: '1px solid hsla(var(--border)/0.5)', borderRadius: '4px', padding: '4px 8px', fontSize: '0.8rem', color: 'hsl(var(--foreground))', resize: 'none' }}
                   />
                   <div style={{ display: 'flex', gap: '4px', justifyContent: 'flex-end' }}>
                     <button
@@ -176,7 +176,7 @@ export const TemplateManager = () => {
                     <button
                       onClick={handleCancelEdit}
                       disabled={isUpdating}
-                      style={{ background: 'hsla(var(--muted)/0.5)', color: 'white', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem' }}
+                      style={{ background: 'hsla(var(--muted)/0.5)', color: 'hsl(var(--foreground))', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem' }}
                     >
                       <X size={14} /> Cancel
                     </button>
