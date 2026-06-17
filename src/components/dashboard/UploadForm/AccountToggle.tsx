@@ -26,13 +26,13 @@ export const AccountToggle: React.FC<AccountToggleProps> = ({
         disabled={isUploading || isSuccess}
         style={{
           position: 'relative', padding: '0.6rem 1rem', borderRadius: '0.75rem',
-          border: isSelected ? '2px solid hsl(var(--primary))' : '1px solid hsla(var(--border) / 0.5)',
-          background: isSelected ? 'hsla(var(--primary) / 0.15)' : 'hsla(var(--muted) / 0.2)',
-          color: isSelected ? 'hsl(var(--foreground))' : 'hsl(var(--muted-foreground))',
+          border: isSelected ? '1.5px solid hsl(var(--primary))' : '1px solid hsla(var(--border) / 0.8)',
+          background: isSelected ? 'hsla(var(--primary) / 0.1)' : 'transparent',
+          color: isSelected ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
           cursor: isUploading || isSuccess ? 'not-allowed' : 'pointer',
           fontSize: '0.85rem', fontWeight: 600, transition: 'all 0.2s',
           display: 'flex', alignItems: 'center', gap: '0.4rem',
-          boxShadow: isSelected && !isUploading && !isSuccess ? '0 0 20px hsla(var(--primary) / 0.4)' : 'none',
+          boxShadow: isSelected && !isUploading && !isSuccess ? '0 4px 12px hsla(var(--primary) / 0.15)' : 'none',
           opacity: status === 'cancelled' ? 0.5 : 1, overflow: 'hidden',
         }}
       >
@@ -44,7 +44,7 @@ export const AccountToggle: React.FC<AccountToggleProps> = ({
           background: isSelected ? 'hsl(var(--primary))' : 'transparent',
           border: isSelected ? 'none' : '1px solid hsla(var(--muted-foreground) / 0.5)',
         }} />
-        <span style={{ opacity: 0.6, textTransform: 'capitalize' }}>{platform}:</span> {displayName}
+        <span style={{ opacity: 0.6, textTransform: 'capitalize', fontWeight: isSelected ? 700 : 500 }}>{platform}:</span> {displayName}
         <StatusIcon status={status} />
       </button>
       {status === 'failed' && error && (
