@@ -1,150 +1,37 @@
-/* eslint-disable max-lines */
-import { ReviewContext } from './DashboardClient.types';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { Account, PlatformPreference, VideoFormat } from '@/lib/core/types';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
 import { AITier, StyleMode } from '@/lib/core/constants';
 import { AIProvider } from '@/lib/core/ai';
 import { extractVideoFrames } from '@/lib/utils/video-analysis';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { ReviewContext } from './DashboardClient.types';
+import { mapPlatforms } from './handlers/platformMapper';
+import { generateAIStrategy } from './handlers/aiHandler';
+import { handleSubmission } from './handlers/submissionHandler';
 
 export const useDashboardHandlers = (
-  resumeId: string | null,
-  stagedId: string | null,
-  devAccounts: Account[],
-  selectedAccountIds: string[],
-  aiTier: AITier,
-  contentMode: StyleMode,
-  aiProvider: AIProvider,
-  customStyleText: string,
-  byokConfigs: Record<string, { apiKey: string; modelId: string }> | undefined,
-  videoFormat: VideoFormat,
-  draftFileName: string | null,
-  galleryFileId: string | null,
-  galleryFileName: string | null,
-  isScheduled: boolean,
-  scheduledAt: string,
-  setUploadStatus: (s: string) => void,
-  setIsReviewing: (b: boolean) => void,
-  setAiPreviews: (p: Record<string, AIWriteResult>) => void,
-  setReviewContext: (c: ReviewContext) => void,
-  setIsUploading: (b: boolean) => void,
-  clearCache: () => void,
-  preferences: PlatformPreference[] | undefined,
-  handleFileChange: (f: File | null) => void,
-  setGalleryFileId: (id: string | null) => void,
-  setGalleryFileName: (n: string | null) => void,
-  updateSession: (data: Record<string, unknown>) => Promise<unknown>,
+  resumeId: string | null, stagedId: string | null, devAccounts: Account[], selectedAccountIds: string[],
+  aiTier: AITier, contentMode: StyleMode, aiProvider: AIProvider, customStyleText: string,
+  byokConfigs: Record<string, { apiKey: string; modelId: string }> | undefined, videoFormat: VideoFormat,
+  draftFileName: string | null, galleryFileId: string | null, galleryFileName: string | null,
+  isScheduled: boolean, scheduledAt: string, setUploadStatus: (s: string) => void, setIsReviewing: (b: boolean) => void,
+  setAiPreviews: (p: Record<string, AIWriteResult>) => void, setReviewContext: (c: ReviewContext) => void,
+  setIsUploading: (b: boolean) => void, clearCache: () => void, preferences: PlatformPreference[] | undefined,
+  handleFileChange: (f: File | null) => void, setGalleryFileId: (id: string | null) => void,
+  setGalleryFileName: (n: string | null) => void, updateSession: (data: Record<string, unknown>) => Promise<unknown>,
   router: AppRouterInstance
 ) => {
-  const mapPlatforms = (ids: string[], accs: Account[], specific: boolean, fd: FormData) =>
-    ids
-      .map((id) => {
-        const isSplit = id.includes(':');
-        const platformKey = isSplit ? id.split(':')[0] : null;
-        const accId = isSplit ? id.split(':')[1] : id;
-        const acc = accs.find((a) => a.id === accId);
-        if (!acc) return null;
-
-        const provider = isSplit && platformKey ? platformKey : acc.provider === 'google' ? 'youtube' : acc.provider;
-
-        const metadata = specific
-          ? {
-              title: (fd.get(`title_${provider}`) || fd.get('title')) as string,
-              description: (fd.get(`description_${provider}`) || fd.get('description')) as string,
-            }
-          : undefined;
-
-        return { platform: provider, accountId: accId, metadata };
-      })
-      .filter((pl): pl is NonNullable<typeof pl> => !!pl);
-
   const onSubmit = async (fd: FormData) => {
     try {
-      const specific = fd.get('isPlatformSpecific') === 'true';
-      const platforms = mapPlatforms(selectedAccountIds, devAccounts, specific, fd);
-      if (platforms.length === 0) {
-        setUploadStatus(' No platforms selected.');
-        return;
-      }
-
-      setUploadStatus(' Initializing Cockpit...');
-      const initRes = await fetch('/api/upload/init', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: fd.get('title') || (platforms.length > 0 ? platforms[0].metadata?.title : null),
-          description: fd.get('description') || (platforms.length > 0 ? platforms[0].metadata?.description : null),
-          videoFormat,
-          platforms,
-        }),
+      const platforms = mapPlatforms(selectedAccountIds, devAccounts, fd);
+      if (platforms.length === 0) return setUploadStatus(' No platforms selected.');
+      await handleSubmission({
+        fd, platforms, videoFormat, resumeId, aiTier, contentMode, aiProvider, customStyleText, byokConfigs,
+        galleryFileId, galleryFileName, draftFileName, isScheduled, scheduledAt, setUploadStatus, setAiPreviews,
+        setReviewContext, setIsReviewing, updateSession, clearCache, router
       });
-
-      const initData = await initRes.json();
-      const activityId = initData.data?.activityId || resumeId;
-
-      if (aiTier !== 'Manual' && fd.get('skipReview') !== 'true') {
-        setUploadStatus(' Generating AI Strategy...');
-        const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
-        const title = fd.get('title') as string;
-        const description = fd.get('description') as string;
-        const platformsNames = platforms.map((p) => p.platform);
-
-        const previews = await getMultiPlatformAIPreviews({
-          title,
-          description,
-          tier: aiTier,
-          mode: contentMode,
-          platforms: platformsNames,
-          visualData: [],
-          customStyleText,
-          byokConfigs,
-          aiProvider,
-        });
-
-        const { getAiBalance } = await import('@/app/actions/credits');
-        const newBalance = await getAiBalance();
-        await updateSession({ aiCredits: newBalance });
-
-        if (previews) {
-          localStorage.setItem(
-            'SS_AI_PREVIEWS_CONTEXT',
-            JSON.stringify({ title, description, platforms: platformsNames, aiTier, contentMode })
-          );
-        }
-
-        setAiPreviews(previews);
-        setReviewContext({
-          activityId,
-          stagedFileId: galleryFileId || '',
-          fileName: galleryFileName || draftFileName || '',
-          formData: fd,
-        });
-        setIsReviewing(true);
-        return;
-      }
-
-      clearCache();
-      localStorage.setItem(
-        'SS_PENDING_POST',
-        JSON.stringify({
-          title: fd.get('title'),
-          description: fd.get('description'),
-          videoFormat,
-          aiTier,
-          contentMode,
-          customStyleText,
-          platforms,
-          isScheduled,
-          scheduledAt,
-          galleryFileId,
-          galleryFileName,
-          resumeActivityId: activityId,
-        })
-      );
-      router.push('/activity?action=distribute');
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      setUploadStatus(` Error: ${msg}`);
+      setUploadStatus(` Error: ${err instanceof Error ? err.message : String(err)}`);
     }
   };
 
@@ -157,27 +44,14 @@ export const useDashboardHandlers = (
       const { updatePlatformResultsAction } = await import('@/app/actions/activity/metadata');
       await updatePlatformResultsAction(context.activityId, updated);
       clearCache();
-      localStorage.setItem(
-        'SS_PENDING_POST',
-        JSON.stringify({
-          title: 'AI Optimized Post',
-          description: '',
-          videoFormat,
-          aiTier,
-          contentMode,
-          customStyleText,
-          platforms: mapPlatforms(selectedAccountIds, devAccounts, false, context.formData),
-          isScheduled,
-          scheduledAt,
-          galleryFileId,
-          galleryFileName,
-          resumeActivityId: context.activityId,
-        })
-      );
+      localStorage.setItem('SS_PENDING_POST', JSON.stringify({
+        title: 'AI Optimized Post', description: '', videoFormat, aiTier, contentMode, customStyleText,
+        platforms: mapPlatforms(selectedAccountIds, devAccounts, context.formData), isScheduled, scheduledAt,
+        galleryFileId, galleryFileName, resumeActivityId: context.activityId,
+      }));
       router.push('/activity?action=distribute');
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      setUploadStatus(` Error: ${msg}`);
+      setUploadStatus(` Error: ${err instanceof Error ? err.message : String(err)}`);
       setIsUploading(false);
     }
   };
@@ -186,51 +60,24 @@ export const useDashboardHandlers = (
     setUploadStatus(' Scanning video...');
     try {
       const frames = await extractVideoFrames(file);
-      const pl = (preferences || []).filter((pr) => pr.isEnabled);
-      const { getMultiPlatformAIPreviews } = await import('@/app/actions/ai');
-      const previews = await getMultiPlatformAIPreviews({
-        title: '',
-        description: '',
-        tier: 'Generate',
-        mode: contentMode,
-        platforms: pl.map((pr) => pr.platformId),
-        visualData: frames,
-        customStyleText,
-        byokConfigs,
-        aiProvider,
+      const platforms = (preferences || []).filter((pr) => pr.isEnabled).map((pr) => pr.platformId);
+      const previews = await generateAIStrategy({ 
+        title: '', description: '', tier: 'Generate', mode: contentMode, 
+        platforms, customStyleText, byokConfigs, aiProvider,
+        visualData: frames 
       });
-
       const { getAiBalance } = await import('@/app/actions/credits');
-      const newBalance = await getAiBalance();
-      await updateSession({ aiCredits: newBalance });
+      await updateSession({ aiCredits: await getAiBalance() });
       setAiPreviews(previews);
       setIsReviewing(true);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      setUploadStatus(` Error scanning: ${msg}`);
+      setUploadStatus(` Error scanning: ${err instanceof Error ? err.message : String(err)}`);
     }
   };
 
-  const handleFileChangeLocal = (f: File | null) => {
-    setGalleryFileId(null);
-    setGalleryFileName(null);
-    handleFileChange(f);
-    setAiPreviews({});
-  };
-
-  const handleGallerySelect = (id: string, n: string) => {
-    setGalleryFileId(id);
-    setGalleryFileName(n);
-    handleFileChange(null);
-    setUploadStatus(` Selected: ${n}`);
-    setAiPreviews({});
-  };
-
   return {
-    onSubmit,
-    onConfirm,
-    handleVisualScan,
-    handleFileChange: handleFileChangeLocal,
-    handleGallerySelect,
+    onSubmit, onConfirm, handleVisualScan,
+    handleFileChange: (f: File | null) => { setGalleryFileId(null); setGalleryFileName(null); handleFileChange(f); setAiPreviews({}); },
+    handleGallerySelect: (id: string, n: string) => { setGalleryFileId(id); setGalleryFileName(n); handleFileChange(null); setUploadStatus(` Selected: ${n}`); setAiPreviews({}); },
   };
 };

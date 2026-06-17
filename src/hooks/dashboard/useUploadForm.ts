@@ -12,8 +12,15 @@ export function useUploadForm() {
   return {
     title: form.title,
     description: form.description,
+    hashtags: form.hashtags,
+    firstCommentText: form.firstCommentText,
+    scheduledAt: form.scheduledAt,
     platformTitles: form.platformTitles,
     platformDescriptions: form.platformDescriptions,
+    overriddenPlatforms: form.overriddenPlatforms,
+    platformHashtags: form.platformHashtags,
+    platformFirstComments: form.platformFirstComments,
+    platformSchedules: form.platformSchedules,
     isPlatformSpecific: form.isPlatformSpecific,
     ...handlers
   };
