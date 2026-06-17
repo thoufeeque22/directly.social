@@ -137,3 +137,14 @@ Navigation complexity is managed by delegating auxiliary and legal links to a se
 - **Sub-Menu Pattern:** Utilizes a nested MUI `Menu` structure, providing a hierarchical browsing experience for Documentation, Privacy Policy, and Terms of Service.
 - **Aesthetic Consistency:** Uses the standard `HelpOutlinedIcon` and chevron indicators to provide clear visual cues for further interaction.
 
+## 14. Schedule Domain Architecture
+
+The Schedule domain manages the visualization and editing of upcoming posts in calendar and timeline formats.
+
+- **Orchestration Hook (`useScheduleEditor`):** A composite hook that orchestrates data fetching (`useScheduleData`), user actions (`useScheduleActions`), and AI brainstorming (`useScheduleAI`).
+- **Modular Views:** The main `ScheduleContent` component delegates rendering to specialized view components:
+  - `CalendarView`: Orchestrates `CalendarMonthView` and `CalendarWeekView`.
+  - `ScheduleTimelineView`: Provides a chronological list of upcoming posts.
+- **Unified Modal Engine:** The `ScheduleEditModal` follows the Modular Engine pattern, splitting form actions into `ScheduleEditModalActions` and integrating AI reviews via `AIContentReview`.
+- **Modularity:** Strictly adheres to the 100-line rule by extracting sub-components and logic into hooks, ensuring high maintainability.
+
