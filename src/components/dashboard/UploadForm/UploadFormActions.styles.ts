@@ -2,7 +2,7 @@ import React from 'react';
 
 export const primaryButtonStyle: React.CSSProperties = {
   background: 'hsl(var(--primary))', 
-  color: 'white', 
+  color: 'hsl(var(--primary-foreground))', 
   border: 'none', 
   padding: '1rem', 
   borderRadius: '0.75rem', 

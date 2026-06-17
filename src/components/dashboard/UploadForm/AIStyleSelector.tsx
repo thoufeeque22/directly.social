@@ -26,7 +26,7 @@ export const AIStyleSelector: React.FC<Props> = ({ contentMode, onModeChange, cu
             padding: '0.55rem 1.15rem', borderRadius: '2rem',
             border: `1px solid ${contentMode === mode ? 'hsl(var(--primary))' : 'hsla(var(--border) / 0.4)'}`,
             background: contentMode === mode ? 'hsla(var(--primary) / 0.2)' : 'hsla(var(--muted) / 0.1)',
-            color: contentMode === mode ? 'white' : 'hsl(var(--muted-foreground))',
+            color: contentMode === mode ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
             cursor: 'pointer', fontSize: '0.8rem', fontWeight: contentMode === mode ? 700 : 500, transition: 'all 0.2s',
           }}
         >
@@ -44,5 +44,5 @@ export const AIStyleSelector: React.FC<Props> = ({ contentMode, onModeChange, cu
 const customInputStyle: React.CSSProperties = {
   width: '100%', padding: '0.75rem 1rem', borderRadius: '0.75rem',
   background: 'hsla(var(--background) / 0.5)', border: '1px solid hsla(var(--primary) / 0.3)',
-  color: 'white', fontSize: '0.85rem', outline: 'none'
+  color: 'hsl(var(--foreground))', fontSize: '0.85rem', outline: 'none'
 };

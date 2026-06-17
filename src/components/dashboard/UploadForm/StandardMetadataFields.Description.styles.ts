@@ -17,7 +17,7 @@ export const textareaStyle: React.CSSProperties = {
   padding: '0.75rem 2.5rem 0.75rem 1rem', 
   borderRadius: '0.75rem', 
   border: '1px solid hsla(var(--border) / 0.5)', 
-  color: 'white', 
+  color: 'hsl(var(--foreground))', 
   width: '100%', 
   resize: 'none', 
   outline: 'none', 

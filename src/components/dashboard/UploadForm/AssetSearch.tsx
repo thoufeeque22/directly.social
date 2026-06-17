@@ -31,5 +31,5 @@ const searchIconStyle: React.CSSProperties = {
 const inputStyle: React.CSSProperties = { 
   width: '100%', padding: '0.75rem 1rem 0.75rem 2.5rem', 
   borderRadius: '0.75rem', border: '1px solid hsla(var(--border) / 0.5)',
-  background: 'hsla(var(--muted) / 0.3)', color: 'white'
+  background: 'hsla(var(--muted) / 0.3)', color: 'hsl(var(--foreground))'
 };

@@ -29,7 +29,7 @@ export const TemplateItem: React.FC<TemplateItemProps> = ({ template, onSelect }
         e.currentTarget.style.borderColor = 'transparent';
       }}
     >
-      <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white' }}>{template.name}</span>
+      <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'hsl(var(--foreground))' }}>{template.name}</span>
       <span style={contentPreviewStyle}>{template.content}</span>
     </button>
   );

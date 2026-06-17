@@ -27,4 +27,4 @@ const wrapperStyle: React.CSSProperties = { display: 'flex', alignItems: 'center
 const labelStyle: React.CSSProperties = { fontSize: '0.9rem', fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center' };
 const checkboxStyle: React.CSSProperties = { marginRight: '0.5rem', width: '1.1rem', height: '1.1rem' };
 const pickerWrapperStyle: React.CSSProperties = { position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer', width: '100%', maxWidth: '300px' };
-const inputStyle: React.CSSProperties = { background: 'hsla(var(--background)/0.5)', border: '1px solid hsla(var(--border)/0.5)', borderRadius: '0.5rem', padding: '0.5rem 0.75rem 0.5rem 2.5rem', color: 'white', fontSize: '0.85rem', outline: 'none', width: '100%', cursor: 'pointer' };
+const inputStyle: React.CSSProperties = { background: 'hsla(var(--background)/0.5)', border: '1px solid hsla(var(--border)/0.5)', borderRadius: '0.5rem', padding: '0.5rem 0.75rem 0.5rem 2.5rem', color: 'hsl(var(--foreground))', fontSize: '0.85rem', outline: 'none', width: '100%', cursor: 'pointer' };

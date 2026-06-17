@@ -12,7 +12,7 @@ import { useUploadFormContext } from './UploadFormContext';
 const getPlatformIcon = (p: string) => {
   switch (p) {
     case 'youtube': return <YouTubeIcon sx={{ fontSize: 18, color: '#FF0000' }} />;
-    case 'tiktok': return <MusicNoteIcon sx={{ fontSize: 18, color: 'white' }} />;
+    case 'tiktok': return <MusicNoteIcon sx={{ fontSize: 18 }} />;
     case 'instagram': return <InstagramIcon sx={{ fontSize: 18, color: '#E4405F' }} />;
     case 'facebook': return <FacebookIcon sx={{ fontSize: 18, color: '#1877F2' }} />;
     default: return <LanguageIcon sx={{ fontSize: 18 }} />;

@@ -48,7 +48,7 @@ export const SearchField: React.FC<SearchFieldProps> = ({
           borderRadius: '0.75rem', 
           border: '1px solid hsla(var(--border) / 0.5)',
           background: 'hsla(var(--muted) / 0.2)', 
-          color: 'white',
+          color: 'hsl(var(--foreground))',
           fontSize: '1rem',
           outline: 'none',
           transition: 'border-color 0.2s ease, background 0.2s ease',

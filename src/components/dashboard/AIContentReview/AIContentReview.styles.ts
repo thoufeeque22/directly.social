@@ -13,7 +13,7 @@ export const inputStyle = (isError: boolean): React.CSSProperties => ({
   padding: '0.8rem 1rem', 
   borderRadius: '0.75rem', 
   border: `1px solid ${isError ? 'hsl(var(--destructive))' : 'hsla(var(--border) / 0.5)'}`,
-  color: 'white',
+  color: 'hsl(var(--foreground))',
   fontSize: '0.95rem',
   outline: 'none',
   transition: 'border-color 0.2s'

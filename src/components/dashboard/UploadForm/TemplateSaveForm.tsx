@@ -42,6 +42,6 @@ export const TemplateSaveForm: React.FC<TemplateSaveFormProps> = ({
   );
 };
 
-const inputStyle: React.CSSProperties = { background: 'hsla(var(--muted)/0.5)', border: '1px solid hsla(var(--border)/0.5)', borderRadius: '4px', padding: '4px 8px', fontSize: '0.75rem', color: 'white', width: '100%' };
-const saveButtonStyle: React.CSSProperties = { flex: 1, background: 'hsl(var(--primary))', color: 'white', border: 'none', padding: '4px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 600, cursor: 'pointer' };
-const cancelButtonStyle: React.CSSProperties = { background: 'hsla(var(--muted)/0.5)', color: 'white', border: 'none', padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem', cursor: 'pointer' };
+const inputStyle: React.CSSProperties = { background: 'hsla(var(--muted)/0.5)', border: '1px solid hsla(var(--border)/0.5)', borderRadius: '4px', padding: '4px 8px', fontSize: '0.75rem', color: 'hsl(var(--foreground))', width: '100%' };
+const saveButtonStyle: React.CSSProperties = { flex: 1, background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))', border: 'none', padding: '4px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 600, cursor: 'pointer' };
+const cancelButtonStyle: React.CSSProperties = { background: 'hsla(var(--muted)/0.5)', color: 'hsl(var(--foreground))', border: 'none', padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem', cursor: 'pointer' };

@@ -38,5 +38,5 @@ export const ReviewHashtags: React.FC<HashtagsProps> = ({ hashtags, platformName
 };
 
 const xStyle: React.CSSProperties = { background: 'transparent', border: 'none', color: 'currentColor', cursor: 'pointer', padding: 0, marginLeft: '4px', opacity: 0.7 };
-const tagInputStyle: React.CSSProperties = { background: 'hsla(var(--muted) / 0.3)', padding: '0.4rem 0.75rem', borderRadius: '0.5rem', border: '1px solid hsla(var(--border) / 0.5)', color: 'white', fontSize: '0.8rem', width: '150px' };
+const tagInputStyle: React.CSSProperties = { background: 'hsla(var(--muted) / 0.3)', padding: '0.4rem 0.75rem', borderRadius: '0.5rem', border: '1px solid hsla(var(--border) / 0.5)', color: 'hsl(var(--foreground))', fontSize: '0.8rem', width: '150px' };
 const addBtnStyle: React.CSSProperties = { background: 'hsla(var(--primary) / 0.2)', color: 'hsl(var(--primary))', border: 'none', padding: '0.4rem 0.75rem', borderRadius: '0.5rem', cursor: 'pointer', fontSize: '0.8rem' };
