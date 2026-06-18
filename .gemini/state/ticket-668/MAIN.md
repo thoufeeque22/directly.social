@@ -1,0 +1,36 @@
+---
+ticket_id: 668
+branch_name: feature/668-modularize-media-library
+status: discovery
+current_round: 1
+---
+
+# 📋 Ticket Metadata
+- **ID**: 668
+- **Branch**: `feature/668-modularize-media-library`
+- **Goal**: Modularize `MediaLibrary.tsx` to adhere to the 100-line modularity threshold.
+- **Current Status**: discovery
+
+# 📝 Ticket Description
+### Context
+The `src/components/media/MediaLibrary.tsx` component is currently 546 lines long, exceeding the project's 100-line modularity threshold.
+
+### Problem/Goal
+The component merges media preview rendering, gallery asset management, and search/filtering logic into a single monolithic file.
+
+### Suggested Approach
+Modularize using the following strategy:
+1. **MediaPreview:** Extract the `MediaPreview` component and its internal hover/aspect-ratio logic into `src/components/media/MediaPreview.tsx`.
+2. **State Management:** Extract search, filtering, and asset staging logic into a `useMediaLibrary` hook.
+3. **Layout Components:** Split the main component into `MediaLibraryHeader`, `MediaLibraryGrid`, and `MediaLibraryEmptyState`.
+4. **MUI Integration:** Use Material UI `Box`, `Stack`, and `Typography` for layout consistency.
+
+### Impact
+Enables better component reuse and ensures adherence to the 100-Line Rule.
+
+# 🔄 Round History
+- **Round 1**: [IN-PROGRESS]
+
+# 📅 Timeline
+- **[2026-06-18 18:55:08]**: Initialization completed. Current phase: Product.
+- **[2026-06-18 19:00:26]**: PRODUCT [APPROVED] - Defined modular UX strategy for MediaLibrary refactor including orientation filtering, MUI Dialogs for safety, and an actionable empty state.
