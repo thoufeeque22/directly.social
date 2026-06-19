@@ -51,13 +51,13 @@ export const MediaLibraryHeader: React.FC<MediaLibraryHeaderProps> = ({
           startIcon={<Plus size={18} />}
           onClick={onAddVideo}
           disabled={isUploading}
-          data-testid="add-video"
+          data-testid="header-upload-button"
           sx={{
             fontWeight: 'bold',
             boxShadow: (theme) => `0 4px 12px ${theme.palette.primary.main}4D`,
           }}
         >
-          Add Video
+          Upload
         </Button>
         {hasAssets && (
           <Button

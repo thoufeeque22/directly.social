@@ -1,4 +1,5 @@
 
+/* eslint-disable max-lines */
 'use client';
 
 import React from 'react';
@@ -9,6 +10,8 @@ import { MediaLibraryHeader } from './MediaLibraryHeader';
 import { MediaLibraryGrid } from './MediaLibraryGrid';
 import { MediaLibraryEmptyState } from './MediaLibraryEmptyState';
 import { MediaActionsHUD } from './MediaActionsHUD';
+import { MediaLibraryControls } from './MediaLibraryControls';
+import { MediaLibraryDialogs } from './MediaLibraryDialogs';
 import { BRAND } from '@/lib/core/brand';
 
 export const MediaLibrary: React.FC = () => {
@@ -31,11 +34,26 @@ export const MediaLibrary: React.FC = () => {
     setSelectedIds,
   } = useMediaLibrary();
 
+  const [singleDeleteId, setSingleDeleteId] = React.useState<string | null>(null);
+  const [showClearAllDialog, setShowClearAllDialog] = React.useState(false);
+
+  const handleSingleDeleteConfirm = async () => {
+    if (singleDeleteId) {
+      await handleDeleteAsset(singleDeleteId);
+      setSingleDeleteId(null);
+    }
+  };
+
+  const handleClearAllConfirm = async () => {
+    await handleClearAll();
+    setShowClearAllDialog(false);
+  };
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <MediaLibraryHeader
         onAddVideo={handleAddVideo}
-        onClearAll={handleClearAll}
+        onClearAll={() => setShowClearAllDialog(true)}
         isUploading={isUploading}
         hasAssets={assets.length > 0}
       />
@@ -67,15 +85,18 @@ export const MediaLibrary: React.FC = () => {
             <CircularProgress />
           </Box>
         ) : assets.length === 0 ? (
-          <MediaLibraryEmptyState searchQuery={searchQuery} />
+          <MediaLibraryEmptyState searchQuery={searchQuery} onUpload={handleAddVideo} />
         ) : (
-          <MediaLibraryGrid
-            assets={assets}
-            selectedIds={selectedIds}
-            getRemainingTimeInfo={getRemainingTimeInfo}
-            toggleSelect={toggleSelect}
-            handleDeleteAsset={handleDeleteAsset}
-          />
+          <Box>
+            <MediaLibraryControls assets={assets} selectedIds={selectedIds} setSelectedIds={setSelectedIds} />
+            <MediaLibraryGrid
+              assets={assets}
+              selectedIds={selectedIds}
+              getRemainingTimeInfo={getRemainingTimeInfo}
+              toggleSelect={toggleSelect}
+              handleDeleteAsset={(id) => setSingleDeleteId(id)}
+            />
+          </Box>
         )}
       </Paper>
 
@@ -92,6 +113,15 @@ export const MediaLibrary: React.FC = () => {
         uploadStatus={uploadStatus}
         onBulkDelete={handleBulkDelete}
         onCancel={() => setSelectedIds([])}
+      />
+
+      <MediaLibraryDialogs
+        singleDeleteId={singleDeleteId}
+        setSingleDeleteId={setSingleDeleteId}
+        onSingleDeleteConfirm={handleSingleDeleteConfirm}
+        showClearAllDialog={showClearAllDialog}
+        setShowClearAllDialog={setShowClearAllDialog}
+        onClearAllConfirm={handleClearAllConfirm}
       />
     </Box>
   );

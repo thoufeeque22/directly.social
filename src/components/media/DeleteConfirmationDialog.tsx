@@ -14,13 +14,15 @@ interface DeleteConfirmationDialogProps {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  count: number;
+  message?: string;
+  count?: number;
 }
 
 export const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
   open,
   onClose,
   onConfirm,
+  message,
   count,
 }) => {
   return (
@@ -33,7 +35,7 @@ export const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> =
       <DialogTitle id="alert-dialog-title">Confirm Deletion</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Are you sure you want to permanently delete {count} video(s)? This action cannot be undone.
+          {message || `Are you sure you want to permanently delete ${count} video(s)? This action cannot be undone.`}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

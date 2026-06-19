@@ -91,6 +91,7 @@ export const MediaAssetCard: React.FC<MediaAssetCardProps> = ({
           variant="outlined"
           onClick={onDelete}
           data-testid="delete-asset"
+          aria-label="Delete Asset"
         >
           <Trash2 size={14} />
         </Button>

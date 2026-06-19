@@ -66,7 +66,7 @@ export const MediaActionsHUD: React.FC<MediaActionsHUDProps> = ({
           <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
             {isUploading
               ? uploadStatus
-              : `${selectedIds.length} video${selectedIds.length === 1 ? '' : 's'} selected`}
+              : `${selectedIds.length} item${selectedIds.length === 1 ? '' : 's'} selected`}
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
@@ -96,7 +96,7 @@ export const MediaActionsHUD: React.FC<MediaActionsHUDProps> = ({
           onBulkDelete();
           setDialogOpen(false);
         }}
-        count={selectedIds.length}
+        message="Are you sure you want to delete the selected assets?"
       />
     </>
   );

@@ -9,8 +9,6 @@ interface UseMediaDeleterProps {
 
 export const useMediaDeleter = ({ setAssets, selectedIds, setSelectedIds }: UseMediaDeleterProps) => {
   const handleDeleteAsset = async (fileId: string) => {
-    if (!globalThis.confirm('Are you sure you want to permanentely remove this video from your staged media?')) return;
-
     try {
       const res = await fetch(`/api/media/${fileId}`, { method: 'DELETE' });
       if (res.ok) {
@@ -27,8 +25,6 @@ export const useMediaDeleter = ({ setAssets, selectedIds, setSelectedIds }: UseM
   };
 
   const handleBulkDelete = async () => {
-    if (!globalThis.confirm(`Are you sure you want to permanentely delete ${selectedIds.length} videos?`)) return;
-
     try {
       const res = await fetch('/api/media', {
         method: 'DELETE',
@@ -48,9 +44,6 @@ export const useMediaDeleter = ({ setAssets, selectedIds, setSelectedIds }: UseM
   };
 
   const handleClearAll = async () => {
-    if (!globalThis.confirm('️WARNING: This will permanently delete EVERY video in your staged gallery. Are you absolutely sure?')) return;
-    if (!globalThis.confirm('FINAL CONFIRMATION: Are you really sure you want to wipe your entire media gallery?')) return;
-
     try {
       const res = await fetch('/api/media', {
         method: 'DELETE',
@@ -61,7 +54,6 @@ export const useMediaDeleter = ({ setAssets, selectedIds, setSelectedIds }: UseM
       if (res.ok) {
         setAssets([]);
         setSelectedIds([]);
-        alert('Gallery cleared successfully.');
       } else {
         alert('Failed to clear gallery');
       }

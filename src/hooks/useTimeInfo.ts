@@ -17,9 +17,9 @@ export const useTimeInfo = () => {
     const mins = Math.max(0, Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60)));
     const isExpiringSoon = hours < 24;
 
-    let text = `${hours}h ${mins}m left`;
+    let text = `${hours}h ${mins}m remaining`;
     if (hours > 24) {
-      text = `${Math.floor(hours / 24)}d ${hours % 24}h left`;
+      text = `${Math.floor(hours / 24)}d ${hours % 24}h remaining`;
     }
 
     return { text, isExpiringSoon };

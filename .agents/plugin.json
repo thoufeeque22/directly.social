@@ -1,5 +1,5 @@
 {
-  "name": "social-studio-agents",
+  "name": "dsa",
   "version": "1.0.0",
-  "description": "Workspace-specific agents for social-studio-app"
+  "description": "Workspace-specific agents for directly-social"
 }
