@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Neon Interface</title>
+    <style>
+        :root {
+            --bg: #050505;
+            --neon-cyan: #00f3ff;
+            --neon-magenta: #ff00ff;
+            --neon-purple: #bc13fe;
+            --text: #e0e0e0;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(0, 243, 255, 0.3);
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .cyber-container {
+            position: relative;
+            width: 600px;
+            padding: 3rem;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1), inset 0 0 15px rgba(0, 243, 255, 0.05);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .cyber-container::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-cyan), transparent, var(--neon-magenta));
+            z-index: -1;
+            border-radius: inherit;
+            opacity: 0.3;
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            margin-bottom: 2rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .ai-status {
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .pulse-ring {
+            width: 12px;
+            height: 12px;
+            background: var(--neon-magenta);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--neon-magenta);
+            animation: ring-pulse 1.5s infinite;
+        }
+
+        @keyframes ring-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        .terminal-output {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.85rem;
+            height: 120px;
+            overflow-y: hidden;
+            position: relative;
+        }
+
+        .line {
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .line-cyan { color: var(--neon-cyan); }
+        .line-magenta { color: var(--neon-magenta); }
+
+        .scanline {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0; left: 0;
+            background: linear-gradient(to bottom, transparent, rgba(0, 243, 255, 0.05) 50%, transparent);
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(100%); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="cyber-container">
+        <div class="scanline"></div>
+        <h1>CORE_AI</h1>
+        
+        <div class="ai-status">
+            <div class="pulse-ring"></div>
+            <span>SYSTEM_OPERATIONAL</span>
+        </div>
+
+        <div class="terminal-output" id="terminal">
+            <!-- Lines added by JS -->
+        </div>
+    </div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const logs = [
+            { text: "> Initializing neural matrix...", type: "cyan" },
+            { text: "> Syncing with cloud nodes...", type: "magenta" },
+            { text: "> Verifying protocol 7-B...", type: "cyan" },
+            { text: "> Accessing encrypted vault...", type: "magenta" },
+            { text: "> Optimizing weights...", type: "cyan" },
+            { text: "> Connection stable.", type: "magenta" },
+            { text: "> Awaiting user input...", type: "cyan" }
+        ];
+        let logIndex = 0;
+
+        function addLog() {
+            const log = logs[logIndex % logs.length];
+            const line = document.createElement('div');
+            line.className = `line line-${log.type}`;
+            line.textContent = log.text;
+            terminal.appendChild(line);
+            
+            if (terminal.childNodes.length > 10) {
+                terminal.removeChild(terminal.firstChild);
+            }
+
+            logIndex++;
+        }
+
+        setInterval(addLog, 2000);
+        addLog();
+    </script>
+</body>
+</html>
