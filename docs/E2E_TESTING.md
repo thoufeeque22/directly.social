@@ -59,9 +59,11 @@ Located at `src/__tests__/e2e/global-setup.ts`, this script:
 
 We use a "Setup Project" pattern. Playwright runs `auth.setup.ts` first, which logs in the user and saves the storage state to `.auth/user.json`. All other tests depend on this state, so they don't need to perform the login flow.
 
-### Worker Isolation
+### Parallel Test Isolation
 
-When running tests in parallel, Directly uses the `TEST_WORKER_INDEX` environment variable to create isolated temporary directories (e.g., `tmp/e2e/worker-0/`). This prevents race conditions during file upload and processing tests.
+When running tests in parallel, Directly relies on Playwright's `testInfo.parallelIndex` to allocate completely isolated tester identities and storage states (e.g., `v2-tester-0.json`, `v2-tester-1.json`, etc.). 
+
+**Crucial Architecture Note:** Never use `testInfo.workerIndex` for database or user identity isolation. Because Playwright dynamically spins up and tears down workers during execution, multiple parallel workers can be assigned the identical modulo `workerIndex`, leading to Cross-Test Database Pollution (race conditions where independent tests manipulate the same database records). `parallelIndex` is strictly guaranteed to be unique for concurrent execution lines.
 
 ## Troubleshooting
 

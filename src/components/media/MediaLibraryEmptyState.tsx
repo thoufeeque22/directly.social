@@ -18,7 +18,8 @@ export const MediaLibraryEmptyState: React.FC<MediaLibraryEmptyStateProps> = ({
     <Box
       sx={{
         gridColumn: '1 / -1',
-        p: '4rem',
+        py: '2rem',
+        px: '1rem',
         textAlign: 'center',
         color: 'text.secondary',
         display: 'flex',

@@ -50,13 +50,19 @@ export const MediaLibrary: React.FC = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <MediaLibraryHeader
         onAddVideo={handleAddVideo}
         onClearAll={() => setShowClearAllDialog(true)}
         isUploading={isUploading}
         hasAssets={assets.length > 0}
       />
+
+      <Box sx={{ p: '1rem', borderRadius: '12px', bgcolor: 'warning.main' }}>
+        <Typography variant="body2" sx={{ color: 'warning.contrastText', textAlign: 'center' }}>
+          <strong>Note:</strong> To keep your workspace fast and organized, uploaded videos are automatically removed after 7 days.
+        </Typography>
+      </Box>
 
       <input
         type="file"
@@ -99,13 +105,6 @@ export const MediaLibrary: React.FC = () => {
           </Box>
         )}
       </Paper>
-
-      <Box sx={{ p: '1rem', borderRadius: '12px', bgcolor: 'warning.light' }}>
-        <Typography variant="body2" sx={{ color: 'warning.main', textAlign: 'center' }}>
-          <strong>Note:</strong> {BRAND.name} uses a &quot;Lean Gallery&quot; approach. Videos are
-          automatically purged after 7 days to keep performance high and storage costs low.
-        </Typography>
-      </Box>
 
       <MediaActionsHUD
         selectedIds={selectedIds}
