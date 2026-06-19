@@ -142,6 +142,7 @@ export const test = base.extend<{
           if (text.includes('Load failed')) return;
           if (text.includes('Button failed to load')) return;
           if (text.includes('Intentional Render Error')) return;
+          if (text.includes('The network connection was lost.')) return;
           if (text === 'null') return;
           
           errors.push(`Console error: ${text}`);

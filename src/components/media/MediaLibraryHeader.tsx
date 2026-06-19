@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { Box, Button, Typography, Stack } from '@mui/material';
-import { Plus, Trash2 } from 'lucide-react';
+import { Add as Plus, Delete as Trash2 } from '@mui/icons-material';
 
 interface MediaLibraryHeaderProps {
   onAddVideo: () => void;
@@ -48,7 +48,7 @@ export const MediaLibraryHeader: React.FC<MediaLibraryHeaderProps> = ({
         <Button
           variant="contained"
           color="primary"
-          startIcon={<Plus size={18} />}
+          startIcon={<Plus sx={{ fontSize: 18 }} />}
           onClick={onAddVideo}
           disabled={isUploading}
           data-testid="header-upload-button"
@@ -63,7 +63,7 @@ export const MediaLibraryHeader: React.FC<MediaLibraryHeaderProps> = ({
           <Button
             variant="outlined"
             color="error"
-            startIcon={<Trash2 size={16} />}
+            startIcon={<Trash2 sx={{ fontSize: 16 }} />}
             onClick={onClearAll}
             disabled={isUploading}
             data-testid="clear-gallery"

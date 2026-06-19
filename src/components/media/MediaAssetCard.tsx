@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Box, Typography, Button, Checkbox, Stack } from '@mui/material';
-import { Trash2 } from 'lucide-react';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { MediaPreview } from './MediaPreview';
 import type { GalleryAsset } from '@/hooks/useMediaLibrary';
 
@@ -23,6 +23,7 @@ export const MediaAssetCard: React.FC<MediaAssetCardProps> = ({
 }) => {
   return (
     <Box
+      data-testid="media-asset-card"
       sx={{
         p: 1,
         borderRadius: 3,
@@ -93,7 +94,7 @@ export const MediaAssetCard: React.FC<MediaAssetCardProps> = ({
           data-testid="delete-asset"
           aria-label="Delete Asset"
         >
-          <Trash2 size={14} />
+          <DeleteIcon sx={{ fontSize: 14 }} />
         </Button>
       </Stack>
     </Box>
