@@ -1,15 +1,15 @@
 ---
 ticket_id: 668
 branch_name: feature/668-modularize-media-library
-status: dev
-current_round: 2
+status: qa
+current_round: 3
 ---
 
 # 📋 Ticket Metadata
 - **ID**: 668
 - **Branch**: `feature/668-modularize-media-library`
 - **Goal**: Modularize `MediaLibrary.tsx` to adhere to the 100-line modularity threshold.
-- **Current Status**: dev
+- **Current Status**: qa
 
 # 📝 Ticket Description
 ### Context

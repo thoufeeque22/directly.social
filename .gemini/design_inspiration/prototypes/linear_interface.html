@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Style Interface</title>
+    <style>
+        :root {
+            --bg: #080808;
+            --sidebar-bg: #111111;
+            --border: #222222;
+            --accent: #5e6ad2;
+            --text-dim: #888888;
+            --text-bright: #eeeeee;
+            --font: 'Inter', -apple-system, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text-bright);
+            font-family: var(--font);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 240px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+
+        .nav-item {
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-item:hover {
+            background: #1a1a1a;
+            color: var(--text-bright);
+        }
+
+        .nav-item.active {
+            background: #1a1a1a;
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            height: 48px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            justify-content: space-between;
+        }
+
+        .breadcrumb {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .breadcrumb span {
+            color: var(--text-bright);
+        }
+
+        .content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+        }
+
+        /* Issue List Table Style */
+        .issue-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .issue-row {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.1s;
+            cursor: pointer;
+        }
+
+        .issue-row:hover {
+            background: #111111;
+        }
+
+        .issue-row td {
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .status-tag {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .status-todo { background: #222; color: #aaa; }
+        .status-progress { background: #1e3a8a; color: #60a5fa; }
+        .status-done { background: #064e3b; color: #34d399; }
+
+        .priority-icon {
+            color: var(--text-dim);
+        }
+
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div style="padding: 0.5rem 0.75rem; font-weight: 700; margin-bottom: 1rem;">PROJECT X</div>
+        <div class="nav-item active">All Issues</div>
+        <div class="nav-item">My Issues</div>
+        <div class="nav-item">Recently Viewed</div>
+        <div style="margin-top: 2rem; font-size: 0.7rem; color: var(--text-dim); padding-left: 0.75rem; text-transform: uppercase;">Teams</div>
+        <div class="nav-item">Engineering</div>
+        <div class="nav-item">Design</div>
+    </aside>
+
+    <main>
+        <header>
+            <div class="breadcrumb">Issues / <span>All Issues</span></div>
+            <div style="font-size: 0.8rem; color: var(--text-dim);">Search (⌘K)</div>
+        </header>
+
+        <div class="content">
+            <h1>Issues</h1>
+
+            <table class="issue-table">
+                <tr class="issue-row">
+                    <td width="40"><span class="priority-icon">●</span></td>
+                    <td>Fix authentication race condition</td>
+                    <td width="100"><span class="status-tag status-progress">In Progress</span></td>
+                    <td width="100" style="color: var(--text-dim);">Engineering</td>
+                    <td width="80" style="text-align: right;">Oct 24</td>
+                </tr>
+                <tr class="issue-row">
+                    <td width="40"><span class="priority-icon" style="color: #facc15;">★</span></td>
+                    <td>Implement OAuth2 flow</td>
+                    <td width="100"><span class="status-tag status-todo">Todo</span></td>
+                    <td width="100" style="color: var(--text-dim);">Security</td>
+                    <td width="80" style="text-align: right;">Oct 25</td>
+                </tr>
+                <tr class="issue-row">
+                    <td width="40"><span class="priority-icon">●</span></td>
+                    <td>Update documentation for API v2</td>
+                    <td width="100"><span class="status-tag status-done">Done</span></td>
+                    <td width="100" style="color: var(--text-dim);">Docs</td>
+                    <td width="80" style="text-align: right;">Oct 20</td>
+                </tr>
+                <tr class="issue-row">
+                    <td width="40"><span class="priority-icon">●</span></td>
+                    <td>Refactor database migration scripts</td>
+                    <td width="100"><span class="status-tag status-todo">Todo</span></td>
+                    <td width="100" style="color: var(--text-dim);">Platform</td>
+                    <td width="80" style="text-align: right;">Oct 28</td>
+                </tr>
+                <tr class="issue-row">
+                    <td width="40"><span class="priority-icon">●</span></td>
+                    <td>Optimize image loading in Dashboard</td>
+                    <td width="100"><span class="status-tag status-progress">In Progress</span></td>
+                    <td width="100" style="color: var(--text-dim);">Frontend</td>
+                    <td width="80" style="text-align: right;">Oct 30</td>
+                </tr>
+            </table>
+        </div>
+    </main>
+
+</body>
+</html>
