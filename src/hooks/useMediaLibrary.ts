@@ -29,7 +29,7 @@ export const useMediaLibrary = () => {
       const url = new URL('/api/media', window.location.origin);
       if (search) url.searchParams.set('search', search);
 
-      const res = await fetch(url.toString());
+      const res = await fetch(url.toString(), { cache: 'no-store' });
       const data = await res.json();
       if (data.success) {
         setAssets(data.data);

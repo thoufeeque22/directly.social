@@ -27,10 +27,11 @@ async function uploadAssets(page: Page, count: number) {
     // To prevent backend deduplication (which uses sha256 checksums), 
     // we must generate a unique file content for each upload.
     const fileBuffer = await fs.readFile(TEST_VIDEO_PATH);
-    const uniqueBuffer = Buffer.concat([fileBuffer, Buffer.from(`\n<!-- unique_${Date.now()}_${i} -->`)]);
+    const uniqueId = `${Date.now()}_${Math.random().toString(36).substring(2, 10)}_${i}`;
+    const uniqueBuffer = Buffer.concat([fileBuffer, Buffer.from(`\n<!-- unique_${uniqueId} -->`)]);
     
     await fileChooser.setFiles({
-      name: `mock_video_${Date.now()}_${i}.mp4`,
+      name: `mock_video_${uniqueId}.mp4`,
       mimeType: 'video/mp4',
       buffer: uniqueBuffer
     });
@@ -53,17 +54,17 @@ test.describe('Media Library E2E Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(MEDIA_PAGE_URL);
     
-    // Wait for the loading spinner to disappear
-    await expect(page.locator('.MuiCircularProgress-root')).toBeHidden({ timeout: 10000 });
-    
-    // Universal cleanup: Check if the 'Clear Gallery' button is present and use it.
+    const emptyState = page.getByText('Your media library is empty.');
     const clearGalleryButton = page.getByRole('button', { name: 'Clear Gallery' });
+    
+    // Wait for the UI to settle into one of the two stable states
+    await expect(emptyState.or(clearGalleryButton)).toBeVisible({ timeout: 15000 });
 
-    const isVisible = await clearGalleryButton.isVisible();
-    if (isVisible) {
+    // Universal cleanup
+    if (await clearGalleryButton.isVisible()) {
       await clearGalleryButton.click();
       await page.getByRole('dialog').getByRole('button', { name: 'Delete' }).click();
-      await expect(page.getByText('Your media library is empty.')).toBeVisible({ timeout: 15000 });
+      await expect(emptyState).toBeVisible({ timeout: 15000 });
     }
   });
 
@@ -166,11 +167,20 @@ test.describe('Media Library E2E Tests', () => {
 test.describe('Media Library Mobile Viewport', () => {
   test.use({ authRole: 'tester' });
   test.beforeEach(async ({ page }) => {
+    // Start listening for the media API response BEFORE navigating
+    const mediaResponsePromise = page.waitForResponse(response => 
+      response.url().includes('/api/media') && response.status() === 200
+    );
     await page.goto(MEDIA_PAGE_URL);
-    await expect(page.locator('.MuiCircularProgress-root')).toBeHidden({ timeout: 10000 });
+    await mediaResponsePromise;
+    
+    // Wait for the UI to settle after data fetch
+    await page.waitForTimeout(500); 
+
     const clearGalleryButton = page.getByRole('button', { name: 'Clear Gallery' });
-    const isVisible = await clearGalleryButton.isVisible();
-    if (isVisible) {
+    
+    // Universal cleanup
+    if (await clearGalleryButton.isVisible()) {
       await clearGalleryButton.click();
       await page.getByRole('dialog').getByRole('button', { name: 'Delete' }).click();
       await expect(page.getByText('Your media library is empty.')).toBeVisible({ timeout: 15000 });
@@ -187,9 +197,10 @@ test.describe('Media Library Mobile Viewport', () => {
     await page.getByRole('button', { name: 'Upload' }).first().click();
     const fileChooser = await fileChooserPromise;
     const fileBuffer = await fs.readFile(TEST_VIDEO_PATH);
-    const uniqueBuffer = Buffer.concat([fileBuffer, Buffer.from(`\n<!-- mobile_${Date.now()} -->`)]);
+    const uniqueId = `${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+    const uniqueBuffer = Buffer.concat([fileBuffer, Buffer.from(`\n<!-- mobile_${uniqueId} -->`)]);
     await fileChooser.setFiles({
-      name: `mobile_video_${Date.now()}.mp4`,
+      name: `mobile_video_${uniqueId}.mp4`,
       mimeType: 'video/mp4',
       buffer: uniqueBuffer
     });
@@ -201,6 +212,6 @@ test.describe('Media Library Mobile Viewport', () => {
     await expect(page.getByTestId('media-asset-card')).toBeVisible();
     
     // Check that the search bar and some key elements are visible
-    await expect(page.getByPlaceholder('Search...')).toBeVisible();
+    await expect(page.getByPlaceholder('Search your library...')).toBeVisible();
   });
 });

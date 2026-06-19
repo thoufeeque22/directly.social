@@ -1,11 +1,11 @@
-import { test, expect } from './base-test';;
+import { test, expect } from './base-test';
 import { execSync } from 'child_process';
 
 test.describe('Parallel Distribution Channels', () => {
 
   test.beforeAll(async ({}, testInfo) => {
-    const workerIndex = testInfo.workerIndex;
-    const email = `tester-${workerIndex % 10}@directly.social`;
+    // 1. Identify which worker is running this test
+    const email = `tester-${testInfo.parallelIndex}@directly.social`;
     // Seed accounts to ensure platforms are recognized for this worker
     execSync(`npx tsx -e "
       import { PrismaClient } from '@prisma/client';
