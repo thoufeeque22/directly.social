@@ -1,7 +1,7 @@
 ---
 ticket_id: 668
 branch_name: feature/668-modularize-media-library
-status: qa
+status: dev
 current_round: 3
 ---
 
@@ -9,7 +9,7 @@ current_round: 3
 - **ID**: 668
 - **Branch**: `feature/668-modularize-media-library`
 - **Goal**: Modularize `MediaLibrary.tsx` to adhere to the 100-line modularity threshold.
-- **Current Status**: qa
+- **Current Status**: dev
 
 # 📝 Ticket Description
 ### Context
@@ -43,3 +43,4 @@ Enables better component reuse and ensures adherence to the 100-Line Rule.
 - **[2026-06-19 19:51:35]**: Handing back to dev-agent to fix QA regressions.
 - **[2026-06-19 20:00:00]**: DEV [SUCCESS] - Fixed the regression. The components have been updated to strictly match the specific text expectations ("Upload", "remaining", "item", Dialogs) and elements (Select All Checkbox) enforced by the E2E tests, resolving the false-positive component rendering timeout issues.
 - **[2026-06-19 20:11:04]**: AUDIT [PASS] - Verified security, hydration, and modularity. Verified zero lint/type errors in modified files.
+- **[2026-06-19 20:16:00]**: QA [FAIL] - E2E tests failed due to timeouts locating the 'Upload' button or filechooser event.
