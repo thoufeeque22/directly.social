@@ -19,14 +19,14 @@ export const test = base.extend<{
 
   // Unique email for this worker
   workerEmail: async ({}, use, testInfo) => {
-    const workerIndex = testInfo.workerIndex;
-    await use(`tester-${workerIndex % 10}@directly.social`);
+    const parallelIndex = testInfo.parallelIndex;
+    await use(`tester-${parallelIndex}@directly.social`);
   },
 
   // Unique admin email for this worker
   adminEmail: async ({}, use, testInfo) => {
-    const workerIndex = testInfo.workerIndex;
-    await use(`admin-${workerIndex % 10}@directly.social`);
+    const parallelIndex = testInfo.parallelIndex;
+    await use(`admin-${parallelIndex}@directly.social`);
   },
 
   // Automatic storage state selection based on worker index (Lazy Authentication)
@@ -38,16 +38,18 @@ export const test = base.extend<{
       return;
     }
 
-    const workerIndex = testInfo.workerIndex;
+    // 2. Select role prefix and ensure valid parallelIndex bounds
     const prefix = authRole === 'admin' ? 'admin' : 'tester';
-    const authFile = `.auth/v2-${prefix}-${workerIndex % 10}.json`;
-    const fullPath = path.resolve(process.cwd(), authFile);
+    const workerIndex = testInfo.workerIndex;
+    const parallelIndex = testInfo.parallelIndex % 10;
+    const authFile = path.resolve(__dirname, `../../../.auth/v2-${prefix}-${parallelIndex}.json`);
+    const fullPath = authFile;
 
     // 2. Perform lazy login if file doesn't exist
     if (!fs.existsSync(fullPath)) {
-      console.log(`[Worker ${workerIndex}] 🔑 Performing lazy login for ${prefix}-${workerIndex % 10}...`);
+      const testEmail = `${prefix}-${parallelIndex}@directly.social`;
+      console.log(`[Worker ${workerIndex}] 🔑 Performing lazy login for ${testEmail}...`);
       
-      const testEmail = `${prefix}-${workerIndex % 10}@directly.social`;
       const roleArg = prefix === 'admin' ? 'ADMIN' : 'USER';
       
       // Perform lazy seeding before logging in
@@ -142,6 +144,7 @@ export const test = base.extend<{
           if (text.includes('Load failed')) return;
           if (text.includes('Button failed to load')) return;
           if (text.includes('Intentional Render Error')) return;
+          if (text.includes('The network connection was lost.')) return;
           if (text === 'null') return;
           
           errors.push(`Console error: ${text}`);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Metadata } from 'next';
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
@@ -17,7 +17,9 @@ export default async function MediaPage() {
 
   return (
     <div style={{ padding: '2rem' }}>
-      <MediaLibrary />
+      <Suspense fallback={<div>Loading...</div>}>
+        <MediaLibrary />
+      </Suspense>
     </div>
   );
 }

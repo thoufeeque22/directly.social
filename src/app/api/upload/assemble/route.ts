@@ -14,8 +14,12 @@ export async function POST(req: NextRequest) {
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const result = UploadAssembleSchema.safeParse(await req.json());
-    if (!result.success) return NextResponse.json({ error: "Invalid data" }, { status: 400 });
+    const body = await req.json();
+    const result = UploadAssembleSchema.safeParse(body);
+    if (!result.success) {
+      logger.error("Zod Validation Error:", result.error);
+      return NextResponse.json({ error: "Invalid data", details: result.error }, { status: 400 });
+    }
 
     const p = result.data;
     const { fileId, finalPath, size, checksum } = await assembleChunks(p.uploadId, p.fileName, p.totalChunks, p.totalSize);

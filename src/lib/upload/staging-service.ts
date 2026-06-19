@@ -28,7 +28,8 @@ export async function stageVideoFile({ file, onStatusUpdate, metadata, platforms
   const byosData = (byosRes?.ok ? await byosRes.json() : null) as { config?: { provider: string; bucketName: string } } | null;
   if (byosData?.config) return stageVideoFileByos({ file, onStatusUpdate, metadata, platforms, resumeActivityId, byosConfig: byosData.config, signal });
 
-  const uploadId = resumeActivityId || `up_${file.name.replace(/[^a-zA-Z0-9]/g, '_')}_${file.size}`;
+  const uniqueSuffix = typeof window !== 'undefined' ? crypto.randomUUID().split('-')[0] : Math.random().toString(36).substring(2, 8);
+  const uploadId = resumeActivityId || `up_${uniqueSuffix}_${file.name.replace(/[^a-zA-Z0-9]/g, '_')}_${file.size}`;
   if (checkGlobalAbort(uploadId)) throw new Error("Upload cancelled");
 
   broadcastStatus(onStatusUpdate, uploadId, "Resuming stream...");
