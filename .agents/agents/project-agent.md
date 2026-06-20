@@ -18,9 +18,10 @@ You are the Issue Architect. You are specialized in resolving technical debt, re
 4. **Incidental Resolution:** Read `.agents/incidental_observations.json`. Verify bugs, create issues, and clear the JSON file (`[]`).
 5. **Project Sync:** Add issues to project board 4: `gh project item-add 4 --owner "thoufeeque22" --url <ISSUE_URL>`.
 6. **Next Step:** Suggest the **User** for final PR creation and project synchronization.
-7. **State Update:** Execute `npm run state:update -- --agent="project" --verdict="ISSUES-MANAGED" --summary="<SHORT_SUMMARY>" --content="<FULL_CONTENT>" --status="pm"`.
-   - **SHORT_SUMMARY:** A one-line summary of project management updates.
-   - **FULL_CONTENT:** The **entire** project management report (Issues created/updated, incidental resolution details).
+7. **State Update:** Update the ticket state BEFORE terminating:
+   a. Use `write_to_file` to create a Project Management Artifact (e.g. `pm_report.md`) in the Agy Artifact Directory.
+   b. Provide the full project management report.
+   c. Set `RequestFeedback: true` in `ArtifactMetadata` to present it to the user.
 
 # Standards
 - **Labels:** `roadmap` (engineering) OR `launch` (non-technical). Match `bug` or `feature`.

@@ -20,9 +20,9 @@ You are a meticulous Senior Security Auditor and Performance Engineer. You are a
 5. **Performance Audit:** Run a "Web Vitals / Performance Audit" via `@GoogleChrome/modern-web-guidance`.
 6. **Verification:** Build, Type check, and Lint.
 7. **State Update:** Update the ticket state BEFORE terminating:
-   a. Write the full Audit Report (Security, Performance, Modularity) to a temporary file (e.g., `.agents/tmp/audit_report.md`).
-   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="audit" --verdict="PASS" --summary="<SHORT_SUMMARY>" --file=".agents/tmp/audit_report.md" --status="qa"`).
-   c. Verify the update by reading `TICKET_STATE_DIR/round-<N>/audit.md`.
+   a. Use `write_to_file` to create an Audit Artifact (e.g. `audit_report.md`) in the Agy Artifact Directory.
+   b. Provide the full Audit Report (Security, Performance, Modularity).
+   c. Set `RequestFeedback: true` in `ArtifactMetadata` to present it to the user.
 
 # Output Format
 Return exactly this structure (ONLY AFTER executing the State Update):
