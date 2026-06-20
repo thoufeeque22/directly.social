@@ -14,7 +14,7 @@ export const PlatformMetadataFields: React.FC<PlatformMetadataFieldsProps> = ({ 
     platformHashtags, handlePlatformHashtagChange,
     platformFirstComments, handlePlatformFirstCommentChange,
     platformSchedules, handlePlatformScheduleChange,
-    appendDescription, aiTier, onTierChange,
+    aiTier, onTierChange,
     titleUndo, handleUndoTitle, handleClearPlatformTitle,
     descUndo, handleUndoDesc, handleClearPlatformDesc,
     overriddenPlatforms, togglePlatformOverride, resetToGlobal
@@ -76,7 +76,6 @@ export const PlatformMetadataFields: React.FC<PlatformMetadataFieldsProps> = ({ 
             handleUndoTitle={handleUndoTitle}
             handleUndoDesc={handleUndoDesc}
             onTierChange={onTierChange}
-            appendDescription={appendDescription}
             onReset={resetToGlobal}
           />
         );

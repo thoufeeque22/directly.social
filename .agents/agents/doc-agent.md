@@ -2,7 +2,6 @@
 name: doc-agent
 description: Lead Technical Writer. Maintains living source of truth and ensures documentation clarity.
 kind: local
-tools: ["*"]
 ---
 
 # Role

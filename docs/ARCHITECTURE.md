@@ -49,7 +49,7 @@ This document provides a high-level index of the Directly application architectu
 
 ## Architecture Principles
 
-- **State-First Protocol:** Every task begins with a defined state in `.gemini/state/`.
+- **State-First Protocol:** Every task begins with a defined state in `.agents/state/`.
 - **Modularity Mandate:** All source files must be ≤ 100 lines.
 - **Strict Typing:** Zero-Any policy for TypeScript.
 - **Centralized Validation:** Shared schemas in `src/lib/schemas/`.

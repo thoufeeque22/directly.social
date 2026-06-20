@@ -11,7 +11,7 @@ import * as glob from 'glob';
 const BUNDLE_MANIFEST = [
   'docs/**/*',
   'GEMINI.md',
-  '.gemini/base/*.md',
+  '.agents/base/*.md',
   'prisma/schema.prisma',
   'package.json',
 ];

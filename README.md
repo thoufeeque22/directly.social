@@ -36,7 +36,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 - `src/components/`: Reusable UI components
 - `src/lib/`: Core logic, schemas, and utilities
 - `src/__tests__/`: Comprehensive test suite (E2E, Unit, Integration) and test scripts
-- `.gemini/`: AI Agent orchestration and standards
+- `.agents/`: AI Agent orchestration and standards
 
 ## Core Scripts
 
@@ -54,7 +54,7 @@ Access the interactive Swagger UI at `/api/docs` in your local development envir
 
 ## AI Agent Orchestration
 
-This project uses an agentic workflow defined in `.gemini/GEMINI.md` and `.gemini/base/ORCHESTRATION.md`. The workflow ensures high-quality code delivery through distinct phases: Discovery, Development, Review, QA, and Documentation.
+This project uses an agentic workflow defined in `GEMINI.md` and `.agents/base/ORCHESTRATION.md`. The workflow ensures high-quality code delivery through distinct phases: Discovery, Development, Review, QA, and Documentation.
 For more details, see [docs/ORCHESTRATION.md](docs/ORCHESTRATION.md).
 
 ## Documentation Index

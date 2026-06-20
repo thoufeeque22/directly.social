@@ -25,10 +25,10 @@
   2. **Next Step Suggestion:** Upon completing a phase, the agent MUST explicitly suggest the next sub-agent in the sequence to the user (e.g., "Next step: Invoke `discovery-agent` for technical planning").
   3. **Immediate Stop on Failure:** If any phase (especially `Audit` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately. No further agents (Doc, Project, etc.) can be invoked in that round.
   4. **Round 2+ Entry Point:** If a round fails during `Audit` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
-- **Human-in-the-Loop Workflow:** ALL transitions between agent phases MUST be mediated by the user. 
+- **Human-in-the-Loop Workflow (HARD STOP):** ALL transitions between agent phases MUST be mediated by the user. **The Orchestrator MUST immediately HALT execution and return control to the User after a phase's state file (e.g., `development.md`) is written. The Orchestrator is STRICTLY FORBIDDEN from automatically chaining to the next phase (e.g., jumping from Dev to Audit) or running multiple sub-agents in a single turn without explicit user approval. This applies universally, even to autonomous teamwork systems.** 
   1. **Inquiry-First Protocol:** The initial turn of any planning agent (`Product`, `Discovery`) SHOULD focus on asking questions to resolve ambiguity. If the agent is in doubt, it MUST set its Verdict to **NEEDS-INFO** and present its questions to the user.
   2. **State-First Protocol (Robust Updates):** Agents MUST update the state directory BEFORE terminating. To prevent shell escaping issues or command length limits, agents MUST:
-     a. Write their full report/content to a temporary file (e.g., `.agents/tmp/report.md`).
+     a. Write their full report/content to a temporary file (e.g., `.ai-state/tmp/report.md`).
      b. Execute the `STATE_UPDATE_CMD` using the `--file` parameter to point to that temporary file.
      c. Verify the update by checking the targeted markdown file in `TICKET_STATE_DIR`.
   3. **Manual Review:** The user reviews the changes and the ticket state.
@@ -55,6 +55,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 
 ## State Management & Isolation (Hook-Only)
 - **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `TICKET_STATE_DIR`.
+- **Transient Files:** ANY temporary scratch files (e.g., `BRIEFING.md`, `ORIGINAL_REQUEST.md`, `handoff.md`) MUST be written to the `.ai-state/` directory. NEVER write temporary files to the project root or `.agents/`.
 - **State Manager Hook:** Agents MUST NOT manually edit `MAIN_STATE_FILE` or their individual round files. Instead, agents MUST execute the `STATE_UPDATE_CMD` as their final action:
   `STATE_UPDATE_CMD`
   *The script will automatically update the `MAIN_STATE_FILE` timeline and append your content to the correct `ROUND_DIR_PATTERN` file.*

@@ -74,7 +74,7 @@ async function run() {
     process.exit(1);
   }
 
-  const stateDir = path.join(process.cwd(), '.gemini', 'state', `ticket-${ticketId}`);
+  const stateDir = path.join(process.cwd(), '.agents', 'state', `ticket-${ticketId}`);
   await fs.mkdir(stateDir, { recursive: true });
 
   const mainMdPath = path.join(stateDir, 'MAIN.md');

@@ -19,7 +19,7 @@ interface PlatformMetadataItemProps {
   handleClearPlatformTitle: (p: string) => void;
   handleClearPlatformDesc: (p: string) => void;
   handleUndoTitle: () => void; handleUndoDesc: () => void;
-  onTierChange: (t: AITier) => void; appendDescription: (v: string, p: string) => void; onReset: (p: string) => void;
+  onTierChange: (t: AITier) => void; onReset: (p: string) => void;
 }
 
 export const PlatformMetadataItem: React.FC<PlatformMetadataItemProps> = (props) => {
@@ -34,7 +34,7 @@ export const PlatformMetadataItem: React.FC<PlatformMetadataItemProps> = (props)
       />
       <PlatformDescriptionField 
         platform={platform} isUploading={props.isUploading} aiTier={props.aiTier} value={props.descVal} showUndo={props.showDescUndo}
-        onChange={props.handlePlatformDescriptionChange} onClear={props.handleClearPlatformDesc} onUndo={props.handleUndoDesc} onTierChange={props.onTierChange} appendDescription={props.appendDescription}
+        onChange={props.handlePlatformDescriptionChange} onClear={props.handleClearPlatformDesc} onUndo={props.handleUndoDesc} onTierChange={props.onTierChange}
       />
       <PlatformHashtagsField platform={platform} value={props.hashtagVal} onChange={props.handlePlatformHashtagChange} />
       <PlatformFirstCommentField platform={platform} value={props.commentVal} onChange={props.handlePlatformFirstCommentChange} />

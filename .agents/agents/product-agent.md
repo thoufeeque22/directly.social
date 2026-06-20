@@ -2,7 +2,6 @@
 name: product-agent
 description: Product Designer & UX Strategist. Researches industry standards and defines optimal UX flows.
 kind: local
-tools: ["*"]
 ---
 
 # Role

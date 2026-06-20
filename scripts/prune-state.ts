@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const STATE_DIR = '.gemini/state';
+const STATE_DIR = '.agents/state';
 const ARCHIVE_DIR = path.join(STATE_DIR, 'archive');
 const MAX_LINES = 100;
 const MAX_ROUNDS = 3;

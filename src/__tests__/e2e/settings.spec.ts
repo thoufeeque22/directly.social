@@ -14,9 +14,10 @@ test.describe('Settings Page - Template Management @regression', () => {
     await snippetsTab.click();
     await page.waitForURL('**/settings?tab=snippets', { timeout: 10000 });
     
-    await expect(page.locator('h2:has-text("Reusable Snippets")')).toBeVisible({ timeout: 10000 });
+    const heading = page.getByText("Reusable Snippets", { exact: true });
+    await expect(heading).toBeVisible({ timeout: 10000 });
     // Instead of expecting empty, just expect the container to be visible
-    await expect(page.locator('h2:has-text("Reusable Snippets")').locator('xpath=..')).toBeVisible();
+    await expect(heading.locator('xpath=..')).toBeVisible();
   });
 
   test('should create a template from the dashboard', async ({ page, workerIndex }) => {
@@ -31,24 +32,24 @@ test.describe('Settings Page - Template Management @regression', () => {
     await page.reload();
     
     // Save a new snippet
-    const descriptionField = page.getByTestId('video-description').first();
-    await expect(descriptionField).toBeVisible({ timeout: 15000 });
+    const titleField = page.getByTestId('video-title').first();
+    await expect(titleField).toBeVisible({ timeout: 15000 });
     await page.waitForTimeout(1000); // Wait for React hydration to complete
-    await descriptionField.scrollIntoViewIfNeeded();
-    await descriptionField.click();
-    await descriptionField.fill('');
-    await descriptionField.pressSequentially(templateContent, { delay: 50 });
-    await descriptionField.blur();
+    await titleField.scrollIntoViewIfNeeded();
+    await titleField.click();
+    await titleField.fill('');
+    await titleField.pressSequentially(templateContent, { delay: 50 });
+    await titleField.blur();
     await page.waitForTimeout(1000); // Wait for React state sync
     
     const trigger = page.getByTestId('snippets-trigger').first();
     await trigger.scrollIntoViewIfNeeded();
     await trigger.click();
     
-    await expect(page.getByTestId('save-snippet-form-trigger').first()).toBeEnabled({ timeout: 10000 });
-    await page.getByTestId('save-snippet-form-trigger').first().click();
-    await page.getByTestId('new-snippet-name-input').first().fill(templateName);
-    await page.getByTestId('confirm-save-snippet').first().click();
+    await expect(page.getByTestId('save-snippet-form-trigger')).toBeEnabled({ timeout: 10000 });
+    await page.getByTestId('save-snippet-form-trigger').click();
+    await page.getByTestId('new-snippet-name-input').fill(templateName);
+    await page.getByTestId('confirm-save-snippet').click();
     await expect(page.getByTestId('snippets-menu')).not.toBeVisible();
     
     // Now go back to settings to manage it
@@ -72,24 +73,24 @@ test.describe('Settings Page - Template Management @regression', () => {
     });
     await page.reload();
     
-    const descField = page.getByTestId('video-description').first();
-    await expect(descField).toBeVisible({ timeout: 15000 });
+    const titleField = page.getByTestId('video-title').first();
+    await expect(titleField).toBeVisible({ timeout: 15000 });
     await page.waitForTimeout(1000); // Wait for React hydration to complete
-    await descField.scrollIntoViewIfNeeded();
-    await descField.click();
-    await descField.fill('');
-    await descField.pressSequentially('content', { delay: 50 });
-    await descField.blur();
+    await titleField.scrollIntoViewIfNeeded();
+    await titleField.click();
+    await titleField.fill('');
+    await titleField.pressSequentially('content', { delay: 50 });
+    await titleField.blur();
     await page.waitForTimeout(1000); // Wait for React state sync
     
     const trigger = page.getByTestId('snippets-trigger').first();
     await trigger.scrollIntoViewIfNeeded();
     await trigger.click();
     
-    await expect(page.getByTestId('save-snippet-form-trigger').first()).toBeEnabled({ timeout: 10000 });
-    await page.getByTestId('save-snippet-form-trigger').first().click();
-    await page.getByTestId('new-snippet-name-input').first().fill(templateName);
-    await page.getByTestId('confirm-save-snippet').first().click();
+    await expect(page.getByTestId('save-snippet-form-trigger')).toBeEnabled({ timeout: 10000 });
+    await page.getByTestId('save-snippet-form-trigger').click();
+    await page.getByTestId('new-snippet-name-input').fill(templateName);
+    await page.getByTestId('confirm-save-snippet').click();
     await expect(page.getByTestId('snippets-menu')).not.toBeVisible();
 
     await page.goto('/settings', { waitUntil: 'networkidle' });

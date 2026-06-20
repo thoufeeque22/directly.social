@@ -14,15 +14,15 @@ This test plan verifies the implementation of Modular GEMINI.md, Discovery DoR, 
 - **Steps:**
   1. Open the project root.
   2. Verify `GEMINI.md` exists and acts as a Table of Contents.
-  3. Verify `.gemini/base/` directory contains `CORE.md`, `UI_UX.md`, `PRODUCTION.md`, and `ORCHESTRATION.md`.
+  3. Verify `.agents/base/` directory contains `CORE.md`, `UI_UX.md`, `PRODUCTION.md`, and `ORCHESTRATION.md`.
   4. Verify each modular file contains its respective domain rules.
 - **Expected Result:** Modular structure is present and correctly categorized.
 
 ### 2. State Pruning Mechanism
 - **Steps:**
   1. Inspect `scripts/prune-state.ts`.
-  2. Run the script with a dummy state file exceeding 50KB or 3 rounds: `npx tsx scripts/prune-state.ts --file .gemini/state/test-ticket.json`.
-  3. Verify the file is archived in `.gemini/state/archive/`.
+  2. Run the script with a dummy state file exceeding 50KB or 3 rounds: `npx tsx scripts/prune-state.ts --file .agents/state/test-ticket.json`.
+  3. Verify the file is archived in `.agents/state/archive/`.
   4. Verify the active file is reset with a `summary` block.
 - **Expected Result:** State file is pruned and archived according to defined thresholds.
 
@@ -35,7 +35,7 @@ This test plan verifies the implementation of Modular GEMINI.md, Discovery DoR, 
 
 ### 4. Discovery DoR Compliance
 - **Steps:**
-  1. Open `.gemini/base/ORCHESTRATION.md`.
+  1. Open `.agents/base/ORCHESTRATION.md`.
   2. Locate the "Discovery DoR" section.
   3. Verify it includes all 6 mandatory checklist items.
 - **Expected Result:** DoR protocol is explicitly documented for the discovery-agent.
