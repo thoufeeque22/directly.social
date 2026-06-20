@@ -1,7 +1,7 @@
 ---
 ticket_id: 669
 branch_name: feature/669-modularize-templatemanager
-status: development
+status: doc
 current_round: 1
 ---
 
@@ -9,7 +9,7 @@ current_round: 1
 - **ID**: 669
 - **Branch**: `feature/669-modularize-templatemanager`
 - **Goal**: Refactor TemplateManager.tsx to improve modularity and testability. Extract business logic into useTemplateManager hook and separate UI into TemplateListItem and TemplateForm.
-- **Current Status**: development
+- **Current Status**: doc
 
 # 📝 Ticket Description
 ### Context
@@ -37,3 +37,7 @@ Improved testability and compliance with the 100-line standard.
 - **[2026-06-20 11:27:23]**: DISCOVERY [APPROVED] - Defined Technical Blueprint and Test Specification for TemplateManager refactoring with dynamic three-field requirement support
 - **[2026-06-20 12:19:05]**: DEV [SUCCESS] - Refactored MetadataTemplates to be generic, injected snippets button into Title, Hashtags, and First Comment fields, and completed TemplateManager refactoring.
 - **[2026-06-20 12:37:29]**: DEV [SUCCESS] - Refactored MetadataTemplates to be generic, injected snippets button into Title, Hashtags, and First Comment fields, and verified build and tests.
+- **[2026-06-20 12:43:14]**: DEV [SUCCESS] - Implemented snippet categorization by field.
+- **[2026-06-20 12:46:12]**: AUDIT [PASS] - Audit completed successfully. Security, Hydration, Modularity, and Performance checks passed.
+- **[2026-06-20 12:57:32]**: QA [PASS] - Rewrote and fully verified all E2E Playwright tests for multiple Snippet fields. Passed all tests.
+- **[2026-06-20 13:01:40]**: QA [PASS] - Verified settings and snippets E2E tests, created manual verification script.
