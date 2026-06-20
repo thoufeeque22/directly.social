@@ -20,7 +20,7 @@
   4. Create a state directory `TICKET_STATE_DIR` with a `MAIN_STATE_FILE` file following the **MAIN_STATE_FILE Template**.
   5. **MANDATORY:** The `MAIN_STATE_FILE` MUST contain the final, resolved `branch_name`. **NEVER** use placeholders or patterns like `FEATURE_BRANCH_PATTERN` in the final file.
   6. Skip if state already exists.
-- **Manual Environment Management:** The User always manages the development server (`npm run dev`), the E2E test server (`http://localhost:3000`), and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, check the connectivity of these services, or modify/enable any Playwright `webServer` configuration. ALL E2E tests are strictly bound to `http://localhost:3000`.
+- **Manual Environment Management:** The User always manages the development server (`pnpm dev`), the E2E test server (`http://localhost:3000`), and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, check the connectivity of these services, or modify/enable any Playwright `webServer` configuration. ALL E2E tests are strictly bound to `http://localhost:3000`.
 - **Strict Sequential Workflow:** ALL tickets MUST follow the `PHASE_ORDER`.
 - **Guardrail Mandates (Terminal Violations):**
   1. **Issue-First Protocol:** Before starting any work, the Orchestrator MUST ensure a corresponding GitHub issue exists. If the task is new or doesn't have an ID, the Orchestrator MUST invoke the `project-agent` to create the issue FIRST.
@@ -54,7 +54,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
   - **Fast-Track Verification:** If the user explicitly requests to save time or if in a fast-iteration loop, the agent MAY skip `BUILD_CMD` IF they have already run it once for the current set of changes and no relevant files have changed.
 - **audit-agent:** READ-ONLY. Focus on Security, Privacy (PII), and Performance (Web Vitals) audits.
 - **qa-agent:** MUST run `REGRESSION_TEST_CMD`. For features with specific impact, they may also run relevant individual tests.
-- **Human-in-the-Loop:** The **User** SHOULD run the full suite (`npm test`) before the final merge.
+- **Human-in-the-Loop:** The **User** SHOULD run the full suite (`pnpm test`) before the final merge.
 
 ### package.json Scripts (Implementation)
 - `test:smoke`: `SMOKE_TEST_CMD`
@@ -165,7 +165,7 @@ current_round: 1
 ### Discovery (Architecture & Planning)
 - **Role:** Read-only consultant and rigorous interrogator. Create blueprints.
 - **Mandate:** MUST grill the user and ask deep and thorough questions to resolve all ambiguities before drafting blueprints. MUST provide an explicit **Socratic Log** (via `discovery-agent`) followed by a **Test Specification** block with high-level manual and automated test scenarios.
-- **NotebookLM Synthesis:** For tickets involving complex integrations, legacy refactors, or deep architectural changes, the agent SHOULD recommend a NotebookLM synthesis step. Use `npm run notebook:package` to bundle context for high-fidelity research.
+- **NotebookLM Synthesis:** For tickets involving complex integrations, legacy refactors, or deep architectural changes, the agent SHOULD recommend a NotebookLM synthesis step. Use `pnpm run notebook:package` to bundle context for high-fidelity research.
 - **Verdict:** Approved -> QA | Needs-Info -> Round 2 | Rejected -> Close.
 
 ### QA (E2E Test Automation & Manual Scripts - Test-Driven Flip)
@@ -181,6 +181,7 @@ current_round: 1
 - **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops. MUST aggressively offload file edits and boilerplate to `cavecrew-builder` or local `ollama_chat`.
 - **Verdict:** Success -> Audit | Blocked -> Discovery/Manual.
 - **Exhaustive Verification:** MUST run `BUILD_CMD`, `LINT_CMD`, and `TYPE_CHECK_CMD`. **MANDATORY:** When encountering bulk lint or build errors, the agent MUST use the `triage-lint` skill to fix them in manageable batches rather than overwhelming the context window.
+- **Dependencies Management:** When adding new dependencies to `package.json`, the agent MUST use `pnpm install <package>` to ensure `pnpm-lock.yaml` is correctly updated. NEVER use `npm`.
 - **Aesthetic Validation:** MUST verify MUI component prop compliance (e.g., using `sx` for styling) to prevent React attribute warnings.
 
 ### Audit (Security & Performance Audit)

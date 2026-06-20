@@ -35,13 +35,13 @@ This file centralizes all global constants, patterns, and strings used in the pr
 - **TICKET_STATUSES**: `in-progress`, `completed`, `blocked`
 
 ## 🛠 Scripts & Commands
-- **STATE_UPDATE_CMD**: `npm run state:update -- --agent="<agent>" --verdict="<verdict>" --summary="<summary>" [--file="<path_to_report>"] [--round="<N>"] [--status="<next_status>"]`
-- **SMOKE_TEST_CMD**: `npm run test:smoke`
-- **REGRESSION_TEST_CMD**: `npm run test:regression`
-- **LINT_CMD**: `npm run lint`
-- **BUILD_CMD**: `npm run build`
+- **STATE_UPDATE_CMD**: `pnpm run state:update -- --agent="<agent>" --verdict="<verdict>" --summary="<summary>" [--file="<path_to_report>"] [--round="<N>"] [--status="<next_status>"]`
+- **SMOKE_TEST_CMD**: `pnpm run test:smoke`
+- **REGRESSION_TEST_CMD**: `pnpm run test:regression`
+- **LINT_CMD**: `pnpm run lint`
+- **BUILD_CMD**: `pnpm run build`
 - **TYPE_CHECK_CMD**: `npx tsc --noEmit`
-- **NOTEBOOK_BUNDLE_CMD**: `npm run notebook:package`
+- **NOTEBOOK_BUNDLE_CMD**: `pnpm run notebook:package`
 
 ## 📚 Documentation & Manual Tests
 - **MANUAL_TEST_DIR**: `docs/manual_tests/`
