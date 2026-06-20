@@ -1,7 +1,7 @@
 ---
 ticket_id: 669
 branch_name: feature/669-modularize-templatemanager
-status: audit
+status: qa
 current_round: 2
 ---
 
@@ -9,7 +9,7 @@ current_round: 2
 - **ID**: 669
 - **Branch**: `feature/669-modularize-templatemanager`
 - **Goal**: Refactor TemplateManager.tsx to improve modularity and testability. Extract business logic into useTemplateManager hook and separate UI into TemplateListItem and TemplateForm.
-- **Current Status**: dev (Round 2)
+- **Current Status**: qa (Round 2)
 
 # 📝 Ticket Description
 ### Context
@@ -43,4 +43,7 @@ Improved testability and compliance with the 100-line standard.
 - **[2026-06-20 12:57:32]**: QA [PASS] - Rewrote and fully verified all E2E Playwright tests for multiple Snippet fields. Passed all tests.
 - **[2026-06-20 15:16:03]**: ROUND 2 STARTED - User approved cursor-insertion feature. Dev agent starting.
 - **[2026-06-20 15:20:31]**: DEV [SUCCESS] - Implemented cursor-position snippet insertion. Created insertAtCursor.ts utility. Updated Title (space sep), Description (newline sep), FirstComment (newline sep), and PlatformDescription (newline sep). Removed appendDescription prop cascade. Build ✅ Lint ✅
+- **[2026-06-20 15:28:33]**: DEV [SUCCESS] - Fixed cursor capture logic: use relatedTarget in onBlur to only preserve cursor position when blur is caused by the snippet trigger button. Clicking elsewhere resets to end-append. Lint ✅
+- **[2026-06-20 15:30:07]**: AUDIT [STARTED] - Transitioning to audit phase for Round 2.
+- **[2026-06-20 15:33:34]**: AUDIT [PASS] - No blocking findings. F1/F2: Safari relatedTarget graceful degradation (MEDIUM, follow-up ticket needed). F3: rAF unmount guard applied proactively. Security clean, React patterns correct, TypeScript strict.
 - **[2026-06-20 13:01:40]**: QA [PASS] - Verified settings and snippets E2E tests, created manual verification script.

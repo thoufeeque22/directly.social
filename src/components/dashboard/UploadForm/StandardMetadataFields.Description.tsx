@@ -42,8 +42,9 @@ export const DescriptionField: React.FC = () => {
     const newCursor = start + snippet.length + (needsSepBefore ? 1 : 0);
     cursorPosRef.current = { start: newCursor, end: newCursor };
     requestAnimationFrame(() => {
-      el?.setSelectionRange(newCursor, newCursor);
-      el?.focus();
+      if (!el) return;
+      el.setSelectionRange(newCursor, newCursor);
+      el.focus();
     });
   }, [description, handleDescriptionChange]);
 
