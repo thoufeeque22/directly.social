@@ -24,7 +24,7 @@ export const faqs = [
   },
   {
     question: <>Can I use <strong>{BRAND.name}</strong> for team collaboration?</>,
-    answer: `Team features are coming soon to our ${cloudTier?.name || 'Cloud Pro'} tier, which will allow for shared local vaults and synchronized workflows while maintaining our privacy-first architecture.`
+    answer: `Team features are coming soon to our ${cloudTier?.name || 'Cloud Pro'} tier, which will allow for shared local galleries and synchronized workflows while maintaining our privacy-first architecture.`
   }
 ];
 

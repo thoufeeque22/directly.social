@@ -83,3 +83,9 @@ BRIEFING.md
 ORIGINAL_REQUEST.md
 progress.md
 handoff.md
+.agents/workspaces/
+.agents/*_agent/
+.agents/worker_*/
+.agents/implementer_*/
+.agents/teamwork_*/
+.agents/victory_verifier/

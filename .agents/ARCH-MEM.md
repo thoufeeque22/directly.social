@@ -9,3 +9,4 @@
   - `doc-agent`: PRs & living docs.
 - **Hooks:** `.agents/hooks/post-task.sh` (auto-lint/test).
 - **State:** `.agents/state/ticket-<id>/MAIN.md` (transient workflow state). Markdown only; JSON is forbidden.
+- **Local Model Routing:** The Orchestrator MUST offload heavy tasks to local models via `ollama_chat` (`qwen-coder-64k`, `gemma4:26b`, `deepseek-coder-v2`, `llama3.1:8b`, etc.) to prevent cloud token exhaustion.

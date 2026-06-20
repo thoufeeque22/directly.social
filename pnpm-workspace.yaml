@@ -7,7 +7,7 @@ allowBuilds:
   core-js-pure: true
   esbuild: true
   prisma: true
-  protobufjs: set this to true or false
+  protobufjs: true
   sharp: true
   tree-sitter: true
   tree-sitter-json: true

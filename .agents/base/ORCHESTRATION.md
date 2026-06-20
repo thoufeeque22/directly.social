@@ -3,6 +3,13 @@
 > **MANDATORY:** All agents MUST use the centralized constants and patterns defined in [VARIABLES.md](VARIABLES.md). NEVER hardcode strings for branch names, state directories, verdicts, or commands.
 
 ## Core Mandates
+- **Local Model Offloading (Zero Token Exhaustion Policy):** The Main Orchestrator and all sub-agents MUST aggressively offload high-token, repetitive, or read-heavy tasks to local models via `ollama_chat` or the `cavecrew` subagents. The cloud orchestrator MUST act strictly as a high-level manager.
+  - **Large Context / Whole-File Reviews (Audit Agent):** Use `qwen-coder-64k:latest` (64k context for large files/logs).
+  - **Heavy Implementation / Deep Reasoning (Architect/Discovery):** Use `deepseek-coder-v2` or `llama3.1:70b`.
+  - **Fast, Surgical Edits / Boilerplate (Dev Agent/Cavecrew Builder):** Use `qwen2.5-coder:1.5b` or `phi3.5`.
+  - **Code Generation & Test Writing (QA/Doc Agent):** Use `codestral`.
+  - **General Purpose / Reasoning Fallback:** Use `llama3.1:8b` or `gemma4:latest`.
+- **Real-Time Auditing (Cavecrew Watcher):** The Orchestrator MUST schedule a background loop (using `phi3.5` or `qwen2.5-coder:1.5b`) to continuously monitor file saves and provide 1-line real-time architectural warnings *as code is written*, rather than waiting for the formal Audit phase.
 - **Active Inquisitiveness (Collaborative Inquiry):** AI agents MUST act as collaborative partners, not just execution machines. If any request, requirement, or technical path is ambiguous, the agent MUST stop and ask the user for clarification before proceeding. "Guessing" is a terminal violation.
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST follow this **Dependency Rule**: `Ticket Description -> Git Branch -> State Directory`.
   1. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue`).
@@ -13,7 +20,7 @@
   4. Create a state directory `TICKET_STATE_DIR` with a `MAIN_STATE_FILE` file following the **MAIN_STATE_FILE Template**.
   5. **MANDATORY:** The `MAIN_STATE_FILE` MUST contain the final, resolved `branch_name`. **NEVER** use placeholders or patterns like `FEATURE_BRANCH_PATTERN` in the final file.
   6. Skip if state already exists.
-- **Manual Environment Management:** The User always manages the development server (`npm run dev`), the E2E test server (`http://localhost:3000`), and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, check the connectivity of these services, or modify/enable any Playwright `webServer` configuration. ALL E2E tests are strictly bound to `http://localhost:3000`.
+- **Manual Environment Management:** The User always manages the development server (`pnpm dev`), the E2E test server (`http://localhost:3000`), and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, check the connectivity of these services, or modify/enable any Playwright `webServer` configuration. ALL E2E tests are strictly bound to `http://localhost:3000`.
 - **Strict Sequential Workflow:** ALL tickets MUST follow the `PHASE_ORDER`.
 - **Guardrail Mandates (Terminal Violations):**
   1. **Issue-First Protocol:** Before starting any work, the Orchestrator MUST ensure a corresponding GitHub issue exists. If the task is new or doesn't have an ID, the Orchestrator MUST invoke the `project-agent` to create the issue FIRST.
@@ -47,7 +54,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
   - **Fast-Track Verification:** If the user explicitly requests to save time or if in a fast-iteration loop, the agent MAY skip `BUILD_CMD` IF they have already run it once for the current set of changes and no relevant files have changed.
 - **audit-agent:** READ-ONLY. Focus on Security, Privacy (PII), and Performance (Web Vitals) audits.
 - **qa-agent:** MUST run `REGRESSION_TEST_CMD`. For features with specific impact, they may also run relevant individual tests.
-- **Human-in-the-Loop:** The **User** SHOULD run the full suite (`npm test`) before the final merge.
+- **Human-in-the-Loop:** The **User** SHOULD run the full suite (`pnpm test`) before the final merge.
 
 ### package.json Scripts (Implementation)
 - `test:smoke`: `SMOKE_TEST_CMD`
@@ -55,6 +62,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 
 ## State Management & Isolation (Hook-Only)
 - **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `TICKET_STATE_DIR`.
+- **Workspace Isolation:** Subagents MUST be invoked with `Workspace: 'inherit'` or `Workspace: 'share'` to prevent cloning repo directories into `.agents/`. If an isolated branched workspace is strictly necessary, it MUST be routed to `.agents/workspaces/`.
 - **Transient Files:** ANY temporary scratch files (e.g., `BRIEFING.md`, `ORIGINAL_REQUEST.md`, `handoff.md`) MUST be written to the `.ai-state/` directory. NEVER write temporary files to the project root or `.agents/`.
 - **State Manager Hook:** Agents MUST NOT manually edit `MAIN_STATE_FILE` or their individual round files. Instead, agents MUST execute the `STATE_UPDATE_CMD` as their final action:
   `STATE_UPDATE_CMD`
@@ -69,9 +77,9 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
   ├── round-1/
   │   ├── product.md       # Product agent only
   │   ├── discovery.md     # Discovery agent only
+  │   ├── qa.md            # QA agent only
   │   ├── development.md   # Dev agent only
-  │   ├── audit.md         # Audit agent only
-  │   └── qa.md            # QA agent only
+  │   └── audit.md         # Audit agent only
   └── round-2/
       ├── development.md
       └── ...
@@ -82,7 +90,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 ---
 ticket_id: <id>
 branch_name: FEATURE_BRANCH_PATTERN
-status: [product|discovery|development|audit|qa|doc|pm]
+status: [product|discovery|qa|development|audit|doc|pm]
 current_round: 1
 ---
 
@@ -144,6 +152,7 @@ current_round: 1
 1. **Atomic Phases:** An agent MUST NOT proceed to the next phase. It MUST execute the state manager hook to update the `status` and `current_round` in `MAIN.md` and record its progress, then return control.
 2. **Failure Recovery:** If `audit.md` or `qa.md` results in a **FAIL**, the user MUST trigger a new round. The `dev-agent` will then start by creating `round-(N+1)/` and initializing `development.md`.
 3. **Traceable Fixes:** Dev agents in Round 2+ MUST read the previous round's `audit.md` or `qa.md` to ensure all reported issues are addressed.
+4. **State Compression:** At the end of every round, the Orchestrator MUST use the `caveman-compress` skill on the state files to drastically reduce token usage for future rounds while preserving technical context.
 
 
 ## Agent Specific Workflows
@@ -156,29 +165,30 @@ current_round: 1
 ### Discovery (Architecture & Planning)
 - **Role:** Read-only consultant and rigorous interrogator. Create blueprints.
 - **Mandate:** MUST grill the user and ask deep and thorough questions to resolve all ambiguities before drafting blueprints. MUST provide an explicit **Socratic Log** (via `discovery-agent`) followed by a **Test Specification** block with high-level manual and automated test scenarios.
-- **NotebookLM Synthesis:** For tickets involving complex integrations, legacy refactors, or deep architectural changes, the agent SHOULD recommend a NotebookLM synthesis step. Use `npm run notebook:package` to bundle context for high-fidelity research.
-- **Verdict:** Approved -> Dev | Needs-Info -> Round 2 | Rejected -> Close.
+- **NotebookLM Synthesis:** For tickets involving complex integrations, legacy refactors, or deep architectural changes, the agent SHOULD recommend a NotebookLM synthesis step. Use `pnpm run notebook:package` to bundle context for high-fidelity research.
+- **Verdict:** Approved -> QA | Needs-Info -> Round 2 | Rejected -> Close.
+
+### QA (E2E Test Automation & Manual Scripts - Test-Driven Flip)
+- **Role:** Automation Engineer. **READ-ONLY (except for test files)**.
+- **Mandate:** 
+  1. **Automation:** Write and execute Playwright/Maestro tests *based on the Discovery spec BEFORE development begins*. The tests will initially fail, giving Dev a strict finish line.
+  2. **Manual:** Formalize the Discovery test spec into a detailed step-by-step manual test script in `MANUAL_TEST_FILE_PATTERN`.
+  3. **No App Edits:** MUST NOT modify application source code (`src/`).
+- **Verdict:** Spec Complete -> Dev | Fail -> Return to Discovery.
 
 ### Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular code.
-- **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops before the phase is considered complete.
+- **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops. MUST aggressively offload file edits and boilerplate to `cavecrew-builder` or local `ollama_chat`.
 - **Verdict:** Success -> Audit | Blocked -> Discovery/Manual.
-- **Exhaustive Verification:** MUST run `BUILD_CMD`, `LINT_CMD`, and `TYPE_CHECK_CMD`. Failure in ANY of these commands requires remediation BEFORE handoff. "Fast-track" skipping of these steps is only permitted if the agent has already run them for the *exact* current state of modified files.
+- **Exhaustive Verification:** MUST run `BUILD_CMD`, `LINT_CMD`, and `TYPE_CHECK_CMD`. **MANDATORY:** When encountering bulk lint or build errors, the agent MUST use the `triage-lint` skill to fix them in manageable batches rather than overwhelming the context window.
+- **Dependencies Management:** When adding new dependencies to `package.json`, the agent MUST use `pnpm install <package>` to ensure `pnpm-lock.yaml` is correctly updated. NEVER use `npm`.
 - **Aesthetic Validation:** MUST verify MUI component prop compliance (e.g., using `sx` for styling) to prevent React attribute warnings.
 
-### Audit (QA & Security Audit)
+### Audit (Security & Performance Audit)
 - **Role:** Senior Auditor. **READ-ONLY**.
 - **Mandate:** 
-  1. **Security & Quality**: MUST NOT modify code. If issues exist, Verdict MUST be "FAIL".
-  2. **Performance Audit**: MUST run a "Web Vitals / Performance Audit" using the `@GoogleChrome/modern-web-guidance` extension. Verify that no deprecated patterns are introduced and that Core Web Vitals (LCP, INP, CLS) are considered.
-- **Verdict:** Pass -> QA | Fail -> Return to Dev.
-
-### QA (E2E Test Automation & Manual Scripts)
-- **Role:** Automation Engineer. **READ-ONLY (except for test files)**.
-- **Mandate:** 
-  1. **Automation**: Write and execute Playwright/Maestro tests.
-  2. **Manual**: Formalize the Discovery test spec into a detailed step-by-step manual test script in `MANUAL_TEST_FILE_PATTERN`.
-  3. **No App Edits**: MUST NOT modify application source code.
+  1. **Security & Quality:** MUST NOT modify code. If issues exist, Verdict MUST be "FAIL". MUST perform all heavy code reviews, log analysis, and architectural gap checks using the `ollama_chat` tool or `cavecrew-reviewer` to avoid burning cloud context on large diffs.
+  2. **Performance Audit:** MUST run a "Web Vitals / Performance Audit" using the `@GoogleChrome/modern-web-guidance` extension. Verify that no deprecated patterns are introduced and that Core Web Vitals (LCP, INP, CLS) are considered.
 - **Verdict:** Pass -> Documentation | Fail -> Return to Dev.
 
 ### Documentation

@@ -2,21 +2,14 @@
 'use client';
 
 import React from 'react';
-import { Box, Button, Typography, Stack } from '@mui/material';
-import { Add as Plus, Delete as Trash2 } from '@mui/icons-material';
+import { Box, Typography } from '@mui/material';
 
 interface MediaLibraryHeaderProps {
-  onAddVideo: () => void;
-  onClearAll: () => void;
-  isUploading: boolean;
-  hasAssets: boolean;
+  actions?: React.ReactNode;
 }
 
 export const MediaLibraryHeader: React.FC<MediaLibraryHeaderProps> = ({
-  onAddVideo,
-  onClearAll,
-  isUploading,
-  hasAssets,
+  actions,
 }) => {
   return (
     <Box
@@ -44,34 +37,7 @@ export const MediaLibraryHeader: React.FC<MediaLibraryHeaderProps> = ({
           Manage your staged video assets and reuse them across platforms.
         </Typography>
       </Box>
-      <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<Plus sx={{ fontSize: 18 }} />}
-          onClick={onAddVideo}
-          disabled={isUploading}
-          data-testid="header-upload-button"
-          sx={{
-            fontWeight: 'bold',
-            boxShadow: (theme) => `0 4px 12px ${theme.palette.primary.main}4D`,
-          }}
-        >
-          Upload
-        </Button>
-        {hasAssets && (
-          <Button
-            variant="outlined"
-            color="error"
-            startIcon={<Trash2 sx={{ fontSize: 16 }} />}
-            onClick={onClearAll}
-            disabled={isUploading}
-            data-testid="clear-gallery"
-          >
-            Clear Gallery
-          </Button>
-        )}
-      </Stack>
+      {actions}
     </Box>
   );
 };
