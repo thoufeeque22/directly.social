@@ -13,6 +13,7 @@ export const DescriptionField: React.FC = () => {
   } = useUploadFormContext();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const cursorPosRef = useRef<{ start: number; end: number } | null>(null);
   // Only preserve cursor position if the user blurred by clicking the snippet trigger.
   // If they clicked elsewhere first, reset to null (falls back to end-append).
   const handleTextareaBlur = useCallback((e: React.FocusEvent<HTMLTextAreaElement>) => {

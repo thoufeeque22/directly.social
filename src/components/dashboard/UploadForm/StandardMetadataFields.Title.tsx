@@ -13,6 +13,7 @@ export const TitleField: React.FC = () => {
   } = useUploadFormContext();
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const cursorPosRef = useRef<{ start: number; end: number } | null>(null);
   // Only preserve cursor position if the user blurred by clicking the snippet trigger.
   // If they clicked elsewhere first, reset to null (falls back to end-append).
   const handleInputBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {

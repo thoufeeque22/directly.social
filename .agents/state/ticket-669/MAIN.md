@@ -1,7 +1,7 @@
 ---
 ticket_id: 669
 branch_name: feature/669-modularize-templatemanager
-status: dev
+status: audit
 current_round: 2
 ---
 
