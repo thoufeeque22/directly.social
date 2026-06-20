@@ -62,6 +62,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 
 ## State Management & Isolation (Hook-Only)
 - **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `TICKET_STATE_DIR`.
+- **Workspace Isolation:** Subagents MUST be invoked with `Workspace: 'inherit'` or `Workspace: 'share'` to prevent cloning repo directories into `.agents/`. If an isolated branched workspace is strictly necessary, it MUST be routed to `.agents/workspaces/`.
 - **Transient Files:** ANY temporary scratch files (e.g., `BRIEFING.md`, `ORIGINAL_REQUEST.md`, `handoff.md`) MUST be written to the `.ai-state/` directory. NEVER write temporary files to the project root or `.agents/`.
 - **State Manager Hook:** Agents MUST NOT manually edit `MAIN_STATE_FILE` or their individual round files. Instead, agents MUST execute the `STATE_UPDATE_CMD` as their final action:
   `STATE_UPDATE_CMD`
