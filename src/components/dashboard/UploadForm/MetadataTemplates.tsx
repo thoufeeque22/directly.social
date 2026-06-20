@@ -8,21 +8,16 @@ import { useMetadataTemplates } from './useMetadataTemplates';
 import { TemplateList } from './TemplateList';
 import { TemplateSaveForm } from './TemplateSaveForm';
 
-import { useUploadFormContext } from './UploadFormContext';
-
 interface MetadataTemplatesProps {
+  currentValue: string;
   onSelect: (content: string) => void;
-  platform?: string;
 }
 
-export const MetadataTemplates: React.FC<MetadataTemplatesProps> = ({ onSelect, platform }) => {
+export const MetadataTemplates: React.FC<MetadataTemplatesProps> = ({ currentValue, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showSaveForm, setShowSaveForm] = useState(false);
   const [newName, setNewName] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
-  
-  const { description, platformDescriptions } = useUploadFormContext();
-  const currentContent = platform ? (platformDescriptions[platform] || '') : description;
 
   const { templates, isLoading, isSaving, saveTemplate } = useMetadataTemplates(isOpen);
 
@@ -36,7 +31,7 @@ export const MetadataTemplates: React.FC<MetadataTemplatesProps> = ({ onSelect, 
 
   const handleSave = async () => {
     try {
-      await saveTemplate(newName, currentContent);
+      await saveTemplate(newName, currentValue);
       React.startTransition(() => {
         setNewName('');
         setShowSaveForm(false);
@@ -64,7 +59,7 @@ export const MetadataTemplates: React.FC<MetadataTemplatesProps> = ({ onSelect, 
 
           <div style={footerStyle}>
             {!showSaveForm ? (
-              <button type="button" data-testid="save-snippet-form-trigger" onClick={() => setShowSaveForm(true)} disabled={!currentContent.trim()} style={{ ...addButtonStyle, opacity: currentContent.trim() ? 1 : 0.5, cursor: currentContent.trim() ? 'pointer' : 'not-allowed' }}>
+              <button type="button" data-testid="save-snippet-form-trigger" onClick={() => setShowSaveForm(true)} disabled={!currentValue.trim()} style={{ ...addButtonStyle, opacity: currentValue.trim() ? 1 : 0.5, cursor: currentValue.trim() ? 'pointer' : 'not-allowed' }}>
                 <AddIcon sx={{ fontSize: 14 }} /> Save Current as Snippet
               </button>
             ) : (

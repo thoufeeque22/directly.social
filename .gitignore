@@ -76,6 +76,10 @@ next-env.d.ts
 /capacitor.config.json
 
 # AI Agent Orchestration
-!.gemini/incidental_observations.json
-!.gemini/state/
+.ai-state/
 .gemini/tmp/
+.agents/tmp/
+BRIEFING.md
+ORIGINAL_REQUEST.md
+progress.md
+.agents/handoff.md

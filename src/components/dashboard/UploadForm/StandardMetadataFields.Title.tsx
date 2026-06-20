@@ -1,6 +1,7 @@
 import React from 'react';
 import { useUploadFormContext } from './UploadFormContext';
 import { AINudge } from '@/components/ui/AINudge';
+import { MetadataTemplates } from './MetadataTemplates';
 import UndoIcon from '@mui/icons-material/Undo';
 import { scanButtonStyle, undoButtonStyle, inputStyle, clearButtonStyle } from './StandardMetadataFields.Title.styles';
 
@@ -17,12 +18,21 @@ export const TitleField: React.FC = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
           <label htmlFor="video-title" style={{ fontSize: '0.9rem', fontWeight: 500 }}>
             {aiTier === 'Generate' ? 'Video Prompt' : 'Video Title'}
           </label>
           {aiTier === 'Manual' && (
             <AINudge featureKey="title_generator" message="Try AI Title" tooltipText="Switch to Generate tier" onClick={() => onTierChange('Generate')} />
+          )}
+          {!isUploading && (
+            <MetadataTemplates
+              currentValue={title}
+              onSelect={(val) => {
+                const newTitle = title ? `${title} ${val}` : val;
+                handleTitleChange(newTitle);
+              }}
+            />
           )}
           {aiTier === 'Generate' && !isUploading && (
             <button type="button" onClick={async () => {
