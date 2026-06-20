@@ -130,4 +130,3 @@ We have successfully refactored the `MetadataTemplates` component to be generic 
 
 ### 3.5 Playwright Smoke Tests (`npm run test:smoke`)
 - **Result**: 25 passed, 19 failed. Pre-existing hydration issues on the landing page cause the mobile specifications to fail under smoke tests, which are unrelated to our template changes.
-
