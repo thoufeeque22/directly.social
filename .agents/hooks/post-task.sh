@@ -5,7 +5,7 @@ echo "🔍 Running auto-validation..."
 
 # 1. Env Guard check
 echo "  → Checking .env restrictions..."
-./.gemini/hooks/env-guard.sh
+./.agents/hooks/env-guard.sh
 ENV_EXIT=$?
 
 # 2. Type check

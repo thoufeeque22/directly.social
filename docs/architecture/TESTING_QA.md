@@ -32,7 +32,7 @@ Utility scripts for database management and test data seeding are located in `sr
 
 ## 4. Agent Orchestration
 
-The project uses specialized AI agents (Discovery, Dev, Review, QA) to manage the development lifecycle. Core orchestration rules are modularized in `.gemini/base/`.
+The project uses specialized AI agents (Discovery, Dev, Review, QA) to manage the development lifecycle. Core orchestration rules are modularized in `.agents/base/`.
 
 ## 5. Modularity Enforcement (The 100-Line Rule)
 

@@ -77,9 +77,9 @@ next-env.d.ts
 
 # AI Agent Orchestration
 .ai-state/
-.gemini/tmp/
+.agents/tmp/
 .agents/tmp/
 BRIEFING.md
 ORIGINAL_REQUEST.md
 progress.md
-.agents/handoff.md
+handoff.md
