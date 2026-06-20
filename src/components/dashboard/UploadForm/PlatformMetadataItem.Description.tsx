@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useRef, useCallback } from 'react';
 import { AINudge } from '@/components/ui/AINudge';
 import { MetadataTemplates } from './MetadataTemplates';
 import UndoIcon from '@mui/icons-material/Undo';
 import { PLATFORM_LIMITS } from '@/lib/core/constants';
 import { inputStyle } from './PlatformMetadataFields.styles';
 import { clearButtonStyle as globalClearStyle, undoButtonStyle } from './StandardMetadataFields.Title.styles';
-
 import { AITier } from '@/lib/core/constants';
+import { insertAtCursor } from '@/lib/utils/insertAtCursor';
 
 interface PlatformDescriptionFieldProps {
   platform: string;
@@ -18,14 +18,42 @@ interface PlatformDescriptionFieldProps {
   onClear: (p: string) => void;
   onUndo: () => void;
   onTierChange: (t: AITier) => void;
-  appendDescription: (v: string, p: string) => void;
 }
 
 export const PlatformDescriptionField: React.FC<PlatformDescriptionFieldProps> = ({
-  platform, isUploading, aiTier, value, showUndo, onChange, onClear, onUndo, onTierChange, appendDescription
+  platform, isUploading, aiTier, value, showUndo, onChange, onClear, onUndo, onTierChange
 }) => {
   const limits = PLATFORM_LIMITS[platform] || PLATFORM_LIMITS.default;
   const isOver = value.length > limits.description;
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  // Only preserve cursor position if the user blurred by clicking the snippet trigger.
+  // If they clicked elsewhere first, reset to null (falls back to end-append).
+  const handleTextareaBlur = useCallback((e: React.FocusEvent<HTMLTextAreaElement>) => {
+    const relatedTarget = e.relatedTarget as HTMLElement | null;
+    const isSnippetTrigger = relatedTarget?.dataset?.testid === 'snippets-trigger';
+    if (isSnippetTrigger) {
+      cursorPosRef.current = {
+        start: e.target.selectionStart ?? e.target.value.length,
+        end: e.target.selectionEnd ?? e.target.value.length,
+      };
+    } else {
+      cursorPosRef.current = null;
+    }
+  }, []);
+
+  const handleSnippetSelect = useCallback((snippet: string) => {
+    const el = textareaRef.current;
+    const { start, end } = cursorPosRef.current ?? { start: value.length, end: value.length };
+    const newValue = insertAtCursor(value, snippet, '\n', start, end);
+    onChange(platform, newValue);
+    const needsSepBefore = start > 0 && !value.slice(0, start).endsWith('\n');
+    const newCursor = start + snippet.length + (needsSepBefore ? 1 : 0);
+    cursorPosRef.current = { start: newCursor, end: newCursor };
+    requestAnimationFrame(() => {
+      el?.setSelectionRange(newCursor, newCursor);
+      el?.focus();
+    });
+  }, [value, platform, onChange]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -37,7 +65,9 @@ export const PlatformDescriptionField: React.FC<PlatformDescriptionFieldProps> =
           {aiTier === 'Manual' && (
             <AINudge featureKey="desc_generator" message="Try AI" tooltipText="Switch to Enrich tier" onClick={() => onTierChange('Enrich')} />
           )}
-          {!isUploading && <MetadataTemplates currentValue={value} category="description" onSelect={(val) => appendDescription(val, platform)} />}
+          {!isUploading && (
+            <MetadataTemplates currentValue={value} category="description" onSelect={handleSnippetSelect} />
+          )}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <span style={{ fontSize: '0.65rem', fontWeight: 600, color: isOver ? 'hsl(var(--destructive))' : 'hsl(var(--muted-foreground))' }}>
@@ -52,10 +82,12 @@ export const PlatformDescriptionField: React.FC<PlatformDescriptionFieldProps> =
       </div>
       <div style={{ position: 'relative' }}>
         <textarea 
+          ref={textareaRef}
           name={`description_${platform}`}
           placeholder={`Specific ${platform} description...`} 
           value={value} 
           onChange={(e) => onChange(platform, e.target.value)} 
+          onBlur={handleTextareaBlur}
           rows={3} 
           style={{ ...inputStyle, resize: 'none', paddingRight: '2.5rem', borderColor: isOver ? 'hsl(var(--destructive))' : 'hsla(var(--border) / 0.5)' }} 
         />

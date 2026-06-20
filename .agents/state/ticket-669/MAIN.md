@@ -1,15 +1,15 @@
 ---
 ticket_id: 669
 branch_name: feature/669-modularize-templatemanager
-status: doc
-current_round: 1
+status: dev
+current_round: 2
 ---
 
 # 📋 Ticket Metadata
 - **ID**: 669
 - **Branch**: `feature/669-modularize-templatemanager`
 - **Goal**: Refactor TemplateManager.tsx to improve modularity and testability. Extract business logic into useTemplateManager hook and separate UI into TemplateListItem and TemplateForm.
-- **Current Status**: doc
+- **Current Status**: dev (Round 2)
 
 # 📝 Ticket Description
 ### Context
@@ -28,7 +28,8 @@ The file contains complex CRUD state management, search filtering, and inline ed
 Improved testability and compliance with the 100-line standard.
 
 # 🔄 Round History
-- **Round 1**: [IN-PROGRESS]
+- **Round 1**: [COMPLETE] - Refactored MetadataTemplates to generic component, added snippet categorization, Audit PASS, QA PASS.
+- **Round 2**: [IN-PROGRESS] - Implement cursor-position snippet insertion for Title, Description, and First Comment fields (hashtags remain end-append).
 
 # 📅 Timeline
 - **[2026-06-20 11:15:00]**: Product phase started by `product-agent`.
@@ -40,4 +41,6 @@ Improved testability and compliance with the 100-line standard.
 - **[2026-06-20 12:43:14]**: DEV [SUCCESS] - Implemented snippet categorization by field.
 - **[2026-06-20 12:46:12]**: AUDIT [PASS] - Audit completed successfully. Security, Hydration, Modularity, and Performance checks passed.
 - **[2026-06-20 12:57:32]**: QA [PASS] - Rewrote and fully verified all E2E Playwright tests for multiple Snippet fields. Passed all tests.
+- **[2026-06-20 15:16:03]**: ROUND 2 STARTED - User approved cursor-insertion feature. Dev agent starting.
+- **[2026-06-20 15:20:31]**: DEV [SUCCESS] - Implemented cursor-position snippet insertion. Created insertAtCursor.ts utility. Updated Title (space sep), Description (newline sep), FirstComment (newline sep), and PlatformDescription (newline sep). Removed appendDescription prop cascade. Build ✅ Lint ✅
 - **[2026-06-20 13:01:40]**: QA [PASS] - Verified settings and snippets E2E tests, created manual verification script.
