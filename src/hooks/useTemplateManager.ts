@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getMetadataTemplates, deleteMetadataTemplate, updateMetadataTemplate } from '@/app/actions/metadata';
 
@@ -6,12 +7,14 @@ export interface Template {
   name: string;
   description: string;
   firstComment: string;
+  category: string;
 }
 
 interface DBTemplate {
   id: string;
   name: string;
   content: string;
+  category: string;
 }
 
 const isDBTemplate = (item: unknown): item is DBTemplate =>
@@ -19,7 +22,8 @@ const isDBTemplate = (item: unknown): item is DBTemplate =>
   typeof item === 'object' &&
   'id' in item && typeof (item as Record<string, unknown>).id === 'string' &&
   'name' in item && typeof (item as Record<string, unknown>).name === 'string' &&
-  'content' in item && typeof (item as Record<string, unknown>).content === 'string';
+  'content' in item && typeof (item as Record<string, unknown>).content === 'string' &&
+  'category' in item && typeof (item as Record<string, unknown>).category === 'string';
 
 const parseContent = (content: string) => {
   try {
@@ -37,15 +41,18 @@ export function useTemplateManager() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<string>('All');
 
   const filteredTemplates = useMemo(() => {
     const q = searchQuery.toLowerCase();
-    return templates.filter(t =>
-      t.name.toLowerCase().includes(q) ||
-      t.description.toLowerCase().includes(q) ||
-      t.firstComment.toLowerCase().includes(q)
-    );
-  }, [templates, searchQuery]);
+    return templates.filter(t => {
+      const matchSearch = t.name.toLowerCase().includes(q) ||
+                          t.description.toLowerCase().includes(q) ||
+                          t.firstComment.toLowerCase().includes(q);
+      const matchCat = categoryFilter === 'All' || t.category === categoryFilter.toLowerCase().replace(' ', '_');
+      return matchSearch && matchCat;
+    });
+  }, [templates, searchQuery, categoryFilter]);
 
   const fetchTemplates = useCallback(async () => {
     try {
@@ -53,7 +60,7 @@ export function useTemplateManager() {
       if (Array.isArray(data)) {
         setTemplates(data.filter(isDBTemplate).map(t => {
           const { description, firstComment } = parseContent(t.content);
-          return { id: t.id, name: t.name, description, firstComment };
+          return { id: t.id, name: t.name, description, firstComment, category: t.category };
         }));
       }
     } catch (e) {
@@ -73,7 +80,7 @@ export function useTemplateManager() {
       const updated = await updateMetadataTemplate(id, { name: values.name, content });
       if (isDBTemplate(updated)) {
         const parsed = parseContent(updated.content);
-        setTemplates(prev => prev.map(t => t.id === id ? { id, name: updated.name, ...parsed } : t));
+        setTemplates(prev => prev.map(t => t.id === id ? { id, name: updated.name, category: updated.category, ...parsed } : t));
       } else {
         throw new Error('Invalid template data returned from server.');
       }
@@ -105,6 +112,8 @@ export function useTemplateManager() {
     updatingId,
     searchQuery,
     setSearchQuery,
+    categoryFilter,
+    setCategoryFilter,
     handleUpdate,
     handleDelete
   };

@@ -16,11 +16,13 @@ describe('TemplateManager & Reusable Snippets', () => {
       id: 'template_1',
       name: 'Snippet One',
       content: JSON.stringify({ description: 'This is the first template description.', firstComment: 'Comment 1' }),
+      category: 'description',
     },
     {
       id: 'template_2',
       name: 'Snippet Two',
       content: JSON.stringify({ description: 'This is the second template description.', firstComment: '' }),
+      category: 'description',
     },
   ];
 
@@ -31,6 +33,7 @@ describe('TemplateManager & Reusable Snippets', () => {
       id: 'template_1',
       name: 'Snippet One Updated',
       content: JSON.stringify({ description: 'Updated Description', firstComment: 'Updated Comment' }),
+      category: 'description',
     } as any);
     vi.mocked(deleteMetadataTemplate).mockResolvedValue({ success: true } as any);
 

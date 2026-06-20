@@ -23,7 +23,7 @@ export const DescriptionField: React.FC = () => {
             {aiTier === 'Generate' ? 'Context' : 'Description'}
           </label>
           {aiTier === 'Manual' && <AINudge featureKey="desc_generator" message="Try AI Polish" tooltipText="Switch to Enrich tier" onClick={() => onTierChange('Enrich')} />}
-          {!isUploading && <MetadataTemplates currentValue={description} onSelect={(val) => appendDescription(val)} />}
+          {!isUploading && <MetadataTemplates currentValue={description} category="description" onSelect={(val) => appendDescription(val)} />}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <span style={{ fontSize: '0.7rem', fontWeight: 600, color: isOverLimit ? 'hsl(var(--destructive))' : isNearLimit ? '#ffb74d' : 'hsl(var(--muted-foreground))' }}>

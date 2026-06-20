@@ -1,11 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, TextField, InputAdornment, Skeleton, Stack } from '@mui/material';
+import { Box, Typography, TextField, InputAdornment, Skeleton, Stack, Tabs, Tab } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import { useTemplateManager } from '@/hooks/useTemplateManager';
 import { TemplateListItem } from './TemplateListItem';
+
+const CATEGORIES = ['All', 'Title', 'Description', 'Hashtags', 'First Comment'];
 
 export const TemplateManager: React.FC = () => {
   const {
@@ -15,6 +17,8 @@ export const TemplateManager: React.FC = () => {
     updatingId,
     searchQuery,
     setSearchQuery,
+    categoryFilter,
+    setCategoryFilter,
     handleUpdate,
     handleDelete,
   } = useTemplateManager();
@@ -37,6 +41,15 @@ export const TemplateManager: React.FC = () => {
       <Typography variant="h6" color="text.primary" sx={{ fontWeight: 700 }}>
         Reusable Snippets
       </Typography>
+      
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={categoryFilter} onChange={(_, newValue) => setCategoryFilter(newValue)} variant="scrollable" scrollButtons="auto">
+          {CATEGORIES.map((cat) => (
+            <Tab key={cat} label={cat} value={cat} />
+          ))}
+        </Tabs>
+      </Box>
+
       <TextField
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}

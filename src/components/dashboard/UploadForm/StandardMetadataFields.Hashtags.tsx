@@ -17,6 +17,7 @@ export const HashtagsField: React.FC = () => {
         {!isUploading && (
           <MetadataTemplates
             currentValue={hashtags}
+            category="hashtags"
             onSelect={(val) => {
               const newHashtags = hashtags ? `${hashtags} ${val}` : val;
               handleHashtagsChange(newHashtags);

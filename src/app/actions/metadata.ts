@@ -6,10 +6,10 @@ import { protectedAction, revalidateDashboard } from '@/lib/core/action-utils';
 /**
  * Fetches all metadata templates for the current user.
  */
-export async function getMetadataTemplates() {
+export async function getMetadataTemplates(category?: string) {
   return await protectedAction(async (userId) => {
     return await prisma.metadataTemplate.findMany({
-      where: { userId },
+      where: { userId, ...(category ? { category } : {}) },
       orderBy: { updatedAt: 'desc' }
     });
   });
@@ -18,13 +18,14 @@ export async function getMetadataTemplates() {
 /**
  * Creates a new metadata template.
  */
-export async function createMetadataTemplate(data: { name: string, content: string }) {
+export async function createMetadataTemplate(data: { name: string, content: string, category?: string }) {
   return await protectedAction(async (userId) => {
     const template = await prisma.metadataTemplate.create({
       data: {
         userId,
         name: data.name,
-        content: data.content
+        content: data.content,
+        category: data.category || 'description'
       }
     });
     
@@ -59,7 +60,7 @@ export async function deleteMetadataTemplate(id: string) {
 /**
  * Updates an existing metadata template.
  */
-export async function updateMetadataTemplate(id: string, data: { name: string, content: string }) {
+export async function updateMetadataTemplate(id: string, data: { name: string, content: string, category?: string }) {
   return await protectedAction(async (userId) => {
     // Ensure the template belongs to the user
     const template = await prisma.metadataTemplate.findUnique({
@@ -74,7 +75,8 @@ export async function updateMetadataTemplate(id: string, data: { name: string, c
       where: { id },
       data: {
         name: data.name,
-        content: data.content
+        content: data.content,
+        ...(data.category ? { category: data.category } : {})
       }
     });
 

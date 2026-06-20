@@ -28,6 +28,7 @@ export const TitleField: React.FC = () => {
           {!isUploading && (
             <MetadataTemplates
               currentValue={title}
+              category="title"
               onSelect={(val) => {
                 const newTitle = title ? `${title} ${val}` : val;
                 handleTitleChange(newTitle);

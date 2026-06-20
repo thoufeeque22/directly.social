@@ -37,7 +37,7 @@ export const PlatformDescriptionField: React.FC<PlatformDescriptionFieldProps> =
           {aiTier === 'Manual' && (
             <AINudge featureKey="desc_generator" message="Try AI" tooltipText="Switch to Enrich tier" onClick={() => onTierChange('Enrich')} />
           )}
-          {!isUploading && <MetadataTemplates currentValue={value} onSelect={(val) => appendDescription(val, platform)} />}
+          {!isUploading && <MetadataTemplates currentValue={value} category="description" onSelect={(val) => appendDescription(val, platform)} />}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <span style={{ fontSize: '0.65rem', fontWeight: 600, color: isOver ? 'hsl(var(--destructive))' : 'hsl(var(--muted-foreground))' }}>

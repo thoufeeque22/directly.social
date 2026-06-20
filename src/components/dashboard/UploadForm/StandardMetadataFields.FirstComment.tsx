@@ -17,6 +17,7 @@ export const FirstCommentField: React.FC = () => {
         {!isUploading && (
           <MetadataTemplates
             currentValue={firstCommentText}
+            category="first_comment"
             onSelect={(val) => {
               const newComment = firstCommentText ? `${firstCommentText}\n${val}` : val;
               handleFirstCommentChange(newComment);
