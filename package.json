@@ -33,22 +33,7 @@
     "mobile:dev": "bash scripts/mobile-dev.sh",
     "postinstall": "prisma generate"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@prisma/client",
-      "@prisma/engines",
-      "@sentry/cli",
-      "esbuild",
-      "prisma",
-      "sharp",
-      "tree-sitter",
-      "tree-sitter-json",
-      "@tree-sitter-grammars/tree-sitter-yaml",
-      "unrs-resolver",
-      "core-js-pure",
-      "@scarf/scarf"
-    ]
-  },
+
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.78",
     "@ai-sdk/google": "^3.0.72",
