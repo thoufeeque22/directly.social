@@ -28,7 +28,7 @@ export const LocalVaultPanel: React.FC<LocalVaultPanelProps> = ({ onPostAsset, a
   if (permissionState === 'unsupported') {
     return (
       <Box sx={{ p: 3, textAlign: 'center' }}>
-        <Alert severity="error" icon={<WarningIcon />}>Local Vault is unsupported. Please use Chrome/Edge.</Alert>
+        <Alert severity="error" icon={<WarningIcon />}>Local Gallery is unsupported by your browser. Please use a Chromium-based browser (like Chrome, Edge, or Brave).</Alert>
       </Box>
     );
   }
@@ -53,7 +53,7 @@ export const LocalVaultPanel: React.FC<LocalVaultPanelProps> = ({ onPostAsset, a
       )}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Chip label="Local Vault" color="success" size="small" />
+          <Chip label="Local Gallery" color="success" size="small" />
           <Typography variant="caption" color="text.secondary">{assets.length} file{assets.length !== 1 && 's'} loaded</Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 0.5 }}>

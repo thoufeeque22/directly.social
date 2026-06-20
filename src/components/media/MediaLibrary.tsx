@@ -97,7 +97,7 @@ export const MediaLibrary: React.FC = () => {
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
         <Tab label="Cloud Gallery" />
-        <Tab label="Local Vault" />
+        <Tab label="Local Gallery" />
       </Tabs>
 
       {tabValue === 0 ? (

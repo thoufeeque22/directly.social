@@ -32,7 +32,7 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect, onClose }) =
         <button onClick={onClose} style={styles.closeBtn} aria-label="Close picker"><CloseIcon /></button>
         <h3 style={styles.title}><MovieIcon className="text-primary" sx={{ fontSize: 20 }} />Choose Media</h3>
         <Tabs value={tabValue} onChange={(_, val) => setTabValue(val)} sx={{ mb: 2, borderBottom: 1, borderColor: 'divider' }}>
-          <Tab label="Staged Media" /><Tab label="Local Vault" />
+          <Tab label="Staged Media" /><Tab label="Local Gallery" />
         </Tabs>
         {tabValue === 0 ? (
           <>

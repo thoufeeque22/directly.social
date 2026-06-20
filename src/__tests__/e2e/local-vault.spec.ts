@@ -10,9 +10,9 @@ test.describe('Local FileSystem Vault E2E Tests', () => {
     });
 
     await page.goto('/media');
-    await page.getByRole('tab', { name: 'Local Vault' }).click();
+    await page.getByRole('tab', { name: 'Local Gallery' }).click();
 
-    await expect(page.getByText('Local Vault is unsupported. Please use Chrome/Edge.')).toBeVisible();
+    await expect(page.getByText('Local Gallery is unsupported by your browser. Please use a Chromium-based browser (like Chrome, Edge, or Brave).')).toBeVisible();
   });
 
   test('Case 2 & 3: Folder Connection, Badge & Composer Redirection', async ({ page }) => {
@@ -37,11 +37,11 @@ test.describe('Local FileSystem Vault E2E Tests', () => {
     });
 
     await page.goto('/media');
-    await page.getByRole('tab', { name: 'Local Vault' }).click();
+    await page.getByRole('tab', { name: 'Local Gallery' }).click();
 
     await page.getByRole('button', { name: 'Connect Directory' }).click();
 
-    await expect(page.locator('span.MuiChip-label', { hasText: 'Local Vault' })).toBeVisible();
+    await expect(page.locator('span.MuiChip-label', { hasText: 'Local Gallery' })).toBeVisible();
     await expect(page.getByText('local_test_video.mp4')).toBeVisible();
 
     await page.getByRole('button', { name: 'Post', exact: true }).click();
@@ -73,7 +73,7 @@ test.describe('Local FileSystem Vault E2E Tests', () => {
     });
 
     await page.goto('/media');
-    await page.getByRole('tab', { name: 'Local Vault' }).click();
+    await page.getByRole('tab', { name: 'Local Gallery' }).click();
 
     // Verify warning alert is visible
     await expect(page.getByText('Access to the connected directory needs to be restored')).toBeVisible();
