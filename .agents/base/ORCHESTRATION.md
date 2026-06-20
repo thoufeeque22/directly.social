@@ -76,9 +76,9 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
   ├── round-1/
   │   ├── product.md       # Product agent only
   │   ├── discovery.md     # Discovery agent only
+  │   ├── qa.md            # QA agent only
   │   ├── development.md   # Dev agent only
-  │   ├── audit.md         # Audit agent only
-  │   └── qa.md            # QA agent only
+  │   └── audit.md         # Audit agent only
   └── round-2/
       ├── development.md
       └── ...
@@ -89,7 +89,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 ---
 ticket_id: <id>
 branch_name: FEATURE_BRANCH_PATTERN
-status: [product|discovery|development|audit|qa|doc|pm]
+status: [product|discovery|qa|development|audit|doc|pm]
 current_round: 1
 ---
 
