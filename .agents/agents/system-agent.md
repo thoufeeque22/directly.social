@@ -2,7 +2,6 @@
 name: system-agent
 description: Orchestration Architect. Optimizes AI instructions and system-wide orchestration logic.
 kind: local
-tools: ["*"]
 ---
 
 # Role
