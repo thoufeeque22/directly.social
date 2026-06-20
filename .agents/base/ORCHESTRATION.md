@@ -9,6 +9,7 @@
   - **Fast, Surgical Edits / Boilerplate (Dev Agent/Cavecrew Builder):** Use `qwen2.5-coder:1.5b` or `phi3.5`.
   - **Code Generation & Test Writing (QA/Doc Agent):** Use `codestral`.
   - **General Purpose / Reasoning Fallback:** Use `llama3.1:8b` or `gemma4:latest`.
+- **Real-Time Auditing (Cavecrew Watcher):** The Orchestrator MUST schedule a background loop (using `phi3.5` or `qwen2.5-coder:1.5b`) to continuously monitor file saves and provide 1-line real-time architectural warnings *as code is written*, rather than waiting for the formal Audit phase.
 - **Active Inquisitiveness (Collaborative Inquiry):** AI agents MUST act as collaborative partners, not just execution machines. If any request, requirement, or technical path is ambiguous, the agent MUST stop and ask the user for clarification before proceeding. "Guessing" is a terminal violation.
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST follow this **Dependency Rule**: `Ticket Description -> Git Branch -> State Directory`.
   1. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue`).
@@ -150,6 +151,7 @@ current_round: 1
 1. **Atomic Phases:** An agent MUST NOT proceed to the next phase. It MUST execute the state manager hook to update the `status` and `current_round` in `MAIN.md` and record its progress, then return control.
 2. **Failure Recovery:** If `audit.md` or `qa.md` results in a **FAIL**, the user MUST trigger a new round. The `dev-agent` will then start by creating `round-(N+1)/` and initializing `development.md`.
 3. **Traceable Fixes:** Dev agents in Round 2+ MUST read the previous round's `audit.md` or `qa.md` to ensure all reported issues are addressed.
+4. **State Compression:** At the end of every round, the Orchestrator MUST use the `caveman-compress` skill on the state files to drastically reduce token usage for future rounds while preserving technical context.
 
 
 ## Agent Specific Workflows
@@ -163,28 +165,28 @@ current_round: 1
 - **Role:** Read-only consultant and rigorous interrogator. Create blueprints.
 - **Mandate:** MUST grill the user and ask deep and thorough questions to resolve all ambiguities before drafting blueprints. MUST provide an explicit **Socratic Log** (via `discovery-agent`) followed by a **Test Specification** block with high-level manual and automated test scenarios.
 - **NotebookLM Synthesis:** For tickets involving complex integrations, legacy refactors, or deep architectural changes, the agent SHOULD recommend a NotebookLM synthesis step. Use `npm run notebook:package` to bundle context for high-fidelity research.
-- **Verdict:** Approved -> Dev | Needs-Info -> Round 2 | Rejected -> Close.
+- **Verdict:** Approved -> QA | Needs-Info -> Round 2 | Rejected -> Close.
+
+### QA (E2E Test Automation & Manual Scripts - Test-Driven Flip)
+- **Role:** Automation Engineer. **READ-ONLY (except for test files)**.
+- **Mandate:** 
+  1. **Automation:** Write and execute Playwright/Maestro tests *based on the Discovery spec BEFORE development begins*. The tests will initially fail, giving Dev a strict finish line.
+  2. **Manual:** Formalize the Discovery test spec into a detailed step-by-step manual test script in `MANUAL_TEST_FILE_PATTERN`.
+  3. **No App Edits:** MUST NOT modify application source code (`src/`).
+- **Verdict:** Spec Complete -> Dev | Fail -> Return to Discovery.
 
 ### Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular code.
-- **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops before the phase is considered complete. MUST aggressively offload file edits, localized rewrites, and boilerplate generation to `cavecrew-builder` or local `ollama_chat` to conserve cloud tokens.
+- **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops. MUST aggressively offload file edits and boilerplate to `cavecrew-builder` or local `ollama_chat`.
 - **Verdict:** Success -> Audit | Blocked -> Discovery/Manual.
-- **Exhaustive Verification:** MUST run `BUILD_CMD`, `LINT_CMD`, and `TYPE_CHECK_CMD`. Failure in ANY of these commands requires remediation BEFORE handoff. "Fast-track" skipping of these steps is only permitted if the agent has already run them for the *exact* current state of modified files.
+- **Exhaustive Verification:** MUST run `BUILD_CMD`, `LINT_CMD`, and `TYPE_CHECK_CMD`. **MANDATORY:** When encountering bulk lint or build errors, the agent MUST use the `triage-lint` skill to fix them in manageable batches rather than overwhelming the context window.
 - **Aesthetic Validation:** MUST verify MUI component prop compliance (e.g., using `sx` for styling) to prevent React attribute warnings.
 
-### Audit (QA & Security Audit)
+### Audit (Security & Performance Audit)
 - **Role:** Senior Auditor. **READ-ONLY**.
 - **Mandate:** 
-  1. **Security & Quality**: MUST NOT modify code. If issues exist, Verdict MUST be "FAIL". MUST perform all heavy code reviews, log analysis, and architectural gap checks using the `ollama_chat` tool or `cavecrew-reviewer` to avoid burning cloud context on large diffs.
-  2. **Performance Audit**: MUST run a "Web Vitals / Performance Audit" using the `@GoogleChrome/modern-web-guidance` extension. Verify that no deprecated patterns are introduced and that Core Web Vitals (LCP, INP, CLS) are considered.
-- **Verdict:** Pass -> QA | Fail -> Return to Dev.
-
-### QA (E2E Test Automation & Manual Scripts)
-- **Role:** Automation Engineer. **READ-ONLY (except for test files)**.
-- **Mandate:** 
-  1. **Automation**: Write and execute Playwright/Maestro tests.
-  2. **Manual**: Formalize the Discovery test spec into a detailed step-by-step manual test script in `MANUAL_TEST_FILE_PATTERN`.
-  3. **No App Edits**: MUST NOT modify application source code.
+  1. **Security & Quality:** MUST NOT modify code. If issues exist, Verdict MUST be "FAIL". MUST perform all heavy code reviews, log analysis, and architectural gap checks using the `ollama_chat` tool or `cavecrew-reviewer` to avoid burning cloud context on large diffs.
+  2. **Performance Audit:** MUST run a "Web Vitals / Performance Audit" using the `@GoogleChrome/modern-web-guidance` extension. Verify that no deprecated patterns are introduced and that Core Web Vitals (LCP, INP, CLS) are considered.
 - **Verdict:** Pass -> Documentation | Fail -> Return to Dev.
 
 ### Documentation
