@@ -20,6 +20,13 @@ function openDB(): Promise<IDBDatabase> {
 }
 
 export async function storeDraftFile(file: File): Promise<void> {
+  if (typeof window !== 'undefined') {
+    const win = window as unknown as { __mockDraftFile?: File | null };
+    if (win.__mockDraftFile !== undefined) {
+      win.__mockDraftFile = file;
+      return;
+    }
+  }
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, 'readwrite');
@@ -33,6 +40,12 @@ export async function storeDraftFile(file: File): Promise<void> {
 }
 
 export async function getDraftFile(): Promise<File | null> {
+  if (typeof window !== 'undefined') {
+    const win = window as unknown as { __mockDraftFile?: File | null };
+    if (win.__mockDraftFile !== undefined) {
+      return win.__mockDraftFile;
+    }
+  }
   try {
     const db = await openDB();
     return new Promise((resolve) => {
@@ -56,6 +69,13 @@ export async function getDraftFile(): Promise<File | null> {
 }
 
 export async function clearDraftFile(): Promise<void> {
+  if (typeof window !== 'undefined') {
+    const win = window as unknown as { __mockDraftFile?: File | null };
+    if (win.__mockDraftFile !== undefined) {
+      win.__mockDraftFile = null;
+      return;
+    }
+  }
   try {
     const db = await openDB();
     const tx = db.transaction(STORE_NAME, 'readwrite');

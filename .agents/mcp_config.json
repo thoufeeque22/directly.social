@@ -2,7 +2,7 @@
   "mcpServers": {
     "local-ollama-bridge": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-ollama", "--mcp"]
+      "args": ["-y", "ollama-mcp"]
     }
   }
 }
