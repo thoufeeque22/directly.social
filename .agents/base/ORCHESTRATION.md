@@ -3,6 +3,12 @@
 > **MANDATORY:** All agents MUST use the centralized constants and patterns defined in [VARIABLES.md](VARIABLES.md). NEVER hardcode strings for branch names, state directories, verdicts, or commands.
 
 ## Core Mandates
+- **Local Model Offloading (Zero Token Exhaustion Policy):** The Main Orchestrator and all sub-agents MUST aggressively offload high-token, repetitive, or read-heavy tasks to local models via `ollama_chat` or the `cavecrew` subagents. The cloud orchestrator MUST act strictly as a high-level manager.
+  - **Large Context / Whole-File Reviews (Audit Agent):** Use `qwen-coder-64k:latest` (64k context for large files/logs).
+  - **Heavy Implementation / Deep Reasoning (Architect/Discovery):** Use `deepseek-coder-v2` or `llama3.1:70b`.
+  - **Fast, Surgical Edits / Boilerplate (Dev Agent/Cavecrew Builder):** Use `qwen2.5-coder:1.5b` or `phi3.5`.
+  - **Code Generation & Test Writing (QA/Doc Agent):** Use `codestral`.
+  - **General Purpose / Reasoning Fallback:** Use `llama3.1:8b` or `gemma4:latest`.
 - **Active Inquisitiveness (Collaborative Inquiry):** AI agents MUST act as collaborative partners, not just execution machines. If any request, requirement, or technical path is ambiguous, the agent MUST stop and ask the user for clarification before proceeding. "Guessing" is a terminal violation.
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST follow this **Dependency Rule**: `Ticket Description -> Git Branch -> State Directory`.
   1. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue`).
@@ -161,7 +167,7 @@ current_round: 1
 
 ### Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular code.
-- **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops before the phase is considered complete.
+- **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops before the phase is considered complete. MUST aggressively offload file edits, localized rewrites, and boilerplate generation to `cavecrew-builder` or local `ollama_chat` to conserve cloud tokens.
 - **Verdict:** Success -> Audit | Blocked -> Discovery/Manual.
 - **Exhaustive Verification:** MUST run `BUILD_CMD`, `LINT_CMD`, and `TYPE_CHECK_CMD`. Failure in ANY of these commands requires remediation BEFORE handoff. "Fast-track" skipping of these steps is only permitted if the agent has already run them for the *exact* current state of modified files.
 - **Aesthetic Validation:** MUST verify MUI component prop compliance (e.g., using `sx` for styling) to prevent React attribute warnings.
@@ -169,7 +175,7 @@ current_round: 1
 ### Audit (QA & Security Audit)
 - **Role:** Senior Auditor. **READ-ONLY**.
 - **Mandate:** 
-  1. **Security & Quality**: MUST NOT modify code. If issues exist, Verdict MUST be "FAIL".
+  1. **Security & Quality**: MUST NOT modify code. If issues exist, Verdict MUST be "FAIL". MUST perform all heavy code reviews, log analysis, and architectural gap checks using the `ollama_chat` tool or `cavecrew-reviewer` to avoid burning cloud context on large diffs.
   2. **Performance Audit**: MUST run a "Web Vitals / Performance Audit" using the `@GoogleChrome/modern-web-guidance` extension. Verify that no deprecated patterns are introduced and that Core Web Vitals (LCP, INP, CLS) are considered.
 - **Verdict:** Pass -> QA | Fail -> Return to Dev.
 
