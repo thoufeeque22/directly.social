@@ -1,6 +1,7 @@
 export interface LocalAsset {
   id: string;
   fileName: string;
+  filePath: string;
   fileSize: number;
   url: string;
   getFile(): Promise<File>;

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, Button, Card, CardMedia, CardContent, CardActions, Chip, Alert, CircularProgress } from '@mui/material';
+import { Box, Typography, Button, Card, CardMedia, CardContent, CardActions, Alert, CircularProgress, Chip } from '@mui/material';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import LinkOffIcon from '@mui/icons-material/LinkOff';
@@ -52,9 +52,12 @@ export const LocalVaultPanel: React.FC<LocalVaultPanelProps> = ({ onPostAsset, a
         </Alert>
       )}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <FolderOpenIcon sx={{ fontSize: 14, color: 'text.secondary' }} />
+          <Typography variant="caption" color="text.secondary">
+            {connectionName ? `${connectionName}: ` : ''}{assets.length} file{assets.length !== 1 && 's'} loaded
+          </Typography>
           <Chip label="Local Gallery" color="success" size="small" />
-          <Typography variant="caption" color="text.secondary">{assets.length} file{assets.length !== 1 && 's'} loaded</Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 0.5 }}>
           <Button startIcon={<RefreshIcon />} size="small" onClick={refresh} disabled={isLoading}>Refresh</Button>

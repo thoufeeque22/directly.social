@@ -78,6 +78,7 @@ export class WebVaultService implements VaultService {
         localAssets.push({
           id: entry.name,
           fileName: entry.name,
+          filePath: `${h.name}/${entry.name}`,
           fileSize: file.size,
           url,
           getFile: async () => file,

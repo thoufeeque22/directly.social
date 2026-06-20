@@ -29,6 +29,7 @@ export class MobileVaultService implements VaultService {
     return assets.map(a => ({
       id: a.name,
       fileName: a.name,
+      filePath: a.uri,
       fileSize: a.size,
       url: Capacitor.convertFileSrc(a.uri),
       getFile: () => getMobileFile(a.name),

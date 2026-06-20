@@ -16,6 +16,7 @@ import { MediaActionsHUD } from './MediaActionsHUD';
 import { MediaLibraryControls } from './MediaLibraryControls';
 import { MediaLibraryDialogs } from './MediaLibraryDialogs';
 import { LocalVaultView } from './LocalVaultView';
+import { ByosGalleryPlaceholder } from './ByosGalleryPlaceholder';
 
 export const MediaLibrary: React.FC = () => {
   const router = useRouter();
@@ -96,8 +97,9 @@ export const MediaLibrary: React.FC = () => {
         onChange={(_, val) => setTabValue(val)}
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
-        <Tab label="Cloud Gallery" />
-        <Tab label="Local Gallery" />
+        <Tab label="Workspace" />
+        <Tab label="My Cloud" />
+        <Tab label="Local" />
       </Tabs>
 
       {tabValue === 0 ? (
@@ -158,6 +160,8 @@ export const MediaLibrary: React.FC = () => {
             onCancel={() => setSelectedIds([])}
           />
         </>
+      ) : tabValue === 1 ? (
+        <ByosGalleryPlaceholder />
       ) : (
         <Paper elevation={0} sx={{ p: '1.5rem', borderRadius: '12px' }}>
           <LocalVaultView onPostAsset={async (file) => {
