@@ -7,6 +7,19 @@ export async function deleteByosAsset(userId: string, key: string) {
   const config = await getByosConfig(userId);
   if (!config) throw new Error('BYOS not configured');
 
+  if (config.endpoint === 'mock://s3') {
+    await prisma.galleryAsset.deleteMany({
+      where: {
+        userId,
+        metadata: {
+          path: ['key'],
+          equals: key,
+        },
+      },
+    });
+    return { success: true };
+  }
+
   const client = createS3Client({
     endpoint: config.endpoint || undefined,
     region: config.region ?? '',

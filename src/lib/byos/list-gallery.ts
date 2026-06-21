@@ -25,6 +25,66 @@ export async function listByosGallery(userId: string, continuationToken?: string
     }
   }
 
+  if (config.endpoint === 'mock://s3') {
+    // Generate 15 mock items
+    const mockVideos = Array.from({ length: 15 }, (_, i) => {
+      const id = i + 1;
+      const key = `mock-video-${id}.mp4`;
+      return {
+        Key: key,
+        Size: 10 * 1024 * 1024 * id, // 10MB, 20MB...
+        LastModified: new Date(Date.now() - id * 24 * 60 * 60 * 1000),
+      };
+    });
+
+    const registered = await prisma.galleryAsset.findMany({
+      where: {
+        userId,
+        metadata: { path: ['byos'], equals: true },
+      },
+    });
+
+    const registeredMap = new Map<string, string>(
+      registered
+        .map((asset) => {
+          const meta = asset.metadata as unknown as ByosMetadata;
+          return meta?.key ? [meta.key, asset.fileId] : null;
+        })
+        .filter((item): item is [string, string] => item !== null)
+    );
+
+    const slicedVideos = mockVideos.slice(offset, offset + limit);
+    const data = slicedVideos.map((obj) => {
+      const key = obj.Key;
+      const testVideos = [
+        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      ];
+      const videoIndex = (parseInt(key.split('-')[2]) || 1) % testVideos.length;
+      const previewUrl = testVideos[videoIndex];
+
+      return {
+        key,
+        fileName: key,
+        fileSize: obj.Size,
+        lastModified: obj.LastModified.toISOString(),
+        status: registeredMap.has(key) ? 'Cloud' : 'External',
+        fileId: registeredMap.get(key) || null,
+        previewUrl,
+      };
+    });
+
+    let nextContinuationToken: string | null = null;
+    let hasNextPage = false;
+    if (offset + limit < mockVideos.length) {
+      nextContinuationToken = Buffer.from(JSON.stringify({ s3Token: null, offset: offset + limit })).toString('base64');
+      hasNextPage = true;
+    }
+
+    return { data, nextContinuationToken, hasNextPage };
+  }
+
   const client = createS3Client({
     endpoint: config.endpoint || undefined,
     region: config.region ?? '',
