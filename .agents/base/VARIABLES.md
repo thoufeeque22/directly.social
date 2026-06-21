@@ -9,11 +9,11 @@ This file centralizes all global constants, patterns, and strings used in the pr
 - **COMMIT_MSG_PATTERN**: `<type>(ticket-<id>): <summary>`
 
 ## 📂 State Management
-- **STATE_ROOT_DIR**: `.agents/state/`
-- **TICKET_STATE_DIR**: `.agents/state/ticket-<id>/`
-- **MAIN_STATE_FILE**: `MAIN.md`
-- **ROUND_DIR_PATTERN**: `round-<N>/`
+- **ARTIFACT_DIR**: `<appDataDir>/brain/<conversation-id>/` *(injected by Agy — use directly in `write_to_file`)*
+- **SCRATCH_DIR**: `<appDataDir>/brain/<conversation-id>/scratch/` *(for temporary/scratch files)*
 - **OBSERVATIONS_FILE**: `.agents/incidental_observations.json`
+
+> ⚠️ **Deprecated (do NOT use):** `STATE_ROOT_DIR` (`.agents/state/`) and `TICKET_STATE_DIR` (`.agents/state/ticket-<id>/`) are retired. All ticket state is now tracked via Agy Artifacts.
 
 ## 🔄 Phase Sequence
 - **PHASE_ORDER**: `Product` -> `Discovery` -> `QA` -> `Development` -> `Review` -> `Audit` -> `Documentation` -> `Project`
@@ -36,7 +36,6 @@ This file centralizes all global constants, patterns, and strings used in the pr
 - **TICKET_STATUSES**: `in-progress`, `completed`, `blocked`
 
 ## 🛠 Scripts & Commands
-- **STATE_UPDATE_CMD**: `pnpm run state:update -- --agent="<agent>" --verdict="<verdict>" --summary="<summary>" [--file="<path_to_report>"] [--round="<N>"] [--status="<next_status>"]`
 - **SMOKE_TEST_CMD**: `pnpm run test:smoke`
 - **REGRESSION_TEST_CMD**: `pnpm run test:regression`
 - **LINT_CMD**: `pnpm run lint`

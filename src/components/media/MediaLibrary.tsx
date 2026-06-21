@@ -16,7 +16,8 @@ import { MediaActionsHUD } from './MediaActionsHUD';
 import { MediaLibraryControls } from './MediaLibraryControls';
 import { MediaLibraryDialogs } from './MediaLibraryDialogs';
 import { LocalVaultView } from './LocalVaultView';
-import { ByosGalleryPlaceholder } from './ByosGalleryPlaceholder';
+import { ByosGallery } from './ByosGallery';
+import { useByosConfig } from '@/hooks/useByosConfig';
 
 export const MediaLibrary: React.FC = () => {
   const router = useRouter();
@@ -39,7 +40,8 @@ export const MediaLibrary: React.FC = () => {
     setSelectedIds,
   } = useMediaLibrary();
 
-  const [tabValue, setTabValue] = React.useState(0);
+  const { hasByos, isChecking } = useByosConfig();
+  const [tabValue, setTabValue] = React.useState<'workspace' | 'cloud' | 'local'>('workspace');
   const [singleDeleteId, setSingleDeleteId] = React.useState<string | null>(null);
   const [showClearAllDialog, setShowClearAllDialog] = React.useState(false);
 
@@ -55,11 +57,19 @@ export const MediaLibrary: React.FC = () => {
     setShowClearAllDialog(false);
   };
 
+  if (isChecking) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '300px' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <MediaLibraryHeader
         actions={
-          tabValue === 0 && (
+          tabValue === 'workspace' && (
             <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
               <Button
                 variant="contained"
@@ -94,15 +104,15 @@ export const MediaLibrary: React.FC = () => {
 
       <Tabs
         value={tabValue}
-        onChange={(_, val) => setTabValue(val)}
+        onChange={(_, val) => setTabValue(val as 'workspace' | 'cloud' | 'local')}
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
-        <Tab label="Workspace" />
-        <Tab label="My Cloud" />
-        <Tab label="Local" />
+        <Tab value="workspace" label="Workspace" />
+        {hasByos && <Tab value="cloud" label="My Cloud" />}
+        <Tab value="local" label="Local" />
       </Tabs>
 
-      {tabValue === 0 ? (
+      {tabValue === 'workspace' ? (
         <>
           <Box sx={{ p: '1rem', borderRadius: '12px', bgcolor: 'warning.main' }}>
             <Typography variant="body2" sx={{ color: 'warning.contrastText', textAlign: 'center' }}>
@@ -160,8 +170,8 @@ export const MediaLibrary: React.FC = () => {
             onCancel={() => setSelectedIds([])}
           />
         </>
-      ) : tabValue === 1 ? (
-        <ByosGalleryPlaceholder />
+      ) : tabValue === 'cloud' ? (
+        <ByosGallery />
       ) : (
         <Paper elevation={0} sx={{ p: '1.5rem', borderRadius: '12px' }}>
           <LocalVaultView onPostAsset={async (file) => {
