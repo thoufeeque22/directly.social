@@ -30,8 +30,8 @@ export default function LayoutWrapper({ children, session: initialSession }: { c
     pathname?.startsWith('/docs');
   
   // We hide the shell ONLY if:
-  // 1. It's an always-public route (EXCEPT root/status paths when authenticated)
-  const shouldHideShell = isAlwaysPublic && !((pathname === '/' || pathname === '/status') && isAuthenticated);
+  // 1. It's an always-public route, EXCEPT when the user is logged in (excluding the auth page /login)
+  const shouldHideShell = isAlwaysPublic && !(pathname !== '/login' && isAuthenticated);
   const shouldShowShell = !shouldHideShell;
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -42,11 +42,11 @@ export default function LayoutWrapper({ children, session: initialSession }: { c
   }
 
   return (
-    <div className="layout-wrapper" style={{ display: 'flex', height: '100dvh', width: '100vw', overflow: 'hidden' }}>
+    <div className="layout-wrapper">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      <div className="main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
+      <div className="main-content">
         <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <main className="page-content" style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
+        <main className="page-content">
           <PullToRefresh onRefresh={refresh} className="ptr-container">
             {children}
           </PullToRefresh>
