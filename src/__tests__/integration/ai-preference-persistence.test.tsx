@@ -23,15 +23,21 @@ vi.mock('@/app/actions/user/platform', () => ({
   togglePlatformPreference: vi.fn(),
 }));
 
-vi.mock('@/app/actions/user/ai', () => ({
-  getVideoFormatPreference: vi.fn(),
+vi.mock('@/app/actions/user/ai-style', () => ({
   getAIStylePreference: vi.fn(),
-  updateVideoFormatPreference: vi.fn(),
   updateAIStylePreference: vi.fn(),
-  getAIProviderPreference: vi.fn(),
-  updateAIProviderPreference: vi.fn(),
   getAIStyleModePreference: vi.fn(),
   updateAIStyleModePreference: vi.fn(),
+}));
+
+vi.mock('@/app/actions/user/ai-provider', () => ({
+  getAIProviderPreference: vi.fn(),
+  updateAIProviderPreference: vi.fn(),
+}));
+
+vi.mock('@/app/actions/user/video-format', () => ({
+  getVideoFormatPreference: vi.fn(),
+  updateVideoFormatPreference: vi.fn(),
 }));
 
 // Mock Next.js Navigation

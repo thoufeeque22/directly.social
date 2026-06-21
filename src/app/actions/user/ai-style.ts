@@ -32,62 +32,6 @@ export async function updateAIStylePreference(tier: string) {
 }
 
 /**
- * Fetches user preferred AI Provider.
- */
-export async function getAIProviderPreference() {
-  return protectedAction(async function fetchAiProvider(userId) {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { preferredAIProvider: true }
-    });
-    return user?.preferredAIProvider || "gemini";
-  }).catch(() => "gemini");
-}
-
-/**
- * Updates user preferred AI Provider.
- */
-export async function updateAIProviderPreference(provider: string) {
-  return protectedAction(async function updateAiProvider(userId) {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { preferredAIProvider: provider }
-    });
-
-    await revalidateDashboard();
-    return { success: true };
-  });
-}
-
-/**
- * Fetches user preferred Video Format.
- */
-export async function getVideoFormatPreference() {
-  return protectedAction(async function fetchVideoFormat(userId) {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { preferredVideoFormat: true }
-    });
-    return user?.preferredVideoFormat || "short";
-  }).catch(() => "short");
-}
-
-/**
- * Updates user preferred Video Format.
- */
-export async function updateVideoFormatPreference(format: string) {
-  return protectedAction(async function updateVideoFormat(userId) {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { preferredVideoFormat: format }
-    });
-
-    await revalidateDashboard();
-    return { success: true };
-  });
-}
-
-/**
  * Fetches user preferred AI Style Mode (Smart, Gen-Z, etc.).
  */
 export async function getAIStyleModePreference() {

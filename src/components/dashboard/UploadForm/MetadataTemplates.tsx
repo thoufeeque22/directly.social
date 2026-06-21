@@ -84,7 +84,7 @@ export const MetadataTemplates: React.FC<MetadataTemplatesProps> = ({ currentVal
 
           <div style={footerStyle}>
             {!showSaveForm ? (
-              <button type="button" data-testid="save-snippet-form-trigger" onClick={() => setShowSaveForm(true)} disabled={!currentValue.trim()} style={{ ...addButtonStyle, opacity: currentValue.trim() ? 1 : 0.5, cursor: currentValue.trim() ? 'pointer' : 'not-allowed' }}>
+              <button type="button" data-testid="save-snippet-form-trigger" onClick={() => setShowSaveForm(true)} disabled={!(currentValue || '').trim()} style={{ ...addButtonStyle, opacity: (currentValue || '').trim() ? 1 : 0.5, cursor: (currentValue || '').trim() ? 'pointer' : 'not-allowed' }}>
                 <AddIcon sx={{ fontSize: 14 }} /> Save Current as Snippet
               </button>
             ) : (

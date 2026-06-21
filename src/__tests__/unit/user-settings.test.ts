@@ -17,15 +17,19 @@ import {
   togglePlatformPreference,
 } from '../../app/actions/user/platform';
 import {
-  getVideoFormatPreference,
-  updateVideoFormatPreference,
   getAIStylePreference,
   updateAIStylePreference,
-  getAIProviderPreference,
-  updateAIProviderPreference,
   getAIStyleModePreference,
   updateAIStyleModePreference
-} from '../../app/actions/user/ai';
+} from '../../app/actions/user/ai-style';
+import {
+  getAIProviderPreference,
+  updateAIProviderPreference
+} from '../../app/actions/user/ai-provider';
+import {
+  getVideoFormatPreference,
+  updateVideoFormatPreference
+} from '../../app/actions/user/video-format';
 import { prisma } from '../../lib/core/prisma';
 import { auth } from '@/auth';
 
