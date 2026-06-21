@@ -11,18 +11,19 @@ This file centralizes all global constants, patterns, and strings used in the pr
 ## 📂 State Management
 - **STATE_ROOT_DIR**: `.agents/state/`
 - **TICKET_STATE_DIR**: `.agents/state/ticket-<id>/`
+- **TRANSIENT_STATE_DIR**: `.ai-state/`
 - **MAIN_STATE_FILE**: `MAIN.md`
 - **ROUND_DIR_PATTERN**: `round-<N>/`
 - **OBSERVATIONS_FILE**: `.agents/incidental_observations.json`
 
 ## 🔄 Phase Sequence
-- **PHASE_ORDER**: `Product` -> `Discovery` -> `Development` -> `Audit` -> `QA` -> `Documentation`
+- **PHASE_ORDER**: `Product` -> `Discovery` -> `QA` -> `Development` -> `Audit` -> `Documentation`
 - **PHASES**:
   - `product`: Product Designer & UX Strategist
   - `discovery`: Technical Blueprint & Test Spec
+  - `qa`: E2E Test Automation & Manual Scripts
   - `development`: Implementation (arxitect:architect)
   - `audit`: Security, Performance & Quality Audit
-  - `qa`: E2E Test Automation & Manual Scripts
   - `doc`: Documentation & Orchestration Audit
   - `pm`: Project Management (project-agent)
 

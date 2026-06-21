@@ -2,21 +2,20 @@ import { Metadata } from "next";
 import { auth } from "@/auth";
 import DashboardClient from "@/components/dashboard/DashboardClient";
 import { Suspense } from "react";
-import { Box } from "@mui/material";
 import { getUserAccounts, getPlatformPreferences, getAIStylePreference, getAIProviderPreference, getAIStyleModePreference } from "@/app/actions/user";
 import { getByosConfigAction } from "@/lib/actions/settings";
 import { AITier, StyleMode } from "@/lib/core/constants";
 import { AIProvider } from "@/lib/core/ai";
-
-import { BRAND } from "@/lib/core/brand";
 
 // New Landing Page Component
 import { LandingPage } from '@/components/landing/LandingPage';
 import { LandingFallback } from '@/components/landing/LandingFallback';
 import { LandingHeader } from '@/components/landing/Header';
 import { LandingFooter } from '@/components/landing/Footer';
+import { homeMetadata } from './metadata';
+import { JsonLd } from '@/components/seo/JsonLd';
 
-export const metadata: Metadata = { title: `${BRAND.name} | ${BRAND.tagline}` };
+export const metadata: Metadata = homeMetadata;
 
 export default async function Home() {
   const session = await auth();
@@ -24,15 +23,16 @@ export default async function Home() {
   // If NOT authenticated, render the New Landing Page with Header/Footer
   if (!session) {
     return (
-      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--background)' }}>
         <LandingHeader />
-        <Box component="main" sx={{ flexGrow: 1 }}>
+        <main style={{ flexGrow: 1 }}>
           <Suspense fallback={<LandingFallback />}>
             <LandingPage />
           </Suspense>
-        </Box>
+        </main>
         <LandingFooter />
-      </Box>
+        <JsonLd />
+      </div>
     );
   }
 

@@ -5,12 +5,10 @@ import { Box, Container, Typography, Button, Stack } from '@mui/material';
 import Link from 'next/link';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import { useSession } from 'next-auth/react';
 import { DashboardMockup } from './DashboardMockup';
 
 export const Hero = () => {
-  const { status } = useSession();
-  const isAuthenticated = status === 'authenticated';
+  const isAuthenticated = false; // Landing page is only rendered when logged out
 
   return (
     <Box sx={{ pt: { xs: 8, md: 12 }, pb: { xs: 6, md: 10 }, overflow: 'hidden', position: 'relative' }}>

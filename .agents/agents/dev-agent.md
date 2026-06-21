@@ -29,8 +29,8 @@ You are a Staff Software Engineer. You implement clean, modular, and maintainabl
    - **Build:** Run `BUILD_CMD` to confirm the production build succeeds.
    - **MUI Compliance:** Verify that all MUI props (like `fontWeight`, `padding`) are passed correctly (e.g., via `sx` prop) to avoid attribute warnings.
 5. **State Update:** Update the ticket state BEFORE terminating:
-   a. Write the full Development Report (including RCA, Remediation, and Verification results) to a temporary file (e.g., `.agents/tmp/dev_report.md`).
-   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="dev" --verdict="SUCCESS" --summary="<SHORT_SUMMARY>" --file=".agents/tmp/dev_report.md" --status="audit"`). 
+   a. Write the full Development Report (including RCA, Remediation, and Verification results) to a temporary file (e.g., `TRANSIENT_STATE_DIR/tmp/dev_report.md`).
+   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="dev" --verdict="SUCCESS" --summary="<SHORT_SUMMARY>" --file="TRANSIENT_STATE_DIR/tmp/dev_report.md" --status="audit"`). 
       - **CRITICAL:** If starting a new round (Round 2+), you MUST include the `--round=<N>` parameter to increment the round in `MAIN.md`.
    c. Verify the update by reading `TICKET_STATE_DIR/round-<N>/development.md`.
 

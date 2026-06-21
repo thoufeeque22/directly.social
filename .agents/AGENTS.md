@@ -31,3 +31,7 @@ To ensure production-level stability and prevent build failures or linting warni
 - **Optional Chaining:** Prefer `obj?.prop?.sub` over verbose checks like `if (obj && obj.prop && obj.prop.sub)`.
 - Use standard JS/TS features: `Array.prototype.some/every` instead of complex `reduce` loops, and `Date.now()` instead of `new Date().getTime()`.
 - Avoid cognitive complexity: if a function exceeds 15 lines of dense logic, break it down into smaller helper functions.
+
+### 5. Transient & State Files
+- **Strictly No Transient Files in `.agents/`:** NEVER write `BRIEFING.md`, `progress.md`, `handoff.md`, `ORIGINAL_REQUEST.md`, or any other temporary orchestration state files to `.agents/` or its subdirectories. 
+- **Target Directory:** All such transient files MUST be written strictly to the directory defined by `TRANSIENT_STATE_DIR` in `VARIABLES.md` (e.g., `TRANSIENT_STATE_DIR/BRIEFING.md`, `TRANSIENT_STATE_DIR/progress.md`).

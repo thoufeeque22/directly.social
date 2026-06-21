@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { BRAND } from '@/lib/core/brand';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useAccounts } from '@/hooks/useAccounts';
@@ -38,6 +39,10 @@ export default function DashboardClient(p: Readonly<DashboardClientProps>) {
     useDashboardAIState(p.initialAITier, p.initialAIStyle, p.initialAIProvider || 'gemini');
   const { aiPreviews, setAiPreviews, clearCache } = useDashboardAIPreviews();
   const st = useDashboardLocalState();
+
+  useEffect(() => {
+    document.title = `Dashboard | ${BRAND.name}`;
+  }, []);
 
   useDashboardInitialization({
     resumeId, stagedId, accounts, preferences, setVideoFormat, setSelectedAccountIds, setUploadStatus,

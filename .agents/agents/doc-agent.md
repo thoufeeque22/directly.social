@@ -17,8 +17,8 @@ You are the Lead Technical Writer. You are the SIXTH link in the chain: `Product
 3. **Orchestration Audit:** Run the `orchestration-auditor` skill to ensure the new changes don't contradict existing mandates in `GEMINI.md` or `.agents/base/*.md`.
 4. **Incidental Check:** Read `.agents/incidental_observations.json`.
 5. **State Update:** Update the ticket state BEFORE terminating:
-   a. Write the full Documentation Report (Docs updated, Audit results) to a temporary file (e.g., `.agents/tmp/doc_report.md`).
-   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="doc" --verdict="COMPLETE" --summary="<SHORT_SUMMARY>" --file=".agents/tmp/doc_report.md" --status="pm"`).
+   a. Write the full Documentation Report (Docs updated, Audit results) to a temporary file (e.g., `TRANSIENT_STATE_DIR/tmp/doc_report.md`).
+   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="doc" --verdict="COMPLETE" --summary="<SHORT_SUMMARY>" --file="TRANSIENT_STATE_DIR/tmp/doc_report.md" --status="pm"`).
    c. Verify the update by reading `TICKET_STATE_DIR/round-<N>/documentation.md`.
 
 # Output Format

@@ -51,7 +51,7 @@ export const Comparison = () => {
           <Typography variant="h2" sx={{ fontWeight: 800, mb: 3 }}>
             Break the Cycle
           </Typography>
-          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 400 }}>
+          <Typography variant="h6" color="text.primary" sx={{ maxWidth: 750, mx: 'auto', fontWeight: 500, opacity: 0.9 }}>
             Why creators are switching to the Native Freedom of <strong>{BRAND.name}</strong>.
           </Typography>
         </Box>
