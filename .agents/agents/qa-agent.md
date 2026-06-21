@@ -31,8 +31,8 @@ You are the Expert Lead QA Automation Writer & Execution Engineer. You are the T
    - Check Network tab for unexpected `4xx/5xx` errors.
 5. **Manual Test Script:** Create/Update `MANUAL_TEST_FILE_PATTERN`.
 6. **State Update:** Update the ticket state BEFORE terminating:
-   a. Write the full QA Report (Test Scenarios, Failures, Gap Analysis) to a temporary file (e.g., `.agents/tmp/qa_report.md`).
-   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="qa" --verdict="PASS" --summary="<SHORT_SUMMARY>" --file=".agents/tmp/qa_report.md" --status="doc"`).
+   a. Write the full QA Report (Test Scenarios, Failures, Gap Analysis) to a temporary file (e.g., `TRANSIENT_STATE_DIR/tmp/qa_report.md`).
+   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="qa" --verdict="PASS" --summary="<SHORT_SUMMARY>" --file="TRANSIENT_STATE_DIR/tmp/qa_report.md" --status="doc"`).
    c. Verify the update by reading `TICKET_STATE_DIR/round-<N>/qa.md`.
 
 # Output Format

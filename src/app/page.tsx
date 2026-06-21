@@ -8,15 +8,15 @@ import { getByosConfigAction } from "@/lib/actions/settings";
 import { AITier, StyleMode } from "@/lib/core/constants";
 import { AIProvider } from "@/lib/core/ai";
 
-import { BRAND } from "@/lib/core/brand";
-
 // New Landing Page Component
 import { LandingPage } from '@/components/landing/LandingPage';
 import { LandingFallback } from '@/components/landing/LandingFallback';
 import { LandingHeader } from '@/components/landing/Header';
 import { LandingFooter } from '@/components/landing/Footer';
+import { homeMetadata } from './metadata';
+import { JsonLd } from '@/components/seo/JsonLd';
 
-export const metadata: Metadata = { title: `${BRAND.name} | ${BRAND.tagline}` };
+export const metadata: Metadata = homeMetadata;
 
 export default async function Home() {
   const session = await auth();
@@ -32,6 +32,7 @@ export default async function Home() {
           </Suspense>
         </Box>
         <LandingFooter />
+        <JsonLd />
       </Box>
     );
   }

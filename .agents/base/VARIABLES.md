@@ -11,6 +11,7 @@ This file centralizes all global constants, patterns, and strings used in the pr
 ## 📂 State Management
 - **STATE_ROOT_DIR**: `.agents/state/`
 - **TICKET_STATE_DIR**: `.agents/state/ticket-<id>/`
+- **TRANSIENT_STATE_DIR**: `.ai-state/`
 - **MAIN_STATE_FILE**: `MAIN.md`
 - **ROUND_DIR_PATTERN**: `round-<N>/`
 - **OBSERVATIONS_FILE**: `.agents/incidental_observations.json`

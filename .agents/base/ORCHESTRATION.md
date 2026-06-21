@@ -35,7 +35,7 @@
 - **Human-in-the-Loop Workflow (HARD STOP):** ALL transitions between agent phases MUST be mediated by the user. **The Orchestrator MUST immediately HALT execution and return control to the User after a phase's state file (e.g., `development.md`) is written. The Orchestrator is STRICTLY FORBIDDEN from automatically chaining to the next phase (e.g., jumping from Dev to Audit) or running multiple sub-agents in a single turn without explicit user approval. This applies universally, even to autonomous teamwork systems.** 
   1. **Inquiry-First Protocol:** The initial turn of any planning agent (`Product`, `Discovery`) SHOULD focus on asking questions to resolve ambiguity. If the agent is in doubt, it MUST set its Verdict to **NEEDS-INFO** and present its questions to the user.
   2. **State-First Protocol (Robust Updates):** Agents MUST update the state directory BEFORE terminating. To prevent shell escaping issues or command length limits, agents MUST:
-     a. Write their full report/content to a temporary file (e.g., `.ai-state/tmp/report.md`).
+     a. Write their full report/content to a temporary file (e.g., `TRANSIENT_STATE_DIR/tmp/report.md`).
      b. Execute the `STATE_UPDATE_CMD` using the `--file` parameter to point to that temporary file.
      c. Verify the update by checking the targeted markdown file in `TICKET_STATE_DIR`.
   3. **Manual Review:** The user reviews the changes and the ticket state.
@@ -63,7 +63,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 ## State Management & Isolation (Hook-Only)
 - **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `TICKET_STATE_DIR`.
 - **Workspace Isolation:** Subagents MUST be invoked with `Workspace: 'inherit'` or `Workspace: 'share'` to prevent cloning repo directories into `.agents/`. If an isolated branched workspace is strictly necessary, it MUST be routed to `.agents/workspaces/`.
-- **Transient Files:** ANY temporary scratch files (e.g., `BRIEFING.md`, `ORIGINAL_REQUEST.md`, `handoff.md`) MUST be written to the `.ai-state/` directory. NEVER write temporary files to the project root or `.agents/`.
+- **Transient Files:** ANY temporary scratch files (e.g., `BRIEFING.md`, `ORIGINAL_REQUEST.md`, `handoff.md`) MUST be written to the `TRANSIENT_STATE_DIR` directory. NEVER write temporary files to the project root or `.agents/`.
 - **State Manager Hook:** Agents MUST NOT manually edit `MAIN_STATE_FILE` or their individual round files. Instead, agents MUST execute the `STATE_UPDATE_CMD` as their final action:
   `STATE_UPDATE_CMD`
   *The script will automatically update the `MAIN_STATE_FILE` timeline and append your content to the correct `ROUND_DIR_PATTERN` file.*

@@ -26,8 +26,8 @@ Before drafting any specs, you MUST perform an explicit Socratic inquiry:
 3. **UX Flow Definition:** Define the step-by-step user journey.
 4. **UI Placement:** Specify exactly where elements should be placed on the screen.
 5. **State Update:** Update the ticket state BEFORE terminating:
-   a. Write the full Product Spec to a temporary file (e.g., `.agents/tmp/product_spec.md`).
-   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="product" --verdict="APPROVED" --summary="<SHORT_SUMMARY>" --file=".agents/tmp/product_spec.md" --status="discovery"`).
+   a. Write the full Product Spec to a temporary file (e.g., `TRANSIENT_STATE_DIR/tmp/product_spec.md`).
+   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="product" --verdict="APPROVED" --summary="<SHORT_SUMMARY>" --file="TRANSIENT_STATE_DIR/tmp/product_spec.md" --status="discovery"`).
    c. Verify the update by reading `TICKET_STATE_DIR/round-<N>/product.md`.
 
 # Output Format
