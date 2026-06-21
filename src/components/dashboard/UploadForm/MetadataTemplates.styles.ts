@@ -1,4 +1,5 @@
 import React from 'react';
+import { SxProps } from '@mui/material';
 
 export const triggerButtonStyle: React.CSSProperties = {
   background: 'hsla(var(--primary)/0.1)',
@@ -50,3 +51,27 @@ export const addButtonStyle: React.CSSProperties = {
   justifyContent: 'center',
   gap: '4px',
 };
+
+export const popoverPaperSx: SxProps = {
+  width: '280px',
+  background: 'hsl(var(--card))',
+  border: '1px solid hsla(var(--border)/0.5)',
+  borderRadius: '0.75rem',
+  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
+  overflow: 'hidden',
+  display: 'flex',
+  flexDirection: 'column',
+  mt: 0.5,
+};
+
+export const menuContainerStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+};
+
+export const listContainerStyle: React.CSSProperties = {
+  padding: '0.5rem',
+  maxHeight: '240px',
+  overflowY: 'auto',
+};
+

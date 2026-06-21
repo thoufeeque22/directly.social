@@ -14,6 +14,9 @@ import {
   closeButtonStyle,
   footerStyle,
   addButtonStyle,
+  popoverPaperSx,
+  menuContainerStyle,
+  listContainerStyle,
 } from './MetadataTemplates.styles';
 
 interface MetadataTemplatesProps {
@@ -65,27 +68,17 @@ export const MetadataTemplates: React.FC<MetadataTemplatesProps> = ({ currentVal
         }}
         slotProps={{
           paper: {
-            sx: {
-              width: '280px', 
-              background: 'hsl(var(--card))', 
-              border: '1px solid hsla(var(--border)/0.5)', 
-              borderRadius: '0.75rem', 
-              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)', 
-              overflow: 'hidden', 
-              display: 'flex', 
-              flexDirection: 'column',
-              mt: 0.5
-            }
+            sx: popoverPaperSx
           }
         }}
       >
-        <div data-testid="snippets-menu" style={{ display: 'flex', flexDirection: 'column' }}>
+        <div data-testid="snippets-menu" style={menuContainerStyle}>
           <div style={headerStyle}>
             <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'hsl(var(--primary))' }}>Saved Snippets</span>
             <button type="button" onClick={handleClose} style={closeButtonStyle}><CloseIcon sx={{ fontSize: 14 }} /></button>
           </div>
 
-          <div style={{ padding: '0.5rem', maxHeight: '240px', overflowY: 'auto' }}>
+          <div style={listContainerStyle}>
             <TemplateList isLoading={isLoading} templates={templates} onSelect={(c) => { onSelect(c); handleClose(); }} />
           </div>
 

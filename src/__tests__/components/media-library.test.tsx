@@ -29,7 +29,7 @@ describe('MediaLibrary Component', () => {
 
   it('renders the gallery title and search bar', async () => {
     render(<MediaLibrary />);
-    expect(screen.getByText('Media Gallery')).toBeInTheDocument();
+    expect(await screen.findByText('Media Gallery')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Search your library...')).toBeInTheDocument();
   });
 
@@ -41,14 +41,13 @@ describe('MediaLibrary Component', () => {
     });
   });
 
-  it('triggers file selection when clicking Add Video', () => {
+  it('triggers file selection when clicking Upload', async () => {
     render(<MediaLibrary />);
-    const addButton = screen.getByText('Add Video');
-    expect(addButton).toBeEnabled();
+    const uploadButton = await screen.findByRole('button', { name: /Upload/i });
+    expect(uploadButton).toBeEnabled();
   });
 
   it('opens confirmation on per-asset delete click', async () => {
-    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
     vi.mocked(global.fetch).mockResolvedValue({
       ok: true,
       json: async () => ({ success: true, data: mockAssets })
@@ -56,22 +55,14 @@ describe('MediaLibrary Component', () => {
 
     render(<MediaLibrary />);
     
-    // Wait for the delete button to appear
-    try {
-      const deleteBtn = await screen.findByTestId('delete-asset');
-      expect(deleteBtn).toBeInTheDocument();
-      fireEvent.click(deleteBtn);
-      expect(confirmSpy).toHaveBeenCalled();
-    } catch (err: unknown) {
-      screen.debug(); // Show the DOM if it fails
-      throw err;
-    }
+    const deleteBtn = await screen.findByTestId('delete-asset');
+    expect(deleteBtn).toBeInTheDocument();
+    fireEvent.click(deleteBtn);
     
-    confirmSpy.mockRestore();
+    expect(await screen.findByText('Confirm Deletion')).toBeInTheDocument();
   });
 
   it('opens confirmation on Clear Gallery click', async () => {
-    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
     vi.mocked(global.fetch).mockResolvedValue({ 
       ok: true, 
       json: async () => ({ success: true, data: mockAssets }) 
@@ -79,16 +70,10 @@ describe('MediaLibrary Component', () => {
 
     render(<MediaLibrary />);
     
-    try {
-      const clearButton = await screen.findByTestId('clear-gallery');
-      expect(clearButton).toBeInTheDocument();
-      fireEvent.click(clearButton);
-      expect(confirmSpy).toHaveBeenCalled();
-    } catch (err: unknown) {
-      // screen.debug();
-      throw err;
-    }
-
-    confirmSpy.mockRestore();
+    const clearButton = await screen.findByTestId('clear-gallery');
+    expect(clearButton).toBeInTheDocument();
+    fireEvent.click(clearButton);
+    
+    expect(await screen.findByText('Confirm Deletion')).toBeInTheDocument();
   });
 });
