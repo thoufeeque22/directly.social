@@ -30,7 +30,7 @@ Document your analysis and questions in the `SOCRATIC_LOG`:
 4. **Interrogation Phase:** If the technical path is ambiguous, ask the user questions and wait for a response. Do NOT proceed to Technical Specs until you have explicit confirmation on the architectural direction.
 5. **State Update:** Update the ticket state BEFORE terminating:
    a. Write the full Technical Blueprint to a temporary file (e.g., `TRANSIENT_STATE_DIR/tmp/blueprint.md`).
-   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="discovery" --verdict="<VERDICT>" --summary="<SHORT_SUMMARY>" --file="TRANSIENT_STATE_DIR/tmp/blueprint.md" --status="development"`).
+   b. Execute `STATE_UPDATE_CMD` (e.g., `npm run state:update -- --agent="discovery" --verdict="<VERDICT>" --summary="<SHORT_SUMMARY>" --file="TRANSIENT_STATE_DIR/tmp/blueprint.md" --status="qa"`).
    c. Verify the update by reading `TICKET_STATE_DIR/round-<N>/discovery.md`.
 
 # Output Format

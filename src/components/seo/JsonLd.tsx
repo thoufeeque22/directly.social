@@ -21,9 +21,9 @@ export function JsonLd() {
                 caption: `${BRAND.name} Logo`,
               },
               sameAs: [
-                'https://github.com/thoufeeque22/directly.social',
-                'https://x.com/directlysocial',
-                'https://discord.gg/directly',
+                BRAND.social.github,
+                BRAND.social.twitter,
+                BRAND.social.discord,
               ],
             },
             {

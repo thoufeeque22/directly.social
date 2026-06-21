@@ -1,6 +1,37 @@
 import { test, expect } from './base-test';
 import { BRAND } from '../../lib/core/brand';
 
+interface SchemaOrgNode {
+  '@type': string;
+  '@id': string;
+  name: string;
+  url: string;
+  logo: { url: string };
+  sameAs: string[];
+}
+
+interface SchemaAppNode {
+  '@type': string;
+  '@id': string;
+  name: string;
+  applicationCategory: string;
+  operatingSystem: string;
+  offers: {
+    priceCurrency: string;
+    offers: Array<{ name: string }>;
+  };
+  publisher: { '@id': string };
+}
+
+interface SchemaWebSiteNode {
+  '@type': string;
+  '@id': string;
+  name: string;
+  url: string;
+  description: string;
+  publisher: { '@id': string };
+}
+
 test.describe('Technical SEO Foundation', () => {
   // Ensure we start unauthenticated to see the landing page
   test.use({ authRole: 'none' });
@@ -60,7 +91,9 @@ test.describe('Technical SEO Foundation', () => {
     expect(data['@context']).toBe('https://schema.org');
     expect(data['@graph']).toHaveLength(3);
 
-    const organization = data['@graph'].find((obj: any) => obj['@type'] === 'Organization');
+    const graph = data['@graph'] as Record<string, unknown>[];
+
+    const organization = graph.find((obj) => obj['@type'] === 'Organization') as unknown as SchemaOrgNode;
     expect(organization).toBeDefined();
     expect(organization['@id']).toBe(`${BRAND.url}/#organization`);
     expect(organization.name).toBe(BRAND.name);
@@ -72,7 +105,7 @@ test.describe('Technical SEO Foundation', () => {
       'https://discord.gg/directly',
     ]);
 
-    const softwareApplication = data['@graph'].find((obj: any) => obj['@type'] === 'SoftwareApplication');
+    const softwareApplication = graph.find((obj) => obj['@type'] === 'SoftwareApplication') as unknown as SchemaAppNode;
     expect(softwareApplication).toBeDefined();
     expect(softwareApplication['@id']).toBe(`${BRAND.url}/#software`);
     expect(softwareApplication.name).toBe(BRAND.name);
@@ -82,7 +115,7 @@ test.describe('Technical SEO Foundation', () => {
     expect(softwareApplication.offers.offers[0].name).toBe('Local Core');
     expect(softwareApplication.publisher['@id']).toBe(`${BRAND.url}/#organization`);
 
-    const webSite = data['@graph'].find((obj: any) => obj['@type'] === 'WebSite');
+    const webSite = graph.find((obj) => obj['@type'] === 'WebSite') as unknown as SchemaWebSiteNode;
     expect(webSite).toBeDefined();
     expect(webSite['@id']).toBe(`${BRAND.url}/#website`);
     expect(webSite.name).toBe(BRAND.name);
