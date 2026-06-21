@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Container, Typography, Stack, Tooltip } from '@mui/material';
+import { Box, Container, Typography, Stack, Tooltip, useTheme } from '@mui/material';
 import { PlatformIcon } from '@/components/ui/PlatformIcon';
 import { activePlatforms, upcomingPlatforms } from '../data-secondary';
 import AddIcon from '@mui/icons-material/Add';
@@ -20,7 +20,18 @@ const RequestPlatformItem = () => (
 );
 
 const PlatformItem = ({ id, isUpcoming }: { id: string, isUpcoming?: boolean }) => {
-  const brandColors: Record<string, string> = { tiktok: '#000000', instagram: '#E4405F', youtube: '#FF0000', facebook: '#1877F2', linkedin: '#0A66C2', threads: '#000000', x: '#000000', reddit: '#FF4500' };
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const brandColors: Record<string, string> = { 
+    tiktok: isDark ? '#FFFFFF' : '#000000', 
+    instagram: '#E4405F', 
+    youtube: '#FF0000', 
+    facebook: '#1877F2', 
+    linkedin: '#0A66C2', 
+    threads: isDark ? '#FFFFFF' : '#000000', 
+    x: isDark ? '#FFFFFF' : '#000000', 
+    reddit: '#FF4500' 
+  };
   return (
     <Tooltip title={isUpcoming ? `${id} (Coming Soon)` : `Native ${id} Support`} arrow>
       <Stack spacing={1} sx={{ alignItems: 'center', opacity: isUpcoming ? 0.4 : 1, filter: isUpcoming ? 'grayscale(100%)' : 'none', transition: 'all 0.3s ease', '&:hover': { opacity: 1, filter: 'none', transform: 'translateY(-2px)' }, cursor: 'default', position: 'relative' }}>
