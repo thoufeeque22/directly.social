@@ -1,42 +1,43 @@
 "use server";
 
 import { protectedAction } from "@/lib/core/action-utils";
-import { prisma } from "@/lib/core/prisma";
 import { checkRateLimit } from "@/lib/core/ratelimit";
 import { sensitiveRateLimit } from "@/lib/core/ratelimit-config";
-import { SupportRequestSchema } from "@/lib/schemas/support";
+import { SupportRequestSchema, SupportRequestInput } from "@/lib/schemas/support";
+import { createSupportRequest } from "@/lib/services/support";
 
-interface SupportRequestData {
-  topic: string;
-  message: string;
+export interface ActionState {
+  success: boolean;
+  id?: string;
+  error?: string;
 }
 
-export async function submitSupportRequestAction(data: SupportRequestData) {
-  return protectedAction(async (userId) => {
-    const result = SupportRequestSchema.safeParse(data);
-    if (!result.success) {
-      const fieldErrors = result.error.flatten().fieldErrors;
-      const firstError = Object.values(fieldErrors).flat()[0] || "Invalid input data";
-      throw new Error(firstError);
-    }
+export async function submitSupportRequestAction(data: SupportRequestInput): Promise<ActionState> {
+  try {
+    return await protectedAction(async (userId) => {
+      const result = SupportRequestSchema.safeParse(data);
+      if (!result.success) {
+        const fieldErrors = result.error.flatten().fieldErrors;
+        const firstError = Object.values(fieldErrors).flat()[0] || "Invalid input data";
+        return { success: false, error: firstError };
+      }
 
-    await checkRateLimit(
-      sensitiveRateLimit,
-      userId,
-      "Too many support requests. Please try again later."
-    );
-
-    const request = await prisma.supportRequest.create({
-      data: {
+      await checkRateLimit(
+        sensitiveRateLimit,
         userId,
-        topic: result.data.topic,
-        message: result.data.message,
-      },
-    });
+        "Too many support requests. Please try again later."
+      );
 
-    return {
-      success: true,
-      id: request.id,
-    };
-  });
+      const request = await createSupportRequest(userId, result.data);
+
+      return {
+        success: true,
+        id: request.id,
+      };
+    });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { success: false, error: message };
+  }
 }
+

@@ -16,55 +16,47 @@
   - `message` (String, holds the 10-1000 character request message)
   - `createdAt` (DateTime @default(now()))
   - `updatedAt` (DateTime @updatedAt)
-- Defined the one-to-many relation between `User` and `SupportRequest`.
+- Defined the one-to-many relation on the `User` model: `supportRequests SupportRequest[]`.
 - Added an index on `userId` (`@@index([userId])`) to optimize database queries.
-- Synced the schema with the Postgres database and regenerated the Prisma client using `npx prisma db push`.
+- Synced the schema with the database and regenerated the Prisma client using `npx prisma db push`.
 
 ### Zod Validation Schema
 - Created `src/lib/schemas/support.ts` containing:
   - `SupportTopicSchema`: Zod enum restricting values to: `'General Inquiry'`, `'Bug Report'`, `'Feature Request'`, `'Billing'`, `'Other'`.
   - `SupportRequestSchema`: Zod object validating `topic` and `message` (length must be 10-1000 characters).
+  - File is 20 lines long (well under the 100-line limit).
 
 ### Next.js Server Action
-- Created `src/app/actions/support.ts` containing the `submitSupportRequest` server action:
+- Created `src/app/actions/support.ts` containing the `submitSupportRequestAction` server action:
   - Uses `protectedAction` to guarantee the user is authenticated and extract their `userId`.
-  - Checks rate limits against `@upstash/ratelimit` via `checkRateLimit` with `sensitiveRateLimit` on the user ID.
-  - Safe-parses user input using Zod and saves the request into the Postgres database.
-  - Wraps execution in a structured response containing success status, validation field errors, or global errors.
+  - Checks rate limits against the Upstash redis instance via `checkRateLimit` with `sensitiveRateLimit` on the user ID.
+  - Safe-parses user input using Zod and saves the request into the database via `prisma.supportRequest.create`.
+  - File is 39 lines long (well under the 100-line limit).
 
-### UI Enhancement & Modularization
-To strictly comply with the 100-line modularity rule, the UI was refactored into three separate, clean components under `src/components/settings/`:
-1. **`SupportTab.tsx`** (~76 lines): The orchestrating client component that loads the next-auth session, checks the submission state, displays the title/FAQ list, and toggles between form and success states.
-2. **`SupportForm.tsx`** (~95 lines): The form component that links to the Server Action using React 19 / Next.js 15 `useActionState`. Handles character limit validation, displays real-time character counters, shows field-specific/global errors, and manages disabled states.
-3. **`SupportSuccess.tsx`** (~38 lines): Centered success screen displaying the SLA response timeline (reply within 24 hours) with a CheckCircleOutlineIcon (no emojis in UI) and a reset button.
+### UI Implementation
+- Updated `src/components/settings/SupportForm.tsx` (93 lines) as a Client Component:
+  - Uses the session retrieved from `useSession()` to display the typography `"Submitting request as: [User Email]"`.
+  - Renders a dropdown Select for `topic` with strict A11y (aria-describedby and linked labels).
+  - Renders a multiline TextField for `message` with character counter (`message.length / 1000`) and real-time validation error.
+  - Controls loading/submitting state using React 19 `useTransition` and disables button appropriately.
+  - Integrates the success state in-place: upon submission, the form is replaced by a centered success container with `CheckCircleOutlineIcon` (color="success", size 60), the SLA response message (no emojis), and an outlined "Submit Another Request" button.
+- Updated `src/components/settings/SupportTab.tsx` (77 lines) as a Client Component:
+  - Places the `SupportForm` component inside.
+  - Retains the "Email Support" button and helper text (`Reach out to us directly at...`) pointing to `mailto:${CONTACT_EMAILS.support}` inside the card to keep `support-tab-399.spec.ts` passing.
+  - Renders the FAQ list with the necessary questions for E2E tests.
 
 ---
 
 ## 2. Design & Architecture Decisions
 
 ### Clean Architecture & SOLID Compliance
-- **Single Responsibility Principle (SRP)**: Extracted components to separate concerns (form state management, success presentation, and tab coordination).
-- **Dependency Inversion**: Kept actions, schemas, and UI decoupled. Inputs are validated on both the client and server using a shared schema structure.
-- **Modularity (100-Line Rule)**: All created and modified files are strictly under 100 lines (excluding empty lines and comments), preventing cognitive overload.
+- **Single Responsibility Principle (SRP)**: Extracted components to separate concerns (form presentation, schema definition, and server action handling).
+- **Modularity (100-Line Rule)**: All modified and created files are strictly under 100 lines, ensuring optimal maintainability.
 
 ### Accessibility (A11y)
-- Explicitly linked all inputs and helper texts using `htmlFor`, `id`, and `aria-describedby` attributes.
-- Keyboard navigation is fully supported for all inputs, dropdowns, and buttons.
+- Explicitly linked all inputs and helper texts using `id` and `aria-describedby` attributes to satisfy a11y checks.
 
 ### UX/UI & Aesthetics
-- Displayed the user's authenticated email address non-editably in the form using MUI's `Typography`.
+- Displayed the user's authenticated email address in the form using MUI's `Typography`.
 - Handled pending transition states dynamically with `CircularProgress` and disabled button states.
 - Clean success screen with centered layout, theme-aware text, and no emojis in compliance with project standards.
-
----
-
-## 3. Verification Details
-
-- **Type Checking**: Validated imports and Prisma types.
-- **Lint Check**: Ran ESLint on the newly modified and created files:
-  - `src/lib/schemas/support.ts` (PASS)
-  - `src/app/actions/support.ts` (PASS)
-  - `src/components/settings/SupportTab.tsx` (PASS)
-  - `src/components/settings/SupportForm.tsx` (PASS)
-  - `src/components/settings/SupportSuccess.tsx` (PASS)
-- **Database Status**: The Postgres database is synced and fully migrated (`Prisma Client v6.19.3` generated).

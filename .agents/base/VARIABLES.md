@@ -16,13 +16,14 @@ This file centralizes all global constants, patterns, and strings used in the pr
 - **OBSERVATIONS_FILE**: `.agents/incidental_observations.json`
 
 ## 🔄 Phase Sequence
-- **PHASE_ORDER**: `Product` -> `Discovery` -> `Development` -> `Audit` -> `QA` -> `Documentation`
+- **PHASE_ORDER**: `Product` -> `Discovery` -> `QA` -> `Development` -> `Review` -> `Audit` -> `Documentation` -> `Project`
 - **PHASES**:
   - `product`: Product Designer & UX Strategist
   - `discovery`: Technical Blueprint & Test Spec
+  - `qa`: E2E Test Automation & Manual Scripts (TDD)
   - `development`: Implementation (arxitect:architect)
+  - `review`: Peer Code Review
   - `audit`: Security, Performance & Quality Audit
-  - `qa`: E2E Test Automation & Manual Scripts
   - `doc`: Documentation & Orchestration Audit
   - `pm`: Project Management (project-agent)
 

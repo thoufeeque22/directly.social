@@ -11,7 +11,7 @@ test.describe('Settings Support Page', () => {
 
     // Select topic in MUI Select
     await page.click('#support-topic');
-    await page.click('li[data-value="General Inquiry"]');
+    await page.click('li[data-value="general_inquiry"]');
 
     // Fill the support form message
     await page.fill('textarea[name="message"]', 'This is a test support message.');

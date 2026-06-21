@@ -7,7 +7,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import { CONTACT_EMAILS } from '@/lib/core/emails';
 import { SupportForm } from './SupportForm';
 
-export const SupportTab = () => {
+export const SupportTab: React.FC = () => {
   return (
     <GlassCard style={{ padding: '2rem' }}>
       <Box>
