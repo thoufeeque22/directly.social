@@ -32,7 +32,7 @@ export const FOOTER_COLUMNS: FooterColumnData[] = [
     title: 'Company',
     links: [
       { label: `Why ${BRAND.name}?`, href: '/philosophy' },
-      { label: 'System Status', href: '#' },
+      { label: 'System Status', href: '/status' },
       { label: 'Contact Support', href: `mailto:${CONTACT_EMAILS.support}` },
     ],
   },

@@ -1,10 +1,13 @@
+'use client';
+
 import React from 'react';
 import { Box, Typography, Button, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { GlassCard } from '@/components/ui/GlassCard';
 import EmailIcon from '@mui/icons-material/Email';
 import { CONTACT_EMAILS } from '@/lib/core/emails';
+import { SupportForm } from './SupportForm';
 
-export const SupportTab = () => {
+export const SupportTab: React.FC = () => {
   return (
     <GlassCard style={{ padding: '2rem' }}>
       <Box>
@@ -16,9 +19,15 @@ export const SupportTab = () => {
         </Typography>
 
         <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: 'text.primary' }}>
             Contact Us
           </Typography>
+          <SupportForm />
+        </Box>
+
+        <Divider sx={{ mb: 4 }} />
+
+        <Box sx={{ mb: 4 }}>
           <Button
             variant="contained"
             color="primary"
@@ -37,7 +46,7 @@ export const SupportTab = () => {
         <Divider sx={{ mb: 4 }} />
 
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: 'text.primary' }}>
             Frequently Asked Questions
           </Typography>
           <List>
@@ -57,18 +66,6 @@ export const SupportTab = () => {
               <ListItemText
                 primary="How is my data stored?"
                 secondary="By default, your data is securely stored temporarily on our servers. For complete control, we offer Bring Your Own Storage (BYOS), which you can configure in the Storage tab to securely host your own data."
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="How does the AI credit system work?"
-                secondary="If you prefer not to use your own keys, you can purchase AI credits directly through our platform. Check the Credits tab in Settings for your current balance."
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Can I schedule posts in advance?"
-                secondary="Absolutely! You can use our Calendar view to schedule and manage your upcoming content across multiple platforms."
               />
             </ListItem>
           </List>
