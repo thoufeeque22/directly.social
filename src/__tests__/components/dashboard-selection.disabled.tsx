@@ -14,7 +14,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Home from '@/app/(public)/page';
 import { useSession } from 'next-auth/react';
 import { getUserAccounts } from '@/app/actions/user/accounts';
-import { getPlatformPreferences } from '@/app/actions/user/preferences';
+import { getPlatformPreferences } from '@/app/actions/user/platform';
 
 // Mock NextAuth
 vi.mock('next-auth/react', () => ({
@@ -25,7 +25,7 @@ vi.mock('next-auth/react', () => ({
 vi.mock('../../app/actions/user/accounts', () => ({
   getUserAccounts: vi.fn(),
 }));
-vi.mock('../../app/actions/user/preferences', () => ({
+vi.mock('../../app/actions/user/platform', () => ({
   getPlatformPreferences: vi.fn(),
 }));
 

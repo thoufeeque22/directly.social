@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { storeDraftFile, getDraftFile } from '@/lib/upload/file-store';
-import { updateVideoFormatPreference } from '@/app/actions/user/preferences';
+import { updateVideoFormatPreference } from '@/app/actions/user/ai';
 
 export function useDraftFile(userId?: string) {
   const [draftFileName, setDraftFileName] = useState<string | null>(null);

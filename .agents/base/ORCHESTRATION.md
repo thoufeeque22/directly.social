@@ -89,6 +89,7 @@ Required fields in every Artifact:
 ### Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular code.
 - **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops. MUST aggressively offload file edits and boilerplate to `cavecrew-builder` or local `ollama_chat`.
+- **Modularity Enforcement (Strict 100-Line Rule):** The `dev-agent` MUST NOT complete the Development phase or submit its work if any new or modified application files (excluding test files) exceed 100 lines of code. It MUST split new files or refactor/extract logic from any touched legacy files until every affected file is strictly under 100 lines.
 - **Verdict:** Success -> Audit | Blocked -> Discovery/Manual.
 - **Exhaustive Verification:** MUST run `BUILD_CMD`, `LINT_CMD`, and `TYPE_CHECK_CMD`. **MANDATORY:** When encountering bulk lint or build errors, the agent MUST use the `triage-lint` skill to fix them in manageable batches rather than overwhelming the context window.
 - **Dependencies Management:** When adding new dependencies to `package.json`, the agent MUST use `pnpm install <package>` to ensure `pnpm-lock.yaml` is correctly updated. NEVER use `npm`.

@@ -15,6 +15,8 @@ import {
 import {
   getPlatformPreferences,
   togglePlatformPreference,
+} from '../../app/actions/user/platform';
+import {
   getVideoFormatPreference,
   updateVideoFormatPreference,
   getAIStylePreference,
@@ -23,7 +25,7 @@ import {
   updateAIProviderPreference,
   getAIStyleModePreference,
   updateAIStyleModePreference
-} from '../../app/actions/user/preferences';
+} from '../../app/actions/user/ai';
 import { prisma } from '../../lib/core/prisma';
 import { auth } from '@/auth';
 

@@ -18,8 +18,12 @@ vi.mock('@/app/actions/user/accounts', () => ({
   disconnectAccount: vi.fn(),
 }));
 
-vi.mock('@/app/actions/user/preferences', () => ({
+vi.mock('@/app/actions/user/platform', () => ({
   getPlatformPreferences: vi.fn(),
+  togglePlatformPreference: vi.fn(),
+}));
+
+vi.mock('@/app/actions/user/ai', () => ({
   getVideoFormatPreference: vi.fn(),
   getAIStylePreference: vi.fn(),
   updateVideoFormatPreference: vi.fn(),
@@ -28,7 +32,6 @@ vi.mock('@/app/actions/user/preferences', () => ({
   updateAIProviderPreference: vi.fn(),
   getAIStyleModePreference: vi.fn(),
   updateAIStyleModePreference: vi.fn(),
-  togglePlatformPreference: vi.fn(),
 }));
 
 // Mock Next.js Navigation

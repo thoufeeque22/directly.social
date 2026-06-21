@@ -12,7 +12,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useAccounts } from '@/hooks/useAccounts';
 import * as accountActions from '@/app/actions/user/accounts';
-import * as preferenceActions from '@/app/actions/user/preferences';
+import * as preferenceActions from '@/app/actions/user/platform';
 
 const userActions = {
   ...accountActions,
@@ -26,7 +26,7 @@ vi.mock('@/app/actions/user/accounts', () => ({
   disconnectAccount: vi.fn(),
 }));
 
-vi.mock('@/app/actions/user/preferences', () => ({
+vi.mock('@/app/actions/user/platform', () => ({
   getPlatformPreferences: vi.fn(),
   togglePlatformPreference: vi.fn(),
 }));

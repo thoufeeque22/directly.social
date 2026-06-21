@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import SettingsPage from '../../app/settings/SettingsContent';
 import { useSession } from 'next-auth/react';
 import { getUserAccounts } from '../../app/actions/user/accounts';
-import { togglePlatformPreference, getPlatformPreferences } from '../../app/actions/user/preferences';
+import { togglePlatformPreference, getPlatformPreferences } from '../../app/actions/user/platform';
 
 // Mock NextAuth
 vi.mock('next-auth/react', () => ({
@@ -16,7 +16,7 @@ vi.mock('../../app/actions/user/accounts', () => ({
   getUserAccounts: vi.fn(),
   toggleAccountDistribution: vi.fn(),
 }));
-vi.mock('../../app/actions/user/preferences', () => ({
+vi.mock('../../app/actions/user/platform', () => ({
   getPlatformPreferences: vi.fn(),
   togglePlatformPreference: vi.fn(),
 }));

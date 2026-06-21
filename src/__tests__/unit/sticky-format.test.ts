@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getVideoFormatPreference, updateVideoFormatPreference } from '../../app/actions/user/preferences';
+import { getVideoFormatPreference, updateVideoFormatPreference } from '../../app/actions/user/ai';
 import { prisma } from '../../lib/core/prisma';
 import { auth } from '@/auth';
 
