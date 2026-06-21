@@ -32,10 +32,10 @@
   2. **Next Step Suggestion:** Upon completing a phase, the agent MUST explicitly suggest the next sub-agent in the sequence to the user (e.g., "Next step: Invoke `discovery-agent` for technical planning").
   3. **Immediate Stop on Failure:** If any phase (especially `Audit` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately. No further agents (Doc, Project, etc.) can be invoked in that round.
   4. **Round 2+ Entry Point:** If a round fails during `Audit` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
-- **Human-in-the-Loop Workflow (HARD STOP):** ALL transitions between agent phases MUST be mediated by the user. **The Orchestrator MUST immediately HALT execution and return control to the User after a phase's state file (e.g., `development.md`) is written. The Orchestrator is STRICTLY FORBIDDEN from automatically chaining to the next phase (e.g., jumping from Dev to Audit) or running multiple sub-agents in a single turn without explicit user approval. This applies universally, even to autonomous teamwork systems.** 
+- **Human-in-the-Loop Workflow (HARD STOP):** ALL transitions between agent phases MUST be mediated by the user. **The Orchestrator MUST immediately HALT execution and return control to the User after a phase's state file (e.g., `development.md`) is written. The Orchestrator is STRICTLY FORBIDDEN from automatically chaining to the next phase (e.g., jumping from Dev to Audit) or running multiple sub-agents in a single turn without explicit user approval. This applies universally, even to autonomous teamwork systems.**
   1. **Inquiry-First Protocol:** The initial turn of any planning agent (`Product`, `Discovery`) SHOULD focus on asking questions to resolve ambiguity. If the agent is in doubt, it MUST set its Verdict to **NEEDS-INFO** and present its questions to the user.
   2. **State-First Protocol (Robust Updates):** Agents MUST update the state directory BEFORE terminating. To prevent shell escaping issues or command length limits, agents MUST:
-     a. Write their full report/content to a temporary file (e.g., `TRANSIENT_STATE_DIR/tmp/report.md`).
+     a. Write their full report/content to a temporary file (e.g., `.ai-state/tmp/report.md`).
      b. Execute the `STATE_UPDATE_CMD` using the `--file` parameter to point to that temporary file.
      c. Verify the update by checking the targeted markdown file in `TICKET_STATE_DIR`.
   3. **Manual Review:** The user reviews the changes and the ticket state.
@@ -60,99 +60,34 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 - `test:smoke`: `SMOKE_TEST_CMD`
 - `test:regression`: `REGRESSION_TEST_CMD`
 
-## State Management & Isolation (Hook-Only)
-- **Directory Structure:** ALL ticket state MUST be managed within a dedicated directory: `TICKET_STATE_DIR`.
-- **Workspace Isolation:** Subagents MUST be invoked with `Workspace: 'inherit'` or `Workspace: 'share'` to prevent cloning repo directories into `.agents/`. If an isolated branched workspace is strictly necessary, it MUST be routed to `.agents/workspaces/`.
-- **Transient Files:** ANY temporary scratch files (e.g., `BRIEFING.md`, `ORIGINAL_REQUEST.md`, `handoff.md`) MUST be written to the `TRANSIENT_STATE_DIR` directory. NEVER write temporary files to the project root or `.agents/`.
-- **State Manager Hook:** Agents MUST NOT manually edit `MAIN_STATE_FILE` or their individual round files. Instead, agents MUST execute the `STATE_UPDATE_CMD` as their final action:
-  `STATE_UPDATE_CMD`
-  *The script will automatically update the `MAIN_STATE_FILE` timeline and append your content to the correct `ROUND_DIR_PATTERN` file.*
-  - **TIMELINE SUMMARY:** A concise, one-line summary of the milestone for the `MAIN_STATE_FILE` timeline.
-  - **FULL CONTENT:** The **entire** generated report/blueprint/audit for that phase. This ensures context persistence for subsequent agents in the round file.
-- **State Layout:****
+## State Management & Artifacts
+- **Native Artifacts:** Instead of manually executing `npm run state:update` and writing to `MAIN_STATE_FILE` and `.agents/tmp/` files, ALL ticket state and agent reports MUST be tracked using Agy's native Artifact system.
+- **State Updates:** To complete a phase, an agent MUST use the `write_to_file` tool to create or update an artifact markdown file in the artifact directory (`<appDataDir>/brain/<conversation-id>/`). The file MUST be created with `ArtifactMetadata` containing `RequestFeedback: true`.
+  - **Why?** Using `RequestFeedback: true` will natively pause the Orchestrator and present a UI to the user to "Proceed" or reject the phase transition, fulfilling the strict Human-in-the-Loop requirement without brittle shell scripts.
+- **Transient Files:** ANY temporary scratch files MUST be written to the `<appDataDir>/brain/<conversation-id>/scratch/` directory.
 
-  ```
-  TICKET_STATE_DIR
-  ├── MAIN_STATE_FILE      # Global Metadata, Status, History, and TIMELINE
-  ├── round-1/
-  │   ├── product.md       # Product agent only
-  │   ├── discovery.md     # Discovery agent only
-  │   ├── qa.md            # QA agent only
-  │   ├── development.md   # Dev agent only
-  │   └── audit.md         # Audit agent only
-  └── round-2/
-      ├── development.md
-      └── ...
-  ```
+## Artifact Template Guidelines
+Each phase must produce a comprehensive Artifact (e.g. `product_spec.md`, `discovery_blueprint.md`, `development_report.md`).
+The Artifact MUST contain:
+1. **Verdict**: [APPROVED / NEEDS-INFO / REJECTED / PASS / FAIL / BLOCKED / SUCCESS]
+2. **Current Round**: The current iteration number.
+3. **Phase-Specific Data**: (e.g. Socratic Log, Root Cause Analysis, Gap Analysis).
 
-## MAIN_STATE_FILE Template
-```markdown
----
-ticket_id: <id>
-branch_name: FEATURE_BRANCH_PATTERN
-status: [product|discovery|qa|development|audit|doc|pm]
-current_round: 1
----
-
-# 📋 Ticket Metadata
-- **ID**: <id>
-- **Branch**: `FEATURE_BRANCH_PATTERN`
-- **Goal**: Concise goal statement
-- **Current Status**: in-progress
-
-# 📝 Ticket Description
-<INSERT_FULL_ISSUE_BODY_HERE>
-
-# 🔄 Round History
-- **Round 1**: [FAILED @ Audit] - Violated 100-line rule.
-- **Round 2**: [IN-PROGRESS]
-
-# 📅 Timeline
-- **[YYYY-MM-DD HH:mm:ss]**: Product phase started by `product-agent`.
-- **[YYYY-MM-DD HH:mm:ss]**: Discovery started by `discovery-agent`.
-- **[YYYY-MM-DD HH:mm:ss]**: Development completed by `dev-agent`.
-- **[YYYY-MM-DD HH:mm:ss]**: Audit FAIL: Modularity regression in `page.tsx`.
-```
-
-
-## Agent Specific State Files
-
-### product.md
-- **Verdict**: [APPROVED / NEEDS-INFO / REJECTED]
-- **UX Strategy**: Analysis of the best solution/flow.
-- **Industry Standards**: Research on competitive benchmarks.
-- **UI Layout**: Detailed instructions on element placement.
-
-### discovery.md
-- **Verdict**: [APPROVED / NEEDS-INFO / REJECTED]
-- **Feedback Analysis (Round 2+ only)**: Analyze why the previous blueprint was rejected or revised.
-- **Technical Blueprint**: Architecture based on the Product Spec.
-- **Test Specification**: ...
-
-### development.md
+### Development Artifact Requirements
 - **Verdict**: [SUCCESS / BLOCKED]
-- **Root Cause Analysis (Round 2+ only)**: Explicitly identify WHY the previous round was rejected (e.g., "Violated 100-line rule").
+- **Root Cause Analysis (Round 2+ only)**: Explicitly identify WHY the previous round was rejected.
 - **Remediation Strategy (Round 2+ only)**: Detail the specific changes made to address the failure and prevent regression.
 - **Summary**: ...
 
-### audit.md
+### Audit/QA Artifact Requirements
 - **Verdict**: [PASS / FAIL]
-- **Audit Gap Analysis (Round 2+ only)**: If the previous audit was overridden or if QA found issues missed here, analyze the gap in the audit protocol.
-- **Security Audit**: ...
-- **Performance Audit**: ...
+- **Gap Analysis (Round 2+ only)**: Analyze why previous checks failed or were missed.
 - **Failures**: [If FAIL, list specific file:line and reason]
 
-### qa.md
-- **Verdict**: [PASS / FAIL]
-- **Test Gap Analysis (Round 2+ only)**: If a bug was found manually that this suite missed, identify the missing test scenario.
-- **Test Results**: [Playwright/Maestro output]
-- **Manual Script**: [Link to doc/manual_tests/ticket-<id>.md]
-
 ## Phase Termination & Failure Protocol
-1. **Atomic Phases:** An agent MUST NOT proceed to the next phase. It MUST execute the state manager hook to update the `status` and `current_round` in `MAIN.md` and record its progress, then return control.
-2. **Failure Recovery:** If `audit.md` or `qa.md` results in a **FAIL**, the user MUST trigger a new round. The `dev-agent` will then start by creating `round-(N+1)/` and initializing `development.md`.
-3. **Traceable Fixes:** Dev agents in Round 2+ MUST read the previous round's `audit.md` or `qa.md` to ensure all reported issues are addressed.
-4. **State Compression:** At the end of every round, the Orchestrator MUST use the `caveman-compress` skill on the state files to drastically reduce token usage for future rounds while preserving technical context.
+1. **Native Pause:** An agent MUST NOT proceed to the next phase autonomously. It MUST write its final artifact using `RequestFeedback: true` and then return control.
+2. **Failure Recovery:** If an `audit` or `qa` artifact results in a **FAIL**, the user will trigger a new round by explicitly invoking the `dev-agent` again.
+3. **Traceable Fixes:** Dev agents in Round 2+ MUST read the previous round's `audit` or `qa` artifact from the conversation context to ensure all reported issues are addressed.
 
 
 ## Agent Specific Workflows
