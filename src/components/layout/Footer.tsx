@@ -26,7 +26,7 @@ export function Footer() {
       title: 'Resources',
       links: [
         { label: 'Documentation', href: '#' },
-        { label: 'Status', href: '#' },
+        { label: 'Status', href: '/status' },
       ],
     },
     {
