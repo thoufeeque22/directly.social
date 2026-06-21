@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Stack } from '@mui/material';
+import { Box, Typography, Stack, Link } from '@mui/material';
 
 import { CONTACT_EMAILS } from '@/lib/core/emails';
 import { BRAND } from '@/lib/core/brand';
@@ -54,14 +54,21 @@ export const PrivacyContent = () => (
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>4. Data Deletion</Typography>
       <Typography variant="body1" gutterBottom>
-        <strong>Data Deletion:</strong> You may request the deletion of your account and all associated data by emailing us at {CONTACT_EMAILS.privacy} or by using the &quot;Delete Account&quot; feature in your settings.
+        <strong>Data Deletion:</strong> You may request the deletion of your account and all associated data by emailing us at{' '}
+        <Link href={`mailto:${CONTACT_EMAILS.privacy}`}>{CONTACT_EMAILS.privacy}</Link>
+        {' '}or by using the &quot;Delete Account&quot; feature in your settings.
       </Typography>
     </section>
 
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>5. Contact Us</Typography>
       <Typography variant="body1">If you have any questions, please contact us at:</Typography>
-      <Typography variant="body1" sx={{ fontWeight: 700 }}>Email: {CONTACT_EMAILS.privacy}</Typography>
+      <Typography variant="body1">
+        Email:{' '}
+        <Link href={`mailto:${CONTACT_EMAILS.privacy}`} sx={{ fontWeight: 700 }}>
+          {CONTACT_EMAILS.privacy}
+        </Link>
+      </Typography>
     </section>
   </Stack>
 );

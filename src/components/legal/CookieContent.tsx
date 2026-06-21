@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Stack } from '@mui/material';
+import { Typography, Stack, Link } from '@mui/material';
 
 import { CONTACT_EMAILS } from '@/lib/core/emails';
 import { BRAND } from '@/lib/core/brand';
@@ -32,7 +32,12 @@ export const CookieContent = () => (
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>4. Contact Us</Typography>
       <Typography variant="body1">If you have any questions, please contact us at:</Typography>
-      <Typography variant="body1" sx={{ fontWeight: 700 }}>Email: {CONTACT_EMAILS.privacy}</Typography>
+      <Typography variant="body1">
+        Email:{' '}
+        <Link href={`mailto:${CONTACT_EMAILS.privacy}`} sx={{ fontWeight: 700 }}>
+          {CONTACT_EMAILS.privacy}
+        </Link>
+      </Typography>
     </section>
   </Stack>
 );
