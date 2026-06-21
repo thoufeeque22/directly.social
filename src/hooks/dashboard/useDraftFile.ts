@@ -33,7 +33,7 @@ export function useDraftFile(userId?: string) {
           if (video.src) {
             try {
               globalThis.URL.revokeObjectURL(video.src);
-            } catch (e) {}
+            } catch {}
             video.src = '';
           }
           video.remove();

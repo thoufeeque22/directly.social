@@ -3,26 +3,24 @@ import { Account } from '@/lib/core/types';
 import { toggleAccountDistribution, disconnectAccount as disconnectAccountAction } from '@/app/actions/user/accounts';
 
 export function useAccountOperations(
-  accounts: Account[],
   setAccounts: React.Dispatch<React.SetStateAction<Account[]>>
 ) {
   const toggleDistribution = useCallback(async (provider: string, currentStatus: boolean): Promise<void> => {
     const newStatus = !currentStatus;
+    let targetAccountIds: string[] = [];
 
     // 1. Optimistic Update
-    setAccounts(prevAccounts => 
-      prevAccounts.map(a => 
+    setAccounts(prevAccounts => {
+      targetAccountIds = prevAccounts.filter(a => a.provider === provider).map(a => a.id);
+      return prevAccounts.map(a => 
         a.provider === provider ? { ...a, isDistributionEnabled: newStatus } : a
-      )
-    );
-
-    // Identify the accounts that need updating
-    const targetAccounts = accounts.filter(a => a.provider === provider);
+      );
+    });
 
     try {
       // 2. Execute server actions concurrently
       await Promise.all(
-        targetAccounts.map(a => toggleAccountDistribution(a.id, newStatus))
+        targetAccountIds.map(id => toggleAccountDistribution(id, newStatus))
       );
     } catch (error) {
       // 3. Rollback on error
@@ -34,13 +32,20 @@ export function useAccountOperations(
       );
       throw error;
     }
-  }, [accounts, setAccounts]);
+  }, [setAccounts]);
 
   const disconnectAccount = useCallback(async (accountId: string): Promise<void> => {
-    const originalAccounts = [...accounts];
+    let removedAccount: Account | undefined;
+    let originalIndex = -1;
 
     // 1. Optimistic Update
-    setAccounts(prev => prev.filter(a => a.id !== accountId));
+    setAccounts(prev => {
+      originalIndex = prev.findIndex(a => a.id === accountId);
+      if (originalIndex !== -1) {
+        removedAccount = prev[originalIndex];
+      }
+      return prev.filter(a => a.id !== accountId);
+    });
 
     try {
       // 2. Execute server action
@@ -48,10 +53,16 @@ export function useAccountOperations(
     } catch (error) {
       // 3. Rollback on error
       console.error("Error disconnecting account. Rolling back state.", error);
-      setAccounts(originalAccounts);
+      if (removedAccount && originalIndex !== -1) {
+        setAccounts(prev => {
+          const updated = [...prev];
+          updated.splice(originalIndex, 0, removedAccount!);
+          return updated;
+        });
+      }
       throw error;
     }
-  }, [accounts, setAccounts]);
+  }, [setAccounts]);
 
   return { toggleDistribution, disconnectAccount };
 }

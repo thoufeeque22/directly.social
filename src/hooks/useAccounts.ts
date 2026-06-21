@@ -50,7 +50,7 @@ export const useAccounts = (initialAccounts?: Account[], initialPreferences?: Pl
     return () => globalThis.removeEventListener('app:refresh', handleRefresh);
   }, []);
 
-  const { toggleDistribution, disconnectAccount } = useAccountOperations(accounts, setAccounts);
+  const { toggleDistribution, disconnectAccount } = useAccountOperations(setAccounts);
   const { togglePlatform } = usePlatformOperations(setPreferences);
 
   return {

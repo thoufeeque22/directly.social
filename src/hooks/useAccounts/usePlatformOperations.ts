@@ -7,10 +7,12 @@ export function usePlatformOperations(
 ) {
   const togglePlatform = useCallback(async (platformId: string, currentStatus: boolean): Promise<void> => {
     const newStatus = !currentStatus;
+    let hadExisting = true;
 
     // 1. Optimistic Update
     setPreferences(prev => {
       const existing = prev.find(p => p.platformId === platformId);
+      hadExisting = !!existing;
       if (existing) {
         return prev.map(p => p.platformId === platformId ? { ...p, isEnabled: newStatus } : p);
       } else {
@@ -24,9 +26,13 @@ export function usePlatformOperations(
     } catch (error) {
       // 3. Rollback
       console.error("Error toggling platform preference. Rolling back state.", error);
-      setPreferences(prev =>
-        prev.map(p => p.platformId === platformId ? { ...p, isEnabled: currentStatus } : p)
-      );
+      if (!hadExisting) {
+        setPreferences(prev => prev.filter(p => p.platformId !== platformId));
+      } else {
+        setPreferences(prev =>
+          prev.map(p => p.platformId === platformId ? { ...p, isEnabled: currentStatus } : p)
+        );
+      }
       throw error;
     }
   }, [setPreferences]);
