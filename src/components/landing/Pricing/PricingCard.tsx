@@ -4,7 +4,6 @@ import React from 'react';
 import { Box, Typography, Card, CardContent, Button, Stack, useTheme } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 
 interface PricingTier {
   name: string;
@@ -19,8 +18,7 @@ interface PricingTier {
 
 export const PricingCard = ({ tier }: { tier: PricingTier }) => {
   const theme = useTheme();
-  const { status } = useSession();
-  const isAuthenticated = status === 'authenticated';
+  const isAuthenticated = false; // Landing page is only rendered when logged out
 
   return (
     <Card 

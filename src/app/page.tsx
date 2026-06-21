@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { auth } from "@/auth";
 import DashboardClient from "@/components/dashboard/DashboardClient";
 import { Suspense } from "react";
-import { Box } from "@mui/material";
 import { getUserAccounts, getPlatformPreferences, getAIStylePreference, getAIProviderPreference, getAIStyleModePreference } from "@/app/actions/user";
 import { getByosConfigAction } from "@/lib/actions/settings";
 import { AITier, StyleMode } from "@/lib/core/constants";
@@ -24,16 +23,16 @@ export default async function Home() {
   // If NOT authenticated, render the New Landing Page with Header/Footer
   if (!session) {
     return (
-      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--background)' }}>
         <LandingHeader />
-        <Box component="main" sx={{ flexGrow: 1 }}>
+        <main style={{ flexGrow: 1 }}>
           <Suspense fallback={<LandingFallback />}>
             <LandingPage />
           </Suspense>
-        </Box>
+        </main>
         <LandingFooter />
         <JsonLd />
-      </Box>
+      </div>
     );
   }
 

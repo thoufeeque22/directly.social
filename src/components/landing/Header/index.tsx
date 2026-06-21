@@ -5,15 +5,13 @@ import { AppBar, Toolbar, Typography, Button, Container, Stack, useTheme, useScr
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import { useSession } from 'next-auth/react';
 
 import { BRAND } from '@/lib/core/brand';
 
 export const LandingHeader = () => {
   const theme = useTheme();
   const pathname = usePathname();
-  const { status } = useSession();
-  const isAuthenticated = status === 'authenticated';
+  const isAuthenticated = false; // Landing page is only rendered when logged out
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 50,
