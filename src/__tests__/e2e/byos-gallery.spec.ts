@@ -100,7 +100,7 @@ test.describe('BYOS Gallery - "My Cloud" Tab E2E @regression', () => {
     await expect(page.getByRole('button', { name: /Retry/i })).toBeVisible();
   });
 
-  test('should render assets card grid layout, file details, and hover video preview', async ({ page }) => {
+  test('should render assets card grid layout, file details, and hover video preview', async ({ page, isMobile }) => {
     await page.route('**/api/settings/byos', async (route) => {
       await route.fulfill({
         status: 200,
@@ -141,15 +141,17 @@ test.describe('BYOS Gallery - "My Cloud" Tab E2E @regression', () => {
     await expect(card.getByText('15 MB')).toBeVisible();
     await expect(card.getByText('External')).toBeVisible(); // Status chip
 
-    // Test hover video preview
-    await card.hover();
-    const videoPreview = card.locator('video');
-    await expect(videoPreview).toBeVisible();
-    await expect(videoPreview).toHaveAttribute('src', /demo-video.mp4/);
+    // Test hover video preview on desktop only (no true hover on mobile)
+    if (!isMobile) {
+      await card.hover();
+      const videoPreview = card.locator('video');
+      await expect(videoPreview).toBeVisible();
+      await expect(videoPreview).toHaveAttribute('src', /demo-video.mp4/);
 
-    // Unhover and verify video reverts
-    await page.mouse.move(0, 0);
-    await expect(videoPreview).not.toBeVisible();
+      // Unhover and verify video reverts
+      await page.mouse.move(0, 0);
+      await expect(videoPreview).not.toBeVisible();
+    }
   });
 
   test('should support bidirectional pagination using continuation token stack', async ({ page }) => {
