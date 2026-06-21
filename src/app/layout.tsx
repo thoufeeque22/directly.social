@@ -4,6 +4,7 @@ import "./globals.css";
 import LayoutWrapper from "@/components/layout/LayoutWrapper";
 import { Providers } from "@/components/Providers";
 import { ThemeScript } from "@/components/layout/ThemeScript";
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';
 
 import { auth } from "@/auth";
 
@@ -44,11 +45,13 @@ export default async function RootLayout({
         <ThemeScript />
       </head>
       <body className={inter.className}>
-        <Providers session={session}>
-          <LayoutWrapper session={session}>
-            {children}
-          </LayoutWrapper>
-        </Providers>
+        <AppRouterCacheProvider options={{ key: 'css' }}>
+          <Providers session={session}>
+            <LayoutWrapper session={session}>
+              {children}
+            </LayoutWrapper>
+          </Providers>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
