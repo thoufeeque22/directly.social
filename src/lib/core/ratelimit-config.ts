@@ -55,3 +55,13 @@ export const sensitiveRateLimit = new Ratelimit({
   analytics: true,
   prefix: "ratelimit:sensitive",
 });
+
+/**
+ * Support request rate limiter: 3 requests per 60 seconds.
+ */
+export const supportRateLimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(3, "60 s"),
+  analytics: true,
+  prefix: "ratelimit:support",
+});

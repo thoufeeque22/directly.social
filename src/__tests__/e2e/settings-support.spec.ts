@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './base-test';
 
 test.describe('Settings Support Page', () => {
   test.beforeEach(async ({ page }) => {
@@ -9,11 +9,12 @@ test.describe('Settings Support Page', () => {
     // Check if the form is present
     await expect(page.locator('form')).toBeVisible();
 
-    // Fill the support form
+    // Select topic in MUI Select
+    await page.click('#support-topic');
+    await page.click('li[data-value="General Inquiry"]');
+
+    // Fill the support form message
     await page.fill('textarea[name="message"]', 'This is a test support message.');
-    
-    // Select topic if it's a dropdown/select
-    // await page.selectOption('select[name="topic"]', 'General Inquiry');
 
     // Submit the form
     await page.click('button[type="submit"]');
@@ -28,7 +29,7 @@ test.describe('Settings Support Page', () => {
     
     // Extract all anchor tags
     const links = await page.locator('a').evaluateAll(anchors => 
-      anchors.map(a => a.href).filter(href => href.startsWith('http') || href.startsWith('/'))
+      anchors.map(a => (a as HTMLAnchorElement).href).filter(href => href.startsWith('http') || href.startsWith('/'))
     );
 
     // Make an HTTP request to assert they all return 200 OK
