@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
-      const res = await fetch('https://api.betterstack.com/api/v2/monitors', {
+      const res = await fetch('https://uptime.betterstack.com/api/v2/monitors', {
         headers: { Authorization: `Bearer ${apiKey}` },
         signal: controller.signal,
         next: { revalidate: 30 },
