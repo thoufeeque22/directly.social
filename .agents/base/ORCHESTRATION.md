@@ -11,15 +11,14 @@
   - **General Purpose / Reasoning Fallback:** Use `llama3.1:8b` or `gemma4:latest`.
 - **Real-Time Auditing (Cavecrew Watcher):** The Orchestrator MUST schedule a background loop (using `phi3.5` or `qwen2.5-coder:1.5b`) to continuously monitor file saves and provide 1-line real-time architectural warnings *as code is written*, rather than waiting for the formal Audit phase.
 - **Active Inquisitiveness (Collaborative Inquiry):** AI agents MUST act as collaborative partners, not just execution machines. If any request, requirement, or technical path is ambiguous, the agent MUST stop and ask the user for clarification before proceeding. "Guessing" is a terminal violation.
-- **Strict Initialization:** Before any work begins, the Orchestrator MUST follow this **Dependency Rule**: `Ticket Description -> Git Branch -> State Directory`.
+- **Strict Initialization:** Before any work begins, the Orchestrator MUST follow this **Dependency Rule**: `Ticket Description -> Git Branch -> Artifact`.
   1. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue`).
   2. Check the current branch. If NOT on the target feature branch (`FEATURE_BRANCH_PATTERN`):
      a. Switch to `MAIN_BRANCH` and pull latest (`git checkout main && git pull`).
      b. Create the dedicated feature branch (`git checkout -b <FEATURE_BRANCH_PATTERN>`).
   3. **MANDATORY:** Verify the branch exists and matches the full slug before proceeding.
-  4. Create a state directory `TICKET_STATE_DIR` with a `MAIN_STATE_FILE` file following the **MAIN_STATE_FILE Template**.
-  5. **MANDATORY:** The `MAIN_STATE_FILE` MUST contain the final, resolved `branch_name`. **NEVER** use placeholders or patterns like `FEATURE_BRANCH_PATTERN` in the final file.
-  6. Skip if state already exists.
+  4. Create an initial phase Artifact using `write_to_file` in `ARTIFACT_DIR` containing the ticket ID, branch name, and current status.
+  5. Skip if an Artifact for the ticket already exists in the current conversation.
 - **Manual Environment Management:** The User always manages the development server (`pnpm dev`), the E2E test server (`http://localhost:3000`), and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, check the connectivity of these services, or modify/enable any Playwright `webServer` configuration. ALL E2E tests are strictly bound to `http://localhost:3000`.
 - **Strict Sequential Workflow:** ALL tickets MUST follow the `PHASE_ORDER`.
 - **Guardrail Mandates (Terminal Violations):**
@@ -32,14 +31,11 @@
   2. **Next Step Suggestion:** Upon completing a phase, the agent MUST explicitly suggest the next sub-agent in the sequence to the user (e.g., "Next step: Invoke `discovery-agent` for technical planning").
   3. **Immediate Stop on Failure:** If any phase (especially `Audit` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately. No further agents (Doc, Project, etc.) can be invoked in that round.
   4. **Round 2+ Entry Point:** If a round fails during `Audit` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
-- **Human-in-the-Loop Workflow (HARD STOP):** ALL transitions between agent phases MUST be mediated by the user. **The Orchestrator MUST immediately HALT execution and return control to the User after a phase's state file (e.g., `development.md`) is written. The Orchestrator is STRICTLY FORBIDDEN from automatically chaining to the next phase (e.g., jumping from Dev to Audit) or running multiple sub-agents in a single turn without explicit user approval. This applies universally, even to autonomous teamwork systems.**
+- **Human-in-the-Loop Workflow (HARD STOP):** ALL transitions between agent phases MUST be mediated by the user. **The Orchestrator MUST immediately HALT execution and return control to the User after writing a phase Artifact. The Orchestrator is STRICTLY FORBIDDEN from automatically chaining to the next phase or running multiple sub-agents in a single turn without explicit user approval.**
   1. **Inquiry-First Protocol:** The initial turn of any planning agent (`Product`, `Discovery`) SHOULD focus on asking questions to resolve ambiguity. If the agent is in doubt, it MUST set its Verdict to **NEEDS-INFO** and present its questions to the user.
-  2. **State-First Protocol (Robust Updates):** Agents MUST update the state directory BEFORE terminating. To prevent shell escaping issues or command length limits, agents MUST:
-     a. Write their full report/content to a temporary file (e.g., `.ai-state/tmp/report.md`).
-     b. Execute the `STATE_UPDATE_CMD` using the `--file` parameter to point to that temporary file.
-     c. Verify the update by checking the targeted markdown file in `TICKET_STATE_DIR`.
-  3. **Manual Review:** The user reviews the changes and the ticket state.
-  4. **Explicit Approval & Auto-Commit:** When the User provides approval to proceed to the *next* phase (e.g., "Invoke discovery-agent"), the Orchestrator MUST automatically commit any pending changes from the current phase before starting the next one. The commit message MUST follow the `COMMIT_MSG_PATTERN` (e.g., `feat(ticket-400): complete product phase - defined UX layout`), derived from the `MAIN_STATE_FILE` status or the summary of the completed phase. This commit is implicitly approved by the user's directive to proceed.
+  2. **Artifact-First Protocol (Robust Updates):** Agents MUST write their final Artifact using `write_to_file` to `ARTIFACT_DIR` with `ArtifactMetadata.RequestFeedback: true` BEFORE terminating. This natively pauses the Orchestrator and presents a "Proceed" UI to the user.
+  3. **Manual Review:** The user reviews the Artifact and the ticket state.
+  4. **Explicit Approval & Auto-Commit:** When the User provides approval to proceed to the next phase, the Orchestrator MUST automatically commit any pending changes from the current phase before starting the next one. The commit message MUST follow the `COMMIT_MSG_PATTERN`.
 - **Traceable Status:** EVERY agent MUST update their section with a clear **Verdict** before handoff.
 
 ## Tiered Testing Strategy
@@ -163,10 +159,9 @@ The Artifact MUST contain:
 - **Role**: User (Human).
 - **Mandate**: The user performs the final project synchronization and PR creation.
 - **Steps**:
-  1. Final review of the `TICKET_STATE_DIR` directory.
-  2. `git add TICKET_STATE_DIR && git commit -m "docs: finalize ticket <id> state"`.
-  3. `git push origin <FEATURE_BRANCH_PATTERN>`.
-  4. `gh pr create --title "..." --body "..."`.
+  1. Final review of the phase Artifacts in the Agy Artifact panel.
+  2. `git push origin <FEATURE_BRANCH_PATTERN>`.
+  3. `gh pr create --title "..." --body "..."`.
 
 
 ## Routing & Pipelines

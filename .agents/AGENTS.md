@@ -4,6 +4,32 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
+# Global Management Policies
+
+> **Primary rules file for Agy (Antigravity).** `GEMINI.md` at the repo root is deprecated and no longer authoritative — these rules take precedence.
+
+- **Phase Throttling (Human-in-the-Loop):** The Orchestrator MUST terminate its turn after calling exactly one sub-agent. NEVER chain sub-agents autonomously. ALL transitions between phases (`Discovery` -> `Dev` -> `Review` -> `QA` -> `Doc` -> `Project`) MUST be approved by the user.
+- **Artifact-First Protocol (replaces State-First):** Before invoking any sub-agent or performing any action, the Orchestrator MUST create or update an Artifact using Agy's native `write_to_file` tool into `<appDataDir>/brain/<conversation-id>/`. Do NOT write state to `.agents/state/ticket-<id>/` — that path is obsolete.
+- **Initialization Precedence:** Every new ticket MUST follow the **Strict Initialization** workflow defined in [ORCHESTRATION.md](base/ORCHESTRATION.md). This includes conditional branch synchronization.
+- **Explicit Commit Permission & Auto-Handoff:** AI agents MUST NOT commit changes without user permission, EXCEPT during phase handoffs. As defined in [ORCHESTRATION.md](base/ORCHESTRATION.md), the Orchestrator automatically checkpoints changes upon handoff approval.
+- **Verification Integrity:** Local verification MUST be exhaustive (e.g., `pnpm run build`, `pnpm run lint`). NEVER use 'surgical' or 'token-optimized' checks unless explicitly instructed by the user.
+- **Technical Excellence:** ALL code MUST adhere to the standards in [CORE.md](base/CORE.md). **MANDATORY:** Invoke the `arxitect:architect` skill for ALL new feature implementations and refactors.
+- **Aesthetic Integrity:** ALL UI MUST adhere to the standards in [UI_UX.md](base/UI_UX.md) (MUI, Theme Awareness, No Emojis).
+- **Manual Environment Management:** The User manages the dev server, the E2E test server (http://localhost:3000), and tunnels manually. Agents MUST NOT interfere.
+- **Context Preservation:** Agents must never destructively overwrite artifact files.
+
+## Standards Reference
+
+1. **[Core Technical Standards](base/CORE.md)** — TypeScript Zero-Any, Next.js 15, 100-Line Modularity
+2. **[UI & Aesthetic Standards](base/UI_UX.md)** — MUI, Theme Awareness, A11y, No Emojis
+3. **[Production & Infrastructure](base/PRODUCTION.md)** — Performance, Security, Neon DB
+4. **[Agent Orchestration & Workflow](base/ORCHESTRATION.md)** — Phase Sequence, Failure Protocols
+5. **[Global Variables & Constants](base/VARIABLES.md)** — Branching, commands, skill names
+
+*Agents MUST read the relevant base files before starting any task.*
+
+---
+
 # Strict AI Coding Guidelines & Rules
 
 To ensure production-level stability and prevent build failures or linting warnings, ALL AI agents modifying this codebase MUST strictly adhere to the following rules:
@@ -33,5 +59,5 @@ To ensure production-level stability and prevent build failures or linting warni
 - Avoid cognitive complexity: if a function exceeds 15 lines of dense logic, break it down into smaller helper functions.
 
 ### 5. Transient & State Files
-- **Strictly No Transient Files in `.agents/`:** NEVER write `BRIEFING.md`, `progress.md`, `handoff.md`, `ORIGINAL_REQUEST.md`, or any other temporary orchestration state files to `.agents/` or its subdirectories. 
-- **Target Directory:** All such transient files MUST be written strictly to the directory defined by `TRANSIENT_STATE_DIR` in `VARIABLES.md` (e.g., `TRANSIENT_STATE_DIR/BRIEFING.md`, `TRANSIENT_STATE_DIR/progress.md`).
+- **Strictly No Transient Files in `.agents/`:** NEVER write `BRIEFING.md`, `progress.md`, `handoff.md`, `ORIGINAL_REQUEST.md`, or any other temporary orchestration state files to `.agents/` or its subdirectories. `.agents/state/ticket-*/` is **obsolete** — do NOT create new directories there.
+- **Target Directory:** All phase artifacts and transient files MUST be written using Agy's native `write_to_file` tool to `<appDataDir>/brain/<conversation-id>/` (artifacts) or `<appDataDir>/brain/<conversation-id>/scratch/` (scratch files). These paths are injected into your context — use them directly.
