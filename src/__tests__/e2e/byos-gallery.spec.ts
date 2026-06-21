@@ -236,8 +236,8 @@ test.describe('BYOS Gallery - "My Cloud" Tab E2E @regression', () => {
 
     // Verify Page 1 items
     await expect(page.getByText('video-p1-0.mp4')).toBeVisible();
-    const prevBtn = page.getByRole('button', { name: /Previous/i });
-    const nextBtn = page.getByRole('button', { name: /Next/i });
+    const prevBtn = page.getByRole('button', { name: 'Previous Page' });
+    const nextBtn = page.getByRole('button', { name: 'Next Page' });
 
     await expect(prevBtn).toBeDisabled();
     await expect(nextBtn).toBeEnabled();

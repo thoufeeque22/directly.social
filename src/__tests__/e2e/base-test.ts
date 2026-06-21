@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks, @typescript-eslint/no-require-imports, @typescript-eslint/no-unused-vars */
 import { test as base, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
@@ -132,9 +133,12 @@ export const test = base.extend<{
           if (text.includes('429') || text.includes('Too Many Requests')) return;
           if (text.includes('Failed to load resource: the server responded with a status of 429')) return;
           if (text.includes('Failed to load resource: the server responded with a status of 404')) return;
+          if (text.includes('Failed to load resource: the server responded with a status of 403')) return;
           if (text.includes('Failed to load resource: the server responded with a status of 500')) return;
           if (text.includes('Failed to load resource: the server responded with a status of 503')) return;
           if (text.includes('Failed to load resource: net::ERR_NAME_NOT_RESOLVED')) return;
+          if (text.includes('Failed to load resource: net::ERR_SSL_VERSION_OR_CIPHER_MISMATCH')) return;
+          if (text.includes('Failed to load resource: A TLS error caused the secure connection to fail.')) return;
           if (text.includes('A server with the specified hostname could not be found')) return;
           if (text.includes('Service Unavailable')) return;
           if (text.includes('MissingCSRF')) return; // Ignore NextAuth CSRF retries

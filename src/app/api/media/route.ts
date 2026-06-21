@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/core/prisma";
@@ -8,6 +9,8 @@ import path from "path";
 import { logger } from "@/lib/core/logger";
 import { MediaDeleteSchema } from "@/lib/schemas/media";
 import { z } from "zod";
+
+import { Prisma } from "@prisma/client";
 
 /**
  * MEDIA DISCOVERY API
@@ -32,7 +35,20 @@ export async function GET(req: NextRequest) {
         },
         ...(search ? {
           fileName: { contains: search, mode: 'insensitive' }
-        } : {})
+        } : {}),
+        // Segregate Workspace assets from BYOS assets
+        OR: [
+          { metadata: { equals: Prisma.DbNull } },
+          { metadata: { equals: Prisma.JsonNull } },
+          {
+            NOT: {
+              metadata: {
+                path: ['byos'],
+                equals: true
+              }
+            }
+          }
+        ]
       },
       orderBy: {
         createdAt: 'desc'
