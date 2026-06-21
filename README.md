@@ -11,6 +11,7 @@
 - **UI:** Material UI (MUI), Framer Motion
 - **Testing:** Playwright (E2E), Vitest (Unit/Integration)
 - **Monitoring:** Sentry
+- **SEO:** Next.js Metadata API, OpenGraph, Schema.org JSON-LD
 
 ## Getting Started
 
