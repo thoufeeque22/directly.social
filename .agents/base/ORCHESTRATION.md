@@ -12,13 +12,14 @@
 - **Real-Time Auditing (Cavecrew Watcher):** The Orchestrator MUST schedule a background loop (using `phi3.5` or `qwen2.5-coder:1.5b`) to continuously monitor file saves and provide 1-line real-time architectural warnings *as code is written*, rather than waiting for the formal Audit phase.
 - **Active Inquisitiveness (Collaborative Inquiry):** AI agents MUST act as collaborative partners, not just execution machines. If any request, requirement, or technical path is ambiguous, the agent MUST stop and ask the user for clarification before proceeding. "Guessing" is a terminal violation.
 - **Strict Initialization:** Before any work begins, the Orchestrator MUST follow this **Dependency Rule**: `Ticket Description -> Git Branch -> Artifact`.
-  1. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue`).
-  2. Check the current branch. If NOT on the target feature branch (`FEATURE_BRANCH_PATTERN`):
+  1. **Resolve Ticket ID:** The Orchestrator MUST parse the input prompt or request context to identify the correct Ticket/Issue ID. The Orchestrator is **STRICTLY FORBIDDEN** from guessing or hallucinating a random ticket ID. If no Ticket ID is explicitly found, the Orchestrator MUST search the GitHub repository or query the user to resolve it.
+  2. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue` with the resolved Ticket ID).
+  3. Check the current branch. If NOT on the target feature branch (`FEATURE_BRANCH_PATTERN`):
      a. Switch to `MAIN_BRANCH` and pull latest (`git checkout main && git pull`).
      b. Create the dedicated feature branch (`git checkout -b <FEATURE_BRANCH_PATTERN>`).
-  3. **MANDATORY:** Verify the branch exists and matches the full slug before proceeding.
-  4. Create an initial phase Artifact using `write_to_file` in `ARTIFACT_DIR` containing the ticket ID, branch name, and current status.
-  5. Skip if an Artifact for the ticket already exists in the current conversation.
+  4. **MANDATORY:** Verify the branch exists and matches the full slug before proceeding.
+  5. Create an initial phase Artifact using `write_to_file` in `ARTIFACT_DIR` containing the ticket ID, branch name, and current status.
+  6. Skip if an Artifact for the ticket already exists in the current conversation.
 - **Manual Environment Management:** The User always manages the development server (`pnpm dev`), the E2E test server (`http://localhost:3000`), and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, check the connectivity of these services, or modify/enable any Playwright `webServer` configuration. ALL E2E tests are strictly bound to `http://localhost:3000`.
 - **Strict Sequential Workflow:** ALL tickets MUST follow the `PHASE_ORDER`.
 - **Guardrail Mandates (Terminal Violations):**
@@ -88,6 +89,7 @@ Required fields in every Artifact:
 ### Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular code.
 - **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops. MUST aggressively offload file edits and boilerplate to `cavecrew-builder` or local `ollama_chat`.
+- **Modularity Enforcement (Strict 100-Line Rule):** The `dev-agent` MUST NOT complete the Development phase or submit its work if any new or modified application files (excluding test files) exceed 100 lines of code. It MUST split new files or refactor/extract logic from any touched legacy files until every affected file is strictly under 100 lines.
 - **Verdict:** Success -> Audit | Blocked -> Discovery/Manual.
 - **Exhaustive Verification:** MUST run `BUILD_CMD`, `LINT_CMD`, and `TYPE_CHECK_CMD`. **MANDATORY:** When encountering bulk lint or build errors, the agent MUST use the `triage-lint` skill to fix them in manageable batches rather than overwhelming the context window.
 - **Dependencies Management:** When adding new dependencies to `package.json`, the agent MUST use `pnpm install <package>` to ensure `pnpm-lock.yaml` is correctly updated. NEVER use `npm`.

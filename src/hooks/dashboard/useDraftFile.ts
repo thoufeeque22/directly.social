@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { storeDraftFile, getDraftFile } from '@/lib/upload/file-store';
-import { updateVideoFormatPreference } from '@/app/actions/user';
+import { updateVideoFormatPreference } from '@/app/actions/user/video-format';
 
 export function useDraftFile(userId?: string) {
   const [draftFileName, setDraftFileName] = useState<string | null>(null);
@@ -33,7 +33,7 @@ export function useDraftFile(userId?: string) {
           if (video.src) {
             try {
               globalThis.URL.revokeObjectURL(video.src);
-            } catch (e) {}
+            } catch {}
             video.src = '';
           }
           video.remove();

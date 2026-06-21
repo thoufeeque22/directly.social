@@ -41,19 +41,19 @@ export const useDashboardAIState = (initialAITier: AITier, initialAIStyle: Style
   const setAiTier = async (newTier: AITier) => {
     setAiTierInternal(newTier);
     if (globalThis.localStorage) localStorage.setItem('SS_AI_TIER', newTier);
-    try { const { updateAIStylePreference } = await import('@/app/actions/user'); await updateAIStylePreference(newTier); } catch (err) { console.error(err); }
+    try { const { updateAIStylePreference } = await import('@/app/actions/user/ai-style'); await updateAIStylePreference(newTier); } catch (err) { console.error(err); }
   };
 
   const setAiProvider = async (newProvider: AIProvider) => {
     setAiProviderInternal(newProvider);
     if (globalThis.localStorage) localStorage.setItem('SS_AI_PROVIDER', newProvider);
-    try { const { updateAIProviderPreference } = await import('@/app/actions/user'); await updateAIProviderPreference(newProvider); } catch (err) { console.error(err); }
+    try { const { updateAIProviderPreference } = await import('@/app/actions/user/ai-provider'); await updateAIProviderPreference(newProvider); } catch (err) { console.error(err); }
   };
 
   const setContentMode = async (newMode: StyleMode) => {
     setContentModeInternal(newMode);
     if (globalThis.localStorage) localStorage.setItem('SS_AI_MODE', newMode);
-    try { const { updateAIStyleModePreference } = await import('@/app/actions/user'); await updateAIStyleModePreference(newMode); } catch (err) { console.error(err); }
+    try { const { updateAIStyleModePreference } = await import('@/app/actions/user/ai-style'); await updateAIStyleModePreference(newMode); } catch (err) { console.error(err); }
   };
 
   return { aiTier, setAiTier, aiProvider, setAiProvider, contentMode, setContentMode };

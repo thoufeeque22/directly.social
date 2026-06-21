@@ -11,14 +11,23 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useAccounts } from '@/hooks/useAccounts';
-import * as userActions from '@/app/actions/user';
+import * as accountActions from '@/app/actions/user/accounts';
+import * as preferenceActions from '@/app/actions/user/platform';
+
+const userActions = {
+  ...accountActions,
+  ...preferenceActions,
+};
 
 // Mock server actions
-vi.mock('@/app/actions/user', () => ({
+vi.mock('@/app/actions/user/accounts', () => ({
   getUserAccounts: vi.fn(),
-  getPlatformPreferences: vi.fn(),
   toggleAccountDistribution: vi.fn(),
   disconnectAccount: vi.fn(),
+}));
+
+vi.mock('@/app/actions/user/platform', () => ({
+  getPlatformPreferences: vi.fn(),
   togglePlatformPreference: vi.fn(),
 }));
 
@@ -107,5 +116,29 @@ describe('useAccounts', () => {
     });
 
     expect(result.current.preferences.find(p => p.platformId === 'facebook')?.isEnabled).toBe(true);
+  });
+
+  it('rolls back platform preference if update fails (existing preference)', async () => {
+    const { result } = renderHook(() => useAccounts(mockAccounts as never, mockPrefs as never));
+    vi.mocked(userActions.togglePlatformPreference).mockRejectedValue(new Error('Platform update failed'));
+
+    await expect(act(async () => {
+      await result.current.togglePlatform('facebook', false);
+    })).rejects.toThrow('Platform update failed');
+
+    // Should be rolled back to false (its original value)
+    expect(result.current.preferences.find(p => p.platformId === 'facebook')?.isEnabled).toBe(false);
+  });
+
+  it('rolls back and removes temporary platform preference if update fails (new preference)', async () => {
+    const { result } = renderHook(() => useAccounts(mockAccounts as never, mockPrefs as never));
+    vi.mocked(userActions.togglePlatformPreference).mockRejectedValue(new Error('Platform update failed'));
+
+    await expect(act(async () => {
+      await result.current.togglePlatform('instagram', false);
+    })).rejects.toThrow('Platform update failed');
+
+    // Since 'instagram' did not exist originally, it should be removed completely
+    expect(result.current.preferences.find(p => p.platformId === 'instagram')).toBeUndefined();
   });
 });

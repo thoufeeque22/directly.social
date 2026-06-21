@@ -11,17 +11,25 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { 
   getUserAccounts, 
   toggleAccountDistribution,
+} from '../../app/actions/user/accounts';
+import {
   getPlatformPreferences,
   togglePlatformPreference,
-  getVideoFormatPreference,
-  updateVideoFormatPreference,
+} from '../../app/actions/user/platform';
+import {
   getAIStylePreference,
   updateAIStylePreference,
-  getAIProviderPreference,
-  updateAIProviderPreference,
   getAIStyleModePreference,
   updateAIStyleModePreference
-} from '../../app/actions/user';
+} from '../../app/actions/user/ai-style';
+import {
+  getAIProviderPreference,
+  updateAIProviderPreference
+} from '../../app/actions/user/ai-provider';
+import {
+  getVideoFormatPreference,
+  updateVideoFormatPreference
+} from '../../app/actions/user/video-format';
 import { prisma } from '../../lib/core/prisma';
 import { auth } from '@/auth';
 

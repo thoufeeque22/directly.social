@@ -79,6 +79,7 @@ describe('Metadata Actions', () => {
           userId: mockUserId,
           name: input.name,
           content: input.content,
+          category: 'description',
         },
       });
       expect(result).toEqual(mockCreated);
