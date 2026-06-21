@@ -11,6 +11,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { 
   getUserAccounts, 
   toggleAccountDistribution,
+} from '../../app/actions/user/accounts';
+import {
   getPlatformPreferences,
   togglePlatformPreference,
   getVideoFormatPreference,
@@ -21,7 +23,7 @@ import {
   updateAIProviderPreference,
   getAIStyleModePreference,
   updateAIStyleModePreference
-} from '../../app/actions/user';
+} from '../../app/actions/user/preferences';
 import { prisma } from '../../lib/core/prisma';
 import { auth } from '@/auth';
 

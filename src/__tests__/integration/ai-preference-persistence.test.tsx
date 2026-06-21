@@ -12,8 +12,13 @@ vi.mock('@/auth', () => ({
 }));
 
 // Mock Server Actions
-vi.mock('@/app/actions/user', () => ({
+vi.mock('@/app/actions/user/accounts', () => ({
   getUserAccounts: vi.fn(),
+  toggleAccountDistribution: vi.fn(),
+  disconnectAccount: vi.fn(),
+}));
+
+vi.mock('@/app/actions/user/preferences', () => ({
   getPlatformPreferences: vi.fn(),
   getVideoFormatPreference: vi.fn(),
   getAIStylePreference: vi.fn(),
@@ -23,8 +28,6 @@ vi.mock('@/app/actions/user', () => ({
   updateAIProviderPreference: vi.fn(),
   getAIStyleModePreference: vi.fn(),
   updateAIStyleModePreference: vi.fn(),
-  toggleAccountDistribution: vi.fn(),
-  disconnectAccount: vi.fn(),
   togglePlatformPreference: vi.fn(),
 }));
 

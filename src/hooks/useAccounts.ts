@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getUserAccounts, toggleAccountDistribution, disconnectAccount as disconnectAccountAction, getPlatformPreferences, togglePlatformPreference as togglePlatformPreferenceAction } from '@/app/actions/user';
+import { getUserAccounts, toggleAccountDistribution, disconnectAccount as disconnectAccountAction } from '@/app/actions/user/accounts';
+import { getPlatformPreferences, togglePlatformPreference as togglePlatformPreferenceAction } from '@/app/actions/user/preferences';
 import { Account, PlatformPreference } from '@/lib/core/types';
 
 /**

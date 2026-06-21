@@ -11,14 +11,23 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useAccounts } from '@/hooks/useAccounts';
-import * as userActions from '@/app/actions/user';
+import * as accountActions from '@/app/actions/user/accounts';
+import * as preferenceActions from '@/app/actions/user/preferences';
+
+const userActions = {
+  ...accountActions,
+  ...preferenceActions,
+};
 
 // Mock server actions
-vi.mock('@/app/actions/user', () => ({
+vi.mock('@/app/actions/user/accounts', () => ({
   getUserAccounts: vi.fn(),
-  getPlatformPreferences: vi.fn(),
   toggleAccountDistribution: vi.fn(),
   disconnectAccount: vi.fn(),
+}));
+
+vi.mock('@/app/actions/user/preferences', () => ({
+  getPlatformPreferences: vi.fn(),
   togglePlatformPreference: vi.fn(),
 }));
 

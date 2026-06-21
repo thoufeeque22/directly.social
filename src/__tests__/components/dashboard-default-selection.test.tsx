@@ -19,16 +19,19 @@ vi.mock('@/auth', () => ({
 }));
 
 // Mock Server Actions BEFORE other imports
-vi.mock('@/app/actions/user', () => ({
+vi.mock('@/app/actions/user/accounts', () => ({
   getUserAccounts: vi.fn(),
-  getPlatformPreferences: vi.fn(),
-  getVideoFormatPreference: vi.fn(),
-  getAIStylePreference: vi.fn(),
-  updateVideoFormatPreference: vi.fn(),
-  updateAIStylePreference: vi.fn(),
   toggleAccountDistribution: vi.fn(),
   disconnectAccount: vi.fn(),
+}));
+
+vi.mock('@/app/actions/user/preferences', () => ({
+  getPlatformPreferences: vi.fn(),
   togglePlatformPreference: vi.fn(),
+  getAIStylePreference: vi.fn(),
+  updateAIStylePreference: vi.fn(),
+  getVideoFormatPreference: vi.fn(),
+  updateVideoFormatPreference: vi.fn(),
 }));
 
 // Mock Next.js Navigation

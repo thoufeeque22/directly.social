@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { getTheme } from '@/theme';
-import { updateThemePreference } from '@/app/actions/user';
+import { updateThemePreference } from '@/app/actions/user/settings';
 import { Theme } from '@prisma/client';
 import { ColorMode, ThemeContext } from './ThemeContext';
 
@@ -16,7 +16,7 @@ export const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
     
     if (process.env.NEXT_PUBLIC_E2E !== 'true') {
       (async () => {
-        const { getThemePreference } = await import('@/app/actions/user');
+        const { getThemePreference } = await import('@/app/actions/user/settings');
         const pref = await getThemePreference();
         const modePref = pref.toLowerCase() as ColorMode;
         if (modePref && modePref !== mode) {
