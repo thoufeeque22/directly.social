@@ -12,7 +12,7 @@ import { Session } from 'next-auth';
 
 export default function LayoutWrapper({ children, session: initialSession }: { children: React.ReactNode, session: Session | null }) {
   const pathname = usePathname();
-  const { status, data: clientSession } = useSession();
+  const { data: clientSession } = useSession();
   
   // Use either the server-side session OR the client-side session
   const session = clientSession || initialSession;
@@ -26,11 +26,12 @@ export default function LayoutWrapper({ children, session: initialSession }: { c
     pathname === '/terms' || 
     pathname === '/cookies' || 
     pathname === '/' ||
+    pathname === '/status' ||
     pathname?.startsWith('/docs');
   
   // We hide the shell ONLY if:
-  // 1. It's an always-public route (EXCEPT root path when authenticated)
-  const shouldHideShell = isAlwaysPublic && !(pathname === '/' && isAuthenticated);
+  // 1. It's an always-public route (EXCEPT root/status paths when authenticated)
+  const shouldHideShell = isAlwaysPublic && !((pathname === '/' || pathname === '/status') && isAuthenticated);
   const shouldShowShell = !shouldHideShell;
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

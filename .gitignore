@@ -89,3 +89,4 @@ handoff.md
 .agents/implementer_*/
 .agents/teamwork_*/
 .agents/victory_verifier/
+.aider*
