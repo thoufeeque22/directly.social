@@ -1,7 +1,7 @@
 # Core Technical Standards
 
 ## Project Architecture & Conventions
-- **Next.js 15 & React 19:** Follow strict rules in `.agents/AI_RULES.md`.
+- **Next.js 15 & React 19:** Follow strict rules in `.agents/AGENTS.md` (TypeScript, React, A11y, Code Quality).
 - **Zero-Any Policy:** Strict TypeScript enforcement across the entire codebase. Use `unknown` or explicit interfaces for dynamic data.
 ## Centralized Schemas
 - All validation logic MUST reside in `src/lib/schemas`. Reuse these schemas for both Route Handlers and Server Actions.

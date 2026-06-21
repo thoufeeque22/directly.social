@@ -25,12 +25,12 @@
   1. **Issue-First Protocol:** Before starting any work, the Orchestrator MUST ensure a corresponding GitHub issue exists. If the task is new or doesn't have an ID, the Orchestrator MUST invoke the `project-agent` to create the issue FIRST.
   2. **No Direct Main Push:** AI agents are STRICTLY FORBIDDEN from merging into or pushing directly to the `MAIN_BRANCH`. ALL code changes MUST live on a dedicated feature branch (`FEATURE_BRANCH_PATTERN`).
   3. **PR-Only Handoff:** The final handoff to the user MUST be for **Pull Request creation**. The agent must never perform the final merge locally.
-  4. **State-First Protocol:** NEVER start work without initializing the state directory and `MAIN_STATE_FILE`.
+  4. **Artifact-First Protocol:** NEVER start a phase without first writing or updating an Artifact in `ARTIFACT_DIR` (see `VARIABLES.md`).
 - **Phase Termination & Failure Protocol:**
-  1. **Atomic Phases:** An agent MUST NOT proceed to the next phase in the sequence. It MUST update the state file, set its **Verdict**, and return control to the Orchestrator.
-  2. **Next Step Suggestion:** Upon completing a phase, the agent MUST explicitly suggest the next sub-agent in the sequence to the user (e.g., "Next step: Invoke `discovery-agent` for technical planning").
-  3. **Immediate Stop on Failure:** If any phase (especially `Audit` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately. No further agents (Doc, Project, etc.) can be invoked in that round.
-  4. **Round 2+ Entry Point:** If a round fails during `Audit` or `QA`, the subsequent round MUST begin with the `dev-agent` to address the identified issues. The sequence then restarts from `Development`.
+  1. **Atomic Phases:** An agent MUST NOT proceed to the next phase autonomously. It MUST write its final Artifact with `RequestFeedback: true`, set its **Verdict**, and return control to the Orchestrator.
+  2. **Next Step Suggestion:** Upon completing a phase, the agent MUST explicitly suggest the next sub-agent in the sequence to the user.
+  3. **Immediate Stop on Failure:** If any phase (especially `Audit` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately.
+  4. **Round 2+ Entry Point:** If a round fails during `Audit` or `QA`, the next round MUST begin with `dev-agent`. The sequence restarts from `Development`.
 - **Human-in-the-Loop Workflow (HARD STOP):** ALL transitions between agent phases MUST be mediated by the user. **The Orchestrator MUST immediately HALT execution and return control to the User after writing a phase Artifact. The Orchestrator is STRICTLY FORBIDDEN from automatically chaining to the next phase or running multiple sub-agents in a single turn without explicit user approval.**
   1. **Inquiry-First Protocol:** The initial turn of any planning agent (`Product`, `Discovery`) SHOULD focus on asking questions to resolve ambiguity. If the agent is in doubt, it MUST set its Verdict to **NEEDS-INFO** and present its questions to the user.
   2. **Artifact-First Protocol (Robust Updates):** Agents MUST write their final Artifact using `write_to_file` to `ARTIFACT_DIR` with `ArtifactMetadata.RequestFeedback: true` BEFORE terminating. This natively pauses the Orchestrator and presents a "Proceed" UI to the user.
@@ -46,44 +46,22 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 - **Full Suite:** The complete test directory, including long-running E2E and edge-case unit tests.
 
 ### Agent Test Mandates
-- **dev-agent:** MUST use the `ARCHITECT_SKILL` for all changes. MUST run `SMOKE_TEST_CMD` and `LINT_CMD`.
-  - **Fast-Track Verification:** If the user explicitly requests to save time or if in a fast-iteration loop, the agent MAY skip `BUILD_CMD` IF they have already run it once for the current set of changes and no relevant files have changed.
-- **audit-agent:** READ-ONLY. Focus on Security, Privacy (PII), and Performance (Web Vitals) audits.
-- **qa-agent:** MUST run `REGRESSION_TEST_CMD`. For features with specific impact, they may also run relevant individual tests.
-- **Human-in-the-Loop:** The **User** SHOULD run the full suite (`pnpm test`) before the final merge.
+- **dev-agent:** MUST use `ARCHITECT_SKILL`. MUST run `SMOKE_TEST_CMD` and `LINT_CMD`. May skip `BUILD_CMD` on fast-iteration loops if already run for the current changeset.
+- **audit-agent:** READ-ONLY. Focus on Security, Privacy (PII), and Performance (Web Vitals).
+- **qa-agent:** MUST run `REGRESSION_TEST_CMD`. May run targeted tests for high-impact features.
+- **Human-in-the-Loop:** The **User** SHOULD run the full suite (`pnpm test`) before final merge.
 
-### package.json Scripts (Implementation)
-- `test:smoke`: `SMOKE_TEST_CMD`
-- `test:regression`: `REGRESSION_TEST_CMD`
+> All command identifiers (`SMOKE_TEST_CMD`, `REGRESSION_TEST_CMD`, etc.) are defined in `VARIABLES.md`.
 
-## State Management & Artifacts
-- **Native Artifacts:** Instead of manually executing `npm run state:update` and writing to `MAIN_STATE_FILE` and `.agents/tmp/` files, ALL ticket state and agent reports MUST be tracked using Agy's native Artifact system.
-- **State Updates:** To complete a phase, an agent MUST use the `write_to_file` tool to create or update an artifact markdown file in the artifact directory (`<appDataDir>/brain/<conversation-id>/`). The file MUST be created with `ArtifactMetadata` containing `RequestFeedback: true`.
-  - **Why?** Using `RequestFeedback: true` will natively pause the Orchestrator and present a UI to the user to "Proceed" or reject the phase transition, fulfilling the strict Human-in-the-Loop requirement without brittle shell scripts.
-- **Transient Files:** ANY temporary scratch files MUST be written to the `<appDataDir>/brain/<conversation-id>/scratch/` directory.
+## Artifact Templates
+Each phase MUST produce an Artifact in `ARTIFACT_DIR` with `RequestFeedback: true`. Paths and directory constants are in `VARIABLES.md`.
 
-## Artifact Template Guidelines
-Each phase must produce a comprehensive Artifact (e.g. `product_spec.md`, `discovery_blueprint.md`, `development_report.md`).
-The Artifact MUST contain:
-1. **Verdict**: [APPROVED / NEEDS-INFO / REJECTED / PASS / FAIL / BLOCKED / SUCCESS]
-2. **Current Round**: The current iteration number.
-3. **Phase-Specific Data**: (e.g. Socratic Log, Root Cause Analysis, Gap Analysis).
+Required fields in every Artifact:
+1. **Verdict** — from `PHASE_SPECIFIC_VERDICTS` in `VARIABLES.md`.
+2. **Current Round** — iteration number.
+3. **Phase-Specific Data** — e.g. Socratic Log, Root Cause Analysis, Gap Analysis, Failures.
 
-### Development Artifact Requirements
-- **Verdict**: [SUCCESS / BLOCKED]
-- **Root Cause Analysis (Round 2+ only)**: Explicitly identify WHY the previous round was rejected.
-- **Remediation Strategy (Round 2+ only)**: Detail the specific changes made to address the failure and prevent regression.
-- **Summary**: ...
-
-### Audit/QA Artifact Requirements
-- **Verdict**: [PASS / FAIL]
-- **Gap Analysis (Round 2+ only)**: Analyze why previous checks failed or were missed.
-- **Failures**: [If FAIL, list specific file:line and reason]
-
-## Phase Termination & Failure Protocol
-1. **Native Pause:** An agent MUST NOT proceed to the next phase autonomously. It MUST write its final artifact using `RequestFeedback: true` and then return control.
-2. **Failure Recovery:** If an `audit` or `qa` artifact results in a **FAIL**, the user will trigger a new round by explicitly invoking the `dev-agent` again.
-3. **Traceable Fixes:** Dev agents in Round 2+ MUST read the previous round's `audit` or `qa` artifact from the conversation context to ensure all reported issues are addressed.
+> **Round 2+:** Dev artifacts MUST include Root Cause Analysis + Remediation Strategy. Audit/QA artifacts MUST include Gap Analysis explaining why previous checks failed.
 
 
 ## Agent Specific Workflows
@@ -123,11 +101,17 @@ The Artifact MUST contain:
 - **Verdict:** Pass -> Documentation | Fail -> Return to Dev.
 
 ### Documentation
-- **Role**: Tech Writer & Orchestration Architect. Finalize feature docs and optimize instruction layer.
-- **Orchestration Audit**: The agent MUST periodically run the `AUDITOR_SKILL` to identify contradictions or redundancies in `GEMINI.md` and `.agents/base/*.md`.
-- **Incidental Check**: After finishing work, the agent MUST read `OBSERVATIONS_FILE`.
-  - If **Observations exist**: Suggest invoking `project-agent` to resolve them.
-  - If **No Observations exist**: Suggest the **User** for final PR creation.
+- **Role**: Tech Writer, Orchestration Architect & Learning Integrator. Finalize feature docs, audit instructions, and encode user learnings.
+- **Mandatory Sequence (every invocation, in order):**
+  1. **Orchestration Audit:** Run `AUDITOR_SKILL` against `.agents/AGENTS.md` and `.agents/base/*.md`. **Offload to `ollama_chat` (`gemma4:latest`)** — this is a read-heavy diff task, not a writing task. Do NOT burn cloud context on it.
+  2. **Learning Extraction:** Scan `<appDataDir>/brain/<conversation-id>/.system_generated/logs/transcript.jsonl` for user corrections and preferences. **Offload to `ollama_chat` (`gemma4:latest`)** — ask it to return a bullet list of rule candidates only. Then apply the results yourself. For each learning:
+     - Encode it as a concise, imperative rule in the correct target file (`AGENTS.md` or a `base/*.md` file).
+     - Apply minor additions directly. Present a diff for structural changes.
+     - Log under **Learnings Integrated** in the phase Artifact.
+  3. **Feature Docs:** Write or update `docs/` for the completed feature. This is the primary cloud-model task.
+  4. **Incidental Check:** Read `OBSERVATIONS_FILE`.
+     - If **Observations exist**: Suggest invoking `project-agent` to resolve them.
+     - If **No Observations exist**: Suggest the **User** for final PR creation.
 - **Verdict**: [COMPLETE].
 
 ### Project Agent

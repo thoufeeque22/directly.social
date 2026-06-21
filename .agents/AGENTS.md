@@ -8,7 +8,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 > **Primary rules file for Agy (Antigravity).** `GEMINI.md` at the repo root is deprecated and no longer authoritative — these rules take precedence.
 
-- **Phase Throttling (Human-in-the-Loop):** The Orchestrator MUST terminate its turn after calling exactly one sub-agent. NEVER chain sub-agents autonomously. ALL transitions between phases (`Discovery` -> `Dev` -> `Review` -> `QA` -> `Doc` -> `Project`) MUST be approved by the user.
+- **Phase Throttling (Human-in-the-Loop):** The Orchestrator MUST terminate its turn after calling exactly one sub-agent. NEVER chain sub-agents autonomously. ALL phase transitions (per `PHASE_ORDER` in [VARIABLES.md](base/VARIABLES.md)) MUST be approved by the user.
 - **Artifact-First Protocol (replaces State-First):** Before invoking any sub-agent or performing any action, the Orchestrator MUST create or update an Artifact using Agy's native `write_to_file` tool into `<appDataDir>/brain/<conversation-id>/`. Do NOT write state to `.agents/state/ticket-<id>/` — that path is obsolete.
 - **Initialization Precedence:** Every new ticket MUST follow the **Strict Initialization** workflow defined in [ORCHESTRATION.md](base/ORCHESTRATION.md). This includes conditional branch synchronization.
 - **Explicit Commit Permission & Auto-Handoff:** AI agents MUST NOT commit changes without user permission, EXCEPT during phase handoffs. As defined in [ORCHESTRATION.md](base/ORCHESTRATION.md), the Orchestrator automatically checkpoints changes upon handoff approval.
