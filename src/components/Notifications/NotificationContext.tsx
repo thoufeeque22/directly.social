@@ -17,7 +17,8 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     }
     try {
       if (process.env.NEXT_PUBLIC_E2E === 'true') {
-        const mockData = (window as any).__MOCK_NOTIFICATIONS__;
+        const mockWindow = window as Window & { __MOCK_NOTIFICATIONS__?: Notification[] };
+        const mockData = mockWindow.__MOCK_NOTIFICATIONS__;
         if (mockData) {
           setNotifications(mockData);
           setLoading(false);
@@ -43,9 +44,10 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     if (status !== 'authenticated') return;
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
     if (process.env.NEXT_PUBLIC_E2E === 'true') {
-      if ((window as any).__MOCK_NOTIFICATIONS__) {
-        (window as any).__MOCK_NOTIFICATIONS__ = (window as any).__MOCK_NOTIFICATIONS__.map(
-          (n: any) => n.id === id ? { ...n, isRead: true } : n
+      const mockWindow = window as Window & { __MOCK_NOTIFICATIONS__?: Notification[] };
+      if (mockWindow.__MOCK_NOTIFICATIONS__) {
+        mockWindow.__MOCK_NOTIFICATIONS__ = mockWindow.__MOCK_NOTIFICATIONS__.map(
+          (n: Notification) => n.id === id ? { ...n, isRead: true } : n
         );
       }
     } else {
@@ -56,9 +58,10 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     if (status !== 'authenticated') return;
     setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
     if (process.env.NEXT_PUBLIC_E2E === 'true') {
-      if ((window as any).__MOCK_NOTIFICATIONS__) {
-        (window as any).__MOCK_NOTIFICATIONS__ = (window as any).__MOCK_NOTIFICATIONS__.map(
-          (n: any) => ({ ...n, isRead: true })
+      const mockWindow = window as Window & { __MOCK_NOTIFICATIONS__?: Notification[] };
+      if (mockWindow.__MOCK_NOTIFICATIONS__) {
+        mockWindow.__MOCK_NOTIFICATIONS__ = mockWindow.__MOCK_NOTIFICATIONS__.map(
+          (n: Notification) => ({ ...n, isRead: true })
         );
       }
     } else {

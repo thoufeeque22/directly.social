@@ -2,7 +2,8 @@ import React from 'react';
 import styles from '@/app/settings/Settings.module.css';
 import { Account } from '@/lib/core/types';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { formatHandle } from '@/lib/utils/utils';
+import { ConnectionDisclosure } from './ConnectionDisclosure';
+import { ConnectedAccountsList } from './ConnectedAccountsList';
 
 interface ConnectionSectionProps {
   title: string;
@@ -53,7 +54,10 @@ export const ConnectionSection: React.FC<ConnectionSectionProps> = ({
               cursor: 'pointer', 
               fontWeight: 600, 
               transition: 'all 0.2s ease',
-              boxShadow: `0 4px 12px ${color === 'black' ? 'rgba(0,0,0,0.2)' : color + '33'}` 
+              boxShadow: `0 4px 12px ${color === 'black' ? 'rgba(0,0,0,0.2)' : color + '33'}`,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-2px)';
@@ -64,39 +68,20 @@ export const ConnectionSection: React.FC<ConnectionSectionProps> = ({
               e.currentTarget.style.boxShadow = `0 4px 12px ${color === 'black' ? 'rgba(0,0,0,0.2)' : color + '33'}`;
             }}
           >
-            Connect Account
+            {icon && React.isValidElement(icon) && React.cloneElement(icon as React.ReactElement<Record<string, unknown>>, { 
+              sx: { fontSize: 20, color: 'currentColor' } 
+            })}
+            <span>Connect {platformLabel}</span>
           </button>
 
-          {platformAccounts.length > 0 && (
-            <div className={styles.connectedList}>
-              <p className={styles.connectedTitle}>Connected:</p>
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                {platformAccounts.map(acc => (
-                  <div 
-                    key={acc.id} 
-                    className={styles.handlePill}
-                    style={{ 
-                      background: `${color}1A`, 
-                      color: color === 'white' ? 'white' : color, 
-                      border: color === 'white' ? '1px solid rgba(255,255,255,0.2)' : `1px solid ${color}33`,
-                    }}
-                  >
-                    <span>{formatHandle(acc.accountName, platformLabel)}</span>
-                    <button
-                      onClick={() => onDisconnect(acc.id)}
-                      title="Disconnect account"
-                      className={styles.removeBtn}
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </svg>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          <ConnectionDisclosure provider={provider} />
+
+          <ConnectedAccountsList 
+            platformAccounts={platformAccounts}
+            platformLabel={platformLabel}
+            color={color}
+            onDisconnect={onDisconnect}
+          />
         </div>
       </div>
     </GlassCard>

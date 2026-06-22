@@ -3,14 +3,14 @@
 import React from 'react';
 
 interface E2ELoginFormProps {
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  action: (formData: FormData) => void;
 }
 
-export function E2ELoginForm({ onSubmit }: E2ELoginFormProps) {
+export function E2ELoginForm({ action }: E2ELoginFormProps) {
   return (
     <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid hsla(var(--border)/0.5)' }}>
       <h3 style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'hsl(var(--muted-foreground))', marginBottom: '1rem', letterSpacing: '0.05em' }}>E2E Test Login</h3>
-      <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <form action={action} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         <input 
           name="email" 
           type="email" 
