@@ -16,7 +16,7 @@ test.describe('Ticket 695: Delete Account', () => {
     // 6. Verify modal contents and warning text
     const dialog = page.locator('div[role="dialog"]');
     await expect(dialog).toBeVisible();
-    await expect(dialog).toContainText("If you delete your account, your data can't be recovered, but you can create your account using the same credentials again.");
+    await expect(dialog).toContainText("If you delete your account, your data can't be recovered, but you can create a new account using the same login details later.");
 
     // 7. Try to click Delete without typing DELETE (should be disabled)
     const deleteButton = dialog.locator('button', { hasText: /^Delete Account$/ });

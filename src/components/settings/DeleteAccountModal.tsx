@@ -41,7 +41,7 @@ export const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
       <DialogContent>
         <Box sx={{ mb: 3, mt: 1 }}>
           <Typography variant="body1" sx={{ fontWeight: 500, color: 'text.primary', mb: 2 }}>
-            If you delete your account, your data can&apos;t be recovered, but you can create your account using the same credentials again.
+            If you delete your account, your data can&apos;t be recovered, but you can create a new account using the same login details later.
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
             This action will permanently remove your profile, connected social destinations, snippets, and all active sessions.
