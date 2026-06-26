@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import styles from './Sidebar.module.css';
 
@@ -14,10 +15,31 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import CloseIcon from '@mui/icons-material/Close';
 import InsightsIcon from '@mui/icons-material/Insights';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { Collapse } from '@mui/material';
 import { BRAND } from '@/lib/core/brand';
+
+const settingsSubItems = [
+  { id: 'destinations', label: 'Destinations' },
+  { id: 'snippets', label: 'Snippets' },
+  { id: 'ai', label: 'AI Providers' },
+  { id: 'storage', label: 'Storage (BYOS)' },
+  { id: 'account', label: 'Account' },
+  { id: 'support', label: 'Support' },
+];
 
 const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const { data: session } = useSession();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentTab = searchParams?.get('tab') || 'destinations';
+
+  const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
+
+  useEffect(() => {
+    setIsSettingsExpanded(!!pathname?.startsWith('/settings'));
+  }, [pathname]);
 
   const menuItems = [
     { name: 'Dashboard', icon: <DashboardIcon sx={{ fontSize: 20 }} />, path: '/' },
@@ -48,17 +70,52 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         </Link>
 
       <nav className={styles.nav}>
-        {menuItems.map((item) => (
-          <Link 
-            href={item.path} 
-            key={item.name} 
-            className={styles.navItem}
-            onClick={onClose}
-          >
-            <span className={styles.icon}>{item.icon}</span>
-            <span className={styles.name}>{item.name}</span>
-          </Link>
-        ))}
+        {menuItems.map((item) => {
+          const isSettings = item.name === 'Settings';
+          const isActive = pathname === item.path || (isSettings && pathname?.startsWith('/settings'));
+          
+          return (
+            <React.Fragment key={item.name}>
+              <Link 
+                href={item.path} 
+                className={`${styles.navItem} ${isActive && !isSettings ? styles.active : ''}`}
+                onClick={(e) => {
+                  if (isSettings) {
+                    e.preventDefault(); // Just expand/collapse, do not navigate
+                    setIsSettingsExpanded(!isSettingsExpanded);
+                  } else {
+                    setIsSettingsExpanded(false); // Collapse settings when navigating elsewhere
+                    onClose();
+                  }
+                }}
+              >
+                <span className={styles.icon}>{item.icon}</span>
+                <span className={styles.name} style={{ flexGrow: 1 }}>{item.name}</span>
+                {isSettings && (
+                  <span className={styles.chevron}>
+                    {isSettingsExpanded ? <ExpandMoreIcon sx={{ fontSize: 18 }} /> : <ExpandLessIcon sx={{ fontSize: 18 }} />}
+                  </span>
+                )}
+              </Link>
+              {isSettings && (
+                <Collapse in={isSettingsExpanded} timeout="auto" unmountOnExit>
+                  <div className={styles.subnav}>
+                    {settingsSubItems.map(sub => (
+                      <Link
+                        key={sub.id}
+                        href={`/settings?tab=${sub.id}`}
+                        className={`${styles.subnavItem} ${currentTab === sub.id && isActive ? styles.subnavActive : ''}`}
+                        onClick={onClose}
+                      >
+                        {sub.label}
+                      </Link>
+                    ))}
+                  </div>
+                </Collapse>
+              )}
+            </React.Fragment>
+          );
+        })}
       </nav>
 
       {session?.user && (

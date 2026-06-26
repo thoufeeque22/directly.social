@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import React from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Box, Typography } from '@mui/material';
 import { SettingsHeader } from '@/components/settings/SettingsHeader';
 import { TemplateManager } from '@/components/settings/TemplateManager';
@@ -9,17 +9,33 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import AiByokWizard from '@/components/AiByokWizard';
 import { ByosWizard } from '@/components/settings/ByosWizard';
 import { DestinationsTab } from '@/components/settings/DestinationsTab';
-import { SettingsTabs } from '@/components/settings/SettingsTabs';
 import { SupportTab } from '@/components/settings/SupportTab';
 import styles from './Settings.module.css';
 
 const SettingsContent = () => {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const activeTab = searchParams.get('tab') || 'destinations';
+  const currentTab = searchParams?.get('tab') || 'destinations';
 
-  const handleTabChange = (_: React.SyntheticEvent, newTab: string) => {
-    router.push(`/settings?tab=${newTab}`, { scroll: false });
+  const renderContent = () => {
+    switch (currentTab) {
+      case 'destinations': return <DestinationsTab />;
+      case 'snippets': return (
+        <GlassCard style={{ padding: '2rem' }}>
+          <TemplateManager />
+        </GlassCard>
+      );
+      case 'ai': return (
+        <GlassCard style={{ padding: '2rem' }}>
+          <Box>
+            <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>AI Providers</Typography>
+            <AiByokWizard />
+          </Box>
+        </GlassCard>
+      );
+      case 'storage': return <ByosWizard />;
+      case 'support': return <SupportTab />;
+      default: return null;
+    }
   };
 
   return (
@@ -28,26 +44,8 @@ const SettingsContent = () => {
         title="Settings" 
         subtitle="Configure your video distribution and automation preferences." 
       />
-      <Box sx={{ width: '100%', mt: 4 }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-          <SettingsTabs activeTab={activeTab} onChange={handleTabChange} />
-        </Box>
-        {activeTab === 'destinations' && <DestinationsTab />}
-        {activeTab === 'snippets' && (
-          <GlassCard style={{ padding: '2rem' }}>
-            <TemplateManager />
-          </GlassCard>
-        )}
-        {activeTab === 'ai' && (
-          <GlassCard style={{ padding: '2rem' }}>
-            <Box>
-              <Typography variant="h5" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>AI Providers</Typography>
-              <AiByokWizard />
-            </Box>
-          </GlassCard>
-        )}
-        {activeTab === 'storage' && <ByosWizard />}
-        {activeTab === 'support' && <SupportTab />}
+      <Box sx={{ mt: 4 }} data-testid="settings-content-pane">
+        {renderContent()}
       </Box>
     </div>
   );
