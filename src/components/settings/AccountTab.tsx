@@ -1,32 +1,20 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Box, Typography, Button, Divider } from '@mui/material';
+import { Box, Typography, Button, Divider, Snackbar, Alert } from '@mui/material';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { DeleteAccountModal } from './DeleteAccountModal';
-import { signOut } from 'next-auth/react';
+import { useDeleteAccount } from '@/hooks/useDeleteAccount';
 
 export const AccountTab: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { deleteAccount, isDeleting } = useDeleteAccount();
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
   const handleDeleteAccount = async () => {
-    setIsDeleting(true);
-    try {
-      const res = await fetch('/api/settings/delete-account', {
-        method: 'DELETE',
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to delete account');
-      }
-
-      alert('Account deleted successfully');
-      await signOut({ callbackUrl: '/' });
-    } catch (error) {
-      console.error(error);
-      alert('An error occurred while deleting your account');
-      setIsDeleting(false);
+    const success = await deleteAccount();
+    if (!success) {
+      setSnackbar({ open: true, message: 'An error occurred while deleting your account', severity: 'error' });
       setIsModalOpen(false);
     }
   };
@@ -68,6 +56,11 @@ export const AccountTab: React.FC = () => {
         onConfirm={handleDeleteAccount}
         isDeleting={isDeleting}
       />
+      <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+        <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </GlassCard>
   );
 };
