@@ -3,12 +3,9 @@ import { test, expect } from './base-test';
 test.describe('Ticket 695: Delete Account', () => {
   test('should navigate to Account tab, open Delete Account modal, and perform deletion', async ({ page }) => {
 
-    // 2. Navigate to Settings page
-    await page.goto('/settings');
-    await expect(page).toHaveURL(/\/settings/);
-
-    // 3. Navigate to the new Account tab
-    await page.click('button[role="tab"]:has-text("Account")');
+    // 2. Navigate to Settings page with Account tab selected
+    await page.goto('/settings?tab=account');
+    await expect(page).toHaveURL(/\/settings\?tab=account/);
 
     // 4. Verify Danger Zone exists
     await expect(page.locator('text=Danger Zone')).toBeVisible();
@@ -31,7 +28,7 @@ test.describe('Ticket 695: Delete Account', () => {
 
     // 9. Confirm deletion
     // Intercept the API call to avoid actually deleting the test user
-    await page.route('/api/settings/delete-account', async route => {
+    await page.route('/api/settings/account', async route => {
       expect(route.request().method()).toBe('DELETE');
       await route.fulfill({ status: 200, json: { success: true } });
     });
