@@ -76,4 +76,4 @@ export const comparisonGood = {
 export const activePlatforms = ['tiktok', 'instagram', 'youtube', 'facebook'];
 export const upcomingPlatforms = ['linkedin', 'threads', 'x', 'reddit'];
 
-export const testimonials: any[] = [];
+export const testimonials: { content: string; avatar?: string; name: string; role: string; [key: string]: unknown }[] = [];

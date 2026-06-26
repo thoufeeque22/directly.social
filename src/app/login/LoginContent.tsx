@@ -7,11 +7,14 @@ import { Capacitor } from '@capacitor/core';
 import { Browser } from '@capacitor/browser';
 import { useSearchParams } from 'next/navigation';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import { NativeBridgeOverlay } from './NativeBridgeOverlay';
 import { UnifiedIdentityModal } from './UnifiedIdentityModal';
 import { E2ELoginForm } from './E2ELoginForm';
 import { BRAND } from '@/lib/core/brand';
 import { APP_CONFIG } from '@/lib/core/config';
+import { GoogleIcon } from '@/components/ui/icons/GoogleIcon';
+import { TiktokIcon } from '@/components/ui/icons/TiktokIcon';
 
 type AuthProvider = 'google' | 'facebook' | 'tiktok';
 
@@ -43,9 +46,7 @@ export function LoginContent() {
     setPendingProvider(provider); setShowWarning(true);
   };
 
-  const handleE2ELogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  const handleE2ELogin = async (formData: FormData) => {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     let result = await signIn('credentials', { email, password, redirect: false });
@@ -82,12 +83,12 @@ export function LoginContent() {
           <p className={styles.subtitle}>Sign in to manage your automated distribution.</p>
         </div>
         <div className={styles.buttonGroup}>
-          <button onClick={() => handleLoginClick("google")} className={`${styles.loginBtn} ${styles.googleBtn}`}><span className={styles.btnIcon}>G</span>Continue with Google</button>
-          <button onClick={() => handleLoginClick("facebook")} className={`${styles.loginBtn} ${styles.facebookBtn}`}><span className={styles.btnIcon}>f</span>Continue with Facebook</button>
-          <button onClick={() => handleLoginClick("tiktok")} className={`${styles.loginBtn} ${styles.tiktokBtn}`}><span className={styles.btnIcon}>d</span>Continue with TikTok</button>
+          <button onClick={() => handleLoginClick("google")} className={`${styles.loginBtn} ${styles.googleBtn}`}><span className={styles.btnIcon}><GoogleIcon /></span>Continue with Google</button>
+          <button onClick={() => handleLoginClick("facebook")} className={`${styles.loginBtn} ${styles.facebookBtn}`}><span className={styles.btnIcon}><FacebookIcon /></span>Continue with Facebook</button>
+          <button onClick={() => handleLoginClick("tiktok")} className={`${styles.loginBtn} ${styles.tiktokBtn}`}><span className={styles.btnIcon}><TiktokIcon /></span>Continue with TikTok</button>
         </div>
-        {process.env.NEXT_PUBLIC_E2E === 'true' && <E2ELoginForm onSubmit={handleE2ELogin} />}
-        <div className={styles.footer}>By continuing, you agree to our <br /> <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></div>
+        {process.env.NEXT_PUBLIC_E2E === 'true' && <E2ELoginForm action={handleE2ELogin} />}
+        <div className={styles.footer}>By continuing, you agree to our <br /> <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></div>
       </div>
     </div>
   );

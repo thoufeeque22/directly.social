@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { prisma } from '@/lib/core/prisma';
 import { getByosConfig } from '@/lib/byos/service';
 import { createS3Client } from '@/lib/upload/s3/client';

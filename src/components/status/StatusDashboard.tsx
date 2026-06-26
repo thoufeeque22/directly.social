@@ -35,6 +35,7 @@ export function StatusDashboard({ scenario }: { scenario: string | null }) {
   }, [scenario]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
     const interval = setInterval(() => fetchData(true), 60000);
     return () => clearInterval(interval);
