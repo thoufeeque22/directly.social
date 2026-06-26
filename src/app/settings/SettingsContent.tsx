@@ -10,6 +10,7 @@ import AiByokWizard from '@/components/AiByokWizard';
 import { ByosWizard } from '@/components/settings/ByosWizard';
 import { DestinationsTab } from '@/components/settings/DestinationsTab';
 import { SupportTab } from '@/components/settings/SupportTab';
+import { AccountTab } from '@/components/settings/AccountTab';
 import styles from './Settings.module.css';
 
 const SettingsContent = () => {
@@ -33,6 +34,7 @@ const SettingsContent = () => {
         </GlassCard>
       );
       case 'storage': return <ByosWizard />;
+      case 'account': return <AccountTab />;
       case 'support': return <SupportTab />;
       default: return null;
     }
