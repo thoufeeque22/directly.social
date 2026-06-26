@@ -17,6 +17,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
   4. Start working
   Every new ticket MUST also follow the workflow defined in [ORCHESTRATION.md](base/ORCHESTRATION.md).
 - **Explicit Commit Permission & Auto-Handoff:** AI agents MUST NOT commit changes without user permission, EXCEPT during phase handoffs. As defined in [ORCHESTRATION.md](base/ORCHESTRATION.md), the Orchestrator automatically checkpoints changes upon handoff approval.
+- **Strict Phase Guardrails (Test-Driven Transition):** The Orchestrator MUST NOT transition from the `Discovery` phase directly to the `Development` phase. Even when a technical blueprint is approved, the Orchestrator MUST force a stop to generate the automated E2E test scripts (`.spec.ts`) and manual test document in the `QA` phase FIRST. Writing application code (`src/`) before generating QA artifacts is a terminal violation.
 - **Verification Integrity:** Local verification MUST be exhaustive (e.g., `pnpm run build`, `pnpm run lint`). NEVER use 'surgical' or 'token-optimized' checks unless explicitly instructed by the user.
 - **Technical Excellence:** ALL code MUST adhere to the standards in [CORE.md](base/CORE.md). **MANDATORY:** Invoke the `arxitect:architect` skill for ALL new feature implementations and refactors.
 - **Aesthetic Integrity:** ALL UI MUST adhere to the standards in [UI_UX.md](base/UI_UX.md) (MUI, Theme Awareness, No Emojis).
