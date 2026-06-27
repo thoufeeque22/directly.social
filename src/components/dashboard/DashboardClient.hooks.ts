@@ -31,10 +31,8 @@ export const useDashboardAIState = (initialAITier: AITier, initialAIStyle: Style
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (savedTier && ['Manual', 'Enrich', 'Generate'].includes(savedTier)) setAiTierInternal(savedTier);
     const savedProvider = localStorage.getItem('SS_AI_PROVIDER') as AIProvider;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (savedProvider && ['gemini', 'groq', 'ollama', 'openai', 'anthropic'].includes(savedProvider)) setAiProviderInternal(savedProvider);
     const savedMode = localStorage.getItem('SS_AI_MODE') as StyleMode;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (savedMode && (STYLE_MODES as string[]).includes(savedMode)) setContentModeInternal(savedMode);
   }, []);
 

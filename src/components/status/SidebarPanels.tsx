@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, Typography, Box, Divider, List, ListItem, ListItemText, Chip } from '@mui/material';
+import { Paper, Typography, Box, Divider, List, ListItem, Chip } from '@mui/material';
 
 interface MaintenanceEvent {
   title: string;

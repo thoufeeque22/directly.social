@@ -18,7 +18,6 @@ export function useDashboardInitialization({
   resumeId,
   stagedId,
   accounts,
-  preferences,
   setVideoFormat,
   setSelectedAccountIds,
   setUploadStatus,

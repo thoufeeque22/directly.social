@@ -13,7 +13,6 @@ interface ActivityCardHeaderProps {
 
 export function ActivityCardHeader({
   title,
-  description,
   isCardActive,
   isOptimistic,
   isPostCancelled,

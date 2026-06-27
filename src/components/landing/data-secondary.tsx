@@ -3,7 +3,7 @@ import { BRAND } from '@/lib/core/brand';
 import { PRICING_TIERS } from '@/lib/core/product-data';
 
 const hackerTier = PRICING_TIERS.find(t => t.id === 'free-hacker');
-const cloudTier = PRICING_TIERS.find(t => t.id === 'cloud-pro');
+
 
 export const faqs = [
   {

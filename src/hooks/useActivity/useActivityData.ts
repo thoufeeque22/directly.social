@@ -27,7 +27,7 @@ export function useActivityData({
       }).catch(() => setIsLoading(false));
     }, searchQuery ? 400 : 0);
     return () => clearTimeout(timer);
-  }, [searchQuery, fetchActivity, setPosts, setNextCursor, setIsLoading]);
+  }, [searchQuery, fetchActivity, setPosts, setNextCursor, setIsLoading, posts.length]);
 
   useEffect(() => {
     const handleRefresh = () => {

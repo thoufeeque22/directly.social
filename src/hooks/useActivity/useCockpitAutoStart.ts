@@ -70,7 +70,7 @@ export function useCockpitAutoStart({ setPosts, fetchActivity, setActiveResuming
       }
       if (stagedFileId && fileName) await executeCockpitDistribution(stagedFileId, fileName, activityId, post, reviewed);
     } catch (e) { console.error(e); setTimeout(() => setActiveResumingId(null), 5000); }
-  }, [accounts, fetchActivity, executeCockpitDistribution, byokConfigs, setPosts, setActiveResumingId]);
+  }, [accounts, fetchActivity, executeCockpitDistribution, byokConfigs, setPosts, setActiveResumingId, update]);
 
   useEffect(() => {
     const action = new URL(globalThis.window?.location.href || '').searchParams.get('action');
