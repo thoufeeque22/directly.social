@@ -6,6 +6,7 @@ import TikTok from "next-auth/providers/tiktok";
 import type { User } from "next-auth";
 
 export default {
+  useSecureCookies: process.env.NEXT_PUBLIC_E2E !== 'true',
   // ... rest of the config ...
   providers: [
     Google({

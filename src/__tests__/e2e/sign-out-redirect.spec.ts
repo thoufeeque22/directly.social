@@ -14,10 +14,10 @@ test.describe('Sign Out Flow @regression', () => {
 
     // 2. Wait for dashboard to load
     await expect(page).toHaveURL('/');
-    await expect(page.getByText('Activity Hub')).toBeVisible();
+    await expect(page.getByTestId('profile-menu-button')).toBeVisible();
 
     // 3. Open user menu
-    await page.getByTestId('user-avatar-button').click();
+    await page.getByTestId('profile-menu-button').click();
 
     // 4. Click Sign Out
     await page.getByTestId('sign-out-button').click();
@@ -33,5 +33,12 @@ test.describe('Sign Out Flow @regression', () => {
     
     // 8. Verify landing page content is visible
     await expect(page.getByRole('heading', { name: 'The Local-First Creator Studio', level: 1 })).toBeVisible();
+
+    // 9. Explicitly verify Dashboard Sidebar/Header is NOT visible (using profile menu button)
+    await expect(page.getByTestId('profile-menu-button')).not.toBeVisible();
+
+    // 10. Verify protected route redirects to login (proving proxy.ts middleware is enforcing session)
+    await page.goto('/settings');
+    await expect(page).toHaveURL(/.*\/login.*/);
   });
 });
