@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { calculateChecksum, calculateMetadataHash } from "../../lib/utils/checksum";
 import fs from "fs";
 import path from "path";

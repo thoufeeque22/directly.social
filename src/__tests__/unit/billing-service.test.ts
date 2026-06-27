@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { BillingService } from "../../lib/services/billing-service";
-import { SystemBilling } from "@prisma/client";
+
 import { SystemBillingRepository } from "../../lib/billing/repository";
 import { IBillingNotificationService, BillingProvider } from "../../lib/billing/types";
 

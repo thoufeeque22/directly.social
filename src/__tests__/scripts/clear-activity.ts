@@ -37,7 +37,7 @@ async function clearActivity() {
               await fs.unlink(filePath);
            }
            deletedFiles++;
-        } catch (e) {
+        } catch (_e) {
            // Skip if file already gone or busy
         }
       }

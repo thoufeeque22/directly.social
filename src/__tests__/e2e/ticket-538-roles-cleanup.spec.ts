@@ -45,7 +45,7 @@ test.describe('Ticket #538: Security Roles and Cleanup', () => {
     console.log('[E2E] Attempting direct access to /admin/analytics...');
     try {
       await page.goto('/admin/analytics', { waitUntil: 'commit' });
-    } catch (e) {
+    } catch (_e) {
       console.log('[E2E] Handled fast redirect abort during goto.');
     }
     

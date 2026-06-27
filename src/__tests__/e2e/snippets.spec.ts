@@ -107,7 +107,7 @@ test.describe.serial('Metadata Templates (Snippets)', () => {
       const platformTrigger = platformContainer.getByTestId('snippets-trigger').first();
       const platformInput = platformContainer.getByTestId('video-description-youtube');
 
-      await trigger.click();
+      await platformTrigger.click();
       const firstSnippet = page.locator('[data-testid^="snippet-item-"]').first();
       await expect(firstSnippet).toBeVisible();
       await firstSnippet.click();

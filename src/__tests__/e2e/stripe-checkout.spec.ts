@@ -15,7 +15,7 @@ test.describe('Stripe Integration (Authenticated)', () => {
     await expect(subscribeButton).toBeVisible();
     
     // We wait for navigation to checkout.stripe.com
-    const [response] = await Promise.all([
+    await Promise.all([
       page.waitForURL(/.*checkout\.stripe\.com.*/, { timeout: 10000 }).catch(() => null),
       subscribeButton.click()
     ]);

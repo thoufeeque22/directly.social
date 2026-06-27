@@ -28,14 +28,14 @@ describe('TemplateManager & Reusable Snippets', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(getMetadataTemplates).mockResolvedValue(mockTemplates as any);
+    vi.mocked(getMetadataTemplates).mockResolvedValue(mockTemplates as never);
     vi.mocked(updateMetadataTemplate).mockResolvedValue({
       id: 'template_1',
       name: 'Snippet One Updated',
       content: JSON.stringify({ description: 'Updated Description', firstComment: 'Updated Comment' }),
       category: 'description',
-    } as any);
-    vi.mocked(deleteMetadataTemplate).mockResolvedValue({ success: true } as any);
+    } as never);
+    vi.mocked(deleteMetadataTemplate).mockResolvedValue({ success: true } as never);
 
     // Mock window.confirm
     vi.stubGlobal('confirm', vi.fn(() => true));
