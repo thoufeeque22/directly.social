@@ -84,7 +84,7 @@ describe('videoPublishingHandler', () => {
 
   it('throttles progress updates during push', async () => {
     // To test progress throttling, we need to capture the onProgress callback passed to push
-    let capturedOnProgress: ((pct: number) => Promise<void>) | undefined;
+    let capturedOnProgress: ((pct: number) => void | Promise<void>) | undefined;
     mockActivity.push.mockImplementation(async (params: PushParams) => {
       capturedOnProgress = params.onProgress;
       return { platformPostId: 'post1' };

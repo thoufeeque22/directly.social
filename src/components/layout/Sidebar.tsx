@@ -123,26 +123,7 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true, tierName = "Free Starter"
         })}
       </nav>
 
-      {session?.user && (
-        <div className={styles.userProfile}>
-          {session.user.image ? (
-            <Image 
-              src={session.user.image} 
-              alt="User" 
-              width={32} 
-              height={32} 
-              className={styles.avatar} 
-              style={{ objectFit: 'cover' }} 
-            />
-          ) : (
-            <div className={styles.avatar}>{session.user.name?.charAt(0) || 'U'}</div>
-          )}
-          <div className={styles.userInfo}>
-            <span className={styles.userName}>{session.user.name}</span>
-            <span className={styles.userRole}>{tierName}</span>
-          </div>
-        </div>
-      )}
+
       </aside>
     </>
   );

@@ -65,7 +65,7 @@ vi.mock('fs', () => {
   });
 
   const mockReadStream = {
-    on: vi.fn(function(event, cb) {
+    on: vi.fn(function(this: any, event, cb) {
       if (event === "data") cb(Buffer.from("chunk data"));
       if (event === "end") cb();
       return this;

@@ -10,7 +10,7 @@ import NotificationBell from '../Notifications/NotificationBell';
 import styles from './Header.module.css';
 import Link from 'next/link';
 
-export function UserActions({ session }: { session: Session | null }) {
+export function UserActions({ session, tierName }: { session: Session | null, tierName?: string }) {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [helpAnchor, setHelpAnchor] = useState<null | HTMLElement>(null);
   const [popoverAnchor, setPopoverAnchor] = useState<null | HTMLElement>(null);
@@ -51,6 +51,15 @@ export function UserActions({ session }: { session: Session | null }) {
           >
             <MenuItem onClick={handleWhatsNew} data-testid="whats-new-profile-link">What&apos;s New</MenuItem>
             
+            <MenuItem disabled style={{ opacity: 1 }}>
+              <ListItemText 
+                primary={session.user.name} 
+                secondary={tierName || "Free Starter"} 
+                primaryTypographyProps={{ variant: 'subtitle2', color: 'text.primary' }}
+                secondaryTypographyProps={{ variant: 'caption', color: 'primary.main', fontWeight: 'bold' }}
+              />
+            </MenuItem>
+            <Divider />
             <MenuItem onClick={handleHelpClick}>
               <ListItemIcon><HelpOutlinedIcon fontSize="small" /></ListItemIcon>
               <ListItemText>Help</ListItemText>
