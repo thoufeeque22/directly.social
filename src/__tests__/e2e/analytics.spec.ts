@@ -1,19 +1,10 @@
 import { test, expect } from './base-test';;
-import { execSync } from 'child_process';
+
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-function safeExec(command: string, retries = 3) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      return execSync(command, { stdio: 'inherit' });
-    } catch (error) {
-      if (i === retries - 1) throw error;
-      console.warn(`[E2E] Command failed, retrying (${i + 1}/${retries}): ${command}`);
-    }
-  }
-}
+
 
 test.describe('Analytics Dashboard', () => {
   // Use admin role for this file by default
@@ -104,7 +95,7 @@ test.describe('Analytics Dashboard', () => {
         // Now try to access admin analytics
         try {
           await page.goto('/admin/analytics', { waitUntil: 'commit' });
-        } catch (e) {
+        } catch {
           // Ignore fast-redirect network aborts
           console.log('[E2E] Handled fast redirect abort during goto.');
         }

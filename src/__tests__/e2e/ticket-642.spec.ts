@@ -31,8 +31,6 @@ test.describe('Ticket #642: Architectural Separation of Landing Page and Login P
     });
 
     test('Pricing Smart CTA should point to /login', async ({ page }) => {
-      // Find the first pricing card button that is not disabled
-      const pricingCta = page.locator('button:has-text("Get Started")').first();
       // In our code, pricing CTAs are Links rendered as buttons
       const pricingLink = page.getByRole('link', { name: 'Get Started' }).first();
       await expect(pricingLink).toHaveAttribute('href', '/login');

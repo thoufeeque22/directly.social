@@ -31,7 +31,7 @@ export const useAppRefresh = () => {
       setIsManualRefreshing(false);
       isRefreshingRef.current = false;
     }
-  }, []);
+  }, [router]);
 
   return {
     refresh,

@@ -1,16 +1,9 @@
 import { test, expect } from './base-test';;
-import { execSync } from 'child_process';
+
 import * as fs from 'fs';
 import * as path from 'path';
 
-function runDbScript(scriptName: string) {
-  try {
-    console.log(`[E2E DB Setup] Running ${scriptName}...`);
-    execSync(`npx tsx src/__tests__/scripts/${scriptName}`, { stdio: 'inherit' });
-  } catch (error) {
-    console.error(`[E2E DB Setup Error] Failed to run ${scriptName}:`, error);
-  }
-}
+
 
 import { prisma } from '../../lib/core/prisma';
 

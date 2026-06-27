@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+
 import { streamText, convertToModelMessages } from 'ai';
 import { auth } from '@/auth';
 import { logger } from '@/lib/core/logger';

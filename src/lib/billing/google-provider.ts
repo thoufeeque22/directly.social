@@ -1,4 +1,4 @@
-import { google } from 'googleapis';
+
 import { BillingProvider, GoogleBillingConfig, BillingProviderType } from './types';
 import { logger } from '@/lib/core/logger';
 
@@ -21,7 +21,7 @@ export class GoogleBillingProvider implements BillingProvider {
     // Validate that it is valid JSON
     try {
       JSON.parse(config.serviceAccount);
-    } catch (e) {
+    } catch {
       throw new Error('[GoogleBillingProvider] serviceAccount must be a valid JSON string');
     }
   }

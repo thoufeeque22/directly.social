@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import ffmpeg from 'fluent-ffmpeg';
 import path from 'path';
-import fs from 'fs';
+
 
 export interface VideoMetadata {
   width: number;

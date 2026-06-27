@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { useAppRefresh } from '@/hooks/useAppRefresh';
 import { useRouter } from 'next/navigation';
 import { vi, expect, it, describe, beforeEach, afterEach } from 'vitest';

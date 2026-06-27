@@ -53,7 +53,7 @@ async function run() {
   if (contentFile) {
     try {
       content = await fs.readFile(contentFile, 'utf-8');
-    } catch (e) {
+    } catch {
       console.error(`❌ Could not read content file: ${contentFile}`);
       process.exit(1);
     }
@@ -64,7 +64,7 @@ async function run() {
       const branch = execSync('git rev-parse --abbrev-ref HEAD', { stdio: 'pipe' }).toString().trim();
       const match = branch.match(/feature\/(\d+)/) || branch.match(/ticket\/(\d+)/) || branch.match(/^(\d+)-/);
       if (match) ticketId = match[1];
-    } catch (e) {
+    } catch {
       // Ignored
     }
   }
@@ -98,7 +98,7 @@ async function run() {
       mainMdContent = mainMdContent.replace(/status:\s*[a-zA-Z0-9_-]+/, `status: ${newStatus}`);
       mainMdContent = mainMdContent.replace(/- \*\*Current Status\*\*:.*$/m, `- **Current Status**: ${newStatus}`);
     }
-  } catch (e) {
+  } catch {
     // MAIN.md doesn't exist, create it
     const roundToUse = targetRound ? parseInt(targetRound, 10) : 1;
     mainMdContent = `---

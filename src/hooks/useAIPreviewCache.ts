@@ -6,7 +6,7 @@ export const useAIPreviewCache = () => {
     if (typeof window === 'undefined') return {};
     const saved = localStorage.getItem('SS_AI_PREVIEWS_CACHE');
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) { return {}; }
+      try { return JSON.parse(saved); } catch { return {}; }
     }
     return {};
   });

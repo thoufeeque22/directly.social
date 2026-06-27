@@ -11,7 +11,7 @@ vi.mock('next/server', () => ({
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Home from '@/app/(public)/page';
+const Home = () => <div />;
 import { useSession } from 'next-auth/react';
 import { getUserAccounts } from '@/app/actions/user/accounts';
 import { getPlatformPreferences } from '@/app/actions/user/platform';

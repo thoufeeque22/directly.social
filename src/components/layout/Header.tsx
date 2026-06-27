@@ -9,7 +9,7 @@ import { UserActions } from './UserActions';
 import { RefreshButton } from './RefreshButton';
 import { ThemeToggle } from './ThemeToggle';
 
-export const Header = ({ onToggleSidebar }: { onToggleSidebar: () => void }) => {
+export const Header = ({ onToggleSidebar, tierName }: { onToggleSidebar: () => void, tierName?: string }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { data: session } = useSession();
@@ -40,7 +40,7 @@ export const Header = ({ onToggleSidebar }: { onToggleSidebar: () => void }) => 
         <ThemeToggle />
         <RefreshButton />
         <WhatsNewBadge />
-        <UserActions session={session} />
+        <UserActions session={session} tierName={tierName} />
       </div>
     </header>
   );

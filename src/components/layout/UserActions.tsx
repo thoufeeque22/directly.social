@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
-import { Menu, MenuItem, Divider, ListItemIcon, ListItemText } from '@mui/material';
+import { Menu, MenuItem, Divider, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { WhatsNewPopover } from '../WhatsNew/WhatsNewPopover';
@@ -10,7 +10,7 @@ import NotificationBell from '../Notifications/NotificationBell';
 import styles from './Header.module.css';
 import Link from 'next/link';
 
-export function UserActions({ session }: { session: Session | null }) {
+export function UserActions({ session, tierName }: { session: Session | null, tierName?: string }) {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [helpAnchor, setHelpAnchor] = useState<null | HTMLElement>(null);
   const [popoverAnchor, setPopoverAnchor] = useState<null | HTMLElement>(null);
@@ -51,6 +51,13 @@ export function UserActions({ session }: { session: Session | null }) {
           >
             <MenuItem onClick={handleWhatsNew} data-testid="whats-new-profile-link">What&apos;s New</MenuItem>
             
+            <MenuItem disabled style={{ opacity: 1 }}>
+              <ListItemText 
+                primary={<Typography variant="subtitle2" color="text.primary">{session.user.name}</Typography>}
+                secondary={<Typography variant="caption" color="primary.main" sx={{ fontWeight: 'bold' }}>{tierName || "Free Starter"}</Typography>}
+              />
+            </MenuItem>
+            <Divider />
             <MenuItem onClick={handleHelpClick}>
               <ListItemIcon><HelpOutlinedIcon fontSize="small" /></ListItemIcon>
               <ListItemText>Help</ListItemText>

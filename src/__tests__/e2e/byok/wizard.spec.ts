@@ -1,6 +1,7 @@
-import { test, expect } from '../base-test';;
+import { test, expect } from '../base-test';
+import type { Locator, Page } from '@playwright/test';
 
-async function robustFill(locator: any, value: string, page: any) {
+async function robustFill(locator: Locator, value: string, page: Page) {
   await locator.click();
   await locator.fill('');
   await locator.pressSequentially(value, { delay: 30 });

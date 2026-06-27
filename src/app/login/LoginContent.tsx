@@ -35,6 +35,8 @@ export function LoginContent() {
                      Capacitor.getPlatform() !== 'web' &&
                      (Capacitor.isNativePlatform() || navigator.userAgent.includes(APP_CONFIG.userAgent));
 
+    const callbackUrl = searchParams.get('callbackUrl') || '/';
+
     if (isNative) {
       const baseUrl = typeof window !== 'undefined' ? window.location.origin : APP_CONFIG.urls.production;
       const bridgeUrl = `${baseUrl}/login?bridge=true&provider=${provider}&native=true`;
@@ -42,7 +44,7 @@ export function LoginContent() {
       return;
     }
 
-    if (provider === 'google') { signIn('google', { callbackUrl: '/' }); return; }
+    if (provider === 'google') { signIn('google', { callbackUrl }); return; }
     setPendingProvider(provider); setShowWarning(true);
   };
 
@@ -56,7 +58,8 @@ export function LoginContent() {
       result = await signIn('credentials', { email, password, redirect: false });
       retries++;
     }
-    if (!result?.error) window.location.href = '/';
+    const callbackUrl = searchParams.get('callbackUrl') || '/';
+    if (!result?.error) window.location.href = callbackUrl;
   };
 
   if (searchParams.get('bridge') === 'true') return <NativeBridgeOverlay provider={searchParams.get('provider')} />;
@@ -67,12 +70,12 @@ export function LoginContent() {
         <UnifiedIdentityModal 
           pendingProvider={pendingProvider} 
           onClose={() => setShowWarning(false)}
-          onContinue={() => { if (pendingProvider) signIn(pendingProvider, { callbackUrl: '/' }); setShowWarning(false); }}
+          onContinue={() => { if (pendingProvider) signIn(pendingProvider, { callbackUrl: searchParams.get('callbackUrl') || '/' }); setShowWarning(false); }}
           onRecommended={async () => {
             const isNative = typeof window !== 'undefined' && Capacitor.getPlatform() !== 'web' && (Capacitor.isNativePlatform() || navigator.userAgent.includes(APP_CONFIG.userAgent));
             setShowWarning(false);
             if (isNative) { const baseUrl = typeof window !== 'undefined' ? window.location.origin : APP_CONFIG.urls.production; await Browser.open({ url: `${baseUrl}/login?bridge=true&provider=google&native=true` }); }
-            else { signIn('google', { callbackUrl: '/' }); }
+            else { signIn('google', { callbackUrl: searchParams.get('callbackUrl') || '/' }); }
           }}
         />
       )}

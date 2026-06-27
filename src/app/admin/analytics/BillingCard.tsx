@@ -9,7 +9,7 @@ import {
   Tooltip,
   IconButton
 } from "@mui/material";
-import { Info as InfoIcon, Refresh as RefreshIcon } from "@mui/icons-material";
+import { Info as InfoIcon } from "@mui/icons-material";
 
 export interface BillingInfo {
   id: string;

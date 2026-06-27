@@ -248,6 +248,7 @@ model User {
   role                 Role                 @default(USER)
   preferredTheme       Theme                @default(SYSTEM)
   aiCredits            Int                  @default(100)
+  billingProfile        BillingProfile?
   accounts              Account[]
   byokCredentials       ByokCredential[]
   byosConfig           ByosConfig?
@@ -316,6 +317,39 @@ enum Theme {
   LIGHT
   DARK
   SYSTEM
+}
+
+enum SubscriptionTier {
+  FREE_STARTER
+  FREE_HACKER
+  POWER_PASS
+  CREATOR_PRO
+  CLOUD_PRO
+  AGENCY_PRO
+  LIFETIME_DEAL
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+  UNPAID
+  PAUSED
+}
+
+model BillingProfile {
+  id                   String             @id @default(cuid())
+  userId               String             @unique
+  provider             String             @default("stripe")
+  providerCustomerId   String             @unique
+  providerSubscriptionId String?          @unique
+  subscriptionTier     SubscriptionTier   @default(FREE_STARTER)
+  subscriptionStatus   SubscriptionStatus @default(ACTIVE)
+  subscriptionPeriodEnd DateTime?
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model SupportRequest {

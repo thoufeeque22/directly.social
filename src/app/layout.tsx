@@ -32,12 +32,36 @@ export const metadata: Metadata = {
   },
 };
 
+import { prisma } from "@/lib/core/prisma";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const session = await auth();
+  
+  let isFreeTier = true;
+  let tierName = "Free Starter";
+  
+  if (session?.user?.id) {
+    const profile = await prisma.billingProfile.findUnique({
+      where: { userId: session.user.id },
+      select: { subscriptionTier: true, subscriptionStatus: true }
+    });
+    
+    if (profile) {
+      if (profile.subscriptionStatus === "ACTIVE" && profile.subscriptionTier !== "FREE_STARTER" && profile.subscriptionTier !== "FREE_HACKER") {
+        isFreeTier = false;
+      }
+      
+      // Format FREE_STARTER -> Free Starter
+      tierName = profile.subscriptionTier
+        .split('_')
+        .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+        .join(' ');
+    }
+  }
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -47,7 +71,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         <AppRouterCacheProvider options={{ key: 'css' }}>
           <Providers session={session}>
-            <LayoutWrapper session={session}>
+            <LayoutWrapper session={session} isFreeTier={isFreeTier} tierName={tierName}>
               {children}
             </LayoutWrapper>
           </Providers>

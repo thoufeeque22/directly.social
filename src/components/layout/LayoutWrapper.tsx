@@ -10,7 +10,17 @@ import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useAppRefresh } from '@/hooks/useAppRefresh';
 import { Session } from 'next-auth';
 
-export default function LayoutWrapper({ children, session: initialSession }: { children: React.ReactNode, session: Session | null }) {
+export default function LayoutWrapper({ 
+  children, 
+  session: initialSession, 
+  isFreeTier = true,
+  tierName = "Free Starter"
+}: { 
+  children: React.ReactNode, 
+  session: Session | null, 
+  isFreeTier?: boolean,
+  tierName?: string
+}) {
   const pathname = usePathname();
   const { data: clientSession } = useSession();
   
@@ -26,6 +36,7 @@ export default function LayoutWrapper({ children, session: initialSession }: { c
     pathname === '/terms' || 
     pathname === '/cookies' || 
     pathname === '/' ||
+    pathname === '/pricing' ||
     pathname === '/status' ||
     pathname?.startsWith('/docs');
   
@@ -43,9 +54,9 @@ export default function LayoutWrapper({ children, session: initialSession }: { c
 
   return (
     <div className="layout-wrapper">
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} isFreeTier={isFreeTier} />
       <div className="main-content">
-        <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+        <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} tierName={tierName} />
         <main className="page-content">
           <PullToRefresh onRefresh={refresh} className="ptr-container">
             {children}

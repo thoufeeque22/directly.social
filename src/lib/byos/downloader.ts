@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/core/prisma";
 import { decryptByos } from "@/lib/core/byos-encrypt";
-import { S3Client, GetObjectCommand, S3ClientConfig } from "@aws-sdk/client-s3";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { logger } from "@/lib/core/logger";

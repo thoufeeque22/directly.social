@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Box, Typography, Button, Divider, Snackbar, Alert } from '@mui/material';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { DeleteAccountModal } from './DeleteAccountModal';
@@ -9,7 +10,17 @@ import { useDeleteAccount } from '@/hooks/useDeleteAccount';
 export const AccountTab: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { deleteAccount, isDeleting } = useDeleteAccount();
+  const searchParams = useSearchParams();
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
+
+  useEffect(() => {
+    if (searchParams?.get('success') === 'true') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSnackbar({ open: true, message: 'Subscription successfully updated! Welcome aboard.', severity: 'success' });
+      // Remove success from URL without reload
+      window.history.replaceState({}, '', '/settings?tab=account');
+    }
+  }, [searchParams]);
 
   const handleDeleteAccount = async () => {
     const success = await deleteAccount();
@@ -30,7 +41,23 @@ export const AccountTab: React.FC = () => {
         </Typography>
       </Box>
 
-      {/* Additional account settings can be added here in the future */}
+      {/* Billing Section */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', mb: 1 }}>
+          Subscription & Billing
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
+          View pricing tiers, upgrade your plan, or manage your subscription.
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          href="/pricing"
+          sx={{ textTransform: 'none', fontWeight: 600 }}
+        >
+          View Plans & Upgrade
+        </Button>
+      </Box>
 
       <Divider sx={{ my: 4 }} />
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
-import { inputStyle, textareaStyle, tagStyle } from './AIContentReview.styles';
+import { inputStyle, textareaStyle } from './AIContentReview.styles';
 
 interface FieldsProps {
   activePlatform: string;

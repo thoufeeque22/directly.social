@@ -1,11 +1,12 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, Card, CardContent, Button, Stack, useTheme } from '@mui/material';
+import { Box, Typography, Card, CardContent, Button, Stack, useTheme, CircularProgress } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
-import Link from 'next/link';
+import { useCheckout } from './useCheckout';
 
 interface PricingTier {
+  id?: string;
   name: string;
   price: string;
   period?: string;
@@ -18,7 +19,7 @@ interface PricingTier {
 
 export const PricingCard = ({ tier }: { tier: PricingTier }) => {
   const theme = useTheme();
-  const isAuthenticated = false; // Landing page is only rendered when logged out
+  const { handleCheckout, isLoading } = useCheckout();
 
   return (
     <Card 
@@ -73,20 +74,21 @@ export const PricingCard = ({ tier }: { tier: PricingTier }) => {
           fullWidth 
           variant={tier.highlighted ? 'contained' : 'outlined'} 
           size="large"
-          component={Link}
-          href={tier.disabled ? '#' : (isAuthenticated ? '/' : '/login')}
-          disabled={tier.disabled}
+          onClick={() => handleCheckout(tier.id || '')}
+          disabled={tier.disabled || isLoading === tier.id}
           sx={{ py: 1.5, borderRadius: 2, textTransform: 'none', fontWeight: 700, mb: 1 }}
         >
-          {tier.disabled ? tier.cta : (isAuthenticated ? 'Go to Dashboard' : tier.cta)}
+          {isLoading === tier.id ? <CircularProgress size={24} /> : (tier.disabled ? tier.cta : tier.cta)}
         </Button>
         
         <Button
           fullWidth
           variant="text"
           size="small"
-          component={Link}
-          href="#compare"
+          onClick={() => {
+            const el = document.getElementById('compare');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
           sx={{ textTransform: 'none', color: 'text.secondary', fontWeight: 600 }}
         >
           View all features

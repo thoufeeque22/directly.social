@@ -29,7 +29,7 @@ export const updatePlatformProgress = async (activityId: string, platform: strin
         data: { progress }
       });
     }
-  } catch (err) {
+  } catch {
     // Silent fail for progress updates
   }
 };

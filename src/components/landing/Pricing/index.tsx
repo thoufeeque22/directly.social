@@ -1,11 +1,13 @@
+/* eslint-disable max-lines */
 'use client';
 
-import React from 'react';
-import { Box, Container, Typography, Grid, Paper, Button, Stack, Chip } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Container, Typography, Grid, Paper, Button, Stack, Chip, CircularProgress, Snackbar, Alert } from '@mui/material';
 import { PricingCard } from './PricingCard';
 import { pricingTiers } from '../data';
 import CheckIcon from '@mui/icons-material/Check';
-import Link from 'next/link';
+import { useCheckout } from './useCheckout';
+import { useSearchParams } from 'next/navigation';
 
 export const Pricing = () => {
   const coreTiers = pricingTiers.filter(t => ['free-starter', 'creator-pro', 'cloud-pro'].includes(t.id));
@@ -14,8 +16,23 @@ export const Pricing = () => {
   const hackerTier = pricingTiers.find(t => t.id === 'free-hacker');
   const agencyTier = pricingTiers.find(t => t.id === 'agency-pro');
 
+  const { handleCheckout, isLoading } = useCheckout();
+  const searchParams = useSearchParams();
+  const [snackbar, setSnackbar] = useState(false);
+
+  useEffect(() => {
+    if (searchParams?.get('canceled') === 'true') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSnackbar(true);
+      window.history.replaceState({}, '', '/pricing');
+    }
+  }, [searchParams]);
+
   return (
     <Box id="pricing" sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.default' }}>
+      <Snackbar open={snackbar} autoHideDuration={6000} onClose={() => setSnackbar(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+        <Alert severity="info" sx={{ width: '100%' }}>Checkout was canceled. You have not been charged.</Alert>
+      </Snackbar>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', mb: 8 }}>
           <Chip 
@@ -55,11 +72,11 @@ export const Pricing = () => {
                 variant="contained" 
                 color="primary" 
                 size="small"
-                component={Link}
-                href="/login"
+                onClick={() => handleCheckout(powerPass.id)}
+                disabled={isLoading === powerPass.id}
                 sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 700, whiteSpace: 'nowrap' }}
               >
-                {powerPass.cta}
+                {isLoading === powerPass.id ? <CircularProgress size={20} color="inherit" /> : powerPass.cta}
               </Button>
             </Paper>
           </Box>
@@ -75,7 +92,7 @@ export const Pricing = () => {
 
         <Box sx={{ mb: 10 }}>
           <Typography variant="h4" sx={{ fontWeight: 700, mb: 2, textAlign: 'center' }}>
-            Power User? We've got you covered.
+            Power User? We&apos;ve got you covered.
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 6, maxWidth: 600, mx: 'auto', textAlign: 'center' }}>
             Escape the SaaS tax entirely. Bring your own infrastructure and own your workflow.
@@ -104,12 +121,12 @@ export const Pricing = () => {
                     variant="outlined" 
                     color="primary" 
                     size="large" 
-                    component={Link}
-                    href="/login"
+                    onClick={() => handleCheckout(lifetimeTier.id)}
+                    disabled={isLoading === lifetimeTier.id}
                     fullWidth
                     sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 700 }}
                   >
-                    {lifetimeTier.cta}
+                    {isLoading === lifetimeTier.id ? <CircularProgress size={24} color="inherit" /> : lifetimeTier.cta}
                   </Button>
                 </Paper>
               </Grid>
@@ -134,12 +151,12 @@ export const Pricing = () => {
                     variant="text" 
                     color="inherit"
                     size="large" 
-                    component={Link}
-                    href="/login"
+                    onClick={() => handleCheckout(hackerTier.id)}
+                    disabled={isLoading === hackerTier.id}
                     fullWidth
                     sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 600, border: '1px dashed', borderColor: 'divider' }}
                   >
-                    {hackerTier.cta}
+                    {isLoading === hackerTier.id ? <CircularProgress size={24} color="inherit" /> : hackerTier.cta}
                   </Button>
                 </Paper>
               </Grid>

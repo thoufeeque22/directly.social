@@ -1,8 +1,8 @@
+/* eslint-disable max-lines */
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import styles from './Sidebar.module.css';
@@ -29,7 +29,7 @@ const settingsSubItems = [
   { id: 'support', label: 'Support' },
 ];
 
-const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onClose: () => void; isFreeTier?: boolean }) => {
   const { data: session } = useSession();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -38,6 +38,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
   const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsSettingsExpanded(!!pathname?.startsWith('/settings'));
   }, [pathname]);
 
@@ -50,6 +51,9 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
       { name: 'Analytics', icon: <InsightsIcon sx={{ fontSize: 20 }} />, path: '/admin/analytics' },
     ] : []),
     { name: 'Settings', icon: <SettingsIcon sx={{ fontSize: 20 }} />, path: '/settings' },
+    ...(isFreeTier ? [
+      { name: 'Upgrade Plan', icon: <AutoAwesomeIcon sx={{ fontSize: 20 }} />, path: '/pricing' }
+    ] : []),
   ];
 
   return (
@@ -118,26 +122,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         })}
       </nav>
 
-      {session?.user && (
-        <div className={styles.userProfile}>
-          {session.user.image ? (
-            <Image 
-              src={session.user.image} 
-              alt="User" 
-              width={32} 
-              height={32} 
-              className={styles.avatar} 
-              style={{ objectFit: 'cover' }} 
-            />
-          ) : (
-            <div className={styles.avatar}>{session.user.name?.charAt(0) || 'U'}</div>
-          )}
-          <div className={styles.userInfo}>
-            <span className={styles.userName}>{session.user.name}</span>
-            <span className={styles.userRole}>Creator Account</span>
-          </div>
-        </div>
-      )}
+
       </aside>
     </>
   );

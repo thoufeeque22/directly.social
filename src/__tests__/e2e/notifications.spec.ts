@@ -35,7 +35,7 @@ test.describe('Notification Utility E2E Tests @regression', () => {
   test('Visibility of NotificationBell and Badge', async ({ page }) => {
     // Inject mocks before page loads
     await page.addInitScript((notifications) => {
-      (window as any).__MOCK_NOTIFICATIONS__ = notifications;
+      (window as Window & { __MOCK_NOTIFICATIONS__?: unknown }).__MOCK_NOTIFICATIONS__ = notifications;
     }, mockNotifications);
     
     await page.goto('/');
@@ -50,7 +50,7 @@ test.describe('Notification Utility E2E Tests @regression', () => {
 
   test('Opening the NotificationPopover and verifying items', async ({ page }) => {
     await page.addInitScript((notifications) => {
-      (window as any).__MOCK_NOTIFICATIONS__ = notifications;
+      (window as Window & { __MOCK_NOTIFICATIONS__?: unknown }).__MOCK_NOTIFICATIONS__ = notifications;
     }, mockNotifications);
     
     await page.goto('/');
@@ -70,7 +70,7 @@ test.describe('Notification Utility E2E Tests @regression', () => {
 
   test('Mark as Read functionality', async ({ page }) => {
     await page.addInitScript((notifications) => {
-      (window as any).__MOCK_NOTIFICATIONS__ = notifications;
+      (window as Window & { __MOCK_NOTIFICATIONS__?: unknown }).__MOCK_NOTIFICATIONS__ = notifications;
     }, mockNotifications);
     
     await page.goto('/');
@@ -90,7 +90,7 @@ test.describe('Notification Utility E2E Tests @regression', () => {
 
   test('Mark all as Read functionality', async ({ page }) => {
     await page.addInitScript((notifications) => {
-      (window as any).__MOCK_NOTIFICATIONS__ = notifications;
+      (window as Window & { __MOCK_NOTIFICATIONS__?: unknown }).__MOCK_NOTIFICATIONS__ = notifications;
     }, mockNotifications);
     
     await page.goto('/');
@@ -110,7 +110,7 @@ test.describe('Notification Utility E2E Tests @regression', () => {
 
   test('Empty state visibility', async ({ page }) => {
     await page.addInitScript(() => {
-      (window as any).__MOCK_NOTIFICATIONS__ = [];
+      (window as Window & { __MOCK_NOTIFICATIONS__?: unknown }).__MOCK_NOTIFICATIONS__ = [];
     });
     
     await page.goto('/');
