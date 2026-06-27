@@ -8,35 +8,101 @@
 
 export const PRICING_TIERS = [
   {
-    id: 'local-core',
-    name: 'Local Core',
+    id: 'free-starter',
+    name: 'Free Starter',
     price: '$0',
-    description: 'Free Forever. Perfect for solo creators who value privacy and control.',
+    description: 'Easiest way to start. No technical setup required.',
     features: [
-      'Unlimited Local Projects',
-      'Bring Your Own Key (BYOK - Use your own API accounts)',
-      'Native Platform Publishing',
-      'AI Vibe Sync (Local)',
-      'Community Support'
+      'Up to 3 Social Connections',
+      '10 Posts per Month',
+      'Ephemeral Storage (Deletes after 24h)',
+      'Watermarked Posts'
     ],
-    cta: 'Get Started',
+    cta: 'Start Free',
+    highlighted: false
+  },
+  {
+    id: 'free-hacker',
+    name: 'Free Hacker',
+    price: '$0',
+    description: 'For technical creators who want unlimited capacity.',
+    features: [
+      'Unlimited Social Connections',
+      'Unlimited Posts',
+      'Requires BYOK & BYOS',
+      'Watermarked Posts'
+    ],
+    cta: 'Build Your Own',
+    highlighted: false
+  },
+  {
+    id: 'power-pass',
+    name: '24-Hour Pass',
+    price: '$2.99',
+    period: '/day',
+    description: 'The Weekend Batcher. No monthly commitment.',
+    features: [
+      'Removes Watermark for 24h',
+      'Unlimited High-Speed Scheduling',
+      'Includes 50 Managed AI Credits',
+      'Temporary Managed Storage'
+    ],
+    cta: 'Buy Pass',
     highlighted: true
   },
   {
-    id: 'cloud-pro',
-    name: 'Cloud Pro',
+    id: 'creator-pro',
+    name: 'Creator Pro',
+    price: '$5',
+    period: '/mo',
+    description: 'For consistent creators who want clean branding.',
+    features: [
+      'Everything in Free',
+      'Permanent Watermark Removal',
+      'Advanced Analytics Dashboard',
+      'Evergreen Post Recycling'
+    ],
+    cta: 'Subscribe',
+    highlighted: false
+  },
+  {
+    id: 'lifetime-deal',
+    name: 'Lifetime License',
+    price: '$89',
+    period: ' one-time',
+    description: 'Anti-SaaS. Own the software forever.',
+    features: [
+      'Creator Pro Features Forever',
+      'Requires BYOK & BYOS',
+      'No Monthly Subscription',
+      'Zero Marginal Cost'
+    ],
+    cta: 'Claim LTD',
+    highlighted: false
+  }
+] as const;
+
+export const INFRASTRUCTURE_ADDONS = [
+  {
+    id: 'managed-storage',
+    name: 'Managed Storage',
+    price: '$5',
+    period: '/mo',
+    description: '50GB of Cloud Storage (Replaces BYOS)'
+  },
+  {
+    id: 'managed-ai',
+    name: 'Managed Intelligence',
+    price: '$10',
+    period: '/mo',
+    description: '500 AI Operations (Replaces BYOK)'
+  },
+  {
+    id: 'team-seat',
+    name: 'Team Workspace',
     price: '$15',
     period: '/mo',
-    description: 'For power users who need sync and advanced AI.',
-    features: [
-      'Everything in Local Core',
-      'Cloud Backup & Sync',
-      'Encrypted Remote Vaults',
-      'Priority Support',
-      'Managed AI Endpoints'
-    ],
-    cta: 'Coming Soon',
-    disabled: true
+    description: '1 Extra Seat + Approval Workflows'
   }
 ] as const;
 
