@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
-import { Menu, MenuItem, Divider, ListItemIcon, ListItemText } from '@mui/material';
+import { Menu, MenuItem, Divider, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { WhatsNewPopover } from '../WhatsNew/WhatsNewPopover';
@@ -53,10 +53,8 @@ export function UserActions({ session, tierName }: { session: Session | null, ti
             
             <MenuItem disabled style={{ opacity: 1 }}>
               <ListItemText 
-                primary={session.user.name} 
-                secondary={tierName || "Free Starter"} 
-                primaryTypographyProps={{ variant: 'subtitle2', color: 'text.primary' }}
-                secondaryTypographyProps={{ variant: 'caption', color: 'primary.main', fontWeight: 'bold' }}
+                primary={<Typography variant="subtitle2" color="text.primary">{session.user.name}</Typography>}
+                secondary={<Typography variant="caption" color="primary.main" sx={{ fontWeight: 'bold' }}>{tierName || "Free Starter"}</Typography>}
               />
             </MenuItem>
             <Divider />

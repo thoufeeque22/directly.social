@@ -93,7 +93,7 @@ webhookRegistry.register('invoice.payment_succeeded', async (event: Stripe.Event
   const invoice = event.data.object as Stripe.Invoice & { subscription?: string };
   if (invoice.subscription) {
     const subscriptionId = invoice.subscription as string;
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId) as any;
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId) as unknown as { current_period_end: number };
     
     await prisma.billingProfile.updateMany({
       where: { providerSubscriptionId: subscriptionId },
@@ -106,7 +106,7 @@ webhookRegistry.register('invoice.payment_succeeded', async (event: Stripe.Event
 });
 
 webhookRegistry.register('customer.subscription.deleted', async (event: Stripe.Event) => {
-  const subscription = event.data.object as any;
+  const subscription = event.data.object as unknown as { id: string };
   await prisma.billingProfile.updateMany({
     where: { providerSubscriptionId: subscription.id },
     data: {
