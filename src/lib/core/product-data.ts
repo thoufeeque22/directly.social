@@ -57,9 +57,10 @@ export const PRICING_TIERS = [
     period: '/mo',
     description: 'For technical creators who want clean branding and low costs.',
     features: [
-      'Everything in Free',
+      'Unlimited Connections & Posts',
       'Permanent Watermark Removal',
-      'Advanced Analytics Dashboard',
+      'Visual Content Calendar',
+      'Analytics (Free Future Update)',
       'Requires BYOK & BYOS'
     ],
     cta: 'Subscribe (BYO)',
@@ -72,10 +73,11 @@ export const PRICING_TIERS = [
     period: '/mo',
     description: 'The "It Just Works" fully managed plan. Focus on your content, we handle the infrastructure.',
     features: [
-      'Creator Pro Software Features',
-      'Includes 50GB Cloud Storage',
-      'Includes 500 AI Operations',
-      'No Technical Setup Required'
+      'Unlimited Connections & Posts',
+      'Bulk Post Upload (CSV)',
+      '50GB Managed Cloud Storage',
+      '500 Managed AI Operations',
+      'First-in-Line Priority Support'
     ],
     cta: 'Get Cloud Pro',
     highlighted: true

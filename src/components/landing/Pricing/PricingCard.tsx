@@ -76,9 +76,20 @@ export const PricingCard = ({ tier }: { tier: PricingTier }) => {
           component={Link}
           href={tier.disabled ? '#' : (isAuthenticated ? '/' : '/login')}
           disabled={tier.disabled}
-          sx={{ py: 1.5, borderRadius: 2, textTransform: 'none', fontWeight: 700 }}
+          sx={{ py: 1.5, borderRadius: 2, textTransform: 'none', fontWeight: 700, mb: 1 }}
         >
           {tier.disabled ? tier.cta : (isAuthenticated ? 'Go to Dashboard' : tier.cta)}
+        </Button>
+        
+        <Button
+          fullWidth
+          variant="text"
+          size="small"
+          component={Link}
+          href="#compare"
+          sx={{ textTransform: 'none', color: 'text.secondary', fontWeight: 600 }}
+        >
+          View all features
         </Button>
       </CardContent>
     </Card>

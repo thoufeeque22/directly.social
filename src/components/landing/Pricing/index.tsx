@@ -86,7 +86,7 @@ export const Pricing = () => {
               <Grid size={{ xs: 12, sm: 6, md: 5 }}>
                 <Paper elevation={0} sx={{ p: 4, borderRadius: 4, border: '1px solid', borderColor: 'divider', height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <Typography variant="h5" sx={{ fontWeight: 800 }}>{lifetimeTier.name}</Typography>
-                  <Stack direction="row" spacing={2} alignItems="baseline" sx={{ my: 2 }}>
+                  <Stack direction="row" spacing={2} sx={{ my: 2, alignItems: 'baseline' }}>
                     <Typography variant="h3" sx={{ fontWeight: 800 }}>{lifetimeTier.price}</Typography>
                     <Typography variant="h5" color="text.disabled" sx={{ textDecoration: 'line-through', fontWeight: 600 }}>$299</Typography>
                   </Stack>
