@@ -3,7 +3,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import styles from './Sidebar.module.css';
@@ -30,7 +29,7 @@ const settingsSubItems = [
   { id: 'support', label: 'Support' },
 ];
 
-const Sidebar = ({ isOpen, onClose, isFreeTier = true, tierName = "Free Starter" }: { isOpen: boolean; onClose: () => void; isFreeTier?: boolean; tierName?: string }) => {
+const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onClose: () => void; isFreeTier?: boolean }) => {
   const { data: session } = useSession();
   const pathname = usePathname();
   const searchParams = useSearchParams();
