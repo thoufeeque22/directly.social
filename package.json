@@ -63,6 +63,7 @@
     "@mui/x-charts": "^9.2.0",
     "@prisma/client": "^6.19.3",
     "@sentry/nextjs": "^10.50.0",
+    "@stripe/stripe-js": "^9.8.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
     "ai": "^6.0.178",
@@ -88,6 +89,7 @@
     "remark-gfm": "^4.0.1",
     "resend": "^6.12.4",
     "server-only": "^0.0.1",
+    "stripe": "^22.3.0",
     "swagger-ui-react": "^5.32.6",
     "tsx": "^4.19.2",
     "zod": "^4.4.3"

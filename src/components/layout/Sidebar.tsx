@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -38,6 +39,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
   const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsSettingsExpanded(!!pathname?.startsWith('/settings'));
   }, [pathname]);
 

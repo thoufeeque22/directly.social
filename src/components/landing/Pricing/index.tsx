@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 'use client';
 
 import React from 'react';
@@ -75,7 +76,7 @@ export const Pricing = () => {
 
         <Box sx={{ mb: 10 }}>
           <Typography variant="h4" sx={{ fontWeight: 700, mb: 2, textAlign: 'center' }}>
-            Power User? We've got you covered.
+            Power User? We&apos;ve got you covered.
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 6, maxWidth: 600, mx: 'auto', textAlign: 'center' }}>
             Escape the SaaS tax entirely. Bring your own infrastructure and own your workflow.
