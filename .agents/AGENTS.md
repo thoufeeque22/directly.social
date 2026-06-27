@@ -68,3 +68,9 @@ To ensure production-level stability and prevent build failures or linting warni
 ### 5. Transient & State Files
 - **Strictly No Transient Files in `.agents/`:** NEVER write `BRIEFING.md`, `progress.md`, `handoff.md`, `ORIGINAL_REQUEST.md`, or any other temporary orchestration state files to `.agents/` or its subdirectories. `.agents/state/ticket-*/` is **obsolete** — do NOT create new directories there.
 - **Target Directory:** All phase artifacts and transient files MUST be written using Agy's native `write_to_file` tool to `<appDataDir>/brain/<conversation-id>/` (artifacts) or `<appDataDir>/brain/<conversation-id>/scratch/` (scratch files). These paths are injected into your context — use them directly.
+
+### 6. Code Refactoring & Cleanup Hazards
+- **Stale Imports/Variables:** When deleting or relocating UI components, always double-check for unused imports (e.g., `Image` from `next/image`) and orphaned props. `@typescript-eslint/no-unused-vars` will fail the build if these are left behind.
+- **Type Casting & "Zero-Any" strictness:** Never lazily cast to `any` to bypass complex type errors (such as third-party SDK namespace collisions like `Stripe.Subscription`). Instead, use precise intersections (e.g., `as unknown as { id: string }`) or exact typing.
+- **MUI Component Typings:** When using MUI components (like `<Typography>`), ensure you are using valid props (e.g., `sx={{ fontWeight: 'bold' }}`). Do not pass invalid HTML/CSS props directly unless explicitly supported, as it will trigger strict TypeScript React typings errors (`IntrinsicAttributes & ...`).
+- **Callback `this` Context:** In test files (like `vi.fn(function(this: unknown) { ... })`), explicitly type `this` instead of letting it default to `any`, which violates the strict config.
