@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
+import NextAuth from 'next-auth';
+import authConfig from '@/auth.config';
+
+const { auth } = NextAuth(authConfig);
 import { shouldBypassRateLimit } from '@/lib/core/bypass-utils';
 import { getLimiterForPath } from '@/lib/core/rate-limit-registry';
 

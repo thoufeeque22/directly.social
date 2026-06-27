@@ -50,7 +50,7 @@ To ensure production-level stability and prevent build failures or linting warni
 - **React 19 / Next.js 15 Forms:** Use `action={...}` passing `FormData` instead of the legacy `onSubmit={...}` paired with `React.FormEvent`.
 - **Client/Server boundaries:** Ensure `'use client'` is only used when hooks (`useState`, `useEffect`) or browser APIs are required.
 - **Hydration & Storage:** Do not use `window` for global variables; use `globalThis` instead. **NEVER** read from `localStorage` or `sessionStorage` in a `useState` initializer or directly in the component body during render. Always use a `useEffect` hook to synchronize state with browser storage after the initial client-side mount to avoid SSR hydration mismatches.
-- **Middleware Naming:** Always name the Next.js middleware file exactly `middleware.ts` inside the `src/` directory (or root). Do not rename it (e.g., to `proxy.ts`) as Next.js will ignore it.
+- **Middleware Naming:** Since Next.js 16, the middleware file convention has changed. Always name the Next.js middleware file exactly `proxy.ts` inside the `src/` directory (or root). Do NOT name it `middleware.ts` (it is deprecated) and ensure the middleware logic is Edge-compatible (e.g., use `auth.config.ts` for NextAuth, do not import Prisma).
 
 
 ### 3. Strict Accessibility (A11y) Compliance
