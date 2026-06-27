@@ -2,11 +2,11 @@
 'use client';
 
 import React from 'react';
-import { Box, Container, Typography, Grid, Paper, Button, Stack, Chip } from '@mui/material';
+import { Box, Container, Typography, Grid, Paper, Button, Stack, Chip, CircularProgress } from '@mui/material';
 import { PricingCard } from './PricingCard';
 import { pricingTiers } from '../data';
 import CheckIcon from '@mui/icons-material/Check';
-import Link from 'next/link';
+import { useCheckout } from './useCheckout';
 
 export const Pricing = () => {
   const coreTiers = pricingTiers.filter(t => ['free-starter', 'creator-pro', 'cloud-pro'].includes(t.id));
@@ -14,6 +14,8 @@ export const Pricing = () => {
   const lifetimeTier = pricingTiers.find(t => t.id === 'lifetime-deal');
   const hackerTier = pricingTiers.find(t => t.id === 'free-hacker');
   const agencyTier = pricingTiers.find(t => t.id === 'agency-pro');
+
+  const { handleCheckout, isLoading } = useCheckout();
 
   return (
     <Box id="pricing" sx={{ py: { xs: 8, md: 12 }, bgcolor: 'background.default' }}>
@@ -56,11 +58,11 @@ export const Pricing = () => {
                 variant="contained" 
                 color="primary" 
                 size="small"
-                component={Link}
-                href="/login"
+                onClick={() => handleCheckout(powerPass.id)}
+                disabled={isLoading === powerPass.id}
                 sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 700, whiteSpace: 'nowrap' }}
               >
-                {powerPass.cta}
+                {isLoading === powerPass.id ? <CircularProgress size={20} color="inherit" /> : powerPass.cta}
               </Button>
             </Paper>
           </Box>
@@ -105,12 +107,12 @@ export const Pricing = () => {
                     variant="outlined" 
                     color="primary" 
                     size="large" 
-                    component={Link}
-                    href="/login"
+                    onClick={() => handleCheckout(lifetimeTier.id)}
+                    disabled={isLoading === lifetimeTier.id}
                     fullWidth
                     sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 700 }}
                   >
-                    {lifetimeTier.cta}
+                    {isLoading === lifetimeTier.id ? <CircularProgress size={24} color="inherit" /> : lifetimeTier.cta}
                   </Button>
                 </Paper>
               </Grid>
@@ -135,12 +137,12 @@ export const Pricing = () => {
                     variant="text" 
                     color="inherit"
                     size="large" 
-                    component={Link}
-                    href="/login"
+                    onClick={() => handleCheckout(hackerTier.id)}
+                    disabled={isLoading === hackerTier.id}
                     fullWidth
                     sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 600, border: '1px dashed', borderColor: 'divider' }}
                   >
-                    {hackerTier.cta}
+                    {isLoading === hackerTier.id ? <CircularProgress size={24} color="inherit" /> : hackerTier.cta}
                   </Button>
                 </Paper>
               </Grid>

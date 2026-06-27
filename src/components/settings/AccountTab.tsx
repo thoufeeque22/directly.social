@@ -30,7 +30,23 @@ export const AccountTab: React.FC = () => {
         </Typography>
       </Box>
 
-      {/* Additional account settings can be added here in the future */}
+      {/* Billing Section */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', mb: 1 }}>
+          Subscription & Billing
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
+          View pricing tiers, upgrade your plan, or manage your subscription.
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          href="/pricing"
+          sx={{ textTransform: 'none', fontWeight: 600 }}
+        >
+          View Plans & Upgrade
+        </Button>
+      </Box>
 
       <Divider sx={{ my: 4 }} />
 
