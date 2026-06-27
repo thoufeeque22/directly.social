@@ -30,7 +30,7 @@ const settingsSubItems = [
   { id: 'support', label: 'Support' },
 ];
 
-const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onClose: () => void; isFreeTier?: boolean }) => {
+const Sidebar = ({ isOpen, onClose, isFreeTier = true, tierName = "Free Starter" }: { isOpen: boolean; onClose: () => void; isFreeTier?: boolean; tierName?: string }) => {
   const { data: session } = useSession();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -139,7 +139,7 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
           )}
           <div className={styles.userInfo}>
             <span className={styles.userName}>{session.user.name}</span>
-            <span className={styles.userRole}>Creator Account</span>
+            <span className={styles.userRole}>{tierName}</span>
           </div>
         </div>
       )}

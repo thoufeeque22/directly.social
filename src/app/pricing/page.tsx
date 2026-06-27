@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { LandingHeader } from '@/components/landing/Header';
 import { LandingFooter } from '@/components/landing/Footer';
 import { Pricing } from '@/components/landing/Pricing';
+import { Suspense } from 'react';
 
 import { auth } from "@/auth";
 
@@ -17,7 +18,9 @@ export default async function PricingPage() {
   if (isAuthenticated) {
     return (
       <div style={{ padding: '2rem 1rem' }}>
-        <Pricing />
+        <Suspense fallback={<div>Loading pricing...</div>}>
+          <Pricing />
+        </Suspense>
       </div>
     );
   }
@@ -26,7 +29,9 @@ export default async function PricingPage() {
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--background)' }}>
       <LandingHeader />
       <main style={{ flexGrow: 1, paddingTop: '80px' }}>
-        <Pricing />
+        <Suspense fallback={<div>Loading pricing...</div>}>
+          <Pricing />
+        </Suspense>
       </main>
       <LandingFooter />
     </div>

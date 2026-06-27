@@ -17,7 +17,7 @@ export const useCheckout = () => {
     if (!tierId) return;
 
     if (tierId.startsWith('free-')) {
-      router.push('/dashboard');
+      router.push('/');
       return;
     }
 
