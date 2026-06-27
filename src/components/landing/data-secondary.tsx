@@ -2,7 +2,7 @@ import React from 'react';
 import { BRAND } from '@/lib/core/brand';
 import { PRICING_TIERS } from '@/lib/core/product-data';
 
-const localTier = PRICING_TIERS.find(t => t.id === 'local-core');
+const hackerTier = PRICING_TIERS.find(t => t.id === 'free-hacker');
 const cloudTier = PRICING_TIERS.find(t => t.id === 'cloud-pro');
 
 export const faqs = [
@@ -12,7 +12,7 @@ export const faqs = [
   },
   {
     question: <>Is <strong>{BRAND.name}</strong> really free?</>,
-    answer: `Yes, our ${localTier?.name || 'Local Core'} tier is free forever. Since the app runs on your machine and uses your own API keys, our overhead is low, and we pass those savings directly to you.`
+    answer: `Yes, our ${hackerTier?.name || 'Free Hacker'} tier is free forever. Since the app runs on your machine and uses your own API keys, our overhead is low, and we pass those savings directly to you.`
   },
   {
     question: "How do I get my own API keys?",
@@ -24,7 +24,7 @@ export const faqs = [
   },
   {
     question: <>Can I use <strong>{BRAND.name}</strong> for team collaboration?</>,
-    answer: `Team features are coming soon to our ${cloudTier?.name || 'Cloud Pro'} tier, which will allow for shared local galleries and synchronized workflows while maintaining our privacy-first architecture.`
+    answer: `Team features are coming soon, which will allow for shared local galleries and synchronized workflows while maintaining our privacy-first architecture.`
   }
 ];
 

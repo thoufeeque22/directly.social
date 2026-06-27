@@ -55,14 +55,45 @@ export const PRICING_TIERS = [
     name: 'Creator Pro',
     price: '$5',
     period: '/mo',
-    description: 'For consistent creators who want clean branding.',
+    description: 'For technical creators who want clean branding and low costs.',
     features: [
       'Everything in Free',
       'Permanent Watermark Removal',
       'Advanced Analytics Dashboard',
-      'Evergreen Post Recycling'
+      'Requires BYOK & BYOS'
     ],
-    cta: 'Subscribe',
+    cta: 'Subscribe (BYO)',
+    highlighted: false
+  },
+  {
+    id: 'cloud-pro',
+    name: 'Cloud Pro',
+    price: '$20',
+    period: '/mo',
+    description: 'The "It Just Works" fully managed plan. Focus on your content, we handle the infrastructure.',
+    features: [
+      'Creator Pro Software Features',
+      'Includes 50GB Cloud Storage',
+      'Includes 500 AI Operations',
+      'No Technical Setup Required'
+    ],
+    cta: 'Get Cloud Pro',
+    highlighted: true
+  },
+  {
+    id: 'agency-pro',
+    name: 'Agency Scale',
+    price: '$99',
+    period: '/mo',
+    description: 'For social media managers and creative agencies managing multiple clients.',
+    features: [
+      'Everything in Cloud Pro',
+      'Includes 5 Team Seats',
+      'Client Approval Workflows',
+      'White-Label Client Dashboard'
+    ],
+    cta: 'Join Waitlist (Coming Soon)',
+    disabled: true,
     highlighted: false
   },
   {
