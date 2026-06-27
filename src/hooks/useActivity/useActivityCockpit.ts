@@ -34,7 +34,7 @@ export function useActivityCockpit({ setPosts, fetchActivity, setActiveResumingI
         return;
       }
       await executePipeline(post, file);
-    } catch (_e: unknown) { 
+    } catch { 
       setTimeout(() => setActiveResumingId(null), 3000); 
     }
   };

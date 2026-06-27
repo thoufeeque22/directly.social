@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import NextAuth from 'next-auth';
 import authConfig from '@/auth.config';
 
@@ -12,7 +12,7 @@ import { getLimiterForPath } from '@/lib/core/rate-limit-registry';
  */
 export default auth(async (req) => {
   const pathname = req.nextUrl.pathname;
-  const nextReq = req as unknown as NextRequest;
+
 
   // 1. Rate Limiting for API routes
   if (pathname.startsWith('/api')) {

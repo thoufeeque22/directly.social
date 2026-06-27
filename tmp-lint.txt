@@ -1,0 +1,82 @@
+
+> directly.social@0.1.0 lint
+> eslint
+
+
+/Users/thoufeeque/projects/directly.social/scripts/state-manager.ts
+   56:14  warning  '_e' is defined but never used  @typescript-eslint/no-unused-vars
+   67:14  warning  '_e' is defined but never used  @typescript-eslint/no-unused-vars
+  101:12  warning  '_e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/analytics.spec.ts
+  98:18  warning  '_e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/global-setup.ts
+  4:28  warning  '_config' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/ticket-538-roles-cleanup.spec.ts
+  48:14  warning  '_e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/scripts/clear-activity.ts
+  40:18  warning  '_e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/app/actions/byok.ts
+  4:19  warning  'decrypt' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/app/api/chat/route.ts
+  1:1  warning  Unused eslint-disable directive (no problems were reported from 'max-lines')
+
+/Users/thoufeeque/projects/directly.social/src/hooks/useAIPreviewCache.ts
+  9:48  warning  '_e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/hooks/useActivity/useActivityCockpit.ts
+  37:14  warning  '_e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/actions/settings.ts
+  8:10  warning  'z' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/api/routes/auxiliary/tiktok.ts
+  2:10  warning  'z' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/billing/google-provider.ts
+   1:10  warning  'google' is defined but never used  @typescript-eslint/no-unused-vars
+  24:14  warning  'e' is defined but never used       @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/byos/downloader.ts
+  3:10  warning  'S3Client' is defined but never used        @typescript-eslint/no-unused-vars
+  3:38  warning  'S3ClientConfig' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/byos/presign-service.ts
+  4:10  warning  'createS3Client' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/core/byos-encrypt.ts
+  36:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/core/credits.ts
+  18:3  warning  'activeProvider' is defined but never used  @typescript-eslint/no-unused-vars
+  19:3  warning  'byokConfigs' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/core/heartbeat-server.ts
+  32:12  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/services/audit-service.ts
+  3:34  warning  'fs' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/video/processor.ts
+  4:8  warning  'fs' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/worker/server-distributor.ts
+  1:8   warning  'path' is defined but never used                   @typescript-eslint/no-unused-vars
+  4:31  warning  'upsertPlatformResult' is defined but never used   @typescript-eslint/no-unused-vars
+  4:53  warning  'recordPlatformFailure' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/worker/worker.ts
+  1:10  warning  'prisma' is defined but never used  @typescript-eslint/no-unused-vars
+  2:13  warning  'Sentry' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/proxy.ts
+  15:9  warning  'nextReq' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 30 problems (0 errors, 30 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+

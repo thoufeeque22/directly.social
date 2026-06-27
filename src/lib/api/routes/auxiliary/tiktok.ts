@@ -1,5 +1,5 @@
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
-import { z } from '@/lib/api/zod-openapi';
+
 import { TikTokProxySchema } from '@/lib/schemas/auxiliary';
 
 export function registerTikTokProxyRoutes(registry: OpenAPIRegistry) {

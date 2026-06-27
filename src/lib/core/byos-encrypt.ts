@@ -33,7 +33,7 @@ export const decryptByos = (text: string): string => {
     let decrypted = decipher.update(encrypted, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
     return decrypted;
-  } catch (error: unknown) {
+  } catch {
     throw new Error('Failed to decrypt BYOS credential');
   }
 };

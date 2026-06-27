@@ -95,7 +95,7 @@ test.describe('Analytics Dashboard', () => {
         // Now try to access admin analytics
         try {
           await page.goto('/admin/analytics', { waitUntil: 'commit' });
-        } catch (_e) {
+        } catch {
           // Ignore fast-redirect network aborts
           console.log('[E2E] Handled fast redirect abort during goto.');
         }

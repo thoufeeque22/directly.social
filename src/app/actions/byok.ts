@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from '@/lib/core/prisma';
-import { encrypt, decrypt } from '@/lib/core/encryption';
+import { encrypt } from '@/lib/core/encryption';
 import { protectedAction, revalidateDashboard } from '@/lib/core/action-utils';
 import { validateCredentials, byokCredentialSchema } from '@/lib/byok/credential-validator';
 import { revalidatePath } from 'next/cache';

@@ -15,8 +15,10 @@ const LOW_CREDIT_THRESHOLD = 10;
  */
 export async function consumeAiCredit(
   userId: string,
-  activeProvider: string,
-  byokConfigs?: Record<string, { apiKey: string; modelId: string }>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _activeProvider: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _byokConfigs?: Record<string, { apiKey: string; modelId: string }>
 ) {
   // Feature temporarily disabled.
   return { success: true };

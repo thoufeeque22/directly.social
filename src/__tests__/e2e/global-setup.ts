@@ -1,7 +1,7 @@
-import { FullConfig } from '@playwright/test';
+
 import { execSync } from 'child_process';
 
-async function globalSetup(_config: FullConfig) {
+async function globalSetup() {
   console.log('🚀 [GLOBAL SETUP] Starting E2E environment preparation...');
 
   try {

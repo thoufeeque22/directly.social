@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/core/prisma";
 import { auditLogger as logger } from "@/lib/core/logger";
-import { existsSync, promises as fs } from "fs";
+import { existsSync } from "fs";
 import path from "path";
 import { calculateChecksum } from "@/lib/utils/checksum";
 
