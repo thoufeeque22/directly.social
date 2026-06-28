@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - **Stripe Customer Portal**: Pro and paid tier users can now manage their subscriptions directly from the settings page.
 - **Freemium Guard**: Free tier users are now restricted to 10 video uploads per month.
+- **App Store Metadata** (#500): Added Apple App Store subtitle ("Schedule & Post Natively") and Google Play short description to `brand.ts`. Created `docs/app-store/metadata.md` ASO reference.
 
 ### Changed
 - **Billing UI**: Refactored the `AccountTab` settings page to extract billing logic into a modular `BillingSection` component.
