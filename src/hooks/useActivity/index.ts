@@ -32,18 +32,20 @@ export function useActivity() {
       description: state.pendingPost.description || null,
       stagedFileId: state.pendingPost.stagedFileId || null,
       isOptimistic: true,
-      platforms: (state.pendingPost.platforms || []).map((p: any, index: number) => ({
+      platforms: (state.pendingPost.platforms || []).map((p: { platform: string; accountId?: string | null; overrideTitle?: string | null; overrideDescription?: string | null; metadata?: { title?: string | null; description?: string | null } | null }, index: number) => ({
         id: `optimistic-${p.platform}-${p.accountId || index}`,
-        activityId: optimisticId,
-        accountId: p.accountId || '',
         platform: p.platform,
+        accountName: null,
+        platformPostId: null,
+        permalink: null,
         status: 'pending',
+        progress: 0,
+        errorMessage: null,
+        accountId: p.accountId || '',
         metadata: {
           title: p.overrideTitle,
           description: p.overrideDescription,
         },
-        error: null,
-        publishedUrl: null
       })),
     };
     return [optimisticPost, ...state.posts.filter(p => p.id !== optimisticId)];

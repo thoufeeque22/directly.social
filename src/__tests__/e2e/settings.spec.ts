@@ -1,4 +1,4 @@
-import { test, expect } from './base-test';;
+import { test, expect, openMobileMenuIfNeeded } from './base-test';
 
 test.describe('Settings Page - Template Management @regression', () => {
   test.beforeEach(async ({ page }) => {
@@ -7,8 +7,9 @@ test.describe('Settings Page - Template Management @regression', () => {
     await page.waitForTimeout(1000);
   });
 
-  test('should display the template manager', async ({ page }) => {
+  test('should display the template manager', async ({ page, isMobile }) => {
     // Navigate to snippets tab
+    await openMobileMenuIfNeeded(page, isMobile);
     const snippetsTab = page.getByRole('link', { name: /snippets/i });
     await snippetsTab.scrollIntoViewIfNeeded();
     await snippetsTab.click();
@@ -20,7 +21,7 @@ test.describe('Settings Page - Template Management @regression', () => {
     await expect(heading.locator('xpath=..')).toBeVisible();
   });
 
-  test('should create a template from the dashboard', async ({ page, workerIndex }) => {
+  test('should create a template from the dashboard', async ({ page, workerIndex, isMobile }) => {
     const templateName = `Test Template ${workerIndex}-${Date.now()}`;
     const templateContent = `Test Content ${workerIndex}-${Date.now()}`;
 
@@ -54,6 +55,7 @@ test.describe('Settings Page - Template Management @regression', () => {
     
     // Now go back to settings to manage it
     await page.goto('/settings', { waitUntil: 'networkidle' });
+    await openMobileMenuIfNeeded(page, isMobile);
     const snippetsTab = page.getByRole('link', { name: /snippets/i });
     await snippetsTab.scrollIntoViewIfNeeded();
     await snippetsTab.click({ force: true });
@@ -62,7 +64,7 @@ test.describe('Settings Page - Template Management @regression', () => {
     await expect(page.getByTestId('template-card').filter({ hasText: templateName }).first()).toBeVisible({ timeout: 30000 });
   });
 
-  test('should edit and delete a template', async ({ page, workerIndex }) => {
+  test('should edit and delete a template', async ({ page, workerIndex, isMobile }) => {
     // We'll create one quickly here to ensure the test is isolated and robust
     const templateName = `ToEdit ${workerIndex}-${Date.now()}`;
     const updatedTemplateName = `${templateName} - updated`;
@@ -94,6 +96,7 @@ test.describe('Settings Page - Template Management @regression', () => {
     await expect(page.getByTestId('snippets-menu')).not.toBeVisible();
 
     await page.goto('/settings', { waitUntil: 'networkidle' });
+    await openMobileMenuIfNeeded(page, isMobile);
     const snippetsTab = page.getByRole('link', { name: /snippets/i });
     await snippetsTab.scrollIntoViewIfNeeded();
     await snippetsTab.click({ force: true });

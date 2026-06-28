@@ -38,6 +38,7 @@ This file centralizes all global constants, patterns, and strings used in the pr
 ## 🛠 Scripts & Commands
 - **SMOKE_TEST_CMD**: `pnpm run test:smoke`
 - **REGRESSION_TEST_CMD**: `pnpm run test:regression`
+- **NATIVE_TEST_CMD**: `pnpm run test:native:full`
 - **LINT_CMD**: `pnpm run lint`
 - **BUILD_CMD**: `pnpm run build`
 - **TYPE_CHECK_CMD**: `npx tsc --noEmit`

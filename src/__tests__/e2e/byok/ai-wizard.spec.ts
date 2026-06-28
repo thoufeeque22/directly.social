@@ -1,4 +1,4 @@
-import { test, expect } from '../base-test';;
+import { test, expect, openMobileMenuIfNeeded } from '../base-test';
 import fs from 'fs';
 
 test.describe('AI BYOK Wizard E2E', () => {
@@ -9,9 +9,10 @@ test.describe('AI BYOK Wizard E2E', () => {
     }
   });
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, isMobile }) => {
     await page.goto('/settings');
     // Click on the AI Providers tab
+    await openMobileMenuIfNeeded(page, isMobile);
     const aiTab = page.getByRole('link', { name: /AI Providers/i });
     await aiTab.scrollIntoViewIfNeeded();
     await aiTab.click();

@@ -1,19 +1,11 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, openMobileMenuIfNeeded } from './base-test';
 
 test.describe('Sign Out Flow @regression', () => {
-  test('should redirect to landing page with success message after sign out', async ({ page }) => {
-    // 1. Login first
-    await page.goto('/login');
-    await page.getByTestId('e2e-email-input').fill('tester-0@directly.social');
-    await page.getByTestId('e2e-password-input').fill(process.env.E2E_TEST_PASSWORD || 'password');
-    
-    // Wait for CSRF token to initialize (as seen in base-test.ts)
-    await page.waitForTimeout(2000);
-    
-    await page.getByTestId('e2e-login-submit').click();
-
-    // 2. Wait for dashboard to load
+  test('should redirect to landing page with success message after sign out', async ({ page, isMobile }) => {
+    // 1. Navigate to dashboard (already logged in via base-test fixtures)
+    await page.goto('/');
     await expect(page).toHaveURL('/');
+    await openMobileMenuIfNeeded(page, isMobile);
     await expect(page.getByTestId('profile-menu-button')).toBeVisible();
 
     // 3. Open user menu
