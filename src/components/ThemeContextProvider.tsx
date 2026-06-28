@@ -16,14 +16,23 @@ export const ThemeContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
     
     if (process.env.NEXT_PUBLIC_E2E !== 'true') {
       (async () => {
-        const { getThemePreference } = await import('@/app/actions/user/settings');
-        const pref = await getThemePreference();
-        const modePref = pref.toLowerCase() as ColorMode;
-        if (modePref && modePref !== mode) {
-          setMode(modePref);
-          localStorage.setItem('theme-preference', modePref);
+        try {
+          const { getThemePreference } = await import('@/app/actions/user/settings');
+          const pref = await getThemePreference();
+          const modePref = pref.toLowerCase() as ColorMode;
+          // Only sync from server if the user is authenticated (i.e. the server
+          // returned a real preference, not the catch-all SYSTEM fallback).
+          // After sign-out the server action fails and falls back to SYSTEM,
+          // which would overwrite the local preference and cause a theme flash.
+          if (localPref && modePref === localPref) return; // already in sync
+          if (modePref && modePref !== (localPref || mode)) {
+            setMode(modePref);
+            localStorage.setItem('theme-preference', modePref);
+          }
+        } catch {
+          // Server action failed (e.g. no session after sign-out) — keep local pref
         }
-      })().catch(() => {});
+      })();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
