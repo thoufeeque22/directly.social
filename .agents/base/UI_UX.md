@@ -19,3 +19,12 @@ Forms exceeding 3 sections or 100 lines of total logic MUST be refactored into a
 3.  **Pure Entry Points:** The main `index.tsx` should only contain the Provider wrap and the high-level layout component.
 4.  **Logic Separation:** Extract business logic, media processing, and validation into specialized custom hooks (prefixed with `use`).
 5.  **Types & Utils:** Keep context types and utility functions in separate `.types.ts` and `.utils.ts` files within the component directory.
+
+## Brand Identity
+
+- **Full Brand Name:** `directly.social` (lowercase, with the dot). This is the primary brand identity and MUST be used in all user-facing UI (headers, footers, meta tags, marketing copy).
+- **NEVER shorten to just "Directly"** — the word is a common English adverb and loses all brand recognition without `.social`.
+- **Two-Word Form:** Use `Directly Social` (title case, no dot) only where punctuation is restricted (e.g., Stripe statement descriptors, app store listings, legal documents).
+- **Social Handles:** `@directlysocial` (no dot, no spaces).
+- **Alt Text / SEO:** Always include the full form `directly.social` in page titles, Open Graph tags, and meta descriptions.
+- **Logo Usage:** The logo must always render the full `directly.social` wordmark. Icon-only variants (e.g., favicons) may use the "d.s" monogram but never the word "Directly" alone.

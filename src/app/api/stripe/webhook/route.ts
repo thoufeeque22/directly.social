@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/client';
-import { webhookRegistry } from '@/lib/billing/subscription-service';
+import { webhookRegistry } from '@/lib/billing/webhook-registry';
 
 export async function POST(req: Request) {
   try {

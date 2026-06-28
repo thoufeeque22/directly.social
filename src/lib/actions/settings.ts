@@ -124,3 +124,20 @@ export async function getByosConfigAction() {
     }
   });
 }
+
+/**
+ * Fetches the user's subscription tier.
+ */
+export async function getSubscriptionTierAction() {
+  return protectedAction(async function fetchTier(userId) {
+    try {
+      const billingProfile = await prisma.billingProfile.findUnique({
+        where: { userId },
+        select: { subscriptionTier: true }
+      });
+      return { success: true, tier: billingProfile?.subscriptionTier || 'FREE_STARTER' };
+    } catch (err: unknown) {
+      return { success: false, error: err instanceof Error ? err.message : String(err) };
+    }
+  });
+}

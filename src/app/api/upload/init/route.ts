@@ -4,6 +4,7 @@ import { z } from "zod";
 import { logger } from "@/lib/core/logger";
 import { UploadInitSchema } from "@/lib/schemas/upload";
 import { CreateActivityParams, activityService } from "@/lib/services/activity-service";
+import { FreemiumGuard } from "@/lib/billing/freemium-guard";
 
 /**
  * Upload Initialization API
@@ -18,6 +19,12 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const validated = UploadInitSchema.parse(body);
     const { title, description, videoFormat, platforms } = validated;
+
+    // Check Freemium Guard quota
+    const quotaCheck = await FreemiumGuard.checkUploadQuota(userId);
+    if (!quotaCheck.allowed) {
+      return NextResponse.json({ error: quotaCheck.reason }, { status: 403 });
+    }
 
     logger.info(`Initializing upload for user ${userId}`, { platforms: platforms.length });
 

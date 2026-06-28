@@ -6,6 +6,7 @@ import { Box, Typography, Button, Divider, Snackbar, Alert } from '@mui/material
 import { GlassCard } from '@/components/ui/GlassCard';
 import { DeleteAccountModal } from './DeleteAccountModal';
 import { useDeleteAccount } from '@/hooks/useDeleteAccount';
+import { BillingSection } from './BillingSection';
 
 export const AccountTab: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,22 +43,7 @@ export const AccountTab: React.FC = () => {
       </Box>
 
       {/* Billing Section */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', mb: 1 }}>
-          Subscription & Billing
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
-          View pricing tiers, upgrade your plan, or manage your subscription.
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          href="/pricing"
-          sx={{ textTransform: 'none', fontWeight: 600 }}
-        >
-          View Plans & Upgrade
-        </Button>
-      </Box>
+      <BillingSection />
 
       <Divider sx={{ my: 4 }} />
 
