@@ -1,0 +1,564 @@
+diff --git a/.agents/base/ORCHESTRATION.md b/.agents/base/ORCHESTRATION.md
+index 694b1cd..d53aa35 100644
+--- a/.agents/base/ORCHESTRATION.md
++++ b/.agents/base/ORCHESTRATION.md
+@@ -91,7 +91,7 @@ Required fields in every Artifact:
+ - **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops. MUST aggressively offload file edits and boilerplate to `cavecrew-builder` or local `ollama_chat`.
+ - **Modularity Enforcement (Strict 100-Line Rule):** The `dev-agent` MUST NOT complete the Development phase or submit its work if any new or modified application files (excluding test files) exceed 100 lines of code. It MUST split new files or refactor/extract logic from any touched legacy files until every affected file is strictly under 100 lines.
+ - **Verdict:** Success -> Audit | Blocked -> Discovery/Manual.
+-- **Exhaustive Verification (Zero Defect Policy):** MUST run `BUILD_CMD`, `LINT_CMD` (e.g., `npm run lint`), and `TYPE_CHECK_CMD` (e.g., `npx tsc --noEmit`) iteratively at the end of every workflow before finishing. **MANDATORY:** The agent MUST NOT transition out of the Development phase until the codebase strictly passes with **0 warnings and 0 errors**. When encountering bulk lint or build errors, the agent MUST use the `triage-lint` skill to fix them in manageable batches rather than overwhelming the context window.
++- **Exhaustive Verification (Zero Defect Policy):** MUST run `BUILD_CMD`, `LINT_CMD` (e.g., `npm run lint`), and `TYPE_CHECK_CMD` (e.g., `npx tsc --noEmit`) iteratively at the end of every workflow before finishing. **Additionally, the agent MUST run the automated E2E tests written during the QA phase (e.g., `npx playwright test`) iteratively to ensure the new features meet the specifications (Test-Driven Development).** **MANDATORY:** The agent MUST NOT transition out of the Development phase until the codebase strictly passes all linting, type checks, and relevant E2E tests with **0 warnings and 0 errors**. When encountering bulk lint or build errors, the agent MUST use the `triage-lint` skill to fix them in manageable batches rather than overwhelming the context window.
+ - **Dependencies Management:** When adding new dependencies to `package.json`, the agent MUST use `pnpm install <package>` to ensure `pnpm-lock.yaml` is correctly updated. NEVER use `npm`.
+ - **Aesthetic Validation:** MUST verify MUI component prop compliance (e.g., using `sx` for styling) to prevent React attribute warnings.
+ 
+diff --git a/docs/manual_tests/ticket-689.md b/docs/manual_tests/ticket-689.md
+new file mode 100644
+index 0000000..1cc5327
+--- /dev/null
++++ b/docs/manual_tests/ticket-689.md
+@@ -0,0 +1,33 @@
++# Manual Test Script for Ticket #689 (Stripe Customer Portal & Freemium Guard)
++
++## Prerequisites
++- A local instance running `npm run dev` or `pnpm dev`.
++- A Stripe sandbox account configured with Webhook secrets, Price IDs, and Public/Secret keys in `.env`.
++- Database seeded with at least one free user and one Pro user.
++
++## Scenario 1: Customer Portal Button for Subscribers
++1. Login to the application as a user who HAS an active Stripe subscription (e.g. `subscriptionTier = PRO`).
++2. Navigate to `/settings` and scroll/click to the **Subscription & Billing** section.
++3. Verify that instead of "View Plans & Upgrade", there is a **"Manage Subscription"** button.
++4. Click **"Manage Subscription"**.
++5. Verify that the application redirects to the Stripe Customer Portal successfully.
++6. Verify you can see your billing details in the portal.
++
++## Scenario 2: Upgrade Prompt for Free Users
++1. Login to the application as a user with a `FREE` subscription tier (or no subscription).
++2. Navigate to `/settings` -> **Subscription & Billing**.
++3. Verify that the **"Manage Subscription"** button is NOT present.
++4. Verify that the **"View Plans & Upgrade"** button IS present.
++
++## Scenario 3: Freemium Guard Blocks Video Uploads (Free Tier)
++1. In the database, manually seed the `PostActivity` table so the free user has exactly `10` video uploads in the current month.
++2. Login to the application as the free user.
++3. Attempt to upload a new video.
++4. Verify that the upload fails and an error message is displayed (e.g. `402 Payment Required` or `403 Forbidden` - "Monthly quota exceeded").
++5. Verify that the application prompts you to upgrade to a higher tier.
++
++## Scenario 4: Freemium Guard Allows Video Uploads (Pro Tier)
++1. In the database, ensure the Pro user has `10` or more video uploads in the current month.
++2. Login as the Pro user.
++3. Attempt to upload a new video.
++4. Verify that the upload succeeds because Pro has unlimited (or a much higher) limit.
+diff --git a/src/__tests__/e2e/ticket-689-stripe-portal.spec.ts b/src/__tests__/e2e/ticket-689-stripe-portal.spec.ts
+new file mode 100644
+index 0000000..4bd1be7
+--- /dev/null
++++ b/src/__tests__/e2e/ticket-689-stripe-portal.spec.ts
+@@ -0,0 +1,35 @@
++import { test, expect } from './base-test';
++
++test.describe('Ticket 689: Stripe Customer Portal', () => {
++  test.use({ authRole: 'tester' });
++
++  test('Free users should see Upgrade button instead of Manage Subscription', async ({ page }) => {
++    await page.goto('/settings?tab=account');
++    const accountTab = page.locator('text=Subscription & Billing').first();
++    await expect(accountTab).toBeVisible();
++
++    const manageSubBtn = page.locator('text=Manage Subscription');
++    await expect(manageSubBtn).toHaveCount(0);
++    
++    const upgradeBtn = page.locator('text=View Plans & Upgrade').first();
++    await expect(upgradeBtn).toBeVisible();
++  });
++});
++
++import { execSync } from 'child_process';
++
++test.describe('Ticket 689: Stripe Customer Portal (Admin/Pro)', () => {
++  test.use({ authRole: 'admin' });
++
++  test('Admin users (mocked as Pro) should see Manage Subscription button', async ({ page, adminEmail }) => {
++    execSync(`npx tsx src/__tests__/scripts/seed-billing-pro.ts ${adminEmail}`, { stdio: 'inherit' });
++
++    await page.goto('/settings?tab=account');
++    
++    const accountTab = page.locator('text=Subscription & Billing').first();
++    await expect(accountTab).toBeVisible();
++
++    const manageSubBtn = page.locator('text=Manage Subscription').first();
++    await expect(manageSubBtn).toBeVisible();
++  });
++});
+diff --git a/src/__tests__/scripts/seed-billing-pro.ts b/src/__tests__/scripts/seed-billing-pro.ts
+new file mode 100644
+index 0000000..52c9731
+--- /dev/null
++++ b/src/__tests__/scripts/seed-billing-pro.ts
+@@ -0,0 +1,30 @@
++import { PrismaClient } from '@prisma/client';
++import { SubscriptionTier } from '@prisma/client';
++
++const prisma = new PrismaClient();
++
++async function main() {
++  const targetEmail = process.argv[2];
++  if (!targetEmail) {
++    console.error('Email required');
++    process.exit(1);
++  }
++
++  const user = await prisma.user.findUnique({ where: { email: targetEmail } });
++  if (user) {
++    await prisma.billingProfile.upsert({
++      where: { userId: user.id },
++      update: { subscriptionTier: SubscriptionTier.CREATOR_PRO },
++      create: { 
++        userId: user.id, 
++        subscriptionTier: SubscriptionTier.CREATOR_PRO,
++        providerCustomerId: 'mock-cus-' + user.id
++      }
++    });
++    console.log(`Successfully seeded CREATOR_PRO for ${targetEmail}`);
++  } else {
++    console.log(`User ${targetEmail} not found`);
++  }
++}
++
++main().finally(() => prisma.$disconnect());
+diff --git a/src/app/api/stripe/portal/route.ts b/src/app/api/stripe/portal/route.ts
+new file mode 100644
+index 0000000..8e39722
+--- /dev/null
++++ b/src/app/api/stripe/portal/route.ts
+@@ -0,0 +1,20 @@
++import { NextResponse } from 'next/server';
++import { auth } from '@/auth';
++import { SubscriptionService } from '@/lib/billing/subscription-service';
++
++export async function POST() {
++  try {
++    const session = await auth();
++    if (!session?.user?.id) {
++      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
++    }
++
++    const url = await SubscriptionService.createCustomerPortalSession(session.user.id);
++
++    return NextResponse.json({ url });
++  } catch (error: unknown) {
++    const message = error instanceof Error ? error.message : String(error);
++    console.error('[STRIPE_PORTAL]', message);
++    return NextResponse.json({ error: 'Internal Error', message }, { status: 500 });
++  }
++}
+diff --git a/src/app/api/stripe/webhook/route.ts b/src/app/api/stripe/webhook/route.ts
+index 52906ad..03593f2 100644
+--- a/src/app/api/stripe/webhook/route.ts
++++ b/src/app/api/stripe/webhook/route.ts
+@@ -1,6 +1,6 @@
+ import { NextResponse } from 'next/server';
+ import { stripe } from '@/lib/stripe/client';
+-import { webhookRegistry } from '@/lib/billing/subscription-service';
++import { webhookRegistry } from '@/lib/billing/webhook-registry';
+ 
+ export async function POST(req: Request) {
+   try {
+diff --git a/src/app/api/upload/init/route.ts b/src/app/api/upload/init/route.ts
+index 979259e..0ca6ba3 100644
+--- a/src/app/api/upload/init/route.ts
++++ b/src/app/api/upload/init/route.ts
+@@ -4,6 +4,7 @@ import { z } from "zod";
+ import { logger } from "@/lib/core/logger";
+ import { UploadInitSchema } from "@/lib/schemas/upload";
+ import { CreateActivityParams, activityService } from "@/lib/services/activity-service";
++import { FreemiumGuard } from "@/lib/billing/freemium-guard";
+ 
+ /**
+  * Upload Initialization API
+@@ -19,6 +20,12 @@ export async function POST(req: NextRequest) {
+     const validated = UploadInitSchema.parse(body);
+     const { title, description, videoFormat, platforms } = validated;
+ 
++    // Check Freemium Guard quota
++    const quotaCheck = await FreemiumGuard.checkUploadQuota(userId);
++    if (!quotaCheck.allowed) {
++      return NextResponse.json({ error: quotaCheck.reason }, { status: 403 });
++    }
++
+     logger.info(`Initializing upload for user ${userId}`, { platforms: platforms.length });
+ 
+     const activity = await activityService.initializeActivity({
+diff --git a/src/components/settings/AccountTab.tsx b/src/components/settings/AccountTab.tsx
+index 4b228e9..53fa484 100644
+--- a/src/components/settings/AccountTab.tsx
++++ b/src/components/settings/AccountTab.tsx
+@@ -6,6 +6,7 @@ import { Box, Typography, Button, Divider, Snackbar, Alert } from '@mui/material
+ import { GlassCard } from '@/components/ui/GlassCard';
+ import { DeleteAccountModal } from './DeleteAccountModal';
+ import { useDeleteAccount } from '@/hooks/useDeleteAccount';
++import { BillingSection } from './BillingSection';
+ 
+ export const AccountTab: React.FC = () => {
+   const [isModalOpen, setIsModalOpen] = useState(false);
+@@ -42,22 +43,7 @@ export const AccountTab: React.FC = () => {
+       </Box>
+ 
+       {/* Billing Section */}
+-      <Box sx={{ mb: 4 }}>
+-        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', mb: 1 }}>
+-          Subscription & Billing
+-        </Typography>
+-        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
+-          View pricing tiers, upgrade your plan, or manage your subscription.
+-        </Typography>
+-        <Button
+-          variant="contained"
+-          color="primary"
+-          href="/pricing"
+-          sx={{ textTransform: 'none', fontWeight: 600 }}
+-        >
+-          View Plans & Upgrade
+-        </Button>
+-      </Box>
++      <BillingSection />
+ 
+       <Divider sx={{ my: 4 }} />
+ 
+diff --git a/src/components/settings/BillingSection.tsx b/src/components/settings/BillingSection.tsx
+new file mode 100644
+index 0000000..2d35e09
+--- /dev/null
++++ b/src/components/settings/BillingSection.tsx
+@@ -0,0 +1,76 @@
++'use client';
++
++import React, { useState, useEffect } from 'react';
++import { Box, Typography, Button, Snackbar, Alert } from '@mui/material';
++import { getSubscriptionTierAction } from '@/lib/actions/settings';
++
++export const BillingSection: React.FC = () => {
++  const [tier, setTier] = useState<string>('FREE_STARTER');
++  const [isManaging, setIsManaging] = useState(false);
++  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
++
++  useEffect(() => {
++    async function loadTier() {
++      const result = await getSubscriptionTierAction();
++      if (result.success && result.tier) {
++        setTier(result.tier);
++      }
++    }
++    loadTier();
++  }, []);
++
++  const handleManage = async () => {
++    setIsManaging(true);
++    try {
++      const res = await fetch('/api/stripe/portal', { method: 'POST' });
++      const data = await res.json();
++      if (data.url) {
++        window.location.href = data.url;
++      } else {
++        setSnackbar({ open: true, message: 'Could not open billing portal', severity: 'error' });
++      }
++    } catch {
++      setSnackbar({ open: true, message: 'Could not open billing portal', severity: 'error' });
++    } finally {
++      setIsManaging(false);
++    }
++  };
++
++  return (
++    <Box sx={{ mb: 4 }}>
++      <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', mb: 1 }}>
++        Subscription & Billing
++      </Typography>
++      <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
++        View pricing tiers, upgrade your plan, or manage your subscription.
++      </Typography>
++      
++      {tier === 'FREE_STARTER' || tier === 'FREE_HACKER' ? (
++        <Button
++          variant="contained"
++          color="primary"
++          href="/pricing"
++          sx={{ textTransform: 'none', fontWeight: 600 }}
++        >
++          View Plans & Upgrade
++        </Button>
++      ) : (
++        <Button
++          variant="contained"
++          color="secondary"
++          disabled={isManaging}
++          onClick={handleManage}
++          sx={{ textTransform: 'none', fontWeight: 600 }}
++        >
++          {isManaging ? 'Loading...' : 'Manage Subscription'}
++        </Button>
++      )}
++
++      <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
++        <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity} sx={{ width: '100%' }}>
++          {snackbar.message}
++        </Alert>
++      </Snackbar>
++    </Box>
++  );
++};
+diff --git a/src/lib/actions/settings.ts b/src/lib/actions/settings.ts
+index 15ed144..5f28d2f 100644
+--- a/src/lib/actions/settings.ts
++++ b/src/lib/actions/settings.ts
+@@ -124,3 +124,20 @@ export async function getByosConfigAction() {
+     }
+   });
+ }
++
++/**
++ * Fetches the user's subscription tier.
++ */
++export async function getSubscriptionTierAction() {
++  return protectedAction(async function fetchTier(userId) {
++    try {
++      const billingProfile = await prisma.billingProfile.findUnique({
++        where: { userId },
++        select: { subscriptionTier: true }
++      });
++      return { success: true, tier: billingProfile?.subscriptionTier || 'FREE_STARTER' };
++    } catch (err: unknown) {
++      return { success: false, error: err instanceof Error ? err.message : String(err) };
++    }
++  });
++}
+diff --git a/src/lib/billing/freemium-guard.ts b/src/lib/billing/freemium-guard.ts
+new file mode 100644
+index 0000000..58a76d9
+--- /dev/null
++++ b/src/lib/billing/freemium-guard.ts
+@@ -0,0 +1,45 @@
++import { prisma } from '@/lib/core/prisma';
++import { SubscriptionTier } from '@prisma/client';
++
++export class FreemiumGuard {
++  static async checkUploadQuota(userId: string) {
++    const billingProfile = await prisma.billingProfile.findUnique({
++      where: { userId },
++    });
++
++    const tier = billingProfile?.subscriptionTier || SubscriptionTier.FREE_STARTER;
++
++    // Pro and Agency tiers have no or higher limits (assumed unlimited here)
++    if (
++      tier === SubscriptionTier.CREATOR_PRO ||
++      tier === SubscriptionTier.CLOUD_PRO ||
++      tier === SubscriptionTier.AGENCY_PRO ||
++      tier === SubscriptionTier.LIFETIME_DEAL
++    ) {
++      return { allowed: true };
++    }
++
++    // Free tier logic: cap at 10 video uploads per month
++    const currentMonthStart = new Date();
++    currentMonthStart.setDate(1);
++    currentMonthStart.setHours(0, 0, 0, 0);
++
++    const uploadsThisMonth = await prisma.postActivity.count({
++      where: {
++        userId,
++        createdAt: {
++          gte: currentMonthStart,
++        },
++      },
++    });
++
++    if (uploadsThisMonth >= 10) {
++      return {
++        allowed: false,
++        reason: 'Monthly upload quota exceeded (10 videos on free tier)',
++      };
++    }
++
++    return { allowed: true };
++  }
++}
+diff --git a/src/lib/billing/subscription-service.ts b/src/lib/billing/subscription-service.ts
+index ea5a727..84cc858 100644
+--- a/src/lib/billing/subscription-service.ts
++++ b/src/lib/billing/subscription-service.ts
+@@ -1,7 +1,6 @@
+ import { prisma } from '@/lib/core/prisma';
+ import { stripe } from '@/lib/stripe/client';
+-import type Stripe from 'stripe';
+-import { SubscriptionTier, SubscriptionStatus } from '@prisma/client';
++
+ 
+ export class SubscriptionService {
+   static async createCheckoutSession(userId: string, userEmail: string, tierId: string) {
+@@ -44,73 +43,23 @@ export class SubscriptionService {
+ 
+     return session.url;
+   }
+-}
+-
+-export class WebhookStrategyRegistry {
+-  private strategies: Record<string, (event: Stripe.Event) => Promise<void>> = {};
+ 
+-  register(eventType: string, handler: (event: Stripe.Event) => Promise<void>) {
+-    this.strategies[eventType] = handler;
+-  }
++  static async createCustomerPortalSession(userId: string) {
++    const billingProfile = await prisma.billingProfile.findUnique({
++      where: { userId },
++    });
+ 
+-  async handle(event: Stripe.Event) {
+-    const handler = this.strategies[event.type];
+-    if (handler) {
+-      await handler(event);
+-    } else {
+-      console.log(`[STRIPE_WEBHOOK] Unhandled event type: ${event.type}`);
++    if (!billingProfile?.providerCustomerId) {
++      throw new Error('No billing profile found');
+     }
+-  }
+-}
+-
+-export const webhookRegistry = new WebhookStrategyRegistry();
+ 
+-webhookRegistry.register('checkout.session.completed', async (event: Stripe.Event) => {
+-  const session = event.data.object as Stripe.Checkout.Session;
+-  if (session.metadata?.userId) {
+-    const userId = session.metadata.userId;
+-    const tierId = session.metadata.tierId;
+-    const subscriptionId = session.subscription as string | null;
+-
+-    let tierEnum: SubscriptionTier = SubscriptionTier.FREE_STARTER;
+-    if (tierId === 'creator-pro') tierEnum = SubscriptionTier.CREATOR_PRO;
+-    if (tierId === 'cloud-pro') tierEnum = SubscriptionTier.CLOUD_PRO;
+-    if (tierId === 'power-pass') tierEnum = SubscriptionTier.POWER_PASS;
+-    if (tierId === 'lifetime-deal') tierEnum = SubscriptionTier.LIFETIME_DEAL;
+-
+-    await prisma.billingProfile.update({
+-      where: { userId },
+-      data: {
+-        providerSubscriptionId: subscriptionId,
+-        subscriptionTier: tierEnum,
+-        subscriptionStatus: SubscriptionStatus.ACTIVE,
+-      },
++    const session = await stripe.billingPortal.sessions.create({
++      customer: billingProfile.providerCustomerId,
++      return_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/settings?tab=account`,
+     });
+-  }
+-});
+ 
+-webhookRegistry.register('invoice.payment_succeeded', async (event: Stripe.Event) => {
+-  const invoice = event.data.object as Stripe.Invoice & { subscription?: string };
+-  if (invoice.subscription) {
+-    const subscriptionId = invoice.subscription as string;
+-    const subscription = await stripe.subscriptions.retrieve(subscriptionId) as unknown as { current_period_end: number };
+-    
+-    await prisma.billingProfile.updateMany({
+-      where: { providerSubscriptionId: subscriptionId },
+-      data: {
+-        subscriptionStatus: SubscriptionStatus.ACTIVE,
+-        subscriptionPeriodEnd: new Date(subscription.current_period_end * 1000),
+-      },
+-    });
++    return session.url;
+   }
+-});
++}
++
+ 
+-webhookRegistry.register('customer.subscription.deleted', async (event: Stripe.Event) => {
+-  const subscription = event.data.object as unknown as { id: string };
+-  await prisma.billingProfile.updateMany({
+-    where: { providerSubscriptionId: subscription.id },
+-    data: {
+-      subscriptionStatus: SubscriptionStatus.CANCELED,
+-    },
+-  });
+-});
+diff --git a/src/lib/billing/webhook-registry.ts b/src/lib/billing/webhook-registry.ts
+new file mode 100644
+index 0000000..39ce7bb
+--- /dev/null
++++ b/src/lib/billing/webhook-registry.ts
+@@ -0,0 +1,73 @@
++import { prisma } from '@/lib/core/prisma';
++import { stripe } from '@/lib/stripe/client';
++import type Stripe from 'stripe';
++import { SubscriptionTier, SubscriptionStatus } from '@prisma/client';
++
++export class WebhookStrategyRegistry {
++  private strategies: Record<string, (event: Stripe.Event) => Promise<void>> = {};
++
++  register(eventType: string, handler: (event: Stripe.Event) => Promise<void>) {
++    this.strategies[eventType] = handler;
++  }
++
++  async handle(event: Stripe.Event) {
++    const handler = this.strategies[event.type];
++    if (handler) {
++      await handler(event);
++    } else {
++      console.log(`[STRIPE_WEBHOOK] Unhandled event type: ${event.type}`);
++    }
++  }
++}
++
++export const webhookRegistry = new WebhookStrategyRegistry();
++
++webhookRegistry.register('checkout.session.completed', async (event: Stripe.Event) => {
++  const session = event.data.object as Stripe.Checkout.Session;
++  if (session.metadata?.userId) {
++    const userId = session.metadata.userId;
++    const tierId = session.metadata.tierId;
++    const subscriptionId = session.subscription as string | null;
++
++    let tierEnum: SubscriptionTier = SubscriptionTier.FREE_STARTER;
++    if (tierId === 'creator-pro') tierEnum = SubscriptionTier.CREATOR_PRO;
++    if (tierId === 'cloud-pro') tierEnum = SubscriptionTier.CLOUD_PRO;
++    if (tierId === 'power-pass') tierEnum = SubscriptionTier.POWER_PASS;
++    if (tierId === 'lifetime-deal') tierEnum = SubscriptionTier.LIFETIME_DEAL;
++
++    await prisma.billingProfile.update({
++      where: { userId },
++      data: {
++        providerSubscriptionId: subscriptionId,
++        subscriptionTier: tierEnum,
++        subscriptionStatus: SubscriptionStatus.ACTIVE,
++      },
++    });
++  }
++});
++
++webhookRegistry.register('invoice.payment_succeeded', async (event: Stripe.Event) => {
++  const invoice = event.data.object as Stripe.Invoice & { subscription?: string };
++  if (invoice.subscription) {
++    const subscriptionId = invoice.subscription as string;
++    const subscription = await stripe.subscriptions.retrieve(subscriptionId) as unknown as { current_period_end: number };
++    
++    await prisma.billingProfile.updateMany({
++      where: { providerSubscriptionId: subscriptionId },
++      data: {
++        subscriptionStatus: SubscriptionStatus.ACTIVE,
++        subscriptionPeriodEnd: new Date(subscription.current_period_end * 1000),
++      },
++    });
++  }
++});
++
++webhookRegistry.register('customer.subscription.deleted', async (event: Stripe.Event) => {
++  const subscription = event.data.object as unknown as { id: string };
++  await prisma.billingProfile.updateMany({
++    where: { providerSubscriptionId: subscription.id },
++    data: {
++      subscriptionStatus: SubscriptionStatus.CANCELED,
++    },
++  });
++});
