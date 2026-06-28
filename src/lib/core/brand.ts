@@ -15,9 +15,11 @@ export const BRAND = {
   url: LAUNCH_URL,
   appStore: {
     apple: {
+      title: 'Directly Social: Post Planner',
       subtitle: 'Schedule & Post Natively',
     },
     google: {
+      title: 'Directly Social: Post Planner',
       shortDescription:
         'Schedule and publish to social media platforms — with your own keys and storage.',
     },
