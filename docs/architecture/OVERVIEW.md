@@ -2,7 +2,7 @@
 
 ## System Overview
 
-Directly is a multi-platform social media management application that allows users to schedule and distribute video content (Shorts/Reels/TikToks) across various platforms simultaneously.
+Directly is a multi-platform social media management application that allows users to schedule and distribute both short-form (Shorts/Reels/TikToks) and long-form video content across various platforms simultaneously.
 
 ## Tech Stack
 

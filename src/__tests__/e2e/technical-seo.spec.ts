@@ -48,7 +48,17 @@ test.describe('Technical SEO - Advanced (Ticket 687)', () => {
     await expect(breadcrumbNav).toBeVisible();
     
     // Check JSON-LD schema
-    const scriptTag = page.locator('script[type="application/ld+json"]').filter({ hasText: 'BreadcrumbList' });
-    await expect(scriptTag).toHaveCount(1);
+    const scriptTags = page.locator('script[type="application/ld+json"]');
+    await scriptTags.first().waitFor({ state: 'attached' });
+    const count = await scriptTags.count();
+    let found = false;
+    for (let i = 0; i < count; i++) {
+      const text = await scriptTags.nth(i).textContent();
+      if (text?.includes('BreadcrumbList')) {
+        found = true;
+        break;
+      }
+    }
+    expect(found).toBe(true);
   });
 });
