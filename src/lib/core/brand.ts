@@ -13,6 +13,15 @@ export const BRAND = {
   shortName: 'Directly',
   tagline: 'The Native Social Client',
   url: LAUNCH_URL,
+  appStore: {
+    apple: {
+      subtitle: 'Schedule & Post Natively',
+    },
+    google: {
+      shortDescription:
+        'Schedule and publish to social media platforms — with your own keys and storage.',
+    },
+  },
   social: {
     github: 'https://github.com/thoufeeque22/directly.social',
     twitter: 'https://x.com/directlysocial', // Placeholder
