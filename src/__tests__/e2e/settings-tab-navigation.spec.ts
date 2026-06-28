@@ -15,7 +15,7 @@ test.describe('Settings Page Tab Interface', () => {
     ];
     
     for (const tab of tabMapping) {
-      const tabElement = page.getByRole('tab', { name: tab.label, exact: true });
+      const tabElement = page.getByRole('link', { name: tab.label, exact: true });
       await tabElement.scrollIntoViewIfNeeded();
       await tabElement.click();
       
@@ -35,13 +35,13 @@ test.describe('Settings Page Tab Interface', () => {
 
   test('should have all elements visible in the unified platform view', async ({ page }) => {
     // AI Providers tab
-    const aiTab = page.getByRole('tab', { name: /ai providers/i });
+    const aiTab = page.getByRole('link', { name: /ai providers/i });
     await aiTab.scrollIntoViewIfNeeded();
     await aiTab.click();
     await expect(page.getByRole('heading', { name: /ai providers/i })).toBeVisible({ timeout: 10000 });
     
     // Switch back to Destinations
-    const destTab = page.getByRole('tab', { name: /destinations/i });
+    const destTab = page.getByRole('link', { name: /destinations/i });
     await destTab.scrollIntoViewIfNeeded();
     await destTab.click();
     

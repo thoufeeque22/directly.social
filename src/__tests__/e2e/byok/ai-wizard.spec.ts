@@ -12,7 +12,7 @@ test.describe('AI BYOK Wizard E2E', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/settings');
     // Click on the AI Providers tab
-    const aiTab = page.getByRole('tab', { name: /AI Providers/i });
+    const aiTab = page.getByRole('link', { name: /AI Providers/i });
     await aiTab.scrollIntoViewIfNeeded();
     await aiTab.click();
     await page.waitForURL('**/settings?tab=ai', { timeout: 10000 });

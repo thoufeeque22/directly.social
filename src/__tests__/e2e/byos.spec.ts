@@ -11,7 +11,7 @@ test.describe('BYOS - Bring Your Own Storage @regression', () => {
     await page.waitForLoadState('networkidle');
 
     // Switch to Storage Tab
-    await page.getByRole('tab', { name: /Storage/i }).click();
+    await page.getByRole('link', { name: /Storage/i }).click();
     await page.waitForTimeout(1000); // Wait for tab transition and hydration
 
     // Step 0: Select Provider
@@ -44,7 +44,7 @@ test.describe('BYOS - Bring Your Own Storage @regression', () => {
 
   test('should handle invalid credentials gracefully', async ({ page }) => {
     // For negative path, we use the real server action with invalid-id bypass
-    await page.getByRole('tab', { name: /Storage/i }).click();
+    await page.getByRole('link', { name: /Storage/i }).click();
     await page.waitForTimeout(1000); // Wait for tab transition and hydration
 
     await page.getByRole('heading', { name: 'AWS S3 Compatible' }).click();

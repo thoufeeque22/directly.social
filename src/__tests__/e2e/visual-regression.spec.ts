@@ -22,8 +22,8 @@ test.describe('Structural & Visual Audit @visual', () => {
     // 1. Structural Assertions
     await expect(page.locator('aside').first()).toBeVisible();
     await expect(page.getByText('Directly').first()).toBeVisible();
-    await expect(page.getByRole('tab', { name: /destinations/i })).toBeVisible();
-    await expect(page.getByRole('tab', { name: /ai providers/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /destinations/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /ai providers/i })).toBeVisible();
 
     // 2. Save artifact
     await page.locator('.ptr-container').screenshot({ path: 'verification/audit-settings-page.png' });

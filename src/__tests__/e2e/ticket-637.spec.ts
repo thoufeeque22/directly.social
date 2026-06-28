@@ -14,7 +14,7 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
 
     // 2. Select platforms
     const youtubeButton = page.getByRole('button', { name: /YouTube:/i }).first();
-    const tiktokButton = page.getByRole('button', { name: /Instagram:/i }).first();
+    const tiktokButton = page.getByRole('button', { name: /Tiktok:/i }).first();
     
     // Wait for buttons to be present
     await expect(youtubeButton).toBeVisible();
@@ -34,8 +34,8 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     // 4. Verify fields appear
     const youtubeTitle = page.locator('input[name="title_youtube"]');
     const youtubeDesc = page.locator('textarea[name="description_youtube"]');
-    const tiktokTitle = page.locator('input[name="title_instagram"]');
-    const tiktokDesc = page.locator('textarea[name="description_instagram"]');
+    const tiktokTitle = page.locator('input[name="title_tiktok"]');
+    const tiktokDesc = page.locator('textarea[name="description_tiktok"]');
 
     await expect(youtubeTitle).toBeVisible();
     await expect(youtubeDesc).toBeVisible();
@@ -97,13 +97,13 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Manual', exact: true }).click();
     const ytBtn = page.getByRole('button', { name: /YouTube:/i }).first();
-    const igBtn = page.getByRole('button', { name: /Instagram:/i }).first();
+    const igBtn = page.getByRole('button', { name: /Tiktok:/i }).first();
     if (await ytBtn.getAttribute('aria-pressed') !== 'true') await ytBtn.click();
     if (await igBtn.getAttribute('aria-pressed') !== 'true') await igBtn.click();
     await page.getByLabel('Separate titles/descriptions per platform').check();
     
     await page.locator('input[name="title_youtube"]').fill('Title A');
-    await page.locator('input[name="title_instagram"]').fill('Title B');
+    await page.locator('input[name="title_tiktok"]').fill('Title B');
     
     // Re-upload and submit
     await page.locator('input[type="file"]').setInputFiles({
