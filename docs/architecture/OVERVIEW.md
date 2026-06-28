@@ -15,7 +15,7 @@ Directly is a multi-platform social media management application that allows use
 - **Video Processing:** [FFmpeg](https://ffmpeg.org/) (via `fluent-ffmpeg`)
 - **Mobile Wrapper:** [Capacitor](https://capacitorjs.com/) (iOS & Android)
 - **Monitoring:** [Sentry](https://sentry.io/)
-- **Styling:** Vanilla CSS, Framer Motion, Lucide React
+- **Styling:** Material UI (MUI), Framer Motion, Lucide React
 
 ## Core Architecture Patterns
 

@@ -1,0 +1,100 @@
+    >  98 |     await snippetsTab.scrollIntoViewIfNeeded();
+          |                       ^
+       99 |     await snippetsTab.click({ force: true });
+      100 |     await page.waitForURL('**/settings?tab=snippets', { timeout: 30000 });
+      101 |     
+        at /Users/thoufeeque/projects/directly.social/src/__tests__/e2e/settings.spec.ts:98:23
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/settings-Settings-Page---T-dd23b--edit-and-delete-a-template-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/settings-Settings-Page---T-dd23b--edit-and-delete-a-template-Mobile-Safari/error-context.md
+
+
+  31) [Mobile Safari] › src/__tests__/e2e/ticket-637.spec.ts:10:7 › Ticket-637: UI Audit & Metadata Refactor @regression › should verify platform-specific metadata capture, clear, and undo 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.check: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Separate titles/descriptions per platform')
+
+
+      30 |     // 3. Toggle Platform Specific Metadata
+      31 |     const specificToggle = page.getByLabel('Separate titles/descriptions per platform');
+    > 32 |     await specificToggle.check();
+         |                          ^
+      33 |
+      34 |     // 4. Verify fields appear
+      35 |     const youtubeTitle = page.locator('input[name="title_youtube"]');
+        at /Users/thoufeeque/projects/directly.social/src/__tests__/e2e/ticket-637.spec.ts:32:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/ticket-637-Ticket-637-UI-A-9337e-data-capture-clear-and-undo-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/ticket-637-Ticket-637-UI-A-9337e-data-capture-clear-and-undo-Mobile-Safari/error-context.md
+
+
+  32) [Mobile Safari] › src/__tests__/e2e/ticket-637.spec.ts:65:7 › Ticket-637: UI Audit & Metadata Refactor @regression › should verify Activity Hub title promotion and Multi-Title badge 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.check: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Separate titles/descriptions per platform')
+
+
+      74 |     
+      75 |     // 3. Set platform specific title, keep global empty
+    > 76 |     await page.getByLabel('Separate titles/descriptions per platform').check();
+         |                                                                        ^
+      77 |     await page.locator('input[name="title_youtube"]').fill('Promoted YouTube Title');
+      78 |     
+      79 |     // 4. Select a file
+        at /Users/thoufeeque/projects/directly.social/src/__tests__/e2e/ticket-637.spec.ts:76:72
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/ticket-637-Ticket-637-UI-A-7f37c-otion-and-Multi-Title-badge-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/ticket-637-Ticket-637-UI-A-7f37c-otion-and-Multi-Title-badge-Mobile-Safari/error-context.md
+
+
+  32 failed
+    [chromium] › src/__tests__/e2e/byos.spec.ts:10:7 › BYOS - Bring Your Own Storage @regression › should complete the full BYOS configuration stepper successfully 
+    [chromium] › src/__tests__/e2e/byos.spec.ts:45:7 › BYOS - Bring Your Own Storage @regression › should handle invalid credentials gracefully 
+    [chromium] › src/__tests__/e2e/calendar-planner.spec.ts:25:7 › Calendar Content Planner Refinements @regression › View Toggling - Month and Week views 
+    [chromium] › src/__tests__/e2e/global-search.spec.ts:4:7 › Global Search @regression › should filter activity items by search query 
+    [chromium] › src/__tests__/e2e/global-search.spec.ts:38:7 › Global Search @regression › should filter media gallery items by search query 
+    [chromium] › src/__tests__/e2e/settings.spec.ts:10:7 › Settings Page - Template Management @regression › should display the template manager 
+    [chromium] › src/__tests__/e2e/settings.spec.ts:23:7 › Settings Page - Template Management @regression › should create a template from the dashboard 
+    [chromium] › src/__tests__/e2e/settings.spec.ts:65:7 › Settings Page - Template Management @regression › should edit and delete a template 
+    [chromium] › src/__tests__/e2e/sign-out-redirect.spec.ts:4:7 › Sign Out Flow @regression › should redirect to landing page with success message after sign out 
+    [chromium] › src/__tests__/e2e/ticket-637.spec.ts:10:7 › Ticket-637: UI Audit & Metadata Refactor @regression › should verify platform-specific metadata capture, clear, and undo 
+    [chromium] › src/__tests__/e2e/ticket-637.spec.ts:65:7 › Ticket-637: UI Audit & Metadata Refactor @regression › should verify Activity Hub title promotion and Multi-Title badge 
+    [Mobile Chrome] › src/__tests__/e2e/activity.spec.ts:90:7 › Activity Domain Modularization Verification @regression › should handle "Load More" for pagination 
+    [Mobile Chrome] › src/__tests__/e2e/byos.spec.ts:10:7 › BYOS - Bring Your Own Storage @regression › should complete the full BYOS configuration stepper successfully 
+    [Mobile Chrome] › src/__tests__/e2e/byos.spec.ts:45:7 › BYOS - Bring Your Own Storage @regression › should handle invalid credentials gracefully 
+    [Mobile Chrome] › src/__tests__/e2e/calendar-planner.spec.ts:25:7 › Calendar Content Planner Refinements @regression › View Toggling - Month and Week views 
+    [Mobile Chrome] › src/__tests__/e2e/global-search.spec.ts:4:7 › Global Search @regression › should filter activity items by search query 
+    [Mobile Chrome] › src/__tests__/e2e/global-search.spec.ts:38:7 › Global Search @regression › should filter media gallery items by search query 
+    [Mobile Chrome] › src/__tests__/e2e/settings.spec.ts:10:7 › Settings Page - Template Management @regression › should display the template manager 
+    [Mobile Chrome] › src/__tests__/e2e/settings.spec.ts:23:7 › Settings Page - Template Management @regression › should create a template from the dashboard 
+    [Mobile Chrome] › src/__tests__/e2e/settings.spec.ts:65:7 › Settings Page - Template Management @regression › should edit and delete a template 
+    [Mobile Chrome] › src/__tests__/e2e/ticket-637.spec.ts:10:7 › Ticket-637: UI Audit & Metadata Refactor @regression › should verify platform-specific metadata capture, clear, and undo 
+    [Mobile Chrome] › src/__tests__/e2e/ticket-637.spec.ts:65:7 › Ticket-637: UI Audit & Metadata Refactor @regression › should verify Activity Hub title promotion and Multi-Title badge 
+    [Mobile Safari] › src/__tests__/e2e/byos.spec.ts:10:7 › BYOS - Bring Your Own Storage @regression › should complete the full BYOS configuration stepper successfully 
+    [Mobile Safari] › src/__tests__/e2e/byos.spec.ts:45:7 › BYOS - Bring Your Own Storage @regression › should handle invalid credentials gracefully 
+    [Mobile Safari] › src/__tests__/e2e/calendar-planner.spec.ts:25:7 › Calendar Content Planner Refinements @regression › View Toggling - Month and Week views 
+    [Mobile Safari] › src/__tests__/e2e/global-search.spec.ts:4:7 › Global Search @regression › should filter activity items by search query 
+    [Mobile Safari] › src/__tests__/e2e/global-search.spec.ts:38:7 › Global Search @regression › should filter media gallery items by search query 
+    [Mobile Safari] › src/__tests__/e2e/settings.spec.ts:10:7 › Settings Page - Template Management @regression › should display the template manager 
+    [Mobile Safari] › src/__tests__/e2e/settings.spec.ts:23:7 › Settings Page - Template Management @regression › should create a template from the dashboard 
+    [Mobile Safari] › src/__tests__/e2e/settings.spec.ts:65:7 › Settings Page - Template Management @regression › should edit and delete a template 
+    [Mobile Safari] › src/__tests__/e2e/ticket-637.spec.ts:10:7 › Ticket-637: UI Audit & Metadata Refactor @regression › should verify platform-specific metadata capture, clear, and undo 
+    [Mobile Safari] › src/__tests__/e2e/ticket-637.spec.ts:65:7 › Ticket-637: UI Audit & Metadata Refactor @regression › should verify Activity Hub title promotion and Multi-Title badge 
+  21 skipped
+  121 passed (2.7m)
+[ELIFECYCLE] Command failed with exit code 1.
