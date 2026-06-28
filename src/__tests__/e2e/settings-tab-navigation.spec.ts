@@ -1,11 +1,11 @@
-import { test, expect } from './base-test';;
+import { test, expect, openMobileMenuIfNeeded } from './base-test';
 
 test.describe('Settings Page Tab Interface', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/settings');
   });
 
-  test('should navigate between all tabs and persist URL', async ({ page }) => {
+  test('should navigate between all tabs and persist URL', async ({ page, isMobile }) => {
     // Correct mapping based on TABS array in SettingsContent.tsx
     const tabMapping = [
       { label: 'Destinations', id: 'destinations' },
@@ -15,6 +15,7 @@ test.describe('Settings Page Tab Interface', () => {
     ];
     
     for (const tab of tabMapping) {
+      await openMobileMenuIfNeeded(page, isMobile);
       const tabElement = page.getByRole('link', { name: tab.label, exact: true });
       await tabElement.scrollIntoViewIfNeeded();
       await tabElement.click();
@@ -33,14 +34,16 @@ test.describe('Settings Page Tab Interface', () => {
     }
   });
 
-  test('should have all elements visible in the unified platform view', async ({ page }) => {
+  test('should have all elements visible in the unified platform view', async ({ page, isMobile }) => {
     // AI Providers tab
+    await openMobileMenuIfNeeded(page, isMobile);
     const aiTab = page.getByRole('link', { name: /ai providers/i });
     await aiTab.scrollIntoViewIfNeeded();
     await aiTab.click();
     await expect(page.getByRole('heading', { name: /ai providers/i })).toBeVisible({ timeout: 10000 });
     
     // Switch back to Destinations
+    await openMobileMenuIfNeeded(page, isMobile);
     const destTab = page.getByRole('link', { name: /destinations/i });
     await destTab.scrollIntoViewIfNeeded();
     await destTab.click();

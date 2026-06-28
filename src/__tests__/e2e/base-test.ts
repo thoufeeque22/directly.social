@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks, @typescript-eslint/no-require-imports, @typescript-eslint/no-unused-vars */
-import { test as base, expect } from '@playwright/test';
+import { test as base, expect, Page } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 
@@ -164,5 +164,15 @@ export const test = base.extend<{
     { auto: true } // This ensures the fixture is run for every test automatically
   ],
 });
+
+export const openMobileMenuIfNeeded = async (page: Page, isMobile: boolean | undefined) => {
+  if (isMobile) {
+    const menuBtn = page.locator('button', { hasText: '☰' }).first();
+    if (await menuBtn.isVisible().catch(() => false)) {
+      await menuBtn.click();
+      await page.waitForTimeout(500); // Wait for the drawer animation
+    }
+  }
+};
 
 export { expect };

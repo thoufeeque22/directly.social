@@ -1,4 +1,4 @@
-import { test, expect } from './base-test';;
+import { test, expect, openMobileMenuIfNeeded } from './base-test';
 
 test.describe('BYOS - Bring Your Own Storage @regression', () => {
   test.beforeEach(async ({ page }) => {
@@ -7,10 +7,11 @@ test.describe('BYOS - Bring Your Own Storage @regression', () => {
     await page.waitForTimeout(1000);
   });
 
-  test('should complete the full BYOS configuration stepper successfully', async ({ page }) => {
+  test('should complete the full BYOS configuration stepper successfully', async ({ page, isMobile }) => {
     await page.waitForLoadState('networkidle');
 
     // Switch to Storage Tab
+    await openMobileMenuIfNeeded(page, isMobile);
     await page.getByRole('link', { name: /Storage/i }).click();
     await page.waitForTimeout(1000); // Wait for tab transition and hydration
 
@@ -42,8 +43,9 @@ test.describe('BYOS - Bring Your Own Storage @regression', () => {
     await expect(page.getByText('Connection Active').first()).toBeVisible({ timeout: 10000 });
   });
 
-  test('should handle invalid credentials gracefully', async ({ page }) => {
+  test('should handle invalid credentials gracefully', async ({ page, isMobile }) => {
     // For negative path, we use the real server action with invalid-id bypass
+    await openMobileMenuIfNeeded(page, isMobile);
     await page.getByRole('link', { name: /Storage/i }).click();
     await page.waitForTimeout(1000); // Wait for tab transition and hydration
 
