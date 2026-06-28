@@ -21,7 +21,14 @@ export const TermsContent = () => (
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>3. Third-Party Platforms</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>3. Subscriptions and Payments</Typography>
+      <Typography variant="body1" gutterBottom>
+        Certain features of the Service may require a paid subscription. Payments are processed securely through our third-party payment provider, Stripe. By subscribing, you agree to Stripe&apos;s terms and to provide valid billing information. All fees are non-refundable unless otherwise required by law.
+      </Typography>
+    </section>
+
+    <section>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>4. Third-Party Platforms</Typography>
       <Typography variant="body1" gutterBottom>
         Our Service interacts with third-party platforms. By connecting your accounts, you agree to comply with:
       </Typography>
@@ -29,18 +36,19 @@ export const TermsContent = () => (
         <li><Typography variant="body1"><a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">YouTube Terms of Service</a></Typography></li>
         <li><Typography variant="body1"><a href="https://www.tiktok.com/legal/terms-of-service" target="_blank" rel="noopener noreferrer">TikTok Terms of Service</a></Typography></li>
         <li><Typography variant="body1"><a href="https://www.facebook.com/terms.php" target="_blank" rel="noopener noreferrer">Meta Terms of Service</a></Typography></li>
+        <li><Typography variant="body1"><a href="https://stripe.com/legal/end-users" target="_blank" rel="noopener noreferrer">Stripe Terms of Service</a></Typography></li>
       </ul>
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>4. Prohibited Activities</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>5. Prohibited Activities</Typography>
       <Typography variant="body1" gutterBottom>
         You agree NOT to: post illegal content, use the Service for spam, or bypass security features.
       </Typography>
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>5. Contact Us</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>6. Contact Us</Typography>
       <Typography variant="body1">If you have any questions, please contact us at:</Typography>
       <Typography variant="body1">
         Email:{' '}

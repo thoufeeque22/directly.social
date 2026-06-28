@@ -21,7 +21,8 @@ export const UploadFormInner: React.FC = () => {
     onSubmit, showGallery, setShowGallery, onGallerySelect,
     contentMode, onModeChange, customStyleText, onCustomStyleChange,
     accounts, preferences, selectedAccountIds, onToggleAccount,
-    isScheduled, scheduledAt, onSchedulingChange, selectedPlatforms
+    isScheduled, scheduledAt, onSchedulingChange, selectedPlatforms,
+    overriddenPlatforms, platformTitles, platformDescriptions, platformHashtags, platformFirstComments, platformSchedules
   } = useUploadFormContext();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,6 +48,20 @@ export const UploadFormInner: React.FC = () => {
             return <PlatformMetadataFields activePlatform={platform} />;
           }}
         </PostComposerTabs>
+
+        {selectedPlatforms.map(platform => {
+          if (!overriddenPlatforms.includes(platform)) return null;
+          return (
+            <React.Fragment key={`hidden-${platform}`}>
+              <input type="hidden" name={`overridden_${platform}`} value="true" />
+              <input type="hidden" name={`title_${platform}`} value={platformTitles[platform] || ''} />
+              <input type="hidden" name={`description_${platform}`} value={platformDescriptions[platform] || ''} />
+              <input type="hidden" name={`hashtags_${platform}`} value={platformHashtags[platform] || ''} />
+              <input type="hidden" name={`first_comment_${platform}`} value={platformFirstComments[platform] || ''} />
+              <input type="hidden" name={`scheduled_at_${platform}`} value={platformSchedules[platform] || ''} />
+            </React.Fragment>
+          );
+        })}
 
         {aiTier !== 'Manual' && <AIStyleSelector contentMode={contentMode} onModeChange={onModeChange} customStyleText={customStyleText} onCustomStyleChange={onCustomStyleChange} />}
         <AIStrategyNotice />

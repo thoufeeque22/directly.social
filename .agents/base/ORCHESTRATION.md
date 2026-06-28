@@ -48,7 +48,7 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 
 ### Agent Test Mandates
 - **dev-agent:** MUST use `ARCHITECT_SKILL`. MUST run `SMOKE_TEST_CMD` and `LINT_CMD`. May skip `BUILD_CMD` on fast-iteration loops if already run for the current changeset.
-- **audit-agent:** READ-ONLY. Focus on Security, Privacy (PII), and Performance (Web Vitals).
+- **audit-agent:** READ-ONLY. Focus on Security, Privacy (PII, Cookie Policy, Terms & Conditions), and Performance (Web Vitals).
 - **qa-agent:** MUST run `REGRESSION_TEST_CMD`. May run targeted tests for high-impact features.
 - **Human-in-the-Loop:** The **User** SHOULD run the full suite (`pnpm test`) before final merge.
 
@@ -74,7 +74,7 @@ Required fields in every Artifact:
 
 ### Discovery (Architecture & Planning)
 - **Role:** Read-only consultant and rigorous interrogator. Create blueprints.
-- **Mandate:** MUST grill the user and ask deep and thorough questions to resolve all ambiguities before drafting blueprints. MUST provide an explicit **Socratic Log** (via `discovery-agent`) followed by a **Test Specification** block with high-level manual and automated test scenarios.
+- **Mandate:** MUST grill the user and ask deep and thorough questions to resolve all ambiguities before drafting blueprints. MUST evaluate if the proposed feature violates or requires updates to the Cookie Policy, Terms and Conditions, or other compliance policies. MUST provide an explicit **Socratic Log** (via `discovery-agent`) followed by a **Test Specification** block with high-level manual and automated test scenarios.
 - **NotebookLM Synthesis:** For tickets involving complex integrations, legacy refactors, or deep architectural changes, the agent SHOULD recommend a NotebookLM synthesis step. Use `pnpm run notebook:package` to bundle context for high-fidelity research.
 - **Verdict:** Approved -> QA | Needs-Info -> Round 2 | Rejected -> Close.
 
@@ -98,7 +98,7 @@ Required fields in every Artifact:
 ### Audit (Security & Performance Audit)
 - **Role:** Senior Auditor. **READ-ONLY**.
 - **Mandate:** 
-  1. **Security & Quality:** MUST NOT modify code. If issues exist, Verdict MUST be "FAIL". MUST perform all heavy code reviews, log analysis, and architectural gap checks using the `ollama_chat` tool or `cavecrew-reviewer` to avoid burning cloud context on large diffs.
+  1. **Security, Privacy & Compliance:** MUST NOT modify code. If issues exist, Verdict MUST be "FAIL". MUST check if the implemented feature violates any Cookie Policy, Terms and Conditions, or if those documents require updating. MUST perform all heavy code reviews, log analysis, and architectural gap checks using the `ollama_chat` tool or `cavecrew-reviewer` to avoid burning cloud context on large diffs.
   2. **Performance Audit:** MUST run a "Web Vitals / Performance Audit" using the `@GoogleChrome/modern-web-guidance` extension. Verify that no deprecated patterns are introduced and that Core Web Vitals (LCP, INP, CLS) are considered.
 - **Verdict:** Pass -> Documentation | Fail -> Return to Dev.
 

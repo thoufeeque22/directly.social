@@ -17,15 +17,16 @@ export const CookieContent = () => (
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>2. How We Use Cookies</Typography>
       <ul>
         <li><Typography variant="body1"><strong>Authentication:</strong> To securely keep you logged in to your account.</Typography></li>
-        <li><Typography variant="body1"><strong>Security:</strong> To protect your data and the Service from unauthorized access.</Typography></li>
+        <li><Typography variant="body1"><strong>Security & Fraud Prevention:</strong> To protect your data, secure payments, and prevent fraud (via Stripe).</Typography></li>
+        <li><Typography variant="body1"><strong>Diagnostics:</strong> To monitor service health and track technical errors securely (via Sentry).</Typography></li>
         <li><Typography variant="body1"><strong>Preferences:</strong> To remember basic interface settings you have chosen.</Typography></li>
       </ul>
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>3. No Third-Party Tracking</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>3. No Advertising Tracking</Typography>
       <Typography variant="body1">
-        We do not use third-party tracking cookies or marketing pixels. Your activity on {BRAND.name} is not tracked for advertising purposes.
+        We do not use third-party advertising cookies or marketing pixels. Your activity on {BRAND.name} is not tracked for advertising or marketing purposes. The only third-party cookies we use are strictly necessary for processing payments securely (Stripe) and monitoring application stability (Sentry).
       </Typography>
     </section>
 
