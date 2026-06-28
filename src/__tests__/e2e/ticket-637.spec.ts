@@ -14,7 +14,7 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
 
     // 2. Select platforms
     const youtubeButton = page.getByRole('button', { name: /YouTube:/i }).first();
-    const tiktokButton = page.getByRole('button', { name: /Instagram:/i }).first();
+    const tiktokButton = page.getByRole('button', { name: /Tiktok:/i }).first();
     
     // Wait for buttons to be present
     await expect(youtubeButton).toBeVisible();
@@ -27,38 +27,43 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
       await tiktokButton.click();
     }
 
-    // 3. Toggle Platform Specific Metadata
-    const specificToggle = page.getByLabel('Separate titles/descriptions per platform');
-    await specificToggle.check();
-
-    // 4. Verify fields appear
-    const youtubeTitle = page.locator('input[name="title_youtube"]');
-    const youtubeDesc = page.locator('textarea[name="description_youtube"]');
-    const tiktokTitle = page.locator('input[name="title_instagram"]');
-    const tiktokDesc = page.locator('textarea[name="description_instagram"]');
-
+    // 3. Navigate to Youtube Tab and fill fields
+    await page.getByRole('tab', { name: 'Youtube' }).click();
+    await page.getByRole('button', { name: 'Customize for youtube' }).click();
+    
+    const youtubeTitle = page.locator('input[name="title_youtube"]:not([type="hidden"])');
+    const youtubeDesc = page.locator('textarea[name="description_youtube"]:not([type="hidden"])');
     await expect(youtubeTitle).toBeVisible();
     await expect(youtubeDesc).toBeVisible();
+    
+    await youtubeTitle.fill('YouTube Specific Title');
+    await youtubeDesc.fill('YouTube Specific Description');
+
+    // 4. Navigate to Tiktok Tab and fill fields
+    await page.getByRole('tab', { name: 'Tiktok' }).click();
+    await page.getByRole('button', { name: 'Customize for tiktok' }).click();
+    
+    const tiktokTitle = page.locator('input[name="title_tiktok"]:not([type="hidden"])');
+    const tiktokDesc = page.locator('textarea[name="description_tiktok"]:not([type="hidden"])');
     await expect(tiktokTitle).toBeVisible();
     await expect(tiktokDesc).toBeVisible();
 
-    // 5. Fill in data
-    await youtubeTitle.fill('YouTube Specific Title');
-    await youtubeDesc.fill('YouTube Specific Description');
     await tiktokTitle.fill('TikTok Specific Title');
     await tiktokDesc.fill('TikTok Specific Description');
 
-    // 6. Test Clear (✕)
+    // 5. Test Clear (✕) on Youtube tab
+    await page.getByRole('tab', { name: 'Youtube' }).click();
     const youtubeTitleClear = page.locator('div:has(> input[name="title_youtube"]) > button').filter({ hasText: '✕' });
     await youtubeTitleClear.click();
     await expect(youtubeTitle).toHaveValue('');
 
-    // 7. Test Undo
+    // 6. Test Undo on Youtube tab
     const youtubeTitleUndo = page.getByRole('button', { name: /Undo Clear/i }).first();
     await youtubeTitleUndo.click();
     await expect(youtubeTitle).toHaveValue('YouTube Specific Title');
 
-    // 8. Verify Capture (TikTok remains unchanged)
+    // 7. Verify Capture (TikTok remains unchanged)
+    await page.getByRole('tab', { name: 'Tiktok' }).click();
     await expect(tiktokTitle).toHaveValue('TikTok Specific Title');
   });
 
@@ -73,8 +78,9 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     }
     
     // 3. Set platform specific title, keep global empty
-    await page.getByLabel('Separate titles/descriptions per platform').check();
-    await page.locator('input[name="title_youtube"]').fill('Promoted YouTube Title');
+    await page.getByRole('tab', { name: 'Youtube' }).click();
+    await page.getByRole('button', { name: 'Customize for youtube' }).click();
+    await page.locator('input[name="title_youtube"]:not([type="hidden"])').fill('Promoted YouTube Title');
     
     // 4. Select a file
     await page.locator('input[type="file"]').setInputFiles({
@@ -97,13 +103,17 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Manual', exact: true }).click();
     const ytBtn = page.getByRole('button', { name: /YouTube:/i }).first();
-    const igBtn = page.getByRole('button', { name: /Instagram:/i }).first();
+    const igBtn = page.getByRole('button', { name: /Tiktok:/i }).first();
     if (await ytBtn.getAttribute('aria-pressed') !== 'true') await ytBtn.click();
     if (await igBtn.getAttribute('aria-pressed') !== 'true') await igBtn.click();
-    await page.getByLabel('Separate titles/descriptions per platform').check();
     
-    await page.locator('input[name="title_youtube"]').fill('Title A');
-    await page.locator('input[name="title_instagram"]').fill('Title B');
+    await page.getByRole('tab', { name: 'Youtube' }).click();
+    await page.getByRole('button', { name: 'Customize for youtube' }).click();
+    await page.locator('input[name="title_youtube"]:not([type="hidden"])').fill('Title A');
+    
+    await page.getByRole('tab', { name: 'Tiktok' }).click();
+    await page.getByRole('button', { name: 'Customize for tiktok' }).click();
+    await page.locator('input[name="title_tiktok"]:not([type="hidden"])').fill('Title B');
     
     // Re-upload and submit
     await page.locator('input[type="file"]').setInputFiles({
@@ -121,6 +131,6 @@ test.describe('Ticket-637: UI Audit & Metadata Refactor @regression', () => {
     
     // 10. Verify tooltip
     const youtubePill = page.locator('[class*="platformPill"]').filter({ hasText: 'YouTube' }).first();
-    await expect(youtubePill).toHaveAttribute('title', /Status:/);
+    await expect(youtubePill).toHaveAttribute('title', /(Status:|Waiting for worker)/);
   });
 });

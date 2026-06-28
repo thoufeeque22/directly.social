@@ -9,7 +9,7 @@ test.describe('Settings Page - Template Management @regression', () => {
 
   test('should display the template manager', async ({ page }) => {
     // Navigate to snippets tab
-    const snippetsTab = page.getByRole('tab', { name: /snippets/i });
+    const snippetsTab = page.getByRole('link', { name: /snippets/i });
     await snippetsTab.scrollIntoViewIfNeeded();
     await snippetsTab.click();
     await page.waitForURL('**/settings?tab=snippets', { timeout: 10000 });
@@ -54,7 +54,7 @@ test.describe('Settings Page - Template Management @regression', () => {
     
     // Now go back to settings to manage it
     await page.goto('/settings', { waitUntil: 'networkidle' });
-    const snippetsTab = page.getByRole('tab', { name: /snippets/i });
+    const snippetsTab = page.getByRole('link', { name: /snippets/i });
     await snippetsTab.scrollIntoViewIfNeeded();
     await snippetsTab.click({ force: true });
     await page.waitForURL('**/settings?tab=snippets', { timeout: 30000 });
@@ -94,7 +94,7 @@ test.describe('Settings Page - Template Management @regression', () => {
     await expect(page.getByTestId('snippets-menu')).not.toBeVisible();
 
     await page.goto('/settings', { waitUntil: 'networkidle' });
-    const snippetsTab = page.getByRole('tab', { name: /snippets/i });
+    const snippetsTab = page.getByRole('link', { name: /snippets/i });
     await snippetsTab.scrollIntoViewIfNeeded();
     await snippetsTab.click({ force: true });
     await page.waitForURL('**/settings?tab=snippets', { timeout: 30000 });

@@ -21,8 +21,10 @@ export const PrivacyContent = () => (
       <ul>
         <li><Typography variant="body1">Name and email address.</Typography></li>
         <li><Typography variant="body1">Profile information (e.g., avatar, bio).</Typography></li>
+        <li><Typography variant="body1">Billing information (processed securely by our payment provider, Stripe).</Typography></li>
         <li><Typography variant="body1">Social media account identifiers and authentication tokens (OAuth).</Typography></li>
         <li><Typography variant="body1">Content you upload (e.g., videos, titles, descriptions).</Typography></li>
+        <li><Typography variant="body1">Diagnostic data (e.g., IP addresses, crash logs, and device info used strictly for error tracking via Sentry).</Typography></li>
       </ul>
     </section>
 
@@ -43,10 +45,16 @@ export const PrivacyContent = () => (
           We use TikTok for Developers APIs to facilitate video posting and account management. We adhere to TikTok&apos;s Developer Terms.
         </Typography>
       </Box>
-      <Box sx={{ ml: 2 }}>
+      <Box sx={{ ml: 2, mb: 2 }}>
         <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Meta (Facebook/Instagram) API</Typography>
         <Typography variant="body1" gutterBottom>
           We use Meta Graph APIs to publish content to your Facebook Pages and Instagram Business accounts.
+        </Typography>
+      </Box>
+      <Box sx={{ ml: 2 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Payment Processing & Telemetry</Typography>
+        <Typography variant="body1" gutterBottom>
+          We use <strong>Stripe</strong> for secure payment processing. We do not store your full credit card details on our servers. We also use <strong>Sentry</strong> for error monitoring and diagnostics to ensure the stability of the Service.
         </Typography>
       </Box>
     </section>

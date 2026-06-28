@@ -44,8 +44,8 @@ export const handleSubmission = async (options: SubmissionOptions) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      title: fd.get('title') || platforms[0].overrideTitle || null,
-      description: fd.get('description') || platforms[0].overrideDescription || null,
+      title: fd.get('title') || platforms.find(p => p.overrideTitle)?.overrideTitle || null,
+      description: fd.get('description') || platforms.find(p => p.overrideDescription)?.overrideDescription || null,
       videoFormat,
       platforms,
     }),
@@ -56,8 +56,8 @@ export const handleSubmission = async (options: SubmissionOptions) => {
 
   if (aiTier !== 'Manual' && fd.get('skipReview') !== 'true') {
     setUploadStatus(' Generating AI Strategy...');
-    const title = fd.get('title') as string;
-    const description = fd.get('description') as string;
+    const title = (fd.get('title') || platforms.find(p => p.overrideTitle)?.overrideTitle || '') as string;
+    const description = (fd.get('description') || platforms.find(p => p.overrideDescription)?.overrideDescription || '') as string;
     const platformsNames = platforms.map((p) => p.platform);
 
     const previews = await generateAIStrategy({
@@ -80,8 +80,18 @@ export const handleSubmission = async (options: SubmissionOptions) => {
   }
 
   clearCache();
+  
+  const draftKeys = [
+    'SS_DRAFT_TITLE', 'SS_DRAFT_DESC', 'SS_DRAFT_HASHTAGS', 'SS_DRAFT_COMMENT', 'SS_DRAFT_SCHEDULE',
+    'SS_METADATA_SPECIFIC', 'SS_PLATFORM_TITLES', 'SS_PLATFORM_DESCS', 'SS_OVERRIDDEN_PLATFORMS',
+    'SS_PLATFORM_HASHTAGS', 'SS_PLATFORM_COMMENTS', 'SS_PLATFORM_SCHEDULES'
+  ];
+  draftKeys.forEach(k => localStorage.removeItem(k));
+  
   localStorage.setItem('SS_PENDING_POST', JSON.stringify({
-    title: fd.get('title'), description: fd.get('description'), videoFormat, aiTier, contentMode,
+    title: fd.get('title') || platforms.find(p => p.overrideTitle)?.overrideTitle || null,
+    description: fd.get('description') || platforms.find(p => p.overrideDescription)?.overrideDescription || null,
+    videoFormat, aiTier, contentMode,
     customStyleText, platforms, isScheduled, scheduledAt, galleryFileId, galleryFileName, resumeActivityId: activityId,
   }));
   router.push('/activity?action=distribute');
