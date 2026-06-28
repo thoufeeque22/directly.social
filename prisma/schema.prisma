@@ -78,18 +78,7 @@ model GalleryAsset {
   @@index([userId])
 }
 
-model LaunchTask {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  status      String   @default("pending")
-  category    String   @default("Marketing")
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
-  @@index([category, status])
-}
 
 model MetadataTemplate {
   id        String   @id @default(cuid())
@@ -161,18 +150,7 @@ model PostPlatformResult {
   @@unique([postActivityId, platform, accountId], name: "postActivityId_platform_accountId")
 }
 
-model RoadmapTask {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  status      String   @default("pending")
-  priority    String   @default("High Priority")
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
-  @@index([priority, status])
-}
 
 model Session {
   id           String   @id @default(cuid())

@@ -110,7 +110,7 @@ Required fields in every Artifact:
      - Encode it as a concise, imperative rule in the correct target file (`AGENTS.md` or a `base/*.md` file).
      - Apply minor additions directly. Present a diff for structural changes.
      - Log under **Learnings Integrated** in the phase Artifact.
-  3. **Feature Docs:** Write or update `docs/` for the completed feature. This is the primary cloud-model task.
+  3. **Documentation Audit & Update:** You MUST audit the current feature implementation against the existing documentation (`docs/`, `README.md`). If the source code has advanced past the documentation, you MUST update the documentation files to ensure they stay perfectly in sync with the actual codebase reality.
   4. **Incidental Check:** Read `OBSERVATIONS_FILE`.
      - If **Observations exist**: Suggest invoking `project-agent` to resolve them.
      - If **No Observations exist**: Suggest the **User** for final PR creation.

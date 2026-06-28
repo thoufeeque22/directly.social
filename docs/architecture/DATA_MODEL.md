@@ -13,6 +13,10 @@ erDiagram
     User ||--o{ MetadataTemplate : "saves"
     User ||--o{ UserSeenUpdate : "tracks"
     User ||--o{ Notification : "receives"
+    User ||--o{ ByokCredential : "configures"
+    User ||--o| ByosConfig : "configures"
+    User ||--o| BillingProfile : "has"
+    User ||--o{ SupportRequest : "submits"
     UpdateLog ||--o{ UserSeenUpdate : "logs"
 
     Account ||--o{ TokenAuditLog : "audited by"
@@ -27,6 +31,10 @@ erDiagram
         string image
         string preferredVideoFormat
         string preferredAIStyle
+        string preferredAIStyleMode
+        string preferredAIProvider
+        string role
+        string preferredTheme
         int aiCredits
     }
 
@@ -84,10 +92,18 @@ erDiagram
         string transcodeStatus
         string optimizedFileId
         json metadata
+        string metadataHash
         int progress
         int retryCount
         datetime lastRetryAt
         datetime createdAt
+        string overrideTitle
+        string overrideDescription
+        string hashtags
+        string firstCommentText
+        datetime scheduledAt
+        int lastOffset
+        string currentStep
     }
 
     GalleryAsset {
@@ -128,3 +144,12 @@ erDiagram
         datetime createdAt
     }
 ```
+
+## Additional Models
+
+- **ByokCredential:** Stores Bring-Your-Own-Key API credentials for users (e.g., OpenAI, Anthropic keys).
+- **ByosConfig:** Stores Bring-Your-Own-Storage configurations for users (e.g., custom S3 or R2 buckets).
+- **BillingProfile:** Tracks the user's subscription tier and billing status (e.g., via Stripe).
+- **SupportRequest:** User-submitted support tickets and messages.
+- **SystemBilling:** Tracks global system spending and thresholds for API providers.
+- **SystemMetric:** Logs system-wide performance and usage metrics.

@@ -2,7 +2,7 @@
 
 ## System Overview
 
-Directly is a multi-platform social media management application that allows users to schedule and distribute video content (Shorts/Reels/TikToks) across various platforms simultaneously.
+Directly is a multi-platform social media management application that allows users to schedule and distribute both short-form (Shorts/Reels/TikToks) and long-form video content across various platforms simultaneously.
 
 ## Tech Stack
 
@@ -15,7 +15,7 @@ Directly is a multi-platform social media management application that allows use
 - **Video Processing:** [FFmpeg](https://ffmpeg.org/) (via `fluent-ffmpeg`)
 - **Mobile Wrapper:** [Capacitor](https://capacitorjs.com/) (iOS & Android)
 - **Monitoring:** [Sentry](https://sentry.io/)
-- **Styling:** Vanilla CSS, Framer Motion, Lucide React
+- **Styling:** Material UI (MUI), Framer Motion, Lucide React
 
 ## Core Architecture Patterns
 
