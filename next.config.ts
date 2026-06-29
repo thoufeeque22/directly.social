@@ -9,14 +9,29 @@ const nextConfig: NextConfig = {
     "khalilah-spritelike-flossily.ngrok-free.dev",
     "*.trycloudflare.com",
     "directly-social.duckdns.org",
-    "roohis-mac.tail8a2e7d.ts.net"
+    "roohis-mac.tail8a2e7d.ts.net",
+    "127.0.0.1",   // iOS Simulator Capacitor WebView
+    "10.0.2.2",    // Android Emulator Capacitor WebView
   ],
+
   experimental: {
     serverActions: {
       bodySizeLimit: "50gb",
     },
     proxyClientMaxBodySize: "50gb",
   },
+  // Allow Capacitor WKWebView to receive HMR updates via polling
+  // since WebSocket upgrades fail in the native WebView context.
+  webpack(config, { dev, isServer }) {
+    if (dev && !isServer) {
+      config.watchOptions = {
+        ...config.watchOptions,
+        poll: 1000,
+      };
+    }
+    return config;
+  },
+
   serverExternalPackages: ["@prisma/client", "prisma"],
   images: {
     remotePatterns: [

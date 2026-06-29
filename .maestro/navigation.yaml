@@ -1,0 +1,10 @@
+appId: com.thoufeeque.directly
+---
+- launchApp
+- runFlow: login.yaml
+- tapOn: "Activity Hub"
+- assertVisible: "Activity Hub"
+- tapOn: "Upload & Automate"
+- assertVisible: "Upload & Automate"
+- tapOn: "Settings"
+- assertVisible: "Settings"

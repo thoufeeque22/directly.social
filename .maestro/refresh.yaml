@@ -1,6 +1,7 @@
 appId: com.thoufeeque.directly
 ---
 - launchApp
+- runFlow: login.yaml
 - swipe:
     start: 50%, 20%
     end: 50%, 80%

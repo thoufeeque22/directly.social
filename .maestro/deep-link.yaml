@@ -2,5 +2,5 @@ appId: com.thoufeeque.directly
 ---
 - launchApp
 - runFlow: login.yaml
+- openLink: "directly://upload"
 - assertVisible: "Upload & Automate"
-- assertVisible: "Activity Hub"

@@ -48,19 +48,47 @@ export function LoginContent() {
     setPendingProvider(provider); setShowWarning(true);
   };
 
-  const handleE2ELogin = async (formData: FormData) => {
+  const handleE2ELogin = async (_prevState: string | null, formData: FormData): Promise<string | null> => {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
-    let result = await signIn('credentials', { email, password, redirect: false });
-    let retries = 0;
-    while ((result?.error === 'MissingCSRF' || result?.error === 'Configuration') && retries < 3) {
-      await new Promise(r => setTimeout(r, 1000));
-      result = await signIn('credentials', { email, password, redirect: false });
-      retries++;
+
+    try {
+      // Step 1: Get CSRF token
+      const csrfRes = await fetch('/api/auth/csrf');
+      if (!csrfRes.ok) return `CSRF fetch failed: ${csrfRes.status}`;
+      const { csrfToken } = await csrfRes.json() as { csrfToken: string };
+      console.log('[E2E] Got CSRF token, attempting login for:', email);
+
+      // Step 2: POST credentials directly with redirect:'manual' so fetch never
+      // follows the 302 to NEXTAUTH_URL (which may be a tunnel/production URL).
+      // NextAuth sets the session cookie on the 302 response itself, so we capture
+      // it here and then manually navigate.
+      const body = new URLSearchParams({ email, password, csrfToken, callbackUrl: '/' });
+      const res = await fetch('/api/auth/callback/credentials', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+        redirect: 'manual',
+      });
+
+      console.log('[E2E] Auth response status:', res.status);
+
+      // status 0 = opaque redirect (fetch manual), 302 = standard redirect — both mean success
+      if (res.status === 0 || res.status === 302 || res.status === 200) {
+        console.log('[E2E] Login success — navigating to /');
+        window.location.href = '/';
+        return null;
+      }
+
+      const body2 = await res.text().catch(() => '');
+      return `Auth failed: HTTP ${res.status} — ${body2.slice(0, 120)}`;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error('[E2E] Exception:', message);
+      return `Error: ${message}`;
     }
-    const callbackUrl = searchParams.get('callbackUrl') || '/';
-    if (!result?.error) window.location.href = callbackUrl;
   };
+
 
   if (searchParams.get('bridge') === 'true') return <NativeBridgeOverlay provider={searchParams.get('provider')} />;
 

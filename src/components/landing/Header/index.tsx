@@ -43,7 +43,10 @@ export const LandingHeader = () => {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: theme.zIndex.appBar
+        zIndex: theme.zIndex.appBar,
+        pt: 'env(safe-area-inset-top)',
+        pl: 'env(safe-area-inset-left)',
+        pr: 'env(safe-area-inset-right)'
       }}
     >
       <Container maxWidth="lg">

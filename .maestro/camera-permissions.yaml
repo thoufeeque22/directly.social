@@ -1,0 +1,10 @@
+appId: com.thoufeeque.directly
+---
+- clearState
+- launchApp:
+    permissions:
+      camera: grant
+- runFlow: login.yaml
+- tapOn: "Upload & Automate"
+- tapOn: "Take Photo"
+- assertVisible: "Camera"
