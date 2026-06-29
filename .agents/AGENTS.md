@@ -74,3 +74,7 @@ To ensure production-level stability and prevent build failures or linting warni
 - **Type Casting & "Zero-Any" strictness:** Never lazily cast to `any` to bypass complex type errors (such as third-party SDK namespace collisions like `Stripe.Subscription`). Instead, use precise intersections (e.g., `as unknown as { id: string }`) or exact typing.
 - **MUI Component Typings:** When using MUI components (like `<Typography>`), ensure you are using valid props (e.g., `sx={{ fontWeight: 'bold' }}`). Do not pass invalid HTML/CSS props directly unless explicitly supported, as it will trigger strict TypeScript React typings errors (`IntrinsicAttributes & ...`).
 - **Callback `this` Context:** In test files (like `vi.fn(function(this: unknown) { ... })`), explicitly type `this` instead of letting it default to `any`, which violates the strict config.
+
+### 7. Secrets & Credentials in Tests
+- **Never Hardcode Secrets:** When writing Playwright or Maestro E2E tests, never hardcode passwords (like `Tester@123`) or other sensitive credentials directly in the test scripts.
+- **Environment Variables:** Always use environment variables (e.g., `process.env.TEST_USER_PASSWORD` in Playwright or `${TEST_USER_PASSWORD}` in Maestro) and pull them from the `.env` file to ensure local testing doesn't leak secrets or break across environments.

@@ -84,6 +84,7 @@ Required fields in every Artifact:
   1. **Automation:** Write and execute Playwright/Maestro tests *based on the Discovery spec BEFORE development begins*. The tests will initially fail, giving Dev a strict finish line.
   2. **Manual:** Formalize the Discovery test spec into a detailed step-by-step manual test script in `MANUAL_TEST_FILE_PATTERN`.
   3. **No App Edits:** MUST NOT modify application source code (`src/`).
+  4. **Test Secrets & Credentials:** NEVER hardcode test user passwords in E2E tests (Playwright or Maestro). ALWAYS read the password from the `.env` file (e.g., using `${TEST_USER_PASSWORD}`) and pass it through environment variables to ensure local testing doesn't leak secrets or break across environments.
 - **Verdict:** Spec Complete -> Dev | Fail -> Return to Discovery.
 
 ### Development (Implementation)
