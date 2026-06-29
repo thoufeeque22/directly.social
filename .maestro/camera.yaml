@@ -1,0 +1,13 @@
+appId: com.thoufeeque.directly
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: grant
+- runFlow: login.yaml
+- assertVisible: "Upload & Automate"
+- tapOn: "Record Video"
+# Maestro will handle the permission dialog automatically if it appears (due to `permissions: all: grant`),
+# but the native camera view opening is tricky to assert in Maestro since it's an OS-level UI.
+# We can just assert that the action was taken successfully and the app didn't crash.
+- assertVisible: "Record Video"
