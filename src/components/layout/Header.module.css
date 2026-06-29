@@ -86,9 +86,9 @@
     display: flex !important;
     width: auto;
     flex: 1;
-    margin: 0 0.75rem;
-    min-width: 120px;
-    padding: 0.5rem 0.75rem;
+    margin: 0 0.5rem;
+    min-width: 40px; /* Reduced to allow shrinking */
+    padding: 0.5rem;
   }
 
   .searchInput {
@@ -96,19 +96,34 @@
   }
 
   .actions {
-    gap: 0.75rem;
+    gap: 0.25rem; /* Reduced gap */
+  }
+
+  .createBtn {
+    padding: 0;
+    width: 36px; /* slightly smaller */
+    height: 36px;
+    justify-content: center;
+    border-radius: 50%;
   }
 
   .createBtn span:not(.btnPlus) {
-    display: none; /* Hide "Create Post" text on very small screens, keep plus */
+    display: none;
   }
 
   .userProfile {
-    padding-left: 0.75rem;
+    padding-left: 0.25rem;
+    gap: 0.5rem;
   }
 
   .userDetails {
-    display: none; /* Hide user name on mobile header */
+    display: none;
+  }
+  
+  /* Hide less essential icons on tiny mobile screens */
+  .actions > button:nth-child(1), /* ThemeToggle */
+  .actions > button:nth-child(2) /* RefreshButton */ {
+    display: none;
   }
 }
 

@@ -1,6 +1,7 @@
 appId: com.thoufeeque.directly
 ---
-- launchApp
+- launchApp:
+    clearState: true
 - runFlow: login.yaml
 - tapOn: "Activity Hub"
 - assertVisible: "Activity Hub"

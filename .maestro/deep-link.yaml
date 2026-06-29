@@ -1,6 +1,7 @@
 appId: com.thoufeeque.directly
 ---
-- launchApp
+- launchApp:
+    clearState: true
 - runFlow: login.yaml
 - openLink: "directly://upload"
 - assertVisible: "Upload & Automate"

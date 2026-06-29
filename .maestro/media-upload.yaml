@@ -1,0 +1,13 @@
+appId: com.thoufeeque.directly
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: grant
+- runFlow: login.yaml
+- assertVisible: "Upload & Automate"
+- tapOn: "Browse Gallery"
+- assertVisible: "Choose Media"
+- assertVisible: "Staged Media"
+- tapOn: "Local Gallery"
+- assertVisible: "Select"

@@ -33,7 +33,7 @@ export const UploadFormInner: React.FC = () => {
   return (
     <GlassCard id="create-post-section" style={{ padding: '2rem' }}>
       <UploadHeader />
-      <form aria-label="Upload Form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+      <form aria-label="Upload Form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', paddingBottom: '100px', width: '100%', maxWidth: '100%', overflowX: 'hidden' }}>
         <VideoSelection />
         {showGallery && <MediaPicker onClose={() => setShowGallery(false)} onSelect={(a) => { onGallerySelect(a.fileId, a.fileName); setShowGallery(false); }} />}
         <AITierSelector selectedTier={aiTier} onChange={onTierChange} />

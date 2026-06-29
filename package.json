@@ -26,7 +26,7 @@
     "test:regression": "npx playwright test --grep @regression",
     "test:e2e:server": "NODE_ENV=test NEXT_DIST_DIR=.next-e2e npm run start -- -p 3005",
     "test:visual": "npx playwright test --grep @visual",
-    "test:native": "maestro test .maestro/",
+    "test:native": "export $(grep -v '^#' .env | xargs) && maestro test .maestro/",
     "test:native:full": "bash scripts/mobile-test.sh",
     "mobile:ios": "open -a Simulator",
     "mobile:android": "~/Library/Android/sdk/emulator/emulator -avd $(~/Library/Android/sdk/emulator/emulator -list-avds | head -n 1) &",
