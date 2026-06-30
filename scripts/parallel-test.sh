@@ -28,12 +28,15 @@ echo "🚀 Starting Parallel Mobile Test Orchestration..."
 echo "🔍 Fetching available device profiles..."
 mapfile -t ALL_DEVICES < <($AVDMANAGER list device | grep -E "^id: " | grep -oE '"[^"]+"' | tr -d '"' | grep -iE "(pixel|nexus|galaxy|phone)")
 
+DEVICES_USED=""
+
 # 1. Provision AVDs with random hardware profiles
 for i in $(seq 1 $NUM_EMULATORS); do
     AVD_NAME="maestro_emu_$i"
     
     # Pick a random device profile from the dynamic list
     RANDOM_DEV="${ALL_DEVICES[$RANDOM % ${#ALL_DEVICES[@]}]}"
+    DEVICES_USED+="$RANDOM_DEV "
     
     echo "⚙️ Provisioning AVD: $AVD_NAME as a '$RANDOM_DEV'..."
     
@@ -91,14 +94,34 @@ if [ -f .env ]; then
 fi
 
 # Run tests and shard split them
-maestro test -e E2E_TEST_PASSWORD=$E2E_TEST_PASSWORD --shard-split $NUM_EMULATORS --test-output-dir ./test-results/maestro .maestro/ || echo "⚠️ Some tests failed, check test-results/maestro."
+rm -rf ./test-results/maestro/* 2>/dev/null
+maestro test -e E2E_TEST_PASSWORD=$E2E_TEST_PASSWORD --shard-split $NUM_EMULATORS --test-output-dir ./test-results/maestro .maestro/
+TEST_EXIT_CODE=$?
+
+# Log the results to history
+mkdir -p ./test-results
+LOG_FILE="./test-results/device-history.log"
+TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+
+if [ $TEST_EXIT_CODE -eq 0 ]; then
+    echo "[$TIMESTAMP] Devices: $DEVICES_USED | Status: SUCCESS | All parallel tests passed" >> "$LOG_FILE"
+else
+    # Extract failed test names from maestro screenshots
+    FAILED_TESTS=$(find ./test-results/maestro -name "*❌*" 2>/dev/null | grep -o '([^)]*)' | tr -d '()' | sort | uniq | tr '\n' ' ' | sed 's/ $//')
+    if [ -z "$FAILED_TESTS" ]; then FAILED_TESTS="Unknown"; fi
+    echo "[$TIMESTAMP] Devices: $DEVICES_USED | Status: FAILED | Failed Tests: $FAILED_TESTS" >> "$LOG_FILE"
+fi
 
 # 6. Teardown
 echo "🧹 Tearing down emulators..."
 for i in $(seq 1 $NUM_EMULATORS); do
-    PORT=$((5552 + i * 2))
-    DEVICE="emulator-$PORT"
-    $ADB -s $DEVICE emu kill || true
+    PORT=$((5554 + (i - 1) * 2))
+    $ADB -s emulator-$PORT emu kill >/dev/null 2>&1 || true
 done
 
-echo "🎉 Orchestration complete!"
+if [ $TEST_EXIT_CODE -ne 0 ]; then
+    echo "⚠️ Some tests failed, check test-results/maestro."
+    exit $TEST_EXIT_CODE
+else
+    echo "🎉 Orchestration complete!"
+fi

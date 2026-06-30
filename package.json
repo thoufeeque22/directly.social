@@ -26,7 +26,7 @@
     "test:regression": "npx playwright test --grep @regression",
     "test:e2e:server": "NODE_ENV=test NEXT_DIST_DIR=.next-e2e npm run start -- -p 3005",
     "test:visual": "npx playwright test --grep @visual",
-    "test:native": "export $(grep -v '^#' .env | xargs) && maestro test -e E2E_TEST_PASSWORD=$E2E_TEST_PASSWORD --test-output-dir ./test-results/maestro .maestro/",
+    "test:native": "bash scripts/test-native.sh",
     "test:native:parallel": "bash scripts/parallel-test.sh",
     "test:native:full": "bash scripts/mobile-test.sh",
     "mobile:dev:auto": "bash scripts/auto-mobile-dev.sh",
