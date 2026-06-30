@@ -69,21 +69,21 @@ export const LandingHeader = () => {
             <Button component={Link} href="/docs" color="inherit" sx={{ textTransform: 'none', fontWeight: 500 }}>Docs</Button>
           </Stack>
 
-          <Stack direction="row" spacing={3} sx={{ alignItems: 'center', flexShrink: 0 }}>
+          <Stack direction="row" spacing={{ xs: 1, sm: 3 }} sx={{ alignItems: 'center', flexShrink: 0 }}>
             {isAuthenticated ? (
               <Button
                 component={Link}
                 href="/"
                 variant="contained"
                 color="primary"
-                sx={{ borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 600 }}
+                sx={{ borderRadius: 2, px: { xs: 2, sm: 3 }, textTransform: 'none', fontWeight: 600 }}
               >
                 Dashboard
               </Button>
             ) : (
               <>
-                <Link href="/login" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>
-                  <Typography sx={{ fontWeight: 600, fontSize: '0.9rem', '&:hover': { color: 'primary.main' } }}>
+                <Link href="/login" style={{ textDecoration: 'none', color: theme.palette.text.primary, display: 'block' }}>
+                  <Typography sx={{ fontWeight: 600, fontSize: '0.9rem', '&:hover': { color: 'primary.main' }, display: { xs: 'none', sm: 'block' } }}>
                     Login
                   </Typography>
                 </Link>
@@ -92,7 +92,7 @@ export const LandingHeader = () => {
                   href="/login"
                   variant="contained"
                   color="primary"
-                  sx={{ borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 600 }}
+                  sx={{ borderRadius: 2, px: { xs: 1.5, sm: 3 }, textTransform: 'none', fontWeight: 600 }}
                 >
                   Get Started
                 </Button>

@@ -1,7 +1,13 @@
+# -----------------------------------------------------------
+# Test: Core Smoke Test
+# Purpose: Verifies the app boots successfully and displays 
+# the initial splash/login screen without crashing.
+# -----------------------------------------------------------
 appId: com.thoufeeque.directly
 ---
 - launchApp:
     clearState: true
 - runFlow: login.yaml
 - assertVisible: "Upload & Automate"
+- tapOn: "☰"
 - assertVisible: "Activity Hub"

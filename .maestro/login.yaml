@@ -1,8 +1,0 @@
-appId: com.thoufeeque.directly
----
-- tapOn: "Login"
-- assertVisible: "E2E Test Login"
-- tapOn: "Test Password"
-- inputText: ${E2E_TEST_PASSWORD}
-- tapOn: "Get Started"
-- assertVisible: "Upload & Automate"
