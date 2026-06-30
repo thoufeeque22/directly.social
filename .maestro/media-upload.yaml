@@ -17,4 +17,5 @@ appId: com.thoufeeque.directly
 - assertVisible: "Choose Media"
 - assertVisible: "Staged Media"
 - tapOn: "Local Gallery"
-- assertVisible: "Select"
+- assertVisible: "Connect Directory"
+- tapOn: "Connect Directory"

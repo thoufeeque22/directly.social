@@ -5,9 +5,11 @@
 # -----------------------------------------------------------
 appId: com.thoufeeque.directly
 ---
-- launchApp:
-    clearState: true
-- runFlow: login.yaml
+- launchApp
+- runFlow:
+    when:
+      visible: "Login"
+    file: subflows/login.yaml
 - assertVisible: "Upload & Automate"
 - tapOn: "☰"
 - assertVisible: "Activity Hub"

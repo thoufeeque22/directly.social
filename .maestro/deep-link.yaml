@@ -5,8 +5,10 @@
 # -----------------------------------------------------------
 appId: com.thoufeeque.directly
 ---
-- launchApp:
-    clearState: true
-- runFlow: login.yaml
+- launchApp
+- runFlow:
+    when:
+      visible: "Login"
+    file: subflows/login.yaml
 - openLink: "directly://upload"
 - assertVisible: "Upload & Automate"
