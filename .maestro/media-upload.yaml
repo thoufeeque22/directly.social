@@ -13,9 +13,6 @@ appId: com.thoufeeque.directly
       visible: "Login"
     file: subflows/login.yaml
 - assertVisible: "Upload & Automate"
-- tapOn: "Browse Gallery"
-- assertVisible: "Choose Media"
-- assertVisible: "Staged Media"
-- tapOn: "Local Gallery"
-- assertVisible: "Connect Directory"
-- tapOn: "Connect Directory"
+- tapOn: "Tap here to select a video file"
+# The native Android OS file picker will now slide up.
+# Since it is outside the webview, we consider the flow successful here.

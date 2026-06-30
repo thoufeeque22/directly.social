@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import MovieIcon from '@mui/icons-material/Movie';
 import CloseIcon from '@mui/icons-material/Close';
+import { Capacitor } from '@capacitor/core';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { GalleryAsset } from './GalleryAsset';
 import { useMediaLibrary } from './useMediaLibrary';
@@ -32,7 +33,10 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect, onClose }) =
         <button onClick={onClose} style={styles.closeBtn} aria-label="Close picker"><CloseIcon /></button>
         <h3 style={styles.title}><MovieIcon className="text-primary" sx={{ fontSize: 20 }} />Choose Media</h3>
         <Tabs value={tabValue} onChange={(_, val) => setTabValue(val)} sx={{ mb: 2, borderBottom: 1, borderColor: 'divider' }}>
-          <Tab label="Staged Media" /><Tab label="Local Gallery" />
+          <Tab label="Staged Media" />
+          {(!Capacitor.isNativePlatform()) && (
+            <Tab label="Local Gallery" />
+          )}
         </Tabs>
         {tabValue === 0 ? (
           <>
