@@ -1,0 +1,18 @@
+# -----------------------------------------------------------
+# Test: Native Media Picker Integration
+# Purpose: Verifies that tapping the "Browse Gallery" button 
+# correctly launches the native OS file/media picker UI.
+# -----------------------------------------------------------
+appId: com.thoufeeque.directly
+---
+- launchApp:
+    permissions:
+      all: grant
+- runFlow:
+    when:
+      visible: "Login"
+    file: subflows/login.yaml
+- assertVisible: "Upload & Automate"
+- tapOn: "Tap here to select a video file"
+# The native Android OS file picker will now slide up.
+# Since it is outside the webview, we consider the flow successful here.

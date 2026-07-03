@@ -1,0 +1,10 @@
+# -----------------------------------------------------------
+# Test: 00 Suite Setup
+# Purpose: Guarantees a clean slate before running a full 
+# test suite. It explicitly clears the state and logs in once.
+# -----------------------------------------------------------
+appId: com.thoufeeque.directly
+---
+- launchApp:
+    clearState: true
+- runFlow: subflows/login.yaml

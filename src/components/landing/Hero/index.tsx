@@ -11,7 +11,7 @@ export const Hero = () => {
   const isAuthenticated = false; // Landing page is only rendered when logged out
 
   return (
-    <Box sx={{ pt: { xs: 8, md: 12 }, pb: { xs: 6, md: 10 }, overflow: 'hidden', position: 'relative' }}>
+    <Box sx={{ pt: { xs: 12, md: 16 }, pb: { xs: 6, md: 10 }, overflow: 'hidden', position: 'relative' }}>
       {/* Studio Aura Glow */}
       <Box 
         sx={{ 

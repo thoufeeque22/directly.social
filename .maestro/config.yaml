@@ -1,1 +1,4 @@
 appId: com.thoufeeque.directly
+env:
+  E2E_PASSWORD: ${E2E_TEST_PASSWORD}
+  E2E_EMAIL: tester@directly.social

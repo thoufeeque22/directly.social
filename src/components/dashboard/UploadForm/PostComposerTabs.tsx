@@ -32,7 +32,7 @@ export const PostComposerTabs: React.FC<PostComposerTabsProps> = ({ children }) 
   };
 
   return (
-    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <Box sx={{ width: '100%', maxWidth: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs 
           value={activeTab} 

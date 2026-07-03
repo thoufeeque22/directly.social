@@ -1,7 +1,7 @@
 # -----------------------------------------------------------
-# Test: Core Smoke Test
-# Purpose: Verifies the app boots successfully and displays 
-# the initial splash/login screen without crashing.
+# Test: Deep Linking
+# Purpose: Verifies that the app handles deep links correctly
+# and routes the user to the appropriate screen on launch.
 # -----------------------------------------------------------
 appId: com.thoufeeque.directly
 ---
@@ -10,6 +10,5 @@ appId: com.thoufeeque.directly
     when:
       visible: "Login"
     file: subflows/login.yaml
+- openLink: "directly://upload"
 - assertVisible: "Upload & Automate"
-- tapOn: "☰"
-- assertVisible: "Activity Hub"

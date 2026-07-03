@@ -1,0 +1,16 @@
+# -----------------------------------------------------------
+# Test: Authentication Flow
+# Purpose: Automates the email/password login sequence to 
+# act as a prerequisite setup for other authenticated tests.
+# -----------------------------------------------------------
+appId: com.thoufeeque.directly
+---
+- extendedWaitUntil:
+    visible: "Login"
+    timeout: 60000
+- tapOn: "Login"
+- assertVisible: "E2E Test Login"
+- tapOn: "Test Password"
+- inputText: ${E2E_TEST_PASSWORD}
+- tapOn: "Get Started"
+- assertVisible: "Upload & Automate"

@@ -13,6 +13,9 @@ export const ThemeScript = () => (
             } else {
               document.documentElement.classList.add('light-mode');
             }
+            if (localStorage.getItem('has_account') === 'true') {
+              document.documentElement.classList.add('returning-user');
+            }
           } catch (e) {}
         })();
       `,

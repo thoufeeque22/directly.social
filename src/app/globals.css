@@ -89,12 +89,6 @@ a {
 }
 
 @media (max-width: 768px) {
-  .responsive-grid {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem;
-    display: flex;
-    flex-direction: column;
-  }
   
   .layout-wrapper {
     flex-direction: column;
@@ -102,7 +96,7 @@ a {
 
   .main-content {
     margin-left: 0 !important;
-    width: 100vw;
+    width: 100%;
   }
 }
 
@@ -245,14 +239,17 @@ a {
 /* Responsive Grid Utility */
 .responsive-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   gap: 2rem;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
   .responsive-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 1.5rem;
+    width: 100%;
   }
 }
 /* Custom Tooltip Styles */

@@ -1,0 +1,22 @@
+# -----------------------------------------------------------
+# Test: Mobile Sidebar Navigation
+# Purpose: Verifies that the hamburger menu opens the sidebar
+# and successfully routes the user between main screens.
+# -----------------------------------------------------------
+appId: com.thoufeeque.directly
+---
+- launchApp
+- runFlow:
+    when:
+      visible: "Login"
+    file: subflows/login.yaml
+- tapOn: "☰"
+- tapOn: "Activity Hub"
+- assertVisible: "Activity Hub"
+- tapOn: "☰"
+- tapOn: "Dashboard"
+- assertVisible: "Upload & Automate"
+- tapOn: "☰"
+- tapOn: "Settings"
+- tapOn: "Destinations"
+- assertVisible: "Connected Platforms"

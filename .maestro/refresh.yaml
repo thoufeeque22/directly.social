@@ -1,6 +1,15 @@
+# -----------------------------------------------------------
+# Test: Pull-to-Refresh
+# Purpose: Verifies that swiping down on the dashboard triggers
+# the native pull-to-refresh spinner and reloads the data.
+# -----------------------------------------------------------
 appId: com.thoufeeque.directly
 ---
 - launchApp
+- runFlow:
+    when:
+      visible: "Login"
+    file: subflows/login.yaml
 - swipe:
     start: 50%, 20%
     end: 50%, 80%

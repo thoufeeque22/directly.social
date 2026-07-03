@@ -16,9 +16,22 @@ const PROVIDERS: { id: AIProvider; name: string }[] = [
 
 export const AIProviderSelector: React.FC<AIProviderSelectorProps> = ({ selectedProvider, onChange }) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem', width: '100%', maxWidth: '100%' }}>
       <label style={{ fontSize: '0.9rem', fontWeight: 500 }}>AI Provider</label>
-      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+      <div 
+        style={{ 
+          display: 'flex', 
+          gap: '0.4rem', 
+          flexWrap: 'nowrap', 
+          overflowX: 'auto',
+          paddingBottom: '0.5rem',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          width: '100%',
+          maxWidth: '100%'
+        }}
+        className="hide-scrollbar"
+      >
         {PROVIDERS.map(provider => (
           <button
             key={provider.id}

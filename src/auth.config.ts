@@ -61,6 +61,15 @@ export default {
   trustHost: true,
   secret: process.env.AUTH_SECRET,
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Prevent cross-origin redirect to Tailscale tunnel during native E2E tests,
+      // which causes iOS WKWebView to aggressively drop the Set-Cookie header.
+      if (process.env.NEXT_PUBLIC_E2E === 'true') {
+        const path = url.startsWith('http') ? new URL(url).pathname : url;
+        return `http://127.0.0.1:3000${path}`;
+      }
+      return url.startsWith("/") ? new URL(url, baseUrl).toString() : url;
+    },
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;

@@ -25,6 +25,8 @@ if [ "$PLATFORM" == "ios" ]; then
         echo "✅ Found booted Simulator: $TARGET_ID"
     fi
 
+    echo "🏗️ Syncing local test server URL..."
+    CAPACITOR_URL="http://127.0.0.1:3000" npx cap sync ios
     echo "🏗️ Building and Installing app on iOS..."
     npx cap run ios --target "$TARGET_ID" --no-sync
     
@@ -51,6 +53,8 @@ elif [ "$PLATFORM" == "android" ]; then
         echo "✅ Found Android device: $TARGET_ID"
     fi
 
+    echo "🏗️ Syncing local test server URL..."
+    CAPACITOR_URL="http://10.0.2.2:3000" npx cap sync android
     echo "🏗️ Building and Installing app on Android..."
     npx cap run android --target "$TARGET_ID" --no-sync
 else
@@ -59,4 +63,28 @@ else
 fi
 
 echo "🧪 Running Maestro Tests..."
-npm run test:native
+E2E_TEST_PASSWORD="$E2E_TEST_PASSWORD" npm run test:native
+TEST_EXIT_CODE=$?
+
+if [ $TEST_EXIT_CODE -ne 0 ]; then
+    echo ""
+    echo "❌ Tests failed. Locating failure screenshots..."
+    LATEST_RUN=$(ls -td ~/.maestro/tests/*/ 2>/dev/null | head -n 1)
+    if [ -n "$LATEST_RUN" ]; then
+        echo "📁 Debug artifacts: $LATEST_RUN"
+        SCREENSHOTS=$(find "$LATEST_RUN" -name "screenshot-❌-*.png" 2>/dev/null)
+        if [ -n "$SCREENSHOTS" ]; then
+            echo "📸 Failure screenshots:"
+            echo "$SCREENSHOTS"
+            # Open all failure screenshots for visual inspection
+            echo "$SCREENSHOTS" | xargs open
+        else
+            echo "⚠️  No failure screenshots found in $LATEST_RUN"
+        fi
+    else
+        echo "⚠️  No Maestro test runs found in ~/.maestro/tests/"
+    fi
+    exit $TEST_EXIT_CODE
+fi
+
+echo "✅ All tests passed!"

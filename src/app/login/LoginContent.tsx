@@ -48,19 +48,7 @@ export function LoginContent() {
     setPendingProvider(provider); setShowWarning(true);
   };
 
-  const handleE2ELogin = async (formData: FormData) => {
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-    let result = await signIn('credentials', { email, password, redirect: false });
-    let retries = 0;
-    while ((result?.error === 'MissingCSRF' || result?.error === 'Configuration') && retries < 3) {
-      await new Promise(r => setTimeout(r, 1000));
-      result = await signIn('credentials', { email, password, redirect: false });
-      retries++;
-    }
-    const callbackUrl = searchParams.get('callbackUrl') || '/';
-    if (!result?.error) window.location.href = callbackUrl;
-  };
+
 
   if (searchParams.get('bridge') === 'true') return <NativeBridgeOverlay provider={searchParams.get('provider')} />;
 
@@ -90,7 +78,7 @@ export function LoginContent() {
           <button onClick={() => handleLoginClick("facebook")} className={`${styles.loginBtn} ${styles.facebookBtn}`}><span className={styles.btnIcon}><FacebookIcon /></span>Continue with Facebook</button>
           <button onClick={() => handleLoginClick("tiktok")} className={`${styles.loginBtn} ${styles.tiktokBtn}`}><span className={styles.btnIcon}><TiktokIcon /></span>Continue with TikTok</button>
         </div>
-        {process.env.NEXT_PUBLIC_E2E === 'true' && <E2ELoginForm action={handleE2ELogin} />}
+        {process.env.NEXT_PUBLIC_E2E === 'true' && <E2ELoginForm />}
         <div className={styles.footer}>By continuing, you agree to our <br /> <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></div>
       </div>
     </div>
