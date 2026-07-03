@@ -19,6 +19,12 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "50gb",
     },
     proxyClientMaxBodySize: "50gb",
+    // Vercel only has a few GB of RAM. Limit workers to prevent OOM crashes (WorkerError)
+    ...(process.env.VERCEL === "1" ? {
+      cpus: 1,
+      workerThreads: false,
+      memoryBasedWorkersCount: true
+    } : {}),
   },
   // Allow Capacitor WKWebView to receive HMR updates via polling
   // since WebSocket upgrades fail in the native WebView context.
@@ -31,6 +37,8 @@ const nextConfig: NextConfig = {
     }
     return config;
   },
+  
+  turbopack: {},
 
   serverExternalPackages: ["@prisma/client", "prisma"],
   images: {
