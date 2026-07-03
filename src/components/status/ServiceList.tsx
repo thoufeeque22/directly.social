@@ -25,6 +25,15 @@ const extTooltips: Record<string, string> = {
   'YouTube Data API': 'YouTube Data API health for video uploads and channel metrics syncing.',
 };
 
+const friendlyNames: Record<string, string> = {
+  'directly-social.vercel.app': 'Website & Dashboard',
+  'Core API Gateway': 'Internal Services',
+  'Primary Database': 'Data Storage',
+  'YouTube Data API': 'YouTube Connection',
+  'Meta Graph API': 'Facebook & Instagram Connection',
+  'TikTok Publishing API': 'TikTok Connection',
+};
+
 export function ServiceList({ monitors }: ServiceListProps) {
   const externalNames = ['TikTok Publishing API', 'Meta Graph API', 'YouTube Data API', 'TikTok API', 'Meta API', 'YouTube API'];
   const core = monitors.filter(m => {
@@ -41,7 +50,7 @@ export function ServiceList({ monitors }: ServiceListProps) {
     const cfg = statusMap[status] || statusMap.paused;
     const itemContent = (
       <ListItem sx={{ py: 1.5, px: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', '&:hover': { bgcolor: 'action.hover' } }}>
-        <ListItemText primary={<Typography variant="body2" sx={{ fontWeight: 500 }}>{m.attributes.name}</Typography>} />
+        <ListItemText primary={<Typography variant="body2" sx={{ fontWeight: 500 }}>{friendlyNames[m.attributes.name] || m.attributes.name}</Typography>} />
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           {cfg.icon}
           <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>{cfg.label}</Typography>
@@ -62,13 +71,13 @@ export function ServiceList({ monitors }: ServiceListProps) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <Paper sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', boxShadow: 'none' }}>
-        <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>Core Platform Services</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>Directly Social Platform</Typography>
         <Divider />
         <List disablePadding>{core.map(m => renderItem(m))}</List>
       </Paper>
       <Paper sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', boxShadow: 'none' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>External Integration APIs</Typography>
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>Social Media Connections</Typography>
           <Tooltip title="Real-time connectivity and response status of external platform integrations monitored via BetterStack." arrow>
             <IconButton size="small" aria-label="More information about external APIs" tabIndex={0}>
               <HelpCenterIcon fontSize="small" />
