@@ -88,7 +88,7 @@ export async function GET() {
         incidents: incidentsJson.data || [] 
       });
     }
-    return NextResponse.json({ error: 'Failed to fetch status from Better Stack' }, { status: res.status });
+    return NextResponse.json({ error: 'Failed to fetch status from Better Stack' }, { status: monitorsRes.status || 500 });
   } catch {
     return NextResponse.json({ error: 'Failed to fetch status from Better Stack' }, { status: 500 });
   }

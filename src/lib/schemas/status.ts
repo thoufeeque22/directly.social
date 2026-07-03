@@ -10,6 +10,7 @@ export const BetterStackMonitorStatusSchema = z.enum([
 
 export const BetterStackMonitorAttributesSchema = z.object({
   name: z.string(),
+  pronounceable_name: z.string().optional(),
   url: z.string().optional(),
   monitor_type: z.string().optional(),
   status: BetterStackMonitorStatusSchema,
