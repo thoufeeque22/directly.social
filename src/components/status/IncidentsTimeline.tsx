@@ -10,22 +10,7 @@ interface PastIncident {
   details: string;
 }
 
-const pastIncidents: PastIncident[] = [
-  {
-    date: 'June 20, 2026',
-    title: 'Meta Graph API Posting Failures',
-    status: 'Resolved',
-    severity: 'success',
-    details: 'Investigated reports of publishing failures for Facebook/Instagram accounts. The issue was caused by an outage in Meta Graph API services. Normal operations have fully resumed.',
-  },
-  {
-    date: 'June 15, 2026',
-    title: 'Background Scheduler Backend Delay',
-    status: 'Resolved',
-    severity: 'success',
-    details: 'Identified a queue backlog delay causing post-publishing jobs to execute up to 10 minutes late. Database pool capacities were optimized, clearing all backlog queues.',
-  },
-];
+const pastIncidents: PastIncident[] = [];
 
 export function IncidentsTimeline() {
   return (

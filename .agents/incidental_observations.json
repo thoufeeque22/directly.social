@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "OBS-1719973800000",
+    "discovery_agent": "dev-agent",
+    "observation": "Pre-existing Playwright E2E smoke and regression tests (Theme Toggle and Landing Page personas) fail on Mobile Chrome and Mobile Safari due to elements not being visible. This needs to be addressed in a separate ticket.",
+    "file": "src/__tests__/e2e/theme-toggle.spec.ts:28",
+    "severity": "medium"
+  }
+]

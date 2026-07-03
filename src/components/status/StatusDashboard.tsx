@@ -72,7 +72,7 @@ export function StatusDashboard({ scenario }: { scenario: string | null }) {
               <ServiceList monitors={monitors} />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }} component="section">
-              <SidebarPanels />
+              <SidebarPanels monitors={monitors} />
             </Grid>
           </Grid>
           <Box component="section">

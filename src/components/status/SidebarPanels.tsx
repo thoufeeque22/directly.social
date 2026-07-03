@@ -7,22 +7,24 @@ interface MaintenanceEvent {
   description: string;
 }
 
-const maintenanceEvents: MaintenanceEvent[] = [
-  {
-    title: 'Neon Database Maintenance',
-    time: 'June 28, 2026, 02:00 - 04:00 UTC',
-    description: 'Scheduled minor version upgrade. Short performance anomalies might occur.',
-  },
-];
+const maintenanceEvents: MaintenanceEvent[] = [];
 
-export function SidebarPanels() {
+import { BetterStackMonitor } from '@/lib/schemas/status';
+
+export function SidebarPanels({ monitors }: { monitors: BetterStackMonitor[] }) {
+  // Calculate average uptime from real monitors
+  const validUptimes = monitors.filter(m => m.attributes.uptime_percentage !== undefined && m.attributes.uptime_percentage !== null);
+  const avgUptime = validUptimes.length > 0 
+    ? validUptimes.reduce((acc, m) => acc + Number(m.attributes.uptime_percentage), 0) / validUptimes.length 
+    : 100;
+  
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <Paper sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', boxShadow: 'none' }}>
         <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>90-Day Uptime</Typography>
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: 'success.main' }}>99.97%</Typography>
+          <Typography variant="h3" sx={{ fontWeight: 800, color: 'success.main' }}>{avgUptime.toFixed(2)}%</Typography>
           <Typography variant="body2" color="text.secondary">average uptime</Typography>
         </Box>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>

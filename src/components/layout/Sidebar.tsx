@@ -17,6 +17,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import InsightsIcon from '@mui/icons-material/Insights';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import { Collapse } from '@mui/material';
 import { BRAND } from '@/lib/core/brand';
 
@@ -51,6 +52,7 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
       { name: 'Analytics', icon: <InsightsIcon sx={{ fontSize: 20 }} />, path: '/admin/analytics' },
     ] : []),
     { name: 'Settings', icon: <SettingsIcon sx={{ fontSize: 20 }} />, path: '/settings' },
+    { name: 'System Status', icon: <CloudQueueIcon sx={{ fontSize: 20 }} />, path: '/status' },
     ...(isFreeTier ? [
       { name: 'Upgrade Plan', icon: <AutoAwesomeIcon sx={{ fontSize: 20 }} />, path: '/pricing' }
     ] : []),

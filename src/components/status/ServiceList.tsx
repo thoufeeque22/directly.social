@@ -26,8 +26,15 @@ const extTooltips: Record<string, string> = {
 };
 
 export function ServiceList({ monitors }: ServiceListProps) {
-  const core = monitors.filter(m => parseInt(m.id, 10) >= 1 && parseInt(m.id, 10) <= 4);
-  const external = monitors.filter(m => parseInt(m.id, 10) >= 5 && parseInt(m.id, 10) <= 7);
+  const externalNames = ['TikTok Publishing API', 'Meta Graph API', 'YouTube Data API', 'TikTok API', 'Meta API', 'YouTube API'];
+  const core = monitors.filter(m => {
+    const name = m.attributes?.name || '';
+    return !externalNames.some(ext => name.includes(ext));
+  });
+  const external = monitors.filter(m => {
+    const name = m.attributes?.name || '';
+    return externalNames.some(ext => name.includes(ext));
+  });
 
   const renderItem = (m: BetterStackMonitor, isExternal = false) => {
     const status = m.attributes.status;
