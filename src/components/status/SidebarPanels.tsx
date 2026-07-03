@@ -34,6 +34,16 @@ export function SidebarPanels({ monitors }: { monitors: BetterStackMonitor[] }) 
   const coreUptime = getAvg(coreMonitors);
   const externalUptime = getAvg(externalMonitors);
   
+  const getAggregateColor = (list: BetterStackMonitor[]) => {
+    if (list.some(m => m.attributes.status === 'down')) return 'error.main';
+    if (list.some(m => m.attributes.status === 'degraded')) return 'warning.main';
+    if (list.some(m => m.attributes.status === 'maintenance')) return 'info.main';
+    return 'success.main';
+  };
+
+  const coreColor = getAggregateColor(coreMonitors);
+  const externalColor = getAggregateColor(externalMonitors);
+  
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <Paper sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', boxShadow: 'none' }}>
@@ -43,13 +53,13 @@ export function SidebarPanels({ monitors }: { monitors: BetterStackMonitor[] }) 
           <Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>Directly Social Platform</Typography>
             <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
-              <Typography variant="h4" sx={{ fontWeight: 800, color: 'success.main' }}>{coreUptime.toFixed(2)}%</Typography>
+              <Typography variant="h4" sx={{ fontWeight: 800, color: coreColor }}>{coreUptime.toFixed(2)}%</Typography>
             </Box>
           </Box>
           <Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>Social Media Connections</Typography>
             <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
-              <Typography variant="h4" sx={{ fontWeight: 800, color: 'success.main' }}>{externalUptime.toFixed(2)}%</Typography>
+              <Typography variant="h4" sx={{ fontWeight: 800, color: externalColor }}>{externalUptime.toFixed(2)}%</Typography>
             </Box>
           </Box>
         </Box>

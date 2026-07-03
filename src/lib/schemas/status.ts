@@ -27,6 +27,21 @@ export const BetterStackResponseSchema = z.object({
   data: z.array(BetterStackMonitorSchema),
 });
 
+export const BetterStackIncidentAttributesSchema = z.object({
+  name: z.string(),
+  started_at: z.string(),
+  resolved_at: z.string().nullable(),
+  cause: z.string().nullable(),
+});
+
+export const BetterStackIncidentSchema = z.object({
+  id: z.string(),
+  type: z.literal('incident'),
+  attributes: BetterStackIncidentAttributesSchema,
+});
+
+export type BetterStackIncident = z.infer<typeof BetterStackIncidentSchema>;
+
 export type BetterStackMonitorStatus = z.infer<typeof BetterStackMonitorStatusSchema>;
 export type BetterStackMonitor = z.infer<typeof BetterStackMonitorSchema>;
 export type BetterStackResponse = z.infer<typeof BetterStackResponseSchema>;

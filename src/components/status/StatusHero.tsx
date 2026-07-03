@@ -31,14 +31,14 @@ export function StatusHero({ monitors }: StatusHeroProps) {
     },
     degraded: {
       title: 'Degraded Performance',
-      subtitle: 'Some integrations or platform services are experiencing issues.',
+      subtitle: 'Some integrations or platform services are experiencing issues. We are actively working to restore full functionality.',
       bgColor: 'warning.light',
       color: 'warning.dark',
       icon: <WarningIcon data-testid="WarningIcon" sx={{ fontSize: 40, color: 'warning.main' }} />,
     },
     down: {
       title: 'System Outage',
-      subtitle: 'Major service disruption detected in core services.',
+      subtitle: 'Major service disruption detected. Our engineering team is actively investigating. Most issues are resolved within 15-30 minutes.',
       bgColor: 'error.light',
       color: 'error.dark',
       icon: <ErrorIcon data-testid="ErrorIcon" sx={{ fontSize: 40, color: 'error.main' }} />,

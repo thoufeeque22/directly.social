@@ -18,7 +18,7 @@ import InsightsIcon from '@mui/icons-material/Insights';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
-import { Collapse } from '@mui/material';
+import { Collapse, Badge } from '@mui/material';
 import { BRAND } from '@/lib/core/brand';
 
 const settingsSubItems = [
@@ -37,11 +37,37 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
   const currentTab = searchParams?.get('tab') || 'destinations';
 
   const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
+  const [hasStatusAlert, setHasStatusAlert] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsSettingsExpanded(!!pathname?.startsWith('/settings'));
   }, [pathname]);
+
+  useEffect(() => {
+    if (!session?.user) return;
+
+    let isMounted = true;
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch('/api/status/personalized');
+        if (res.ok && isMounted) {
+          const data = await res.json();
+          setHasStatusAlert(data.hasAlert === true);
+        }
+      } catch (err) {
+        console.error('Failed to fetch personalized status', err);
+      }
+    };
+
+    fetchStatus();
+    // Poll every 5 minutes
+    const interval = setInterval(fetchStatus, 5 * 60 * 1000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [session?.user]);
 
   const menuItems = [
     { name: 'Dashboard', icon: <DashboardIcon sx={{ fontSize: 20 }} />, path: '/' },
@@ -52,7 +78,20 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
       { name: 'Analytics', icon: <InsightsIcon sx={{ fontSize: 20 }} />, path: '/admin/analytics' },
     ] : []),
     { name: 'Settings', icon: <SettingsIcon sx={{ fontSize: 20 }} />, path: '/settings' },
-    { name: 'System Status', icon: <CloudQueueIcon sx={{ fontSize: 20 }} />, path: '/status' },
+    { 
+      name: 'System Status', 
+      icon: (
+        <Badge 
+          color="error" 
+          variant="dot" 
+          invisible={!hasStatusAlert}
+          sx={{ '& .MuiBadge-badge': { top: 2, right: 2 } }}
+        >
+          <CloudQueueIcon sx={{ fontSize: 20 }} />
+        </Badge>
+      ), 
+      path: '/status' 
+    },
     ...(isFreeTier ? [
       { name: 'Upgrade Plan', icon: <AutoAwesomeIcon sx={{ fontSize: 20 }} />, path: '/pricing' }
     ] : []),

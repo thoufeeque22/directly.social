@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Button, LinearProgress, Alert, Grid, Typography } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { BetterStackMonitor } from '@/lib/schemas/status';
+import { BetterStackMonitor, BetterStackIncident } from '@/lib/schemas/status';
 import { StatusHero } from './StatusHero';
 import { ServiceList } from './ServiceList';
 import { SidebarPanels } from './SidebarPanels';
@@ -11,6 +11,7 @@ import { IncidentsTimeline } from './IncidentsTimeline';
 
 export function StatusDashboard({ scenario }: { scenario: string | null }) {
   const [monitors, setMonitors] = useState<BetterStackMonitor[]>([]);
+  const [incidents, setIncidents] = useState<BetterStackIncident[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState('');
@@ -25,7 +26,8 @@ export function StatusDashboard({ scenario }: { scenario: string | null }) {
         throw new Error(`Failed to fetch status: ${res.statusText || 'Error'}`);
       }
       const data = await res.json();
-      setMonitors(data.data);
+      setMonitors(data.data || []);
+      setIncidents(data.incidents || []);
       setLastUpdated(new Date().toLocaleTimeString());
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -76,7 +78,7 @@ export function StatusDashboard({ scenario }: { scenario: string | null }) {
             </Grid>
           </Grid>
           <Box component="section">
-            <IncidentsTimeline />
+            <IncidentsTimeline incidents={incidents} />
           </Box>
         </>
       )}
