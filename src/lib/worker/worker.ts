@@ -10,6 +10,7 @@ declare global {
   var _ss_cleanup_interval: NodeJS.Timeout | undefined;
   var _ss_audit_interval: NodeJS.Timeout | undefined;
   var _ss_billing_interval: NodeJS.Timeout | undefined;
+  var _ss_heartbeat_interval: NodeJS.Timeout | undefined;
   var _ss_worker_version: number | undefined;
 }
 
@@ -18,7 +19,7 @@ export async function startPublishingWorker() {
   
   if (global._ss_worker_started) {
     logger.info("♻️ [WORKER] Restarting worker...");
-    [global._ss_worker_interval, global._ss_cleanup_interval, global._ss_audit_interval, global._ss_billing_interval]
+    [global._ss_worker_interval, global._ss_cleanup_interval, global._ss_audit_interval, global._ss_billing_interval, global._ss_heartbeat_interval]
       .forEach(i => i && clearInterval(i));
   }
   
@@ -50,6 +51,19 @@ export async function startPublishingWorker() {
     const { billingService } = await import('@/lib/services/billing-instance');
     await billingService.syncAll().catch(err => logger.error("💰 [WORKER] Billing sync failed:", err));
   }, 4 * 60 * 60 * 1000);
+
+  // Better Stack Heartbeat Interval (60s)
+  global._ss_heartbeat_interval = setInterval(() => {
+    if (global._ss_worker_version !== currentVersion) return;
+    const heartbeatUrl = process.env.BETTERSTACK_HEARTBEAT_URL;
+    if (heartbeatUrl) {
+      fetch(heartbeatUrl)
+        .then(res => {
+          if (!res.ok) logger.warn(`💓 [WORKER] Heartbeat failed with status: ${res.status}`);
+        })
+        .catch(err => logger.error("💓 [WORKER] Heartbeat fetch failed:", err));
+    }
+  }, 60 * 1000);
 
   // Initial runs
   purgeExpiredAssets();

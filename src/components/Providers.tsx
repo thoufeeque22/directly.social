@@ -16,7 +16,7 @@ export function Providers({ children, session }: { children: React.ReactNode; se
     if (session?.user) {
       try {
         localStorage.setItem('has_account', 'true');
-      } catch (e) {}
+      } catch {}
     }
   }, [session]);
 

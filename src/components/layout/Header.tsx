@@ -24,7 +24,7 @@ export const Header = ({ onToggleSidebar, tierName }: { onToggleSidebar: () => v
 
   return (
     <header className={styles.header}>
-      <button className={styles.menuBtn} onClick={onToggleSidebar}>☰</button>
+      <button className={styles.menuBtn} onClick={onToggleSidebar} aria-label="Menu">☰</button>
       <div className={styles.search}>
         <input
           id="header-search"

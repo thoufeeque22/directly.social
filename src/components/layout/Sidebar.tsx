@@ -17,6 +17,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import InsightsIcon from '@mui/icons-material/Insights';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import CloudQueueIcon from '@mui/icons-material/CloudQueue';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { Collapse } from '@mui/material';
 import { BRAND } from '@/lib/core/brand';
 
@@ -36,11 +38,37 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
   const currentTab = searchParams?.get('tab') || 'destinations';
 
   const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
+  const [hasStatusAlert, setHasStatusAlert] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsSettingsExpanded(!!pathname?.startsWith('/settings'));
   }, [pathname]);
+
+  useEffect(() => {
+    if (!session?.user) return;
+
+    let isMounted = true;
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch('/api/status/personalized');
+        if (res.ok && isMounted) {
+          const data = await res.json();
+          setHasStatusAlert(data.hasAlert === true);
+        }
+      } catch (err) {
+        console.error('Failed to fetch personalized status', err);
+      }
+    };
+
+    fetchStatus();
+    // Poll every 5 minutes
+    const interval = setInterval(fetchStatus, 5 * 60 * 1000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [session?.user]);
 
   const menuItems = [
     { name: 'Dashboard', icon: <DashboardIcon sx={{ fontSize: 20 }} />, path: '/' },
@@ -51,6 +79,12 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
       { name: 'Analytics', icon: <InsightsIcon sx={{ fontSize: 20 }} />, path: '/admin/analytics' },
     ] : []),
     { name: 'Settings', icon: <SettingsIcon sx={{ fontSize: 20 }} />, path: '/settings' },
+    { 
+      name: 'System Status', 
+      icon: <CloudQueueIcon sx={{ fontSize: 20 }} />, 
+      path: '/status',
+      alert: hasStatusAlert
+    },
     ...(isFreeTier ? [
       { name: 'Upgrade Plan', icon: <AutoAwesomeIcon sx={{ fontSize: 20 }} />, path: '/pricing' }
     ] : []),
@@ -94,7 +128,10 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
                 }}
               >
                 <span className={styles.icon}>{item.icon}</span>
-                <span className={styles.name} style={{ flexGrow: 1 }}>{item.name}</span>
+                <span className={styles.name} style={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {item.alert && <WarningAmberIcon color="error" sx={{ fontSize: 18 }} />}
+                  {item.name}
+                </span>
                 {isSettings && (
                   <span className={styles.chevron}>
                     {isSettingsExpanded ? <ExpandMoreIcon sx={{ fontSize: 18 }} /> : <ExpandLessIcon sx={{ fontSize: 18 }} />}

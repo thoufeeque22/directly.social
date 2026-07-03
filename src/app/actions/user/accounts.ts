@@ -11,7 +11,8 @@ export async function getUserAccounts() {
     if (process.env.NEXT_PUBLIC_E2E === 'true') {
        return [
          { id: 'mock-youtube-acc', provider: 'google', accountName: 'Mock YouTube Channel', isDistributionEnabled: true },
-         { id: 'mock-facebook-acc', provider: 'facebook', accountName: 'Mock Facebook Page', isDistributionEnabled: true }
+         { id: 'mock-facebook-acc', provider: 'facebook', accountName: 'Mock Facebook Page', isDistributionEnabled: true },
+         { id: 'mock-tiktok-acc', provider: 'tiktok', accountName: 'Mock TikTok Account', isDistributionEnabled: true }
        ];
     }
     return await prisma.account.findMany({

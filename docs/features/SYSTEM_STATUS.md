@@ -8,8 +8,10 @@ The System Status dashboard provides real-time and near-real-time visibility int
 ## Architecture
 The system status feature is modularized to comply with the 100-line limit:
 1. **Schema & Types** (`src/lib/schemas/status.ts`): Declares Zod schemas and TypeScript types for the BetterStack monitor API payload.
-2. **API Route** (`src/app/api/status/route.ts`): Performs a hybrid check. If `BETTERSTACK_API_KEY` is present, it fetches live monitors from BetterStack's REST API. Otherwise, it falls back to mock responses.
-3. **Page Route** (`src/app/(public)/status/page.tsx`): Next.js public route that receives scenario parameters and renders the dashboard.
+2. **API Routes**:
+   - `src/app/api/status/route.ts`: Fetches live monitors and incidents from BetterStack's REST API. Crucially, it dynamically filters external API platforms (TikTok, Meta, YouTube) based on the authenticated user's connected social media accounts queried via Prisma.
+   - `src/app/api/status/personalized/route.ts`: A lightweight endpoint polled every 5 minutes by the frontend sidebar to display a dynamic warning alert icon if any of the user's specifically connected services are degraded.
+3. **Page Route** (`src/app/(public)/status/page.tsx`): Next.js public route that renders the dashboard.
 4. **Dashboard Coordinator** (`src/components/status/StatusDashboard.tsx`): Coordinates fetching, loading, errors, 60s automatic polling, and hydration-safe last-updated timestamps.
 5. **Sub-components**:
    - `StatusHero`: Theme-aware header card displaying aggregated system status.
@@ -19,19 +21,22 @@ The system status feature is modularized to comply with the 100-line limit:
 
 ## Configuration
 The feature relies on the following environment variables:
-- `BETTERSTACK_API_KEY`: BetterStack API token. If absent, the system falls back to a programmatic mock.
+- `BETTERSTACK_API_KEY`: BetterStack API token.
 - `NEXT_PUBLIC_APP_URL`: Used for constructing dynamic references.
+- `NEXT_PUBLIC_E2E`: When set to `true`, the status API routes bypass Prisma database calls and fallback to predefined mock connected accounts (Google, Facebook, TikTok) for reliable Playwright UI testing.
 Other settings such as brand and contact support are fetched dynamically from central files (`src/lib/core/brand.ts` and `src/lib/core/emails.ts`).
 
-## Uptime & Scenario Simulations
-Monitors track uptime and compute status. For local development, testing, and E2E validation, the API route supports scenario simulations. Passing `?scenario=...` to the status page/endpoint forces specific health states:
-- `all-healthy` (default): All core services and external APIs set to operational (`up`).
-- `degraded-performance`: Sets TikTok and Meta Graph APIs to `degraded`.
-- `major-outage`: Sets API Gateway, Scheduler, and Meta Graph API to `down`.
-- `maintenance`: Sets Scheduler and Neon Database to `maintenance`.
+## E2E Testing & Mocks
+For local development, testing, and E2E validation, the application relies on Playwright network interceptions (`page.route`) instead of backend query parameters. 
+
+The E2E tests dynamically intercept the calls to `/api/status` and `/api/status/personalized` to inject arbitrary health scenarios purely at the browser layer:
+- `all-healthy`: Default API response.
+- `degraded-performance`: Injects a degraded status for specific APIs.
+- `major-outage`: Injects a down status.
+- `maintenance`: Simulates a scheduled maintenance window.
 - `error`: Simulates a backend 500 failure to test error boundary alert components.
 
 ## Access Pathways
 Users can access the dashboard through the following integration links:
 1. **Landing Page Footer**: Accessible at the bottom of the landing layout for unauthenticated guests.
-2. **App Layout Footer**: Placed at the bottom of the primary workspace sidebar/footer for authenticated dashboard users.
+2. **Sidebar Navigation**: Placed within the main authenticated dashboard sidebar. This link automatically displays a dynamic red warning icon (`<WarningAmberIcon />`) if the personalized polling endpoint detects an outage for the user's specific connected accounts.
