@@ -72,8 +72,6 @@ describe('Settings Multi-Account Management', () => {
 
   it('displays connected segments ONLY for enabled platforms', async () => {
     render(<SettingsPage />);
-    const connectionsTab = screen.getByRole('tab', { name: /Destinations/i });
-    fireEvent.click(connectionsTab);
     
     await waitFor(() => {
       // YouTube is enabled in prefs, so handles should be visible
@@ -108,8 +106,6 @@ describe('Settings Multi-Account Management', () => {
     ] as Awaited<ReturnType<typeof getPlatformPreferences>>);
     
     render(<SettingsPage />);
-    const connectionsTab = screen.getByRole('tab', { name: /Destinations/i });
-    fireEvent.click(connectionsTab);
     
     await waitFor(() => screen.getByText('Instagram Reels'));
     
@@ -133,8 +129,6 @@ describe('Settings Multi-Account Management', () => {
     ] as Awaited<ReturnType<typeof getPlatformPreferences>>);
 
     render(<SettingsPage />);
-    const connectionsTab = screen.getByRole('tab', { name: /Destinations/i });
-    fireEvent.click(connectionsTab);
 
     await waitFor(() => {
       // LinkedIn heading should be visible in the connection grid

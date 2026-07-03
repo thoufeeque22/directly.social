@@ -79,8 +79,6 @@ describe('Settings Disconnect Functionality', () => {
 
   const renderSettings = () => {
     render(<SettingsPage />);
-    const connectionsTab = screen.getByRole('tab', { name: /Destinations/i });
-    fireEvent.click(connectionsTab);
   };
 
   it('renders disconnect buttons (X) for connected accounts when platforms are active', async () => {
