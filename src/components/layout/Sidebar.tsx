@@ -18,7 +18,8 @@ import InsightsIcon from '@mui/icons-material/Insights';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
-import { Collapse, Badge } from '@mui/material';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import { Collapse } from '@mui/material';
 import { BRAND } from '@/lib/core/brand';
 
 const settingsSubItems = [
@@ -80,17 +81,9 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
     { name: 'Settings', icon: <SettingsIcon sx={{ fontSize: 20 }} />, path: '/settings' },
     { 
       name: 'System Status', 
-      icon: (
-        <Badge 
-          color="error" 
-          variant="dot" 
-          invisible={!hasStatusAlert}
-          sx={{ '& .MuiBadge-badge': { top: 2, right: 2 } }}
-        >
-          <CloudQueueIcon sx={{ fontSize: 20 }} />
-        </Badge>
-      ), 
-      path: '/status' 
+      icon: <CloudQueueIcon sx={{ fontSize: 20 }} />, 
+      path: '/status',
+      alert: hasStatusAlert
     },
     ...(isFreeTier ? [
       { name: 'Upgrade Plan', icon: <AutoAwesomeIcon sx={{ fontSize: 20 }} />, path: '/pricing' }
@@ -135,7 +128,10 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
                 }}
               >
                 <span className={styles.icon}>{item.icon}</span>
-                <span className={styles.name} style={{ flexGrow: 1 }}>{item.name}</span>
+                <span className={styles.name} style={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {item.alert && <WarningAmberIcon color="error" sx={{ fontSize: 18 }} />}
+                  {item.name}
+                </span>
                 {isSettings && (
                   <span className={styles.chevron}>
                     {isSettingsExpanded ? <ExpandMoreIcon sx={{ fontSize: 18 }} /> : <ExpandLessIcon sx={{ fontSize: 18 }} />}

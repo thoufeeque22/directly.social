@@ -1,9 +1,34 @@
 import { NextResponse } from 'next/server';
+import { auth } from '@/auth';
+import { prisma } from '@/lib/core/prisma';
+
+const providerMap: Record<string, string[]> = {
+  'YouTube Data API': ['youtube', 'google'],
+  'Meta Graph API': ['facebook', 'instagram'],
+  'TikTok Publishing API': ['tiktok'],
+  'YouTube Connection': ['youtube', 'google'],
+  'Facebook & Instagram Connection': ['facebook', 'instagram'],
+  'TikTok Connection': ['tiktok'],
+};
 
 export async function GET() {
   const apiKey = process.env.BETTERSTACK_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ data: [], incidents: [] });
+  }
+
+  const session = await auth();
+  let userProviders: string[] | null = null;
+  if (session?.user?.id) {
+    if (process.env.NEXT_PUBLIC_E2E === 'true') {
+      userProviders = ['google', 'facebook', 'tiktok'];
+    } else {
+      const accounts = await prisma.account.findMany({
+        where: { userId: session.user.id },
+        select: { provider: true }
+      });
+      userProviders = accounts.map(a => a.provider);
+    }
   }
 
   try {
@@ -45,6 +70,18 @@ export async function GET() {
             name: m.attributes.pronounceable_name || m.attributes.name || 'Unknown Monitor',
           }
         }));
+
+        // Filter out unconnected external APIs if the user is authenticated
+        if (userProviders !== null) {
+          monitorsJson.data = monitorsJson.data.filter((m: RawMonitor) => {
+            const name = m.attributes.name || '';
+            const mappedProviders = providerMap[name];
+            if (mappedProviders) {
+              return mappedProviders.some(p => userProviders!.includes(p));
+            }
+            return true;
+          });
+        }
       }
       return NextResponse.json({ 
         data: monitorsJson.data || [], 

@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { Paper, Typography, Box, Accordion, AccordionSummary, AccordionDetails, Chip, Divider } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -5,9 +7,13 @@ import { BetterStackIncident } from '@/lib/schemas/status';
 import { friendlyNames } from './ServiceListItem';
 
 export function IncidentsTimeline({ incidents = [] }: { incidents?: BetterStackIncident[] }) {
-  // Only show resolved incidents (Past Incidents) and sort by newest first. Limit to 5.
+  // Only show resolved incidents from the last 30 days, sorted by newest first. Limit to 5.
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
   const pastIncidents = incidents
     .filter(inc => inc.attributes.resolved_at !== null)
+    .filter(inc => new Date(inc.attributes.started_at) > thirtyDaysAgo)
     .sort((a, b) => new Date(b.attributes.started_at).getTime() - new Date(a.attributes.started_at).getTime())
     .slice(0, 5);
   return (
@@ -15,7 +21,7 @@ export function IncidentsTimeline({ incidents = [] }: { incidents?: BetterStackI
       <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>Past Incidents</Typography>
       <Divider sx={{ mb: 3 }} />
       {pastIncidents.length === 0 ? (
-        <Typography variant="body2" color="text.secondary">No incidents reported in the last 90 days.</Typography>
+        <Typography variant="body2" color="text.secondary">No incidents reported in the last 30 days.</Typography>
       ) : (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {pastIncidents.map((incident, idx) => {

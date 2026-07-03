@@ -12,6 +12,8 @@ const maintenanceEvents: MaintenanceEvent[] = [];
 import { BetterStackMonitor } from '@/lib/schemas/status';
 
 export function SidebarPanels({ monitors }: { monitors: BetterStackMonitor[] }) {
+  const SHOW_UPTIME = false; // Feature flag to easily enable/disable the 90-Day Uptime section
+
   // Shared filter logic
   const externalNames = ['YouTube', 'Meta', 'TikTok'];
   
@@ -43,27 +45,29 @@ export function SidebarPanels({ monitors }: { monitors: BetterStackMonitor[] }) 
 
   const coreColor = getAggregateColor(coreMonitors);
   const externalColor = getAggregateColor(externalMonitors);
-  
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <Paper sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', boxShadow: 'none' }}>
-        <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>90-Day Uptime</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Box>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>Directly Social Platform</Typography>
-            <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
-              <Typography variant="h4" sx={{ fontWeight: 800, color: coreColor }}>{coreUptime.toFixed(2)}%</Typography>
+      {SHOW_UPTIME && (
+        <Paper sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', boxShadow: 'none' }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>90-Day Uptime</Typography>
+          <Divider sx={{ mb: 2 }} />
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>Directly Social Platform</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
+                <Typography variant="h4" sx={{ fontWeight: 800, color: coreColor }}>{coreUptime.toFixed(2)}%</Typography>
+              </Box>
+            </Box>
+            <Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>Social Media Connections</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
+                <Typography variant="h4" sx={{ fontWeight: 800, color: externalColor }}>{externalUptime.toFixed(2)}%</Typography>
+              </Box>
             </Box>
           </Box>
-          <Box>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>Social Media Connections</Typography>
-            <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
-              <Typography variant="h4" sx={{ fontWeight: 800, color: externalColor }}>{externalUptime.toFixed(2)}%</Typography>
-            </Box>
-          </Box>
-        </Box>
-      </Paper>
+        </Paper>
+      )}
 
       <Paper sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', boxShadow: 'none' }}>
         <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>Upcoming Maintenance</Typography>

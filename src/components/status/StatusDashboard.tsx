@@ -12,6 +12,7 @@ import { IncidentsTimeline } from './IncidentsTimeline';
 export function StatusDashboard({ scenario }: { scenario: string | null }) {
   const [monitors, setMonitors] = useState<BetterStackMonitor[]>([]);
   const [incidents, setIncidents] = useState<BetterStackIncident[]>([]);
+  const SHOW_INCIDENTS = false; // Feature flag to easily enable/disable past incidents
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState('');
@@ -77,9 +78,11 @@ export function StatusDashboard({ scenario }: { scenario: string | null }) {
               <SidebarPanels monitors={monitors} />
             </Grid>
           </Grid>
-          <Box component="section">
-            <IncidentsTimeline incidents={incidents} />
-          </Box>
+          {SHOW_INCIDENTS && (
+            <Box component="section">
+              <IncidentsTimeline incidents={incidents} />
+            </Box>
+          )}
         </>
       )}
     </Box>

@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { ListItem, ListItemText, Typography, Box, Tooltip } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -16,9 +18,9 @@ export const statusMap = {
 };
 
 export const extTooltips: Record<string, string> = {
-  'TikTok Publishing API': 'TikTok API health for video publishing and analytics retrieval.',
-  'Meta Graph API': 'Meta Graph API health for account connections and posting.',
-  'YouTube Data API': 'YouTube Data API health for video uploads and channel metrics syncing.',
+  'TikTok Publishing API': 'TikTok health for video publishing and analytics retrieval.',
+  'Meta Graph API': 'Facebook & Instagram health for account connections and posting.',
+  'YouTube Data API': 'YouTube health for video uploads and channel metrics syncing.',
 };
 
 export const friendlyNames: Record<string, string> = {

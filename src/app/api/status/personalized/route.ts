@@ -8,14 +8,14 @@ const isDown = (status: string) => status === 'down' || status === 'degraded' ||
 const coreServices = ['directly-social.vercel.app', 'Core API Gateway', 'Primary Database'];
 
 // Map Better Stack monitor names (or friendly names) to provider names in the Account table
-const providerMap: Record<string, string> = {
-  'YouTube Data API': 'google',
-  'Meta Graph API': 'facebook',
-  'TikTok Publishing API': 'tiktok',
+const providerMap: Record<string, string[]> = {
+  'YouTube Data API': ['youtube', 'google'],
+  'Meta Graph API': ['facebook', 'instagram'],
+  'TikTok Publishing API': ['tiktok'],
   // Also checking friendly names just in case
-  'YouTube Connection': 'google',
-  'Facebook & Instagram Connection': 'facebook',
-  'TikTok Connection': 'tiktok',
+  'YouTube Connection': ['youtube', 'google'],
+  'Facebook & Instagram Connection': ['facebook', 'instagram'],
+  'TikTok Connection': ['tiktok'],
 };
 
 export async function GET() {
@@ -31,12 +31,17 @@ export async function GET() {
   }
 
   try {
-    // 1. Fetch user's connected providers from DB
-    const accounts = await prisma.account.findMany({
-      where: { userId: session.user.id },
-      select: { provider: true }
-    });
-    const userProviders = accounts.map(a => a.provider);
+    // 1. Fetch user's connected providers from DB (or mock if E2E)
+    let userProviders: string[] = [];
+    if (process.env.NEXT_PUBLIC_E2E === 'true') {
+      userProviders = ['google', 'facebook', 'tiktok'];
+    } else {
+      const accounts = await prisma.account.findMany({
+        where: { userId: session.user.id },
+        select: { provider: true }
+      });
+      userProviders = accounts.map(a => a.provider);
+    }
 
     // 2. Fetch Better Stack monitors
     const controller = new AbortController();
@@ -66,8 +71,8 @@ export async function GET() {
       if (coreServices.includes(name)) return true;
       
       // External APIs only affect if user has connected it
-      const mappedProvider = providerMap[name];
-      if (mappedProvider && userProviders.includes(mappedProvider)) {
+      const mappedProviders = providerMap[name];
+      if (mappedProviders && mappedProviders.some(p => userProviders.includes(p))) {
         return true;
       }
       

@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { Paper, Typography, Box, List, ListItemButton, ListItemText, Tooltip, IconButton, Divider, Collapse } from '@mui/material';
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -44,16 +46,14 @@ export function ServiceList({ monitors }: ServiceListProps) {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <Paper sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider', boxShadow: 'none' }}>
-        <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>Directly Social Platform</Typography>
-        <Divider />
+      <Paper sx={{ p: 2, borderRadius: 3, border: '1px solid', borderColor: 'divider', boxShadow: 'none' }}>
         <List disablePadding>
           <ListItemButton 
             onClick={() => setCoreExpanded(!coreExpanded)}
-            sx={{ py: 1.5, px: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', '&:hover': { bgcolor: 'action.hover' } }}
+            sx={{ py: 1.5, px: 2, borderRadius: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', '&:hover': { bgcolor: 'action.hover' } }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <ListItemText primary={<Typography variant="body1" sx={{ fontWeight: 600 }}>App Functionality</Typography>} />
+              <ListItemText primary={<Typography variant="h6" sx={{ fontWeight: 700 }}>Directly Social App Functionality</Typography>} />
               {coreExpanded ? <ExpandLess color="action" /> : <ExpandMore color="action" />}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
