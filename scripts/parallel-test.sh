@@ -24,37 +24,44 @@ fi
 
 echo "🚀 Starting Parallel Mobile Test Orchestration..."
 
-# Dynamically fetch all phone/tablet profiles from Android Studio
-echo "🔍 Fetching available device profiles..."
-mapfile -t ALL_DEVICES < <($AVDMANAGER list device | grep -E "^id: " | grep -oE '"[^"]+"' | tr -d '"' | grep -iE "(pixel|nexus|galaxy|phone)")
+# Define the Device Matrix
+TARGET_DEVICES=("small_phone" "pixel_9_pro")
+NUM_EMULATORS=${#TARGET_DEVICES[@]}
 
 DEVICES_USED=""
 
-# 1. Provision AVDs with random hardware profiles
+# 1. Provision AVDs with the fixed hardware profiles
 for i in $(seq 1 $NUM_EMULATORS); do
-    AVD_NAME="maestro_emu_$i"
+    TARGET_DEV="${TARGET_DEVICES[$((i-1))]}"
+    AVD_NAME="maestro_${TARGET_DEV}"
     
-    # Pick a random device profile from the dynamic list
-    RANDOM_DEV="${ALL_DEVICES[$RANDOM % ${#ALL_DEVICES[@]}]}"
-    DEVICES_USED+="$RANDOM_DEV "
+    DEVICES_USED+="$TARGET_DEV "
     
-    echo "⚙️ Provisioning AVD: $AVD_NAME as a '$RANDOM_DEV'..."
+    echo "⚙️ Ensuring AVD '$AVD_NAME' exists..."
     
-    # Delete if exists so we can recreate it with a new profile
-    if $EMULATOR -list-avds | grep -q "^${AVD_NAME}$"; then
-        $AVDMANAGER delete avd -n "$AVD_NAME" >/dev/null
+    # Create only if it doesn't exist
+    if ! $EMULATOR -list-avds | grep -q "^${AVD_NAME}$"; then
+        echo "   Creating new AVD as '$TARGET_DEV'..."
+        echo "no" | $AVDMANAGER create avd -n "$AVD_NAME" -k "$SYS_IMG" --device "$TARGET_DEV" --force >/dev/null
+    else
+        echo "   AVD already exists. Reusing..."
     fi
-    
-    echo "no" | $AVDMANAGER create avd -n "$AVD_NAME" -k "$SYS_IMG" --device "$RANDOM_DEV" --force
 done
 
+HEADED_FLAG="-no-window"
+if [[ "$*" == *"--headed"* ]] || [[ "$HEADED" == "true" ]] || [[ "$HEADED" == "1" ]]; then
+    echo "👀 Headed mode enabled! Emulators will be visible."
+    HEADED_FLAG=""
+fi
+
 # 2. Boot Emulators
-echo "🔋 Booting $NUM_EMULATORS Emulators Headlessly..."
+echo "🔋 Booting $NUM_EMULATORS Emulators..."
 for i in $(seq 1 $NUM_EMULATORS); do
-    AVD_NAME="maestro_emu_$i"
+    TARGET_DEV="${TARGET_DEVICES[$((i-1))]}"
+    AVD_NAME="maestro_${TARGET_DEV}"
     PORT=$((5552 + i * 2)) # 5554, 5556
     echo "   Starting $AVD_NAME on port $PORT..."
-    $EMULATOR -avd "$AVD_NAME" -port $PORT -no-window -no-snapshot-load -no-snapshot-save -no-audio -no-boot-anim -wipe-data -metrics-to-console &
+    $EMULATOR -avd "$AVD_NAME" -port $PORT $HEADED_FLAG -no-snapshot-load -no-snapshot-save -no-audio -no-boot-anim -wipe-data -metrics-to-console &
 done
 
 # 3. Wait for Boot Completion
@@ -73,11 +80,9 @@ for i in $(seq 1 $NUM_EMULATORS); do
 done
 
 # 4. Install APK
-echo "📦 Installing APK to all emulators..."
-if [ ! -f "$APK_PATH" ]; then
-    echo "⚠️ APK not found at $APK_PATH! Building now..."
-    cd android && ./gradlew assembleDebug && cd ..
-fi
+echo "📦 Building and Installing APK to all emulators..."
+CAPACITOR_URL="http://10.0.2.2:3000" npx cap sync android > /dev/null
+cd android && ./gradlew assembleDebug && cd ..
 
 for i in $(seq 1 $NUM_EMULATORS); do
     PORT=$((5552 + i * 2))
@@ -95,7 +100,7 @@ fi
 
 # Run tests and shard split them
 rm -rf ./test-results/maestro/* 2>/dev/null
-maestro test -e E2E_TEST_PASSWORD=$E2E_TEST_PASSWORD --shard-split $NUM_EMULATORS --test-output-dir ./test-results/maestro .maestro/
+maestro test -e E2E_TEST_PASSWORD=$E2E_TEST_PASSWORD --device emulator-5554,emulator-5556 --shard-split $NUM_EMULATORS --test-output-dir ./test-results/maestro .maestro/
 TEST_EXIT_CODE=$?
 
 # Log the results to history

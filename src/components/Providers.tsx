@@ -13,6 +13,14 @@ import { Session } from "next-auth";
 
 export function Providers({ children, session }: { children: React.ReactNode; session: Session | null }) {
   useEffect(() => {
+    if (session?.user) {
+      try {
+        localStorage.setItem('has_account', 'true');
+      } catch (e) {}
+    }
+  }, [session]);
+
+  useEffect(() => {
     const setupDeepLinkListener = async () => {
       // Clean up any existing listeners first
       await App.removeAllListeners();

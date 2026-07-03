@@ -83,7 +83,13 @@ export const LandingHeader = () => {
             ) : (
               <>
                 <Link href="/login" style={{ textDecoration: 'none', color: theme.palette.text.primary, display: 'block' }}>
-                  <Typography sx={{ fontWeight: 600, fontSize: '0.9rem', '&:hover': { color: 'primary.main' }, display: { xs: 'none', sm: 'block' } }}>
+                  <Typography sx={{ 
+                    fontWeight: 600, 
+                    fontSize: '0.9rem', 
+                    '&:hover': { color: 'primary.main' }, 
+                    display: { xs: 'none', sm: 'block' },
+                    '.returning-user &': { display: 'none !important' }
+                  }}>
                     Login
                   </Typography>
                 </Link>
@@ -94,7 +100,12 @@ export const LandingHeader = () => {
                   color="primary"
                   sx={{ borderRadius: 2, px: { xs: 1.5, sm: 3 }, textTransform: 'none', fontWeight: 600 }}
                 >
-                  Get Started
+                  <Box component="span" sx={{ display: 'inline', '.returning-user &': { display: 'none !important' } }}>
+                    Get Started
+                  </Box>
+                  <Box component="span" sx={{ display: 'none', '.returning-user &': { display: 'inline !important' } }}>
+                    Login
+                  </Box>
                 </Button>
               </>
             )}
