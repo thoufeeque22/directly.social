@@ -32,9 +32,7 @@ export function ScheduleContent() {
         onViewChange={editor.setViewMode}
       />
 
-      {editor.posts.length === 0 ? (
-        <ScheduleEmptyState />
-      ) : (editor.viewMode === 'month' || editor.viewMode === 'week') ? (
+      {(editor.viewMode === 'month' || editor.viewMode === 'week') ? (
         editor.currentDate && (
           <CalendarView 
             posts={editor.posts} 
@@ -43,6 +41,8 @@ export function ScheduleContent() {
             onEditPost={(post) => editor.setEditingPost(post)} 
           />
         )
+      ) : editor.posts.length === 0 ? (
+        <ScheduleEmptyState />
       ) : (
         <ScheduleTimelineView 
           posts={editor.posts}

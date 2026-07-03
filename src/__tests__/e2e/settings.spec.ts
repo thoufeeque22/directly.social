@@ -10,7 +10,13 @@ test.describe('Settings Page - Template Management @regression', () => {
   test('should display the template manager', async ({ page, isMobile }) => {
     // Navigate to snippets tab
     await openMobileMenuIfNeeded(page, isMobile);
-    const snippetsTab = page.getByRole('link', { name: /snippets/i });
+    // On mobile the Settings section is collapsed — expand it first
+    const settingsNavItem = page.getByRole('link', { name: /^Settings$/i }).first();
+    if (await settingsNavItem.isVisible() && isMobile) {
+      await settingsNavItem.click();
+      await page.waitForTimeout(400);
+    }
+    const snippetsTab = page.getByRole('link', { name: /^Snippets$/i });
     await snippetsTab.scrollIntoViewIfNeeded();
     await snippetsTab.click();
     await page.waitForURL('**/settings?tab=snippets', { timeout: 10000 });
@@ -56,7 +62,13 @@ test.describe('Settings Page - Template Management @regression', () => {
     // Now go back to settings to manage it
     await page.goto('/settings', { waitUntil: 'networkidle' });
     await openMobileMenuIfNeeded(page, isMobile);
-    const snippetsTab = page.getByRole('link', { name: /snippets/i });
+    // On mobile the Settings section is collapsed — expand it first
+    const settingsNavItem2 = page.getByRole('link', { name: /^Settings$/i }).first();
+    if (await settingsNavItem2.isVisible() && isMobile) {
+      await settingsNavItem2.click();
+      await page.waitForTimeout(400);
+    }
+    const snippetsTab = page.getByRole('link', { name: /^Snippets$/i });
     await snippetsTab.scrollIntoViewIfNeeded();
     await snippetsTab.click({ force: true });
     await page.waitForURL('**/settings?tab=snippets', { timeout: 30000 });
@@ -97,7 +109,13 @@ test.describe('Settings Page - Template Management @regression', () => {
 
     await page.goto('/settings', { waitUntil: 'networkidle' });
     await openMobileMenuIfNeeded(page, isMobile);
-    const snippetsTab = page.getByRole('link', { name: /snippets/i });
+    // On mobile the Settings section is collapsed — expand it first
+    const settingsNavItem3 = page.getByRole('link', { name: /^Settings$/i }).first();
+    if (await settingsNavItem3.isVisible() && isMobile) {
+      await settingsNavItem3.click();
+      await page.waitForTimeout(400);
+    }
+    const snippetsTab = page.getByRole('link', { name: /^Snippets$/i });
     await snippetsTab.scrollIntoViewIfNeeded();
     await snippetsTab.click({ force: true });
     await page.waitForURL('**/settings?tab=snippets', { timeout: 30000 });

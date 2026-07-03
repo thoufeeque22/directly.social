@@ -12,6 +12,12 @@ test.describe('BYOS - Bring Your Own Storage @regression', () => {
 
     // Switch to Storage Tab
     await openMobileMenuIfNeeded(page, isMobile);
+    // On mobile the Settings section is collapsed — expand it first
+    const settingsNavItem = page.getByRole('link', { name: /^Settings$/i }).first();
+    if (await settingsNavItem.isVisible() && isMobile) {
+      await settingsNavItem.click();
+      await page.waitForTimeout(400);
+    }
     await page.getByRole('link', { name: /Storage/i }).click();
     await page.waitForTimeout(1000); // Wait for tab transition and hydration
 
@@ -46,6 +52,12 @@ test.describe('BYOS - Bring Your Own Storage @regression', () => {
   test('should handle invalid credentials gracefully', async ({ page, isMobile }) => {
     // For negative path, we use the real server action with invalid-id bypass
     await openMobileMenuIfNeeded(page, isMobile);
+    // On mobile the Settings section is collapsed — expand it first
+    const settingsNavItem2 = page.getByRole('link', { name: /^Settings$/i }).first();
+    if (await settingsNavItem2.isVisible() && isMobile) {
+      await settingsNavItem2.click();
+      await page.waitForTimeout(400);
+    }
     await page.getByRole('link', { name: /Storage/i }).click();
     await page.waitForTimeout(1000); // Wait for tab transition and hydration
 

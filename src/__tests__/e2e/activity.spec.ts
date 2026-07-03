@@ -118,6 +118,8 @@ test.describe('Activity Domain Modularization Verification @regression', () => {
     await expect(page.getByText('Post 2')).not.toBeVisible();
 
     const loadMoreButton = page.getByRole('button', { name: 'Load More' });
+    await expect(loadMoreButton).toBeVisible({ timeout: 10000 });
+    await loadMoreButton.scrollIntoViewIfNeeded();
     await loadMoreButton.click();
 
     await expect(page.getByText('Post 2')).toBeVisible();

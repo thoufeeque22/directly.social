@@ -82,6 +82,8 @@ export function UserActions({ session, tierName }: { session: Session | null, ti
               onClick={async () => {
                 const m = await import('@/app/actions/user/auth');
                 await m.logOutAction();
+                // Small delay to ensure session cookie is cleared before navigating
+                await new Promise(resolve => setTimeout(resolve, 300));
                 window.location.href = '/?loggedOut=true';
               }} 
               data-testid="sign-out-button"
