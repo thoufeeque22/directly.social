@@ -47,7 +47,7 @@ export function ActivityList({
       ))}
 
       {nextCursor && (
-        <button className={styles.loadMoreButton} onClick={onLoadMore} disabled={loadingMore}>
+        <button className={styles.loadMoreButton} onClick={onLoadMore} disabled={loadingMore} data-testid="load-more-button">
           {loadingMore ? 'Loading...' : 'Load More'}
         </button>
       )}

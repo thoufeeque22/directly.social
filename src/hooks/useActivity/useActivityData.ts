@@ -27,7 +27,8 @@ export function useActivityData({
       }).catch(() => setIsLoading(false));
     }, searchQuery ? 400 : 0);
     return () => clearTimeout(timer);
-  }, [searchQuery, fetchActivity, setPosts, setNextCursor, setIsLoading, posts.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, fetchActivity, setPosts, setNextCursor, setIsLoading]);
 
   useEffect(() => {
     const handleRefresh = () => {
