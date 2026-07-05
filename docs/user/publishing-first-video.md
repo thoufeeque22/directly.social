@@ -1,6 +1,6 @@
 # Publishing Your First Video
 
-Ready to start publishing? Directly Social makes it easy to manage your videos and push them to all your social channels with a single click.
+Ready to start publishing? directly.social makes it easy to manage your videos and push them to all your social channels with a single click.
 
 ## Step 1: Upload to Your Vault
 1. Navigate to the **Media** tab.

@@ -9,17 +9,17 @@
 const LAUNCH_URL = 'https://directly-social.vercel.app';
 
 export const BRAND = {
-  name: 'Directly Social',
-  shortName: 'Directly',
+  name: 'directly.social',
+  shortName: 'directly.social',
   tagline: 'The Native Social Client',
   url: LAUNCH_URL,
   appStore: {
     apple: {
-      title: 'Directly Social: Post Planner',
+      title: 'directly.social: Post Planner',
       subtitle: 'Schedule & Post Natively',
     },
     google: {
-      title: 'Directly Social: Post Planner',
+      title: 'directly.social: Post Planner',
       shortDescription:
         'Schedule and publish to social media platforms — with your own keys and storage.',
     },
@@ -30,6 +30,6 @@ export const BRAND = {
     discord: 'https://discord.gg/directly', // Placeholder
   },
   legal: {
-    copyrightOwner: 'Directly Social',
+    copyrightOwner: 'directly.social',
   }
 } as const;

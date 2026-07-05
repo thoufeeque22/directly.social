@@ -1,6 +1,6 @@
-# Directly Social App
+# directly.social App
 
-**Directly Social** is a multi-platform social media management application that allows users to schedule and distribute both short-form (Shorts/Reels/TikToks) and long-form video content across various platforms simultaneously.
+**directly.social** is a multi-platform social media management application that allows users to schedule and distribute both short-form (Shorts/Reels/TikToks) and long-form video content across various platforms simultaneously.
 
 ## Tech Stack
 
@@ -50,7 +50,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 ## API Documentation
 
-**Directly Social** features a centralized API documentation system powered by Swagger/OpenAPI.
+**directly.social** features a centralized API documentation system powered by Swagger/OpenAPI.
 Access the interactive Swagger UI at `/api/docs` in your local development environment.
 
 ## AI Agent Orchestration

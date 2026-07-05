@@ -1,4 +1,4 @@
-# Directly Social App: Requirements Specification
+# directly.social App: Requirements Specification
 
 ## 1. Project Overview
 Directly is a professional-grade multi-platform video distribution platform designed to help creators publish content to YouTube Shorts, Instagram Reels, and TikTok simultaneously. The platform focuses on high-performance uploads, AI-driven content optimization, and robust background publishing.

@@ -27,7 +27,7 @@ Verify that the System Status Dashboard correctly fetches and displays the healt
     2. Navigate to the Status Page via the Sidebar.
 - **Expected Result**:
     - The Sidebar "System Status" link does NOT have a red warning icon (since there are no connected accounts to be degraded).
-    - The Service List on the Status page displays the "Directly Social App Functionality" section.
+    - The Service List on the Status page displays the "directly.social App Functionality" section.
     - The external platform connections (YouTube, Meta, TikTok) are HIDDEN because the user has not connected them.
 
 ### 3. Authenticated Filtering (Specific Connected Accounts)
@@ -49,7 +49,7 @@ Verify that the System Status Dashboard correctly fetches and displays the healt
 
 ### 5. UI Interactivity & Tooltips
 - **Steps**:
-    1. On the Status Page, click the "Directly Social App Functionality" accordion header.
+    1. On the Status Page, click the "directly.social App Functionality" accordion header.
     2. Hover over the "Status" chips (e.g., "Operational", "Degraded").
 - **Expected Result**:
     - The accordion collapses and expands smoothly.

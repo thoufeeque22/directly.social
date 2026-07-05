@@ -9,7 +9,7 @@
 
 | Field | Value | Limit |
 |---|---|---|
-| **Title** | Directly Social | 30 chars |
+| **Title** | directly.social | 30 chars |
 | **Subtitle** | Schedule & Post Natively | 30 chars |
 
 ### Subtitle Rationale
@@ -28,7 +28,7 @@
 
 | Field | Value | Limit |
 |---|---|---|
-| **Title** | Directly Social | 30 chars |
+| **Title** | directly.social | 30 chars |
 | **Short Description** | Schedule and publish to social media platforms — with your own keys and storage. | 80 chars |
 
 ### Short Description Rationale

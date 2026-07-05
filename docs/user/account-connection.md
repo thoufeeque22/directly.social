@@ -1,9 +1,9 @@
 # Connecting Your Social Accounts
 
-To begin publishing, you need to grant Directly Social permission to post on your behalf. We use secure **OAuth 2.0** flows, which means we never see or store your social media passwords.
+To begin publishing, you need to grant directly.social permission to post on your behalf. We use secure **OAuth 2.0** flows, which means we never see or store your social media passwords.
 
 ## Automatic Connection
-**Good news!** The primary account you used to log into Directly Social is automatically connected and ready for publishing. You can see it in your **Settings > Destinations** list immediately.
+**Good news!** The primary account you used to log into directly.social is automatically connected and ready for publishing. You can see it in your **Settings > Destinations** list immediately.
 
 ## How to Connect Additional Accounts
 If you have multiple YouTube channels, TikTok profiles, or Instagram Business accounts, you can add them easily:
@@ -12,7 +12,7 @@ If you have multiple YouTube channels, TikTok profiles, or Instagram Business ac
 2. Click the **Connect** button next to the platform you want to link.
 3. You will be redirected to the platform's official login page (TikTok, Google, or Meta).
 4. Review the permissions requested and click **Authorize** or **Allow**.
-5. You will be automatically returned to Directly Social, and your account will now appear as "Connected."
+5. You will be automatically returned to directly.social, and your account will now appear as "Connected."
 
 ## Troubleshooting
 

@@ -1,18 +1,18 @@
 # Bringing Your Own Keys (BYOK)
 
-To give you maximum freedom and bypass global rate limits, Directly Social allows you to **Bring Your Own Keys (BYOK)**. This means you connect your own developer accounts directly to the app.
+To give you maximum freedom and bypass global rate limits, directly.social allows you to **Bring Your Own Keys (BYOK)**. This means you connect your own developer accounts directly to the app.
 
 **Quick Navigation:**
 - [YouTube Configuration](#1-youtube-via-google-cloud)
 - [TikTok Configuration](#2-tiktok-via-tiktok-for-developers)
 - [Meta (Facebook & Instagram) Configuration](#3-meta-facebook--instagram)
 - [AI Providers (OpenAI & Gemini)](#4-ai-providers-openai--gemini)
-- [How to Configure in Directly Social](#how-to-configure-in-directly-social)
+- [How to Configure in directly.social](#how-to-configure-in-directly-social)
 
 ## Benefits of BYOK
 
 - **Unlimited Throughput:** You aren't shared with thousands of other users. You use your own project's quota.
-- **Custom Branding:** When you connect an account, it will show *your* application name instead of "Directly Social."
+- **Custom Branding:** When you connect an account, it will show *your* application name instead of "directly.social."
 - **Total Independence:** You own the relationship with the platform APIs.
 
 ## Supported Platforms
@@ -45,7 +45,7 @@ To publish Reels and Posts, you need a **Facebook Business Page** linked to an *
 - In Facebook Login settings, add the **Redirect URI:** `https://directly.social/api/auth/callback/facebook`
 - Ensure your app requests: `instagram_basic`, `instagram_content_publish`, `pages_show_list`, and `pages_read_engagement`.
 
-## How to Configure in Directly Social
+## How to Configure in directly.social
 
 1. Open **Settings** and go to the **Destinations** tab.
 2. Find the platform you want to configure and click **Enable**.
@@ -54,7 +54,7 @@ To publish Reels and Posts, you need a **Facebook Business Page** linked to an *
 5. Click **Save Configuration**.
 
 Once saved, the app will prioritize your personal keys for all future connection and publishing tasks!
-figure in Directly Social
+figure in directly.social
 
 ### For Social Platforms (YouTube, TikTok, Meta)
 1. Open **Settings** and go to the **Destinations** tab.

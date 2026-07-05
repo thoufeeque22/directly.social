@@ -25,7 +25,7 @@ const docCategories = [
   {
     id: 'core-features',
     title: 'Core Features',
-    description: 'Master the tools that make Directly Social powerful and efficient.',
+    description: 'Master the tools that make directly.social powerful and efficient.',
     icon: <AutoAwesomeIcon color="primary" sx={{ fontSize: 32 }} />,
     links: [
       { label: 'Metadata Snippets', href: '/docs/user/metadata-snippets' },
@@ -47,7 +47,7 @@ const docCategories = [
   {
     id: 'philosophy-support',
     title: 'Philosophy & Support',
-    description: 'Understand our mission and how to get the most out of Directly Social.',
+    description: 'Understand our mission and how to get the most out of directly.social.',
     icon: <HelpCenterIcon color="primary" sx={{ fontSize: 32 }} />,
     links: [
       { label: 'The SaaS Tax Explained', href: '/philosophy' },

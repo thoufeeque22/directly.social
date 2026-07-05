@@ -1,10 +1,10 @@
 # Bring Your Own AI Keys (BYOK)
 
-To use "Zero-Markup AI" features like Vibe Sync, Title Polishing, and Hashtag Generation, Directly Social allows you to bring your own API keys for top AI models. This means you only pay wholesale prices directly to the provider, with no monthly markup from us.
+To use "Zero-Markup AI" features like Vibe Sync, Title Polishing, and Hashtag Generation, directly.social allows you to bring your own API keys for top AI models. This means you only pay wholesale prices directly to the provider, with no monthly markup from us.
 
 **Quick Navigation:**
 - [Supported Providers](#supported-providers)
-- [How to Configure in Directly Social](#how-to-configure-in-directly-social)
+- [How to Configure in directly.social](#how-to-configure-in-directly-social)
 
 ## Supported Providers
 
@@ -34,11 +34,11 @@ To use "Zero-Markup AI" features like Vibe Sync, Title Polishing, and Hashtag Ge
 - Click **Create API Key**.
 - Copy the generated API Key.
 
-## How to Configure in Directly Social
+## How to Configure in directly.social
 
 1. Open **Settings** and go to the **AI** tab.
 2. Select your preferred provider (OpenAI, Gemini, Anthropic, or Groq).
 3. Enter your API Key in the provided field.
 4. Click **Connect Provider**.
 
-Once saved, Directly Social will prioritize your personal API key for all AI-assisted features!
+Once saved, directly.social will prioritize your personal API key for all AI-assisted features!
