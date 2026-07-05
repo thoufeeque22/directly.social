@@ -78,3 +78,6 @@ To ensure production-level stability and prevent build failures or linting warni
 ### 7. Secrets & Credentials in Tests
 - **Never Hardcode Secrets:** When writing Playwright or Maestro E2E tests, never hardcode passwords (like `Tester@123`) or other sensitive credentials directly in the test scripts.
 - **Environment Variables:** Always use environment variables (e.g., `process.env.TEST_USER_PASSWORD` in Playwright or `${TEST_USER_PASSWORD}` in Maestro) and pull them from the `.env` file to ensure local testing doesn't leak secrets or break across environments.
+
+### 8. Branding & Naming
+- **Strict Application Name:** When referring to the application or writing user-facing documentation, ALWAYS use the exact string `directly.social`. NEVER use "Directly Social", "Directly.Social", or any capitalized variation.
