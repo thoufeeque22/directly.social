@@ -6,12 +6,10 @@
  * different support/legal/privacy mailboxes.
  */
 
-const BASE_EMAIL = 'support.directly.social@gmail.com';
-
 export const CONTACT_EMAILS = {
-  support: BASE_EMAIL,
-  hello: BASE_EMAIL,
-  privacy: BASE_EMAIL,
-  legal: BASE_EMAIL,
-  alerts: BASE_EMAIL,
+  support: 'support@directly.social',
+  hello: 'hello@directly.social',
+  privacy: 'privacy@directly.social',
+  legal: 'legal@directly.social',
+  alerts: 'alerts@directly.social',
 } as const;

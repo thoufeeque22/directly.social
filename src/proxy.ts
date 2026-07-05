@@ -23,8 +23,10 @@ export default auth(async (req) => {
 
     try {
       const userId = req.auth?.user?.id;
-      // Use a safer access pattern for IP to satisfy the compiler
-      const ip = (req as Request & { ip?: string }).ip ?? '127.0.0.1';
+      // Use a safer access pattern for IP to satisfy the compiler and handle Vercel routing
+      const forwardedFor = req.headers.get('x-forwarded-for');
+      const realIp = req.headers.get('x-real-ip');
+      const ip = (req as Request & { ip?: string }).ip ?? forwardedFor?.split(',')[0] ?? realIp ?? '127.0.0.1';
 
       // (CA-003): Use registry to find appropriate limiter
       const { limiter, useIpOnly } = getLimiterForPath(pathname);
