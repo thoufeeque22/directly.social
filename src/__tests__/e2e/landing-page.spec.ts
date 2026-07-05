@@ -51,7 +51,7 @@ test('should display all 10 major sections @smoke', async ({ page }) => {
     // Switch to Power Users
     await page.getByRole('button', { name: 'Power Users' }).click();
     await expect(page.getByText('For Power Users & Teams')).toBeVisible();
-    await expect(page.locator('text=/BYOK.*Architecture/')).toBeVisible();
+    await expect(page.getByText(/BYOK.*Storage/).first()).toBeVisible();
   });
 
   test('should expand FAQ items @interactivity @smoke', async ({ page }) => {
@@ -75,7 +75,7 @@ test('should display all 10 major sections @smoke', async ({ page }) => {
   test('should be responsive on mobile @smoke', async ({ page, isMobile }) => {
     if (isMobile) {
       // Check that desktop-only elements are hidden
-      await expect(page.getByRole('button', { name: 'Features' })).not.toBeVisible();
+      await expect(page.locator('header').getByRole('link', { name: 'Features', exact: true })).not.toBeVisible();
       // Hero title should be smaller but visible
       await expect(page.getByRole('heading', { name: 'The Local-First Creator Studio', level: 1 })).toBeVisible();
     }

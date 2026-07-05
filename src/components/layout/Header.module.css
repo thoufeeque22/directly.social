@@ -121,7 +121,6 @@
   }
   
   /* Hide less essential icons on tiny mobile screens */
-  .actions > button:nth-child(1), /* ThemeToggle */
   .actions > button:nth-child(2) /* RefreshButton */ {
     display: none;
   }
