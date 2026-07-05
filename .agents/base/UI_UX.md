@@ -1,6 +1,9 @@
 # UI & Aesthetic Standards
 
 ## Aesthetic Principles
+- **Creator Studio Aesthetic:** The app MUST feel like a warm, empathetic "Creator Studio" rather than a clinical "AI SaaS" tool. 
+  - **Avoid Generic AI Tropes:** STRICTLY FORBID harsh neon colors (e.g., deep neon purples/blues), aggressive glassmorphism, and clinical radial "aura" glows. 
+  - **Embrace Warmth:** Use warmer, earthy tones (like terracotta, warm amber, soft sage), organic design elements, softer shadows, and human-centric copy.
 - **Material UI Aesthetic:** Prioritize a "humanly", professional, and polished UI design using Material UI (MUI).
 - **Theme Awareness (Light/Dark/System):** STRICTLY PROHIBIT hardcoded color values (e.g., `white`, `#FFFFFF`, `black`). Always use theme-aware HSL variables (e.g., `hsl(var(--foreground))`, `hsl(var(--primary-foreground))`) defined in the global theme.
 - **Human-Centric Design:** Focus on accessibility (A11y), clean spacing, clear visual hierarchy, and intuitive user flows. Verify all UI changes for contrast and visibility in both Light and Dark modes.
