@@ -5,33 +5,33 @@ export const getPalette = (mode: PaletteMode) => ({
   ...(mode === 'light'
     ? {
         primary: {
-          main: 'hsl(250, 80%, 60%)',
+          main: 'hsl(20, 80%, 60%)', // Warm terracotta
           contrastText: '#fff',
         },
         background: {
-          default: 'hsl(250, 40%, 98%)',
-          paper: 'rgba(255, 255, 255, 0.7)',
+          default: 'hsl(35, 30%, 98%)', // Warm off-white/cream
+          paper: 'rgba(255, 255, 255, 0.8)',
         },
         text: {
-          primary: 'hsl(250, 40%, 10%)',
-          secondary: 'hsl(250, 20%, 40%)',
+          primary: 'hsl(20, 40%, 10%)',
+          secondary: 'hsl(20, 20%, 40%)',
         },
         divider: 'rgba(0, 0, 0, 0.12)',
       }
     : {
         primary: {
-          main: 'hsl(250, 80%, 60%)',
-          contrastText: 'hsl(250, 10%, 98%)',
+          main: 'hsl(20, 80%, 60%)', // Warm terracotta
+          contrastText: 'hsl(20, 10%, 98%)',
         },
         background: {
-          default: 'hsl(250, 40%, 5%)',
-          paper: 'hsla(250, 30%, 12%, 0.5)',
+          default: 'hsl(20, 20%, 6%)', // Warm dark earthy tone
+          paper: 'hsla(20, 20%, 12%, 0.6)',
         },
         text: {
-          primary: 'hsl(250, 10%, 95%)',
-          secondary: 'hsl(250, 10%, 60%)',
+          primary: 'hsl(20, 10%, 95%)',
+          secondary: 'hsl(20, 10%, 60%)',
         },
-        divider: 'hsla(250, 30%, 25%, 0.2)',
+        divider: 'hsla(20, 30%, 25%, 0.2)',
       }),
   error: {
     main: 'hsl(0, 84%, 60%)',

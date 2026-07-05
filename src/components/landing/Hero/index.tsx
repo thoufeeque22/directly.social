@@ -12,17 +12,17 @@ export const Hero = () => {
 
   return (
     <Box sx={{ pt: { xs: 12, md: 16 }, pb: { xs: 6, md: 10 }, overflow: 'hidden', position: 'relative' }}>
-      {/* Studio Aura Glow */}
+      {/* Warm Studio Lighting */}
       <Box 
         sx={{ 
           position: 'absolute', 
-          top: '10%', 
+          top: '0%', 
           left: '50%', 
           transform: 'translateX(-50%)', 
-          width: '80%', 
-          height: '60%', 
-          background: 'radial-gradient(circle, hsla(var(--primary), 0.08) 0%, transparent 70%)', 
-          filter: 'blur(100px)',
+          width: '100%', 
+          height: '80%', 
+          background: 'radial-gradient(ellipse at top, hsla(var(--primary), 0.05) 0%, transparent 80%)', 
+          filter: 'blur(120px)',
           zIndex: 0,
           pointerEvents: 'none'
         }} 
