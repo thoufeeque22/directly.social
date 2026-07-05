@@ -27,6 +27,7 @@ Technical guides for advanced users and power users configuring their own infras
 
 - [Architecture Overview](ARCHITECTURE.md) - Deep dive into system design, data models, and workflows.
 - [AI Agent Orchestration](ORCHESTRATION.md) - Points to the AI agent workflows and instructions.
+- [Data Handling & Privacy](architecture/DATA_HANDLING.md) - Internal documentation on data storage, processing, and retention.
 
 ## Features
 

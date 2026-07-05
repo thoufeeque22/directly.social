@@ -51,20 +51,29 @@ export const PrivacyContent = () => (
           We use Meta Graph APIs to publish content to your Facebook Pages and Instagram Business accounts.
         </Typography>
       </Box>
-      <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Payment Processing & Telemetry</Typography>
+      <Box sx={{ ml: 2, mb: 2 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>AI Content Enhancement</Typography>
         <Typography variant="body1" gutterBottom>
-          We use <strong>Stripe</strong> for secure payment processing. We do not store your full credit card details on our servers. We also use <strong>Sentry</strong> for error monitoring and diagnostics to ensure the stability of the Service.
+          To provide AI-assisted content generation (e.g., generating descriptions and hashtags), we transmit relevant video metadata and styling prompts to trusted AI providers (such as OpenAI, Google, Anthropic, or Groq). Your Personal Identifiable Information (PII) is strictly excluded from these prompts unless you explicitly include it in your content. We do not allow these providers to use our API data to train their models.
+        </Typography>
+      </Box>
+      <Box sx={{ ml: 2 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Infrastructure, Payment & Telemetry</Typography>
+        <Typography variant="body1" gutterBottom>
+          We use <strong>Stripe</strong> for secure payment processing and do not store your full credit card details on our servers. For essential infrastructure, we use <strong>Upstash</strong> for rate-limiting and security, and <strong>Resend</strong> for transactional email delivery. We also use <strong>Sentry</strong> for error monitoring and diagnostics to ensure the stability of the Service.
         </Typography>
       </Box>
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>4. Data Deletion</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>4. Data Retention and Deletion</Typography>
       <Typography variant="body1" gutterBottom>
-        <strong>Data Deletion:</strong> You may request the deletion of your account and all associated data by emailing us at{' '}
+        <strong>Right to be Forgotten:</strong> You may request the deletion of your account and all associated data by emailing us at{' '}
         <Link href={`mailto:${CONTACT_EMAILS.privacy}`}>{CONTACT_EMAILS.privacy}</Link>
         {' '}or by using the &quot;Delete Account&quot; feature in your settings.
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        When you initiate an account deletion, our system immediately and permanently deletes all of your associated relational database records, authentication credentials, and uploaded media assets from our cloud storage. We do not use soft-deletes or retain your core data after an explicit deletion request.
       </Typography>
     </section>
 
