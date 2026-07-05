@@ -159,7 +159,7 @@ test.describe('System Status - Personalized Alerts & Component UI', () => {
     await page.goto('/status');
     
     // Verify core services collapsible
-    const coreHeader = page.getByText('Directly Social App Functionality');
+    const coreHeader = page.getByText('directly.social App Functionality');
     await expect(coreHeader).toBeVisible();
     await coreHeader.click(); // Expand
 

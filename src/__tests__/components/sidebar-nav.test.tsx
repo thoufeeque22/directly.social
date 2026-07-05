@@ -38,7 +38,7 @@ describe('Sidebar Component', () => {
       </SessionProvider>
     );
 
-    const logoLink = screen.getByText('Directly Social').closest('a');
+    const logoLink = screen.getByText('directly.social').closest('a');
     expect(logoLink).toHaveAttribute('href', '/');
   });
 });

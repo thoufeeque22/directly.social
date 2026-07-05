@@ -1,17 +1,17 @@
 # Cloud Storage Guide (BYOS)
 
-This guide provides the exact technical specifications required to connect an S3-compatible storage bucket to Directly Social.
+This guide provides the exact technical specifications required to connect an S3-compatible storage bucket to directly.social.
 
 ## S3 Compatibility Requirements
 
-Directly Social uses the standard S3 protocol. Your provider must support:
+directly.social uses the standard S3 protocol. Your provider must support:
 - **SigV4 Authentication**
 - **Multipart Uploads**
-- **Public/Private ACLs** (Directly Social typically uses private buckets with presigned URLs).
+- **Public/Private ACLs** (directly.social typically uses private buckets with presigned URLs).
 
 ## CORS (Cross-Origin Resource Sharing)
 
-Since Directly Social is a web application, your storage bucket **must** allow cross-origin requests from the browser. Without correct CORS settings, uploads will fail with a "Network Error."
+Since directly.social is a web application, your storage bucket **must** allow cross-origin requests from the browser. Without correct CORS settings, uploads will fail with a "Network Error."
 
 **Required CORS Configuration (JSON):**
 ```json

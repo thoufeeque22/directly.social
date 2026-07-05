@@ -53,7 +53,7 @@ export function ServiceList({ monitors }: ServiceListProps) {
             sx={{ py: 1.5, px: 2, borderRadius: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', '&:hover': { bgcolor: 'action.hover' } }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <ListItemText primary={<Typography variant="h6" sx={{ fontWeight: 700 }}>Directly Social App Functionality</Typography>} />
+              <ListItemText primary={<Typography variant="h6" sx={{ fontWeight: 700 }}>directly.social App Functionality</Typography>} />
               {coreExpanded ? <ExpandLess color="action" /> : <ExpandMore color="action" />}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

@@ -54,7 +54,7 @@ export function SidebarPanels({ monitors }: { monitors: BetterStackMonitor[] }) 
           <Divider sx={{ mb: 2 }} />
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Box>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>Directly Social Platform</Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>directly.social Platform</Typography>
               <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
                 <Typography variant="h4" sx={{ fontWeight: 800, color: coreColor }}>{coreUptime.toFixed(2)}%</Typography>
               </Box>

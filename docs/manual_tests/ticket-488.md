@@ -23,22 +23,22 @@ This document provides step-by-step instructions for manual verification of the 
 *   **Action:** Right-click the page, select **View Page Source** (or open browser DevTools, inspect the `<head>` section).
 *   **Verification:**
     *   Confirm the presence and exact content of the following elements:
-        *   `<title>`: `Directly Social | The Native Social Media Creator Studio`
+        *   `<title>`: `directly.social | The Native Social Media Creator Studio`
         *   `<meta name="description" content="...">`: `Publish native Short, Reel, and TikTok video formats directly using your own API keys. No middleware servers, no markups, complete data privacy, and Bring Your Own Storage (BYOS).`
         *   `<meta name="keywords" content="...">`: `social media manager, native social client, auto poster, tiktok scheduler, instagram reels scheduler, youtube shorts poster, privacy first social tool, bring your own keys, byos storage, short-form video distribution`
         *   `<link rel="canonical" href="...">`: `https://directly-social.vercel.app`
         *   `<meta name="robots" content="index,follow">`
     *   Confirm the OpenGraph tags:
-        *   `<meta property="og:title" content="Directly Social - The Native Social Media Client">`
+        *   `<meta property="og:title" content="directly.social - The Native Social Media Client">`
         *   `<meta property="og:description" content="Stop paying the SaaS tax. Publish native shorts, reels, and TikToks directly from your device using your own keys and cloud storage.">`
         *   `<meta property="og:url" content="https://directly-social.vercel.app">`
-        *   `<meta property="og:site_name" content="Directly Social">`
+        *   `<meta property="og:site_name" content="directly.social">`
         *   `<meta property="og:locale" content="en_US">`
         *   `<meta property="og:type" content="website">`
         *   `<meta property="og:image" content="https://directly-social.vercel.app/og-image.png">`
     *   Confirm the Twitter Card tags:
         *   `<meta name="twitter:card" content="summary_large_image">`
-        *   `<meta name="twitter:title" content="Directly Social - The Native Social Media Client">`
+        *   `<meta name="twitter:title" content="directly.social - The Native Social Media Client">`
         *   `<meta name="twitter:description" content="Publish native video content directly using your own API keys. No markups, no middleware database, and complete data privacy.">`
         *   `<meta name="twitter:image" content="https://directly-social.vercel.app/og-image.png">`
         *   `<meta name="twitter:creator" content="@directlysocial">`
@@ -51,7 +51,7 @@ This document provides step-by-step instructions for manual verification of the 
     2.  Verify the `@graph` array contains exactly 3 objects:
         *   **`Organization`**:
             *   `@id`: `https://directly-social.vercel.app/#organization`
-            *   `name`: `Directly Social`
+            *   `name`: `directly.social`
             *   `url`: `https://directly-social.vercel.app`
             *   `logo`: `@id` is `https://directly-social.vercel.app/#logo` and `url` is `https://directly-social.vercel.app/logo.png`
             *   `sameAs`: MUST match official URLs:
@@ -60,7 +60,7 @@ This document provides step-by-step instructions for manual verification of the 
                 *   `https://discord.gg/directly`
         *   **`SoftwareApplication`**:
             *   `@id`: `https://directly-social.vercel.app/#software`
-            *   `name`: `Directly Social`
+            *   `name`: `directly.social`
             *   `applicationCategory`: `BusinessApplication`
             *   `operatingSystem`: `Web, iOS, Android`
             *   `offers`: An `AggregateOffer` with a price of `0` USD and `offers[0]` named `"Local Core"`.
@@ -68,7 +68,7 @@ This document provides step-by-step instructions for manual verification of the 
         *   **`WebSite`**:
             *   `@id`: `https://directly-social.vercel.app/#website`
             *   `url`: `https://directly-social.vercel.app`
-            *   `name`: `Directly Social`
+            *   `name`: `directly.social`
             *   `description`: `The Native Social Client`
             *   `publisher`: References `{"@id": "https://directly-social.vercel.app/#organization"}`
 
@@ -78,8 +78,8 @@ This document provides step-by-step instructions for manual verification of the 
     1.  Observe the browser tab title once logged in and redirected to the dashboard.
     2.  Inspect the raw page source using `curl -s http://localhost:3000/`.
 *   **Verification:**
-    1.  The browser tab title must dynamically override to `Dashboard | Directly Social`.
-    2.  The raw, server-rendered source fetched via curl must *still* return `Directly Social | The Native Social Media Creator Studio` in the `<title>` tag (verifying hydration-safety: title override executes on client-side mount only and doesn't pollute the SSR output needed for crawlers).
+    1.  The browser tab title must dynamically override to `Dashboard | directly.social`.
+    2.  The raw, server-rendered source fetched via curl must *still* return `directly.social | The Native Social Media Creator Studio` in the `<title>` tag (verifying hydration-safety: title override executes on client-side mount only and doesn't pollute the SSR output needed for crawlers).
 
 ---
 

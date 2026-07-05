@@ -1,4 +1,4 @@
-# Directly Social Documentation
+# directly.social Documentation
 
 Welcome to the Directly project documentation. This folder contains architectural blueprints, setup guides, and feature specifications.
 
@@ -11,7 +11,7 @@ The quickest path to your first native post.
 
 ## 🎨 Core Features
 
-Master the tools that make Directly Social powerful and efficient.
+Master the tools that make directly.social powerful and efficient.
 - [Metadata Snippets](user/metadata-snippets.md) - Saving and injecting reusable hashtags and bio links.
 - [AI Content Polish](user/ai-content-polish.md) - Using Vibe Sync and AI tools to enhance your captions.
 - [Media Management & Cloud Sync](user/storage-setup.md) - Connecting private cloud storage (BYOS).

@@ -1,6 +1,6 @@
 # AI Content Enhancement & Vibe Sync
 
-Directly Social helps you polish your content to match the "vibe" of different platforms. Whether you need to turn a serious caption into a viral TikTok hook or generate trending hashtags, our AI tools have you covered.
+directly.social helps you polish your content to match the "vibe" of different platforms. Whether you need to turn a serious caption into a viral TikTok hook or generate trending hashtags, our AI tools have you covered.
 
 ## Prerequisites
 To use these features, you must first connect your own AI account (e.g., OpenAI, Gemini, Anthropic, or Groq) in **Settings > AI Configuration**. See our [Power Users AI Guide](/docs/dev/ai-byok-guide) for help getting your API keys.
@@ -24,4 +24,4 @@ Turn boring titles into click-worthy headlines.
 -   **Result:** The AI provides 3 alternative titles designed to improve your click-through rate (CTR).
 
 ## Privacy Note
-Because you use your own API keys, your content is sent directly to the AI provider (e.g., OpenAI). Directly Social does not store your prompts or the generated content on our servers.
+Because you use your own API keys, your content is sent directly to the AI provider (e.g., OpenAI). directly.social does not store your prompts or the generated content on our servers.
