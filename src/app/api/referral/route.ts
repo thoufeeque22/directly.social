@@ -26,7 +26,6 @@ export async function GET(req: Request) {
     let referralCode = user.referralCode;
     if (!referralCode) {
       // Fallback for existing users created before this feature
-      const { nanoid } = await import('nanoid');
       const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
       const namePrefix = user.name ? `${slugify(user.name)}-` : '';
       
@@ -34,7 +33,8 @@ export async function GET(req: Request) {
       let success = false;
       while (!success && attempts < 3) {
         try {
-          referralCode = `${namePrefix}${nanoid(6 + attempts)}`;
+          const randomSuffix = Math.random().toString(36).substring(2, 2 + 6 + attempts);
+          referralCode = `${namePrefix}${randomSuffix}`;
           await prisma.user.update({
             where: { id: user.id },
             data: { referralCode }
