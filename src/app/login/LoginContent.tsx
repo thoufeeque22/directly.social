@@ -78,6 +78,7 @@ export function LoginContent() {
           <button onClick={() => handleLoginClick("facebook")} className={`${styles.loginBtn} ${styles.facebookBtn}`}><span className={styles.btnIcon}><FacebookIcon /></span>Continue with Facebook</button>
           <button onClick={() => handleLoginClick("tiktok")} className={`${styles.loginBtn} ${styles.tiktokBtn}`}><span className={styles.btnIcon}><TiktokIcon /></span>Continue with TikTok</button>
         </div>
+        {/* E2E Bypass Form */}
         {process.env.NEXT_PUBLIC_E2E === 'true' && <E2ELoginForm />}
         <div className={styles.footer}>By continuing, you agree to our <br /> <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></div>
       </div>
