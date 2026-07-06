@@ -2,6 +2,7 @@ import NextAuth, { type DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/core/prisma";
+import { BRAND } from "@/lib/core/brand";
 import authConfig from "./auth.config";
 import { extractAccountName } from "@/lib/utils/utils";
 import { Role } from "@prisma/client";
@@ -45,9 +46,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           }
 
           const email = credentials?.email as string;
-          const isE2EEmail = email === "tester@directly.social" || 
-                           email === "admin@directly.social" || 
-                           (email && (email.startsWith("tester-") || email.startsWith("admin-")) && email.endsWith("@directly.social"));
+          const isE2EEmail = email === `tester@${BRAND.domain}` || 
+                           email === `admin@${BRAND.domain}` || 
+                           (email && (email.startsWith("tester-") || email.startsWith("admin-")) && email.endsWith(`@${BRAND.domain}`));
           
           if (
             expectedPassword &&

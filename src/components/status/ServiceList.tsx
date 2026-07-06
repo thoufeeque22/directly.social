@@ -6,6 +6,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import { BetterStackMonitor } from '@/lib/schemas/status';
+import { BRAND } from '@/lib/core/brand';
 import { ServiceListItem, statusMap } from './ServiceListItem';
 
 interface ServiceListProps {
@@ -53,7 +54,7 @@ export function ServiceList({ monitors }: ServiceListProps) {
             sx={{ py: 1.5, px: 2, borderRadius: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', '&:hover': { bgcolor: 'action.hover' } }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <ListItemText primary={<Typography variant="h6" sx={{ fontWeight: 700 }}>directly.social App Functionality</Typography>} />
+              <ListItemText primary={<Typography variant="h6" sx={{ fontWeight: 700 }}>{BRAND.name} App Functionality</Typography>} />
               {coreExpanded ? <ExpandLess color="action" /> : <ExpandMore color="action" />}
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

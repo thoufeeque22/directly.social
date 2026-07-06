@@ -11,6 +11,9 @@ export const PrivacyContent = () => (
       <Typography variant="body1" gutterBottom>
         {BRAND.name} (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share information when you use our web and mobile applications (the &quot;Service&quot;).
       </Typography>
+      <Typography variant="body1" gutterBottom>
+        {BRAND.name} is operated by {BRAND.legal.owner}.
+      </Typography>
     </section>
 
     <section>

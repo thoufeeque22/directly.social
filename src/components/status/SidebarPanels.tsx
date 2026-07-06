@@ -1,5 +1,6 @@
 import React from 'react';
 import { Paper, Typography, Box, Divider, List, ListItem, Chip } from '@mui/material';
+import { BRAND } from '@/lib/core/brand';
 
 interface MaintenanceEvent {
   title: string;
@@ -54,7 +55,7 @@ export function SidebarPanels({ monitors }: { monitors: BetterStackMonitor[] }) 
           <Divider sx={{ mb: 2 }} />
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Box>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>directly.social Platform</Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>{BRAND.name} Platform</Typography>
               <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
                 <Typography variant="h4" sx={{ fontWeight: 800, color: coreColor }}>{coreUptime.toFixed(2)}%</Typography>
               </Box>

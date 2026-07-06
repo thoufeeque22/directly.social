@@ -1,15 +1,21 @@
 /**
  * Operational and Support Email Configuration
  * 
- * Centralizing these addresses makes it easier to update them when the 
- * custom domain (directly.social) is acquired or when migrating to 
- * different support/legal/privacy mailboxes.
+ * All addresses derive from the centralized BRAND.domain constant.
+ * To update the domain, change it in brand.ts — these update automatically.
  */
 
+import { BRAND } from './brand';
+
+const d = BRAND.domain;
+
 export const CONTACT_EMAILS = {
-  support: 'support@directly.social',
-  hello: 'hello@directly.social',
-  privacy: 'privacy@directly.social',
-  legal: 'legal@directly.social',
-  alerts: 'alerts@directly.social',
+  support: `support@${d}`,
+  hello: `hello@${d}`,
+  privacy: `privacy@${d}`,
+  legal: `legal@${d}`,
+  alerts: `alerts@${d}`,
+  billing: `billing@${d}`,
+  admin: `admin@${d}`,
 } as const;
+

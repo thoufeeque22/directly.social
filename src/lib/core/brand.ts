@@ -3,33 +3,48 @@
  * 
  * Centralizing the brand name, tagline, and URLs allows for easy
  * rebranding or global updates across metadata, UI, and legal copy.
+ * 
+ * IMPORTANT: To rebrand, change ONLY the constants below.
+ * Everything else derives from them automatically.
  */
 
-// Use Vercel URL for first launch, update to directly.social later
-const LAUNCH_URL = 'https://directly-social.vercel.app';
+/** The single source of truth for the brand name. */
+const BRAND_NAME = 'directly.social';
+
+/** The legal entity name shown in copyright notices and legal documents. */
+const LEGAL_OWNER = 'Thoufeeque Abdul Rahman Rafique';
+
+/** The primary domain (used for constructing URLs and email addresses). */
+const DOMAIN = 'directly.social';
+
+// Use Vercel URL for first launch, update to production domain later
+const LAUNCH_URL = `https://${DOMAIN}`;
 
 export const BRAND = {
-  name: 'directly.social',
-  shortName: 'directly.social',
+  name: BRAND_NAME,
+  shortName: BRAND_NAME,
+  domain: DOMAIN,
   tagline: 'The Native Social Client',
   url: LAUNCH_URL,
   appStore: {
     apple: {
-      title: 'directly.social: Post Planner',
+      title: `${BRAND_NAME}: Post Planner`,
       subtitle: 'Schedule & Post Natively',
     },
     google: {
-      title: 'directly.social: Post Planner',
+      title: `${BRAND_NAME}: Post Planner`,
       shortDescription:
         'Schedule and publish to social media platforms — with your own keys and storage.',
     },
   },
   social: {
-    github: 'https://github.com/thoufeeque22/directly.social',
+    github: `https://github.com/thoufeeque22/${DOMAIN}`,
     twitter: 'https://x.com/directlysocial', // Placeholder
     discord: 'https://discord.gg/directly', // Placeholder
   },
   legal: {
-    copyrightOwner: 'directly.social',
-  }
+    owner: LEGAL_OWNER,
+    copyrightOwner: BRAND_NAME,
+  },
 } as const;
+

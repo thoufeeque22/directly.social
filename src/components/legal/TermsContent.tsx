@@ -11,6 +11,9 @@ export const TermsContent = () => (
       <Typography variant="body1" gutterBottom>
         By accessing or using {BRAND.name} (the &quot;Service&quot;), you agree to be bound by these Terms of Service.
       </Typography>
+      <Typography variant="body1" gutterBottom>
+        {BRAND.name} is operated by {BRAND.legal.owner}.
+      </Typography>
     </section>
 
     <section>

@@ -20,6 +20,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import { ByokCredential } from '../../lib/byok/credential-validator';
 import { SettingsWizardCard } from '../settings/SettingsWizardCard';
 import { validateAndSaveByokAction } from '../../app/actions/byok';
+import { BRAND } from '@/lib/core/brand';
 
 interface PlatformByokWizardProps {
   platform: string;
@@ -148,7 +149,7 @@ export const PlatformByokWizard = ({ platform }: PlatformByokWizardProps) => {
               data-testid="redirect-uri-input" 
               value={credentials.redirectUri} 
               onChange={(e) => setCredentials({ ...credentials, redirectUri: e.target.value })}
-              placeholder="https://directly.social/callback"
+              placeholder={`${BRAND.url}/callback`}
               size="small"
               helperText="Must match the authorized redirect URI in your dev portal."
             />

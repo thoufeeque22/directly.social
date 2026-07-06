@@ -3,6 +3,7 @@
 import React, { useState, useRef, useTransition } from 'react';
 import { signIn } from 'next-auth/react';
 import { E2E_TEST_IDS } from './e2eTestIds';
+import { BRAND } from '@/lib/core/brand';
 
 export function E2ELoginForm() {
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +35,7 @@ export function E2ELoginForm() {
       <form ref={formRef} onSubmit={(e) => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', fontSize: '0.9rem', color: 'hsl(var(--muted-foreground))' }}>
           Test Email
-          <input name="email" type="email" id={E2E_TEST_IDS.email} placeholder="tester@directly.social" defaultValue="tester@directly.social" required data-testid={E2E_TEST_IDS.email} style={{ background: 'hsla(var(--muted)/0.3)', border: '1px solid hsla(var(--border)/0.5)', padding: '0.75rem', borderRadius: '0.5rem', color: 'hsl(var(--foreground))' }} />
+          <input name="email" type="email" id={E2E_TEST_IDS.email} placeholder={`tester@${BRAND.domain}`} defaultValue={`tester@${BRAND.domain}`} required data-testid={E2E_TEST_IDS.email} style={{ background: 'hsla(var(--muted)/0.3)', border: '1px solid hsla(var(--border)/0.5)', padding: '0.75rem', borderRadius: '0.5rem', color: 'hsl(var(--foreground))' }} />
         </label>
         <label style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', fontSize: '0.9rem', color: 'hsl(var(--muted-foreground))' }}>
           Test Password

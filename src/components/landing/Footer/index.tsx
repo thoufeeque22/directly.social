@@ -42,7 +42,7 @@ export const LandingFooter = () => {
 
         <Box sx={{ pt: 4, borderTop: `1px solid ${theme.palette.divider}`, textAlign: 'center' }}>
           <Typography variant="caption" color="text.secondary">
-            © {new Date().getFullYear()} {BRAND.name}. All rights reserved. Built for the native web.
+            © {new Date().getFullYear()} {BRAND.legal.copyrightOwner}. All rights reserved. Built for the native web.
           </Typography>
         </Box>
       </Container>

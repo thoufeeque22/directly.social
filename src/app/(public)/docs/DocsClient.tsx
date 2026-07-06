@@ -8,6 +8,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import { DocCategoryCard } from './DocCategoryCard';
 import { BRAND } from '@/lib/core/brand';
+import { CONTACT_EMAILS } from '@/lib/core/emails';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 
 const docCategories = [
@@ -25,7 +26,7 @@ const docCategories = [
   {
     id: 'core-features',
     title: 'Core Features',
-    description: 'Master the tools that make directly.social powerful and efficient.',
+    description: `Master the tools that make ${BRAND.name} powerful and efficient.`,
     icon: <AutoAwesomeIcon color="primary" sx={{ fontSize: 32 }} />,
     links: [
       { label: 'Metadata Snippets', href: '/docs/user/metadata-snippets' },
@@ -47,12 +48,12 @@ const docCategories = [
   {
     id: 'philosophy-support',
     title: 'Philosophy & Support',
-    description: 'Understand our mission and how to get the most out of directly.social.',
+    description: `Understand our mission and how to get the most out of ${BRAND.name}.`,
     icon: <HelpCenterIcon color="primary" sx={{ fontSize: 32 }} />,
     links: [
       { label: 'The SaaS Tax Explained', href: '/philosophy' },
       { label: 'Why Native Matters', href: '/philosophy' },
-      { label: 'Community & Feedback', href: 'mailto:support@directly.social' }
+      { label: 'Community & Feedback', href: `mailto:${CONTACT_EMAILS.support}` }
     ]
   }
 ];
