@@ -16,7 +16,7 @@ export const ReferralSquad: React.FC<Props> = ({ history }) => {
           No referrals yet. Share your link to get started!
         </Typography>
       ) : (
-        <Stack spacing={1}>
+        <Stack spacing={1} data-testid="squad-list">
           {history.map((row, i) => (
             <Paper key={i} variant="outlined" sx={{ p: 1.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: 2 }}>
               <Typography variant="body2" sx={{ fontWeight: 500 }}>{row.email}</Typography>

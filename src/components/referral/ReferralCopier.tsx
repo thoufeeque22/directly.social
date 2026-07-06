@@ -31,6 +31,7 @@ export const ReferralCopier: React.FC<Props> = ({ referralUrl }) => {
       >
         <Typography 
           variant="body2" 
+          data-testid="referral-link-text"
           sx={{ flex: 1, fontFamily: 'monospace', color: referralUrl ? 'text.primary' : 'text.disabled', overflow: 'hidden', textOverflow: 'ellipsis' }}
         >
           {referralUrl || 'Loading your unique link...'}

@@ -1,9 +1,43 @@
 import { test, expect } from '@playwright/test';
+import { PrismaClient } from '@prisma/client';
 
 // Use process.env.TEST_USER_PASSWORD for authentication
 const TEST_USER_PASSWORD = process.env.TEST_USER_PASSWORD || 'secret';
+const prisma = new PrismaClient();
 
 test.describe('Referral Bonus Program - End to End Workflows & Consumption', () => {
+
+  test.beforeAll(async () => {
+    // Seed test users with specific tiers
+    const testUsers = [
+      { email: 'tester-free@directly.social', tier: 'FREE_STARTER' },
+      { email: 'tester-pro@directly.social', tier: 'CLOUD_PRO' },
+      { email: 'tester-byok@directly.social', tier: 'LIFETIME_DEAL' },
+      { email: 'tester-referrer-tier2@directly.social', tier: 'FREE_STARTER' },
+      { email: 'tester-grandprize@directly.social', tier: 'FREE_STARTER' },
+      { email: 'tester-selfrefer@directly.social', tier: 'FREE_STARTER' },
+      { email: 'tester-consume-a@directly.social', tier: 'FREE_STARTER' },
+    ];
+
+    for (const u of testUsers) {
+      await prisma.user.upsert({
+        where: { email: u.email },
+        update: {},
+        create: {
+          email: u.email,
+          name: u.email.split('@')[0],
+          role: 'USER',
+          billingProfile: {
+            create: {
+              providerCustomerId: `cus_${u.email.split('@')[0]}`,
+              subscriptionTier: u.tier as any,
+              subscriptionStatus: 'ACTIVE',
+            }
+          }
+        }
+      });
+    }
+  });
 
   test('Legal Compliance: Terms explicitly state Referral Program rules', async ({ page }) => {
     await page.goto('/terms');
@@ -15,25 +49,64 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
     await expect(termsContent).toContainText('exactly 5 active paid referrals');
   });
 
+  test('UI Scenario A: Free User Dynamic Copy', async ({ page }) => {
+    await page.goto('/login');
+    await page.fill('input[name="email"]', 'tester-free@directly.social');
+    await page.fill('input[name="password"]', TEST_USER_PASSWORD);
+    await page.click('button[type="submit"]');
+
+    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    await page.click('button:has-text("Get Cloud Pro for Free")');
+    await expect(page.getByTestId('progress-desc')).toContainText('Get 5 total referrals for Lifetime BYOK, or maintain 5 active to keep Cloud Pro free forever.');
+    await expect(page.getByTestId('grand-prize-reward')).toContainText('Lifetime BYOK or Cloud Pro');
+  });
+
+  test('UI Scenario B: Cloud Pro User Dynamic Copy', async ({ page }) => {
+    await page.goto('/login');
+    await page.fill('input[name="email"]', 'tester-pro@directly.social');
+    await page.fill('input[name="password"]', TEST_USER_PASSWORD);
+    await page.click('button[type="submit"]');
+
+    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    await page.click('button:has-text("Get Cloud Pro for Free")');
+    await expect(page.getByTestId('progress-desc')).toContainText('Maintain 5 active paid referrals to keep your Cloud Pro subscription 100% free forever.');
+    await expect(page.getByTestId('grand-prize-reward')).toContainText('Cloud Pro Access');
+  });
+
+  test('UI Scenario C: BYOK User Dynamic Copy', async ({ page }) => {
+    await page.goto('/login');
+    await page.fill('input[name="email"]', 'tester-byok@directly.social');
+    await page.fill('input[name="password"]', TEST_USER_PASSWORD);
+    await page.click('button[type="submit"]');
+
+    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    await page.click('button:has-text("Get Cloud Pro for Free")');
+    await expect(page.getByTestId('progress-desc')).toContainText('Get 5 total paid referrals to unlock Lifetime BYOK forever.');
+    await expect(page.getByTestId('grand-prize-reward')).toContainText('Lifetime BYOK');
+  });
+
   test('Tier 1 (Free) - Reward Consumption: Referral quota used after base limit exhausted', async ({ browser, request }) => {
     const contextA = await browser.newContext();
     const pageA = await contextA.newPage();
     
     // User A logs in
     await pageA.goto('/login');
-    await pageA.fill('input[name="email"]', 'usera_consume@example.com');
+    await pageA.fill('input[name="email"]', 'tester-consume-a@directly.social');
     await pageA.fill('input[name="password"]', TEST_USER_PASSWORD);
     await pageA.click('button[type="submit"]');
     
     // Copy referral link
-    await pageA.click('button:has-text("🚀 Get Cloud Pro for Free")');
-    const referralUrl = await pageA.locator('input.referral-link').inputValue();
+    if (pageA.viewportSize()?.width! < 768) await pageA.click('button[aria-label="Menu"]');
+    await pageA.click('button:has-text("Get Cloud Pro for Free")');
+    const referralUrl = await pageA.getByTestId('referral-link-text').textContent() || '';
 
     // User B signs up via the link
     const contextB = await browser.newContext();
     const pageB = await contextB.newPage();
+    const userB_email = `tester-userb-${Date.now()}@directly.social`;
+    await prisma.user.create({ data: { email: userB_email, name: 'User B', role: 'USER' } });
     await pageB.goto(referralUrl);
-    await pageB.fill('input[name="email"]', 'userb_consume@example.com');
+    await pageB.fill('input[name="email"]', userB_email);
     await pageB.fill('input[name="password"]', TEST_USER_PASSWORD);
     await pageB.click('button[type="submit"]');
 
@@ -42,7 +115,7 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
        await request.post('/api/posts', { data: { content: `Base post ${i}` }});
     }
 
-    // Now User A attempts the 11th post via UI. Normally this would fail, but they have +5 from referral.
+    // Now User A attempts the 11th post via UI.
     await pageA.goto('/dashboard');
     await pageA.fill('textarea.post-input', 'My 11th extra bonus post!');
     await pageA.click('button:has-text("Post")');
@@ -51,17 +124,32 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
     await expect(pageA.locator('.post-list')).toContainText('My 11th extra bonus post!');
     
     // Verify quota dropped
-    await pageA.click('button:has-text("🚀 Get Cloud Pro for Free")');
-    const quotaDisplay = pageA.locator('.extra-posts-quota-remaining'); 
-    await expect(quotaDisplay).toContainText('4');
+    if (pageA.viewportSize()?.width! < 768) await pageA.click('button[aria-label="Menu"]');
+    await pageA.click('button:has-text("Get Cloud Pro for Free")');
+    const quotaDisplay = pageA.getByTestId('extra-posts-quota'); 
+    await expect(quotaDisplay).toContainText('+4');
 
     await contextA.close();
     await contextB.close();
   });
 
   test('Tier 2 (Paid) - Reward Consumption: Balance Transaction actively reduces next Stripe invoice', async ({ request }) => {
-    const userEmail = 'squad_tier2@example.com';
-    const referrerEmail = 'referrer_tier2@example.com';
+    const userEmail = 'tester-squad-tier2@directly.social';
+    const referrerEmail = 'tester-referrer-tier2@directly.social';
+
+    const referrer = await prisma.user.findUnique({ where: { email: referrerEmail } });
+    if (referrer) {
+      await prisma.user.upsert({
+        where: { email: userEmail },
+        update: {},
+        create: {
+          email: userEmail,
+          name: 'Squad Tier2',
+          role: 'USER',
+          referredById: referrer.id
+        }
+      });
+    }
 
     // Simulate User B upgrading via Webhook
     const webhookPayload = {
@@ -86,7 +174,7 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
   });
 
   test('Grand Prize (Option B) - Reward Consumption: Next invoice is $0 and Pro features remain active', async ({ page, request }) => {
-    const referrerEmail = 'grandprize@example.com';
+    const referrerEmail = 'tester-grandprize@directly.social';
 
     // Log User A in
     await page.goto('/login');
@@ -95,18 +183,34 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
     await page.click('button[type="submit"]');
 
     // Simulate 5 active referrals
-    for (let i = 1; i <= 5; i++) {
-      await request.post('/api/webhooks/stripe', { 
-         data: { 
-           type: 'invoice.payment_succeeded', 
-           data: { object: { billing_reason: 'subscription_create', customer_email: `grandprize_squad${i}@example.com`, total: 1000 } }
-         } 
-      });
+    const referrer = await prisma.user.findUnique({ where: { email: referrerEmail } });
+    if (referrer) {
+      for (let i = 1; i <= 5; i++) {
+        const squadEmail = `tester-grandprize-squad${i}@directly.social`;
+        await prisma.user.upsert({
+          where: { email: squadEmail },
+          update: {},
+          create: {
+            email: squadEmail,
+            name: `Squad ${i}`,
+            role: 'USER',
+            referredById: referrer.id
+          }
+        });
+
+        await request.post('/api/webhooks/stripe', { 
+           data: { 
+             type: 'invoice.payment_succeeded', 
+             data: { object: { billing_reason: 'subscription_create', customer_email: squadEmail, total: 1000 } }
+           } 
+        });
+      }
     }
 
-    // Verify UI reflects 100% discount
-    await page.click('button:has-text("🚀 Get Cloud Pro for Free")');
-    await expect(page.locator('.subscription-status')).toContainText('100% Free Cloud Pro');
+    // Verify UI reflects UNLOCKED
+    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    await page.click('button:has-text("Get Cloud Pro for Free")');
+    await expect(page.getByTestId('grand-prize-status')).toContainText('UNLOCKED');
     
     // Simulate generation of User A's next upcoming invoice
     const invoicePreview = await request.get(`/api/testing/stripe-invoice-preview?email=${referrerEmail}`);
@@ -124,24 +228,26 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
 
   test('Self-Referral Prevention - Cannot use own referral link', async ({ page }) => {
     await page.goto('/login');
-    await page.fill('input[name="email"]', 'selfrefer@example.com');
+    await page.fill('input[name="email"]', 'tester-selfrefer@directly.social');
     await page.fill('input[name="password"]', TEST_USER_PASSWORD);
     await page.click('button[type="submit"]');
 
-    await page.click('button:has-text("🚀 Get Cloud Pro for Free")');
-    const referralUrl = await page.locator('input.referral-link').inputValue();
+    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    await page.click('button:has-text("Get Cloud Pro for Free")');
+    const referralUrl = await page.getByTestId('referral-link-text').textContent() || '';
 
     // Log out and attempt sign-up
     await page.click('button:has-text("Logout")');
 
     await page.goto(referralUrl);
-    await page.fill('input[name="email"]', 'selfrefer@example.com');
+    await page.fill('input[name="email"]', 'tester-selfrefer@directly.social');
     await page.fill('input[name="password"]', TEST_USER_PASSWORD);
     await page.click('button[type="submit"]');
     
     await expect(page).toHaveURL('/dashboard');
-    await page.click('button:has-text("🚀 Get Cloud Pro for Free")');
-    const historyTable = page.locator('.referral-history-table tbody');
+    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    await page.click('button:has-text("Get Cloud Pro for Free")');
+    const historyTable = page.getByTestId('squad-list');
     await expect(historyTable).not.toContainText('s***@example.com');
   });
 });

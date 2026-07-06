@@ -42,7 +42,7 @@ export function E2ELoginForm() {
           <input name="password" type="password" id={E2E_TEST_IDS.password} placeholder="password" required data-testid={E2E_TEST_IDS.password} style={{ background: 'hsla(var(--muted)/0.3)', border: '1px solid hsla(var(--border)/0.5)', padding: '0.75rem', borderRadius: '0.5rem', color: 'hsl(var(--foreground))' }} />
         </label>
         {error && ( <p role="alert" data-testid="e2e-login-error" style={{ color: 'hsl(var(--destructive))', fontSize: '0.85rem', margin: 0, padding: '0.5rem', background: 'hsla(var(--destructive)/0.1)', borderRadius: '0.375rem' }}> ⚠ {error} </p> )}
-        <button type="button" id={E2E_TEST_IDS.submit} data-testid={E2E_TEST_IDS.submit} disabled={isPending} onClick={handleClick} style={{ background: isPending ? 'hsl(var(--muted))' : 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontWeight: 600, cursor: isPending ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}>
+        <button type="submit" id={E2E_TEST_IDS.submit} data-testid={E2E_TEST_IDS.submit} disabled={isPending} onClick={handleClick} style={{ background: isPending ? 'hsl(var(--muted))' : 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontWeight: 600, cursor: isPending ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}>
           {isPending ? 'Signing in…' : 'Get Started'}
         </button>
       </form>
