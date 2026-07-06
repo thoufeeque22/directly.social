@@ -30,11 +30,16 @@ export const BRAND = {
     apple: {
       title: `${BRAND_NAME}: Post Planner`,
       subtitle: 'Publish Videos Privately',
+      categories: {
+        primary: 'Business',
+        secondary: 'Productivity',
+      },
     },
     google: {
       title: `${BRAND_NAME}: Post Planner`,
       shortDescription:
         'Publish videos across platforms privately, keeping 100% control of your data.',
+      category: 'Business',
     },
   },
   social: {
