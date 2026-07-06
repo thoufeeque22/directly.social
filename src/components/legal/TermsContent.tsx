@@ -51,7 +51,17 @@ export const TermsContent = () => (
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>6. Contact Us</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>6. Referral Program</Typography>
+      <Typography variant="body1" gutterBottom>
+        Referral rewards are discretionary and depend on successful non-refunded payments.
+        Rewards are subject to revocation in cases of fraud or chargebacks.
+        The Grand Prize (100% Free Cloud Pro) requires maintaining exactly 5 active paid referrals.
+        We reserve the right to modify, suspend, or terminate the Referral Program at any time without prior notice.
+      </Typography>
+    </section>
+
+    <section>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>7. Contact Us</Typography>
       <Typography variant="body1">If you have any questions, please contact us at:</Typography>
       <Typography variant="body1">
         Email:{' '}

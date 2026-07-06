@@ -226,6 +226,12 @@ model User {
   role                 Role                 @default(USER)
   preferredTheme       Theme                @default(SYSTEM)
   aiCredits            Int                  @default(100)
+  referralCode         String?              @unique
+  referredById         String?
+  referredBy           User?                @relation("UserReferrals", fields: [referredById], references: [id], onDelete: SetNull)
+  referrals            User[]               @relation("UserReferrals")
+  extraPostsQuota      Int                  @default(0)
+  lifetimeUnlock       Boolean              @default(false)
   billingProfile        BillingProfile?
   accounts              Account[]
   byokCredentials       ByokCredential[]

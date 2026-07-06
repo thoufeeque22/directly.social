@@ -21,6 +21,7 @@ import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { Collapse } from '@mui/material';
 import { BRAND } from '@/lib/core/brand';
+import { ReferralModal } from '@/components/referral/ReferralModal';
 
 const settingsSubItems = [
   { id: 'destinations', label: 'Destinations' },
@@ -39,6 +40,28 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
 
   const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
   const [hasStatusAlert, setHasStatusAlert] = useState(false);
+
+  const [isReferralModalOpen, setIsReferralModalOpen] = useState(false);
+  const [referralData, setReferralData] = useState({
+    referralUrl: '',
+    activeCount: 0,
+    quotaRemaining: 0,
+    history: [],
+    subscriptionTier: 'FREE_STARTER'
+  });
+
+  const handleOpenReferral = async () => {
+    setIsReferralModalOpen(true);
+    try {
+      const res = await fetch('/api/referral');
+      if (res.ok) {
+        const data = await res.json();
+        setReferralData(data);
+      }
+    } catch (err) {
+      console.error('Failed to load referral stats', err);
+    }
+  };
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -159,8 +182,31 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
         })}
       </nav>
 
-
+        <div style={{ padding: '16px', marginTop: 'auto', borderTop: '1px solid rgba(128,128,128,0.2)' }}>
+          <button 
+            onClick={handleOpenReferral}
+            style={{ 
+              width: '100%', padding: '12px', 
+              background: 'linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%)', 
+              color: 'white', border: 'none', borderRadius: '8px', 
+              cursor: 'pointer', fontWeight: 600, fontSize: '14px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
+            }}
+          >
+            <AutoAwesomeIcon sx={{ fontSize: 18 }} /> Get Cloud Pro for Free
+          </button>
+        </div>
       </aside>
+      
+      <ReferralModal 
+        open={isReferralModalOpen}
+        onClose={() => setIsReferralModalOpen(false)}
+        referralUrl={referralData.referralUrl}
+        activeCount={referralData.activeCount}
+        quotaRemaining={referralData.quotaRemaining}
+        history={referralData.history}
+        subscriptionTier={referralData.subscriptionTier}
+      />
     </>
   );
 };
