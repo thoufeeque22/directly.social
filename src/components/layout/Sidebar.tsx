@@ -16,7 +16,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import CloseIcon from '@mui/icons-material/Close';
 import InsightsIcon from '@mui/icons-material/Insights';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { Collapse } from '@mui/material';
@@ -134,7 +134,7 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true }: { isOpen: boolean; onCl
                 </span>
                 {isSettings && (
                   <span className={styles.chevron}>
-                    {isSettingsExpanded ? <ExpandMoreIcon sx={{ fontSize: 18 }} /> : <ExpandLessIcon sx={{ fontSize: 18 }} />}
+                    {isSettingsExpanded ? <ExpandMoreIcon sx={{ fontSize: 18 }} /> : <ChevronRightIcon sx={{ fontSize: 18 }} />}
                   </span>
                 )}
               </Link>
