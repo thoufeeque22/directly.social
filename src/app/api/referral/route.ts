@@ -29,11 +29,22 @@ export async function GET(req: Request) {
       const { nanoid } = await import('nanoid');
       const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
       const namePrefix = user.name ? `${slugify(user.name)}-` : '';
-      referralCode = `${namePrefix}${nanoid(6)}`;
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { referralCode }
-      });
+      
+      let attempts = 0;
+      let success = false;
+      while (!success && attempts < 3) {
+        try {
+          referralCode = `${namePrefix}${nanoid(6 + attempts)}`;
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { referralCode }
+          });
+          success = true;
+        } catch (e: unknown) {
+          attempts++;
+          if (attempts >= 3) throw e;
+        }
+      }
     }
 
     const history = user.referrals.map(ref => {

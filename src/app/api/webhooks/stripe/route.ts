@@ -4,13 +4,37 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_123', {
-  apiVersion: '2026-06-24.dahlia',
+  apiVersion: '2026-06-24.dahlia', // Matches existing project config
 });
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const event = body as Stripe.Event;
+    const rawBody = await req.text();
+    const signature = req.headers.get('stripe-signature');
+    
+    let event: Stripe.Event;
+
+    // In E2E test mode, we allow unsigned JSON payload injection
+    if (process.env.NEXT_PUBLIC_E2E === 'true' && !signature) {
+      event = JSON.parse(rawBody) as Stripe.Event;
+    } else {
+      if (!signature) {
+        return NextResponse.json({ error: 'Missing stripe-signature header' }, { status: 400 });
+      }
+      
+      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+      if (!webhookSecret) {
+        throw new Error('CRITICAL: STRIPE_WEBHOOK_SECRET is not set');
+      }
+
+      try {
+        event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+      } catch (err: unknown) {
+         const message = err instanceof Error ? err.message : String(err);
+         console.error('Webhook signature verification failed:', message);
+         return NextResponse.json({ error: `Webhook Error: ${message}` }, { status: 400 });
+      }
+    }
 
     if (event.type === 'invoice.payment_succeeded') {
       const invoice = event.data.object as Stripe.Invoice;
@@ -22,58 +46,57 @@ export async function POST(req: Request) {
         if (user && user.referredById) {
           const referrer = await prisma.user.findUnique({
             where: { id: user.referredById },
+            include: { billingProfile: true }
           });
 
-          if (referrer && referrer.email) {
-            const customers = await stripe.customers.list({ email: referrer.email, limit: 1 });
-            const referrerCustomer = customers.data[0];
+          if (referrer && referrer.billingProfile?.providerCustomerId) {
+            const customerId = referrer.billingProfile.providerCustomerId;
 
-            if (referrerCustomer) {
-              await stripe.customers.createBalanceTransaction(referrerCustomer.id, {
-                amount: -invoice.total,
-                currency: invoice.currency,
-                description: `Referral bonus for ${user.email}`,
-              });
+            // Issue Stripe Credit to Referrer
+            await stripe.customers.createBalanceTransaction(customerId, {
+              amount: -invoice.total,
+              currency: invoice.currency,
+              description: `Referral bonus for ${user.email}`,
+            });
 
-              const historicalPaidCount = await prisma.user.count({
-                where: { 
-                  referredById: referrer.id,
-                  billingProfile: {
-                    is: {
-                      subscriptionTier: { not: 'FREE_STARTER' }
-                    }
+            const historicalPaidCount = await prisma.user.count({
+              where: { 
+                referredById: referrer.id,
+                billingProfile: {
+                  is: {
+                    subscriptionTier: { not: 'FREE_STARTER' }
                   }
-                },
-              });
+                }
+              },
+            });
 
-              const activePaidCount = await prisma.user.count({
-                where: { 
-                  referredById: referrer.id,
-                  billingProfile: {
-                    is: {
-                      subscriptionStatus: 'ACTIVE',
-                      subscriptionTier: { not: 'FREE_STARTER' }
-                    }
+            const activePaidCount = await prisma.user.count({
+              where: { 
+                referredById: referrer.id,
+                billingProfile: {
+                  is: {
+                    subscriptionStatus: 'ACTIVE',
+                    subscriptionTier: { not: 'FREE_STARTER' }
                   }
-                },
+                }
+              },
+            });
+
+            if (historicalPaidCount >= 5) {
+              await prisma.user.update({
+                where: { id: referrer.id },
+                data: { lifetimeUnlock: true }
               });
+            }
 
-              if (historicalPaidCount >= 5) {
-                await prisma.user.update({
-                  where: { id: referrer.id },
-                  data: { lifetimeUnlock: true }
-                });
-              }
-
-              if (activePaidCount >= 5 && referrerCustomer.id) {
-                 const subscriptions = await stripe.subscriptions.list({ customer: referrerCustomer.id });
-                 if (subscriptions.data.length > 0) {
-                    await stripe.subscriptions.update(
-                      subscriptions.data[0].id,
-                      { discounts: [{ coupon: process.env.STRIPE_100_OFF_COUPON || '100_OFF' }] }
-                    );
-                 }
-              }
+            if (activePaidCount >= 5) {
+               const subscriptions = await stripe.subscriptions.list({ customer: customerId });
+               if (subscriptions.data.length > 0) {
+                  await stripe.subscriptions.update(
+                    subscriptions.data[0].id,
+                    { discounts: [{ coupon: process.env.STRIPE_100_OFF_COUPON || '100_OFF' }] }
+                  );
+               }
             }
           }
         }
@@ -81,7 +104,9 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ received: true });
-  } catch (error) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Webhook failed:', message);
     return NextResponse.json({ error: 'Webhook failed' }, { status: 400 });
   }
 }
