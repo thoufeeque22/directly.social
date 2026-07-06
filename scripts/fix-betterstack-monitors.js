@@ -1,3 +1,4 @@
+/* eslint-disable */
 const https = require('https');
 require('dotenv').config({ path: '.env.local' });
 require('dotenv').config({ path: '.env' });

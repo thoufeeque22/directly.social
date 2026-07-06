@@ -29,12 +29,12 @@ export const BRAND = {
   appStore: {
     apple: {
       title: `${BRAND_NAME}: Post Planner`,
-      subtitle: 'Schedule & Post Natively',
+      subtitle: 'Publish Videos Privately',
     },
     google: {
       title: `${BRAND_NAME}: Post Planner`,
       shortDescription:
-        'Schedule and publish to social media platforms — with your own keys and storage.',
+        'Publish videos across platforms privately, keeping 100% control of your data.',
     },
   },
   social: {
