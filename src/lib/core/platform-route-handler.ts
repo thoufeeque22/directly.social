@@ -33,16 +33,9 @@ export async function handlePlatformUploadRequest({ req, platform, uploadLogic }
     if (!isByos && filePath && stagedId && !fsSync.existsSync(filePath)) {
       const asset = await prisma.galleryAsset.findUnique({ where: { fileId: stagedId } });
       const blobUrl = (asset?.metadata as any)?.blobUrl as string | undefined;
-      if (blobUrl && blobUrl.includes('vercel-storage.com')) {
-        const res = await fetch(blobUrl);
-        if (res.ok && res.body) {
-          const { Readable } = await import('stream');
-          const { finished } = await import('stream/promises');
-          const path = await import('node:path');
-          fsSync.mkdirSync(path.dirname(filePath), { recursive: true });
-          const fileStream = fsSync.createWriteStream(filePath);
-          await finished(Readable.fromWeb(res.body as any).pipe(fileStream));
-        }
+      if (blobUrl) {
+        const { downloadVercelBlobToTemp } = await import("@/lib/upload/blob-downloader");
+        await downloadVercelBlobToTemp(blobUrl, filePath);
       }
     }
     if (!filePath || !fsSync.existsSync(filePath)) return NextResponse.json({ error: "No file" }, { status: 400 });
@@ -52,7 +45,7 @@ export async function handlePlatformUploadRequest({ req, platform, uploadLogic }
     const caption = formatPlatformCaption({ ...enriched, platform });
     if (fields.accountId) {
       const accIdStr = fields.accountId as string;
-      const isMock = accIdStr.startsWith('mock-') || accIdStr.startsWith('local-dev-');
+      const isMock = process.env.NODE_ENV !== 'production' && (accIdStr.startsWith('mock-') || accIdStr.startsWith('local-dev-'));
       const acc = await prisma.account.findFirst({ where: { id: accIdStr, userId: session.user.id } });
       
       if (!acc && !isMock) {
@@ -64,17 +57,8 @@ export async function handlePlatformUploadRequest({ req, platform, uploadLogic }
       }
       
       if (isMock) {
-        // Simulate a real upload delay so the user can see the progress bar
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        const mockResult = { id: `mock-post-${Date.now()}`, videoId: `mock-vid-${Date.now()}` };
-        if (fields.activityId) {
-          const { extractPlatformPostId, generatePermalink } = await import("./distributor-utils");
-          await prisma.postPlatformResult.update({ 
-            where: { postActivityId_platform_accountId: { postActivityId: fields.activityId as string, platform, accountId: accIdStr } }, 
-            data: { status: 'success', platformPostId: extractPlatformPostId(platform, mockResult), permalink: generatePermalink(platform, mockResult), progress: 100 } 
-          });
-        }
-        return NextResponse.json({ success: true, data: mockResult });
+        const { handleMockPlatformUpload } = await import("@/lib/testing/mock-platform-handler");
+        return handleMockPlatformUpload(fields.activityId as string | undefined, platform, accIdStr);
       }
     }
     

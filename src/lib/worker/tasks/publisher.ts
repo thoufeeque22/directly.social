@@ -58,12 +58,11 @@ export async function processPendingPosts() {
       
       if (stagedFileId.startsWith('http') && !existsSync(filePath)) {
         logger.info(`[WORKER] Downloading remote blob ${stagedFileId} to ${filePath}`);
-        await import("fs/promises").then(m => m.mkdir(tempDir, { recursive: true }));
-        const res = await fetch(stagedFileId);
-        if (!res.ok || !res.body) throw new Error(`Failed to download blob: ${res.statusText}`);
-        
-        // @ts-expect-error Node 18+ Web Streams to Node Streams
-        await pipeline(res.body, createWriteStream(filePath));
+        const { downloadVercelBlobToTemp } = await import("@/lib/upload/blob-downloader");
+        const success = await downloadVercelBlobToTemp(stagedFileId, filePath);
+        if (!success) {
+          throw new Error(`Failed to download blob or invalid URL: ${stagedFileId}`);
+        }
         logger.info(`[WORKER] Download complete`);
       } else if (!existsSync(filePath)) {
         throw new Error(`File missing: ${filePath}`);
