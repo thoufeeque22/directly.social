@@ -15,6 +15,7 @@ import { BRAND } from '@/lib/core/brand';
 import { APP_CONFIG } from '@/lib/core/config';
 import { GoogleIcon } from '@/components/ui/icons/GoogleIcon';
 import { TiktokIcon } from '@/components/ui/icons/TiktokIcon';
+import Alert from '@mui/material/Alert';
 
 type AuthProvider = 'google' | 'facebook' | 'tiktok';
 
@@ -22,6 +23,16 @@ export function LoginContent() {
   const [showWarning, setShowWarning] = useState(false);
   const [pendingProvider, setPendingProvider] = useState<AuthProvider | null>(null);
   const searchParams = useSearchParams();
+  const errorParam = searchParams.get('error');
+
+  let errorMessage = '';
+  if (errorParam === 'RateLimit' || errorParam === 'TooManyRequests') {
+    errorMessage = 'Too many requests. Please wait a moment and try again.';
+  } else if (errorParam === 'AccessDenied') {
+    errorMessage = 'Access denied. You do not have permission to log in.';
+  } else if (errorParam) {
+    errorMessage = 'An error occurred during authentication. Please try again.';
+  }
 
   useEffect(() => {
     const provider = searchParams.get('provider');
@@ -73,6 +84,11 @@ export function LoginContent() {
           <h1 className={styles.title}>{BRAND.name}</h1>
           <p className={styles.subtitle}>Sign in to manage your automated distribution.</p>
         </div>
+        {errorMessage && (
+          <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+            {errorMessage}
+          </Alert>
+        )}
         <div className={styles.buttonGroup}>
           <button onClick={() => handleLoginClick("google")} className={`${styles.loginBtn} ${styles.googleBtn}`}><span className={styles.btnIcon}><GoogleIcon /></span>Continue with Google</button>
           <button onClick={() => handleLoginClick("facebook")} className={`${styles.loginBtn} ${styles.facebookBtn}`}><span className={styles.btnIcon}><FacebookIcon /></span>Continue with Facebook</button>

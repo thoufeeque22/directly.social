@@ -35,6 +35,12 @@ export default auth(async (req) => {
       const limitResult = await limiter.limit(identifier);
 
       if (!limitResult.success) {
+        // Handle browser navigation requests gracefully (e.g., OAuth callbacks)
+        if (req.headers.get('accept')?.includes('text/html')) {
+          const redirectUrl = new URL('/login?error=RateLimit', req.url);
+          return NextResponse.redirect(redirectUrl);
+        }
+
         return new NextResponse(
           JSON.stringify({
             error: 'Too Many Requests',

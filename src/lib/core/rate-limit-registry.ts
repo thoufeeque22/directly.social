@@ -27,7 +27,7 @@ export const rateLimitRegistry: RateLimitRoute[] = [
     limiter: uploadRateLimit,
   },
   {
-    pattern: /^\/api\/auth\//,
+    pattern: /^\/api\/auth\/(signin|verify-request)/,
     limiter: authRateLimit,
     useIpOnly: true,
   },
