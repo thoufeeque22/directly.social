@@ -36,7 +36,7 @@ export async function stageVideoFile({ file, onStatusUpdate, metadata, platforms
   const chunksRes = await fetch(`/api/upload/chunks/${uploadId}`, { signal }).catch(() => null);
   const existingChunks = (chunksRes?.ok ? (await chunksRes.json()).chunks : []) as number[];
 
-  const CHUNK_SIZE = 5 * 1024 * 1024;
+  const CHUNK_SIZE = 4 * 1024 * 1024; // 4MB — must stay under Vercel Hobby plan's 4.5MB payload limit
   const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
   
   for (let i = 0; i < totalChunks; i++) {
