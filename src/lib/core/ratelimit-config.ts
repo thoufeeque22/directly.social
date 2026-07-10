@@ -24,12 +24,12 @@ export const aiRateLimit = new Ratelimit({
 });
 
 /**
- * Upload rate limiter: 3 requests per 60 seconds.
- * Prevents storage abuse and bandwidth saturation.
+ * Upload rate limiter: 120 requests per 60 seconds.
+ * Allows chunked uploads while still preventing severe storage abuse.
  */
 export const uploadRateLimit = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(3, "60 s"),
+  limiter: Ratelimit.slidingWindow(120, "60 s"),
   analytics: true,
   prefix: "ratelimit:upload",
 });

@@ -1,3 +1,4 @@
+import os from "os";
 import { prisma } from "@/lib/core/prisma";
 import { workerLogger as logger } from "@/lib/core/logger";
 import * as Sentry from "@sentry/nextjs";
@@ -6,7 +7,7 @@ import { readFileSync, existsSync } from "fs";
 import { refreshTokenIfNecessary } from "@/lib/auth/token-refresher";
 
 const getTempDir = () => {
-  const base = process.env.UPLOAD_TEMP_DIR || path.join(/*turbopackIgnore: true*/ process.cwd(), "tmp");
+  const base = process.env.UPLOAD_TEMP_DIR || path.join(/*turbopackIgnore: true*/ os.tmpdir(), "directly_social");
   if (process.env.TEST_WORKER_INDEX) {
     return path.join(/*turbopackIgnore: true*/ base, `worker-${process.env.TEST_WORKER_INDEX}`);
   }

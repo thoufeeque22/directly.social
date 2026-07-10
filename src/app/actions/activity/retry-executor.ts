@@ -1,3 +1,4 @@
+import os from "os";
 import { distributeSinglePlatform } from '@/lib/core/distributor-server';
 import { updateRetrySuccess, updateRetryFailure } from './retry-helpers';
 import { ResultWithActivity } from './prisma-helpers';
@@ -10,7 +11,7 @@ export async function executeRetry(resultId: string, result: ResultWithActivity,
     const stagedFileId = result.postActivity.stagedFileId;
     if (!stagedFileId) throw new Error("Original staged file reference missing.");
 
-    const filePath = path.join(process.cwd(), "tmp", stagedFileId);
+    const filePath = path.join(os.tmpdir(), "directly_social", stagedFileId);
     if (!fs.existsSync(filePath)) throw new Error("Source video file has been purged from the server (24h limit).");
 
     const platformResult = await distributeSinglePlatform({

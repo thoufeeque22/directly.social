@@ -1,3 +1,4 @@
+import os from "os";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { promises as fs } from "fs";
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Security check: ensure the file is strictly within tmp
-    const filePath = path.join(process.cwd(), "tmp", path.basename(stagedFileId));
+    const filePath = path.join(os.tmpdir(), "directly_social", path.basename(stagedFileId));
 
     if (fsSync.existsSync(filePath)) {
       await fs.unlink(filePath);

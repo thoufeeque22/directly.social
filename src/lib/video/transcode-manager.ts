@@ -1,3 +1,4 @@
+import os from "os";
 import { prisma } from "@/lib/core/prisma";
 import { checkTranscodeRequirement, transcodeForPlatform } from "./processor";
 import path from "path";
@@ -14,7 +15,7 @@ export async function getOptimizedVideoPath(
   postActivityId?: string,
   accountId?: string
 ): Promise<string> {
-  const originalPath = path.join(/*turbopackIgnore: true*/ process.cwd(), "tmp", originalFileId);
+  const originalPath = path.join(/*turbopackIgnore: true*/ os.tmpdir(), "directly_social", originalFileId);
   
   // 1. Check if we already have an optimized version in DB for this post/platform/account
   if (postActivityId && accountId) {
@@ -29,7 +30,7 @@ export async function getOptimizedVideoPath(
     });
 
     if (result?.optimizedFileId) {
-      const optimizedPath = path.join(/*turbopackIgnore: true*/ process.cwd(), "tmp", result.optimizedFileId);
+      const optimizedPath = path.join(/*turbopackIgnore: true*/ os.tmpdir(), "directly_social", result.optimizedFileId);
       if (fs.existsSync(optimizedPath)) {
         logger.info(`️ [TRANSCODER] Reusing optimized file: ${result.optimizedFileId}`);
         return optimizedPath;

@@ -1,3 +1,4 @@
+import os from "os";
 import { PrismaClient } from "@prisma/client";
 import { promises as fs } from "fs";
 import path from "path";
@@ -22,7 +23,7 @@ async function clearActivity() {
     console.log(`- Deleted ${galleryCount} gallery assets.`);
 
     // 4. Clean up physical temp files in tmp
-    const tempDir = path.join(process.cwd(), "tmp");
+    const tempDir = path.join(os.tmpdir(), "directly_social");
     if (fsSync.existsSync(tempDir)) {
       const files = await fs.readdir(tempDir);
       let deletedFiles = 0;
