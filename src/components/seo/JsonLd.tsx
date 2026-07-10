@@ -17,7 +17,7 @@ export function JsonLd() {
               logo: {
                 '@type': 'ImageObject',
                 '@id': `${BRAND.url}/#logo`,
-                url: `${BRAND.url}/logo.png`,
+                url: `${BRAND.url}/brand-logo.png`,
                 caption: `${BRAND.name} Logo`,
               },
               sameAs: [

@@ -24,7 +24,7 @@ export const LandingFooter = () => {
           <Grid size={{ xs: 12, md: 4 }}>
             <Stack spacing={3}>
               <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-                <Image src="/logo.png?v=2" alt={BRAND.name} width={28} height={28} style={{ borderRadius: '6px' }} />
+                <Image src="/brand-logo.png" alt={BRAND.name} width={28} height={28} style={{ borderRadius: '6px' }} />
                 <Typography variant="h6" sx={{ fontWeight: 700 }}>{BRAND.name}</Typography>
               </Stack>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 300 }}>

@@ -55,7 +55,7 @@ export const LandingHeader = () => {
           <Box sx={{ flexShrink: 0 }}>
             <Link href="/" onClick={handleLogoClick} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-                <Image src="/logo.png?v=2" alt={BRAND.name} width={28} height={28} style={{ borderRadius: '6px' }} />
+                <Image src="/brand-logo.png" alt={BRAND.name} width={28} height={28} style={{ borderRadius: '6px' }} />
                 <Typography variant="h6" component="div" sx={{ fontWeight: 700 }}>
                   {BRAND.name}
                 </Typography>

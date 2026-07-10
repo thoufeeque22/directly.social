@@ -98,7 +98,7 @@ test.describe('Technical SEO Foundation', () => {
     expect(organization['@id']).toBe(`${BRAND.url}/#organization`);
     expect(organization.name).toBe(BRAND.name);
     expect(organization.url).toBe(BRAND.url);
-    expect(organization.logo.url).toBe(`${BRAND.url}/logo.png`);
+    expect(organization.logo.url).toBe(`${BRAND.url}/brand-logo.png`);
     expect(organization.sameAs).toEqual([
       'https://github.com/thoufeeque22/directly.social',
       'https://x.com/directlysocial',
