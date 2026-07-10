@@ -5,7 +5,7 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Container, Stack, useTheme, useScrollTrigger, Box } from '@mui/material';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import Image from 'next/image';
 
 import { BRAND } from '@/lib/core/brand';
 
@@ -55,7 +55,7 @@ export const LandingHeader = () => {
           <Box sx={{ flexShrink: 0 }}>
             <Link href="/" onClick={handleLogoClick} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-                <RocketLaunchIcon color="primary" />
+                <Image src="/logo.png" alt={BRAND.name} width={28} height={28} style={{ borderRadius: '6px' }} />
                 <Typography variant="h6" component="div" sx={{ fontWeight: 700 }}>
                   {BRAND.name}
                 </Typography>

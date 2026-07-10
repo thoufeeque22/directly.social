@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Box, Container, Typography, Grid, Stack, useTheme } from '@mui/material';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import Image from 'next/image';
 import { FooterColumn } from './FooterColumn';
 import { FOOTER_COLUMNS } from './constants';
 import { BRAND } from '@/lib/core/brand';
@@ -24,7 +24,7 @@ export const LandingFooter = () => {
           <Grid size={{ xs: 12, md: 4 }}>
             <Stack spacing={3}>
               <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-                <RocketLaunchIcon color="primary" />
+                <Image src="/logo.png" alt={BRAND.name} width={28} height={28} style={{ borderRadius: '6px' }} />
                 <Typography variant="h6" sx={{ fontWeight: 700 }}>{BRAND.name}</Typography>
               </Stack>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 300 }}>

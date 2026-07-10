@@ -49,7 +49,7 @@ export const BRAND = {
   },
   legal: {
     owner: LEGAL_OWNER,
-    copyrightOwner: BRAND_NAME,
+    copyrightOwner: `${LEGAL_OWNER} (${BRAND_NAME})`,
   },
 } as const;
 
