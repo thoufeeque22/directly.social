@@ -13,9 +13,8 @@ export const UploadInitializeSchema = z.object({
 }).openapi('UploadInitialize');
 
 export const UploadAssembleSchema = z.object({
-  uploadId: z.string().openapi({ example: 'upload_abc123' }),
+  blobUrl: z.string().url().openapi({ example: 'https://xxx.public.blob.vercel-storage.com/video.mp4' }),
   fileName: z.string().openapi({ example: 'video.mp4' }),
-  totalChunks: z.number().openapi({ example: 10 }),
   totalSize: z.number().optional().openapi({ example: 10485760 }),
   title: z.string().nullable().optional(),
   description: z.string().nullable().optional(),

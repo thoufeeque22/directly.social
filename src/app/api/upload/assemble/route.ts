@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { logger } from "@/lib/core/logger";
 import { UploadAssembleSchema } from "@/lib/schemas/upload-pipeline";
-import { assembleChunks, UploadAssemblyError } from "@/lib/upload/chunk-assembler";
+import { UploadAssemblyError } from "@/lib/upload/chunk-assembler";
 import { registerGalleryAsset } from "@/lib/upload/gallery-registration";
 import { upsertUploadActivity, PlatformInput } from "@/lib/upload/activity-registration";
 import { getVideoMetadata, checkTranscodeRequirement } from "@/lib/video/processor";
@@ -22,7 +22,12 @@ export async function POST(req: NextRequest) {
     }
 
     const p = result.data;
-    const { fileId, finalPath, size, checksum } = await assembleChunks(p.uploadId, p.fileName, p.totalChunks, p.totalSize);
+    
+    // With Vercel Blob, the file is already fully uploaded. The URL is the "finalPath".
+    const finalPath = p.blobUrl;
+    const size = p.totalSize || 0;
+    const fileId = p.blobUrl.split('/').pop() || `${Date.now()}`;
+    const checksum = "blob-checksum-bypassed";
 
     let videoMetadata = null;
     try { videoMetadata = await getVideoMetadata(finalPath); } 
