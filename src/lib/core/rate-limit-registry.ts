@@ -1,6 +1,7 @@
 import {
   aiRateLimit,
   uploadRateLimit,
+  chunkRateLimit,
   authRateLimit,
   sensitiveRateLimit,
   globalRateLimit,
@@ -21,6 +22,10 @@ export const rateLimitRegistry: RateLimitRoute[] = [
   {
     pattern: /^\/api\/ai\//,
     limiter: aiRateLimit,
+  },
+  {
+    pattern: /^\/api\/upload\/chunk\//,
+    limiter: chunkRateLimit,
   },
   {
     pattern: /^\/api\/(upload|media)\//,

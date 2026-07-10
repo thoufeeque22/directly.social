@@ -1,3 +1,4 @@
+import os from "os";
 /* eslint-disable max-lines */
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
@@ -119,7 +120,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     // 2. Physical cleanup (Always do this, even if DB failed or IDs were already missing)
-    const tempDir = path.join(process.cwd(), "tmp");
+    const tempDir = path.join(os.tmpdir(), "directly_social");
     let deletedCount = 0;
     for (const fileId of targetIds) {
       const filePath = path.join(tempDir, path.basename(fileId));

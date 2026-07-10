@@ -23,7 +23,7 @@ export function useCockpitPipeline(
 
       const selectedAccountIds = post.platforms.map(p => {
         const accId = p.accountId || accounts.find(acc => (acc.provider === 'google' ? 'youtube' : acc.provider) === p.platform)?.id;
-        return accId ? ((p.platform === 'facebook' || p.platform === 'instagram') ? `${p.platform}:${accId}` : accId) : null;
+        return accId ? `${p.platform}:${accId}` : null;
       }).filter((id): id is string => id !== null);
 
       await distributeToPlatforms({ 

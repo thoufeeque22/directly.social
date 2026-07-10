@@ -1,3 +1,4 @@
+import os from "os";
 import { prisma } from "@/lib/core/prisma";
 import { auditLogger as logger } from "@/lib/core/logger";
 import { existsSync } from "fs";
@@ -6,7 +7,7 @@ import { calculateChecksum } from "@/lib/utils/checksum";
 
 export class AuditService {
   private static getStoragePath(fileId: string) {
-    const base = process.env.UPLOAD_TEMP_DIR || path.join(process.cwd(), "tmp");
+    const base = process.env.UPLOAD_TEMP_DIR || path.join(os.tmpdir(), "directly_social");
     return path.join(base, fileId);
   }
 

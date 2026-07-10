@@ -2,31 +2,29 @@
 
 ## 1. Media Upload & Ingestion
 
-Users upload media which is temporarily stored on the server for processing and distribution. The system uses a **decentralized observation pattern** where upload utilities broadcast progress to `localStorage`, allowing a persistent `UploadHUD` component to provide real-time feedback across the entire application without complex prop-drilling.
+Users upload media which is directly streamed to cloud storage (Vercel Blob) for processing and distribution, completely bypassing local serverless payload limits. The system uses a **decentralized observation pattern** where upload utilities broadcast progress to `localStorage`, allowing a persistent `UploadHUD` component to provide real-time feedback across the entire application without complex prop-drilling.
 
-The finalization process is orchestrated by specialized modular services to ensure data integrity, gallery consistency, and publishing readiness.
+The finalization process is orchestrated by specialized modular services to ensure data integrity, SSRF validation, gallery consistency, and publishing readiness. Before distribution to platforms, the cloud blob is dynamically downloaded to the worker's temp directory via a secure Just-In-Time bridge.
 
 ```mermaid
 sequenceDiagram
     participant U as User (UI)
     participant LS as localStorage (SS_STAGING_STATUS)
+    participant VB as Vercel Blob
     participant API as API (/api/upload)
-    participant CA as ChunkAssembler
     participant GR as GalleryRegistration
     participant AR as ActivityRegistration
     participant VP as VideoProcessor
     participant DB as Database (Prisma)
 
-    U->>API: Upload Video Chunk
-    API->>API: Write Chunk to tmp/
-    API-->>U: Success
+    U->>VB: Stream Video Upload (@vercel/blob/client)
+    VB-->>U: Return Blob URL
     U->>LS: Broadcast Progress (X%)
 
     U->>API: Finalize Upload (/assemble)
-    API->>CA: assembleChunks()
-    CA->>CA: Merge chunks & Verify integrity
-    API->>VP: getVideoMetadata()
-    API->>GR: registerGalleryAsset()
+    API->>API: SSRF Validation on Blob URL
+    API->>VP: getVideoMetadata() (If applicable)
+    API->>GR: registerGalleryAsset(blobUrl)
     GR->>DB: Upsert GalleryAsset (Deduplication)
     API->>VP: checkTranscodeRequirement()
     API->>AR: upsertUploadActivity()

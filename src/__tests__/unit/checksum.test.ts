@@ -1,10 +1,11 @@
+import os from "os";
 import { describe, it, expect, beforeEach } from "vitest";
 import { calculateChecksum, calculateMetadataHash } from "../../lib/utils/checksum";
 import fs from "fs";
 import path from "path";
 
 describe("Checksum Utility", () => {
-  const testFile = path.join(process.cwd(), "tmp", "test-checksum.txt");
+  const testFile = path.join(os.tmpdir(), "directly_social", "test-checksum.txt");
 
   beforeEach(async () => {
     if (!fs.existsSync(path.dirname(testFile))) {

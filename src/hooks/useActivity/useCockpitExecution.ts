@@ -14,9 +14,9 @@ export function useCockpitExecution(setPosts: (p: PostActivityEntry[]) => void, 
         await updatePlatformResultsAction(activityId, reviewedContent);
       }
       const selectedAccountIds = post.platforms.map((p: PlatformResult) => {
-         const account = accounts.find(acc => acc.id === p.accountId);
-         if (!account) return (p.accountId?.includes('local-dev-')) ? p.accountId : null;
-         return (p.platform === 'facebook' || p.platform === 'instagram') ? `${p.platform}:${account.id}` : account.id;
+         const accId = p.accountId || accounts.find(acc => (acc.provider === 'google' ? 'youtube' : acc.provider) === p.platform)?.id;
+         if (!accId) return (p.accountId?.includes('local-dev-')) ? p.accountId : null;
+         return `${p.platform}:${accId}`;
       }).filter((id): id is string => id !== null);
 
       await distributeToPlatforms({

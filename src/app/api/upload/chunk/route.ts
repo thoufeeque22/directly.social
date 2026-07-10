@@ -1,3 +1,4 @@
+import os from "os";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { promises as fs } from "fs";
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
     if (!uploadId || !chunkIndex || !/^\d+$/.test(chunkIndex)) {
       return NextResponse.json({ error: "Invalid or missing x-upload-id or x-chunk-index" }, { status: 400 });
     }
-    const baseDir = process.env.UPLOAD_TEMP_DIR || path.join(process.cwd(), "tmp");
+    const baseDir = process.env.UPLOAD_TEMP_DIR || path.join(os.tmpdir(), "directly_social");
     const chunkDir = path.join(baseDir, "chunks", path.basename(uploadId));
     await fs.mkdir(chunkDir, { recursive: true });
 

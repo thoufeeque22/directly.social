@@ -1,3 +1,4 @@
+import os from "os";
 import { NextRequest } from "next/server";
 import busboy from "busboy";
 import { Readable } from "node:stream";
@@ -24,7 +25,7 @@ export async function streamMultipartFormData(req: NextRequest): Promise<ParsedM
   let fileName: string | undefined;
 
   // Ensure temp directory exists
-  const tempDir = path.join(process.cwd(), "tmp");
+  const tempDir = path.join(os.tmpdir(), "directly_social");
   if (!fs.existsSync(tempDir)) {
     await fsPromises.mkdir(tempDir, { recursive: true });
   }

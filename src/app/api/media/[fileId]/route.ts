@@ -1,3 +1,4 @@
+import os from "os";
 /* eslint-disable max-lines */
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
@@ -44,7 +45,7 @@ export async function GET(
     return new NextResponse("Unauthorized: Invalid or expired media token", { status: 403 });
   }
 
-  const tempDir = path.join(process.cwd(), "tmp");
+  const tempDir = path.join(os.tmpdir(), "directly_social");
   const filePath = path.join(tempDir, path.basename(fileId));
 
   try {
@@ -146,7 +147,7 @@ export async function DELETE(
     });
 
     // 2. Physically delete from disk
-    const tempDir = path.join(process.cwd(), "tmp");
+    const tempDir = path.join(os.tmpdir(), "directly_social");
     const filePath = path.join(tempDir, path.basename(fileId));
     
     let diskDeleted = false;

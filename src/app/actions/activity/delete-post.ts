@@ -1,4 +1,5 @@
 "use server";
+import os from "os";
 
 import { prisma } from '@/lib/core/prisma';
 import { protectedAction, revalidateDashboard } from '@/lib/core/action-utils';
@@ -16,7 +17,7 @@ export async function deleteScheduledPost(id: string) {
 
     if (post.stagedFileId) {
       try {
-        const filePath = path.join(process.cwd(), "tmp", post.stagedFileId);
+        const filePath = path.join(os.tmpdir(), "directly_social", post.stagedFileId);
         if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
       } catch (e: unknown) {
         logger.warn("Failed to delete temp file", e);

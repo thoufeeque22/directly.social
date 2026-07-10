@@ -1,12 +1,14 @@
+import os from "os";
 import { prisma } from "@/lib/core/prisma";
 import { workerLogger as logger } from "@/lib/core/logger";
 import * as Sentry from "@sentry/nextjs";
 import path from "path";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, existsSync, createWriteStream } from "fs";
+import { pipeline } from "stream/promises";
 import { refreshTokenIfNecessary } from "@/lib/auth/token-refresher";
 
 const getTempDir = () => {
-  const base = process.env.UPLOAD_TEMP_DIR || path.join(/*turbopackIgnore: true*/ process.cwd(), "tmp");
+  const base = process.env.UPLOAD_TEMP_DIR || path.join(/*turbopackIgnore: true*/ os.tmpdir(), "directly_social");
   if (process.env.TEST_WORKER_INDEX) {
     return path.join(/*turbopackIgnore: true*/ base, `worker-${process.env.TEST_WORKER_INDEX}`);
   }
@@ -45,8 +47,27 @@ export async function processPendingPosts() {
       }
 
       const tempDir = getTempDir();
-      const filePath = path.join(/*turbopackIgnore: true*/ tempDir, stagedFileId);
-      if (!existsSync(filePath)) throw new Error(`File missing: ${filePath}`);
+      
+      let safeFileId = stagedFileId;
+      if (stagedFileId.startsWith('http')) {
+        // It's a Vercel Blob URL, extract filename
+        safeFileId = stagedFileId.split('/').pop() || `video_${Date.now()}.mp4`;
+      }
+      
+      const filePath = path.join(/*turbopackIgnore: true*/ tempDir, safeFileId);
+      
+      if (stagedFileId.startsWith('http') && !existsSync(filePath)) {
+        logger.info(`[WORKER] Downloading remote blob ${stagedFileId} to ${filePath}`);
+        const { downloadVercelBlobToTemp } = await import("@/lib/upload/blob-downloader");
+        const success = await downloadVercelBlobToTemp(stagedFileId, filePath);
+        if (!success) {
+          throw new Error(`Failed to download blob or invalid URL: ${stagedFileId}`);
+        }
+        logger.info(`[WORKER] Download complete`);
+      } else if (!existsSync(filePath)) {
+        throw new Error(`File missing: ${filePath}`);
+      }
+
 
       const metadataPath = path.join(/*turbopackIgnore: true*/ tempDir, `${stagedFileId}.metadata.json`);
       let reviewedContent = undefined;
@@ -60,7 +81,7 @@ export async function processPendingPosts() {
 
       const { distributeToPlatformsServer } = await import('../server-distributor');
       await distributeToPlatformsServer({
-        stagedFileId,
+        stagedFileId: safeFileId,
         userId: post.userId,
         activityId: post.id,
         title: post.title,

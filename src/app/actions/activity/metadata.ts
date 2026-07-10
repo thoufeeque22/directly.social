@@ -1,4 +1,5 @@
 "use server";
+import os from "os";
 
 import { prisma } from '@/lib/core/prisma';
 import { protectedAction, revalidateDashboard } from '@/lib/core/action-utils';
@@ -12,7 +13,7 @@ import { AIWriteResult } from '@/lib/utils/ai-writer';
  */
 export async function saveStagedMetadata(stagedFileId: string, reviewedContent: Record<string, AIWriteResult>) {
   return protectedAction(async function saveStaged() {
-    const metadataPath = path.join(process.cwd(), "tmp", `${stagedFileId}.metadata.json`);
+    const metadataPath = path.join(os.tmpdir(), "directly_social", `${stagedFileId}.metadata.json`);
     fs.writeFileSync(metadataPath, JSON.stringify(reviewedContent, null, 2), "utf8");
     return { success: true };
   });

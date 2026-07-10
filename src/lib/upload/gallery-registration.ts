@@ -20,7 +20,7 @@ export interface GalleryRegistrationParams {
 }
 
 export async function registerGalleryAsset(params: GalleryRegistrationParams) {
-  const { userId, fileId, fileName, size, checksum, scheduledAt, videoMetadata } = params;
+  const { userId, fileId, fileName, size, checksum, scheduledAt, videoMetadata, finalPath } = params;
   const expiresAt = getExpiryDate(scheduledAt);
   
   // Enhanced deduplication using checksum if available, fallback to fileName + size
@@ -28,7 +28,7 @@ export async function registerGalleryAsset(params: GalleryRegistrationParams) {
     ? await prisma.galleryAsset.findFirst({ where: { userId, checksum } })
     : await prisma.galleryAsset.findFirst({ where: { userId, fileName, fileSize: BigInt(size) } });
 
-  const metadata = videoMetadata as unknown as Record<string, unknown> | undefined;
+  const metadata = { ...(videoMetadata || {}), blobUrl: finalPath } as any;
 
   if (existingAsset) {
     logger.info(`🔄 [GALLERY] Updating existing asset to prevent duplicate: ${fileName} (Checksum: ${checksum || 'N/A'})`);

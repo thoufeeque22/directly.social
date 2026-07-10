@@ -1,3 +1,4 @@
+import os from "os";
 import { promises as fs } from "fs";
 import fsSync from "fs";
 import path from "path";
@@ -14,7 +15,7 @@ export async function assembleChunks(
   fileName: string,
   totalChunks: number,
   totalSize?: number,
-  baseDir: string = process.env.UPLOAD_TEMP_DIR || path.join(process.cwd(), "tmp")
+  baseDir: string = process.env.UPLOAD_TEMP_DIR || path.join(os.tmpdir(), "directly_social")
 ) {
   const chunkDir = path.join(baseDir, "chunks", path.basename(uploadId));
   const tempDir = baseDir;
