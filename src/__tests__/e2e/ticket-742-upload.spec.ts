@@ -37,7 +37,7 @@ test.describe('Ticket 742: Cloudflare R2 Media Upload Migration', () => {
 
     // Mock the assemble endpoint
     let assembleCalled = false;
-    let assemblePayload: any = null;
+    let assemblePayload: { blobUrl?: string } | null = null;
     await page.route('**/api/upload/assemble', async (route) => {
       if (route.request().method() === 'POST') {
         assembleCalled = true;
@@ -66,7 +66,7 @@ test.describe('Ticket 742: Cloudflare R2 Media Upload Migration', () => {
       await page.waitForResponse('**/api/upload/assemble');
 
       expect(assembleCalled).toBe(true);
-      expect(assemblePayload?.blobUrl).toBe('https://mock-r2-bucket.pub-r2.dev/video.mp4');
+      expect((assemblePayload as { blobUrl?: string } | null)?.blobUrl).toBe('https://mock-r2-bucket.pub-r2.dev/video.mp4');
     }
   });
 

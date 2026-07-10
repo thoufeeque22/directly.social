@@ -33,10 +33,10 @@ importers:
         specifier: ^2.11.1
         version: 2.11.2(@prisma/client@6.19.3(prisma@6.19.3(typescript@5.9.3))(typescript@5.9.3))
       '@aws-sdk/client-s3':
-        specifier: ^3.1053.0
+        specifier: ^3.1057.0
         version: 3.1057.0
       '@aws-sdk/s3-request-presigner':
-        specifier: ^3.1053.0
+        specifier: ^3.1057.0
         version: 3.1057.0
       '@capacitor/android':
         specifier: ^8.3.1
@@ -104,9 +104,6 @@ importers:
       '@upstash/redis':
         specifier: ^1.38.0
         version: 1.38.0
-      '@vercel/blob':
-        specifier: ^2.6.1
-        version: 2.6.1
       ai:
         specifier: ^6.0.178
         version: 6.0.193(zod@4.4.3)
@@ -3441,10 +3438,6 @@ packages:
     resolution: {integrity: sha512-ncQ8CRb6XoEAYJwjOTRGpACRT6h/AeY+/33gLyeVxG5BIes27OPm1jmqreF+JHjcTmGhClTP+kBpmyLfbV0xew==}
     engines: {node: '>=20.0.0'}
 
-  '@vercel/blob@2.6.1':
-    resolution: {integrity: sha512-KTJytw85j1XQBxjN5d6UXI7fIWNQe1jotn4nWN+0hePqLs+Qi1B3jHdQcSKFGF0m2rsy9uhPT6GOXMtHe3qNzg==}
-    engines: {node: '>=20.0.0'}
-
   '@vercel/build-utils@13.26.4':
     resolution: {integrity: sha512-0g3ZxtZUJZbt4y0Vu4pkHtu1UN58FbVF9cqGT8T6jHp0EHdLGFj5TVCiME8ALeK4tjPImSmxnKZvvB5yb2hqEw==}
 
@@ -3454,13 +3447,6 @@ packages:
 
   '@vercel/cli-config@0.1.2':
     resolution: {integrity: sha512-XQOcuCM+8tKjh3sfgGRKRuNh78u2D8uGpDJIFcCtFi2tUqbGvqmJo790XX7+Bwakk08y0FCrs2JlEjvvwRhpAg==}
-
-  '@vercel/cli-config@0.2.0':
-    resolution: {integrity: sha512-fJRRRB7734BDuXZ89yBEaA2ncYhH7bWX30mk04W80J6VAfQc+4iB8lyzAdaGpFV3/vNlkt9VZt+/uoQoWX6UsQ==}
-
-  '@vercel/cli-exec@1.0.0':
-    resolution: {integrity: sha512-kQF8LGie/Hbdq9/psJxLE7owRTcqMQMhgybU04gCeR7cbQAr5t8OrjefDNColJv1QSSucFt4pLwRiARVmlOnug==}
-    engines: {node: '>= 18'}
 
   '@vercel/detect-agent@1.2.3':
     resolution: {integrity: sha512-VYNCgUc0nOmC4WJmWw9GkrKdfr8Zl4/rxhC5SvgacBgxiW9W/9NRttUoHHXV8xdII3MaRgkZZVX8Ikzc/Jmjag==}
@@ -3519,10 +3505,6 @@ packages:
 
   '@vercel/oidc@3.2.0':
     resolution: {integrity: sha512-UycprH3T6n3jH0k44NHMa7pnFHGu/N05MjojYr+Mc6I7obkoLIJujSWwin1pCvdy/eOxrI/l3uDLQsmcrOb4ug==}
-    engines: {node: '>= 20'}
-
-  '@vercel/oidc@3.8.0':
-    resolution: {integrity: sha512-r00laGW6Pv778RoR6M2NxX91ycSj+PBwVo+fOb9Bif+F0IyUKt25zrvBzfEzQpeAzbqOgPZyQibEWDdDFApd+A==}
     engines: {node: '>= 20'}
 
   '@vercel/prepare-flags-definitions@0.2.1':
@@ -11349,15 +11331,6 @@ snapshots:
       throttleit: 2.1.0
       undici: 6.26.0
 
-  '@vercel/blob@2.6.1':
-    dependencies:
-      '@vercel/oidc': 3.8.0
-      async-retry: 1.3.3
-      is-buffer: 2.0.5
-      is-node-process: 1.2.0
-      throttleit: 2.1.0
-      undici: 6.26.0
-
   '@vercel/build-utils@13.26.4':
     dependencies:
       '@vercel/python-analysis': 0.11.1
@@ -11378,15 +11351,6 @@ snapshots:
     dependencies:
       xdg-app-paths: 5.5.1
       zod: 4.1.11
-
-  '@vercel/cli-config@0.2.0':
-    dependencies:
-      xdg-app-paths: 5.5.1
-      zod: 4.1.11
-
-  '@vercel/cli-exec@1.0.0':
-    dependencies:
-      execa: 5.1.1
 
   '@vercel/detect-agent@1.2.3': {}
 
@@ -11568,12 +11532,6 @@ snapshots:
       - supports-color
 
   '@vercel/oidc@3.2.0': {}
-
-  '@vercel/oidc@3.8.0':
-    dependencies:
-      '@vercel/cli-config': 0.2.0
-      '@vercel/cli-exec': 1.0.0
-      jose: 5.9.6
 
   '@vercel/prepare-flags-definitions@0.2.1': {}
 

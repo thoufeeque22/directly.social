@@ -32,7 +32,7 @@ export async function handlePlatformUploadRequest({ req, platform, uploadLogic }
     if (isByos && filePath && stagedId) await downloadByosFile(session.user.id, stagedId, filePath);
     if (!isByos && filePath && stagedId && !fsSync.existsSync(filePath)) {
       const asset = await prisma.galleryAsset.findUnique({ where: { fileId: stagedId } });
-      const blobUrl = (asset?.metadata as any)?.blobUrl as string | undefined;
+      const blobUrl = (asset?.metadata as Record<string, unknown>)?.blobUrl as string | undefined;
       if (blobUrl) {
         const { downloadVercelBlobToTemp } = await import("@/lib/upload/blob-downloader");
         await downloadVercelBlobToTemp(blobUrl, filePath);

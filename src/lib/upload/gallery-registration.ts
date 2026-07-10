@@ -28,7 +28,7 @@ export async function registerGalleryAsset(params: GalleryRegistrationParams) {
     ? await prisma.galleryAsset.findFirst({ where: { userId, checksum } })
     : await prisma.galleryAsset.findFirst({ where: { userId, fileName, fileSize: BigInt(size) } });
 
-  const metadata = { ...(videoMetadata || {}), blobUrl: finalPath } as any;
+  const metadata = { ...(videoMetadata || {}), blobUrl: finalPath } as Record<string, unknown>;
 
   if (existingAsset) {
     logger.info(`🔄 [GALLERY] Updating existing asset to prevent duplicate: ${fileName} (Checksum: ${checksum || 'N/A'})`);

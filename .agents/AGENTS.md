@@ -81,3 +81,10 @@ To ensure production-level stability and prevent build failures or linting warni
 
 ### 8. Branding & Naming
 - **Strict Application Name:** When referring to the application or writing user-facing documentation, ALWAYS use the exact string `directly.social`. NEVER use "Directly Social", "Directly.Social", or any capitalized variation.
+
+### 9. Subagent Capabilities & Boundaries
+- **Discovery Agent**: Does NOT modify application code. Requires file-writing tools ONLY to generate and save phase artifacts (like technical blueprints).
+- **QA Agent**: Must be granted write access restricted strictly to test directories (`src/__tests__/` and `docs/manual_tests/`). Must never modify implementation code.
+- **Dev Agent**: Must be granted write access restricted strictly to implementation directories (`src/app/`, `src/lib/`, `src/components/`, etc.) and configuration.
+- **Doc Agent**: Must be granted write access restricted strictly to documentation directories (`docs/`, `README.md`) and `.agents/` config files for updating rules and learnings.
+- The Orchestrator MUST use the `define_subagent` tool with `enable_write_tools: true` for these agents, but MUST include these explicit directory boundaries in their `initialPrompt`.

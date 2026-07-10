@@ -21,6 +21,6 @@ export async function downloadVercelBlobToTemp(blobUrl: string, filePath: string
 
   fsSync.mkdirSync(path.dirname(filePath), { recursive: true });
   const fileStream = fsSync.createWriteStream(filePath);
-  await finished(Readable.fromWeb(res.body as any).pipe(fileStream));
+  await finished(Readable.fromWeb(res.body as unknown as import("stream/web").ReadableStream).pipe(fileStream));
   return true;
 }
