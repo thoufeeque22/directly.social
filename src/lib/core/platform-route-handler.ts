@@ -81,6 +81,17 @@ export async function handlePlatformUploadRequest({ req, platform, uploadLogic }
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : String(error);
     logger.error(` [${platform}] Error:`, msg);
+
+    if (msg.includes("invalid_grant") || msg.includes("Token has been expired or revoked")) {
+      if (fields.accountId) {
+        await prisma.account.update({
+          where: { id: fields.accountId as string },
+          data: { access_token: null, refresh_token: null, expires_at: null }
+        }).catch(() => {});
+      }
+      return NextResponse.json({ success: false, error: "invalid_grant" }, { status: 401 });
+    }
+
     return NextResponse.json({ success: false, error: msg }, { status: 500 });
   } finally { if (isByos && filePath && fsSync.existsSync(filePath)) fsSync.unlinkSync(filePath); }
 }
