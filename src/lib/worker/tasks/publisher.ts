@@ -3,8 +3,7 @@ import { prisma } from "@/lib/core/prisma";
 import { workerLogger as logger } from "@/lib/core/logger";
 import * as Sentry from "@sentry/nextjs";
 import path from "path";
-import { readFileSync, existsSync, createWriteStream } from "fs";
-import { pipeline } from "stream/promises";
+import { readFileSync, existsSync } from "fs";
 import { refreshTokenIfNecessary } from "@/lib/auth/token-refresher";
 
 const getTempDir = () => {

@@ -1,7 +1,6 @@
 import { checkGlobalAbort, broadcastStatus, clearStagingStatus } from './abort-utils';
 import { stageVideoFileByos } from './byos-upload-client';
 
-import { upload } from '@vercel/blob/client';
 
 interface StageParams {
   file: File;
@@ -23,20 +22,42 @@ export async function stageVideoFile({ file, onStatusUpdate, metadata, platforms
 
   broadcastStatus(onStatusUpdate, uploadId, "Uploading video...");
 
-  const blob = await upload(file.name, file, {
-    access: 'public',
-    handleUploadUrl: '/api/upload/token',
-    onUploadProgress: (progressEvent) => {
-      if (checkGlobalAbort(uploadId)) throw new Error("Upload cancelled");
-      broadcastStatus(onStatusUpdate, uploadId, `Uploading: ${Math.round(progressEvent.percentage)}%`, Math.round(progressEvent.percentage));
-    },
-    abortSignal: signal
+  const presignRes = await fetch('/api/upload/presigned-url', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filename: file.name, size: file.size, contentType: file.type }), signal
+  });
+  if (!presignRes.ok) throw new Error("Failed to get upload URL");
+  const { url, publicUrl } = await presignRes.json();
+
+  await new Promise<void>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', url, true);
+    xhr.setRequestHeader('Content-Type', file.type);
+    
+    xhr.upload.onprogress = (event) => {
+      if (checkGlobalAbort(uploadId)) { xhr.abort(); return reject(new Error("Upload cancelled")); }
+      if (event.lengthComputable) {
+        const percentage = Math.round((event.loaded / event.total) * 100);
+        broadcastStatus(onStatusUpdate, uploadId, `Uploading: ${percentage}%`, percentage);
+      }
+    };
+    
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) resolve();
+      else reject(new Error(`Upload failed with status ${xhr.status}`));
+    };
+    xhr.onerror = () => reject(new Error("Upload network error"));
+    xhr.onabort = () => reject(new Error("Upload cancelled"));
+    
+    if (signal) signal.addEventListener('abort', () => { xhr.abort(); reject(new Error("Upload cancelled")); });
+    
+    xhr.send(file);
   });
 
   broadcastStatus(onStatusUpdate, uploadId, "Finalizing...", 99);
   const res = await fetch(`/api/upload/assemble`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ blobUrl: blob.url, fileName: file.name, totalSize: file.size, ...metadata, platforms, activityId: resumeActivityId }), signal
+    body: JSON.stringify({ blobUrl: publicUrl, fileName: file.name, totalSize: file.size, ...metadata, platforms, activityId: resumeActivityId }), signal
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || "Assembly failed");

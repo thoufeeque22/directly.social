@@ -8,6 +8,7 @@
 - **Language:** TypeScript
 - **Authentication:** Auth.js (NextAuth)
 - **Database:** PostgreSQL with Prisma ORM
+- **Storage:** Cloudflare R2 (S3-compatible via AWS SDK)
 - **UI:** Material UI (MUI), Framer Motion
 - **Testing:** Playwright (E2E), Vitest (Unit/Integration)
 - **Monitoring:** Sentry

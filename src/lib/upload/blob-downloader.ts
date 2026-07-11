@@ -4,10 +4,15 @@ import { Readable } from "stream";
 import { finished } from "stream/promises";
 
 export async function downloadVercelBlobToTemp(blobUrl: string, filePath: string): Promise<boolean> {
-  // SSRF Protection: Only allow vercel-storage.com domains
+  // SSRF Protection: Allow vercel blob and Cloudflare R2 / Custom Domains
   try {
     const parsed = new URL(blobUrl);
-    if (!parsed.hostname.endsWith('.public.blob.vercel-storage.com')) {
+    const r2PublicHost = process.env.R2_PUBLIC_URL ? new URL(process.env.R2_PUBLIC_URL).hostname : '';
+    if (
+      !parsed.hostname.endsWith('.public.blob.vercel-storage.com') &&
+      !parsed.hostname.endsWith('.r2.dev') &&
+      (!r2PublicHost || parsed.hostname !== r2PublicHost)
+    ) {
       return false;
     }
   } catch {
@@ -21,6 +26,6 @@ export async function downloadVercelBlobToTemp(blobUrl: string, filePath: string
 
   fsSync.mkdirSync(path.dirname(filePath), { recursive: true });
   const fileStream = fsSync.createWriteStream(filePath);
-  await finished(Readable.fromWeb(res.body as any).pipe(fileStream));
+  await finished(Readable.fromWeb(res.body as unknown as import("stream/web").ReadableStream).pipe(fileStream));
   return true;
 }

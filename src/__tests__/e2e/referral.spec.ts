@@ -30,7 +30,7 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
           billingProfile: {
             create: {
               providerCustomerId: `cus_${u.email.split('@')[0]}`,
-              subscriptionTier: u.tier as any,
+              subscriptionTier: u.tier as unknown as 'FREE_STARTER' | 'CLOUD_PRO' | 'LIFETIME_DEAL',
               subscriptionStatus: 'ACTIVE',
             }
           }
@@ -55,7 +55,7 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
     await page.fill('input[name="password"]', TEST_USER_PASSWORD);
     await page.click('button[type="submit"]');
 
-    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    if ((page.viewportSize()?.width ?? 0) < 768) await page.click('button[aria-label="Menu"]');
     await page.click('button:has-text("Get Cloud Pro for Free")');
     await expect(page.getByTestId('progress-desc')).toContainText('Get 5 total referrals for Lifetime BYOK, or maintain 5 active to keep Cloud Pro free forever.');
     await expect(page.getByTestId('grand-prize-reward')).toContainText('Lifetime BYOK or Cloud Pro');
@@ -67,7 +67,7 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
     await page.fill('input[name="password"]', TEST_USER_PASSWORD);
     await page.click('button[type="submit"]');
 
-    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    if ((page.viewportSize()?.width ?? 0) < 768) await page.click('button[aria-label="Menu"]');
     await page.click('button:has-text("Get Cloud Pro for Free")');
     await expect(page.getByTestId('progress-desc')).toContainText('Maintain 5 active paid referrals to keep your Cloud Pro subscription 100% free forever.');
     await expect(page.getByTestId('grand-prize-reward')).toContainText('Cloud Pro Access');
@@ -79,7 +79,7 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
     await page.fill('input[name="password"]', TEST_USER_PASSWORD);
     await page.click('button[type="submit"]');
 
-    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    if ((page.viewportSize()?.width ?? 0) < 768) await page.click('button[aria-label="Menu"]');
     await page.click('button:has-text("Get Cloud Pro for Free")');
     await expect(page.getByTestId('progress-desc')).toContainText('Get 5 total paid referrals to unlock Lifetime BYOK forever.');
     await expect(page.getByTestId('grand-prize-reward')).toContainText('Lifetime BYOK');
@@ -96,7 +96,7 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
     await pageA.click('button[type="submit"]');
     
     // Copy referral link
-    if (pageA.viewportSize()?.width! < 768) await pageA.click('button[aria-label="Menu"]');
+    if ((pageA.viewportSize()?.width ?? 0) < 768) await pageA.click('button[aria-label="Menu"]');
     await pageA.click('button:has-text("Get Cloud Pro for Free")');
     const referralUrl = await pageA.getByTestId('referral-link-text').textContent() || '';
 
@@ -124,7 +124,7 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
     await expect(pageA.locator('.post-list')).toContainText('My 11th extra bonus post!');
     
     // Verify quota dropped
-    if (pageA.viewportSize()?.width! < 768) await pageA.click('button[aria-label="Menu"]');
+    if ((pageA.viewportSize()?.width ?? 0) < 768) await pageA.click('button[aria-label="Menu"]');
     await pageA.click('button:has-text("Get Cloud Pro for Free")');
     const quotaDisplay = pageA.getByTestId('extra-posts-quota'); 
     await expect(quotaDisplay).toContainText('+4');
@@ -208,7 +208,7 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
     }
 
     // Verify UI reflects UNLOCKED
-    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    if ((page.viewportSize()?.width ?? 0) < 768) await page.click('button[aria-label="Menu"]');
     await page.click('button:has-text("Get Cloud Pro for Free")');
     await expect(page.getByTestId('grand-prize-status')).toContainText('UNLOCKED');
     
@@ -232,7 +232,7 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
     await page.fill('input[name="password"]', TEST_USER_PASSWORD);
     await page.click('button[type="submit"]');
 
-    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    if ((page.viewportSize()?.width ?? 0) < 768) await page.click('button[aria-label="Menu"]');
     await page.click('button:has-text("Get Cloud Pro for Free")');
     const referralUrl = await page.getByTestId('referral-link-text').textContent() || '';
 
@@ -245,7 +245,7 @@ test.describe('Referral Bonus Program - End to End Workflows & Consumption', () 
     await page.click('button[type="submit"]');
     
     await expect(page).toHaveURL('/dashboard');
-    if (page.viewportSize()?.width! < 768) await page.click('button[aria-label="Menu"]');
+    if ((page.viewportSize()?.width ?? 0) < 768) await page.click('button[aria-label="Menu"]');
     await page.click('button:has-text("Get Cloud Pro for Free")');
     const historyTable = page.getByTestId('squad-list');
     await expect(historyTable).not.toContainText('s***@example.com');
