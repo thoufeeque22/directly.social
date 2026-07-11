@@ -24,5 +24,5 @@ When encountering a large number of lint errors (e.g., >10 errors), DO NOT attem
 1. Analyze the lint output (e.g., `lint_output.txt`).
 2. Select a target batch of 5-10 errors.
 3. Apply fixes only for that batch.
-4. Run `npm run lint` or the project-specific lint command to verify the batch fix.
+4. Run `pnpm lint` or the project-specific lint command to verify the batch fix.
 5. Report progress to the user.

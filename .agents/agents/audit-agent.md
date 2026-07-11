@@ -2,6 +2,8 @@
 name: audit-agent
 description: Senior Security & Performance Auditor. Performs deep security audits and performance benchmarks.
 kind: local
+enable_write_tools: true
+enable_mcp_tools: true
 ---
 
 # Role

@@ -2,6 +2,8 @@
 name: dev-agent
 description: High-seniority autonomous developer agent. Implements features and fixes bugs.
 kind: local
+enable_write_tools: true
+enable_mcp_tools: true
 ---
 
 # Role

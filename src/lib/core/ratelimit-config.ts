@@ -24,14 +24,35 @@ export const aiRateLimit = new Ratelimit({
 });
 
 /**
- * Upload rate limiter: 3 requests per 60 seconds.
- * Protects standard upload and media routes from abuse.
+ * Storage rate limiter: 5 requests per 60 seconds.
+ * Protects the Cloudflare R2 bucket from empty/spam uploads.
  */
-export const uploadRateLimit = new Ratelimit({
+export const storageRateLimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, "60 s"),
+  analytics: true,
+  prefix: "ratelimit:storage",
+});
+
+/**
+ * Generic Platform upload limiter: 3 requests per 60 seconds.
+ * Dynamically prefixes the identifier with the platform name to create isolated buckets automatically.
+ */
+export const platformRateLimit = new Ratelimit({
   redis,
   limiter: Ratelimit.slidingWindow(3, "60 s"),
   analytics: true,
-  prefix: "ratelimit:upload",
+  prefix: "ratelimit:platform",
+});
+
+/**
+ * Local upload limiter: 5 requests per 60 seconds.
+ */
+export const localPlatformRateLimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, "60 s"),
+  analytics: true,
+  prefix: "ratelimit:local",
 });
 
 /**
