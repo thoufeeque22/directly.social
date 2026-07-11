@@ -1,6 +1,8 @@
 import {
   aiRateLimit,
-  uploadRateLimit,
+  storageRateLimit,
+  platformRateLimit,
+  localPlatformRateLimit,
   chunkRateLimit,
   authRateLimit,
   sensitiveRateLimit,
@@ -12,6 +14,7 @@ export interface RateLimitRoute {
   pattern: RegExp;
   limiter: Ratelimit;
   useIpOnly?: boolean;
+  getDynamicIdentifier?: (pathname: string, baseIdentifier: string) => string;
 }
 
 /**
@@ -28,8 +31,24 @@ export const rateLimitRegistry: RateLimitRoute[] = [
     limiter: chunkRateLimit,
   },
   {
+    pattern: /^\/api\/upload\/presigned-url/,
+    limiter: storageRateLimit,
+  },
+  {
+    pattern: /^\/api\/upload\/local/,
+    limiter: localPlatformRateLimit,
+  },
+  {
+    pattern: /^\/api\/upload\/(youtube|tiktok|facebook|instagram|local)/i,
+    limiter: platformRateLimit,
+    getDynamicIdentifier: (pathname, baseId) => {
+      const platform = pathname.split('/')[3] || 'unknown';
+      return `${platform}:${baseId}`;
+    }
+  },
+  {
     pattern: /^\/api\/(upload|media)\//,
-    limiter: uploadRateLimit,
+    limiter: storageRateLimit, // Fallback for other media/upload endpoints
   },
   {
     pattern: /^\/api\/auth\/(signin|verify-request)/,

@@ -3,7 +3,8 @@ import { getLimiterForPath } from '@/lib/core/rate-limit-registry';
 import { shouldBypassRateLimit } from '@/lib/core/bypass-utils';
 import {
   aiRateLimit,
-  uploadRateLimit,
+  storageRateLimit,
+  platformRateLimit,
   authRateLimit,
   sensitiveRateLimit,
   globalRateLimit,
@@ -15,13 +16,18 @@ describe('Rate Limit Registry', () => {
     expect(route.limiter).toBe(aiRateLimit);
   });
 
-  it('should match upload and media routes to uploadRateLimit', () => {
-    expect(getLimiterForPath('/api/upload/video').limiter).toBe(uploadRateLimit);
-    expect(getLimiterForPath('/api/media/image').limiter).toBe(uploadRateLimit);
+  it('should match granular upload and media routes to correct limiters', () => {
+    const youtubeRoute = getLimiterForPath('/api/upload/youtube');
+    expect(youtubeRoute.limiter).toBe(platformRateLimit);
+    expect(youtubeRoute.getDynamicIdentifier).toBeDefined();
+    expect(youtubeRoute.getDynamicIdentifier!('/api/upload/youtube', 'user123')).toBe('youtube:user123');
+    
+    expect(getLimiterForPath('/api/media/image').limiter).toBe(storageRateLimit);
+    expect(getLimiterForPath('/api/upload/presigned-url').limiter).toBe(storageRateLimit);
   });
 
   it('should match auth routes to authRateLimit', () => {
-    const route = getLimiterForPath('/api/auth/session');
+    const route = getLimiterForPath('/api/auth/signin');
     expect(route.limiter).toBe(authRateLimit);
     expect(route.useIpOnly).toBe(true);
   });

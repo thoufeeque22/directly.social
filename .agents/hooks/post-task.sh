@@ -15,17 +15,17 @@ TSC_EXIT=$?
 
 # 3. Build check
 echo "  → Building..."
-npm run build --silent
+pnpm build --silent
 BUILD_EXIT=$?
 
 # 4. Lint check
 echo "  → Linting..."
-npm run lint --silent
+pnpm lint --silent
 LINT_EXIT=$?
 
 # 5. Unit test check
 echo "  → Testing..."
-npm run test -- src/__tests__/unit/whats-new.test.ts src/__tests__/unit/whats-new-activity.test.ts --silent
+pnpm test -- src/__tests__/unit/whats-new.test.ts src/__tests__/unit/whats-new-activity.test.ts --silent
 TEST_EXIT=$?
 
 if [ $ENV_EXIT -ne 0 ] || [ $TSC_EXIT -ne 0 ] || [ $BUILD_EXIT -ne 0 ] || [ $LINT_EXIT -ne 0 ] || [ $TEST_EXIT -ne 0 ]; then

@@ -29,8 +29,11 @@ export default auth(async (req) => {
       const ip = (req as Request & { ip?: string }).ip ?? forwardedFor?.split(',')[0] ?? realIp ?? '127.0.0.1';
 
       // (CA-003): Use registry to find appropriate limiter
-      const { limiter, useIpOnly } = getLimiterForPath(pathname);
-      const identifier = useIpOnly ? ip : (userId ?? ip);
+      const { limiter, useIpOnly, getDynamicIdentifier } = getLimiterForPath(pathname);
+      let identifier = useIpOnly ? ip : (userId ?? ip);
+      if (getDynamicIdentifier) {
+        identifier = getDynamicIdentifier(pathname, identifier);
+      }
 
       const limitResult = await limiter.limit(identifier);
 

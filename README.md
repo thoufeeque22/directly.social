@@ -27,7 +27,7 @@ pnpm install
 
 ### 3. Development
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser.
@@ -42,12 +42,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 ## Core Scripts
 
-- `npm run build`: Production build
-- `npm run lint`: ESLint check (enforces 100-line modularity rule)
-- `npm run test`: Run unit and integration tests
-- `npm run test:smoke`: Run critical path E2E tests
-- `npm run test:regression`: Run full regression E2E tests
-- `npm run cleanup:neon`: Purge old Neon database branches
+- `pnpm build`: Production build
+- `pnpm lint`: ESLint check (enforces 100-line modularity rule)
+- `pnpm test`: Run unit and integration tests
+- `pnpm test:smoke`: Run critical path E2E tests
+- `pnpm test:regression`: Run full regression E2E tests
+- `pnpm cleanup:neon`: Purge old Neon database branches
 
 ## API Documentation
 
