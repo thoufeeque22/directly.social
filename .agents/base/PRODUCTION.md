@@ -9,11 +9,4 @@
   - **API Documentation:** Maintain up-to-date Swagger/OpenAPI docs at `/api/docs`. This is critical for mobile (Capacitor) integration and future public API consumers.
   - **Logging:** Log critical business events and system health metrics.
 
-## Infrastructure & Database Maintenance
-- **Neon Branch Management:** The Neon Vercel integration creates a new database branch for every preview deployment. On the Free Tier (limit 10), this can block deployments.
-- **Cleanup Automation:** Use the provided script to purge old branches while keeping `main` and the most recent preview branch:
-    ```bash
-    pnpm run cleanup:neon        # Dry Run
-    pnpm run cleanup:neon:force  # Actual Deletion
-    ```
-- **Project ID:** The script defaults to `falling-feather-78236210`. To override, use `--project-id <id>`.
+

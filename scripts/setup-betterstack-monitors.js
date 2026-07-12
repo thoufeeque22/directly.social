@@ -21,9 +21,9 @@ const monitorsToCreate = [
   },
   {
     monitor_type: 'tcp',
-    url: 'db.neon.tech', // replace with actual Neon DB host
+    url: 'aws-0-eu-west-1.pooler.supabase.com', // replace with actual Supabase DB host
     port: '5432',
-    pronounceable_name: 'Neon Database',
+    pronounceable_name: 'Supabase Database',
     check_frequency: 180,
     monitor_group_id: null,
   },

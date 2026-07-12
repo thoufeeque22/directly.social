@@ -14,8 +14,6 @@
     "cap:open:ios": "npx cap open ios",
     "cap:open:android": "npx cap open android",
     "clear-activity": "npx tsx src/__tests__/scripts/clear-activity.ts",
-    "cleanup:neon": "bash src/__tests__/scripts/cleanup-neon.sh",
-    "cleanup:neon:force": "bash src/__tests__/scripts/cleanup-neon.sh --force",
     "notebook:package": "npx tsx scripts/notebook-bundle.ts",
     "prune-state": "npx tsx scripts/prune-state.ts",
     "state:update": "npx tsx scripts/state-manager.ts",

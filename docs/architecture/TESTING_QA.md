@@ -25,7 +25,7 @@ Unit tests for utilities and integration tests for server actions are in `src/__
 
 Utility scripts for database management and test data seeding are located in `src/__tests__/scripts/`. These scripts are exposed via `package.json` for ease of use:
 
-- **Cleanup Neon DB:** `npm run cleanup:neon` (Dry Run) or `npm run cleanup:neon:force`. Purges old Neon database branches.
+
 - **E2E Seeding:** `npm run seed:e2e`. Seeds a standard test user and session.
 - **Activity Cleanup:** `npm run clear-activity`. Clears all activity records for a clean state.
 - **Feature Seeding:** `npm run seed:schedule` and `npm run seed:whats-new`. Seeds specific feature data for development and testing.

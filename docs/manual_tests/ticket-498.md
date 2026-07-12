@@ -21,7 +21,7 @@
 2. Complete the purchase.
 3. **Expected Result:** You are redirected back to the application (e.g., `/dashboard` or a success page).
 4. **Expected Result:** Check the terminal running `stripe listen`. It should show `checkout.session.completed` and `invoice.payment_succeeded` events being received (200 OK).
-5. Verify the Neon Postgres database (`User` table) for the purchasing user.
+5. Verify the Supabase Postgres database (`User` table) for the purchasing user.
    - `stripeCustomerId` should be populated.
    - `stripeSubscriptionId` should be populated.
    - `subscriptionTier` should reflect the purchased tier (e.g., `creator-pro`).
@@ -30,5 +30,5 @@
 ### TC-3: Verify Subscription Cancellation
 1. In the Stripe Dashboard (Test Mode), locate the Customer that was just created and cancel their active subscription.
 2. **Expected Result:** The `stripe listen` terminal should log a `customer.subscription.deleted` event (200 OK).
-3. Verify the Neon Postgres database (`User` table).
+3. Verify the Supabase Postgres database (`User` table).
    - `subscriptionStatus` should be updated to reflect cancellation (e.g., `canceled` or `inactive`).

@@ -16,7 +16,7 @@ directly.social processes and stores various categories of user data:
 We employ robust security measures for data at rest and data in transit:
 
 ### Data at Rest
-- **Relational Database:** All relational data (users, metadata, billing profiles) is stored in PostgreSQL (e.g., Neon/Supabase). 
+- **Relational Database:** All relational data (users, metadata, billing profiles) is stored in PostgreSQL (e.g., Supabase). 
 - **Object Storage:** User media assets are stored in S3-compatible object storage (AWS S3, Cloudflare R2).
 - **Encryption:** Highly sensitive fields, particularly BYOK credentials (`ByokCredential.clientSecret`) and BYOS configurations (`ByosConfig.secretAccessKey`), are encrypted at rest using **AES-256-GCM** before being persisted to the database.
 

@@ -81,7 +81,7 @@ Directly implements a background refresh mechanism to ensure that scheduled post
   - `VERCEL_ANALYZE_BUILD_OUTPUT`: Set to `1` to debug large bundle sizes (over 300MB).
 - **Exclusions**: The `tmp` and `.next/cache` folders are excluded via `.vercelignore` to stay under the 2GB upload limit.
 
-### 5. Neon (Database)
+### 5. Supabase (Database)
 - **Role**: Serverless PostgreSQL provider.
 - **Details**:
   - `DATABASE_URL`: Connection string (uses connection pooling).

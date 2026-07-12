@@ -28,8 +28,8 @@ Check these systems in order of likelihood for causing a major outage.
     *   `Out of Memory (OOM)` errors.
     *   Unhandled Promise Rejections or specific stack traces.
 
-### 3. Database (Neon Postgres)
-*   **Action:** Open the [Neon Console](https://console.neon.tech/app/projects).
+### 3. Database (Supabase Postgres)
+*   **Action:** Open the [Supabase Dashboard](https://supabase.com/dashboard).
 *   **Check for:**
     *   **Active Connections:** Are you hitting the connection limit? (This is a common issue with serverless functions).
     *   **Compute/CPU Usage:** Is the database CPU pegged at 100%?
@@ -40,7 +40,7 @@ Check these systems in order of likelihood for causing a major outage.
 *   **Action:** Check the status pages of critical dependencies.
 *   **Check:**
     *   **Hosting:** [Vercel Status Page](https://www.vercel-status.com/)
-    *   **Database:** [Neon Status Page](https://neon.tech/status)
+    *   **Database:** [Supabase Status Page](https://status.supabase.com/)
     *   **Payments:** [Stripe Status Page](https://status.stripe.com/)
     *   **Authentication:** (e.g., [Clerk Status](https://status.clerk.com/) or [Auth0 Status](https://status.auth0.com/))
     *   **Email:** (e.g., [Resend Status](https://status.resend.com/) or [SendGrid Status](https://status.sendgrid.com/))
@@ -60,5 +60,5 @@ If the issue wasn't found in the usual suspects:
 ## Phase 4: Escalation / Getting Help
 
 If you are stuck after 30 minutes:
-*   Post the specific error trace to relevant support channels (e.g., Vercel Support, Neon Support, or developer communities).
+*   Post the specific error trace to relevant support channels (e.g., Vercel Support, Supabase Support, or developer communities).
 *   Update your public Status Page to "Investigating" to buy yourself time (see `communication_templates.md`).

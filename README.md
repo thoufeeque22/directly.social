@@ -47,7 +47,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 - `pnpm test`: Run unit and integration tests
 - `pnpm test:smoke`: Run critical path E2E tests
 - `pnpm test:regression`: Run full regression E2E tests
-- `pnpm cleanup:neon`: Purge old Neon database branches
 
 ## API Documentation
 

@@ -20,7 +20,7 @@
 **Goal**: Verify that scripts moved to `src/__tests__/scripts/` are still executable via `npm`.
 1. Run `npm run clear-activity`.
 2. **Expected**: The script should start executing. It may fail due to missing env vars in some environments, but it should NOT fail with a "File not found" error related to the path change.
-3. Run `npm run cleanup:neon -- --help` (if supported).
+
 4. **Expected**: The script should attempt to run.
 
 ### Scenario 3: Gitignore Integrity

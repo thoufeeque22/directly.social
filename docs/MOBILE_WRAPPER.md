@@ -80,5 +80,5 @@ npm run test:native
 If you see a **"Server Error"** or **"404"** on the mobile app:
 
 1. **Environment Variables**: Ensure your Vercel project has all secrets from `.env` (especially `AUTH_SECRET`, `GOOGLE_ID`, and `DATABASE_URL`).
-2. **Database Connection**: Vercel requires a hosted database (like Neon/Supabase). Ensure you have run `npx prisma db push` against your live database URL.
+2. **Database Connection**: Vercel requires a hosted database (like Supabase). Ensure you have run `npx prisma db push` against your live database URL.
 3. **Re-sync**: Always run `npm run cap:sync` and click the **Play (▶️)** button in Xcode again after changing URLs or config files.

@@ -28,7 +28,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 1. **[Core Technical Standards](base/CORE.md)** — TypeScript Zero-Any, Next.js 15, 100-Line Modularity
 2. **[UI & Aesthetic Standards](base/UI_UX.md)** — MUI, Theme Awareness, A11y, No Emojis
-3. **[Production & Infrastructure](base/PRODUCTION.md)** — Performance, Security, Neon DB
+3. **[Production & Infrastructure](base/PRODUCTION.md)** — Performance, Security, Supabase DB
 4. **[Agent Orchestration & Workflow](base/ORCHESTRATION.md)** — Phase Sequence, Failure Protocols
 5. **[Global Variables & Constants](base/VARIABLES.md)** — Branching, commands, skill names
 
