@@ -2,6 +2,11 @@
 
 **directly.social** is a multi-platform social media management application that allows users to schedule and distribute both short-form (Shorts/Reels/TikToks) and long-form video content across various platforms simultaneously.
 
+### 🚀 Advanced Features
+- **Lifetime BYOK (Bring Your Own Key):** Professionals can plug their own OpenAI/Anthropic API keys directly into their dashboard to generate content at wholesale API prices without any markup, unlocking infinite scalability and complete privacy. See the dedicated marketing page at `/byok`.
+- **Referral Bonus Program:** Users can refer friends to earn extra posts or unlock the Lifetime BYOK tier or Free Cloud Pro.
+- **Enterprise-Grade Legal Boilerplate:** The Referral Terms include comprehensive clauses for Refunds & Chargebacks, Tax Liability, Right to Modify/Terminate, Relationship of Parties, and Limitation of Liability to fully protect the platform from fraud.
+
 ## Tech Stack
 
 - **Framework:** Next.js 16 (App Router)

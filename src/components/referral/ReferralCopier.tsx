@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { Box, Typography, Paper, Button } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';

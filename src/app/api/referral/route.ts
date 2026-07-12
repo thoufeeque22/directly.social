@@ -72,6 +72,7 @@ export async function GET(req: Request) {
       referralUrl,
       activeCount,
       quotaRemaining: user.extraPostsQuota,
+      aiCredits: user.aiCredits,
       history,
       subscriptionTier: user.billingProfile?.subscriptionTier || 'FREE_STARTER'
     });

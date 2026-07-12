@@ -33,7 +33,7 @@ export default function LayoutWrapper({
 
   return (
     <div className="layout-wrapper">
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} isFreeTier={isFreeTier} />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} isFreeTier={isFreeTier} tierName={tierName} />
       <div className="main-content">
         <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} tierName={tierName} />
         <main className="page-content">
