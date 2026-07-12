@@ -10,8 +10,8 @@ export async function processReferralReward(referredUserEmail: string, eventId: 
     await prisma.processedWebhook.create({
       data: { id: eventId, type: 'referral_reward' }
     });
-  } catch (error: any) {
-    if (error.code === 'P2002') {
+  } catch (error: unknown) {
+    if (typeof error === 'object' && error !== null && 'code' in error && (error as {code: string}).code === 'P2002') {
       // Event already processed, ignore to prevent replay attack
       return;
     }
@@ -56,42 +56,6 @@ export async function processReferralReward(referredUserEmail: string, eventId: 
     });
   }
 
-  // Grand Prize Tracking
-  const historicalPaidCount = await prisma.user.count({
-    where: { 
-      referredById: referrer.id,
-      billingProfile: {
-        is: { subscriptionTier: { not: 'FREE_STARTER' } }
-      }
-    },
-  });
-
-  const activePaidCount = await prisma.user.count({
-    where: { 
-      referredById: referrer.id,
-      billingProfile: {
-        is: {
-          subscriptionStatus: 'ACTIVE',
-          subscriptionTier: { not: 'FREE_STARTER' }
-        }
-      }
-    },
-  });
-
-  if (historicalPaidCount >= 5) {
-    await prisma.user.update({
-      where: { id: referrer.id },
-      data: { lifetimeUnlock: true }
-    });
-  }
-
-  if (activePaidCount >= 5 && customerId) {
-    const subscriptions = await stripe.subscriptions.list({ customer: customerId });
-    if (subscriptions.data.length > 0) {
-      await stripe.subscriptions.update(
-        subscriptions.data[0].id,
-        { discounts: [{ coupon: process.env.STRIPE_100_OFF_COUPON || '100_OFF' }] }
-      );
-    }
-  }
+  // The UI will now explicitly prompt the user to claim their grand prize via POST /api/referral/redeem
+  // once activePaidCount reaches 5.
 }

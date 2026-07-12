@@ -83,6 +83,8 @@ export default async function ReferralPage() {
   const isLifetime = subscriptionTier === 'LIFETIME_DEAL';
   const isCloudPro = subscriptionTier === 'CLOUD_PRO';
   
+  const hasClaimed = isLifetime || isCloudPro || user.lifetimeUnlock;
+
   const grandPrizeNodes = isFree 
     ? (
       <>
@@ -168,6 +170,7 @@ export default async function ReferralPage() {
               isGrandPrize={isGrandPrize}
               grandPrizeReward={grandPrizeReward}
               progressDesc={progressDesc}
+              hasClaimed={hasClaimed}
             />
 
             <Divider />
