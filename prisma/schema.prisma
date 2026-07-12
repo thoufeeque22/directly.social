@@ -232,6 +232,7 @@ model User {
   referrals            User[]               @relation("UserReferrals")
   extraPostsQuota      Int                  @default(0)
   lifetimeUnlock       Boolean              @default(false)
+  referralRewardClaimed Boolean              @default(false)
   billingProfile        BillingProfile?
   accounts              Account[]
   byokCredentials       ByokCredential[]
@@ -348,3 +349,17 @@ model SupportRequest {
   @@index([userId])
 }
 
+model ClaimedSocialAccount {
+  id                String   @id @default(cuid())
+  provider          String
+  providerAccountId String
+  claimedAt         DateTime @default(now())
+
+  @@unique([provider, providerAccountId])
+}
+
+model ProcessedWebhook {
+  id        String   @id // The Stripe event ID (e.g. evt_123)
+  type      String
+  createdAt DateTime @default(now())
+}

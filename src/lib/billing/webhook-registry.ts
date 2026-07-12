@@ -47,7 +47,7 @@ webhookRegistry.register('checkout.session.completed', async (event: Stripe.Even
     
     // Process Lifetime Deals for referrals
     if (tierEnum === SubscriptionTier.LIFETIME_DEAL && session.customer_details?.email) {
-      await processReferralReward(session.customer_details.email);
+      await processReferralReward(session.customer_details.email, event.id);
     }
   }
 });
@@ -68,7 +68,7 @@ webhookRegistry.register('invoice.payment_succeeded', async (event: Stripe.Event
     
     // Process recurring paid referrals
     if (invoice.billing_reason === 'subscription_create' && invoice.customer_email) {
-      await processReferralReward(invoice.customer_email, invoice.total, invoice.currency);
+      await processReferralReward(invoice.customer_email, event.id, invoice.total, invoice.currency);
     }
   }
 });

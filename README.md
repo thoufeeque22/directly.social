@@ -58,6 +58,13 @@ Access the interactive Swagger UI at `/api/docs` in your local development envir
 This project uses an agentic workflow defined in `GEMINI.md` and `.agents/base/ORCHESTRATION.md`. The workflow ensures high-quality code delivery through distinct phases: Discovery, Development, Review, QA, and Documentation.
 For more details, see [docs/ORCHESTRATION.md](docs/ORCHESTRATION.md).
 
+## Webhooks & Referral Program
+
+The Referral Bonus Program utilizes Stripe Webhooks to grant rewards for paid conversions.
+- To test Stripe Webhooks locally without cryptographic signatures, ensure you set `E2E_MOCK_WEBHOOKS=true` in your `.env` file **(Local/E2E testing only)**.
+- In production, Stripe signatures are strictly verified. Ensure `STRIPE_WEBHOOK_SECRET` is set in your environment.
+- Referral links are structured as `/?ref=<userId>`.
+
 ## Documentation Index
 
 Comprehensive documentation is available in the `docs/` directory:

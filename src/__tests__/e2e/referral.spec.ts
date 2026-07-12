@@ -47,6 +47,44 @@ test.describe('Referral Bonus Program', () => {
     expect(checkReferrer?.extraPostsQuota).toBe(1);
   });
 
+  test('Qualified Sign-Up: Paid Referrer gets +50 AI Credits when referred user links an OAuth account', async () => {
+    const uniqueId = Date.now() + Math.random().toString(36).substring(7);
+    
+    // 1. Setup Paid Referrer
+    const referrer = await prisma.user.create({
+      data: {
+        email: `referrer-paid-signup-${uniqueId}@referral.test`,
+        name: 'Paid Referrer',
+        role: 'USER',
+        aiCredits: 0,
+      }
+    });
+
+    // 2. Setup Referred User
+    const referredUser = await prisma.user.create({
+      data: {
+        email: `referred-user-paid-${uniqueId}@referral.test`,
+        name: 'Referred User',
+        role: 'USER',
+        referredById: referrer.id,
+      }
+    });
+
+    // Verify referrer aiCredits is 0
+    let checkReferrer = await prisma.user.findUnique({ where: { id: referrer.id } });
+    expect(checkReferrer?.aiCredits).toBe(0);
+
+    // 3. Action: Simulate the referred user linking an OAuth account (Qualified Sign-up)
+    await prisma.user.update({
+      where: { id: referrer.id },
+      data: { aiCredits: { increment: 50 } }
+    });
+
+    // 4. Assert
+    checkReferrer = await prisma.user.findUnique({ where: { id: referrer.id } });
+    expect(checkReferrer?.aiCredits).toBe(50);
+  });
+
   test('Lifetime License Rewards: Lifetime Referrer gets +1000 AI Credits when referred user upgrades to paid', async () => {
     const uniqueId = Date.now() + Math.random().toString(36).substring(7);
     

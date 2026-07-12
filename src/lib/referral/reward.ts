@@ -5,7 +5,19 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_123', {
   apiVersion: '2026-06-24.dahlia',
 });
 
-export async function processReferralReward(referredUserEmail: string, paymentAmount?: number, currency?: string) {
+export async function processReferralReward(referredUserEmail: string, eventId: string, paymentAmount?: number, currency?: string) {
+  try {
+    await prisma.processedWebhook.create({
+      data: { id: eventId, type: 'referral_reward' }
+    });
+  } catch (error: any) {
+    if (error.code === 'P2002') {
+      // Event already processed, ignore to prevent replay attack
+      return;
+    }
+    throw error;
+  }
+
   const user = await prisma.user.findUnique({
     where: { email: referredUserEmail },
   });
@@ -38,7 +50,9 @@ export async function processReferralReward(referredUserEmail: string, paymentAm
     await stripe.customers.createBalanceTransaction(customerId, {
       amount: -paymentAmount,
       currency: currency,
-      description: `Referral bonus for ${user.email}`,
+      description: `Referral Bonus`,
+    }, {
+      idempotencyKey: `reward_${eventId}`
     });
   }
 

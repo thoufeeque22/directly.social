@@ -13,28 +13,22 @@ export async function POST(req: Request) {
     const rawBody = await req.text();
     const signature = req.headers.get('stripe-signature');
     
+    if (!signature) {
+      return NextResponse.json({ error: 'Missing stripe-signature header' }, { status: 400 });
+    }
+    
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      throw new Error('CRITICAL: STRIPE_WEBHOOK_SECRET is not set');
+    }
+
     let event: Stripe.Event;
-
-    // In E2E test mode, we allow unsigned JSON payload injection
-    if (process.env.NEXT_PUBLIC_E2E === 'true' && !signature) {
-      event = JSON.parse(rawBody) as Stripe.Event;
-    } else {
-      if (!signature) {
-        return NextResponse.json({ error: 'Missing stripe-signature header' }, { status: 400 });
-      }
-      
-      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-      if (!webhookSecret) {
-        throw new Error('CRITICAL: STRIPE_WEBHOOK_SECRET is not set');
-      }
-
-      try {
-        event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
-      } catch (err: unknown) {
-         const message = err instanceof Error ? err.message : String(err);
-         console.error('Webhook signature verification failed:', message);
-         return NextResponse.json({ error: `Webhook Error: ${message}` }, { status: 400 });
-      }
+    try {
+      event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error('Webhook signature verification failed:', message);
+      return NextResponse.json({ error: `Webhook Error: ${message}` }, { status: 400 });
     }
 
     await webhookRegistry.handle(event);
