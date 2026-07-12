@@ -4,9 +4,24 @@
 The Referral Bonus Program is a dual-sided growth loop ("Give a month, get a month") designed to incentivize user acquisition.
 
 ## Mechanics
-- **Tier 1 (Free Users)**: Referrals grant `+1` extra social media post quota.
-- **Tier 2 (Paid Users - Cloud Pro & BYOK)**: Referrals grant `$10` Stripe credits toward the referrer's next invoice.
-- **Grand Prize (Lifetime Unlock)**: Achieving 5 active paid referrals unlocks "Lifetime Cloud Pro" or "Lifetime BYOK" status (`lifetimeUnlock = true`).
+The referral program maps specific rewards to the user's current subscription plan:
+
+### Free Plans (Tier 1)
+Users on free plans receive **+1 extra social media post quota** per successful referral. This applies to:
+- **Free Starter**
+- **Free Hacker**
+
+### Paid Recurring Plans (Tier 2)
+Users on active paid subscriptions receive **$10 Stripe credits** toward their next invoice per successful referral. This applies to:
+- **Creator Pro**
+- **Cloud Pro**
+
+### One-Time Plans
+- **Lifetime License**: Users with a lifetime deal already enjoy permanent access and unlimited post quotas. Since they do not have recurring invoices or quota caps, the referral rewards (+1 quota / $10 credits) are not applicable to them.
+
+### The Grand Prize (Lifetime Unlock)
+Regardless of the current plan, achieving **5 active paid referrals** unlocks the Grand Prize:
+- Permanent "Lifetime" status (`lifetimeUnlock = true`) preventing any future billing, or a 100% off coupon applied to the active subscription.
 
 ## Database Architecture
 - `User` model includes:

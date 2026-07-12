@@ -91,6 +91,20 @@ export const ReferralModal: React.FC<ReferralModalProps> = ({
         <Stack spacing={4}>
           <ReferralCopier referralUrl={referralUrl} />
 
+          {isFree && (
+            <Box sx={{ p: 2, bgcolor: 'action.hover', borderRadius: 2, border: '1px solid', borderColor: 'primary.light' }}>
+              <Typography variant="body2" sx={{ fontWeight: 600, color: 'primary.main', mb: 1 }}>
+                🚀 Pro Tip: Upgrade to Creator Pro
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                Upgrade before sharing your link to earn $10 in real statement credits per referral instead of post quota!
+              </Typography>
+              <Typography variant="body2">
+                <a href="/pricing" style={{ color: 'inherit', fontWeight: 'bold' }}>Upgrade Now &rarr;</a>
+              </Typography>
+            </Box>
+          )}
+
           <ReferralProgress 
             quotaRemaining={quotaRemaining}
             activeCount={activeCount}
@@ -103,6 +117,10 @@ export const ReferralModal: React.FC<ReferralModalProps> = ({
           <Divider />
 
           <ReferralSquad history={history} />
+          
+          <Typography variant="caption" color="text.secondary" align="center" sx={{ display: 'block', pt: 1 }}>
+            By sharing your link, you agree to our <a href="/referral-terms" style={{ color: 'inherit' }}>Referral Program Terms</a>.
+          </Typography>
         </Stack>
       </DialogContent>
     </Dialog>

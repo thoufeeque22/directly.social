@@ -38,6 +38,7 @@ export default function LayoutWrapper({
     pathname === '/' ||
     pathname === '/pricing' ||
     pathname === '/status' ||
+    pathname === '/referral-terms' ||
     pathname?.startsWith('/docs');
   
   // We hide the shell ONLY if:

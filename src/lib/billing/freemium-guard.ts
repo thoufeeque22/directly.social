@@ -3,6 +3,11 @@ import { SubscriptionTier } from '@prisma/client';
 
 export class FreemiumGuard {
   static async checkUploadQuota(userId: string) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { extraPostsQuota: true }
+    });
+
     const billingProfile = await prisma.billingProfile.findUnique({
       where: { userId },
     });
@@ -33,10 +38,14 @@ export class FreemiumGuard {
       },
     });
 
-    if (uploadsThisMonth >= 10) {
+    const baseQuota = 10;
+    const extraQuota = user?.extraPostsQuota || 0;
+    const totalQuota = baseQuota + extraQuota;
+
+    if (uploadsThisMonth >= totalQuota) {
       return {
         allowed: false,
-        reason: 'Monthly upload quota exceeded (10 videos on free tier)',
+        reason: `Monthly upload quota exceeded (${totalQuota} videos on free tier)`,
       };
     }
 
