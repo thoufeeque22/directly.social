@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/app/settings/Settings.module.css';
+import styles from '@/app/(dashboard)/settings/Settings.module.css';
 
 interface SettingsHeaderProps {
   title: string;

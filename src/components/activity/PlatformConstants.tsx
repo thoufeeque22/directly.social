@@ -4,7 +4,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import ComputerIcon from '@mui/icons-material/Computer';
-import styles from '@/app/activity/activity.module.css';
+import styles from '@/app/(dashboard)/activity/activity.module.css';
 
 export const PLATFORM_META: Record<string, { icon: React.ReactNode; label: string; className: string }> = {
   youtube:   { icon: <YouTubeIcon sx={{ fontSize: 18, color: '#FF0000' }} />, label: 'YouTube',   className: styles.platformYoutube },

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { usePolling } from '@/hooks/usePolling';
-import { PostActivityEntry } from '@/app/schedule/types';
+import { PostActivityEntry } from '@/app/(dashboard)/schedule/types';
 import { addMonths, subMonths, addWeeks, subWeeks } from 'date-fns';
 
 export function useScheduleData() {

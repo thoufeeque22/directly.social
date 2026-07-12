@@ -4,7 +4,7 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import ActivityIcon from '@mui/icons-material/History';
 import { PostActivityEntry } from '@/hooks/useActivity';
 import { formatRelativeDate } from '@/lib/utils/date';
-import styles from '@/app/activity/activity.module.css';
+import styles from '@/app/(dashboard)/activity/activity.module.css';
 
 // TODO: Refactor: logic extraction needed
 interface ActivityCardActionsProps {

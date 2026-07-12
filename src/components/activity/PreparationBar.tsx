@@ -1,7 +1,7 @@
 import React from 'react';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import SettingsIcon from '@mui/icons-material/Settings';
-import styles from '@/app/activity/activity.module.css';
+import styles from '@/app/(dashboard)/activity/activity.module.css';
 import { UploadStatus } from '@/hooks/useUploadStatus';
 
 interface PreparationBarProps {

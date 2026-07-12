@@ -4,7 +4,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import ActivityIcon from '@mui/icons-material/History';
-import styles from '@/app/activity/activity.module.css';
+import styles from '@/app/(dashboard)/activity/activity.module.css';
 import { PlatformResult, PostActivityEntry } from '@/hooks/useActivity';
 import { getPlatformMeta } from './PlatformConstants';
 import { PlatformPillActions } from './PlatformPillActions';

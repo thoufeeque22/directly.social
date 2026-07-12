@@ -1,8 +1,8 @@
 import React from 'react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import styles from '@/app/schedule/schedule.module.css';
-import { PostActivityEntry } from '@/app/schedule/types';
+import styles from '@/app/(dashboard)/schedule/schedule.module.css';
+import { PostActivityEntry } from '@/app/(dashboard)/schedule/types';
 import { ScheduleEditModalActions } from './ScheduleEditModalActions';
 
 export interface ScheduleEditModalProps {

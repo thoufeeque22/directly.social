@@ -4,7 +4,7 @@ import React from 'react';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isToday } from 'date-fns';
 import { Tooltip } from '@mui/material';
 import styles from './calendar.module.css';
-import { PostActivityEntry } from '@/app/schedule/types';
+import { PostActivityEntry } from '@/app/(dashboard)/schedule/types';
 import { getPlatformClass } from './calendarUtils';
 
 interface CalendarMonthViewProps {

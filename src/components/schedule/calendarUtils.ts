@@ -1,4 +1,4 @@
-import { PlatformResult } from '@/app/schedule/types';
+import { PlatformResult } from '@/app/(dashboard)/schedule/types';
 import styles from './calendar.module.css';
 
 export const getPlatformClass = (platforms: PlatformResult[]) => {
