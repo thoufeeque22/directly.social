@@ -88,4 +88,5 @@ To ensure production-level stability and prevent build failures or linting warni
 - **Dev Agent**: Must be granted write access restricted strictly to implementation directories (`src/app/`, `src/lib/`, `src/components/`, etc.) and configuration.
 - **Doc Agent**: Must be granted write access restricted strictly to documentation directories (`docs/`, `README.md`) and `.agents/` config files for updating rules and learnings.
 - **Audit Agent**: Must be explicitly granted read-only access to the entire repository to explore the codebase for deep security and performance audits. Does NOT modify application code.
-- The Orchestrator MUST use the `define_subagent` tool with `enable_write_tools: true` for these write-capable agents, and MUST ensure agents requiring read access (like the Audit Agent) are correctly equipped with codebase exploration tools in their `initialPrompt`.
+- **Project Agent**: Must be granted `enable_write_tools: true` to run `gh` shell commands, and `enable_mcp_tools: true` to use `mcp_github_create_issue` for issue management and project board linking. Does NOT modify application code.
+- The Orchestrator MUST use the `define_subagent` tool with `enable_write_tools: true` (and `enable_mcp_tools: true` when required) for these agents before invoking them, rather than relying on default read-only inheritance.
