@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { updateScheduledPost } from '@/app/actions/activity/update-schedule';
 import { deleteScheduledPost, publishNowAction } from '@/app/actions/activity/delete-schedule';
-import { PostActivityEntry } from '@/app/schedule/types';
+import { PostActivityEntry } from '@/app/(dashboard)/schedule/types';
 
 export function useScheduleActions(
   setPosts: React.Dispatch<React.SetStateAction<PostActivityEntry[]>>,

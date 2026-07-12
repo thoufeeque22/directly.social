@@ -2,6 +2,7 @@ import { prisma } from '@/lib/core/prisma';
 import { stripe } from '@/lib/stripe/client';
 import type Stripe from 'stripe';
 import { SubscriptionTier, SubscriptionStatus } from '@prisma/client';
+import { processReferralReward } from '@/lib/referral/reward';
 
 export class WebhookStrategyRegistry {
   private strategies: Record<string, (event: Stripe.Event) => Promise<void>> = {};
@@ -43,6 +44,11 @@ webhookRegistry.register('checkout.session.completed', async (event: Stripe.Even
         subscriptionStatus: SubscriptionStatus.ACTIVE,
       },
     });
+    
+    // Process Lifetime Deals for referrals
+    if (tierEnum === SubscriptionTier.LIFETIME_DEAL && session.customer_details?.email) {
+      await processReferralReward(session.customer_details.email, event.id);
+    }
   }
 });
 
@@ -59,6 +65,11 @@ webhookRegistry.register('invoice.payment_succeeded', async (event: Stripe.Event
         subscriptionPeriodEnd: new Date(subscription.current_period_end * 1000),
       },
     });
+    
+    // Process recurring paid referrals
+    if (invoice.billing_reason === 'subscription_create' && invoice.customer_email) {
+      await processReferralReward(invoice.customer_email, event.id, invoice.total, invoice.currency);
+    }
   }
 });
 

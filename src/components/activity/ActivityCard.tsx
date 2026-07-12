@@ -6,7 +6,7 @@ import { ActivityCardActions } from './ActivityCardActions';
 import { ActivityPlatformList } from './ActivityPlatformList';
 import { ActivityCardProps } from './types';
 import StopIcon from '@mui/icons-material/Stop';
-import styles from '@/app/activity/activity.module.css';
+import styles from '@/app/(dashboard)/activity/activity.module.css';
 
 export function ActivityCard(props: ActivityCardProps) {
   const {

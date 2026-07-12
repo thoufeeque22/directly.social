@@ -2,7 +2,7 @@ import React from 'react';
 import StopIcon from '@mui/icons-material/Stop';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import styles from '@/app/activity/activity.module.css';
+import styles from '@/app/(dashboard)/activity/activity.module.css';
 import { PlatformResult } from '@/hooks/useActivity';
 
 interface PlatformPillActionsProps {

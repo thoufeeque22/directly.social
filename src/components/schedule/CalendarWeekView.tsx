@@ -3,7 +3,7 @@
 import React from 'react';
 import { format, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay } from 'date-fns';
 import styles from './calendar.module.css';
-import { PostActivityEntry } from '@/app/schedule/types';
+import { PostActivityEntry } from '@/app/(dashboard)/schedule/types';
 import { getPlatformClass } from './calendarUtils';
 
 interface CalendarWeekViewProps {

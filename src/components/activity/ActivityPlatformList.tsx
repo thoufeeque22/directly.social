@@ -1,7 +1,7 @@
 import React from 'react';
 import { PostActivityEntry, PlatformResult } from '@/hooks/useActivity';
 import { PlatformResultItem } from './PlatformResultItem';
-import styles from '@/app/activity/activity.module.css';
+import styles from '@/app/(dashboard)/activity/activity.module.css';
 
 interface ActivityPlatformListProps {
   post: PostActivityEntry;

@@ -1,6 +1,6 @@
 import React from 'react';
 import ActivityIcon from '@mui/icons-material/History';
-import styles from '@/app/activity/activity.module.css';
+import styles from '@/app/(dashboard)/activity/activity.module.css';
 
 interface ActivityEmptyStateProps {
   searchQuery: string;

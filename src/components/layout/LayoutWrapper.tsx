@@ -28,33 +28,12 @@ export default function LayoutWrapper({
   const session = clientSession || initialSession;
   const isAuthenticated = !!session;
   
-  // Routes that should NEVER show the app shell (Marketing/Auth/Legal)
-  // These are handled by the (public) route group or other specialized layouts.
-  const isAlwaysPublic = pathname === '/login' || 
-    pathname === '/philosophy' || 
-    pathname === '/privacy' || 
-    pathname === '/terms' || 
-    pathname === '/cookies' || 
-    pathname === '/' ||
-    pathname === '/pricing' ||
-    pathname === '/status' ||
-    pathname?.startsWith('/docs');
-  
-  // We hide the shell ONLY if:
-  // 1. It's an always-public route, EXCEPT when the user is logged in (excluding the auth page /login)
-  const shouldHideShell = isAlwaysPublic && !(pathname !== '/login' && isAuthenticated);
-  const shouldShowShell = !shouldHideShell;
-  
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { refresh } = useAppRefresh();
 
-  if (!shouldShowShell) {
-    return <>{children}</>;
-  }
-
   return (
     <div className="layout-wrapper">
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} isFreeTier={isFreeTier} />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} isFreeTier={isFreeTier} tierName={tierName} />
       <div className="main-content">
         <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} tierName={tierName} />
         <main className="page-content">

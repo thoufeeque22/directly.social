@@ -10,7 +10,7 @@
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import SettingsPage from '../../app/settings/SettingsContent';
+import SettingsPage from '../../app/(dashboard)/settings/SettingsContent';
 import { useSession } from 'next-auth/react';
 import { getUserAccounts, disconnectAccount } from '../../app/actions/user/accounts';
 import { getPlatformPreferences } from '../../app/actions/user/platform';

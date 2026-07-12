@@ -53,10 +53,7 @@ export const TermsContent = () => (
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>6. Referral Program</Typography>
       <Typography variant="body1" gutterBottom>
-        Referral rewards are discretionary and depend on successful non-refunded payments.
-        Rewards are subject to revocation in cases of fraud or chargebacks.
-        The Grand Prize (100% Free Cloud Pro) requires maintaining exactly 5 active paid referrals.
-        We reserve the right to modify, suspend, or terminate the Referral Program at any time without prior notice.
+        Participation in our Referral Program is governed by our <Link href="/referral-terms">Referral Program Terms</Link>, which are incorporated herein by reference.
       </Typography>
     </section>
 

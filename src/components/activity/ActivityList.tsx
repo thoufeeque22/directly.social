@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActivityCard } from './ActivityCard';
-import styles from '@/app/activity/activity.module.css';
+import styles from '@/app/(dashboard)/activity/activity.module.css';
 
 import { PostActivityEntry, PlatformResult } from '@/hooks/useActivity';
 import { UploadStatus } from '@/hooks/useUploadStatus';

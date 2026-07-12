@@ -35,6 +35,13 @@ export function LoginContent() {
   }
 
   useEffect(() => {
+    const ref = searchParams.get('ref');
+    if (ref) {
+      document.cookie = `referralCode=${ref}; path=/; max-age=${30 * 24 * 60 * 60}`;
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
     const provider = searchParams.get('provider');
     if (searchParams.get('bridge') === 'true' && provider) {
       signIn(provider, { callbackUrl: '/auth/success' });

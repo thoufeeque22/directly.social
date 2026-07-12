@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/app/activity/activity.module.css';
+import styles from '@/app/(dashboard)/activity/activity.module.css';
 import { PlatformResult } from '@/hooks/useActivity';
 
 interface ActivityCardHeaderProps {
