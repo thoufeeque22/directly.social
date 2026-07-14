@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React from 'react';
 import { Box, Typography, Stack, Link } from '@mui/material';
 
@@ -34,12 +35,33 @@ export const PrivacyContent = () => (
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>3. Use of Third-Party APIs</Typography>
       <Box sx={{ ml: 2, mb: 2 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Google / YouTube API</Typography>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Google / YouTube API Services Data Handling</Typography>
         <Typography variant="body1" gutterBottom>
-          Our application uses Google API Services to allow you to upload videos to your YouTube channel. By using this feature, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">YouTube Terms of Service</a> and the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.
+          Our application uses Google API Services (specifically YouTube APIs) to allow you to upload videos directly to your YouTube channel. By using this feature, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">YouTube Terms of Service</a> and the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.
         </Typography>
-        <Typography variant="body1" sx={{ fontStyle: 'italic', bgcolor: 'action.hover', p: 2, borderRadius: 1, borderLeft: '4px solid', borderColor: 'primary.main' }}>
-          <strong>Google API Disclosure:</strong> {BRAND.name}&apos;s use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy#limited-use-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>, including the Limited Use requirements.
+        <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
+          <strong>1. Data Access:</strong> We request access to your YouTube account solely to upload media files (videos) on your behalf and to read basic channel information necessary to confirm successful uploads.
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          <strong>2. Data Use:</strong> The raw and derived Google user data accessed by our application is used strictly to provide the core user-facing feature of publishing your scheduled content to your YouTube channel.
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          <strong>3. Data Transfer:</strong> We do not transfer or share your Google user data with any third parties, data brokers, or advertisers. Data is solely transmitted securely between your device, our servers, and Google APIs.
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          <strong>4. Data Protection:</strong> All Google user data, including OAuth tokens, is encrypted in transit using industry-standard TLS/SSL and encrypted at rest in our secure database.
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          <strong>5. Data Retention & Deletion:</strong> We retain your authentication tokens only as long as your account is active to facilitate scheduled publishing. Upon account deletion or disconnecting your YouTube account, all associated Google user data and tokens are immediately and permanently deleted from our systems.
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          <strong>6. Prohibited Data Use & Transfer:</strong> We expressly prohibit the use of your raw, aggregated, or anonymized Google user data for targeted advertising, lending purposes, or sale to third parties.
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          <strong>7. AI/ML Model Training Restrictions:</strong> Raw and aggregated Google user data is strictly prohibited from being used to develop, improve, or train any generalized Artificial Intelligence (AI) or Machine Learning (ML) models. We do not transfer Google user data to any third-party AI/ML services for model training purposes.
+        </Typography>
+        <Typography variant="body1" sx={{ fontStyle: 'italic', bgcolor: 'action.hover', p: 2, borderRadius: 1, borderLeft: '4px solid', borderColor: 'primary.main', mt: 2 }}>
+          <strong>Google API Disclosure:</strong> The use of raw or derived user data received from Workspace APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy#limited-use-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>, including the Limited Use requirements.
         </Typography>
       </Box>
       <Box sx={{ ml: 2, mb: 2 }}>
