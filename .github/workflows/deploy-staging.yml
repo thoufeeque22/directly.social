@@ -72,7 +72,7 @@ jobs:
           set -e
           
           # 1. Setup paths
-          BASE_DIR="~/staging.directly.social"
+          BASE_DIR="/home/ubuntu/staging.directly.social"
           RELEASE_DIR="$BASE_DIR/releases/${{ github.sha }}"
           CURRENT_DIR="$BASE_DIR/current"
           

@@ -72,7 +72,7 @@ jobs:
           set -e
           
           # 1. Setup paths
-          BASE_DIR="~/directly.social"
+          BASE_DIR="/home/ubuntu/directly.social"
           RELEASE_DIR="$BASE_DIR/releases/${{ github.sha }}"
           CURRENT_DIR="$BASE_DIR/current"
           
