@@ -32,11 +32,11 @@ Use this skill to create high-quality GitHub issues and automatically link them 
    - Labels: `roadmap`, `bug`/`feature`.
 
 3. **Project Linking & Priority:**
-   - Use `run_shell_command` to add to Project #4:
+   - Use `run_shell_command` to add the issue to Project #4 AND set its priority simultaneously using the helper script:
      ```bash
-     gh project item-add 4 --owner "thoufeeque22" --url <ISSUE_URL>
+     ./scripts/set-gh-project-priority.sh "thoufeeque22" 4 <ISSUE_URL> <PRIORITY_LEVEL>
      ```
-   - Set the **Priority** field in Project #4 using the `gh project item-edit` command:
+   - Valid `<PRIORITY_LEVEL>` values:
      - `critical`: P0 issues, production outages, security vulnerabilities.
      - `high`: Security, core crashes, blocked releases.
      - `medium`: Functional bugs, main features.
