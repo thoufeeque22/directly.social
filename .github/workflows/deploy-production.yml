@@ -1,0 +1,116 @@
+name: Deploy to Oracle VPS (Production)
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      APP_DIR: directly.social
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 11
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'pnpm'
+
+    - name: Install Dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Generate Prisma Client
+      run: pnpm exec prisma generate
+      env:
+        DATABASE_URL: sqlite://./prisma/dev.db
+
+    - name: Build Next.js App
+      run: pnpm build
+      env:
+        NEXTAUTH_SECRET: dummy_secret_for_build_only
+        DATABASE_URL: sqlite://./prisma/dev.db
+
+    - name: Deploy to VPS via Rsync
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_KEY }}
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+        
+        echo "Syncing build artifacts to Oracle Cloud VM..."
+        # Create base and releases directory
+        ssh ${VPS_USERNAME}@${VPS_HOST} "mkdir -p ~/${APP_DIR}/releases/${{ github.sha }}"
+        
+        rsync -avz --delete \
+          --exclude '.git' \
+          --exclude 'node_modules' \
+          --exclude '.env' \
+          --exclude '.env.local' \
+          --exclude 'tmp' \
+          ./ ${VPS_USERNAME}@${VPS_HOST}:~/${APP_DIR}/releases/${{ github.sha }}/
+
+    - name: Install Production Deps & Restart Server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          set -e
+          
+          # 1. Setup paths
+          BASE_DIR="~/directly.social"
+          RELEASE_DIR="$BASE_DIR/releases/${{ github.sha }}"
+          CURRENT_DIR="$BASE_DIR/current"
+          
+          echo "Preparing release at $RELEASE_DIR..."
+          cd $RELEASE_DIR
+          
+          # 2. Symlink shared .env
+          if [ -f "$BASE_DIR/.env" ]; then
+            ln -sfn $BASE_DIR/.env .env
+          else
+            echo "⚠️ Warning: $BASE_DIR/.env not found."
+          fi
+          
+          # 3. Install production deps & generate prisma
+          echo "📦 Ensuring pnpm is installed..."
+          if ! command -v pnpm &> /dev/null; then
+            npm install -g pnpm
+          fi
+          
+          echo "📦 Installing production dependencies..."
+          pnpm install --prod
+          
+          echo "🏗️ Generating Prisma client..."
+          pnpm exec prisma generate
+          
+          # 4. Atomic swap symlink
+          echo "🔄 Swapping symlink to $RELEASE_DIR..."
+          ln -sfn $RELEASE_DIR $CURRENT_DIR
+          
+          # 5. Restart PM2 from the current symlink path
+          echo "🔄 Restarting PM2 processes..."
+          cd $CURRENT_DIR
+          # Note: PM2 still uses node/npm under the hood for 'npm start'
+          pm2 restart directly-production --update-env || pm2 start "pnpm start" --name "directly-production"
+          pm2 restart directly-worker-production --update-env || pm2 start "pnpm run worker" --name "directly-worker-production"
+          
+          # 6. Cleanup old releases (keep last 5)
+          echo "🧹 Cleaning up old releases..."
+          ls -dt $BASE_DIR/releases/* | tail -n +6 | xargs -r rm -rf --
+          
+          echo "✅ Deployment successful!"
