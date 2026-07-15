@@ -56,7 +56,6 @@ jobs:
         
         rsync -avz --delete \
           --exclude '.git' \
-          --exclude 'node_modules' \
           --exclude '.env' \
           --exclude '.env.local' \
           --exclude 'tmp' \
@@ -93,11 +92,8 @@ jobs:
             sudo npm install -g pnpm
           fi
           
-          echo "📦 Installing dependencies..."
-          pnpm install --frozen-lockfile
-          
-          echo "🏗️ Generating Prisma client..."
-          pnpm exec prisma generate
+          # Dependencies and Prisma Client were already installed/generated on the GitHub runner 
+          # and synced via rsync.
           
           # 4. Atomic swap symlink
           echo "🔄 Swapping symlink to $RELEASE_DIR..."
