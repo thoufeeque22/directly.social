@@ -89,7 +89,7 @@ jobs:
           # 3. Install production deps & generate prisma
           echo "📦 Ensuring pnpm is installed..."
           if ! command -v pnpm &> /dev/null; then
-            npm install -g pnpm
+            sudo npm install -g pnpm
           fi
           
           echo "📦 Installing production dependencies..."
