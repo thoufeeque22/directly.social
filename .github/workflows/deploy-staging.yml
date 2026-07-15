@@ -107,7 +107,7 @@ jobs:
           echo "🔄 Restarting PM2 processes..."
           cd $CURRENT_DIR
           # Note: PM2 still uses node/npm under the hood for 'npm start'
-          pm2 restart directly-staging --update-env || pm2 start "pnpm start" --name "directly-staging"
+          PORT=3001 pm2 restart directly-staging --update-env || PORT=3001 pm2 start "pnpm start" --name "directly-staging"
           pm2 restart directly-worker-staging --update-env || pm2 start "pnpm run worker" --name "directly-worker-staging"
           
           # 6. Cleanup old releases (keep last 5)
