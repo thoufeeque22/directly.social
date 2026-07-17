@@ -31,10 +31,10 @@ export async function updatePlatformResultsAction(activityId: string, reviewedCo
 
     if (!activity) throw new Error("Activity record not found.");
 
-    // Update each platform result with its specific custom content
-    await Promise.all(activity.platforms.map((p) => {
+    // Update each platform result with its specific custom content in a batch transaction
+    const updates = activity.platforms.map((p) => {
       const custom = reviewedContent[p.platform];
-      if (!custom) return Promise.resolve();
+      if (!custom) return null;
 
       return prisma.postPlatformResult.update({
         where: { id: p.id },
@@ -46,7 +46,11 @@ export async function updatePlatformResultsAction(activityId: string, reviewedCo
           }
         }
       });
-    }));
+    }).filter((u): u is NonNullable<typeof u> => u !== null);
+
+    if (updates.length > 0) {
+      await prisma.$transaction(updates);
+    }
 
     await revalidateDashboard();
     return { success: true };

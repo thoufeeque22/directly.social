@@ -30,7 +30,14 @@ export function useCancelAllHandler(
       await cancelAllUploadsAction(activityId);
       const data = await fetchActivity();
       setPosts(data.data || []);
-    } catch {}
+    } catch {
+      // Rollback optimistic update
+      if (targetPost) {
+        setCancelledIds(prev => prev.filter(id => !targetPost.platforms.some(p => p.id === id)));
+      } else if (isGhostMatch && pendingPost) {
+        setCancelledIds(prev => prev.filter(id => !id.startsWith('optimistic-p-')));
+      }
+    }
   };
 
   return { handleCancelAll };

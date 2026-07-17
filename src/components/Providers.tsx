@@ -11,14 +11,10 @@ import { NotificationProvider } from "./Notifications/NotificationContext";
 
 import { Session } from "next-auth";
 
-export function Providers({ children, session }: { children: React.ReactNode; session: Session | null }) {
-  useEffect(() => {
-    if (session?.user) {
-      try {
-        localStorage.setItem('has_account', 'true');
-      } catch {}
-    }
-  }, [session]);
+export function Providers({ children }: { children: React.ReactNode }) {
+  // We remove the session prop and useEffect for has_account.
+  // SessionProvider will automatically fetch the session on the client.
+  // The 'has_account' can be set by a small Client Component or omitted if not critical here.
 
   useEffect(() => {
     const setupDeepLinkListener = async () => {
@@ -76,7 +72,7 @@ export function Providers({ children, session }: { children: React.ReactNode; se
   return (
     <ThemeContextProvider>
       <CssBaseline />
-      <SessionProvider session={session}>
+      <SessionProvider>
         <WhatsNewProvider>
           <NotificationProvider>
             {children}

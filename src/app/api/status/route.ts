@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/core/prisma';
 
+import { fetchWithCircuitBreaker } from '@/lib/core/circuit-breaker';
+
 const providerMap: Record<string, string[]> = {
   'YouTube Data API': ['youtube', 'google'],
   'Meta Graph API': ['facebook', 'instagram'],
@@ -32,23 +34,18 @@ export async function GET() {
   }
 
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
     const [monitorsRes, incidentsRes] = await Promise.all([
-      fetch('https://uptime.betterstack.com/api/v2/monitors', {
-        headers: { Authorization: `Bearer ${apiKey}` },
-        signal: controller.signal,
-        next: { revalidate: 30 },
-      }),
-      fetch('https://uptime.betterstack.com/api/v2/incidents', {
-        headers: { Authorization: `Bearer ${apiKey}` },
-        signal: controller.signal,
-        next: { revalidate: 30 },
-      })
-    ]);
-    clearTimeout(timeoutId);
-    
-    if (monitorsRes.ok && incidentsRes.ok) {
+        fetchWithCircuitBreaker('betterstack-monitors', 'https://uptime.betterstack.com/api/v2/monitors', {
+          headers: { Authorization: `Bearer ${apiKey}` },
+          next: { revalidate: 30 },
+        }),
+        fetchWithCircuitBreaker('betterstack-incidents', 'https://uptime.betterstack.com/api/v2/incidents', {
+          headers: { Authorization: `Bearer ${apiKey}` },
+          next: { revalidate: 30 },
+        })
+      ]);
+      
+      if (monitorsRes.ok && incidentsRes.ok) {
       const monitorsJson = await monitorsRes.json();
       const incidentsJson = await incidentsRes.json();
 

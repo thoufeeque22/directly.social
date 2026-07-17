@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/core/prisma';
 import { BetterStackMonitor } from '@/lib/schemas/status';
+import { fetchWithCircuitBreaker } from '@/lib/core/circuit-breaker';
 
 const isDown = (status: string) => status === 'down' || status === 'degraded' || status === 'maintenance';
 
@@ -44,14 +45,10 @@ export async function GET() {
     }
 
     // 2. Fetch Better Stack monitors
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-    const res = await fetch('https://uptime.betterstack.com/api/v2/monitors', {
+    const res = await fetchWithCircuitBreaker('betterstack-monitors', 'https://uptime.betterstack.com/api/v2/monitors', {
       headers: { Authorization: `Bearer ${apiKey}` },
-      signal: controller.signal,
       next: { revalidate: 60 }, // Cache for 60 seconds
     });
-    clearTimeout(timeoutId);
 
     if (!res.ok) {
       return NextResponse.json({ hasAlert: false, reason: 'betterstack_api_error' });

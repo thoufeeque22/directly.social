@@ -96,6 +96,9 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
+    "@reticlehq/next": "^2.0.0",
+    "@reticlehq/react": "^2.0.0",
+    "@reticlehq/server": "^2.0.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
