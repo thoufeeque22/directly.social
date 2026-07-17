@@ -27,6 +27,13 @@ jobs:
         echo "Deployment cancelled by user. You must select 'Yes, deploy it!' from the dropdown to proceed."
         exit 1
 
+    - name: Branch Restriction Check
+      if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production'
+      run: |
+        echo "⛔ CRITICAL ERROR: You cannot deploy a feature branch to Production!"
+        echo "Only the 'main' or 'production' branches are allowed to be deployed here."
+        exit 1
+
     - uses: actions/checkout@v7
 
     - name: Setup pnpm
