@@ -1,9 +1,6 @@
 name: Deploy to Oracle VPS (Production)
 
 on:
-  push:
-    branches:
-      - production
   workflow_dispatch:
     inputs:
       confirm_deploy:
@@ -28,10 +25,10 @@ jobs:
         exit 1
 
     - name: Branch Restriction Check
-      if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/production'
+      if: github.ref != 'refs/heads/main'
       run: |
         echo "⛔ CRITICAL ERROR: You cannot deploy a feature branch to Production!"
-        echo "Only the 'main' or 'production' branches are allowed to be deployed here."
+        echo "Only the 'main' branch is allowed to be deployed here."
         exit 1
 
     - uses: actions/checkout@v7
