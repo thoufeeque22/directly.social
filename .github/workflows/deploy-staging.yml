@@ -102,9 +102,10 @@ jobs:
           # 5. Restart PM2 from the current symlink path
           echo "🔄 Restarting PM2 processes..."
           cd $CURRENT_DIR
-          # Note: PM2 still uses node/npm under the hood for 'npm start'
-          PORT=3001 pm2 restart directly-staging --update-env || PORT=3001 pm2 start "pnpm start" --name "directly-staging"
-          pm2 restart directly-worker-staging --update-env || pm2 start "pnpm run worker" --name "directly-worker-staging"
+          pm2 delete directly-staging || true
+          PORT=3001 pm2 start "pnpm start" --name "directly-staging"
+          pm2 delete directly-worker-staging || true
+          pm2 start "pnpm run worker" --name "directly-worker-staging"
           
           # 6. Cleanup old releases (keep last 5)
           echo "🧹 Cleaning up old releases..."
