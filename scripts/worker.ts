@@ -5,6 +5,7 @@ import { startPublishingWorker } from "../src/lib/worker/worker";
 // Initialize Sentry for the standalone worker process
 Sentry.init({
   dsn: SENTRY_DSN,
+  environment: process.env.NEXT_PUBLIC_APP_ENV || 'development',
   tracesSampleRate: 1.0,
 });
 

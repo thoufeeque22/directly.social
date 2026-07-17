@@ -7,6 +7,7 @@ import { SENTRY_DSN } from "./lib/core/sentry-constants";
 
 Sentry.init({
   dsn: SENTRY_DSN,
+  environment: process.env.NEXT_PUBLIC_APP_ENV || 'development',
 
   // Add optional integrations for additional features
   integrations: [Sentry.replayIntegration()],
