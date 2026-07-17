@@ -5,6 +5,14 @@ on:
     branches:
       - production
   workflow_dispatch:
+    inputs:
+      confirm_deploy:
+        description: 'Confirm deployment to this environment:'
+        required: true
+        type: choice
+        options:
+          - 'No, cancel'
+          - 'Yes, deploy it!'
 
 jobs:
   build-and-deploy:
@@ -13,6 +21,12 @@ jobs:
       APP_DIR: directly.social
 
     steps:
+    - name: Safety Check
+      if: github.event_name == 'workflow_dispatch' && inputs.confirm_deploy != 'Yes, deploy it!'
+      run: |
+        echo "Deployment cancelled by user. You must select 'Yes, deploy it!' from the dropdown to proceed."
+        exit 1
+
     - uses: actions/checkout@v7
 
     - name: Setup pnpm
