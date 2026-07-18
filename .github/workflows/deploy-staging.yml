@@ -51,6 +51,7 @@ jobs:
     - name: Build Next.js App
       run: pnpm build
       env:
+        NEXT_PUBLIC_APP_ENV: staging
         NEXTAUTH_SECRET: dummy_secret_for_build_only
         DATABASE_URL: sqlite://./prisma/dev.db
 

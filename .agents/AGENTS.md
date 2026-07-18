@@ -90,3 +90,7 @@ To ensure production-level stability and prevent build failures or linting warni
 - **Audit Agent**: Must be explicitly granted read-only access to the entire repository to explore the codebase for deep security and performance audits. Does NOT modify application code.
 - **Project Agent**: Must be granted `enable_write_tools: true` to run `gh` shell commands, and `enable_mcp_tools: true` to use `mcp_github_create_issue` for issue management and project board linking. Does NOT modify application code.
 - The Orchestrator MUST use the `define_subagent` tool with `enable_write_tools: true` (and `enable_mcp_tools: true` when required) for these agents before invoking them, rather than relying on default read-only inheritance.
+
+### 10. Proactive Growth & Product Strategy
+- **Marketing & Pricing Psychology:** When discussing features, UI, or pricing, ALL agents MUST proactively suggest psychological pricing tactics (e.g., 5-year anchors for lifetime deals, decoy pricing) and growth-minded UX flows.
+- **Do not wait for prompts:** Do not rely on the user to specify every marketing hook or product strategy. Act as a proactive co-founder: if a UI flow or copy could be optimized for conversion, retention, or perceived value, you must suggest and implement it.
