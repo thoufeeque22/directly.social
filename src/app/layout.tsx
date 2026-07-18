@@ -8,6 +8,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';
 import { auth } from "@/auth";
 
 import { BRAND } from "@/lib/core/brand";
+import { ReticleDev } from './reticle-dev';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,21 +32,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <ThemeScript />
       </head>
       <body className={inter.className}>
+        {process.env.NODE_ENV === 'development' ? <ReticleDev /> : null}
         <AppRouterCacheProvider options={{ key: 'css' }}>
-          <Providers session={session}>
+          <Providers>
             {children}
           </Providers>
         </AppRouterCacheProvider>

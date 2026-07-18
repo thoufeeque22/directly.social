@@ -9,22 +9,48 @@ interface UseMediaDeleterProps {
 
 export const useMediaDeleter = ({ setAssets, selectedIds, setSelectedIds }: UseMediaDeleterProps) => {
   const handleDeleteAsset = async (fileId: string) => {
+    let previousAssets: GalleryAsset[] = [];
+    let previousSelected: string[] = [];
+
+    // Optimistic Update
+    setAssets(prev => {
+      previousAssets = prev;
+      return prev.filter(a => a.fileId !== fileId);
+    });
+    setSelectedIds(prev => {
+      previousSelected = prev;
+      return prev.filter(id => id !== fileId);
+    });
+
     try {
       const res = await fetch(`/api/media/${fileId}`, { method: 'DELETE' });
-      if (res.ok) {
-        setAssets(prev => prev.filter(a => a.fileId !== fileId));
-        setSelectedIds(prev => prev.filter(id => id !== fileId));
-      } else {
+      if (!res.ok) {
         const data = await res.json();
-        alert(data.error || 'Failed to delete asset');
+        throw new Error(data.error || 'Failed to delete asset');
       }
     } catch (err) {
       console.error(err);
-      alert('Network error while deleting asset');
+      // Rollback on error
+      setAssets(previousAssets);
+      setSelectedIds(previousSelected);
+      alert(err instanceof Error ? err.message : 'Network error while deleting asset');
     }
   };
 
   const handleBulkDelete = async () => {
+    let previousAssets: GalleryAsset[] = [];
+    let previousSelected: string[] = [];
+
+    // Optimistic Update
+    setAssets(prev => {
+      previousAssets = prev;
+      return prev.filter(a => !selectedIds.includes(a.fileId));
+    });
+    setSelectedIds(prev => {
+      previousSelected = prev;
+      return [];
+    });
+
     try {
       const res = await fetch('/api/media', {
         method: 'DELETE',
@@ -32,18 +58,32 @@ export const useMediaDeleter = ({ setAssets, selectedIds, setSelectedIds }: UseM
         body: JSON.stringify({ fileIds: selectedIds })
       });
 
-      if (res.ok) {
-        setAssets(prev => prev.filter(a => !selectedIds.includes(a.fileId)));
-        setSelectedIds([]);
-      } else {
-        alert('Bulk delete failed');
+      if (!res.ok) {
+        throw new Error('Bulk delete failed');
       }
     } catch (err) {
       console.error(err);
+      // Rollback on error
+      setAssets(previousAssets);
+      setSelectedIds(previousSelected);
+      alert(err instanceof Error ? err.message : 'Network error during bulk delete');
     }
   };
 
   const handleClearAll = async () => {
+    let previousAssets: GalleryAsset[] = [];
+    let previousSelected: string[] = [];
+
+    // Optimistic Update
+    setAssets(prev => {
+      previousAssets = prev;
+      return [];
+    });
+    setSelectedIds(prev => {
+      previousSelected = prev;
+      return [];
+    });
+
     try {
       const res = await fetch('/api/media', {
         method: 'DELETE',
@@ -51,14 +91,15 @@ export const useMediaDeleter = ({ setAssets, selectedIds, setSelectedIds }: UseM
         body: JSON.stringify({ deleteAll: true })
       });
 
-      if (res.ok) {
-        setAssets([]);
-        setSelectedIds([]);
-      } else {
-        alert('Failed to clear gallery');
+      if (!res.ok) {
+        throw new Error('Failed to clear gallery');
       }
     } catch (err) {
       console.error(err);
+      // Rollback on error
+      setAssets(previousAssets);
+      setSelectedIds(previousSelected);
+      alert(err instanceof Error ? err.message : 'Network error while clearing gallery');
     }
   };
   

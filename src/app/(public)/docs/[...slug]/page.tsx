@@ -7,10 +7,26 @@ import { Metadata } from 'next';
 import { MarkdownRenderer } from '@/components/docs/MarkdownRenderer';
 import { BRAND } from '@/lib/core/brand';
 
+import { glob } from 'glob';
+
 interface PageProps {
   params: Promise<{
     slug: string[];
   }>;
+}
+
+export const dynamicParams = true;
+export const revalidate = 86400; // Cache for 24 hours
+
+export async function generateStaticParams() {
+  const docsRootDir = path.join(process.cwd(), 'docs');
+  const userDocs = glob.sync('user/**/*.md', { cwd: docsRootDir });
+  const devDocs = glob.sync('dev/**/*.md', { cwd: docsRootDir });
+  
+  const allDocs = [...userDocs, ...devDocs];
+  return allDocs.map((file) => ({
+    slug: file.replace(/\.md$/, '').split('/'),
+  }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

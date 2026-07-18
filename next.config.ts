@@ -1,7 +1,9 @@
 import { withSentryConfig } from "@sentry/nextjs";
+import { withReticle } from '@reticlehq/next';
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  compress: true,
   distDir: process.env.NEXT_DIST_DIR || ".next",
 
   // Allow Tunnel requests to hit the dev server without being blocked
@@ -65,7 +67,7 @@ const shouldSkipSentry = process.env.SKIP_SENTRY_BUILD === "true";
 // This prevents noisy warnings during build when tokens are missing.
 const useSentry = !shouldSkipSentry && !!process.env.SENTRY_AUTH_TOKEN;
 
-export default useSentry 
+const finalConfig = useSentry 
   ? withSentryConfig(nextConfig, {
       // For all available options, see:
       // https://www.npmjs.com/package/@sentry/webpack-plugin#options
@@ -98,3 +100,6 @@ export default useSentry
       },
     })
   : nextConfig;
+
+export default withReticle(finalConfig);
+

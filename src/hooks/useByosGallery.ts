@@ -72,18 +72,28 @@ export function useByosGallery() {
   };
 
   const handleDelete = async (key: string) => {
+    // Optimistic UI update
+    const previousAssets = [...assets];
+    setAssets(prev => prev.filter(a => a.key !== key));
     setDeletingKey(key);
+
     try {
       const res = await fetch('/api/media/byos', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key }),
       });
-      if (res.status === 403) setError('Failed to delete asset. Insufficient bucket delete permissions.');
-      else if (!res.ok) throw new Error();
-      else fetchAssets(tokenStack[pageIndex]);
-    } catch {
-      setError('Failed to delete asset from S3.');
+      if (res.status === 403) {
+        throw new Error('Failed to delete asset. Insufficient bucket delete permissions.');
+      } else if (!res.ok) {
+        throw new Error('Failed to delete asset from S3.');
+      }
+      // Re-fetch in background to ensure pagination consistency if needed
+      fetchAssets(tokenStack[pageIndex]);
+    } catch (err) {
+      // Rollback
+      setAssets(previousAssets);
+      setError(err instanceof Error ? err.message : 'Failed to delete asset from S3.');
     } finally {
       setDeletingKey(null);
     }

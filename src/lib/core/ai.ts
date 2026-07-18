@@ -101,6 +101,7 @@ export interface FallbackOptions<T> {
   visualData?: string[];
   byokConfigs?: Record<string, { apiKey: string; modelId: string }>;
   preferredProvider?: AIProvider;
+  temperature?: number;
 }
 
 /**
@@ -164,7 +165,7 @@ export async function generateObjectWithFallback<T>(options: FallbackOptions<T>)
         system: options.systemPrompt,
         messages,
         schema: options.schema,
-        temperature: 0.7,
+        temperature: options.temperature ?? 0.7,
       });
 
       logger.info(`AI generation succeeded with provider: ${provider}`);

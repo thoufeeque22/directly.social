@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Update } from '@/components/WhatsNew/types';
-import { markUpdateAsSeen } from '@/app/actions/whats-new';
 import { getRecentUpdates } from '@/app/actions/whats-new-activity';
 
 export function useWhatsNewPopover(
@@ -20,7 +19,7 @@ export function useWhatsNewPopover(
         setLocalUpdates(unread);
         setUpdates([]);
       }, 0);
-      Promise.allSettled(unread.map((u) => markUpdateAsSeen(u.id)));
+      import('@/app/actions/whats-new').then(m => m.markUpdatesAsSeen(unread.map(u => u.id)));
       return () => clearTimeout(timer);
     }
     setTimeout(() => {

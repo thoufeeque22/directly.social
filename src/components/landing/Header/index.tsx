@@ -7,12 +7,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 
+import { useSession } from 'next-auth/react';
 import { BRAND } from '@/lib/core/brand';
 
 export const LandingHeader = () => {
   const theme = useTheme();
   const pathname = usePathname();
-  const isAuthenticated = false; // Landing page is only rendered when logged out
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 50,
