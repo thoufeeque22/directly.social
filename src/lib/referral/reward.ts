@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from '@/lib/core/prisma';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_123', {
-  apiVersion: '2026-06-24.dahlia' as any,
+  apiVersion: '2026-06-24.dahlia',
 });
 
 export async function processReferralReward(referredUserEmail: string, eventId: string) {
@@ -11,8 +10,9 @@ export async function processReferralReward(referredUserEmail: string, eventId: 
     await prisma.processedWebhook.create({
       data: { id: eventId, type: 'referral_reward' }
     });
-  } catch (error: any) {
-    if (error?.code === 'P2002') return;
+  } catch (error: unknown) {
+    const err = error as { code?: string };
+    if (err?.code === 'P2002') return;
     throw error;
   }
 

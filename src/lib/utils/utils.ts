@@ -17,7 +17,7 @@ export const formatHandle = (name: string | null, fallback: string) => {
   return `@${name.replace(/\s+/g, '').toLowerCase()}`;
 };
 
-interface ProfileInfo {
+export interface ProfileInfo {
   username?: string | null;
   handle?: string | null;
   login?: string | null;

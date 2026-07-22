@@ -1,6 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export function computeReferralHistory(referrals: any[]) {
-  return referrals.map((ref: any) => {
+interface ReferralItem {
+  billingProfile?: {
+    subscriptionTier?: string;
+    subscriptionStatus?: string;
+  } | null;
+  email?: string | null;
+}
+
+export function computeReferralHistory(referrals: ReferralItem[]) {
+  return referrals.map((ref) => {
     const isPaid = ref.billingProfile && ref.billingProfile.subscriptionTier !== 'FREE_STARTER';
     const isActive = ref.billingProfile?.subscriptionStatus === 'ACTIVE';
     

@@ -1,9 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from '@/lib/core/prisma';
-import { extractAccountName } from '@/lib/utils/utils';
+import { extractAccountName, type ProfileInfo } from '@/lib/utils/utils';
 import { cookies } from 'next/headers';
 
-export async function handleUserCreated(user: any) {
+interface UserParams {
+  id?: string;
+}
+
+export async function handleUserCreated(user: UserParams) {
   if (!user.id) return;
   const cookieStore = await cookies();
   const refCode = cookieStore.get('referralCode')?.value;
@@ -21,7 +24,12 @@ export async function handleUserCreated(user: any) {
   }
 }
 
-export async function handleSocialLinkReward(account: any, profile: any, userId?: string) {
+interface AccountParams {
+  provider: string;
+  providerAccountId: string;
+}
+
+export async function handleSocialLinkReward(account: AccountParams, profile: ProfileInfo, userId?: string) {
   const accountName = extractAccountName(profile);
   if (accountName) {
     await prisma.account.update({
