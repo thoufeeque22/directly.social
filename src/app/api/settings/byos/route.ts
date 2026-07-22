@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getByosConfig, saveByosConfig } from '@/lib/byos/service';
 import { auth } from '@/auth';
-import { ByosConfigSchema } from '@/lib/schemas/settings';
+import { byosConfigSchema } from '@/lib/byos/validation';
 
 export async function GET() {
   const session = await auth();
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   if (!session?.user?.id) return new NextResponse('Unauthorized', { status: 401 });
   try {
     const data = await req.json();
-    const validated = ByosConfigSchema.parse(data);
+    const validated = byosConfigSchema.parse(data);
     
     if (validated.secretAccessKey === '********') {
       const existing = await getByosConfig(session.user.id);

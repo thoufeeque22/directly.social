@@ -6,6 +6,7 @@ test.describe('Ticket 752: BYOS Secret Leakage @regression', () => {
   test('GET /api/settings/byos omits or masks secretAccessKey', async ({ page }) => {
     const testSecret = 'SuperSecretKey123!@#';
     const payload = {
+      provider: 'S3',
       bucketName: 'test-bucket',
       region: 'us-east-1',
       accessKeyId: 'AKIAIOSFODNN7EXAMPLE',
@@ -36,6 +37,7 @@ test.describe('Ticket 752: BYOS Secret Leakage @regression', () => {
   test('POST /api/settings/byos with masked secret preserves existing encrypted secret', async ({ page }) => {
     const initialSecret = 'RealSecretKey456$%^';
     const initialPayload = {
+      provider: 'S3',
       bucketName: 'initial-bucket',
       region: 'us-east-1',
       accessKeyId: 'AKIAIOSFODNN7EXAMPLE',
