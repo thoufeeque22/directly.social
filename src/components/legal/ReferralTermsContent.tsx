@@ -27,7 +27,7 @@ export const ReferralTermsContent = () => (
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>3. Tiered Rewards</Typography>
       <Typography variant="body1" gutterBottom>
-        The "Give a Month, Get a Month" program offers symmetric rewards for both the Referrer and the Referred User:
+        The &quot;Give a Month, Get a Month&quot; program offers symmetric rewards for both the Referrer and the Referred User:
       </Typography>
       <TableContainer component={Paper} variant="outlined" sx={{ mt: 2 }}>
         <Table aria-label="referral rewards table">

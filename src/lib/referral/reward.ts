@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from '@/lib/core/prisma';
 import Stripe from 'stripe';
 
@@ -20,7 +21,7 @@ export async function processReferralReward(referredUserEmail: string, eventId: 
     include: { billingProfile: true }
   });
 
-  if (!user || !user.referredById) return;
+  if (!user || !user.referredById || user.purchaseRewardClaimed) return;
 
   const referrer = await prisma.user.findUnique({
     where: { id: user.referredById },
@@ -30,19 +31,18 @@ export async function processReferralReward(referredUserEmail: string, eventId: 
   if (!referrer) return;
 
   const referrerTier = referrer.billingProfile?.subscriptionTier || 'FREE_STARTER';
-  const referrerCustomerId = referrer.billingProfile?.providerCustomerId;
-  const userCustomerId = user.billingProfile?.providerCustomerId;
   const userSubId = user.billingProfile?.providerSubscriptionId;
   const referrerSubId = referrer.billingProfile?.providerSubscriptionId;
 
-  const coupon = await stripe.coupons.create({
-    percent_off: 100,
-    duration: 'once',
-    name: 'Referral Free Month'
-  });
-
   if (userSubId) {
-    await stripe.subscriptions.update(userSubId, { discounts: [{ coupon: coupon.id }] });
+    const userCoupon = await stripe.coupons.create({
+      percent_off: 100,
+      duration: 'repeating',
+      duration_in_months: 1,
+      max_redemptions: 1,
+      name: 'Referral Free Month'
+    });
+    await stripe.subscriptions.update(userSubId, { discounts: [{ coupon: userCoupon.id }] });
   }
 
   await prisma.notification.create({
@@ -72,7 +72,14 @@ export async function processReferralReward(referredUserEmail: string, eventId: 
     });
   } else {
     if (referrerSubId) {
-      await stripe.subscriptions.update(referrerSubId, { discounts: [{ coupon: coupon.id }] });
+      const referrerCoupon = await stripe.coupons.create({
+        percent_off: 100,
+        duration: 'repeating',
+        duration_in_months: 1,
+        max_redemptions: 1,
+        name: 'Referral Free Month'
+      });
+      await stripe.subscriptions.update(referrerSubId, { discounts: [{ coupon: referrerCoupon.id }] });
     }
     await prisma.notification.create({
       data: {
@@ -82,4 +89,9 @@ export async function processReferralReward(referredUserEmail: string, eventId: 
       }
     });
   }
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { purchaseRewardClaimed: true }
+  });
 }

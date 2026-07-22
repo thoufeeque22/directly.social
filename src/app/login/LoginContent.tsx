@@ -78,7 +78,7 @@ export function LoginContent({ referrerName }: { referrerName?: string | null })
         <LoginHeader />
         {referrerName && (
           <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }} data-testid="referral-banner">
-            You've been gifted 1 Free Month upon upgrading by {referrerName}!
+            You&apos;ve been gifted 1 Free Month upon upgrading by {referrerName}!
           </Alert>
         )}
         {errorMessage && (
