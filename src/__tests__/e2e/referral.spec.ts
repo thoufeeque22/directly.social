@@ -23,7 +23,7 @@ test.describe('Referral Bonus Program', () => {
     });
 
     // 2. Setup Referred User
-    const referredUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email: `referred-user-${uniqueId}@referral.test`,
         name: 'Referred User',
@@ -61,7 +61,7 @@ test.describe('Referral Bonus Program', () => {
     });
 
     // 2. Setup Referred User
-    const referredUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email: `referred-user-paid-${uniqueId}@referral.test`,
         name: 'Referred User',
@@ -99,7 +99,7 @@ test.describe('Referral Bonus Program', () => {
     });
 
     // 2. Setup Referred User
-    const referredUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email: `referred-upgrade1-${uniqueId}@referral.test`,
         name: 'Referred User 1',

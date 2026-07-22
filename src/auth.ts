@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import NextAuth, { type DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
@@ -157,7 +158,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               });
             }
           });
-        } catch (error) {
+        } catch {
           // If transaction fails (e.g. Unique constraint on ClaimedSocialAccount), we gracefully ignore
           // since it means the social account was already used for a referral.
           console.log(`[Referral] Social account ${account.provider} already claimed or error occurred.`);

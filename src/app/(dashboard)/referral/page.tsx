@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React from 'react';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
