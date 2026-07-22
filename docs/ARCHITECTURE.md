@@ -28,6 +28,7 @@ This document provides a high-level index of the Directly application architectu
     *   Standard View Pattern (Server Shell / Client Content)
     *   [Internal User Credits](features/INTERNAL_USER_CREDITS.md)
 6.  **[Security & RBAC](architecture/SECURITY.md)**
+    *   7-Point AI Security Risk Checklist (SSTI, ReDoS, S3 Client-Side Secret Leakage, etc.)
     *   Role-Based Access Control
     *   File System Security
 7.  **[Mobile Architecture](architecture/MOBILE.md)**
@@ -49,7 +50,7 @@ This document provides a high-level index of the Directly application architectu
 
 ## Architecture Principles
 
-- **State-First Protocol:** Every task begins with a defined state in `.agents/state/`.
+- **Artifact-First Protocol:** Every task begins with an Artifact written to the Agy Artifact Directory.
 - **Modularity Mandate:** All source files must be ≤ 100 lines.
 - **Strict Typing:** Zero-Any policy for TypeScript.
 - **Centralized Validation:** Shared schemas in `src/lib/schemas/`.

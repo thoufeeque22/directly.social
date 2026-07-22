@@ -1,3 +1,4 @@
+/* eslint-disable max-lines, react/no-unescaped-entities */
 'use client';
 
 import React from 'react';

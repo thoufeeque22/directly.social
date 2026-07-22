@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { usePathname } from 'next/navigation';
+
 import { useSession } from 'next-auth/react';
 import Sidebar from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
@@ -21,12 +21,12 @@ export default function LayoutWrapper({
   isFreeTier?: boolean,
   tierName?: string
 }) {
-  const pathname = usePathname();
+
   const { data: clientSession } = useSession();
   
   // Use either the server-side session OR the client-side session
-  const session = clientSession || initialSession;
-  const isAuthenticated = !!session;
+
+
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { refresh } = useAppRefresh();

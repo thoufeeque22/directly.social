@@ -94,3 +94,13 @@ To ensure production-level stability and prevent build failures or linting warni
 ### 10. Proactive Growth & Product Strategy
 - **Marketing & Pricing Psychology:** When discussing features, UI, or pricing, ALL agents MUST proactively suggest psychological pricing tactics (e.g., 5-year anchors for lifetime deals, decoy pricing) and growth-minded UX flows.
 - **Do not wait for prompts:** Do not rely on the user to specify every marketing hook or product strategy. Act as a proactive co-founder: if a UI flow or copy could be optimized for conversion, retention, or perceived value, you must suggest and implement it.
+
+### 11. 7-Point AI Security Risk Checklist
+For any significant feature or codebase audit, the following 7 vulnerabilities must be assessed:
+1. **Server-Side Template Injection (SSTI)** - Verify no unsafe `dangerouslySetInnerHTML` or risky markdown parsing (App uses React/Next.js).
+2. **Regular Expression Denial of Service (ReDoS)** - Ensure no unbounded or nested quantifiers in custom regexes (e.g., in Zod validation or route matching).
+3. **Long Password DoS** - Verify password length limits (N/A for OAuth-only flows).
+4. **AWS S3 Client-Side Secret Leakage** - Ensure server-side APIs do not leak plaintext `secretAccessKey` or other credentials to the client.
+5. **NoSQL Injection** - Verify database queries (N/A for Prisma + Postgres).
+6. **Clipboard Copy Attack (Pastejacking)** - Validate content when copying snippets/codes to clipboard.
+7. **Login Replay Attack** - Ensure state/nonce validation in OAuth or Magic Link flows.

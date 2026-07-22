@@ -37,7 +37,7 @@ export async function GET() {
     // Perform a lightweight liveness check
     await prisma.$queryRaw`SELECT 1`;
     status.database.connected = true;
-  } catch (error) {
+  } catch {
     status.database.connected = false;
   }
 
