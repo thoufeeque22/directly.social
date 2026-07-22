@@ -22,28 +22,20 @@ export async function POST(req: Request) {
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       include: {
-        referrals: {
-          include: { billingProfile: true }
-        },
+        referrals: { include: { billingProfile: true } },
         billingProfile: true
       }
     });
 
-    if (!user) {
-      return NextResponse.json({ error: 'user_not_found' }, { status: 404 });
-    }
+    if (!user) return NextResponse.json({ error: 'user_not_found' }, { status: 404 });
 
     // Verify 5 active referrals
-    let activePaidCount = 0;
-    for (const ref of user.referrals) {
-      if (ref.billingProfile?.subscriptionTier !== 'FREE_STARTER' && ref.billingProfile?.subscriptionStatus === 'ACTIVE') {
-        activePaidCount++;
-      }
-    }
+    const activePaidCount = user.referrals.filter(ref => 
+      ref.billingProfile?.subscriptionTier !== 'FREE_STARTER' && 
+      ref.billingProfile?.subscriptionStatus === 'ACTIVE'
+    ).length;
 
-    if (activePaidCount < 5) {
-      return NextResponse.json({ error: 'insufficient_referrals' }, { status: 403 });
-    }
+    if (activePaidCount < 5) return NextResponse.json({ error: 'insufficient_referrals' }, { status: 403 });
 
     const currentTier = user.billingProfile?.subscriptionTier || 'FREE_STARTER';
     
@@ -54,46 +46,30 @@ export async function POST(req: Request) {
 
     const customerId = user.billingProfile?.providerCustomerId;
 
-    if (choice === 'CLOUD_PRO') {
-      if (customerId) {
-        // If they have a Stripe subscription, apply 100% off coupon
-        const subscriptions = await stripe.subscriptions.list({ customer: customerId });
-        if (subscriptions.data.length > 0) {
-          await stripe.subscriptions.update(
-            subscriptions.data[0].id,
-            { discounts: [{ coupon: process.env.STRIPE_100_OFF_COUPON || '100_OFF' }] }
-          );
-        }
-      }
-      // Update local DB
-      await prisma.user.update({
-        where: { id: user.id },
-        data: {
-          lifetimeUnlock: true,
-          billingProfile: {
-            update: { subscriptionTier: 'CLOUD_PRO' }
-          }
-        }
-      });
-    } else if (choice === 'LIFETIME_DEAL') {
-      if (customerId) {
-        // Cancel existing stripe subscription
-        const subscriptions = await stripe.subscriptions.list({ customer: customerId });
+    if (customerId) {
+      const subscriptions = await stripe.subscriptions.list({ customer: customerId });
+      if (choice === 'CLOUD_PRO' && subscriptions.data.length > 0) {
+        await stripe.subscriptions.update(
+          subscriptions.data[0].id,
+          { discounts: [{ coupon: process.env.STRIPE_100_OFF_COUPON || '100_OFF' }] }
+        );
+      } else if (choice === 'LIFETIME_DEAL') {
         for (const sub of subscriptions.data) {
           await stripe.subscriptions.cancel(sub.id);
         }
       }
-      // Update local DB
-      await prisma.user.update({
-        where: { id: user.id },
-        data: {
-          lifetimeUnlock: true,
-          billingProfile: {
-            update: { subscriptionTier: 'LIFETIME_DEAL' }
-          }
-        }
-      });
     }
+
+    // Update local DB
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        lifetimeUnlock: true,
+        billingProfile: {
+          update: { subscriptionTier: choice }
+        }
+      }
+    });
 
     return NextResponse.json({ success: true, newTier: choice });
   } catch (error) {

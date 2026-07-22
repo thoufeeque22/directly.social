@@ -9,7 +9,7 @@ export const CookieContent = () => (
     <section>
       <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>1. Strictly Necessary Cookies</Typography>
       <Typography variant="body1" gutterBottom>
-        {BRAND.name} only uses cookies that are strictly necessary for the Service to function. We do not use any non-essential, tracking, or advertising cookies.
+        {BRAND.name} only uses cookies that are strictly necessary for the Service to function, along with a temporary tracking cookie for our referral program.
       </Typography>
     </section>
 
@@ -20,6 +20,7 @@ export const CookieContent = () => (
         <li><Typography variant="body1"><strong>Security & Fraud Prevention:</strong> To protect your data, secure payments, and prevent fraud (via Stripe).</Typography></li>
         <li><Typography variant="body1"><strong>Diagnostics:</strong> To monitor service health and track technical errors securely (via Sentry).</Typography></li>
         <li><Typography variant="body1"><strong>Preferences:</strong> To remember basic interface settings you have chosen.</Typography></li>
+        <li><Typography variant="body1"><strong>Referral Tracking:</strong> To attribute referrals, we store a temporary `referralCode` cookie for 30 days.</Typography></li>
       </ul>
     </section>
 
