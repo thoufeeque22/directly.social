@@ -15,8 +15,10 @@
   1. **Resolve Ticket ID:** The Orchestrator MUST parse the input prompt or request context to identify the correct Ticket/Issue ID. The Orchestrator is **STRICTLY FORBIDDEN** from guessing or hallucinating a random ticket ID. If no Ticket ID is explicitly found, the Orchestrator MUST search the GitHub repository or query the user to resolve it.
   2. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue` with the resolved Ticket ID).
   3. Check the current branch. If NOT on the target feature branch (`FEATURE_BRANCH_PATTERN`):
-     a. Switch to `MAIN_BRANCH` and pull latest (`git checkout main && git pull`).
-     b. Create the dedicated feature branch (`git checkout -b <FEATURE_BRANCH_PATTERN>`).
+     a. **Isolation Check:** Explicitly ask the user if they want a standard branch or an isolated Git Worktree (for parallel development).
+     b. Switch to `MAIN_BRANCH` and pull latest (`git checkout main && git pull`).
+     c. Create the dedicated feature branch (`git checkout -b <FEATURE_BRANCH_PATTERN>`) OR setup the worktree (`git worktree add ../<repo-name>-<id> -b <FEATURE_BRANCH_PATTERN>`).
+     d. If using a worktree, ensure the context shifts to that new directory.
   4. **MANDATORY:** Verify the branch exists and matches the full slug before proceeding.
   5. Create an initial phase Artifact using `write_to_file` in `ARTIFACT_DIR` containing the ticket ID, branch name, and current status.
   6. Skip if an Artifact for the ticket already exists in the current conversation.

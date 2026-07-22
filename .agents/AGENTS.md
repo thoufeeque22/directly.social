@@ -11,10 +11,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - **Phase Throttling (Human-in-the-Loop):** The Orchestrator MUST terminate its turn after calling exactly one sub-agent. NEVER chain sub-agents autonomously. ALL phase transitions (per `PHASE_ORDER` in [VARIABLES.md](base/VARIABLES.md)) MUST be approved by the user.
 - **Artifact-First Protocol (replaces State-First):** Before invoking any sub-agent or performing any action, the Orchestrator MUST create or update an Artifact using Agy's native `write_to_file` tool into `<appDataDir>/brain/<conversation-id>/`. Do NOT write state to `.agents/state/ticket-<id>/` — that path is obsolete.
 - **Ticket Initialization / Initialization Precedence:** Before starting work on a new ticket/task, strictly follow this orchestration:
-  1. Checkout main (`git checkout main`)
-  2. Pull latest changes (`git pull`)
-  3. Create a new branch for the ticket (`git checkout -b <branch_name>`)
-  4. Start working
+  1. **Isolation Check:** Explicitly ask the user if they prefer a standard branch or an isolated Git Worktree (for parallel development).
+  2. Checkout main (`git checkout main`)
+  3. Pull latest changes (`git pull`)
+  4. Create the standard branch (`git checkout -b <branch_name>`) OR setup the worktree (`git worktree add ../<repo-name>-<branch-name> -b <branch_name>`).
+  5. Start working in the appropriate directory.
   Every new ticket MUST also follow the workflow defined in [ORCHESTRATION.md](base/ORCHESTRATION.md).
 - **Explicit Commit Permission & Auto-Handoff:** AI agents MUST NOT commit changes without user permission, EXCEPT during phase handoffs. As defined in [ORCHESTRATION.md](base/ORCHESTRATION.md), the Orchestrator automatically checkpoints changes upon handoff approval.
 - **Strict Phase Guardrails (Test-Driven Transition):** The Orchestrator MUST NOT transition from the `Discovery` phase directly to the `Development` phase. Even when a technical blueprint is approved, the Orchestrator MUST force a stop to generate the automated E2E test scripts (`.spec.ts`) and manual test document in the `QA` phase FIRST. Writing application code (`src/`) before generating QA artifacts is a terminal violation.
