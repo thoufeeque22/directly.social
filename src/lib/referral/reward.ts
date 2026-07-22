@@ -2,24 +2,22 @@ import { prisma } from '@/lib/core/prisma';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_123', {
-  apiVersion: '2026-06-24.dahlia',
+  apiVersion: '2026-06-24.dahlia' as any,
 });
 
-export async function processReferralReward(referredUserEmail: string, eventId: string, paymentAmount?: number, currency?: string) {
+export async function processReferralReward(referredUserEmail: string, eventId: string) {
   try {
     await prisma.processedWebhook.create({
       data: { id: eventId, type: 'referral_reward' }
     });
-  } catch (error: unknown) {
-    if (typeof error === 'object' && error !== null && 'code' in error && (error as {code: string}).code === 'P2002') {
-      // Event already processed, ignore to prevent replay attack
-      return;
-    }
+  } catch (error: any) {
+    if (error?.code === 'P2002') return;
     throw error;
   }
 
   const user = await prisma.user.findUnique({
     where: { email: referredUserEmail },
+    include: { billingProfile: true }
   });
 
   if (!user || !user.referredById) return;
@@ -32,30 +30,56 @@ export async function processReferralReward(referredUserEmail: string, eventId: 
   if (!referrer) return;
 
   const referrerTier = referrer.billingProfile?.subscriptionTier || 'FREE_STARTER';
-  const customerId = referrer.billingProfile?.providerCustomerId;
+  const referrerCustomerId = referrer.billingProfile?.providerCustomerId;
+  const userCustomerId = user.billingProfile?.providerCustomerId;
+  const userSubId = user.billingProfile?.providerSubscriptionId;
+  const referrerSubId = referrer.billingProfile?.providerSubscriptionId;
 
-  // Reward Logic
+  const coupon = await stripe.coupons.create({
+    percent_off: 100,
+    duration: 'once',
+    name: 'Referral Free Month'
+  });
+
+  if (userSubId) {
+    await stripe.subscriptions.update(userSubId, { discounts: [{ coupon: coupon.id }] });
+  }
+
+  await prisma.notification.create({
+    data: {
+      userId: user.id,
+      type: 'SUCCESS',
+      message: 'Your 1 Free Month referral bonus has been applied to your subscription!'
+    }
+  });
+
+  await prisma.user.update({
+    where: { id: referrer.id },
+    data: { earnedFreeMonths: { increment: 1 } }
+  });
+
   if (referrerTier === 'LIFETIME_DEAL') {
     await prisma.user.update({
       where: { id: referrer.id },
       data: { aiCredits: { increment: 1000 } }
     });
-  } else if (referrerTier === 'FREE_STARTER') {
-    await prisma.user.update({
-      where: { id: referrer.id },
-      data: { extraPostsQuota: { increment: 1 } }
+    await prisma.notification.create({
+      data: {
+        userId: referrer.id,
+        type: 'SUCCESS',
+        message: 'Your friend upgraded! You earned 1000 AI Credits.'
+      }
     });
-  } else if (customerId && paymentAmount && currency) {
-    // Paid tiers with a customer ID
-    await stripe.customers.createBalanceTransaction(customerId, {
-      amount: -paymentAmount,
-      currency: currency,
-      description: `Referral Bonus`,
-    }, {
-      idempotencyKey: `reward_${eventId}`
+  } else {
+    if (referrerSubId) {
+      await stripe.subscriptions.update(referrerSubId, { discounts: [{ coupon: coupon.id }] });
+    }
+    await prisma.notification.create({
+      data: {
+        userId: referrer.id,
+        type: 'SUCCESS',
+        message: 'Your friend upgraded! You earned 1 Free Month on your subscription.'
+      }
     });
   }
-
-  // The UI will now explicitly prompt the user to claim their grand prize via POST /api/referral/redeem
-  // once activePaidCount reaches 5.
 }

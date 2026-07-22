@@ -6,33 +6,22 @@ import styles from './Login.module.css';
 import { Capacitor } from '@capacitor/core';
 import { Browser } from '@capacitor/browser';
 import { useSearchParams } from 'next/navigation';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import FacebookIcon from '@mui/icons-material/Facebook';
+import { APP_CONFIG } from '@/lib/core/config';
+import Alert from '@mui/material/Alert';
 import { NativeBridgeOverlay } from './NativeBridgeOverlay';
 import { UnifiedIdentityModal } from './UnifiedIdentityModal';
 import { E2ELoginForm } from './E2ELoginForm';
-import { BRAND } from '@/lib/core/brand';
-import { APP_CONFIG } from '@/lib/core/config';
-import { GoogleIcon } from '@/components/ui/icons/GoogleIcon';
-import { TiktokIcon } from '@/components/ui/icons/TiktokIcon';
-import Alert from '@mui/material/Alert';
+import { LoginButtons } from './LoginButtons';
+import { LoginHeader } from './LoginHeader';
+import { getErrorMessage } from './getErrorMessage';
 
 type AuthProvider = 'google' | 'facebook' | 'tiktok';
 
-export function LoginContent() {
+export function LoginContent({ referrerName }: { referrerName?: string | null }) {
   const [showWarning, setShowWarning] = useState(false);
   const [pendingProvider, setPendingProvider] = useState<AuthProvider | null>(null);
   const searchParams = useSearchParams();
-  const errorParam = searchParams.get('error');
-
-  let errorMessage = '';
-  if (errorParam === 'RateLimit' || errorParam === 'TooManyRequests') {
-    errorMessage = 'Too many requests. Please wait a moment and try again.';
-  } else if (errorParam === 'AccessDenied') {
-    errorMessage = 'Access denied. You do not have permission to log in.';
-  } else if (errorParam) {
-    errorMessage = 'An error occurred during authentication. Please try again.';
-  }
+  const errorMessage = getErrorMessage(searchParams.get('error'));
 
   useEffect(() => {
     const ref = searchParams.get('ref');
@@ -86,21 +75,18 @@ export function LoginContent() {
         />
       )}
       <div className={styles.loginCard} style={{ margin: '0 auto' }}>
-        <div className={styles.header}>
-          <div className={styles.logo}><AutoAwesomeIcon sx={{ fontSize: 48, color: 'hsl(var(--primary))' }} /></div>
-          <h1 className={styles.title}>{BRAND.name}</h1>
-          <p className={styles.subtitle}>Sign in to manage your automated distribution.</p>
-        </div>
+        <LoginHeader />
+        {referrerName && (
+          <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }} data-testid="referral-banner">
+            You've been gifted 1 Free Month upon upgrading by {referrerName}!
+          </Alert>
+        )}
         {errorMessage && (
           <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
             {errorMessage}
           </Alert>
         )}
-        <div className={styles.buttonGroup}>
-          <button onClick={() => handleLoginClick("google")} className={`${styles.loginBtn} ${styles.googleBtn}`}><span className={styles.btnIcon}><GoogleIcon /></span>Continue with Google</button>
-          <button onClick={() => handleLoginClick("facebook")} className={`${styles.loginBtn} ${styles.facebookBtn}`}><span className={styles.btnIcon}><FacebookIcon /></span>Continue with Facebook</button>
-          <button onClick={() => handleLoginClick("tiktok")} className={`${styles.loginBtn} ${styles.tiktokBtn}`}><span className={styles.btnIcon}><TiktokIcon /></span>Continue with TikTok</button>
-        </div>
+        <LoginButtons onLoginClick={handleLoginClick} />
         {/* E2E Bypass Form */}
         {process.env.NEXT_PUBLIC_E2E === 'true' && <E2ELoginForm />}
         <div className={styles.footer}>By continuing, you agree to our <br /> <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></div>

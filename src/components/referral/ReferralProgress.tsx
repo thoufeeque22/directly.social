@@ -2,6 +2,7 @@
 import React from 'react';
 import { Box, Typography, Stack, Paper, Button } from '@mui/material';
 import { ClaimPrizeModal } from './ClaimPrizeModal';
+import { ReferralStats } from './ReferralStats';
 
 interface Props {
   quotaRemaining: number;
@@ -11,36 +12,18 @@ interface Props {
   activeCount: number;
   progressPercent: number;
   isGrandPrize: boolean;
-  grandPrizeReward: string;
   progressDesc: string;
   hasClaimed?: boolean;
+  earnedFreeMonths: number;
 }
 
 export const ReferralProgress: React.FC<Props> = ({ 
-  quotaRemaining, aiCredits, isFree, isLifetime, activeCount, progressPercent, isGrandPrize, grandPrizeReward, progressDesc, hasClaimed 
+  quotaRemaining, aiCredits, isFree, isLifetime, activeCount, progressPercent, isGrandPrize, progressDesc, hasClaimed, earnedFreeMonths
 }) => {
   const [modalOpen, setModalOpen] = React.useState(false);
   return (
     <>
-      <Stack direction="row" spacing={2}>
-        <Paper variant="outlined" sx={{ flex: 1, p: 2, borderRadius: 2, textAlign: 'center', bgcolor: 'rgba(255,142,83,0.05)' }}>
-          <Typography variant="h3" color="#FF6B6B" data-testid="extra-posts-quota" sx={{ fontWeight: 800 }}>
-            +{isFree ? quotaRemaining : aiCredits}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
-            {isFree ? 'Extra Free Posts' : 'AI Credits Earned'}
-          </Typography>
-        </Paper>
-
-        <Paper variant="outlined" sx={{ flex: 1, p: 2, borderRadius: 2, textAlign: 'center', bgcolor: isGrandPrize ? 'rgba(76,175,80,0.1)' : 'background.default' }}>
-          <Typography variant="h6" color={isGrandPrize ? 'success.main' : 'text.primary'} data-testid="grand-prize-status" sx={{ mt: 1, fontWeight: 700 }}>
-            {isGrandPrize ? 'UNLOCKED' : 'LOCKED'}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" data-testid="grand-prize-reward" sx={{ fontWeight: 500 }}>
-            {grandPrizeReward}
-          </Typography>
-        </Paper>
-      </Stack>
+      <ReferralStats isFree={isFree} quotaRemaining={quotaRemaining} aiCredits={aiCredits} earnedFreeMonths={earnedFreeMonths} />
 
       <Box>
         {!hasClaimed && !isLifetime && (
