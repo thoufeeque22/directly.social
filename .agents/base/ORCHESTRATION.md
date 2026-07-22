@@ -16,9 +16,12 @@
   2. Fetch the ticket description (body) from GitHub (e.g., using `mcp_github_get_issue` with the resolved Ticket ID).
   3. Check the current branch. If NOT on the target feature branch (`FEATURE_BRANCH_PATTERN`):
      a. **Isolation Check:** Explicitly ask the user if they want a standard branch or an isolated Git Worktree (for parallel development).
-     b. Switch to `MAIN_BRANCH` and pull latest (`git checkout main && git pull`).
-     c. Create the dedicated feature branch (`git checkout -b <FEATURE_BRANCH_PATTERN>`) OR setup the worktree (`git worktree add ../<repo-name>-<id> -b <FEATURE_BRANCH_PATTERN>`).
-     d. If using a worktree, ensure the context shifts to that new directory.
+     b. **If Standard Branch:** Switch to `MAIN_BRANCH` and pull latest (`git checkout main && git pull`), then create the branch (`git checkout -b <FEATURE_BRANCH_PATTERN>`).
+     c. **If Isolated Worktree:** DO NOT switch branches in the current directory. Instead, fetch latest (`git fetch origin`) and create the worktree directly from origin/main (`git worktree add ../<repo-name>-<id> -b <FEATURE_BRANCH_PATTERN> origin/main`).
+     d. **If Isolated Worktree:** Automatically copy essential untracked files (e.g., `.env`) from the main repository to the new worktree directory so it functions immediately.
+     e. **If Isolated Worktree:** Automatically execute `pnpm install` in the new worktree directory to resolve dependencies.
+     f. **If Isolated Worktree:** Automatically start the development server (`pnpm dev`) as a background task in the new worktree.
+     g. If using a worktree, ensure the context shifts to that new directory.
   4. **MANDATORY:** Verify the branch exists and matches the full slug before proceeding.
   5. Create an initial phase Artifact using `write_to_file` in `ARTIFACT_DIR` containing the ticket ID, branch name, and current status.
   6. Skip if an Artifact for the ticket already exists in the current conversation.
@@ -146,12 +149,13 @@ Required fields in every Artifact:
 - **Resolution**: The **Project Agent** is responsible for processing this file.
 
 ## Human-Centric Closure
-- **Role**: User (Human).
-- **Mandate**: The user performs the final project synchronization and PR creation.
+- **Role**: User (Human) or Orchestrator.
+- **Mandate**: Final synchronization, PR creation, and environment cleanup.
 - **Steps**:
   1. Final review of the phase Artifacts in the Agy Artifact panel.
   2. `git push origin <FEATURE_BRANCH_PATTERN>`.
   3. `gh pr create --title "..." --body "..."`.
+  4. **Cleanup:** If an isolated Git Worktree was used, the Orchestrator or User MUST clean it up once the PR is merged by removing the directory (`rm -rf ../<repo-name>-<id>`) and pruning the git index (`git worktree prune`).
 
 
 ## Routing & Pipelines
