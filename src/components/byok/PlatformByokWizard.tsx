@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 'use client';
 
-import { useState } from 'react';
 import { 
   Box, 
   TextField, 
@@ -13,47 +12,21 @@ import {
   Stack
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { ByokCredential } from '../../lib/byok/credential-validator';
 import { SettingsWizardCard } from '../settings/SettingsWizardCard';
-import { validateAndSaveByokAction } from '../../app/actions/byok';
 import { BRAND } from '@/lib/core/brand';
 import { getPortalDetails } from './portal-details';
+
+import { useByokWizard } from './PlatformByokWizard.utils';
 
 interface PlatformByokWizardProps {
   platform: string;
 }
 
 export const PlatformByokWizard = ({ platform }: PlatformByokWizardProps) => {
-  const [credentials, setCredentials] = useState<ByokCredential>({ 
-    clientId: '', 
-    clientSecret: '', 
-    redirectUri: '' 
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
+  const { credentials, setCredentials, loading, error, success, handleSave } = useByokWizard(platform);
 
   const portal = getPortalDetails(platform);
   const displayName = platform.charAt(0).toUpperCase() + platform.slice(1);
-
-  const handleSave = async () => {
-    setLoading(true);
-    setError('');
-    setSuccess(false);
-    
-    try {
-      const result = await validateAndSaveByokAction({ platform, ...credentials });
-      if (result.success) {
-        setSuccess(true);
-      } else {
-        setError(result.error || 'Validation failed.');
-      }
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <SettingsWizardCard
@@ -118,19 +91,21 @@ export const PlatformByokWizard = ({ platform }: PlatformByokWizardProps) => {
           </Stack>
         </Box>
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }} data-testid="error-message">
-            <AlertTitle>Validation Failed</AlertTitle>
-            {error}
-          </Alert>
-        )}
+        <Box sx={{ minHeight: 80, mb: 3 }}>
+          {error && (
+            <Alert severity="error" sx={{ borderRadius: 2 }} data-testid="error-message">
+              <AlertTitle>Validation Failed</AlertTitle>
+              {error}
+            </Alert>
+          )}
 
-        {success && (
-          <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }} data-testid="success-message">
-            <AlertTitle>Connection Successful</AlertTitle>
-            Your {displayName} BYOK credentials have been saved securely.
-          </Alert>
-        )}
+          {success && (
+            <Alert severity="success" sx={{ borderRadius: 2 }} data-testid="success-message">
+              <AlertTitle>Connection Successful</AlertTitle>
+              Your {displayName} BYOK credentials have been saved securely.
+            </Alert>
+          )}
+        </Box>
 
         <Button 
           fullWidth

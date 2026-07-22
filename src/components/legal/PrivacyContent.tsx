@@ -69,6 +69,9 @@ export const PrivacyContent = () => (
         <Typography variant="body1" gutterBottom>
           We use TikTok for Developers APIs to facilitate video posting and account management. We adhere to TikTok&apos;s Developer Terms.
         </Typography>
+        <Typography variant="body1" gutterBottom>
+          <strong>Data Deletion:</strong> You can request the deletion of your TikTok data from our servers at any time by disconnecting your TikTok account in the Integrations settings. Alternatively, you may revoke our application&apos;s access directly from your TikTok account&apos;s security settings. When we receive a revocation or data deletion webhook from TikTok, we immediately and permanently delete all your associated TikTok account data and credentials from our systems.
+        </Typography>
       </Box>
       <Box sx={{ ml: 2, mb: 2 }}>
         <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Meta (Facebook/Instagram) API</Typography>

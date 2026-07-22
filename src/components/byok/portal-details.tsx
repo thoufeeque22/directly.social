@@ -1,6 +1,7 @@
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
 
 export const getPortalDetails = (platform: string) => {
   switch (platform.toLowerCase()) {
@@ -21,6 +22,12 @@ export const getPortalDetails = (platform: string) => {
         url: 'https://developers.facebook.com/',
         icon: <InstagramIcon sx={{ color: '#E4405F' }} />,
         instruction: 'Enable Instagram Graph API in your Meta Developer App settings.'
+      };
+    case 'tiktok':
+      return {
+        url: 'https://developers.tiktok.com/',
+        icon: <MusicNoteIcon sx={{ color: '#000000' }} />,
+        instruction: 'Create an app in the TikTok Developer Portal and enable the Content Posting API.'
       };
     default:
       return {

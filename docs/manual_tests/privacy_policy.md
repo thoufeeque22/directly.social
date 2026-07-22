@@ -18,3 +18,10 @@
    - A statement explicitly prohibiting the use of data for targeted advertising or selling to third parties.
    - A statement explicitly prohibiting the use of Google user data to train generalized AI/ML models.
    - The exact "Limited Use Compliance Statement": "The use of raw or derived user data received from Workspace APIs will adhere to the Google User Data Policy, including the Limited Use requirements."
+
+## Scenario 2: Verify TikTok API Services Data Deletion Section
+1. Navigate to `http://localhost:3000/privacy`.
+2. Scroll to the "TikTok API" section.
+3. **Expected**: The following disclosures are explicitly present:
+   - What data is accessed.
+   - The Data Deletion policy explicitly outlining revocation and data deletion webhooks.
