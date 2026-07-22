@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 'use client';
 
-import { useState } from 'react';
 import { 
   Box, 
   TextField, 
@@ -13,85 +12,21 @@ import {
   Stack
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import { ByokCredential } from '../../lib/byok/credential-validator';
 import { SettingsWizardCard } from '../settings/SettingsWizardCard';
-import { validateAndSaveByokAction } from '../../app/actions/byok';
 import { BRAND } from '@/lib/core/brand';
+import { getPortalDetails } from './portal-details';
+
+import { useByokWizard } from './PlatformByokWizard.utils';
 
 interface PlatformByokWizardProps {
   platform: string;
 }
 
 export const PlatformByokWizard = ({ platform }: PlatformByokWizardProps) => {
-  const [credentials, setCredentials] = useState<ByokCredential>({ 
-    clientId: '', 
-    clientSecret: '', 
-    redirectUri: '' 
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-
-  const getPortalDetails = (platform: string) => {
-    switch (platform.toLowerCase()) {
-      case 'youtube':
-        return {
-          url: 'https://console.cloud.google.com/',
-          icon: <YouTubeIcon sx={{ color: '#FF0000' }} />,
-          instruction: 'Create a project in Google Cloud Console and enable the YouTube Data API v3.'
-        };
-      case 'tiktok':
-        return {
-          url: 'https://developers.tiktok.com/console',
-          icon: <MusicNoteIcon sx={{ color: '#000000' }} />,
-          instruction: 'Register as a developer on TikTok for Developers and create a new App.'
-        };
-      case 'facebook':
-        return {
-          url: 'https://developers.facebook.com/',
-          icon: <FacebookIcon sx={{ color: '#1877F2' }} />,
-          instruction: 'Create a Meta App and configure the Graph API with appropriate permissions.'
-        };
-      case 'instagram':
-        return {
-          url: 'https://developers.facebook.com/',
-          icon: <InstagramIcon sx={{ color: '#E4405F' }} />,
-          instruction: 'Enable Instagram Graph API in your Meta Developer App settings.'
-        };
-      default:
-        return {
-          url: '#',
-          icon: null,
-          instruction: `Generate credentials in the ${platform} developer portal.`
-        };
-    }
-  };
+  const { credentials, setCredentials, loading, error, success, handleSave } = useByokWizard(platform);
 
   const portal = getPortalDetails(platform);
   const displayName = platform.charAt(0).toUpperCase() + platform.slice(1);
-
-  const handleSave = async () => {
-    setLoading(true);
-    setError('');
-    setSuccess(false);
-    
-    try {
-      const result = await validateAndSaveByokAction({ platform, ...credentials });
-      if (result.success) {
-        setSuccess(true);
-      } else {
-        setError(result.error || 'Validation failed.');
-      }
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <SettingsWizardCard
@@ -156,19 +91,21 @@ export const PlatformByokWizard = ({ platform }: PlatformByokWizardProps) => {
           </Stack>
         </Box>
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }} data-testid="error-message">
-            <AlertTitle>Validation Failed</AlertTitle>
-            {error}
-          </Alert>
-        )}
+        <Box sx={{ minHeight: 80, mb: 3 }}>
+          {error && (
+            <Alert severity="error" sx={{ borderRadius: 2 }} data-testid="error-message">
+              <AlertTitle>Validation Failed</AlertTitle>
+              {error}
+            </Alert>
+          )}
 
-        {success && (
-          <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }} data-testid="success-message">
-            <AlertTitle>Connection Successful</AlertTitle>
-            Your {displayName} BYOK credentials have been saved securely.
-          </Alert>
-        )}
+          {success && (
+            <Alert severity="success" sx={{ borderRadius: 2 }} data-testid="success-message">
+              <AlertTitle>Connection Successful</AlertTitle>
+              Your {displayName} BYOK credentials have been saved securely.
+            </Alert>
+          )}
+        </Box>
 
         <Button 
           fullWidth

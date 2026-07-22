@@ -25,7 +25,7 @@ export class TikTokActivity implements PlatformActivity {
       account.access_token!, 
       fileSize, 
       params.title || params.description || "", 
-      "SELF_ONLY" // Default to self-only for safety
+      params.privacyLevel || "PUBLIC"
     );
 
     return { creationId: publish_id, resumableUrl: upload_url };
