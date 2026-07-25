@@ -314,6 +314,7 @@ enum SubscriptionTier {
   CLOUD_PRO
   AGENCY_PRO
   LIFETIME_DEAL
+  FIVE_YEAR_DEAL
 }
 
 enum SubscriptionStatus {

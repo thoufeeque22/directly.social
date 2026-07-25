@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { SubscriptionService } from '@/lib/billing/subscription-service';
 
 const checkoutRequestSchema = z.object({
-  tierId: z.enum(['free-starter', 'free-hacker', 'power-pass', 'creator-pro', 'cloud-pro', 'agency-pro', 'lifetime-deal']),
+  tierId: z.enum(['free-starter', 'free-hacker', 'power-pass', 'creator-pro', 'cloud-pro', 'agency-pro', 'lifetime-deal', '5-year-deal']),
 });
 
 export async function POST(req: Request) {

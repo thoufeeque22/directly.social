@@ -3,7 +3,7 @@ export const PLATFORMS = [
   { id: 'instagram', provider: 'facebook', name: 'Instagram Reels', icon: 'instagram', color: '#E4405F', status: 'active' },
   { id: 'tiktok', provider: 'tiktok', name: 'TikTok', icon: 'tiktok', color: '#000000', status: 'active' },
   { id: 'facebook', provider: 'facebook', name: 'Facebook', icon: 'facebook', color: '#1877F2', status: 'active' },
-  { id: 'linkedin', provider: 'linkedin', name: 'LinkedIn', icon: 'linkedin', color: '#0A66C2', status: 'coming-soon' },
+  { id: 'linkedin', provider: 'linkedin', name: 'LinkedIn', icon: 'linkedin', color: '#0A66C2', status: 'active' },
   { id: 'twitter', provider: 'twitter', name: 'Twitter/X', icon: 'twitter', color: '#000000', status: 'coming-soon' },
   { id: 'pinterest', provider: 'pinterest', name: 'Pinterest', icon: 'pinterest', color: '#E60023', status: 'coming-soon' },
   { id: 'threads', provider: 'threads', name: 'Threads', icon: 'threads', color: '#000000', status: 'coming-soon' },
@@ -39,5 +39,6 @@ export const PLATFORM_LIMITS: Record<string, { title?: number; description: numb
   instagram: { title: 100, description: 2200 },
   tiktok: { title: 100, description: 4000 },
   facebook: { title: 100, description: 5000 },
+  linkedin: { title: 100, description: 3000 },
   default: { title: 100, description: 2000 },
 };

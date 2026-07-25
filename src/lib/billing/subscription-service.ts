@@ -5,7 +5,10 @@ import { stripe } from '@/lib/stripe/client';
 export class SubscriptionService {
   static async createCheckoutSession(userId: string, userEmail: string, tierId: string) {
     // Configuration mapping
-    const envKey = `STRIPE_PRICE_ID_${tierId.replace('-', '_').toUpperCase()}`;
+    let envKey = `STRIPE_PRICE_ID_${tierId.replace(/-/g, '_').toUpperCase()}`;
+    if (tierId === '5-year-deal') {
+      envKey = 'STRIPE_PRICE_ID_LIFETIME_DEAL';
+    }
     const priceId = process.env[envKey];
     if (!priceId) {
       throw new Error(`Invalid tier configuration for ${tierId}`);
@@ -35,7 +38,7 @@ export class SubscriptionService {
       customer: billingProfile.providerCustomerId,
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
-      mode: tierId === 'lifetime-deal' ? 'payment' : 'subscription',
+      mode: (tierId === 'lifetime-deal' || tierId === '5-year-deal') ? 'payment' : 'subscription',
       success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/settings?tab=account&success=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/pricing?canceled=true`,
       metadata: { userId, tierId },
