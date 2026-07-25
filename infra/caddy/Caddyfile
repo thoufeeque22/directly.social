@@ -1,4 +1,14 @@
-directly-social.duckdns.org {
-    encode zstd gzip
+# Production Environment
+directly.social {
     reverse_proxy localhost:3000
+}
+
+# Staging Environment — Basic Auth protected
+# Generate hash: caddy hash-password --plaintext "your-password"
+staging.directly.social {
+    basicauth {
+        # Update credentials on the VPS directly — do NOT commit real hashes
+        # thoufeeque <bcrypt-hash>
+    }
+    reverse_proxy localhost:3001
 }
