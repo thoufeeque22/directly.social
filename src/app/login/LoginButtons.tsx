@@ -1,0 +1,23 @@
+import React from 'react';
+import styles from './Login.module.css';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import { GoogleIcon } from '@/components/ui/icons/GoogleIcon';
+import { TiktokIcon } from '@/components/ui/icons/TiktokIcon';
+
+type AuthProvider = 'google' | 'facebook' | 'tiktok';
+
+export function LoginButtons({ onLoginClick }: { onLoginClick: (provider: AuthProvider) => void }) {
+  return (
+    <div className={styles.buttonGroup}>
+      <button onClick={() => onLoginClick("google")} className={`${styles.loginBtn} ${styles.googleBtn}`}>
+        <span className={styles.btnIcon}><GoogleIcon /></span>Continue with Google
+      </button>
+      <button onClick={() => onLoginClick("facebook")} className={`${styles.loginBtn} ${styles.facebookBtn}`}>
+        <span className={styles.btnIcon}><FacebookIcon /></span>Continue with Facebook
+      </button>
+      <button onClick={() => onLoginClick("tiktok")} className={`${styles.loginBtn} ${styles.tiktokBtn}`}>
+        <span className={styles.btnIcon}><TiktokIcon /></span>Continue with TikTok
+      </button>
+    </div>
+  );
+}

@@ -14,7 +14,7 @@ describe('LoginPage', () => {
   });
 
   it('renders the login page with all social options', () => {
-    render(<LoginPage />);
+    render(<LoginPage searchParams={Promise.resolve({})} />);
     
     expect(screen.getByText('directly.social')).toBeInTheDocument();
     expect(screen.getByText('Continue with Google')).toBeInTheDocument();
@@ -23,7 +23,7 @@ describe('LoginPage', () => {
   });
 
   it('triggers Google sign-in immediately without showing the warning modal', () => {
-    render(<LoginPage />);
+    render(<LoginPage searchParams={Promise.resolve({})} />);
     
     const googleBtn = screen.getByText('Continue with Google');
     fireEvent.click(googleBtn);
@@ -36,7 +36,7 @@ describe('LoginPage', () => {
   });
 
   it('intercepts TikTok login and shows the warning modal', () => {
-    render(<LoginPage />);
+    render(<LoginPage searchParams={Promise.resolve({})} />);
     
     const tiktokBtn = screen.getByText('Continue with TikTok');
     fireEvent.click(tiktokBtn);
@@ -50,7 +50,7 @@ describe('LoginPage', () => {
   });
 
   it('allows user to bypass the warning and continue with TikTok', () => {
-    render(<LoginPage />);
+    render(<LoginPage searchParams={Promise.resolve({})} />);
     
     // 1. Trigger warning
     fireEvent.click(screen.getByText('Continue with TikTok'));
@@ -67,7 +67,7 @@ describe('LoginPage', () => {
   });
 
   it('allows user to go back to Google from the warning modal', () => {
-    render(<LoginPage />);
+    render(<LoginPage searchParams={Promise.resolve({})} />);
     
     // 1. Trigger warning via Facebook
     fireEvent.click(screen.getByText('Continue with Facebook'));
@@ -85,7 +85,7 @@ describe('LoginPage', () => {
   });
 
   it('closes the modal when clicking the close button', () => {
-    render(<LoginPage />);
+    render(<LoginPage searchParams={Promise.resolve({})} />);
     
     // 1. Trigger warning
     fireEvent.click(screen.getByText('Continue with TikTok'));

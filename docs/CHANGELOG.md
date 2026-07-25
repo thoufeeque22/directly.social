@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- **Symmetric Referral Rewards**: Upgraded the Referral Bonus Program to a "Give a Month, Get a Month" dual-sided growth loop. Referrers and referred users now both earn tiered rewards (post quotas, AI credits, or free Pro months) upon qualified sign-ups and purchases.
 - **Referral Redemption Flow**: Replaced automatic lifetime unlocking with an explicit redemption UI and `/api/referral/redeem` API, allowing users to actively claim their Grand Prize and choose between Free Cloud Pro or Lifetime BYOK when they hit 5 active paid referrals.
 - **Stripe Customer Portal**: Pro and paid tier users can now manage their subscriptions directly from the settings page.
 - **Freemium Guard**: Free tier users are now restricted to 10 video uploads per month.

@@ -232,7 +232,9 @@ model User {
   referrals            User[]               @relation("UserReferrals")
   extraPostsQuota      Int                  @default(0)
   lifetimeUnlock       Boolean              @default(false)
+  earnedFreeMonths     Int                  @default(0)
   referralRewardClaimed Boolean              @default(false)
+  purchaseRewardClaimed Boolean              @default(false)
   billingProfile        BillingProfile?
   accounts              Account[]
   byokCredentials       ByokCredential[]
