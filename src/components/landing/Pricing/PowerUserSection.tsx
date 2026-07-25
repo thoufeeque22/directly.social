@@ -1,11 +1,26 @@
-import React from 'react';
-import { Box, Typography, Grid, Paper, Stack, Button, CircularProgress } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, Grid, Paper, Stack, Button, CircularProgress, Chip } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import { useCheckout } from './useCheckout';
 import { PricingTier } from './PricingCard';
+import { getLifetimeLicensesLeft } from '@/app/actions/pricing';
 
 export const PowerUserSection = ({ lifetimeTier, hackerTier }: { lifetimeTier: PricingTier | undefined; hackerTier: PricingTier | undefined }) => {
   const { handleCheckout, isLoading } = useCheckout();
+  const [licensesLeft, setLicensesLeft] = useState<number | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    fetch('/api/pricing/lifetime-cap')
+      .then(r => r.json())
+      .then(data => {
+        if (mounted && typeof data.count === 'number') {
+          setLicensesLeft(data.count);
+        }
+      })
+      .catch(console.error);
+    return () => { mounted = false; };
+  }, []);
 
   return (
     <Box sx={{ mb: 10 }}>
@@ -23,8 +38,21 @@ export const PowerUserSection = ({ lifetimeTier, hackerTier }: { lifetimeTier: P
               <Typography variant="h5" sx={{ fontWeight: 800 }}>{lifetimeTier.name}</Typography>
               <Stack direction="row" spacing={2} sx={{ my: 2, alignItems: 'baseline' }}>
                 <Typography variant="h3" sx={{ fontWeight: 800 }}>{lifetimeTier.price}</Typography>
-                <Typography variant="h5" color="text.disabled" sx={{ textDecoration: 'line-through', fontWeight: 600 }}>$299</Typography>
+                <Typography variant="h5" color="text.disabled" sx={{ textDecoration: 'line-through', fontWeight: 600 }}>Actual price: $299</Typography>
               </Stack>
+              {licensesLeft !== null && (
+                <Box sx={{ mb: 2 }}>
+                  <Chip
+                    label={licensesLeft > 0 ? `🔥 Only ${licensesLeft} licenses left` : 'Sold Out'}
+                    color={licensesLeft > 0 ? 'warning' : 'default'}
+                    size="small"
+                    sx={{ fontWeight: 'bold' }}
+                  />
+                  <Typography variant="body2" color="error.main" sx={{ mt: 1, fontWeight: 600 }}>
+                    Once sold out, the $89 deal will only cover a 5-year license instead of a Lifetime license.
+                  </Typography>
+                </Box>
+              )}
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>{lifetimeTier.description}</Typography>
               
               <Stack spacing={1.5} sx={{ mb: 4, flexGrow: 1 }}>
@@ -40,11 +68,11 @@ export const PowerUserSection = ({ lifetimeTier, hackerTier }: { lifetimeTier: P
                 color="primary" 
                 size="large" 
                 onClick={() => handleCheckout(lifetimeTier.id || '')}
-                disabled={isLoading === lifetimeTier.id}
+                disabled={isLoading === lifetimeTier.id || licensesLeft === 0}
                 fullWidth
                 sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 700 }}
               >
-                {isLoading === lifetimeTier.id ? <CircularProgress size={24} color="inherit" /> : lifetimeTier.cta}
+                {isLoading === lifetimeTier.id ? <CircularProgress size={24} color="inherit" /> : (licensesLeft === 0 ? "Sold Out" : lifetimeTier.cta)}
               </Button>
             </Paper>
           </Grid>

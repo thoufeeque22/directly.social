@@ -28,6 +28,19 @@ export async function POST(req: Request) {
 
     const { tierId } = validation.data;
 
+    if (tierId === 'lifetime-deal') {
+      const { prisma } = await import('@/lib/core/prisma');
+      const count = await prisma.billingProfile.count({
+        where: {
+          subscriptionTier: 'LIFETIME_DEAL',
+        },
+      });
+      const maxCap = process.env.LIFETIME_CAP ? parseInt(process.env.LIFETIME_CAP, 10) : 15;
+      if (maxCap - count <= 0) {
+        return NextResponse.json({ error: 'Sold Out' }, { status: 400 });
+      }
+    }
+
     const url = await SubscriptionService.createCheckoutSession(session.user.id, session.user.email || '', tierId);
 
     return NextResponse.json({ url });
