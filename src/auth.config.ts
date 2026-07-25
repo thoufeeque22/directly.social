@@ -5,7 +5,6 @@ import Google from "next-auth/providers/google";
 import TikTok from "next-auth/providers/tiktok";
 import LinkedIn from "next-auth/providers/linkedin";
 import type { User } from "next-auth";
-import { prisma } from "@/lib/core/prisma";
 
 const isVercelProduction = process.env.NEXT_PUBLIC_SITE_URL === 'https://directly.social';
 const cookieDomain = isVercelProduction ? ".directly.social" : undefined;
@@ -107,17 +106,8 @@ export default {
         token.aiCredits = (user as User).aiCredits;
       }
       
-      // Handle session updates securely
-      if (trigger === "update" && token.id) {
-        try {
-          const freshUser = await prisma.user.findUnique({ where: { id: token.id as string } });
-          if (freshUser) {
-            token.aiCredits = freshUser.aiCredits;
-          }
-        } catch (e) {
-          console.error("Failed to fetch fresh user data during session update", e);
-        }
-      }
+      // Note: We removed the Prisma fetch here because auth.config.ts runs in Edge runtime.
+      // Database lookups during session update are now handled securely in src/auth.ts
       
       return token;
     },
