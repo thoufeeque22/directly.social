@@ -1,6 +1,8 @@
 import { test, expect } from './base-test';
 
 test.describe('Technical SEO - Advanced (Ticket 687)', () => {
+  test.use({ baseURL: 'http://localhost:3000' });
+  
   test('robots.txt contains correct directives', async ({ request }) => {
     const response = await request.get('/robots.txt');
     expect(response.status()).toBe(200);

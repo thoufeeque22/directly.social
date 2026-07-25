@@ -1,67 +1,65 @@
 import { NextResponse } from 'next/server';
 import NextAuth from 'next-auth';
 import authConfig from '@/auth.config';
+import { applyRateLimit } from '@/lib/core/rate-limit-middleware';
 
 const { auth } = NextAuth(authConfig);
-import { shouldBypassRateLimit } from '@/lib/core/bypass-utils';
-import { getLimiterForPath } from '@/lib/core/rate-limit-registry';
 
 /**
- * Unified Middleware for Authentication and Rate Limiting.
+ * Unified Middleware for Authentication, Rate Limiting, and Routing.
  * (Next.js only supports one middleware file).
  */
 export default auth(async (req) => {
-  const pathname = req.nextUrl.pathname;
-
+  const url = req.nextUrl;
+  const pathname = url.pathname;
+  const hostname = req.headers.get("host") || "";
 
   // 1. Rate Limiting for API routes
-  if (pathname.startsWith('/api')) {
-    // (OO-002): Centralized bypass logic
-    if (shouldBypassRateLimit() || process.env.NEXT_PUBLIC_E2E === 'true' || process.env.NODE_ENV !== 'production' || !process.env.UPSTASH_REDIS_REST_URL) {
-      return NextResponse.next();
-    }
+  const rateLimitResponse = await applyRateLimit(req, pathname, req.auth?.user?.id);
+  if (rateLimitResponse) return rateLimitResponse;
 
-    try {
-      const userId = req.auth?.user?.id;
-      // Use a safer access pattern for IP to satisfy the compiler and handle Vercel routing
-      const forwardedFor = req.headers.get('x-forwarded-for');
-      const realIp = req.headers.get('x-real-ip');
-      const ip = (req as Request & { ip?: string }).ip ?? forwardedFor?.split(',')[0] ?? realIp ?? '127.0.0.1';
+  // 2. Exclude common static/api paths from rewrites
+  if (
+    url.pathname.startsWith("/api") ||
+    url.pathname.startsWith("/_next") ||
+    url.pathname.startsWith("/static") ||
+    url.pathname.startsWith("/login") ||
+    url.pathname.startsWith("/auth") ||
+    url.pathname.startsWith("/monitoring")
+  ) {
+    return NextResponse.next();
+  }
 
-      // (CA-003): Use registry to find appropriate limiter
-      const { limiter, useIpOnly, getDynamicIdentifier } = getLimiterForPath(pathname);
-      let identifier = useIpOnly ? ip : (userId ?? ip);
-      if (getDynamicIdentifier) {
-        identifier = getDynamicIdentifier(pathname, identifier);
-      }
+  // 3. Subdomain detection
+  const isApp = hostname.startsWith("app.") || hostname.startsWith("staging.app.");
+  const isMarketing = !isApp;
+  
+  // Vercel Preview Deployments handling
+  const isVercelPreview = hostname.endsWith('.vercel.app');
 
-      const limitResult = await limiter.limit(identifier);
+  // 4. CTA Routing
+  if ((isMarketing || (isVercelPreview && url.searchParams.get('site') === 'marketing')) && url.pathname === "/signup") {
+     return NextResponse.redirect(new URL("https://app.directly.social/login", req.url));
+  }
 
-      if (!limitResult.success) {
-        // Handle browser navigation requests gracefully (e.g., OAuth callbacks)
-        if (req.headers.get('accept')?.includes('text/html')) {
-          const redirectUrl = new URL('/login?error=RateLimit', req.url);
-          return NextResponse.redirect(redirectUrl);
-        }
+  // 5. Rewrite rules to respective folders
+  
+  // Guard against infinite rewrite loops (prevents HTTP 431)
+  if (url.pathname.startsWith('/app/') || url.pathname === '/app' || 
+      url.pathname.startsWith('/marketing/') || url.pathname === '/marketing') {
+    return NextResponse.next();
+  }
 
-        return new NextResponse(
-          JSON.stringify({
-            error: 'Too Many Requests',
-            message: 'Rate limit exceeded. Please try again later.',
-          }),
-          {
-            status: 429,
-            headers: {
-              'Content-Type': 'application/json',
-              'Retry-After': limitResult.reset.toString(),
-            },
-          }
-        );
-      }
-    } catch (error) {
-      // Fail-open: ensure API remains accessible if Redis/Ratelimit fails
-      console.error('Rate limiting middleware error:', error);
-    }
+  if (isApp || (isVercelPreview && url.searchParams.get('site') !== 'marketing')) {
+    const rewriteUrl = req.nextUrl.clone();
+    rewriteUrl.pathname = url.pathname === '/' ? '/app' : `/app${url.pathname}`;
+    return NextResponse.rewrite(rewriteUrl);
+  }
+
+  if (isMarketing || (isVercelPreview && url.searchParams.get('site') === 'marketing')) {
+    const rewriteUrl = req.nextUrl.clone();
+    rewriteUrl.pathname = url.pathname === '/' ? '/marketing' : `/marketing${url.pathname}`;
+    return NextResponse.rewrite(rewriteUrl);
   }
 
   // Continue to next middleware or route handler

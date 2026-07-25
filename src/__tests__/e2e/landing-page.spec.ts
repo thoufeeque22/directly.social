@@ -1,8 +1,8 @@
 import { test, expect } from './base-test';
 
 test.describe('Landing Page', () => {
-  // Ensure we start unauthenticated to see the landing page
-  test.use({ authRole: 'none' });
+  // Override global app.localhost:3000 to test the marketing site
+  test.use({ baseURL: 'http://localhost:3000', authRole: 'none' });
 
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();

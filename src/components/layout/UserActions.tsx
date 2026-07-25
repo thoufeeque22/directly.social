@@ -84,7 +84,7 @@ export function UserActions({ session, tierName }: { session: Session | null, ti
                 await m.logOutAction();
                 // Small delay to ensure session cookie is cleared before navigating
                 await new Promise(resolve => setTimeout(resolve, 300));
-                window.location.href = '/?loggedOut=true';
+                window.location.href = '/login?loggedOut=true';
               }} 
               data-testid="sign-out-button"
             >

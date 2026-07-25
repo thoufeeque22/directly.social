@@ -13,7 +13,7 @@ export default defineConfig({
   reporter: [['html', { open: 'never' }]],
   snapshotDir: 'docs/visual/goldens',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://app.localhost:3000',
     trace: 'on-first-retry',
     screenshot: { mode: 'only-on-failure', fullPage: true },
     launchOptions: {

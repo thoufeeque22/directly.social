@@ -40,11 +40,7 @@ describe('InstagramActivity', () => {
   it('init calls createContainer', async () => {
     const res = await activity.init({
       ...baseParams,
-      title: 'T',
-      description: 'D',
-      videoFormat: 'short',
-      filePath: '/path',
-      storage: mockStorage
+      content: { title: 'T', description: 'D', videoFormat: 'short', filePath: '/path', storage: mockStorage }
     });
     expect(mockClient.getAccount).toHaveBeenCalledWith('u1', 'acc1');
     expect(mockClient.createContainer).toHaveBeenCalledWith('ig-123', 'token-123', 'D');
@@ -55,11 +51,7 @@ describe('InstagramActivity', () => {
     const onProgress = vi.fn();
     const res = await activity.push({
       ...baseParams,
-      title: 'T',
-      description: 'D',
-      videoFormat: 'short',
-      filePath: '/path',
-      storage: mockStorage,
+      content: { title: 'T', description: 'D', videoFormat: 'short', filePath: '/path', storage: mockStorage },
       creationId: 'container-123',
       onProgress
     });

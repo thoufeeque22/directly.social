@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Public Layout & Consolidate Routes', () => {
+  test.use({ baseURL: 'http://localhost:3000' });
+
   test('landing page shows landing header and footer', async ({ page }) => {
     await page.goto('/');
     

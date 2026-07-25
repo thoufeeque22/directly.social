@@ -2,13 +2,13 @@ import { describe, it, expect, vi, beforeEach, Mocked, Mock } from 'vitest';
 import { videoPublishingHandler } from '@/lib/inngest/functions/video-publishing';
 import { getPlatformActivity } from '@/lib/platforms/factory';
 import { getRepository, getStorage } from '@/lib/infrastructure';
-import { PlatformActivity, PublishingRepository, StorageProvider, PushParams } from '@/lib/platforms/types';
+import { PollableActivity, PublishingRepository, StorageProvider, PushParams } from '@/lib/platforms/types';
 
 vi.mock('@/lib/platforms/factory');
 vi.mock('@/lib/infrastructure');
 
 describe('videoPublishingHandler', () => {
-  let mockActivity: Mocked<PlatformActivity>;
+  let mockActivity: Mocked<PollableActivity>;
   let mockRepository: Mocked<PublishingRepository>;
   let mockStorage: Mocked<StorageProvider>;
   let mockStep: { run: Mock };
@@ -22,7 +22,7 @@ describe('videoPublishingHandler', () => {
       push: vi.fn().mockResolvedValue({ platformPostId: 'post1' }),
       poll: vi.fn(),
       finalize: vi.fn().mockResolvedValue({ id: 'f1', permalink: 'p1' }),
-    } as unknown as Mocked<PlatformActivity>;
+    } as unknown as Mocked<PollableActivity>;
 
     mockRepository = {
       fetchState: vi.fn(),

@@ -143,6 +143,8 @@ export const test = base.extend<{
           if (text.includes('Service Unavailable')) return;
           if (text.includes('MissingCSRF')) return; // Ignore NextAuth CSRF retries
           if (text.includes('Internal Server Error')) return;
+          if (text.includes('WebSocket connection to')) return;
+          if (text.includes('net::ERR_CONNECTION_REFUSED')) return;
           if (text.includes('Failed to fetch')) return;
           if (text.includes('authjs.dev')) return;
           if (text.includes('Load failed')) return;

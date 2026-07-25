@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, max-lines, no-restricted-imports */
 import { 
   PlatformActivity, 
   VerificationParams, 

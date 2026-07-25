@@ -12,7 +12,7 @@ export const HeaderActions = () => {
     <Stack direction="row" spacing={{ xs: 1, sm: 3 }} sx={{ alignItems: 'center', flexShrink: 0 }}>
       {isAuthenticated ? (
         <Button
-          component={Link}
+          component="a"
           href="/"
           variant="contained"
           color="primary"
@@ -22,7 +22,7 @@ export const HeaderActions = () => {
         </Button>
       ) : (
         <>
-          <Link href="/login" style={{ textDecoration: 'none', color: theme.palette.text.primary, display: 'block' }}>
+          <Box component="a" href="/login" style={{ textDecoration: 'none', color: theme.palette.text.primary, display: 'block' }}>
             <Typography sx={{ 
               fontWeight: 600, 
               fontSize: '0.9rem', 
@@ -32,9 +32,9 @@ export const HeaderActions = () => {
             }}>
               Login
             </Typography>
-          </Link>
+          </Box>
           <Button
-            component={Link}
+            component="a"
             href="/login"
             variant="contained"
             color="primary"

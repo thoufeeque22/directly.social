@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+ 
 import React from 'react';
 import { redirect } from 'next/navigation';
 import { Box, Typography, Stack, Divider, Paper } from '@mui/material';
