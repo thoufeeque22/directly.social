@@ -19,9 +19,8 @@ export function useDeleteAccount(): UseDeleteAccountReturn {
         throw new Error('Failed to delete account');
       }
 
-      const { logOutAction } = await import('@/app/actions/user/auth');
-      await logOutAction();
-      window.location.href = '/login';
+      const { signOut } = await import('next-auth/react');
+      await signOut({ callbackUrl: '/login' });
       return true;
     } catch (error: unknown) {
       console.error('Account deletion error:', error instanceof Error ? error.message : String(error));

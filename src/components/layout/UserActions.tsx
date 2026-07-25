@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Session } from 'next-auth';
+import { signOut } from 'next-auth/react';
 import { Menu, MenuItem, Divider, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -79,13 +80,7 @@ export function UserActions({ session, tierName }: { session: Session | null, ti
 
             <Divider />
             <MenuItem 
-              onClick={async () => {
-                const m = await import('@/app/actions/user/auth');
-                await m.logOutAction();
-                // Small delay to ensure session cookie is cleared before navigating
-                await new Promise(resolve => setTimeout(resolve, 300));
-                window.location.href = '/login?loggedOut=true';
-              }} 
+              onClick={() => signOut({ callbackUrl: '/login?loggedOut=true' })} 
               data-testid="sign-out-button"
             >
               Log Out
