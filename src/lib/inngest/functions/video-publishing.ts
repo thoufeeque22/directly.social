@@ -1,4 +1,5 @@
 import { inngest } from "../client";
+import { PollableActivity } from "@/lib/platforms/types";
 import { getPlatformActivity } from "@/lib/platforms/factory";
 import { 
   VerificationParams, 
@@ -22,7 +23,7 @@ export const videoPublishingHandler = async ({
   step: GetStepTools<typeof inngest> 
 }) => {
   const { activityId, platform, accountId, userId, stagedFileId, title, description, videoFormat } = event.data;
-  const activity = getPlatformActivity(platform);
+  const activity = getPlatformActivity(platform) as PollableActivity;
   const repository = getRepository();
   const storage = getStorage();
 
