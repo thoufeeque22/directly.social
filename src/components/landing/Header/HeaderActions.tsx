@@ -1,7 +1,6 @@
 import React from 'react';
 import { Stack, Button, Typography, Box, useTheme } from '@mui/material';
-import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 export const HeaderActions = () => {
   const theme = useTheme();
@@ -11,15 +10,27 @@ export const HeaderActions = () => {
   return (
     <Stack direction="row" spacing={{ xs: 1, sm: 3 }} sx={{ alignItems: 'center', flexShrink: 0 }}>
       {isAuthenticated ? (
-        <Button
-          component="a"
-          href="/"
-          variant="contained"
-          color="primary"
-          sx={{ borderRadius: 2, px: { xs: 2, sm: 3 }, textTransform: 'none', fontWeight: 600 }}
-        >
-          Dashboard
-        </Button>
+        <>
+          <Box sx={{ cursor: 'pointer', display: { xs: 'none', sm: 'block' } }} onClick={() => signOut({ callbackUrl: '/' })}>
+            <Typography sx={{ 
+              fontWeight: 600, 
+              fontSize: '0.9rem', 
+              color: theme.palette.text.primary,
+              '&:hover': { color: 'primary.main' }
+            }}>
+              Log Out
+            </Typography>
+          </Box>
+          <Button
+            component="a"
+            href="/login"
+            variant="contained"
+            color="primary"
+            sx={{ borderRadius: 2, px: { xs: 2, sm: 3 }, textTransform: 'none', fontWeight: 600 }}
+          >
+            Dashboard
+          </Button>
+        </>
       ) : (
         <>
           <Box component="a" href="/login" style={{ textDecoration: 'none', color: theme.palette.text.primary, display: 'block' }}>
@@ -30,7 +41,7 @@ export const HeaderActions = () => {
               display: { xs: 'none', sm: 'block' },
               '.returning-user &': { display: 'none !important' }
             }}>
-              Login
+              Log In
             </Typography>
           </Box>
           <Button
@@ -44,7 +55,7 @@ export const HeaderActions = () => {
               Get Started
             </Box>
             <Box component="span" sx={{ display: 'none', '.returning-user &': { display: 'inline !important' } }}>
-              Login
+              Log In
             </Box>
           </Button>
         </>

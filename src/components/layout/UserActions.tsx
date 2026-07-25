@@ -88,7 +88,7 @@ export function UserActions({ session, tierName }: { session: Session | null, ti
               }} 
               data-testid="sign-out-button"
             >
-              Sign Out
+              Log Out
             </MenuItem>
           </Menu>
           

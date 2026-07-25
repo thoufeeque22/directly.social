@@ -4,9 +4,9 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import InfoIcon from '@mui/icons-material/Info';
-import styles from '@/app/app/schedule/schedule.module.css';
-import { PostActivityEntry } from '@/app/app/schedule/types';
-import { PLATFORM_ICONS } from '@/app/app/schedule/constants';
+import styles from '@/app/(app)/schedule/schedule.module.css';
+import { PostActivityEntry } from '@/app/(app)/schedule/types';
+import { PLATFORM_ICONS } from '@/app/(app)/schedule/constants';
 
 export interface ScheduleTimelineViewProps {
   posts: PostActivityEntry[];

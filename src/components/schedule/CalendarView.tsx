@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styles from './calendar.module.css';
-import { PostActivityEntry } from '@/app/app/schedule/types';
+import { PostActivityEntry } from '@/app/(app)/schedule/types';
 import { CalendarMonthView } from './CalendarMonthView';
 import { CalendarWeekView } from './CalendarWeekView';
 

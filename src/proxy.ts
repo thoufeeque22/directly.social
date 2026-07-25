@@ -51,9 +51,7 @@ export default auth(async (req) => {
   }
 
   if (isApp || (isVercelPreview && url.searchParams.get('site') !== 'marketing')) {
-    const rewriteUrl = req.nextUrl.clone();
-    rewriteUrl.pathname = url.pathname === '/' ? '/app' : `/app${url.pathname}`;
-    return NextResponse.rewrite(rewriteUrl);
+    return NextResponse.next();
   }
 
   if (isMarketing || (isVercelPreview && url.searchParams.get('site') === 'marketing')) {

@@ -5,7 +5,7 @@ import { AIWriteResult } from '@/lib/utils/ai-writer';
 import { useAiByok } from '@/hooks/useAiByok';
 import { useAIPreviewCache } from '@/hooks/useAIPreviewCache';
 import { checkCacheValidity } from '@/components/dashboard/UploadForm/UploadFormContext.utils';
-import { PostActivityEntry } from '@/app/app/schedule/types';
+import { PostActivityEntry } from '@/app/(app)/schedule/types';
 
 export function useScheduleAI(
   editingPost: PostActivityEntry | null,

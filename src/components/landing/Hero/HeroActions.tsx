@@ -4,15 +4,18 @@ import Link from 'next/link';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 
+import { useSession } from 'next-auth/react';
+
 export const HeroActions = () => {
-  const isAuthenticated = false; // Landing page is only rendered when logged out
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
 
   return (
     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ width: { xs: '100%', sm: 'auto' } }}>
       {isAuthenticated ? (
         <Button
           component="a"
-          href="/"
+          href="/login"
           variant="contained"
           size="large"
           startIcon={<DashboardIcon />}

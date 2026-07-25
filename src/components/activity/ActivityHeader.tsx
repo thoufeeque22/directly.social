@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/app/app/activity/activity.module.css';
+import styles from '@/app/(app)/activity/activity.module.css';
 
 interface ActivityHeaderProps {
   fileInputRef: React.RefObject<HTMLInputElement | null>;

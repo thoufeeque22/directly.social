@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useScheduleData } from './useScheduleData';
 import { useScheduleActions } from './useScheduleActions';
 import { useScheduleAI } from './useScheduleAI';
-import { PostActivityEntry } from '@/app/app/schedule/types';
+import { PostActivityEntry } from '@/app/(app)/schedule/types';
 
 export function useScheduleEditor() {
   const [editingPost, setEditingPost] = useState<PostActivityEntry | null>(null);
