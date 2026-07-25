@@ -65,8 +65,6 @@ export async function startPublishingWorker() {
     }
   }, 60 * 1000);
 
-  // Initial runs
+  // Initial runs (Skipping Audit & Billing on boot to prevent OOM/CPU spikes, they will run on their intervals)
   purgeExpiredAssets();
-  AuditService.runFullAudit().catch(() => {});
-  import('@/lib/services/billing-instance').then(m => m.billingService.syncAll()).catch(() => {});
 }
