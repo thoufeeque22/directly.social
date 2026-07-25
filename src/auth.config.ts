@@ -3,7 +3,9 @@ import type { NextAuthConfig } from "next-auth";
 import Facebook from "next-auth/providers/facebook";
 import Google from "next-auth/providers/google";
 import TikTok from "next-auth/providers/tiktok";
+import LinkedIn from "next-auth/providers/linkedin";
 import type { User } from "next-auth";
+import { prisma } from "@/lib/core/prisma";
 
 export default {
   useSecureCookies: process.env.NEXT_PUBLIC_E2E !== 'true',
@@ -57,6 +59,18 @@ export default {
         allowDangerousEmailAccountLinking: true,
       })
     ] : []),
+    ...(process.env.AUTH_LINKEDIN_ID && process.env.AUTH_LINKEDIN_SECRET ? [
+      LinkedIn({
+        clientId: process.env.AUTH_LINKEDIN_ID,
+        clientSecret: process.env.AUTH_LINKEDIN_SECRET,
+        authorization: {
+          params: {
+            scope: "openid profile email w_member_social r_liteprofile",
+          }
+        },
+        allowDangerousEmailAccountLinking: true,
+      })
+    ] : []),
   ],
   trustHost: true,
   secret: process.env.AUTH_SECRET,
@@ -77,9 +91,16 @@ export default {
         token.aiCredits = (user as User).aiCredits;
       }
       
-      // Handle session updates from the client
-      if (trigger === "update" && session?.aiCredits !== undefined) {
-        token.aiCredits = session.aiCredits;
+      // Handle session updates securely
+      if (trigger === "update" && token.id) {
+        try {
+          const freshUser = await prisma.user.findUnique({ where: { id: token.id as string } });
+          if (freshUser) {
+            token.aiCredits = freshUser.aiCredits;
+          }
+        } catch (e) {
+          console.error("Failed to fetch fresh user data during session update", e);
+        }
       }
       
       return token;

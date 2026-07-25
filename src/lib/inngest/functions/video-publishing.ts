@@ -1,4 +1,5 @@
 import { inngest } from "../client";
+import { PollableActivity } from "@/lib/platforms/types";
 import { getPlatformActivity } from "@/lib/platforms/factory";
 import { 
   VerificationParams, 
@@ -22,7 +23,7 @@ export const videoPublishingHandler = async ({
   step: GetStepTools<typeof inngest> 
 }) => {
   const { activityId, platform, accountId, userId, stagedFileId, title, description, videoFormat } = event.data;
-  const activity = getPlatformActivity(platform);
+  const activity = getPlatformActivity(platform) as PollableActivity;
   const repository = getRepository();
   const storage = getStorage();
 
@@ -41,7 +42,7 @@ export const videoPublishingHandler = async ({
   });
 
   const { creationId, resumableUrl: initialResumableUrl } = await step.run("init", async () => {
-    const params: InitiationParams = { ...baseParams, title, description, videoFormat, filePath: activeFilePath, storage };
+    const params: InitiationParams = { ...baseParams, content: { title, description, videoFormat, filePath: activeFilePath, storage } };
     const res = await activity.init(params);
     await repository.upsertState(activityId, platform, accountId, { 
       currentStep: "init", creationId: res.creationId, resumableUrl: res.resumableUrl 
@@ -52,8 +53,8 @@ export const videoPublishingHandler = async ({
   const { platformPostId } = await step.run("push", async () => {
     let lastProgressUpdate = 0;
     const params: PushParams = {
-      ...baseParams, title, description, videoFormat, filePath: activeFilePath, creationId,
-      resumableUrl: initialResumableUrl, storage,
+      ...baseParams, content: { title, description, videoFormat, filePath: activeFilePath, storage }, creationId,
+      resumableUrl: initialResumableUrl,
       onProgress: async (pct) => {
         // Performance (High): Throttle DB writes to once per 2 seconds
         const now = Date.now();

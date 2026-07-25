@@ -13,6 +13,9 @@
 - **Icons:** Exclusively use **Material UI Icons** (MUI). Avoid generic libraries unless MUI lacks a specific icon.
 - **Visual Integrity Mandate:** All UI changes MUST be verified for contrast, visibility, and spacing. QA-agent MUST include specific tests for critical control visibility.
 
+## Pricing Typography & Anchoring
+- **Strikethrough Old Prices:** When showing a discounted price, do NOT use text like "Actual price:" or "Value:". Simply show the crossed-out original price directly next to or above the new price (e.g., `~~$299~~ $89`) to reduce cognitive load, keep the UI clean, and provide a subtle psychological anchor.
+
 ## Modular Form Standards
 
 Forms exceeding 3 sections or 100 lines of total logic MUST be refactored into a **Modular Engine** pattern:

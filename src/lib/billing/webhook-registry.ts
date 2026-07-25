@@ -34,7 +34,24 @@ webhookRegistry.register('checkout.session.completed', async (event: Stripe.Even
     if (tierId === 'creator-pro') tierEnum = SubscriptionTier.CREATOR_PRO;
     if (tierId === 'cloud-pro') tierEnum = SubscriptionTier.CLOUD_PRO;
     if (tierId === 'power-pass') tierEnum = SubscriptionTier.POWER_PASS;
-    if (tierId === 'lifetime-deal') tierEnum = SubscriptionTier.LIFETIME_DEAL;
+    if (tierId === '5-year-deal') tierEnum = SubscriptionTier.FIVE_YEAR_DEAL;
+    if (tierId === 'lifetime-deal') {
+      const count = await prisma.billingProfile.count({
+        where: { subscriptionTier: 'LIFETIME_DEAL' },
+      });
+      const maxCap = process.env.LIFETIME_CAP ? parseInt(process.env.LIFETIME_CAP, 10) : 15;
+      if (maxCap - count <= 0) {
+        tierEnum = SubscriptionTier.FIVE_YEAR_DEAL;
+      } else {
+        tierEnum = SubscriptionTier.LIFETIME_DEAL;
+      }
+    }
+
+    let subscriptionPeriodEnd: Date | undefined;
+    if (tierEnum === SubscriptionTier.FIVE_YEAR_DEAL) {
+      subscriptionPeriodEnd = new Date();
+      subscriptionPeriodEnd.setFullYear(subscriptionPeriodEnd.getFullYear() + 5);
+    }
 
     await prisma.billingProfile.update({
       where: { userId },
@@ -42,6 +59,7 @@ webhookRegistry.register('checkout.session.completed', async (event: Stripe.Even
         providerSubscriptionId: subscriptionId,
         subscriptionTier: tierEnum,
         subscriptionStatus: SubscriptionStatus.ACTIVE,
+        ...(subscriptionPeriodEnd ? { subscriptionPeriodEnd } : {}),
       },
     });
     
