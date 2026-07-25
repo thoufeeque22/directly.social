@@ -60,6 +60,7 @@ To ensure production-level stability and prevent build failures or linting warni
 - If a custom wrapper element is absolutely necessary for styling over an input, prefer using a `<label>` as the wrapper so clicks automatically focus the input natively without needing `(input as HTMLInputElement).showPicker()`.
 
 ### 4. Code Quality & Cleanliness
+- **Modularity Strictness (No Linter Evasion):** The 100-line strict modularity rule outlined in `CORE.md` MUST NOT be bypassed using `/* eslint-disable max-lines */` in UI components. Monolithic UI components must be split logically into feature sections and isolated hooks, instead of suppressing the linter.
 - **No nested ternaries.** Avoid code like `condition1 ? result1 : condition2 ? result2 : result3`. Extract this into a mapping object (`Record<string, string>`) or a dedicated helper function.
 - **Optional Chaining:** Prefer `obj?.prop?.sub` over verbose checks like `if (obj && obj.prop && obj.prop.sub)`.
 - Use standard JS/TS features: `Array.prototype.some/every` instead of complex `reduce` loops, and `Date.now()` instead of `new Date().getTime()`.
