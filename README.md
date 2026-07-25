@@ -53,6 +53,20 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 - `pnpm test:smoke`: Run critical path E2E tests
 - `pnpm test:regression`: Run full regression E2E tests
 
+## Architecture & Subdomains
+
+The application is deployed as a single monolithic Next.js application but utilizes Next.js middleware (`src/proxy.ts`) to route requests to specific folders based on the hostname:
+
+- **`directly.social`**: The marketing and landing page. Requests are transparently routed to `src/app/marketing`.
+- **`app.directly.social`**: The authenticated application dashboard. Requests are transparently routed to `src/app/app`.
+- **`staging.app.directly.social`**: The dedicated staging environment.
+
+For detailed information on the Vercel branch preview routing and the rate limiting logic, see [Subdomain Routing Docs](docs/features/SUBDOMAIN_ROUTING.md).
+
+## Local Development
+
+Ensure your local `.env` has the correct Supabase and NextAuth secrets.
+
 ## API Documentation
 
 **directly.social** features a centralized API documentation system powered by Swagger/OpenAPI.

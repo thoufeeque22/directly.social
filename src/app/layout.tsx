@@ -5,7 +5,6 @@ import { Providers } from "@/components/Providers";
 import { ThemeScript } from "@/components/layout/ThemeScript";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';
 
-import { auth } from "@/auth";
 
 import { BRAND } from "@/lib/core/brand";
 import { ReticleDev } from './reticle-dev';

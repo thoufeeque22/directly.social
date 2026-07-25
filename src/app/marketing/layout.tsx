@@ -2,7 +2,6 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { LandingHeader } from '@/components/landing/Header';
 import { LandingFooter } from '@/components/landing/Footer';
-import { auth } from '@/auth';
 
 /**
  * PublicLayout provides the LandingHeader and LandingFooter for all public routes

@@ -4,7 +4,7 @@ test.describe('AIChatbot Component E2E', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to a page where the chatbot is available (e.g., dashboard)
     // Assuming the dev server is running on localhost:3000
-    await page.goto('http://localhost:3000');
+    await page.goto('/');
   });
 
   test('should open and close the chat window', async ({ page, isMobile }) => {

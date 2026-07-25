@@ -2,13 +2,10 @@
 
 import React from 'react';
 import { Box, Container, Typography, Button, Stack } from '@mui/material';
-import Link from 'next/link';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import { DashboardMockup } from './DashboardMockup';
+import { HeroActions } from './HeroActions';
 
 export const Hero = () => {
-  const isAuthenticated = false; // Landing page is only rendered when logged out
 
   return (
     <Box sx={{ pt: { xs: 12, md: 16 }, pb: { xs: 6, md: 10 }, overflow: 'hidden', position: 'relative' }}>
@@ -56,40 +53,7 @@ export const Hero = () => {
 
 
           
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ width: { xs: '100%', sm: 'auto' } }}>
-            {isAuthenticated ? (
-              <Button
-                component={Link}
-                href="/"
-                variant="contained"
-                size="large"
-                startIcon={<DashboardIcon />}
-                sx={{ py: 1.5, px: 4, borderRadius: 2, fontSize: '1.1rem', textTransform: 'none' }}
-              >
-                Go to Dashboard
-              </Button>
-            ) : (
-              <Button
-                component={Link}
-                href="/login"
-                variant="contained"
-                size="large"
-                startIcon={<RocketLaunchIcon />}
-                sx={{ py: 1.5, px: 4, borderRadius: 2, fontSize: '1.1rem', textTransform: 'none' }}
-              >
-                Get Started for Free
-              </Button>
-            )}
-            <Button
-              component={Link}
-              href="/#features"
-              variant="outlined"
-              size="large"
-              sx={{ py: 1.5, px: 4, borderRadius: 2, fontSize: '1.1rem', textTransform: 'none' }}
-            >
-              Explore Features
-            </Button>
-          </Stack>
+          <HeroActions />
           
           <Typography variant="body2" color="text.secondary">
             No credit card required. Free forever core tier.

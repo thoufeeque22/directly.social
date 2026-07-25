@@ -5,8 +5,24 @@ import Google from "next-auth/providers/google";
 import TikTok from "next-auth/providers/tiktok";
 import type { User } from "next-auth";
 
+const isVercelProduction = process.env.NEXT_PUBLIC_SITE_URL === 'https://directly.social';
+const cookieDomain = isVercelProduction ? ".directly.social" : undefined;
+const useSecureCookies = process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_E2E !== 'true';
+
 export default {
-  useSecureCookies: process.env.NEXT_PUBLIC_E2E !== 'true',
+  useSecureCookies,
+  cookies: {
+    sessionToken: {
+      name: `${useSecureCookies ? "__Secure-" : ""}authjs.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: useSecureCookies,
+        domain: cookieDomain,
+      },
+    },
+  },
   // ... rest of the config ...
   providers: [
     Google({
@@ -98,7 +114,15 @@ export default {
 
       if (isOnLogin) {
         if (isLoggedIn) {
-          return Response.redirect(new URL("/", nextUrl));
+          let dashboardUrl = new URL("/", nextUrl);
+          if (nextUrl.hostname === 'localhost' || nextUrl.hostname === '127.0.0.1') {
+            dashboardUrl = new URL(`http://app.localhost:${nextUrl.port || '3000'}/`);
+          } else if (nextUrl.hostname === 'directly.social') {
+            dashboardUrl = new URL("https://app.directly.social/");
+          } else if (!nextUrl.hostname.startsWith('app.')) {
+            dashboardUrl.hostname = `app.${nextUrl.hostname}`;
+          }
+          return Response.redirect(dashboardUrl);
         }
         return true;
       }

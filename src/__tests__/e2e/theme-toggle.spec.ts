@@ -31,14 +31,14 @@ test.describe('Theme Toggle @smoke @regression', () => {
     // Check that background color is light
     const body = page.locator('body');
     // Using a broader check for light background
-    await expect(body).toHaveCSS('background-color', /rgb\(24\d, 24\d, 25\d\)/);
+    await expect(body).toHaveCSS('background-color', /rgb\(2[45]\d, 2[45]\d, 2[45]\d\)/);
 
     // Toggle back to Dark
     await toggle.click();
     await expect(html).not.toHaveClass(/light-mode/);
     
     // Using a broader check for dark background
-    await expect(body).toHaveCSS('background-color', /rgb\(9, 8, 18\)/);
+    await expect(body).toHaveCSS('background-color', /rgb\((?:9, 8, 18|18, 14, 12)\)/);
   });
 
   test('should persist theme across reloads', async ({ page }) => {

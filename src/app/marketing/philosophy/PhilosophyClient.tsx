@@ -2,8 +2,6 @@
 
 import React from 'react';
 import { Box, Container, Typography, Grid, Paper, Stack, useTheme } from '@mui/material';
-import { LandingHeader } from '@/components/landing/Header';
-import { LandingFooter } from '@/components/landing/Footer';
 import GppGoodIcon from '@mui/icons-material/GppGood';
 import NoEncryptionIcon from '@mui/icons-material/NoEncryption';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
@@ -43,7 +41,6 @@ export default function PhilosophyClient() {
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <LandingHeader />
       <Box component="main" sx={{ flexGrow: 1, py: { xs: 8, md: 12 }, bgcolor: 'background.default' }}>
         <Container maxWidth="lg">
           <Breadcrumbs items={[{ name: 'Home', url: '/' }, { name: 'Philosophy' }]} />
@@ -96,7 +93,6 @@ export default function PhilosophyClient() {
           </Stack>
         </Container>
       </Box>
-      <LandingFooter />
     </Box>
   );
 }

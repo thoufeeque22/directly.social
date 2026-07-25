@@ -40,11 +40,7 @@ describe('YouTubeActivity', () => {
 
     const res = await activity.init({
       ...baseParams,
-      title: 'T',
-      description: 'D',
-      videoFormat: 'short',
-      filePath: '/path',
-      storage: mockStorage
+      content: { title: 'T', description: 'D', videoFormat: 'short', filePath: '/path', storage: mockStorage }
     });
 
     expect(initYouTubeSession).toHaveBeenCalled();
@@ -57,11 +53,7 @@ describe('YouTubeActivity', () => {
 
     const res = await activity.push({
       ...baseParams,
-      title: 'T',
-      description: 'D',
-      videoFormat: 'short',
-      filePath: '/path',
-      storage: mockStorage,
+      content: { title: 'T', description: 'D', videoFormat: 'short', filePath: '/path', storage: mockStorage },
       creationId: 'url-123'
     });
 

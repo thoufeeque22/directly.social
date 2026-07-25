@@ -33,8 +33,8 @@ interface SchemaWebSiteNode {
 }
 
 test.describe('Technical SEO Foundation', () => {
-  // Ensure we start unauthenticated to see the landing page
-  test.use({ authRole: 'none' });
+  // Ensure we start unauthenticated and on the marketing site to see the landing page
+  test.use({ baseURL: 'http://localhost:3000', authRole: 'none' });
 
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();
