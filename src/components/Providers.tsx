@@ -10,6 +10,8 @@ import { WhatsNewProvider } from "./WhatsNew/WhatsNewContext";
 import { NotificationProvider } from "./Notifications/NotificationContext";
 
 import { Session } from "next-auth";
+import { Analytics } from "@vercel/analytics/react";
+import { PostHogProvider, SuspendedPostHogPageview } from "./analytics/PostHogProvider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   // We remove the session prop and useEffect for has_account.
@@ -72,13 +74,17 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeContextProvider>
       <CssBaseline />
-      <SessionProvider>
-        <WhatsNewProvider>
-          <NotificationProvider>
-            {children}
-          </NotificationProvider>
-        </WhatsNewProvider>
-      </SessionProvider>
+      <PostHogProvider>
+        <SuspendedPostHogPageview />
+        <SessionProvider>
+          <WhatsNewProvider>
+            <NotificationProvider>
+              {children}
+              <Analytics />
+            </NotificationProvider>
+          </WhatsNewProvider>
+        </SessionProvider>
+      </PostHogProvider>
     </ThemeContextProvider>
   );
 }

@@ -4,6 +4,7 @@ allowBuilds:
   '@scarf/scarf': true
   '@sentry/cli': true
   '@tree-sitter-grammars/tree-sitter-yaml': true
+  core-js: set this to true or false
   core-js-pure: true
   esbuild: true
   prisma: true
