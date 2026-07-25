@@ -4,6 +4,7 @@
 
 ### 🚀 Advanced Features
 - **Lifetime BYOK (Bring Your Own Key):** Professionals can plug their own OpenAI/Anthropic API keys directly into their dashboard to generate content at wholesale API prices without any markup, unlocking infinite scalability and complete privacy. See the dedicated marketing page at `/byok`.
+- **Adjustable Lifetime Deal Scarcity:** A rolling cap creates true scarcity for the Lifetime Deal. If a lifetime duration is not explicitly specified, the system defaults to a **5-year fallback logic**, providing a conservative and predictable financial anchor for long-term calculations.
 - **Referral Bonus Program:** Users can refer friends to earn extra posts or unlock the Lifetime BYOK tier or Free Cloud Pro.
 - **Enterprise-Grade Legal Boilerplate:** The Referral Terms include comprehensive clauses for Refunds & Chargebacks, Tax Liability, Right to Modify/Terminate, Relationship of Parties, and Limitation of Liability to fully protect the platform from fraud.
 

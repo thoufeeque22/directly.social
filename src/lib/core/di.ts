@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, max-lines, no-restricted-imports */
 import { PrismaAccountRepository, PrismaTokenAuditRepository } from "@/lib/infrastructure/account-repository";
 import { AccountRevocationService } from "@/lib/services/account-revocation";
 import { LinkedInApiClient } from "@/lib/platforms/linkedin";

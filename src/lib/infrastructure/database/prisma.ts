@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, max-lines, no-restricted-imports */
 import { PrismaClient, Prisma } from "@prisma/client";
 import { encrypt, decrypt } from "./encryption";
 

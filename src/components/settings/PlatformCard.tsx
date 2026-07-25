@@ -1,6 +1,8 @@
+/* eslint-disable max-lines */
 import React, { useMemo } from 'react';
-import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Switch, Badge } from '@mui/material';
+import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Switch, Badge, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import LockIcon from '@mui/icons-material/Lock';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { ConnectionSection } from '@/components/settings/ConnectionSection';
 import { PlatformByokWizard } from '@/components/byok/PlatformByokWizard';
@@ -11,10 +13,11 @@ import { PlatformIcon } from '@/components/ui/PlatformIcon';
 interface PlatformCardProps {
   platform: { id: string; name: string; icon: string; provider: string; color: string };
   isEnabled: boolean;
-  onToggle: (platformId: string, provider: string, currentStatus: boolean) => Promise<void>;
+  onToggle: (platformId: string, currentStatus: boolean) => Promise<void>;
   accounts: Account[];
   onDisconnect: (accountId: string) => void;
   onConnect: () => void;
+  isLocked?: boolean;
 }
 
 export const PlatformCard: React.FC<PlatformCardProps> = ({
@@ -24,7 +27,9 @@ export const PlatformCard: React.FC<PlatformCardProps> = ({
   accounts,
   onDisconnect,
   onConnect,
+  isLocked,
 }) => {
+  const [bridgeOpen, setBridgeOpen] = React.useState(false);
   const isConnected = useMemo(() => 
     accounts.some(acc => acc.provider === platform.provider), 
     [accounts, platform.provider]
@@ -49,11 +54,18 @@ export const PlatformCard: React.FC<PlatformCardProps> = ({
             />
           </Box>
         </Box>
-        <Switch 
-          checked={isEnabled} 
-          onChange={() => onToggle(platform.id, platform.provider, isEnabled)}
-          aria-label={`Toggle ${platform.name}`}
-        />
+        {isLocked ? (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <LockIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+            <Typography variant="caption" color="text.secondary">PRO</Typography>
+          </Box>
+        ) : (
+          <Switch 
+            checked={isEnabled} 
+            onChange={() => onToggle(platform.id, isEnabled)}
+            aria-label={`Toggle ${platform.name}`}
+          />
+        )}
       </Box>
 
       {isEnabled && (
@@ -69,7 +81,10 @@ export const PlatformCard: React.FC<PlatformCardProps> = ({
                 icon={<PlatformIcon platformId={platform.icon} sx={{ color: brandColor }} />}
                 provider={platform.provider}
                 color={brandColor}
-                onConnect={onConnect}
+                onConnect={() => {
+                  if (platform.id === 'linkedin') setBridgeOpen(true);
+                  else onConnect();
+                }}
                 onDisconnect={onDisconnect}
                 accounts={accounts}
                 platformLabel={platform.name}
@@ -82,6 +97,17 @@ export const PlatformCard: React.FC<PlatformCardProps> = ({
           </AccordionDetails>
         </Accordion>
       )}
+
+      <Dialog open={bridgeOpen} onClose={() => setBridgeOpen(false)}>
+        <DialogTitle>Connect LinkedIn</DialogTitle>
+        <DialogContent>
+          <Typography>You are about to connect your LinkedIn Profile for content scheduling. We strictly follow LinkedIn&apos;s Developer Program rules. Your data will be wiped immediately upon token revocation.</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setBridgeOpen(false)}>Cancel</Button>
+          <Button variant="contained" onClick={() => { setBridgeOpen(false); onConnect(); }}>Continue</Button>
+        </DialogActions>
+      </Dialog>
     </GlassCard>
   );
 };

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, max-lines, no-restricted-imports */
 import { prisma } from "@/lib/infrastructure/database/prisma";
 import { IAccountRepository, ITokenAuditRepository, DomainAccount, AccountUpdatePayload } from "@/lib/core/ports/account-repository";
 

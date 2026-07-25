@@ -26,7 +26,7 @@ export class InstagramActivity implements PlatformActivity {
 
   async init(params: InitiationParams): Promise<{ creationId: string }> {
     const { igUserId, userAccessToken } = await this.client.getAccount(params.userId, params.accountId);
-    const creationId = await this.client.createContainer(igUserId, userAccessToken, params.description);
+    const creationId = await this.client.createContainer(igUserId, userAccessToken, (params.content as any).description);
     return { creationId };
   }
 
@@ -36,7 +36,7 @@ export class InstagramActivity implements PlatformActivity {
 
     await this.client.pushBinary(
       params.creationId,
-      params.filePath,
+      (params.content as any).filePath,
       userAccessToken,
       startOffset,
       params.onProgress

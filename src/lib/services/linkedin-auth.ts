@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, max-lines, no-restricted-imports */
 import { TokenRevokedError } from "@/lib/platforms/linkedin";
 import { IAccountRepository } from "@/lib/core/ports/account-repository";
 import { ILinkedInApiClient } from "@/lib/core/ports/linkedin-api-client";

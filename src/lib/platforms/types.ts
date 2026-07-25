@@ -11,13 +11,20 @@ export interface BaseParams {
 
 export type VerificationParams = BaseParams;
 
-export interface InitiationParams extends BaseParams {
-  title: string;
+export interface TextContent {
+  title?: string;
   description: string;
+}
+
+export interface MediaContent extends TextContent {
   videoFormat: VideoFormat;
   filePath: string;
   storage: StorageProvider;
   privacyLevel?: string;
+}
+
+export interface InitiationParams extends BaseParams {
+  content: TextContent | MediaContent;
 }
 
 export interface PushParams extends InitiationParams {
@@ -44,8 +51,11 @@ export interface PlatformActivity {
   preVerify(params: VerificationParams): Promise<void>;
   init(params: InitiationParams): Promise<{ creationId: string; resumableUrl?: string }>;
   push(params: PushParams): Promise<{ resumableUrl?: string; platformPostId?: string }>;
-  poll(params: PollingParams): Promise<void>;
   finalize(params: FinalizationParams): Promise<{ id: string; permalink: string }>;
+}
+
+export interface PollableActivity extends PlatformActivity {
+  poll(params: PollingParams): Promise<void>;
 }
 
 /**

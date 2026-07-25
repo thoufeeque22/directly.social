@@ -20,25 +20,25 @@ export class TikTokActivity implements PlatformActivity {
 
   async init(params: InitiationParams): Promise<{ creationId: string; resumableUrl: string }> {
     const account = await getTikTokAccount(params.userId, params.accountId);
-    const fileSize = await params.storage.getFileSize(params.filePath);
+    const fileSize = await (params.content as any).storage.getFileSize((params.content as any).filePath);
     
     const { upload_url, publish_id } = await initTikTokPublish(
       account.access_token!, 
       fileSize, 
-      params.title || params.description || "", 
-      params.privacyLevel || "PUBLIC"
+      params.content.title || params.content.description || "",
+      (params.content as any).privacyLevel || "PUBLIC"
     );
 
     return { creationId: publish_id, resumableUrl: upload_url };
   }
 
   async push(params: PushParams): Promise<{ resumableUrl?: string }> {
-    const fileSize = await params.storage.getFileSize(params.filePath);
+    const fileSize = await (params.content as any).storage.getFileSize((params.content as any).filePath);
     
     // TikTok's current implementation doesn't easily support resuming mid-file in the pushTikTokBinary utility,
     // but the orchestration allows for it if we refactor pushTikTokBinary later.
     if (params.resumableUrl) {
-      await pushTikTokBinary(params.resumableUrl, params.filePath, fileSize);
+      await pushTikTokBinary(params.resumableUrl, (params.content as any).filePath, fileSize);
     }
 
     return { resumableUrl: params.resumableUrl };
