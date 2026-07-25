@@ -42,7 +42,7 @@ export function LoginContent({ referrerName }: { referrerName?: string | null })
                      Capacitor.getPlatform() !== 'web' &&
                      (Capacitor.isNativePlatform() || navigator.userAgent.includes(APP_CONFIG.userAgent));
 
-    const callbackUrl = searchParams.get('callbackUrl') || '/';
+    const callbackUrl = searchParams.get('callbackUrl') || '/login';
 
     if (isNative) {
       const baseUrl = typeof window !== 'undefined' ? window.location.origin : APP_CONFIG.urls.production;
@@ -65,12 +65,12 @@ export function LoginContent({ referrerName }: { referrerName?: string | null })
         <UnifiedIdentityModal 
           pendingProvider={pendingProvider} 
           onClose={() => setShowWarning(false)}
-          onContinue={() => { if (pendingProvider) signIn(pendingProvider, { callbackUrl: searchParams.get('callbackUrl') || '/' }); setShowWarning(false); }}
+          onContinue={() => { if (pendingProvider) signIn(pendingProvider, { callbackUrl: searchParams.get('callbackUrl') || '/login' }); setShowWarning(false); }}
           onRecommended={async () => {
             const isNative = typeof window !== 'undefined' && Capacitor.getPlatform() !== 'web' && (Capacitor.isNativePlatform() || navigator.userAgent.includes(APP_CONFIG.userAgent));
             setShowWarning(false);
             if (isNative) { const baseUrl = typeof window !== 'undefined' ? window.location.origin : APP_CONFIG.urls.production; await Browser.open({ url: `${baseUrl}/login?bridge=true&provider=google&native=true` }); }
-            else { signIn('google', { callbackUrl: searchParams.get('callbackUrl') || '/' }); }
+            else { signIn('google', { callbackUrl: searchParams.get('callbackUrl') || '/login' }); }
           }}
         />
       )}

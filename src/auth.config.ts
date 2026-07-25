@@ -6,8 +6,7 @@ import TikTok from "next-auth/providers/tiktok";
 import LinkedIn from "next-auth/providers/linkedin";
 import type { User } from "next-auth";
 
-const isVercelProduction = process.env.NEXT_PUBLIC_SITE_URL === 'https://directly.social';
-const cookieDomain = isVercelProduction ? ".directly.social" : undefined;
+const cookieDomain = process.env.NODE_ENV === 'production' ? ".directly.social" : undefined;
 const useSecureCookies = process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_E2E !== 'true';
 
 export default {
@@ -27,6 +26,7 @@ export default {
   // ... rest of the config ...
   providers: [
     Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
       allowDangerousEmailAccountLinking: true,
       authorization: {
