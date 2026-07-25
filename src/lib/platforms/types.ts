@@ -17,6 +17,7 @@ export interface InitiationParams extends BaseParams {
   videoFormat: VideoFormat;
   filePath: string;
   storage: StorageProvider;
+  privacyLevel?: string;
 }
 
 export interface PushParams extends InitiationParams {
