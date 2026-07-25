@@ -1,5 +1,7 @@
-import { verifyLinkedInProfile, TokenRevokedError } from "@/lib/platforms/linkedin";
-import { IAccountRepository } from "./account-repository";
+import { TokenRevokedError } from "@/lib/platforms/linkedin";
+import { IAccountRepository } from "@/lib/core/ports/account-repository";
+import { ILinkedInApiClient } from "@/lib/core/ports/linkedin-api-client";
+import { AccountRevocationService } from "./account-revocation";
 import { z } from "zod";
 
 const LinkedInRefreshResponseSchema = z.object({
@@ -9,19 +11,22 @@ const LinkedInRefreshResponseSchema = z.object({
 });
 
 export class LinkedInAuthService {
-  constructor(private accountRepo: IAccountRepository) {}
+  constructor(
+    private accountRepo: IAccountRepository,
+    private revocationService: AccountRevocationService,
+    private apiClient: ILinkedInApiClient
+  ) {}
 
   async validateTokens(): Promise<void> {
     const accounts = await this.accountRepo.findByProvider("linkedin");
 
     for (const account of accounts) {
-      if (!account.access_token) continue;
+      if (!account.accessToken) continue;
       try {
-        await verifyLinkedInProfile(account.access_token);
+        await this.apiClient.getProfile(account.accessToken);
       } catch (error: unknown) {
         if (error instanceof TokenRevokedError) {
-          await this.accountRepo.deleteAccount(account.id);
-          await this.accountRepo.logWipe(account.userId, "linkedin", "Nightly validator detected 401 Unauthorized");
+          await this.revocationService.handleRevocation(account.id, account.userId, "linkedin", "Nightly validator detected 401 Unauthorized");
         } else {
           console.error("LinkedIn validation failed with non-401 error", error);
           throw error;
@@ -34,26 +39,21 @@ export class LinkedInAuthService {
     const expiringAccounts = await this.accountRepo.findExpiring("linkedin", 7 * 24 * 60 * 60);
 
     for (const account of expiringAccounts) {
-      if (!account.refresh_token) continue;
-      const res = await fetch("https://www.linkedin.com/oauth/v2/accessToken", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          grant_type: "refresh_token",
-          refresh_token: account.refresh_token,
-          client_id: process.env.AUTH_LINKEDIN_ID || "",
-          client_secret: process.env.AUTH_LINKEDIN_SECRET || ""
-        })
-      });
-
-      if (res.ok) {
-        const rawData = await res.json();
+      if (!account.refreshToken) continue;
+      try {
+        const rawData = await this.apiClient.refreshToken(account.refreshToken);
         const data = LinkedInRefreshResponseSchema.parse(rawData);
         await this.accountRepo.updateTokens(account.id, {
-          access_token: data.access_token,
-          refresh_token: data.refresh_token || account.refresh_token,
-          expires_at: Math.floor(Date.now() / 1000) + data.expires_in
+          accessToken: data.access_token,
+          refreshToken: data.refresh_token || account.refreshToken,
+          expiresAt: Math.floor(Date.now() / 1000) + data.expires_in
         });
+      } catch (error: unknown) {
+        if (error instanceof TokenRevokedError) {
+          await this.revocationService.handleRevocation(account.id, account.userId, "linkedin", "Token revoked during refresh");
+        } else {
+          console.error("Failed to refresh LinkedIn token", error);
+        }
       }
     }
   }

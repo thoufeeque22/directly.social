@@ -2,29 +2,41 @@ import {
   PlatformActivity, 
   VerificationParams, 
   InitiationParams, 
-  PushParams, 
-  PollingParams, 
+  PushParams,
   FinalizationParams 
 } from "./types";
-import { verifyLinkedInProfile, createLinkedInPost, TokenRevokedError } from "./linkedin";
-import { IAccountRepository, PrismaAccountRepository } from "@/lib/services/account-repository";
+import { TokenRevokedError } from "./linkedin";
+import { IAccountRepository } from "@/lib/core/ports/account-repository";
+import { ILinkedInApiClient } from "@/lib/core/ports/linkedin-api-client";
+import { AccountRevocationService } from "@/lib/services/account-revocation";
 import { randomUUID } from "crypto";
 
+export class AccountNotConnectedError extends Error {
+  constructor(message: string = "Account is not connected properly.") {
+    super(message);
+    this.name = "AccountNotConnectedError";
+  }
+}
+
 export class LinkedInActivity implements PlatformActivity {
-  constructor(private accountRepo: IAccountRepository = new PrismaAccountRepository()) {}
+  constructor(
+    private accountRepo: IAccountRepository,
+    private revocationService: AccountRevocationService,
+    private apiClient: ILinkedInApiClient
+  ) {}
 
   private async handleRevocation(error: unknown, accountId: string, userId: string) {
     if (error instanceof TokenRevokedError) {
-      await this.accountRepo.deleteAccount(accountId);
-      await this.accountRepo.logWipe(userId, "linkedin", "Token revoked during activity");
+      await this.revocationService.handleRevocation(accountId, userId, "linkedin", "Token revoked during activity");
     }
     throw error;
   }
 
   async preVerify(params: VerificationParams): Promise<void> {
     const account = await this.accountRepo.getAccount(params.userId, params.accountId);
+    if (!account.accessToken) throw new AccountNotConnectedError();
     try {
-      await verifyLinkedInProfile(account.access_token!);
+      await this.apiClient.getProfile(account.accessToken);
     } catch (error) {
       await this.handleRevocation(error, params.accountId, params.userId);
     }
@@ -36,20 +48,19 @@ export class LinkedInActivity implements PlatformActivity {
 
   async push(params: PushParams): Promise<{ resumableUrl?: string; platformPostId?: string }> {
     const account = await this.accountRepo.getAccount(params.userId, params.accountId);
+    if (!account.accessToken) throw new AccountNotConnectedError();
     try {
-      const res = await createLinkedInPost(
-        account.access_token!,
+      const res = await this.apiClient.createPost(
+        account.accessToken,
         account.providerAccountId,
-        params.title || params.description || ""
+        params.content.title || params.content.description || ""
       );
       return { platformPostId: res.id };
     } catch (error) {
       await this.handleRevocation(error, params.accountId, params.userId);
-      throw error; // this is already thrown inside handleRevocation, but TS needs it
+      throw error;
     }
   }
-
-  async poll(params: PollingParams): Promise<void> {}
 
   async finalize(params: FinalizationParams): Promise<{ id: string; permalink: string }> {
     return { id: params.creationId, permalink: `https://www.linkedin.com/feed/update/${params.creationId}` };

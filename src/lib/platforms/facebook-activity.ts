@@ -32,7 +32,7 @@ export class FacebookActivity implements PlatformActivity {
     const startOffset = await fetchMetaUploadOffset(uploadUrl, pageAccessToken);
 
     await pushBinaryToMeta({
-      filePath: params.filePath,
+      filePath: (params.content as any).filePath,
       uploadUrl,
       accessToken: pageAccessToken,
       onProgress: params.onProgress,

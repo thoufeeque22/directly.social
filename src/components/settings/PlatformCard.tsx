@@ -13,7 +13,7 @@ import { PlatformIcon } from '@/components/ui/PlatformIcon';
 interface PlatformCardProps {
   platform: { id: string; name: string; icon: string; provider: string; color: string };
   isEnabled: boolean;
-  onToggle: (platformId: string, provider: string, currentStatus: boolean) => Promise<void>;
+  onToggle: (platformId: string, currentStatus: boolean) => Promise<void>;
   accounts: Account[];
   onDisconnect: (accountId: string) => void;
   onConnect: () => void;
@@ -62,7 +62,7 @@ export const PlatformCard: React.FC<PlatformCardProps> = ({
         ) : (
           <Switch 
             checked={isEnabled} 
-            onChange={() => onToggle(platform.id, platform.provider, isEnabled)}
+            onChange={() => onToggle(platform.id, isEnabled)}
             aria-label={`Toggle ${platform.name}`}
           />
         )}

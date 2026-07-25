@@ -20,12 +20,12 @@ export class YouTubeActivity implements PlatformActivity {
 
   async init(params: InitiationParams): Promise<{ creationId: string; resumableUrl: string }> {
     const youtube = await getYouTubeClient(params.userId, params.accountId);
-    const fileSize = await params.storage.getFileSize(params.filePath);
+    const fileSize = await (params.content as any).storage.getFileSize((params.content as any).filePath);
     
     const resumableUrl = await initYouTubeSession(youtube, fileSize, {
       snippet: { 
-        title: params.title, 
-        description: params.description, 
+        title: params.content.title, 
+        description: params.content.description, 
         tags: ["Directly"], 
         categoryId: "22" 
       },
@@ -39,7 +39,7 @@ export class YouTubeActivity implements PlatformActivity {
   }
 
   async push(params: PushParams): Promise<{ resumableUrl: string; platformPostId: string }> {
-    const fileSize = await params.storage.getFileSize(params.filePath);
+    const fileSize = await (params.content as any).storage.getFileSize((params.content as any).filePath);
     
     // Resume logic
     const offsetRes = await fetch(params.creationId, {
@@ -57,7 +57,7 @@ export class YouTubeActivity implements PlatformActivity {
 
     const result = await pushYouTubeBinary(
       params.creationId, 
-      params.filePath, 
+      (params.content as any).filePath, 
       startByte, 
       fileSize, 
       params.onProgress

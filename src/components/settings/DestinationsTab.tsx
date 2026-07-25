@@ -22,7 +22,7 @@ export const DestinationsTab = () => {
     }
   };
 
-  const handleToggle = async (id: string, _: string, status: boolean, canToggle: boolean) => {
+  const handleToggle = async (id: string, status: boolean, canToggle: boolean) => {
     try {
       if (!canToggle && !status) return alert("Distribution temporarily disabled for this platform.");
       await togglePlatform(id, status);
@@ -35,7 +35,7 @@ export const DestinationsTab = () => {
         <Typography variant="h6" sx={{ mb: 2 }}>Connected Platforms</Typography>
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
           {active.map((p) => (
-            <PlatformCard key={p.id} platform={p} isEnabled={isEnabled(p.id)} onToggle={(id, prov, status) => handleToggle(id, prov, status, p.canToggle)} accounts={accounts} onConnect={() => signIn(p.provider)} onDisconnect={handleDisconnect} isLocked={p.isLocked} />
+            <PlatformCard key={p.id} platform={p} isEnabled={isEnabled(p.id)} onToggle={(id, status) => handleToggle(id, status, p.canToggle)} accounts={accounts} onConnect={() => signIn(p.provider)} onDisconnect={handleDisconnect} isLocked={p.isLocked} />
           ))}
         </Box>
       </Box>

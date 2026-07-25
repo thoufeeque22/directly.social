@@ -3,7 +3,7 @@ import { InstagramActivity } from "./instagram-activity";
 import { YouTubeActivity } from "./youtube-activity";
 import { TikTokActivity } from "./tiktok-activity";
 import { FacebookActivity } from "./facebook-activity";
-import { LinkedInActivity } from "./linkedin-activity";
+import { di } from "@/lib/core/di";
 
 /**
  * (OO-002): Factory Pattern for resolving platform-specific publishing activities.
@@ -30,7 +30,7 @@ defaultRegistry.register('instagram', new InstagramActivity());
 defaultRegistry.register('youtube', new YouTubeActivity());
 defaultRegistry.register('tiktok', new TikTokActivity());
 defaultRegistry.register('facebook', new FacebookActivity());
-defaultRegistry.register('linkedin', new LinkedInActivity());
+defaultRegistry.register('linkedin', di.linkedInActivity);
 
 export function getPlatformActivity(platform: string): PlatformActivity {
   return defaultRegistry.get(platform);

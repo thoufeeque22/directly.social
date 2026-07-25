@@ -35,7 +35,7 @@ export class InstagramActivity implements PlatformActivity {
 
     await this.client.pushBinary(
       params.creationId,
-      params.filePath,
+      (params.content as any).filePath,
       userAccessToken,
       startOffset,
       params.onProgress

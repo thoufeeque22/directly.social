@@ -1,25 +1,28 @@
 import { inngest } from "../client";
-import { LinkedInAuthService } from "@/lib/services/linkedin-auth";
-import { PrismaAccountRepository } from "@/lib/services/account-repository";
-
-const linkedInAuthService = new LinkedInAuthService(new PrismaAccountRepository());
+import { di } from "@/lib/core/di";
 
 export const linkedInTokenValidator = inngest.createFunction(
-  { id: "linkedin-token-validator", name: "LinkedIn Token Validator" },
-  { cron: "0 0 * * *" }, // Nightly
+  { 
+    id: "linkedin-token-validator", 
+    name: "LinkedIn Token Validator",
+    triggers: [{ cron: "0 0 * * *" }]
+  },
   async ({ step }) => {
     await step.run("validate-linkedin-tokens", async () => {
-      await linkedInAuthService.validateTokens();
+      await di.linkedInAuthService.validateTokens();
     });
   }
 );
 
 export const linkedInTokenRefresher = inngest.createFunction(
-  { id: "linkedin-token-refresher", name: "LinkedIn Token Refresher" },
-  { cron: "0 1 * * *" }, // Daily at 1 AM
+  { 
+    id: "linkedin-token-refresher", 
+    name: "LinkedIn Token Refresher",
+    triggers: [{ cron: "0 1 * * *" }]
+  },
   async ({ step }) => {
     await step.run("refresh-linkedin-tokens", async () => {
-      await linkedInAuthService.refreshExpiringTokens();
+      await di.linkedInAuthService.refreshExpiringTokens();
     });
   }
 );
