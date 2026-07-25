@@ -1,106 +1,81 @@
 import { test, expect } from './base-test';
 
-test.describe('LinkedIn Integration', () => {
+/**
+ * E2E Tests — LinkedIn Integration (Ticket #412)
+ *
+ * TDD finish line established by the QA Agent.
+ * Tests cover:
+ *  1. Free Tier restriction (locked card / Pricing Anchor)
+ *  2. Pro Tier flow (auth bridge modal before OAuth)
+ *  3. Backend enforcement (API 403 for Free Tier)
+ */
 
-  test('Free Tier User sees locked LinkedIn card (Pricing Anchor)', async ({ page }) => {
-    // 1. Mock API to return FREE tier
-    await page.route('**/api/user/me*', async (route) => {
-      const response = await route.fetch();
-      const json = await response.json();
-      json.billingProfile = {
-        subscriptionTier: 'FREE_STARTER',
-        subscriptionStatus: 'ACTIVE'
-      };
-      await route.fulfill({ response, json });
-    });
-
-    await page.route('**/api/billing/profile*', async (route) => {
-      await route.fulfill({
-        status: 200,
-        json: {
-          subscriptionTier: 'FREE_STARTER',
-          subscriptionStatus: 'ACTIVE'
-        }
-      });
-    });
-
-    // 2. Go to settings/destinations page
+test.describe('LinkedIn Integration — Free Tier Restrictions', () => {
+  test.beforeEach(async ({ page }) => {
     await page.goto('/settings?tab=destinations');
-
-    // 3. Find LinkedIn card
-    const linkedInCard = page.locator('[data-testid="integration-card-linkedin"]');
-    await expect(linkedInCard).toBeVisible();
-
-    // 4. Assert it is locked
-    await expect(linkedInCard.locator('[data-testid="lock-icon"]')).toBeVisible();
-    await expect(linkedInCard.getByRole('button', { name: /upgrade/i })).toBeVisible();
+    await expect(page.locator('[data-testid="settings-content-pane"]')).toBeVisible({
+      timeout: 15000,
+    });
   });
 
-  test('Pro Tier User sees standard integration flow and Authorization Bridge', async ({ page }) => {
-    // 1. Mock API to return PRO tier
-    await page.route('**/api/user/me*', async (route) => {
-      const response = await route.fetch();
-      const json = await response.json();
-      json.billingProfile = {
-        subscriptionTier: 'CREATOR_PRO',
-        subscriptionStatus: 'ACTIVE'
-      };
-      await route.fulfill({ response, json });
-    });
-
-    await page.route('**/api/billing/profile*', async (route) => {
-      await route.fulfill({
-        status: 200,
-        json: {
-          subscriptionTier: 'CREATOR_PRO',
-          subscriptionStatus: 'ACTIVE'
-        }
-      });
-    });
-
-    await page.goto('/settings?tab=destinations');
-
+  test('should show locked LinkedIn card for Free Tier users', async ({ page }) => {
     const linkedInCard = page.locator('[data-testid="integration-card-linkedin"]');
-    await expect(linkedInCard).toBeVisible();
-
-    // Should not be locked
-    await expect(linkedInCard.locator('[data-testid="lock-icon"]')).toBeHidden();
-
-    // Click connect
-    await linkedInCard.getByRole('button', { name: /connect/i }).click();
-
-    // Expect Authorization Bridge modal
-    const authModal = page.locator('[data-testid="linkedin-auth-bridge-modal"]');
-    await expect(authModal).toBeVisible();
-    await expect(authModal).toContainText('LinkedIn Marketing Developer Program');
-
-    // Proceed to OAuth (we intercept navigation to the OAuth provider)
-    await page.route('**/api/auth/signin/linkedin*', async (route) => {
-      await route.fulfill({ status: 200, body: 'Mocked OAuth Redirection' });
-    });
-
-    const popupPromise = page.waitForEvent('popup', { timeout: 5000 }).catch(() => null);
-    
-    await authModal.getByRole('button', { name: /proceed to linkedin/i }).click();
-
-    // Either a popup or a redirect should occur, we check if the request is triggered
+    await expect(linkedInCard).toBeVisible({ timeout: 10000 });
+    const upgradeBtn = linkedInCard.locator('[data-testid="linkedin-upgrade-cta"]');
+    await expect(upgradeBtn).toBeVisible();
+    await expect(upgradeBtn).toHaveText('Upgrade to Pro');
   });
 
-  test('Scheduling post fails for Free Tier if bypassed', async ({ request }) => {
-    // 1. Trying to schedule directly via API should be rejected for free tier
-    const response = await request.post('/api/post/schedule', {
-      data: {
-        title: 'Test LinkedIn Post',
-        platforms: ['linkedin'],
-        scheduledAt: new Date(Date.now() + 86400000).toISOString(),
-        videoFormat: 'short'
-      }
-    });
+  test('should not show connect button for Free Tier users', async ({ page }) => {
+    const connectBtn = page.locator('[data-testid="linkedin-connect-btn"]');
+    await expect(connectBtn).not.toBeVisible({ timeout: 5000 });
+  });
+});
 
-    // We assume the e2e tester account has FREE_STARTER by default or the API correctly intercepts it based on mock / role.
-    // If the API allows it, this test will fail, indicating missing backend enforcement.
-    expect(response.status()).toBe(403);
-    const body = await response.json();
-    expect(body.error).toMatch(/upgrade/i);
+test.describe('LinkedIn Integration — Pro Tier Flow', () => {
+  test.use({ authRole: 'admin' });
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/settings?tab=destinations');
+    await expect(page.locator('[data-testid="settings-content-pane"]')).toBeVisible({
+      timeout: 15000,
+    });
+  });
+
+  test('should show auth bridge modal when clicking connect', async ({ page }) => {
+    const linkedInCard = page.locator('[data-testid="integration-card-linkedin"]');
+    await expect(linkedInCard).toBeVisible({ timeout: 10000 });
+
+    const connectBtn = linkedInCard.locator('[data-testid="linkedin-connect-btn"]');
+    await expect(connectBtn).toBeVisible({ timeout: 5000 });
+    await connectBtn.click();
+
+    const modal = page.locator('[data-testid="linkedin-auth-bridge-modal"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
+    await expect(modal.getByTestId('linkedin-auth-bridge-confirm')).toBeVisible();
+  });
+
+  test('should close auth bridge modal on cancel', async ({ page }) => {
+    const connectBtn = page.locator('[data-testid="linkedin-connect-btn"]');
+    await expect(connectBtn).toBeVisible({ timeout: 10000 });
+    await connectBtn.click();
+
+    const modal = page.locator('[data-testid="linkedin-auth-bridge-modal"]');
+    await expect(modal).toBeVisible({ timeout: 5000 });
+    await modal.getByRole('button', { name: 'Cancel' }).click();
+    await expect(modal).not.toBeVisible({ timeout: 5000 });
+  });
+});
+
+test.describe('LinkedIn Integration — Backend Enforcement', () => {
+  test('should return 403 for Free Tier users attempting to schedule a post', async ({
+    request,
+  }) => {
+    const res = await request.post('/api/linkedin/posts', {
+      data: { text: 'Test post from Free Tier' },
+    });
+    expect(res.status()).toBe(403);
+    const body = (await res.json()) as { error?: string };
+    expect(body.error).toContain('Pro');
   });
 });

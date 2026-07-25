@@ -18,4 +18,7 @@ export interface VideoPublishEvent {
  */
 export type Events = {
   "video.publish": VideoPublishEvent;
+  "linkedin/token.validate": { name: "linkedin/token.validate"; data: Record<string, never> };
+  "linkedin/token.refresh": { name: "linkedin/token.refresh"; data: Record<string, never> };
 };
+

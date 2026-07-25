@@ -7,12 +7,13 @@ import { useAccounts } from '@/hooks/useAccounts';
 import { PlatformCard } from '@/components/settings/PlatformCard';
 import { RoadmapPlatforms } from '@/components/settings/RoadmapPlatforms';
 import { usePlatforms } from '@/hooks/usePlatforms';
+import { LinkedInSection } from '@/components/settings/linkedin/LinkedInSection';
 
 export const DestinationsTab = () => {
   const { accounts, preferences, togglePlatform, disconnectAccount } = useAccounts();
   const { platforms } = usePlatforms();
 
-  const active = platforms.filter(p => p.status === 'active');
+  const active = platforms.filter(p => p.status === 'active' && p.id !== 'linkedin');
   const upcoming = platforms.filter(p => p.status === 'coming-soon');
   const isEnabled = (id: string) => preferences.some(p => p.platformId === id && p.isEnabled);
 
@@ -37,6 +38,7 @@ export const DestinationsTab = () => {
           {active.map((p) => (
             <PlatformCard key={p.id} platform={p} isEnabled={isEnabled(p.id)} onToggle={(id, status) => handleToggle(id, status, p.canToggle)} accounts={accounts} onConnect={() => signIn(p.provider)} onDisconnect={handleDisconnect} isLocked={p.isLocked} />
           ))}
+          <LinkedInSection accounts={accounts} onDisconnect={handleDisconnect} />
         </Box>
       </Box>
       <RoadmapPlatforms platforms={upcoming} />
