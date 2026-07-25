@@ -10,7 +10,7 @@ import { WhatsNewProvider } from "./WhatsNew/WhatsNewContext";
 import { NotificationProvider } from "./Notifications/NotificationContext";
 
 import { Session } from "next-auth";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 import { PostHogProvider, SuspendedPostHogPageview } from "./analytics/PostHogProvider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
