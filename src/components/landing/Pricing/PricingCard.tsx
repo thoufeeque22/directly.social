@@ -5,7 +5,7 @@ import { Box, Typography, Card, CardContent, Button, Stack, useTheme, CircularPr
 import CheckIcon from '@mui/icons-material/Check';
 import { useCheckout } from './useCheckout';
 
-interface PricingTier {
+export interface PricingTier {
   id?: string;
   name: string;
   price: string;
