@@ -78,6 +78,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     ...authConfig.callbacks,
+    async jwt({ token, user, trigger, session }) {
+      // Execute the base JWT callback from authConfig first
+      if (authConfig.callbacks?.jwt) {
+        // @ts-ignore - NextAuth types can be tricky when composing callbacks
+        token = await authConfig.callbacks.jwt({ token, user, trigger, session });
+      }
+
+      // Handle session updates securely using Prisma in Node.js runtime
+      if (trigger === "update" && token.id) {
+        try {
+          const freshUser = await prisma.user.findUnique({ where: { id: token.id as string } });
+          if (freshUser) {
+            token.aiCredits = freshUser.aiCredits;
+          }
+        } catch (e) {
+          console.error("Failed to fetch fresh user data during session update", e);
+        }
+      }
+
+      return token;
+    },
   },
   events: {
     async createUser({ user }) {
