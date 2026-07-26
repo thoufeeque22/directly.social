@@ -97,7 +97,15 @@ export default {
         const path = url.startsWith('http') ? new URL(url).pathname : url;
         return `http://127.0.0.1:3000${path}`;
       }
-      return url.startsWith("/") ? new URL(url, baseUrl).toString() : url;
+
+      // Fix Nginx proxy localhost leak on logout
+      let fixedBaseUrl = baseUrl;
+      if (process.env.NODE_ENV === 'production' && baseUrl.includes('localhost')) {
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://directly.social';
+        fixedBaseUrl = siteUrl.includes('app.') ? siteUrl : siteUrl.replace('://', '://app.');
+      }
+
+      return url.startsWith("/") ? new URL(url, fixedBaseUrl).toString() : url;
     },
     async jwt({ token, user, trigger, session }) {
       if (user) {
@@ -142,14 +150,14 @@ export default {
         // If they are on the wrong domain for login, redirect them to the app subdomain login page
         if (realHost !== correctAppHost && realHost !== correctAppHost.split(':')[0]) {
           targetUrl.hostname = correctAppHost.split(':')[0];
-          targetUrl.port = correctAppHost.includes(':') ? correctAppHost.split(':')[1] : targetUrl.port;
+          targetUrl.port = correctAppHost.includes(':') ? correctAppHost.split(':')[1] : "";
           targetUrl.pathname = '/login';
           return Response.redirect(targetUrl);
         }
 
         if (isLoggedIn) {
           targetUrl.hostname = correctAppHost.split(':')[0];
-          targetUrl.port = correctAppHost.includes(':') ? correctAppHost.split(':')[1] : targetUrl.port;
+          targetUrl.port = correctAppHost.includes(':') ? correctAppHost.split(':')[1] : "";
           targetUrl.pathname = '/';
           return Response.redirect(targetUrl);
         }
