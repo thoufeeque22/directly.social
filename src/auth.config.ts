@@ -124,21 +124,35 @@ export default {
       const isOnLogin = nextUrl.pathname === "/login";
 
       if (isOnLogin) {
-        if (isLoggedIn) {
-          let dashboardUrl = new URL("/", nextUrl);
-          // Use x-forwarded-host if behind Nginx proxy, fallback to nextUrl.hostname
-          const forwardedHost = request.headers.get('x-forwarded-host');
-          const realHost = forwardedHost ? forwardedHost.split(':')[0] : nextUrl.hostname;
+        let targetUrl = new URL("/", nextUrl);
+        const forwardedHost = request.headers.get('x-forwarded-host');
+        const realHost = forwardedHost ? forwardedHost.split(':')[0] : nextUrl.hostname;
+        const isAppSubdomain = realHost.startsWith('app.') || (realHost === 'localhost' && nextUrl.port === '3000' && false /* handled below */);
 
-          if (realHost === 'localhost' || realHost === '127.0.0.1') {
-            dashboardUrl = new URL(`http://app.localhost:${nextUrl.port || '3000'}/`);
-          } else if (realHost === 'directly.social' || realHost === 'www.directly.social') {
-            dashboardUrl = new URL("https://app.directly.social/");
-          } else if (!realHost.startsWith('app.')) {
-            dashboardUrl.hostname = `app.${realHost}`;
-          }
-          return Response.redirect(dashboardUrl);
+        let correctAppHost = realHost;
+        if (realHost === 'localhost' || realHost === '127.0.0.1') {
+          correctAppHost = `app.localhost:${nextUrl.port || '3000'}`;
+        } else if (realHost === 'directly.social' || realHost === 'www.directly.social') {
+          correctAppHost = "app.directly.social";
+        } else if (!realHost.startsWith('app.')) {
+          correctAppHost = `app.${realHost}`;
         }
+
+        // If they are on the wrong domain for login, redirect them to the app subdomain login page
+        if (realHost !== correctAppHost && realHost !== correctAppHost.split(':')[0]) {
+          targetUrl.hostname = correctAppHost.split(':')[0];
+          targetUrl.port = correctAppHost.includes(':') ? correctAppHost.split(':')[1] : targetUrl.port;
+          targetUrl.pathname = '/login';
+          return Response.redirect(targetUrl);
+        }
+
+        if (isLoggedIn) {
+          targetUrl.hostname = correctAppHost.split(':')[0];
+          targetUrl.port = correctAppHost.includes(':') ? correctAppHost.split(':')[1] : targetUrl.port;
+          targetUrl.pathname = '/';
+          return Response.redirect(targetUrl);
+        }
+        
         return true;
       }
 
