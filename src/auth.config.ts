@@ -119,7 +119,8 @@ export default {
       }
       return session;
     },
-    authorized({ auth, request: { nextUrl } }) {
+    authorized({ auth, request }) {
+      const { nextUrl } = request;
       const isLoggedIn = !!auth?.user;
       const isOnLogin = nextUrl.pathname === "/login";
 
