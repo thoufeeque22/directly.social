@@ -126,12 +126,16 @@ export default {
       if (isOnLogin) {
         if (isLoggedIn) {
           let dashboardUrl = new URL("/", nextUrl);
-          if (nextUrl.hostname === 'localhost' || nextUrl.hostname === '127.0.0.1') {
+          // Use x-forwarded-host if behind Nginx proxy, fallback to nextUrl.hostname
+          const forwardedHost = request.headers.get('x-forwarded-host');
+          const realHost = forwardedHost ? forwardedHost.split(':')[0] : nextUrl.hostname;
+
+          if (realHost === 'localhost' || realHost === '127.0.0.1') {
             dashboardUrl = new URL(`http://app.localhost:${nextUrl.port || '3000'}/`);
-          } else if (nextUrl.hostname === 'directly.social') {
+          } else if (realHost === 'directly.social' || realHost === 'www.directly.social') {
             dashboardUrl = new URL("https://app.directly.social/");
-          } else if (!nextUrl.hostname.startsWith('app.')) {
-            dashboardUrl.hostname = `app.${nextUrl.hostname}`;
+          } else if (!realHost.startsWith('app.')) {
+            dashboardUrl.hostname = `app.${realHost}`;
           }
           return Response.redirect(dashboardUrl);
         }
