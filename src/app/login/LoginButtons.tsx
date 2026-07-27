@@ -4,8 +4,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { GoogleIcon } from '@/components/ui/icons/GoogleIcon';
 import { TiktokIcon } from '@/components/ui/icons/TiktokIcon';
-
-type AuthProvider = 'google' | 'facebook' | 'tiktok' | 'linkedin';
+import type { AuthProvider } from '@/lib/core/constants';
 
 export function LoginButtons({ onLoginClick }: { onLoginClick: (provider: AuthProvider) => void }) {
   return (

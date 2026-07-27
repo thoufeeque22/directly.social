@@ -14,8 +14,7 @@ import { E2ELoginForm } from './E2ELoginForm';
 import { LoginButtons } from './LoginButtons';
 import { LoginHeader } from './LoginHeader';
 import { getErrorMessage } from './getErrorMessage';
-
-type AuthProvider = 'google' | 'facebook' | 'tiktok' | 'linkedin';
+import type { AuthProvider } from '@/lib/core/constants';
 
 export function LoginContent({ referrerName }: { referrerName?: string | null }) {
   const [showWarning, setShowWarning] = useState(false);
