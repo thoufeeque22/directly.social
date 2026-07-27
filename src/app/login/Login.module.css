@@ -97,6 +97,11 @@
   box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.5);
 }
 
+.linkedinBtn:hover {
+  border-color: #0A66C2;
+  box-shadow: 0 4px 20px -5px rgba(10, 102, 194, 0.3);
+}
+
 .btnIcon {
   width: 20px;
   height: 20px;

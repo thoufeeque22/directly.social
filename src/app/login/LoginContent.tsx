@@ -15,7 +15,7 @@ import { LoginButtons } from './LoginButtons';
 import { LoginHeader } from './LoginHeader';
 import { getErrorMessage } from './getErrorMessage';
 
-type AuthProvider = 'google' | 'facebook' | 'tiktok';
+type AuthProvider = 'google' | 'facebook' | 'tiktok' | 'linkedin';
 
 export function LoginContent({ referrerName }: { referrerName?: string | null }) {
   const [showWarning, setShowWarning] = useState(false);
