@@ -36,6 +36,11 @@ test.describe('LinkedIn Integration — Pro Tier Flow', () => {
   test.use({ authRole: 'admin' });
 
   test.beforeEach(async ({ page }) => {
+    // Mock tier endpoint to simulate a Pro subscription for the admin test user.
+    await page.route('**/api/linkedin/tier', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ isPro: true }) })
+    );
+
     await page.goto('/settings?tab=destinations');
     await expect(page.locator('[data-testid="settings-content-pane"]')).toBeVisible({
       timeout: 15000,
