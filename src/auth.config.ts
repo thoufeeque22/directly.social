@@ -132,7 +132,44 @@ export default {
       const isLoggedIn = !!auth?.user;
       const isOnLogin = nextUrl.pathname === "/login";
 
+      // Allow public marketing paths to be served without auth.
+      // This prevents unauthenticated crawlers (e.g. Googlebot) on directly.social
+      // from being redirected to /login → app.directly.social/login, which Google
+      // reports as "Page with redirect" and refuses to index.
+      const forwardedHostRaw = request.headers.get('x-forwarded-host');
+      const realHostRaw = forwardedHostRaw ? forwardedHostRaw.split(':')[0] : nextUrl.hostname;
+      const isMarketingDomain =
+        realHostRaw === 'directly.social' ||
+        realHostRaw === 'www.directly.social' ||
+        // Vercel preview URLs without an explicit site=app param
+        (realHostRaw.endsWith('.vercel.app') && nextUrl.searchParams.get('site') !== 'app');
+
+      const PUBLIC_MARKETING_PATHS = [
+        '/', '/docs', '/philosophy', '/privacy', '/terms',
+        '/pricing', '/cookies', '/byok', '/referral-terms', '/status',
+      ];
+      const isPublicMarketingPath =
+        PUBLIC_MARKETING_PATHS.includes(nextUrl.pathname) ||
+        PUBLIC_MARKETING_PATHS.some(
+          (p) => p !== '/' && nextUrl.pathname.startsWith(p + '/'),
+        );
+
+      if (isMarketingDomain && isPublicMarketingPath) {
+        // Serve the marketing page transparently — proxy.ts will rewrite to /marketing
+        return true;
+      }
+
       if (isOnLogin) {
+        // In local development, skip subdomain redirect entirely.
+        // The port is unreliable in Next.js URL construction when AUTH_URL is set,
+        // which causes redirects to app.localhost:80 instead of app.localhost:3000.
+        if (process.env.NODE_ENV === 'development') {
+          if (isLoggedIn) {
+            return Response.redirect(new URL('/', nextUrl));
+          }
+          return true;
+        }
+
         let targetUrl = new URL("/", nextUrl);
         const forwardedHost = request.headers.get('x-forwarded-host');
         const realHost = forwardedHost ? forwardedHost.split(':')[0] : nextUrl.hostname;
