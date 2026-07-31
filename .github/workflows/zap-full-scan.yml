@@ -78,7 +78,7 @@ jobs:
       #   Layer 2 — ZAP_AUTH_SECRET: NextAuth session via /api/zap/auth endpoint
       # FAILS the workflow if any HIGH severity finding is discovered.
       - name: ZAP Full Scan (Authenticated — Automation Framework)
-        uses: zaproxy/action-af@v0.4.0
+        uses: zaproxy/action-af@v0.3.0
         env:
           ZAP_AUTH_SECRET: ${{ secrets.ZAP_AUTH_SECRET }}
         with:
