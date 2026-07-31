@@ -1,12 +1,6 @@
 name: "ZAP Full DAST Scan (Staging)"
 
 on:
-  # Trigger after every successful staging deployment
-  workflow_run:
-    workflows:
-      - "Deploy to Oracle VPS (Staging)"
-    types:
-      - completed
 
   # Weekly scan every Monday at 2am UTC (ensures we catch drift even without deploys)
   schedule:
@@ -25,26 +19,8 @@ permissions:
   contents: read
 
 jobs:
-  # Guard: only run if staging deploy succeeded (for workflow_run trigger)
-  check-upstream:
-    runs-on: ubuntu-latest
-    outputs:
-      should-run: ${{ steps.check.outputs.should-run }}
-    steps:
-      - name: Check upstream result
-        id: check
-        run: |
-          if [[ "${{ github.event_name }}" == "workflow_run" ]] && [[ "${{ github.event.workflow_run.conclusion }}" != "success" ]]; then
-            echo "Upstream workflow did not succeed — skipping ZAP scan."
-            echo "should-run=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "should-run=true" >> "$GITHUB_OUTPUT"
-          fi
-
   zap-full-scan:
     name: "OWASP ZAP Full DAST Scan (Authenticated)"
-    needs: check-upstream
-    if: needs.check-upstream.outputs.should-run == 'true'
     runs-on: ubuntu-latest
 
     env:
