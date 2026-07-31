@@ -1,0 +1,155 @@
+name: "ZAP Full DAST Scan (Staging)"
+
+on:
+  # Trigger after every successful staging deployment
+  workflow_run:
+    workflows:
+      - "Deploy to Oracle VPS (Staging)"
+    types:
+      - completed
+
+  # Weekly scan every Monday at 2am UTC (ensures we catch drift even without deploys)
+  schedule:
+    - cron: "0 2 * * 1"
+
+  # Allow manual trigger (e.g. after config changes or infrastructure updates)
+  workflow_dispatch:
+    inputs:
+      target_override:
+        description: "Override scan target URL (leave blank for staging)"
+        required: false
+        default: ""
+
+permissions:
+  issues: write    # ZAP creates GitHub issues for findings
+  contents: read
+
+jobs:
+  # Guard: only run if staging deploy succeeded (for workflow_run trigger)
+  check-upstream:
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check upstream result
+        id: check
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_run" ]] && [[ "${{ github.event.workflow_run.conclusion }}" != "success" ]]; then
+            echo "Upstream workflow did not succeed — skipping ZAP scan."
+            echo "should-run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should-run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  zap-full-scan:
+    name: "OWASP ZAP Full DAST Scan (Authenticated)"
+    needs: check-upstream
+    if: needs.check-upstream.outputs.should-run == 'true'
+    runs-on: ubuntu-latest
+
+    env:
+      ZAP_TARGET: ${{ inputs.target_override != '' && inputs.target_override || 'https://staging.directly.social' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── Layer 1: Encode staging HTTP Basic Auth ───────────────────────────
+      # Staging nginx is protected by HTTP Basic Auth. We base64-encode the
+      # credentials and pass them to the ZAP docker container as STAGING_HTTP_B64.
+      # The AF plan picks this up via the Replacer job to inject the header
+      # into every outgoing ZAP request before any scanning begins.
+      - name: Prepare Staging HTTP Basic Auth
+        run: |
+          B64=$(echo -n "${{ secrets.STAGING_HTTP_USER }}:${{ secrets.STAGING_HTTP_PASS }}" | base64 -w 0)
+          echo "STAGING_HTTP_B64=${B64}" >> "$GITHUB_ENV"
+
+      - name: Ensure staging is reachable
+        run: |
+          echo "🔍 Checking staging availability at ${{ env.ZAP_TARGET }}..."
+          curl --fail --silent --max-time 30 \
+            --user "${{ secrets.STAGING_HTTP_USER }}:${{ secrets.STAGING_HTTP_PASS }}" \
+            "${{ env.ZAP_TARGET }}" > /dev/null
+          echo "✅ Staging is reachable."
+
+      # Full DAST scan with authenticated context via Automation Framework.
+      # Two auth layers:
+      #   Layer 1 — STAGING_HTTP_B64: nginx HTTP Basic Auth (Replacer add-on)
+      #   Layer 2 — ZAP_AUTH_SECRET: NextAuth session via /api/zap/auth endpoint
+      # FAILS the workflow if any HIGH severity finding is discovered.
+      - name: ZAP Full Scan (Authenticated — Automation Framework)
+        uses: zaproxy/action-full-scan@v0.11.0
+        env:
+          ZAP_AUTH_SECRET: ${{ secrets.ZAP_AUTH_SECRET }}
+          STAGING_HTTP_B64: ${{ env.STAGING_HTTP_B64 }}
+        with:
+          target: ${{ env.ZAP_TARGET }}
+          rules_file_name: ".zap/rules.tsv"
+          # Use Automation Framework plan for authenticated + configurable scan
+          cmd_options: >-
+            -autorun /zap/wrk/.zap/af-plan.yaml
+          # Fail on HIGH severity — blocks future merges until findings are resolved
+          fail_action: true
+          allow_issue_writing: true   # Auto-create GitHub issues for findings
+          # Pass ZAP_AUTH_SECRET as an env var ZAP can reference in the AF plan
+          # and give ZAP access to the .zap config directory
+          docker_name: "ghcr.io/zaproxy/zaproxy:stable"
+          artifact_name: "zap-full-report"
+
+      - name: Upload Full Scan Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "zap-full-report-${{ github.run_number }}"
+          path: |
+            report_html.html
+            report_md.md
+            reports/
+          retention-days: 90
+
+      - name: Notify on High Severity Findings
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '🚨 ZAP Full Scan: HIGH Severity Findings Detected';
+            const body = [
+              '## 🚨 OWASP ZAP Full DAST Scan — HIGH Severity Alert',
+              '',
+              `**Scan Target:** ${{ env.ZAP_TARGET }}`,
+              `**Workflow Run:** [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})`,
+              `**Triggered by:** ${{ github.event_name }}`,
+              '',
+              '### Action Required',
+              'One or more **HIGH severity** vulnerabilities were detected. Review the scan report artifact and resolve findings before the next staging deployment.',
+              '',
+              '📎 **Reports:** Download from the [workflow artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).',
+              '',
+              '_This issue was automatically created by the OWASP ZAP Full Scan workflow._',
+            ].join('\n');
+
+            // Check if there's already an open HIGH alert issue to avoid duplicates
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['security', 'zap', 'high-severity'],
+              state: 'open',
+            });
+
+            if (issues.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['security', 'zap', 'high-severity'],
+              });
+            }
+
+      - name: Post Success Summary
+        if: success()
+        run: |
+          echo "## ✅ ZAP Full Scan Passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "No HIGH severity findings detected against \`${{ env.ZAP_TARGET }}\`." >> "$GITHUB_STEP_SUMMARY"
+          echo "Download the full HTML report from the [workflow artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})." >> "$GITHUB_STEP_SUMMARY"

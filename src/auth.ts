@@ -75,6 +75,46 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
       })
     ] : []),
+
+    // ZAP Security Scanner credentials provider.
+    // Only active when ZAP_ENABLED=true (staging only — never production).
+    // Used exclusively by the /api/zap/auth route to issue a session
+    // cookie for the dedicated zap@directly.social test user.
+    ...(process.env.ZAP_ENABLED === 'true' ? [
+      Credentials({
+        id: "zap-credentials",
+        name: "ZAP Scanner",
+        credentials: {
+          email: { label: "Email", type: "email" },
+          zapSecret: { label: "ZAP Secret", type: "password" },
+        },
+        async authorize(credentials) {
+          const expectedSecret = process.env.ZAP_AUTH_SECRET;
+
+          if (!expectedSecret) {
+            throw new Error("CRITICAL: ZAP_AUTH_SECRET is not set in staging environment.");
+          }
+
+          const email = credentials?.email as string;
+          const zapSecret = credentials?.zapSecret as string;
+
+          // Strict allowlist — only the designated scanner account
+          if (email !== "zap@directly.social" || zapSecret !== expectedSecret) {
+            return null;
+          }
+
+          const user = await prisma.user.findUnique({ where: { email } });
+          if (!user) return null;
+
+          return {
+            id: user.id,
+            name: user.name ?? "ZAP Security Scanner",
+            email: user.email,
+            role: user.role,
+          };
+        },
+      })
+    ] : []),
   ],
   callbacks: {
     ...authConfig.callbacks,

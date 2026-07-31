@@ -1,0 +1,44 @@
+# ZAP False-Positive Suppression Rules for directly.social
+# Format: <rule-id>\t<action>\t<parameter>\t<evidence>\t<url>
+# Actions: IGNORE, WARN, FAIL
+# Docs: https://www.zaproxy.org/docs/docker/full-scan/#rules-file
+
+# ─── Next.js / Framework Noise ───────────────────────────────────────────────
+
+# Incomplete or No Cache-Control Header
+# Next.js aggressively caches static assets with Vercel/CDN headers — not a vuln.
+10015	IGNORE	(`.next/static`)	.*
+
+# Information Disclosure - Suspicious Comments
+# Next.js injects build IDs and metadata comments in HTML. Not sensitive.
+10027	IGNORE	.*	.*
+
+# Timestamp Disclosure - Unix
+# Next.js build timestamps in chunks are not exploitable.
+10096	IGNORE	.*	.*
+
+# Server Leaks Version Information via "X-Powered-By" Header
+# We'll handle this in next.config.ts (poweredByHeader: false). Suppress until fixed.
+10037	WARN	.*	.*
+
+# ─── Auth / Cookie Flags ─────────────────────────────────────────────────────
+
+# Cookie Without Secure Flag
+# Staging uses HTTP in CI runner context — staging cookies are intentionally non-secure.
+10011	IGNORE	authjs.session-token	.*	https://staging\.directly\.social.*
+
+# Cookie SameSite Attribute Not Set
+# NextAuth explicitly sets SameSite=lax — false positive from ZAP parser.
+10054	IGNORE	authjs.*	.*
+
+# ─── Content Security Policy ─────────────────────────────────────────────────
+
+# Content Security Policy (CSP) Header Not Set
+# CSP is set via next.config.ts headers. Warn only — not a hard fail.
+10038	WARN	.*	.*
+
+# ─── MUI / React Specific ────────────────────────────────────────────────────
+
+# Cross-Domain JavaScript Source File Inclusion
+# MUI emotion bundles include inline styles. Not a vulnerability.
+10017	IGNORE	.*emotion.*	.*

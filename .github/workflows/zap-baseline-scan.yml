@@ -1,0 +1,112 @@
+name: "ZAP Baseline Security Scan (PRs)"
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  issues: write         # ZAP needs this to create GitHub issues
+  pull-requests: write  # Needed to post PR comments
+  contents: read
+
+jobs:
+  zap-baseline:
+    name: "OWASP ZAP Baseline Scan"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── Layer 1: Encode staging HTTP Basic Auth credentials ───────────────
+      # Staging nginx is protected by HTTP Basic Auth. ZAP needs this header
+      # injected into every request via ZAP's built-in Replacer add-on.
+      - name: Prepare Staging HTTP Basic Auth
+        run: |
+          B64=$(echo -n "${{ secrets.STAGING_HTTP_USER }}:${{ secrets.STAGING_HTTP_PASS }}" | base64 -w 0)
+          echo "STAGING_HTTP_B64=${B64}" >> "$GITHUB_ENV"
+
+      # Passive-only scan: fast, non-destructive, runs on every PR
+      # Does NOT fail the build — creates a report artifact for review.
+      - name: ZAP Baseline Scan (Public Routes)
+        uses: zaproxy/action-baseline@v0.13.0
+        with:
+          target: "https://staging.directly.social"
+          rules_file_name: ".zap/rules.tsv"
+          cmd_options: >-
+            -a
+            -j
+            -I
+            -config "replacer.full_list(0).description=StagingHTTPAuth"
+            -config "replacer.full_list(0).enabled=true"
+            -config "replacer.full_list(0).matchtype=REQ_HEADER"
+            -config "replacer.full_list(0).matchstring=Authorization"
+            -config "replacer.full_list(0).replacement=Basic ${{ env.STAGING_HTTP_B64 }}"
+            -config "replacer.full_list(0).initiators="
+          # -a: include alpha passive scan rules
+          # -j: use ajax spider (finds Next.js dynamic routes)
+          # -I: do not return failure exit code (PRs are advisory only)
+          # Replacer injects Authorization: Basic <b64> into every ZAP request
+          allow_issue_writing: false  # No GH issues on PRs — artifact only
+          artifact_name: "zap-baseline-report-pr-${{ github.event.pull_request.number }}"
+          fail_action: false
+
+      - name: Upload Baseline Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "zap-baseline-report-pr-${{ github.event.pull_request.number }}"
+          path: |
+            report_html.html
+            report_md.md
+          retention-days: 30
+
+      - name: Comment PR with Scan Summary
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let body = '## 🔍 OWASP ZAP Baseline Scan\n\n';
+
+            if (fs.existsSync('report_md.md')) {
+              const report = fs.readFileSync('report_md.md', 'utf8');
+              // Extract just the summary table (first ~50 lines)
+              const summary = report.split('\n').slice(0, 60).join('\n');
+              body += summary;
+              body += '\n\n> 📎 Full HTML report available in [workflow artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})';
+            } else {
+              body += '> Scan report not found. Check the [workflow logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.';
+            }
+
+            // Find existing ZAP comment on this PR and update it
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c =>
+              c.user.login === 'github-actions[bot]' &&
+              c.body.includes('OWASP ZAP Baseline Scan')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
