@@ -18,6 +18,10 @@ permissions:
   issues: write    # ZAP creates GitHub issues for findings
   contents: read
 
+concurrency:
+  group: global-workflow-queue
+  cancel-in-progress: false
+
 jobs:
   zap-full-scan:
     name: "OWASP ZAP Full DAST Scan (Authenticated)"
