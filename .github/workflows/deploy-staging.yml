@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '**/*.md'
+      - '.agents/**'
+      - 'docs/**'
   workflow_dispatch:
     inputs:
       confirm_deploy:
