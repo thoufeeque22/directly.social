@@ -47,7 +47,6 @@ jobs:
           # -I: do not return failure exit code (PRs are advisory only)
           # Replacer injects Authorization: Basic <b64> into every ZAP request
           allow_issue_writing: false  # No GH issues on PRs — artifact only
-          artifact_name: "zap-baseline-report-pr-${{ github.event.pull_request.number }}"
           fail_action: false
 
       - name: Upload Baseline Report
