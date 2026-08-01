@@ -105,3 +105,12 @@ For any significant feature or codebase audit, the following 7 vulnerabilities m
 5. **NoSQL Injection** - Verify database queries (N/A for Prisma + Postgres).
 6. **Clipboard Copy Attack (Pastejacking)** - Validate content when copying snippets/codes to clipboard.
 7. **Login Replay Attack** - Ensure state/nonce validation in OAuth or Magic Link flows.
+
+### 12. Strict Content Security Policy (CSP) Enforcement
+- **MANDATORY CSP UPDATES:** This application implements a strict `Content-Security-Policy` header in `next.config.ts`. If any agent introduces a new external domain (e.g., for images, fonts, scripts, iframes, or APIs), the agent **MUST** update the `Content-Security-Policy` string in `next.config.ts` to explicitly allow that specific domain (e.g., adding it to `img-src` or `connect-src`).
+- **No Wildcards:** NEVER use wildcard `https:` sources in the CSP. Always define exact domains.
+- **Unsafe-Inline/Eval:** Next.js and Material UI require `unsafe-inline` and `unsafe-eval` in standard setups; do not attempt to remove them from `style-src` or `script-src` unless explicitly implementing a full middleware nonce system.
+
+### 13. OWASP ZAP Automation Framework Strictness
+- **YAML Schema:** When modifying `.zap/af-plan.yaml` (e.g., for alert filters or replacer rules), you MUST adhere to ZAP's strict YAML schema. 
+- **Known Quirks:** Always use `replacementString` instead of `replacement` for replacer rules. For HTTP headers, ensure they are passed as proper arrays if required by the block. For alert filters, ensure `newRisk` exact casing is used (e.g., `"Info"`, `"False Positive"`). Do not guess the schema.

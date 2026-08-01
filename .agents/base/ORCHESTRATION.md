@@ -106,7 +106,8 @@ Required fields in every Artifact:
 - **Role:** Senior Auditor. **READ-ONLY**.
 - **Mandate:** 
   1. **Security, Privacy & Compliance:** MUST NOT modify code. If issues exist, Verdict MUST be "FAIL". MUST check if the implemented feature violates any Cookie Policy, Terms and Conditions, or if those documents require updating. MUST perform all heavy code reviews, log analysis, and architectural gap checks using the `ollama_chat` tool or `cavecrew-reviewer` to avoid burning cloud context on large diffs.
-  2. **Performance Audit:** MUST run a "Web Vitals / Performance Audit" using the `@GoogleChrome/modern-web-guidance` extension. Verify that no deprecated patterns are introduced and that Core Web Vitals (LCP, INP, CLS) are considered.
+  2. **Automated DAST Reliance:** Dynamic Application Security Testing (DAST) is fully automated via OWASP ZAP in GitHub Actions (Baseline on PRs, Full Scan on Staging). The Audit Agent MUST rely on these workflow artifacts for active vulnerability scanning and MUST NOT attempt to write or execute custom penetration testing scripts locally.
+  3. **Performance Audit:** MUST run a "Web Vitals / Performance Audit" using the `@GoogleChrome/modern-web-guidance` extension. Verify that no deprecated patterns are introduced and that Core Web Vitals (LCP, INP, CLS) are considered.
 - **Verdict:** Pass -> Documentation | Fail -> Return to Dev.
 
 ### Documentation
