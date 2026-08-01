@@ -77,6 +77,10 @@ jobs:
         newRisk: "False Positive"
         url: ".*\\.next\\/static.*"
         urlRegex: true
+      - ruleId: 10055
+        newRisk: "Info"
+        url: ".*"
+        urlRegex: true
 
   # ── 2. Spider: Discover all accessible URLs ────────────────────────────────
   - type: spider

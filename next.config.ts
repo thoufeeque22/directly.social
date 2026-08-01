@@ -74,7 +74,8 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             // Baseline Next.js CSP. Allows inline scripts/styles for React/MUI to function correctly.
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: wss:; frame-ancestors 'none';",
+            // Tightened to remove https: wildcards and explicitly define form-action/base-uri.
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: lh3.googleusercontent.com avatars.githubusercontent.com; font-src 'self' data:; connect-src 'self'; form-action 'self'; base-uri 'self'; frame-ancestors 'none';",
           },
         ],
       },
