@@ -121,7 +121,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user, trigger, session }) {
       // Execute the base JWT callback from authConfig first
       if (authConfig.callbacks?.jwt) {
-        // @ts-ignore - NextAuth types can be tricky when composing callbacks
         token = await authConfig.callbacks.jwt({ token, user, trigger, session });
       }
 

@@ -170,7 +170,7 @@ export default {
           return true;
         }
 
-        let targetUrl = new URL("/", nextUrl);
+        const targetUrl = new URL("/", nextUrl);
         const forwardedHost = request.headers.get('x-forwarded-host');
         const realHost = forwardedHost ? forwardedHost.split(':')[0] : nextUrl.hostname;
         const isAppSubdomain = realHost.startsWith('app.') || (realHost === 'localhost' && nextUrl.port === '3000' && false /* handled below */);
