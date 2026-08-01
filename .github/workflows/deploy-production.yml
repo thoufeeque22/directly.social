@@ -11,6 +11,10 @@ on:
           - 'No, cancel'
           - 'Yes, deploy it!'
 
+concurrency:
+  group: global-workflow-queue
+  cancel-in-progress: false
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

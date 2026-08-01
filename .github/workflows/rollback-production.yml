@@ -8,6 +8,10 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: global-workflow-queue
+  cancel-in-progress: false
+
 jobs:
   rollback:
     runs-on: ubuntu-latest
