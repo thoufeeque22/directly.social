@@ -33,7 +33,7 @@ jobs:
       # Passive-only scan: fast, non-destructive, runs on every PR
       # Does NOT fail the build — creates a report artifact for review.
       - name: ZAP Baseline Scan (Public Routes)
-        uses: zaproxy/action-baseline@v0.13.0
+        uses: zaproxy/action-baseline@v0.15.0
         with:
           target: "https://staging.directly.social"
           rules_file_name: ".zap/rules.tsv"
