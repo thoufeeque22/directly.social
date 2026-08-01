@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/infrastructure/database/prisma";
+import { Account } from "@prisma/client";
 import { IAccountRepository, ITokenAuditRepository, DomainAccount, AccountUpdatePayload } from "@/lib/core/ports/account-repository";
 
-function mapToDomainAccount(account: any): DomainAccount {
+function mapToDomainAccount(account: Account): DomainAccount {
   return {
     id: account.id,
     userId: account.userId,
