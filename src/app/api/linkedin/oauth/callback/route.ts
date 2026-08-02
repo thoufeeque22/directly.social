@@ -5,6 +5,8 @@ import { verifyOAuthState, exchangeCodeForTokens } from '@/lib/platforms/linkedi
 import { encryptLinkedInToken } from '@/lib/platforms/linkedin/encrypt';
 import { fetchLinkedInProfile, buildMemberUrn } from '@/lib/platforms/linkedin/client';
 
+const SETTINGS_URL = '/settings?tab=destinations';
+
 /**
  * GET /api/linkedin/oauth/callback
  * Handles the OAuth 2.0 Authorization Code callback from LinkedIn.
@@ -27,13 +29,13 @@ export async function GET(req: Request): Promise<Response> {
 
   if (error) {
     return NextResponse.redirect(
-      new URL(`/settings?tab=destinations&linkedin_error=${error}`, req.url),
+      new URL(`${SETTINGS_URL}&linkedin_error=${error}`, req.url),
     );
   }
 
   if (!code || !state) {
     return NextResponse.redirect(
-      new URL('/settings?tab=destinations&linkedin_error=missing_params', req.url),
+      new URL(`${SETTINGS_URL}&linkedin_error=missing_params`, req.url),
     );
   }
 
@@ -41,41 +43,51 @@ export async function GET(req: Request): Promise<Response> {
     verifyOAuthState(state);
   } catch {
     return NextResponse.redirect(
-      new URL('/settings?tab=destinations&linkedin_error=invalid_state', req.url),
+      new URL(`${SETTINGS_URL}&linkedin_error=invalid_state`, req.url),
     );
   }
 
-  const redirectUri = `${process.env.NEXTAUTH_URL ?? 'http://localhost:3000'}/api/linkedin/oauth/callback`;
+  try {
+    const redirectUri = `${process.env.NEXTAUTH_URL ?? 'http://localhost:3000'}/api/linkedin/oauth/callback`;
 
-  const tokens = await exchangeCodeForTokens(code, redirectUri);
-  const profile = await fetchLinkedInProfile(tokens.accessToken);
+    const tokens = await exchangeCodeForTokens(code, redirectUri);
+    const profile = await fetchLinkedInProfile(tokens.accessToken);
 
-  const encryptedAccess = encryptLinkedInToken(tokens.accessToken);
-  const encryptedRefresh = encryptLinkedInToken(tokens.refreshToken);
+    const encryptedAccess = encryptLinkedInToken(tokens.accessToken);
+    const encryptedRefresh = encryptLinkedInToken(tokens.refreshToken ?? '');
 
-  await prisma.account.upsert({
-    where: { provider_providerAccountId: { provider: 'linkedin', providerAccountId: profile.sub } },
-    create: {
-      userId: session.user.id,
-      type: 'oauth',
-      provider: 'linkedin',
-      providerAccountId: profile.sub,
-      access_token: encryptedAccess,
-      refresh_token: encryptedRefresh,
-      expires_at: tokens.expiresAt,
-      accountName: profile.name,
-      scope: 'openid profile email w_member_social r_liteprofile',
-    },
-    update: {
-      access_token: encryptedAccess,
-      refresh_token: encryptedRefresh,
-      expires_at: tokens.expiresAt,
-      accountName: profile.name,
-    },
-  });
+    await prisma.account.upsert({
+      where: { provider_providerAccountId: { provider: 'linkedin', providerAccountId: profile.sub } },
+      create: {
+        userId: session.user.id,
+        type: 'oauth',
+        provider: 'linkedin',
+        providerAccountId: profile.sub,
+        access_token: encryptedAccess,
+        refresh_token: encryptedRefresh,
+        expires_at: tokens.expiresAt,
+        accountName: profile.name,
+        scope: 'openid profile email w_member_social',
+      },
+      update: {
+        userId: session.user.id,
+        access_token: encryptedAccess,
+        refresh_token: encryptedRefresh,
+        expires_at: tokens.expiresAt,
+        accountName: profile.name,
+        scope: 'openid profile email w_member_social',
+      },
+    });
 
-  void buildMemberUrn(profile.sub);
-  return NextResponse.redirect(
-    new URL('/settings?tab=destinations&linkedin_connected=true', req.url),
-  );
+    void buildMemberUrn(profile.sub);
+    return NextResponse.redirect(
+      new URL(`${SETTINGS_URL}&linkedin_connected=true`, req.url),
+    );
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error('[LINKEDIN-CALLBACK] Error:', message);
+    return NextResponse.redirect(
+      new URL(`${SETTINGS_URL}&linkedin_error=${encodeURIComponent(message)}`, req.url),
+    );
+  }
 }
