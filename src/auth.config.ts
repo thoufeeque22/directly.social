@@ -80,7 +80,7 @@ export default {
         clientSecret: process.env.AUTH_LINKEDIN_SECRET,
         authorization: {
           params: {
-            scope: "openid profile email w_member_social r_liteprofile",
+            scope: "openid profile email w_member_social",
           }
         },
         allowDangerousEmailAccountLinking: true,
