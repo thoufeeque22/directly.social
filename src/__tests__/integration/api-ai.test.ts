@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
 import { POST as validateKeyPOST } from '@/app/api/ai/validate-key/route';
 import { NextRequest } from 'next/server';
-import { type Session } from 'next-auth';
+import { type Session } from '@/auth';
 
 vi.mock('@/auth', () => ({ auth: vi.fn() }));
 vi.mock('ai', () => ({ generateText: vi.fn() }));

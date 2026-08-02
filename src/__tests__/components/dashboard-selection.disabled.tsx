@@ -12,12 +12,12 @@ vi.mock('next/server', () => ({
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 const Home = () => <div />;
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import { getUserAccounts } from '@/app/actions/user/accounts';
 import { getPlatformPreferences } from '@/app/actions/user/platform';
 
 // Mock NextAuth
-vi.mock('next-auth/react', () => ({
+vi.mock('@/lib/supabase/next-auth-react-shim', () => ({
   useSession: vi.fn(),
 }));
 

@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import 'swagger-ui-react/swagger-ui.css';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import { redirect } from 'next/navigation';
 import { CircularProgress, Box, Typography } from '@mui/material';
 import { BRAND } from '@/lib/core/brand';

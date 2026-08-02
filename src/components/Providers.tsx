@@ -1,6 +1,6 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider } from '@/lib/supabase/next-auth-react-shim';
 import { useEffect } from "react";
 import { App } from "@capacitor/app";
 import { Browser } from "@capacitor/browser";
@@ -9,7 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { WhatsNewProvider } from "./WhatsNew/WhatsNewContext";
 import { NotificationProvider } from "./Notifications/NotificationContext";
 
-import { Session } from "next-auth";
+import { Session } from '@/auth';
 import { Analytics } from "@vercel/analytics/next";
 import { PostHogProvider, SuspendedPostHogPageview } from "./analytics/PostHogProvider";
 

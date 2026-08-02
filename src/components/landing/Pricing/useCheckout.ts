@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import { useRouter } from 'next/navigation';
 
 export const useCheckout = () => {

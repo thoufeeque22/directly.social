@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useTransition } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn } from '@/lib/supabase/next-auth-react-shim';
 import { E2E_TEST_IDS } from './e2eTestIds';
 import { BRAND } from '@/lib/core/brand';
 

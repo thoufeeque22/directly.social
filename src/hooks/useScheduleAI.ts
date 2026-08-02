@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import { updateScheduledPost } from '@/app/actions/activity/update-schedule';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
 import { useAiByok } from '@/hooks/useAiByok';

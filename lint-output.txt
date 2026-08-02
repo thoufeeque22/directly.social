@@ -1,0 +1,808 @@
+Already up to date
+Done in 154ms using pnpm v11.5.0
+
+/Users/thoufeeque/projects/directly.social/eslint.config.mjs
+  12:57  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/next.config.ts
+  16:5  warning  Make sure using a hardcoded IP address 10.0.2.2 is safe here  sonarjs/no-hardcoded-ip
+
+/Users/thoufeeque/projects/directly.social/scripts/copy-assets.js
+   9:8  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  10:5  warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/scripts/notebook-bundle.ts
+  28:3    warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+  28:5    warning  Remove duplicates in this character class                                                                       sonarjs/duplicates-in-character-class
+  28:88   warning  Remove duplicates in this character class                                                                       sonarjs/duplicates-in-character-class
+  28:104  warning  Remove duplicates in this character class                                                                       sonarjs/duplicates-in-character-class
+  43:7    warning  Found existsSync from package "fs" with non literal argument at index 0                                         security/detect-non-literal-fs-filename
+  46:3    warning  Found mkdirSync from package "fs" with non literal argument at index 0                                          security/detect-non-literal-fs-filename
+  59:23   warning  Found readFileSync from package "fs" with non literal argument at index 0                                       security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/scripts/prune-state.ts
+  13:19  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  26:5   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  39:5   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/scripts/seed-normal-user.ts
+  18:5  warning  Remove this useless assignment to variable "user"  sonarjs/no-dead-store
+
+/Users/thoufeeque/projects/directly.social/scripts/seed-stripe.js
+  7:30  warning  Found non-literal argument to RegExp Constructor  security/detect-non-literal-regexp
+
+/Users/thoufeeque/projects/directly.social/scripts/state-manager.ts
+   14:16  warning  Refactor this function to reduce its Cognitive Complexity from 33 to the 15 allowed  sonarjs/cognitive-complexity
+   19:9   warning  Generic Object Injection Sink                                                        security/detect-object-injection
+   20:11  warning  Generic Object Injection Sink                                                        security/detect-object-injection
+   21:23  warning  Generic Object Injection Sink                                                        security/detect-object-injection
+   24:9   warning  Generic Object Injection Sink                                                        security/detect-object-injection
+   26:21  warning  Generic Object Injection Sink                                                        security/detect-object-injection
+   29:11  warning  Generic Object Injection Sink                                                        security/detect-object-injection
+   32:11  warning  Generic Object Injection Sink                                                        security/detect-object-injection
+   55:23  warning  Found readFile from package "fs/promises" with non literal argument at index 0       security/detect-non-literal-fs-filename
+   64:31  warning  Make sure the "PATH" variable only contains fixed, unwriteable directories           sonarjs/no-os-command-from-path
+   78:9   warning  Found mkdir from package "fs/promises" with non literal argument at index 0          security/detect-non-literal-fs-filename
+   85:27  warning  Found readFile from package "fs/promises" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  145:9   warning  Found writeFile from package "fs/promises" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  149:9   warning  Found mkdir from package "fs/promises" with non literal argument at index 0          security/detect-non-literal-fs-filename
+  166:9   warning  Found appendFile from package "fs/promises" with non literal argument at index 0     security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/components/dashboard-default-selection.test.tsx
+  70:37  warning  Generic Object Injection Sink  security/detect-object-injection
+  71:54  warning  Generic Object Injection Sink  security/detect-object-injection
+  72:49  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/components/dashboard-selection.disabled.tsx
+  45:37  warning  Generic Object Injection Sink                       security/detect-object-injection
+  46:54  warning  Generic Object Injection Sink                       security/detect-object-injection
+  47:49  warning  Generic Object Injection Sink                       security/detect-object-injection
+  67:1   warning  Remove this unit test or explain why it is ignored  sonarjs/no-skipped-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/components/settings-disconnect.test.tsx
+  90:7  warning  Prefer "expect(disconnectButtons).toHaveLength(2)" over this generic assertion for better reporting; it works on any object with a numeric length property  sonarjs/prefer-specific-assertions
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/activity.spec.ts
+    9:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  129:3   warning  Add at least one assertion to this test case                               sonarjs/assertions-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/ai-nudge.spec.ts
+  82:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  88:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/analytics.spec.ts
+  36:50  warning  Generic Object Injection Sink                                              security/detect-object-injection
+  37:48  warning  Generic Object Injection Sink                                              security/detect-object-injection
+  38:48  warning  Generic Object Injection Sink                                              security/detect-object-injection
+  39:53  warning  Generic Object Injection Sink                                              security/detect-object-injection
+  40:52  warning  Generic Object Injection Sink                                              security/detect-object-injection
+  41:51  warning  Generic Object Injection Sink                                              security/detect-object-injection
+  77:18  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/base-test.ts
+   34:62  warning  Refactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed  sonarjs/cognitive-complexity
+   50:10  warning  Found existsSync from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+   73:20  warning  Replace this fixed wait with a synchronization on an observable condition            sonarjs/no-fixed-wait-in-tests
+   82:13  warning  Handle this exception or don't catch it at all                                       sonarjs/no-ignored-exceptions
+  129:30  warning  Refactor this function to reduce its Cognitive Complexity from 45 to the 15 allowed  sonarjs/cognitive-complexity
+  175:18  warning  Replace this fixed wait with a synchronization on an observable condition            sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/byok/ai-wizard.spec.ts
+  36:16  warning  Replace this fixed wait with a synchronization on an observable condition         sonarjs/no-fixed-wait-in-tests
+  66:25  warning  Remove this forced interaction and wait for the element to be actionable instead  sonarjs/no-forced-browser-interaction
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/byok/wizard.spec.ts
+  9:14  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/byos-gallery.spec.ts
+  191:14  warning  Potential timing attack, left side: true  security/detect-possible-timing-attacks
+  211:14  warning  Potential timing attack, left side: true  security/detect-possible-timing-attacks
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/byos.spec.ts
+   7:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  19:18  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  22:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  28:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  30:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  35:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  59:18  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  62:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  65:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  67:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  69:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/chat.spec.ts
+  50:5  warning  Remove this unit test or explain why it is ignored  sonarjs/no-skipped-tests
+  68:5  warning  Remove this unit test or explain why it is ignored  sonarjs/no-skipped-tests
+  79:5  warning  Remove this unit test or explain why it is ignored  sonarjs/no-skipped-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/global-setup.ts
+  11:14  warning  Make sure the "PATH" variable only contains fixed, unwriteable directories  sonarjs/no-os-command-from-path
+  23:14  warning  Make sure the "PATH" variable only contains fixed, unwriteable directories  sonarjs/no-os-command-from-path
+  26:14  warning  Make sure the "PATH" variable only contains fixed, unwriteable directories  sonarjs/no-os-command-from-path
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/landing-page.spec.ts
+  105:60  warning  Use concise character class syntax '\d' instead of '[0-9]'  sonarjs/concise-regex
+  105:67  warning  Use concise character class syntax '\d' instead of '[0-9]'  sonarjs/concise-regex
+  105:75  warning  Use concise character class syntax '\d' instead of '[0-9]'  sonarjs/concise-regex
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/linkedin-integration.spec.ts
+  36:30  warning  Remove this forced interaction and wait for the element to be actionable instead  sonarjs/no-forced-browser-interaction
+  46:30  warning  Remove this forced interaction and wait for the element to be actionable instead  sonarjs/no-forced-browser-interaction
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/media-library.spec.ts
+   30:39  warning  Make sure that using this pseudorandom number generator is safe here                                            sonarjs/pseudo-random
+   86:38  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+  178:16  warning  Replace this fixed wait with a synchronization on an observable condition                                       sonarjs/no-fixed-wait-in-tests
+  200:39  warning  Make sure that using this pseudorandom number generator is safe here                                            sonarjs/pseudo-random
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/mobile-smoke.spec.ts
+  12:38  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/parallel-upload.spec.ts
+  76:24  warning  Using http protocol is insecure. Use https instead  sonarjs/no-clear-text-protocols
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/platform-journey.spec.ts
+  12:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/public-layout.spec.ts
+  35:34  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/referral.spec.ts
+   13:35  warning  Make sure that using this pseudorandom number generator is safe here  sonarjs/pseudo-random
+   51:35  warning  Make sure that using this pseudorandom number generator is safe here  sonarjs/pseudo-random
+   89:35  warning  Make sure that using this pseudorandom number generator is safe here  sonarjs/pseudo-random
+  123:35  warning  Make sure that using this pseudorandom number generator is safe here  sonarjs/pseudo-random
+  156:35  warning  Make sure that using this pseudorandom number generator is safe here  sonarjs/pseudo-random
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/refresh-mechanism.spec.ts
+  58:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  89:18  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/schedule-navigation.spec.ts
+  12:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  38:34  warning  Found non-literal argument to RegExp Constructor                           security/detect-non-literal-regexp
+  92:34  warning  Found non-literal argument to RegExp Constructor                           security/detect-non-literal-regexp
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/settings-tab-navigation.spec.ts
+  29:40  warning  Found non-literal argument to RegExp Constructor  security/detect-non-literal-regexp
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/settings.spec.ts
+    7:16  warning  Replace this fixed wait with a synchronization on an observable condition         sonarjs/no-fixed-wait-in-tests
+   17:18  warning  Replace this fixed wait with a synchronization on an observable condition         sonarjs/no-fixed-wait-in-tests
+   44:16  warning  Replace this fixed wait with a synchronization on an observable condition         sonarjs/no-fixed-wait-in-tests
+   50:16  warning  Replace this fixed wait with a synchronization on an observable condition         sonarjs/no-fixed-wait-in-tests
+   69:18  warning  Replace this fixed wait with a synchronization on an observable condition         sonarjs/no-fixed-wait-in-tests
+   73:31  warning  Remove this forced interaction and wait for the element to be actionable instead  sonarjs/no-forced-browser-interaction
+   92:16  warning  Replace this fixed wait with a synchronization on an observable condition         sonarjs/no-fixed-wait-in-tests
+   98:16  warning  Replace this fixed wait with a synchronization on an observable condition         sonarjs/no-fixed-wait-in-tests
+  116:18  warning  Replace this fixed wait with a synchronization on an observable condition         sonarjs/no-fixed-wait-in-tests
+  120:31  warning  Remove this forced interaction and wait for the element to be actionable instead  sonarjs/no-forced-browser-interaction
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/sign-out-redirect.spec.ts
+  34:34  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/snippets.spec.ts
+   40:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+   72:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  128:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  152:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  161:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/status-dashboard.spec.ts
+  69:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/stripe-checkout.spec.ts
+  19:23  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+  25:32  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+  42:23  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+  48:32  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/support-tab-399.spec.ts
+  26:34  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/ticket-538-roles-cleanup.spec.ts
+  30:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  64:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+  75:20  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/ticket-637.spec.ts
+   96:27  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+  126:27  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/ticket-656-nav-layout.spec.ts
+  17:36  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/ticket-741-upload.spec.ts
+  46:34  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/ticket-755-referral.spec.ts
+  40:3  warning  Add at least one assertion to this test case  sonarjs/assertions-in-tests
+  44:3  warning  Add at least one assertion to this test case  sonarjs/assertions-in-tests
+  50:3  warning  Add at least one assertion to this test case  sonarjs/assertions-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/tiktok.spec.ts
+  59:34  warning  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/upload-visibility.spec.ts
+  215:30  warning  Remove this forced interaction and wait for the element to be actionable instead  sonarjs/no-forced-browser-interaction
+  256:27  warning  Remove this forced interaction and wait for the element to be actionable instead  sonarjs/no-forced-browser-interaction
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/video-preview-390.spec.ts
+  11:16  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/visual-audit-batch.spec.ts
+   4:3  warning  Add at least one assertion to this test case  sonarjs/assertions-in-tests
+  10:3  warning  Add at least one assertion to this test case  sonarjs/assertions-in-tests
+  16:3  warning  Add at least one assertion to this test case  sonarjs/assertions-in-tests
+  22:3  warning  Add at least one assertion to this test case  sonarjs/assertions-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/e2e/visual-audit.spec.ts
+   3:1   warning  Add at least one assertion to this test case                               sonarjs/assertions-in-tests
+  30:14  warning  Replace this fixed wait with a synchronization on an observable condition  sonarjs/no-fixed-wait-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/hooks/useLocalVault.test.tsx
+  73:5  warning  Prefer "expect(result.current.assets).toHaveLength(1)" over this generic assertion for better reporting; it works on any object with a numeric length property  sonarjs/prefer-specific-assertions
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/integration/ai-preference-persistence.test.tsx
+  57:37  warning  Generic Object Injection Sink  security/detect-object-injection
+  58:54  warning  Generic Object Injection Sink  security/detect-object-injection
+  59:49  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/integration/parallel-upload.test.ts
+  28:35  warning  Using http protocol is insecure. Use https instead  sonarjs/no-clear-text-protocols
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/integration/upload-integration.test.ts
+   99:56  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  196:56  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/scripts/clear-activity.ts
+   9:16  warning  Refactor this function to reduce its Cognitive Complexity from 19 to the 15 allowed  sonarjs/cognitive-complexity
+  27:9   warning  Found existsSync from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+  28:27  warning  Found readdir from package "fs" with non literal argument at index 0                 security/detect-non-literal-fs-filename
+  34:32  warning  Found stat from package "fs" with non literal argument at index 0                    security/detect-non-literal-fs-filename
+  38:21  warning  Found unlink from package "fs" with non literal argument at index 0                  security/detect-non-literal-fs-filename
+  48:11  warning  Found existsSync from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+  49:31  warning  Found readdir from package "fs" with non literal argument at index 0                 security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/unit/checksum.test.ts
+  11:10  warning  Found existsSync from package "fs" with non literal argument at index 0                                                                         security/detect-non-literal-fs-filename
+  12:7   warning  Found mkdirSync from package "fs" with non literal argument at index 0                                                                          security/detect-non-literal-fs-filename
+  14:5   warning  Found writeFileSync from package "fs" with non literal argument at index 0                                                                      security/detect-non-literal-fs-filename
+  27:5   warning  Prefer "expect(hash).toHaveLength(32)" over this generic assertion for better reporting; it works on any object with a numeric length property  sonarjs/prefer-specific-assertions
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/unit/components/AINudge.test.tsx
+   8:37  warning  Generic Object Injection Sink  security/detect-object-injection
+  10:7   warning  Generic Object Injection Sink  security/detect-object-injection
+  16:14  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/unit/components/CalendarView.test.tsx
+  32:3  warning  Add at least one assertion to this test case  sonarjs/assertions-in-tests
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/unit/error-mapping.test.ts
+  55:5  warning  Prefer "expect(getFriendlyError(longError)).toHaveLength(80)" over this generic assertion for better reporting; it works on any object with a numeric length property  sonarjs/prefer-specific-assertions
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/unit/hooks/useActivityData.test.ts
+  80:5  warning  Prefer "expect(mockFetchActivity.mock.calls).toHaveLength(firstCallCount)" over this generic assertion for better reporting; it works on any object with a numeric length property  sonarjs/prefer-specific-assertions
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/unit/platform-security.test.ts
+  21:15  warning  Make sure publicly writable directories are used safely here  sonarjs/publicly-writable-directories
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/unit/upload/activity-registration.test.ts
+  24:16  warning  Make sure publicly writable directories are used safely here  sonarjs/publicly-writable-directories
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/unit/upload/chunk-assembler.test.ts
+  53:19  warning  Make sure publicly writable directories are used safely here  sonarjs/publicly-writable-directories
+
+/Users/thoufeeque/projects/directly.social/src/__tests__/unit/upload/gallery-registration.test.ts
+  22:16  warning  Make sure publicly writable directories are used safely here  sonarjs/publicly-writable-directories
+
+/Users/thoufeeque/projects/directly.social/src/app/(app)/admin/analytics/FeatureAdoptionChart.tsx
+  23:12  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/app/(app)/page.tsx
+  37:7  warning  Remove this useless assignment to variable "tierName"    sonarjs/no-dead-store
+  41:7  warning  'isFreeTier' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  41:7  warning  Remove this useless assignment to variable "isFreeTier"  sonarjs/no-dead-store
+  43:5  warning  'tierName' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  43:5  warning  Remove this useless assignment to variable "tierName"    sonarjs/no-dead-store
+
+/Users/thoufeeque/projects/directly.social/src/app/(app)/referral/page.tsx
+  51:8  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/app/(app)/schedule/ScheduleContent.tsx
+  44:11  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/app/actions/activity/delete-post.ts
+  21:13  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  21:38  warning  Found unlinkSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/app/actions/activity/metadata.ts
+  10:4  warning  Complete the task associated to this "TODO" comment                         sonarjs/todo-tag
+  17:5  warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/app/actions/activity/retry-executor.ts
+  15:10  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/app/api/chat/route.ts
+  29:18  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/app/api/media/[fileId]/route.ts
+   52:25  warning  Found stat from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+   70:26  warning  Found createReadStream from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+   94:26  warning  Found createReadStream from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  154:9   warning  Found existsSync from package "fs" with non literal argument at index 0        security/detect-non-literal-fs-filename
+  155:13  warning  Found unlink from package "fs" with non literal argument at index 0            security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/app/api/media/route.ts
+  127:11  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  128:15  warning  Found unlink from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/app/api/platforms/route.ts
+  2:10  warning  'PLATFORMS' is defined but never used     @typescript-eslint/no-unused-vars
+  2:10  warning  Remove this unused import of 'PLATFORMS'  sonarjs/unused-import
+
+/Users/thoufeeque/projects/directly.social/src/app/api/pricing/lifetime-cap/route.ts
+  8:5   warning  Handle this exception or don't catch it at all  sonarjs/no-ignored-exceptions
+  8:12  warning  'error' is defined but never used               @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/app/api/referral/route.ts
+   5:23  warning  Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed  sonarjs/cognitive-complexity
+  36:32  warning  Make sure that using this pseudorandom number generator is safe here                 sonarjs/pseudo-random
+
+/Users/thoufeeque/projects/directly.social/src/app/api/status/personalized/route.ts
+  71:31  warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/app/api/status/route.ts
+  75:37  warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/app/api/upload/chunk/route.ts
+  29:11  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  37:11  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/app/api/upload/chunks/[uploadId]/route.ts
+  24:10  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  28:25  warning  Found readdir from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/app/api/upload/cleanup/route.ts
+  31:9   warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  32:13  warning  Found unlink from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/app/error.tsx
+  5:25  warning  Do not use "Error" to declare a function - use another name  sonarjs/no-globals-shadowing
+
+/Users/thoufeeque/projects/directly.social/src/app/login/LoginContent.tsx
+  7:27  warning  'useRouter' is defined but never used     @typescript-eslint/no-unused-vars
+  7:27  warning  Remove this unused import of 'useRouter'  sonarjs/unused-import
+
+/Users/thoufeeque/projects/directly.social/src/app/login/e2eTestIds.ts
+  3:13  warning  Review this potentially hard-coded password  sonarjs/no-hardcoded-passwords
+
+/Users/thoufeeque/projects/directly.social/src/app/marketing/docs/[...slug]/page.tsx
+  56:22  warning  Found existsSync from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  60:19  warning  Found readFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/auth.ts
+  50:31  warning  'options' is defined but never used       @typescript-eslint/no-unused-vars
+  50:41  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  57:30  warning  'provider' is defined but never used      @typescript-eslint/no-unused-vars
+  57:49  warning  'options' is defined but never used       @typescript-eslint/no-unused-vars
+  57:59  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thoufeeque/projects/directly.social/src/components/Providers.tsx
+  12:10  warning  'Session' is defined but never used     @typescript-eslint/no-unused-vars
+  12:10  warning  Remove this unused import of 'Session'  sonarjs/unused-import
+
+/Users/thoufeeque/projects/directly.social/src/components/ThemeContextProvider.tsx
+  55:51  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  62:69  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  66:60  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  67:44  warning  Refactor this code to not nest functions more than 4 levels deep     sonarjs/no-nested-functions
+
+/Users/thoufeeque/projects/directly.social/src/components/WhatsNew/WhatsNewPopover.tsx
+  35:13  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/activity/ActivityCardActions.tsx
+  9:4  warning  Complete the task associated to this "TODO" comment  sonarjs/todo-tag
+
+/Users/thoufeeque/projects/directly.social/src/components/activity/ActivityList.tsx
+  8:4  warning  Complete the task associated to this "TODO" comment  sonarjs/todo-tag
+
+/Users/thoufeeque/projects/directly.social/src/components/activity/PlatformConstants.tsx
+  20:17  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  22:10  warning  Generic Object Injection Sink                                        security/detect-object-injection
+  24:51  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/activity/PlatformResultItem.tsx
+  22:4   warning  Complete the task associated to this "TODO" comment                                  sonarjs/todo-tag
+  23:17  warning  Refactor this function to reduce its Cognitive Complexity from 86 to the 15 allowed  sonarjs/cognitive-complexity
+  35:44  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  36:5   warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  36:48  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  37:5   warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  37:64  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  38:5   warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  53:10  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  54:10  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  55:10  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  56:10  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  59:62  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  60:10  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  60:41  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  61:10  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  70:66  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  71:19  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  71:75  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  72:41  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+  72:58  warning  Refactor this code to not use nested template literals                               sonarjs/no-nested-template-literals
+
+/Users/thoufeeque/projects/directly.social/src/components/chat/ChatMessageItem.tsx
+  50:69  warning  Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed  sonarjs/cognitive-complexity
+  66:91  warning  Extract this nested ternary operation into an independent statement                  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/chat/ChatToolInvocation.tsx
+  24:56  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/AIContentReview/index.tsx
+  18:22   warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+  20:18   warning  Generic Object Injection Sink               security/detect-object-injection
+  23:116  warning  Generic Object Injection Sink               security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/SidebarInfo.tsx
+  89:15  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/UploadForm/AIStyleSelector.tsx
+  24:49  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/UploadForm/AITierSelector.tsx
+  41:68  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/UploadForm/PlatformMetadataFields.tsx
+  62:23  warning  Generic Object Injection Sink  security/detect-object-injection
+  63:22  warning  Generic Object Injection Sink  security/detect-object-injection
+  64:25  warning  Generic Object Injection Sink  security/detect-object-injection
+  65:25  warning  Generic Object Injection Sink  security/detect-object-injection
+  66:26  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/UploadForm/PlatformMetadataItem.Description.tsx
+  26:18  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/UploadForm/PlatformMetadataItem.Title.tsx
+  24:18  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/UploadForm/StandardMetadataFields.Description.tsx
+  68:112  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/UploadForm/StandardMetadataFields.Title.tsx
+  78:112  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/UploadForm/UploadFormActions.tsx
+  58:70  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  58:93  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  59:44  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  59:67  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/UploadForm/UploadFormInner.tsx
+  57:70  warning  Generic Object Injection Sink  security/detect-object-injection
+  58:76  warning  Generic Object Injection Sink  security/detect-object-injection
+  59:73  warning  Generic Object Injection Sink  security/detect-object-injection
+  60:78  warning  Generic Object Injection Sink  security/detect-object-injection
+  61:77  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/components/dashboard/handlers/platformMapper.ts
+  26:63  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/landing/Hero/index.tsx
+  4:38  warning  'Button' is defined but never used     @typescript-eslint/no-unused-vars
+  4:38  warning  Remove this unused import of 'Button'  sonarjs/unused-import
+
+/Users/thoufeeque/projects/directly.social/src/components/landing/Personas/index.tsx
+  13:19  warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/components/landing/Pricing/LifetimePricingCard.tsx
+  81:117  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/landing/Pricing/PricingCard.tsx
+  81:70  warning  This conditional operation returns the same value whether the condition is "true" or "false"  sonarjs/no-all-duplicated-branches
+  81:70  warning  Extract this nested ternary operation into an independent statement                           sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/layout/LayoutWrapper.tsx
+  15:12  warning  'initialSession' is defined but never used                     @typescript-eslint/no-unused-vars
+  25:17  warning  'clientSession' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  25:17  warning  Remove the declaration of the unused 'clientSession' variable  sonarjs/no-unused-vars
+  25:17  warning  Remove this useless assignment to variable "clientSession"     sonarjs/no-dead-store
+
+/Users/thoufeeque/projects/directly.social/src/components/layout/Sidebar.tsx
+  175:113  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/media/ByosAssetCard.tsx
+  28:66  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/components/media/LocalVaultPanel.tsx
+  69:11  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/media/MediaActionsHUD.tsx
+  69:46  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/media/MediaLibrary.tsx
+  149:17  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  173:11  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/media/MediaPreview.tsx
+  27:27  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/referral/ReferralHeader.tsx
+  20:10  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/referral/ReferralProgress.tsx
+  3:34  warning  'Paper' is defined but never used     @typescript-eslint/no-unused-vars
+  3:34  warning  Remove this unused import of 'Paper'  sonarjs/unused-import
+
+/Users/thoufeeque/projects/directly.social/src/components/referral/ReferralSquad.tsx
+  26:76  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  27:67  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/schedule/ScheduleEditModalActions.tsx
+  61:89  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+
+/Users/thoufeeque/projects/directly.social/src/components/settings/linkedin/LinkedInSection.tsx
+  38:10  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/thoufeeque/projects/directly.social/src/components/settings/linkedin/LinkedInSection.tsx:38:10
+  36 |
+  37 |   useEffect(() => {
+> 38 |     void fetchStatus();
+     |          ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  39 |
+  40 |     // Re-check if the page URL has linkedin_connected=true after OAuth redirect
+  41 |     const params = new URLSearchParams(globalThis.location?.search ?? '');  react-hooks/set-state-in-effect
+
+/Users/thoufeeque/projects/directly.social/src/components/status/ServiceList.tsx
+  41:27  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/components/status/StatusDashboard.tsx
+  24:44  warning  Refactor this code to not use nested template literals  sonarjs/no-nested-template-literals
+
+/Users/thoufeeque/projects/directly.social/src/components/status/StatusHero.tsx
+  55:19  warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/hooks/dashboard/useUploadFormHandlers.ts
+  19:25   warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  41:11   warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  41:46   warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  42:11   warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  42:51   warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  42:99   warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  46:16   warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  46:45   warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  46:73   warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  46:104  warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  46:135  warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  59:180  warning  This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally  sonarjs/no-unenclosed-multiline-block
+  61:186  warning  This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally  sonarjs/no-unenclosed-multiline-block
+  62:80   warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+  63:78   warning  Generic Object Injection Sink                                                                                               security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/hooks/useAccounts/useAccountOperations.ts
+  45:26  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/hooks/useActivity/types.ts
+  4:4  warning  Complete the task associated to this "TODO" comment  sonarjs/todo-tag
+
+/Users/thoufeeque/projects/directly.social/src/hooks/useActivity/useCancelAllHandler.ts
+  36:80  warning  Refactor this code to not nest functions more than 4 levels deep  sonarjs/no-nested-functions
+
+/Users/thoufeeque/projects/directly.social/src/hooks/useActivity/useCockpitAutoStart.ts
+  11:4  warning  Complete the task associated to this "TODO" comment  sonarjs/todo-tag
+
+/Users/thoufeeque/projects/directly.social/src/hooks/useAiByok.ts
+  38:12  warning  Generic Object Injection Sink  security/detect-object-injection
+  44:12  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/hooks/useByosGallery.ts
+   49:21  warning  Function Call Object Injection Sink  security/detect-object-injection
+   92:19  warning  Function Call Object Injection Sink  security/detect-object-injection
+  105:30  warning  Function Call Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/hooks/usePlatforms.ts
+  2:10  warning  'PLATFORMS' is defined but never used     @typescript-eslint/no-unused-vars
+  2:10  warning  Remove this unused import of 'PLATFORMS'  sonarjs/unused-import
+
+/Users/thoufeeque/projects/directly.social/src/hooks/useScheduleAI.ts
+  81:30  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/hooks/useUploadStatus.ts
+  4:4  warning  Complete the task associated to this "TODO" comment  sonarjs/todo-tag
+
+/Users/thoufeeque/projects/directly.social/src/lib/actions/ai.ts
+  18:5  warning  Potential timing attack, left side: true  security/detect-possible-timing-attacks
+
+/Users/thoufeeque/projects/directly.social/src/lib/billing/subscription-service.ts
+  12:21  warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/lib/billing/webhook-registry.ts
+  11:5   warning  Generic Object Injection Sink                                                        security/detect-object-injection
+  26:84  warning  Refactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed  sonarjs/cognitive-complexity
+
+/Users/thoufeeque/projects/directly.social/src/lib/byos/downloader.ts
+  43:9   warning  Found mkdir from package "node:fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+  44:23  warning  Found createWriteStream from package "node:fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/byos/list-gallery.ts
+  66:26  warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/lib/core/ai.ts
+  111:23  warning  Refactor this function to reduce its Cognitive Complexity from 25 to the 15 allowed  sonarjs/cognitive-complexity
+  119:20  warning  Generic Object Injection Sink                                                        security/detect-object-injection
+  177:20  warning  Generic Object Injection Sink                                                        security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/lib/core/audit.ts
+  33:84  warning  Refactor this code to not use nested template literals  sonarjs/no-nested-template-literals
+
+/Users/thoufeeque/projects/directly.social/src/lib/core/distributor-utils.ts
+  34:17  warning  Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed  sonarjs/cognitive-complexity
+
+/Users/thoufeeque/projects/directly.social/src/lib/core/logger.ts
+  25:10  warning  Found existsSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  26:7   warning  Found mkdirSync from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  29:5   warning  Found appendFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/core/platform-route-handler.ts
+  26:23  warning  Refactor this function to reduce its Cognitive Complexity from 31 to the 15 allowed  sonarjs/cognitive-complexity
+  33:45  warning  Found existsSync from package "node:fs" with non literal argument at index 0         security/detect-non-literal-fs-filename
+  41:23  warning  Found existsSync from package "node:fs" with non literal argument at index 0         security/detect-non-literal-fs-filename
+  96:41  warning  Found existsSync from package "node:fs" with non literal argument at index 0         security/detect-non-literal-fs-filename
+  96:70  warning  Found unlinkSync from package "node:fs" with non literal argument at index 0         security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/core/platforms/meta-uploader.ts
+  38:23  warning  Found stat from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+  46:22  warning  Found createReadStream from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/core/utils/distribution-channels.js
+  4:15  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/thoufeeque/projects/directly.social/src/lib/infrastructure/storage-provider.ts
+  19:28  warning  Found stat from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/platforms/facebook-activity.ts
+  1:1  warning  Unused eslint-disable directive (no problems were reported from 'max-lines')
+  1:1  warning  Unused eslint-disable directive (no problems were reported from 'no-restricted-imports')
+
+/Users/thoufeeque/projects/directly.social/src/lib/platforms/facebook/video.ts
+  12:22  warning  Found createReadStream from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/platforms/instagram-activity.ts
+  1:1  warning  Unused eslint-disable directive (no problems were reported from 'max-lines')
+  1:1  warning  Unused eslint-disable directive (no problems were reported from 'no-restricted-imports')
+
+/Users/thoufeeque/projects/directly.social/src/lib/platforms/linkedin-activity.ts
+  45:14  warning  'params' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/platforms/tiktok-activity.ts
+  1:1  warning  Unused eslint-disable directive (no problems were reported from 'max-lines')
+  1:1  warning  Unused eslint-disable directive (no problems were reported from 'no-restricted-imports')
+
+/Users/thoufeeque/projects/directly.social/src/lib/platforms/tiktok.ts
+  20:37  warning  Found stat from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/platforms/tiktok/publish.ts
+  30:20  warning  Found createReadStream from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  46:20  warning  Found createReadStream from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/platforms/youtube-activity.ts
+  1:1  warning  Unused eslint-disable directive (no problems were reported from 'max-lines')
+  1:1  warning  Unused eslint-disable directive (no problems were reported from 'no-restricted-imports')
+
+/Users/thoufeeque/projects/directly.social/src/lib/platforms/youtube.ts
+  14:36  warning  Found stat from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/platforms/youtube/push.ts
+  13:22  warning  Found createReadStream from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/referral/generateCode.ts
+  14:30  warning  Make sure that using this pseudorandom number generator is safe here  sonarjs/pseudo-random
+
+/Users/thoufeeque/projects/directly.social/src/lib/services/audit-service.ts
+  23:12  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  34:12  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  59:11  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/services/platform-capability.ts
+  4:19  warning  'isFree' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thoufeeque/projects/directly.social/src/lib/supabase/next-auth-react-shim.tsx
+  53:7  warning  Remove this use of the "void" operator  sonarjs/void-use
+
+/Users/thoufeeque/projects/directly.social/src/lib/upload/blob-downloader.ts
+  27:3   warning  Found mkdirSync from package "node:fs" with non literal argument at index 0          security/detect-non-literal-fs-filename
+  28:22  warning  Found createWriteStream from package "node:fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/upload/chunk-assembler.ts
+  22:9   warning  Found mkdir from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+  28:29  warning  Found readdir from package "fs" with non literal argument at index 0            security/detect-non-literal-fs-filename
+  32:23  warning  Found createWriteStream from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  36:33  warning  Found readFile from package "fs" with non literal argument at index 0           security/detect-non-literal-fs-filename
+  38:13  warning  Found unlink from package "fs" with non literal argument at index 0             security/detect-non-literal-fs-filename
+  47:23  warning  Found stat from package "fs" with non literal argument at index 0               security/detect-non-literal-fs-filename
+  49:11  warning  Found unlink from package "fs" with non literal argument at index 0             security/detect-non-literal-fs-filename
+  53:9   warning  Found rmdir from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/upload/distribution-service.ts
+  23:274  warning  Generic Object Injection Sink  security/detect-object-injection
+  24:15   warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/lib/upload/staging-service.ts
+  19:92  warning  Make sure that using this pseudorandom number generator is safe here  sonarjs/pseudo-random
+
+/Users/thoufeeque/projects/directly.social/src/lib/upload/streaming-parser.ts
+  29:8   warning  Found existsSync from package "node:fs" with non literal argument at index 0         security/detect-non-literal-fs-filename
+  30:11  warning  Found mkdir from package "node:fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+  39:27  warning  Found createWriteStream from package "node:fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  48:7   warning  Generic Object Injection Sink                                                        security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/lib/upload/vault-mobile.ts
+  27:60  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  36:60  warning  Extract this nested ternary operation into an independent statement  sonarjs/no-nested-conditional
+  79:5   warning  Generic Object Injection Sink                                        security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/lib/utils/ai-writer.ts
+  74:7   warning  Generic Object Injection Sink  security/detect-object-injection
+  75:15  warning  Generic Object Injection Sink  security/detect-object-injection
+  94:7   warning  Generic Object Injection Sink  security/detect-object-injection
+  95:15  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/lib/utils/checksum.ts
+  12:20  warning  Found createReadStream from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  26:10  warning  Make sure this weak hash algorithm is not used in a sensitive context here     sonarjs/hashing
+
+/Users/thoufeeque/projects/directly.social/src/lib/utils/video-analysis.ts
+  27:43  warning  Refactor this code to not nest functions more than 4 levels deep  sonarjs/no-nested-functions
+  28:33  warning  Refactor this code to not nest functions more than 4 levels deep  sonarjs/no-nested-functions
+
+/Users/thoufeeque/projects/directly.social/src/lib/video/processor.ts
+   86:19  warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+   88:7   warning  Generic Object Injection Sink               security/detect-object-injection
+  109:5   warning  Generic Object Injection Sink               security/detect-object-injection
+  126:17  warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/lib/video/transcode-manager.ts
+  12:23  warning  Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed  sonarjs/cognitive-complexity
+  34:11  warning  Found existsSync from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+  43:26  warning  Variable Assigned to Object Injection Sink                                           security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/lib/worker/server-distributor.logic.ts
+  15:40  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/thoufeeque/projects/directly.social/src/lib/worker/tasks/cleanup.ts
+  15:23  warning  Refactor this function to reduce its Cognitive Complexity from 40 to the 15 allowed  sonarjs/cognitive-complexity
+  30:15  warning  Found existsSync from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+  31:19  warning  Found unlink from package "fs" with non literal argument at index 0                  security/detect-non-literal-fs-filename
+  36:15  warning  Found existsSync from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+  37:19  warning  Found unlink from package "fs" with non literal argument at index 0                  security/detect-non-literal-fs-filename
+  40:15  warning  Found existsSync from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+  41:33  warning  Found readdir from package "fs" with non literal argument at index 0                 security/detect-non-literal-fs-filename
+  44:25  warning  Found unlink from package "fs" with non literal argument at index 0                  security/detect-non-literal-fs-filename
+  56:9   warning  Found existsSync from package "fs" with non literal argument at index 0              security/detect-non-literal-fs-filename
+  57:27  warning  Found readdir from package "fs" with non literal argument at index 0                 security/detect-non-literal-fs-filename
+  68:29  warning  Found stat from package "fs" with non literal argument at index 0                    security/detect-non-literal-fs-filename
+  72:21  warning  Found unlink from package "fs" with non literal argument at index 0                  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/lib/worker/tasks/publisher.ts
+  58:47  warning  Found existsSync from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  66:19  warning  Found existsSync from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  73:11  warning  Found existsSync from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  75:42  warning  Found readFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/thoufeeque/projects/directly.social/src/proxy.ts
+  24:48  warning  'options' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 432 problems (4 errors, 428 warnings)
+  0 errors and 8 warnings potentially fixable with the `--fix` option.
+
+[ELIFECYCLE] Command failed with exit code 1.

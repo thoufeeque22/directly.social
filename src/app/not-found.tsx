@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Typography, Box, Button } from '@mui/material';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 
 export default function NotFound() {
   const { status } = useSession();

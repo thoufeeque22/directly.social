@@ -1,5 +1,5 @@
 import React from 'react';
-import { Session } from 'next-auth';
+import { Session } from '@/auth';
 import { Heading } from '@/components/ui/Heading';
 import { BRAND } from '@/lib/core/brand';
 

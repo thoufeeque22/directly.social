@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn } from '@/lib/supabase/next-auth-react-shim';
 import { Box, Typography } from '@mui/material';
 import { useAccounts } from '@/hooks/useAccounts';
 import { PlatformCard } from '@/components/settings/PlatformCard';

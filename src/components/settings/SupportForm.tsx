@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useActionState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import { Box, Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, Alert, CircularProgress } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined';
 import { submitSupportRequestAction, ActionState } from '@/app/actions/support';

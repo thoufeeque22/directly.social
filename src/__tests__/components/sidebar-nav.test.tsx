@@ -1,11 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import Sidebar from '../../components/layout/Sidebar';
-import { SessionProvider } from 'next-auth/react';
+import { SessionProvider } from '@/lib/supabase/next-auth-react-shim';
 import React from 'react';
 
 // Mock useSession
-vi.mock('next-auth/react', () => ({
+vi.mock('@/lib/supabase/next-auth-react-shim', () => ({
   useSession: vi.fn(() => ({
     data: { user: { name: 'Test User' } },
     status: 'authenticated',

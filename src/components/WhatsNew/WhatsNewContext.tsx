@@ -1,6 +1,6 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import { getUnseenUpdates } from '@/app/actions/whats-new';
 import { Update, WhatsNewContextType } from './types';
 

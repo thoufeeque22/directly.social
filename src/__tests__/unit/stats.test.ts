@@ -13,7 +13,7 @@ import { prisma } from '../../lib/core/prisma';
 import { auth } from '@/auth';
 import * as youtube from '@/lib/platforms/youtube';
 import * as instagram from '@/lib/platforms/instagram';
-import type { Session } from 'next-auth';
+import type { Session } from '@/auth';
 import { Account as PrismaAccount } from '@prisma/client';
 
 // Mocks

@@ -4,7 +4,7 @@ import { saveByosConfigAction, getByosConfigAction } from '@/lib/actions/setting
 import { auth } from '@/auth';
 import { generateText } from 'ai';
 import { saveByosConfig, getByosConfig } from '@/lib/byos/service';
-import { type Session } from 'next-auth';
+import { type Session } from '@/auth';
 
 vi.mock('@/auth', () => ({ auth: vi.fn() }));
 vi.mock('ai', () => ({ generateText: vi.fn() }));

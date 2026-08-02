@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import { useMediaQuery, useTheme } from '@mui/material';
 import { UIMessage as Message } from '@ai-sdk/react';
 

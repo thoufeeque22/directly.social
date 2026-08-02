@@ -1,73 +1,98 @@
-import { NextResponse } from 'next/server';
-import NextAuth from 'next-auth';
-import authConfig from '@/auth.config';
+import { NextResponse, type NextRequest } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
 import { applyRateLimit } from '@/lib/core/rate-limit-middleware';
-
-const { auth } = NextAuth(authConfig);
 
 /**
  * Unified Middleware for Authentication, Rate Limiting, and Routing.
- * (Next.js only supports one middleware file).
  */
-export default auth(async (req) => {
+export async function proxy(req: NextRequest) {
+  let supabaseResponse = NextResponse.next({
+    request: {
+      headers: req.headers,
+    },
+  });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://mock.supabase.co',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'mock-anon-key',
+    {
+      cookies: {
+        getAll() {
+          return req.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) =>
+            req.cookies.set(name, value)
+          );
+          supabaseResponse = NextResponse.next({
+            request: req,
+          });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          );
+        },
+      },
+    }
+  );
+
+  // Retrieve user session (if any)
+  let user = null;
+  if (process.env.NEXT_PUBLIC_E2E === 'true' && req.cookies.get('e2e-bypass')?.value === 'true') {
+    user = { id: 'e2e-test-user-id' };
+  } else if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://mock.supabase.co') {
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  }
+
   const url = req.nextUrl;
   const pathname = url.pathname;
   const hostname = req.headers.get("host") || "";
 
   // 1. Rate Limiting for API routes
-  const rateLimitResponse = await applyRateLimit(req, pathname, req.auth?.user?.id);
+  const rateLimitResponse = await applyRateLimit(req, pathname, user?.id);
   if (rateLimitResponse) return rateLimitResponse;
 
   // 2. Exclude common static/api paths from rewrites
   if (
-    url.pathname.startsWith("/api") ||
-    url.pathname.startsWith("/_next") ||
-    url.pathname.startsWith("/static") ||
-    url.pathname.startsWith("/login") ||
-    url.pathname.startsWith("/auth") ||
-    url.pathname.startsWith("/monitoring")
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/static") ||
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/monitoring")
   ) {
-    return NextResponse.next();
+    return supabaseResponse;
   }
 
   // 3. Subdomain detection
   const isApp = hostname.startsWith("app.") || hostname.startsWith("staging.app.");
   const isMarketing = !isApp;
-  
-  // Vercel Preview Deployments handling
   const isVercelPreview = hostname.endsWith('.vercel.app');
 
   // 4. CTA Routing
-  if ((isMarketing || (isVercelPreview && url.searchParams.get('site') === 'marketing')) && url.pathname === "/signup") {
-     return NextResponse.redirect(new URL("https://app.directly.social/login", req.url));
+  if ((isMarketing || (isVercelPreview && url.searchParams.get('site') === 'marketing')) && pathname === "/signup") {
+    return NextResponse.redirect(new URL("https://app.directly.social/login", req.url));
   }
 
-  // 5. Rewrite rules to respective folders
-  
-  // Guard against infinite rewrite loops (prevents HTTP 431)
-  if (url.pathname.startsWith('/app/') || url.pathname === '/app' || 
-      url.pathname.startsWith('/marketing/') || url.pathname === '/marketing') {
-    return NextResponse.next();
+  // Guard against infinite rewrite loops
+  if (pathname.startsWith('/app/') || pathname === '/app' || 
+      pathname.startsWith('/marketing/') || pathname === '/marketing') {
+    return supabaseResponse;
   }
 
   if (isApp || (isVercelPreview && url.searchParams.get('site') !== 'marketing')) {
-    return NextResponse.next();
+    return supabaseResponse;
   }
 
   if (isMarketing || (isVercelPreview && url.searchParams.get('site') === 'marketing')) {
     const rewriteUrl = req.nextUrl.clone();
-    rewriteUrl.pathname = url.pathname === '/' ? '/marketing' : `/marketing${url.pathname}`;
+    rewriteUrl.pathname = pathname === '/' ? '/marketing' : `/marketing${pathname}`;
     return NextResponse.rewrite(rewriteUrl);
   }
 
-  // Continue to next middleware or route handler
-  return NextResponse.next();
-});
+  return supabaseResponse;
+}
 
 export const config = {
-  /**
-   * Combined matcher: cover API and all pages (excluding static assets).
-   * This replaces the logic from both src/proxy.ts and the previous src/middleware.ts.
-   */
   matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.png$).*)'],
 };
