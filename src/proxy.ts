@@ -60,21 +60,35 @@ export async function proxy(req: NextRequest) {
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/static") ||
-    pathname.startsWith("/login") ||
-    pathname.startsWith("/auth") ||
     pathname.startsWith("/monitoring")
   ) {
     return supabaseResponse;
   }
 
   // 3. Subdomain detection
-  const isApp = hostname.startsWith("app.") || hostname.startsWith("staging.app.");
+  const isApp = hostname.startsWith("app.") || hostname.startsWith("staging.app.") || hostname.startsWith("app.localhost");
   const isMarketing = !isApp;
   const isVercelPreview = hostname.endsWith('.vercel.app');
 
+  // Force login and auth to happen on the app subdomain to prevent cookie fragmentation
+  if (isMarketing && (pathname.startsWith("/login") || pathname.startsWith("/auth"))) {
+    const appHostname = hostname.includes('localhost') 
+      ? `app.localhost:${url.port || 3000}` 
+      : hostname.startsWith('staging.') ? `app.staging.directly.social` : `app.directly.social`;
+    return NextResponse.redirect(new URL(pathname + url.search, `http${hostname.includes('localhost') ? '' : 's'}://${appHostname}`));
+  }
+
+  // If we are on the app subdomain, allow /login and /auth to proceed normally
+  if (isApp && (pathname.startsWith("/login") || pathname.startsWith("/auth"))) {
+    return supabaseResponse;
+  }
+
   // 4. CTA Routing
   if ((isMarketing || (isVercelPreview && url.searchParams.get('site') === 'marketing')) && pathname === "/signup") {
-    return NextResponse.redirect(new URL("https://app.directly.social/login", req.url));
+    const appHostname = hostname.includes('localhost') 
+      ? `app.localhost:${url.port || 3000}` 
+      : hostname.startsWith('staging.') ? `app.staging.directly.social` : `app.directly.social`;
+    return NextResponse.redirect(new URL("/login", `http${hostname.includes('localhost') ? '' : 's'}://${appHostname}`));
   }
 
   // Guard against infinite rewrite loops
