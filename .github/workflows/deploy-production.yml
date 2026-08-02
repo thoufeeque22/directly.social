@@ -61,6 +61,8 @@ jobs:
       env:
         NEXTAUTH_SECRET: dummy_secret_for_build_only
         DATABASE_URL: sqlite://./prisma/dev.db
+        NEXT_PUBLIC_SUPABASE_URL: "https://ogtbwzzlveqsilqmqscf.supabase.co"
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ndGJ3enpsdmVxc2lscW1xc2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMTU2NzYsImV4cCI6MjA5NDc5MTY3Nn0.HANbZuZxJy9OK8-TL7wBw1wvjI2O30XThdH7owoIGQ8"
 
     - name: Deploy to VPS via Rsync
       env:
