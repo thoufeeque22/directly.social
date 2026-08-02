@@ -13,7 +13,8 @@ export async function getPlatformPreferences() {
         { id: 'mock-pref-1', userId: 'e2e-tester-id-stable', platformId: 'youtube', isEnabled: true },
         { id: 'mock-pref-2', userId: 'e2e-tester-id-stable', platformId: 'facebook', isEnabled: true },
         { id: 'mock-pref-3', userId: 'e2e-tester-id-stable', platformId: 'instagram', isEnabled: true },
-        { id: 'mock-pref-4', userId: 'e2e-tester-id-stable', platformId: 'tiktok', isEnabled: true }
+        { id: 'mock-pref-4', userId: 'e2e-tester-id-stable', platformId: 'tiktok', isEnabled: true },
+        { id: 'mock-pref-5', userId: 'e2e-tester-id-stable', platformId: 'linkedin', isEnabled: true }
       ];
     }
     return await prisma.platformPreference.findMany({

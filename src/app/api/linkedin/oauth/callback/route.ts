@@ -73,6 +73,14 @@ export async function GET(req: Request): Promise<Response> {
 
     void buildMemberUrn(profile.sub);
     console.log(`[LINKEDIN-CALLBACK] ✅ Connected LinkedIn for user ${userId} (${profile.name})`);
+    
+    try {
+      const { revalidateDashboard } = await import('@/lib/core/action-utils');
+      await revalidateDashboard();
+    } catch (e) {
+      console.error('Failed to revalidate dashboard', e);
+    }
+
     return NextResponse.redirect(`${base}${SETTINGS_URL}&linkedin_connected=true`);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
