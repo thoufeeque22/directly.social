@@ -1,15 +1,11 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/core/prisma';
-import { SubscriptionTier } from '@prisma/client';
 import { decryptLinkedInToken } from '@/lib/platforms/linkedin/encrypt';
 import { publishLinkedInPost } from '@/lib/platforms/linkedin/post';
 import { wipeLinkedInData } from '@/lib/platforms/linkedin/wipe';
 import { LinkedInTokenRevokedError } from '@/lib/platforms/linkedin/types';
 import { buildMemberUrn } from '@/lib/platforms/linkedin/client';
-
-/** Free tiers that are not permitted to schedule LinkedIn posts. */
-const FREE_TIERS = new Set<SubscriptionTier>([SubscriptionTier.FREE_STARTER, SubscriptionTier.FREE_HACKER]);
 
 /**
  * POST /api/linkedin/posts
@@ -23,16 +19,6 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   const userId = session.user.id;
-
-  const billing = await prisma.billingProfile.findUnique({ where: { userId } });
-  const tier = billing?.subscriptionTier ?? SubscriptionTier.FREE_STARTER;
-
-  if (FREE_TIERS.has(tier)) {
-    return NextResponse.json(
-      { error: 'LinkedIn posting requires a Pro or higher subscription.' },
-      { status: 403 },
-    );
-  }
 
   const body = (await req.json()) as { text?: string };
   if (!body.text?.trim()) {
