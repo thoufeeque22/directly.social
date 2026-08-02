@@ -160,24 +160,19 @@ export default {
       }
 
       if (isOnLogin) {
-        // In local development, skip subdomain redirect entirely.
-        // The port is unreliable in Next.js URL construction when AUTH_URL is set,
-        // which causes redirects to app.localhost:80 instead of app.localhost:3000.
-        if (process.env.NODE_ENV === 'development') {
-          if (isLoggedIn) {
-            return Response.redirect(new URL('/', nextUrl));
-          }
-          return true;
-        }
-
         const targetUrl = new URL("/", nextUrl);
         const forwardedHost = request.headers.get('x-forwarded-host');
-        const realHost = forwardedHost ? forwardedHost.split(':')[0] : nextUrl.hostname;
-        const isAppSubdomain = realHost.startsWith('app.') || (realHost === 'localhost' && nextUrl.port === '3000' && false /* handled below */);
+        const hostHeader = request.headers.get('host') || '';
+        const effectiveHostHeader = forwardedHost || hostHeader || nextUrl.host;
+        
+        const realHost = effectiveHostHeader.split(':')[0];
+        const isLocal = realHost === 'localhost' || realHost === '127.0.0.1';
+        
+        const port = effectiveHostHeader.includes(':') ? effectiveHostHeader.split(':')[1] : (isLocal ? (nextUrl.port || '3000') : '');
 
         let correctAppHost = realHost;
-        if (realHost === 'localhost' || realHost === '127.0.0.1') {
-          correctAppHost = `app.localhost:${nextUrl.port || '3000'}`;
+        if (isLocal) {
+          correctAppHost = `app.localhost`;
         } else if (realHost === 'directly.social' || realHost === 'www.directly.social') {
           correctAppHost = "app.directly.social";
         } else if (!realHost.startsWith('app.')) {
@@ -187,14 +182,14 @@ export default {
         // If they are on the wrong domain for login, redirect them to the app subdomain login page
         if (realHost !== correctAppHost && realHost !== correctAppHost.split(':')[0]) {
           targetUrl.hostname = correctAppHost.split(':')[0];
-          targetUrl.port = correctAppHost.includes(':') ? correctAppHost.split(':')[1] : "";
+          targetUrl.port = port;
           targetUrl.pathname = '/login';
           return Response.redirect(targetUrl);
         }
 
         if (isLoggedIn) {
           targetUrl.hostname = correctAppHost.split(':')[0];
-          targetUrl.port = correctAppHost.includes(':') ? correctAppHost.split(':')[1] : "";
+          targetUrl.port = port;
           targetUrl.pathname = '/';
           return Response.redirect(targetUrl);
         }

@@ -5,7 +5,7 @@ export class PlatformCapabilityService {
     return PLATFORMS.map(p => ({
       ...p,
       canToggle: p.id !== 'tiktok',
-      isLocked: p.id === 'linkedin' && isFree,
+      isLocked: false,
     }));
   }
 }
