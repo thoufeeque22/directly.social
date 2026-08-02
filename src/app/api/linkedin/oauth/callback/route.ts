@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/auth';
 import { prisma } from '@/lib/core/prisma';
 import { verifyOAuthState, exchangeCodeForTokens } from '@/lib/platforms/linkedin/oauth';
 import { encryptLinkedInToken } from '@/lib/platforms/linkedin/encrypt';
@@ -10,41 +9,34 @@ const SETTINGS_URL = '/settings?tab=destinations';
 /**
  * GET /api/linkedin/oauth/callback
  * Handles the OAuth 2.0 Authorization Code callback from LinkedIn.
- * - Verifies state nonce (anti-replay)
- * - Exchanges code for token set
- * - Encrypts tokens at rest (AES-256-GCM)
- * - Upserts Account record in DB
- * - Redirects to settings page
+ *
+ * NOTE: We intentionally do NOT call auth() here. When LinkedIn redirects
+ * the browser back from an external domain, SameSite cookie policies can
+ * prevent the session cookie from being forwarded, causing auth() to return
+ * null even for a logged-in user. Instead, the userId is safely extracted
+ * from the HMAC-signed state nonce (anti-replay, Security Checklist #7).
  */
 export async function GET(req: Request): Promise<Response> {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
-
   const url = new URL(req.url);
   const code = url.searchParams.get('code');
   const state = url.searchParams.get('state');
   const error = url.searchParams.get('error');
 
+  const base = new URL(req.url).origin;
+
   if (error) {
-    return NextResponse.redirect(
-      new URL(`${SETTINGS_URL}&linkedin_error=${error}`, req.url),
-    );
+    return NextResponse.redirect(`${base}${SETTINGS_URL}&linkedin_error=${error}`);
   }
 
   if (!code || !state) {
-    return NextResponse.redirect(
-      new URL(`${SETTINGS_URL}&linkedin_error=missing_params`, req.url),
-    );
+    return NextResponse.redirect(`${base}${SETTINGS_URL}&linkedin_error=missing_params`);
   }
 
+  let userId: string;
   try {
-    verifyOAuthState(state);
+    userId = verifyOAuthState(state);
   } catch {
-    return NextResponse.redirect(
-      new URL(`${SETTINGS_URL}&linkedin_error=invalid_state`, req.url),
-    );
+    return NextResponse.redirect(`${base}${SETTINGS_URL}&linkedin_error=invalid_state`);
   }
 
   try {
@@ -59,7 +51,7 @@ export async function GET(req: Request): Promise<Response> {
     await prisma.account.upsert({
       where: { provider_providerAccountId: { provider: 'linkedin', providerAccountId: profile.sub } },
       create: {
-        userId: session.user.id,
+        userId,
         type: 'oauth',
         provider: 'linkedin',
         providerAccountId: profile.sub,
@@ -70,7 +62,7 @@ export async function GET(req: Request): Promise<Response> {
         scope: 'openid profile email w_member_social',
       },
       update: {
-        userId: session.user.id,
+        userId,
         access_token: encryptedAccess,
         refresh_token: encryptedRefresh,
         expires_at: tokens.expiresAt,
@@ -80,14 +72,11 @@ export async function GET(req: Request): Promise<Response> {
     });
 
     void buildMemberUrn(profile.sub);
-    return NextResponse.redirect(
-      new URL(`${SETTINGS_URL}&linkedin_connected=true`, req.url),
-    );
+    console.log(`[LINKEDIN-CALLBACK] ✅ Connected LinkedIn for user ${userId} (${profile.name})`);
+    return NextResponse.redirect(`${base}${SETTINGS_URL}&linkedin_connected=true`);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error('[LINKEDIN-CALLBACK] Error:', message);
-    return NextResponse.redirect(
-      new URL(`${SETTINGS_URL}&linkedin_error=${encodeURIComponent(message)}`, req.url),
-    );
+    console.error('[LINKEDIN-CALLBACK] ❌ Error:', message);
+    return NextResponse.redirect(`${base}${SETTINGS_URL}&linkedin_error=${encodeURIComponent(message)}`);
   }
 }
