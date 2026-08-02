@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import 'dotenv/config';
+process.env.E2E_TEST_MODE = 'true';
+process.env.NEXT_PUBLIC_E2E = 'true';
 import dns from 'node:dns';
 dns.setDefaultResultOrder('ipv4first');
 

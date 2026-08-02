@@ -50,7 +50,7 @@ To ensure production-level stability and prevent build failures or linting warni
 - **React 19 / Next.js 15 Forms:** Use `action={...}` passing `FormData` instead of the legacy `onSubmit={...}` paired with `React.FormEvent`.
 - **Client/Server boundaries:** Ensure `'use client'` is only used when hooks (`useState`, `useEffect`) or browser APIs are required.
 - **Hydration & Storage:** Do not use `window` for global variables; use `globalThis` instead. **NEVER** read from `localStorage` or `sessionStorage` in a `useState` initializer or directly in the component body during render. Always use a `useEffect` hook to synchronize state with browser storage after the initial client-side mount to avoid SSR hydration mismatches.
-- **Middleware Naming:** Since Next.js 16, the middleware file convention has changed. Always name the Next.js middleware file exactly `proxy.ts` inside the `src/` directory (or root). Do NOT name it `middleware.ts` (it is deprecated) and ensure the middleware logic is Edge-compatible (e.g., use `auth.config.ts` for NextAuth, do not import Prisma).
+- **Middleware Naming:** Since Next.js 16, the middleware file convention has changed. Always name the Next.js middleware file exactly `proxy.ts` inside the `src/` directory (or root). Do NOT name it `middleware.ts` (it is deprecated) and ensure the middleware logic is Edge-compatible (e.g., use `supabase/middleware.ts` for Supabase Auth, do not import Prisma).
 
 
 ### 3. Strict Accessibility (A11y) Compliance
@@ -79,11 +79,16 @@ To ensure production-level stability and prevent build failures or linting warni
 ### 7. Secrets & Credentials in Tests
 - **Never Hardcode Secrets:** When writing Playwright or Maestro E2E tests, never hardcode passwords (like `Tester@123`) or other sensitive credentials directly in the test scripts.
 - **Environment Variables:** Always use environment variables (e.g., `process.env.TEST_USER_PASSWORD` in Playwright or `${TEST_USER_PASSWORD}` in Maestro) and pull them from the `.env` file to ensure local testing doesn't leak secrets or break across environments.
+- **E2E Bypass Security:** NEVER expose E2E bypass flags (like `NEXT_PUBLIC_E2E`) to the client bundle to toggle authentication backdoors. Always use a strictly server-side variable (e.g., `E2E_TEST_MODE`) for backend validation checks.
 
-### 8. Branding & Naming
+### 8. Authentication Strategy
+- **Front-Door Auth Policy:** The primary login MUST be restricted to Google and Email (Magic Link + OTP). Do NOT implement an Email/Password login option.
+- **Social Integrations as Features:** Third-party integrations (Facebook, TikTok, etc.) MUST NOT be used for initial authentication. They should be connected *inside* the application (e.g., via an Integrations Dashboard) using Supabase `linkIdentity` after the user has authenticated with their primary identity.
+
+### 9. Branding & Naming
 - **Strict Application Name:** When referring to the application or writing user-facing documentation, ALWAYS use the exact string `directly.social`. NEVER use "Directly Social", "Directly.Social", or any capitalized variation.
 
-### 9. Subagent Capabilities & Boundaries
+### 10. Subagent Capabilities & Boundaries
 - **Discovery Agent**: Does NOT modify application code. Requires file-writing tools ONLY to generate and save phase artifacts (like technical blueprints).
 - **QA Agent**: Must be granted write access restricted strictly to test directories (`src/__tests__/` and `docs/manual_tests/`). Must never modify implementation code.
 - **Dev Agent**: Must be granted write access restricted strictly to implementation directories (`src/app/`, `src/lib/`, `src/components/`, etc.) and configuration.
@@ -92,11 +97,11 @@ To ensure production-level stability and prevent build failures or linting warni
 - **Project Agent**: Must be granted `enable_write_tools: true` to run `gh` shell commands, and `enable_mcp_tools: true` to use `mcp_github_create_issue` for issue management and project board linking. Does NOT modify application code.
 - The Orchestrator MUST use the `define_subagent` tool with `enable_write_tools: true` (and `enable_mcp_tools: true` when required) for these agents before invoking them, rather than relying on default read-only inheritance.
 
-### 10. Proactive Growth & Product Strategy
+### 11. Proactive Growth & Product Strategy
 - **Marketing & Pricing Psychology:** When discussing features, UI, or pricing, ALL agents MUST proactively suggest psychological pricing tactics (e.g., 5-year anchors for lifetime deals, decoy pricing) and growth-minded UX flows.
 - **Do not wait for prompts:** Do not rely on the user to specify every marketing hook or product strategy. Act as a proactive co-founder: if a UI flow or copy could be optimized for conversion, retention, or perceived value, you must suggest and implement it.
 
-### 11. 7-Point AI Security Risk Checklist
+### 12. 7-Point AI Security Risk Checklist
 For any significant feature or codebase audit, the following 7 vulnerabilities must be assessed:
 1. **Server-Side Template Injection (SSTI)** - Verify no unsafe `dangerouslySetInnerHTML` or risky markdown parsing (App uses React/Next.js).
 2. **Regular Expression Denial of Service (ReDoS)** - Ensure no unbounded or nested quantifiers in custom regexes (e.g., in Zod validation or route matching).
@@ -106,11 +111,11 @@ For any significant feature or codebase audit, the following 7 vulnerabilities m
 6. **Clipboard Copy Attack (Pastejacking)** - Validate content when copying snippets/codes to clipboard.
 7. **Login Replay Attack** - Ensure state/nonce validation in OAuth or Magic Link flows.
 
-### 12. Strict Content Security Policy (CSP) Enforcement
+### 13. Strict Content Security Policy (CSP) Enforcement
 - **MANDATORY CSP UPDATES:** This application implements a strict `Content-Security-Policy` header in `next.config.ts`. If any agent introduces a new external domain (e.g., for images, fonts, scripts, iframes, or APIs), the agent **MUST** update the `Content-Security-Policy` string in `next.config.ts` to explicitly allow that specific domain (e.g., adding it to `img-src` or `connect-src`).
 - **No Wildcards:** NEVER use wildcard `https:` sources in the CSP. Always define exact domains.
 - **Unsafe-Inline/Eval:** Next.js and Material UI require `unsafe-inline` and `unsafe-eval` in standard setups; do not attempt to remove them from `style-src` or `script-src` unless explicitly implementing a full middleware nonce system.
 
-### 13. OWASP ZAP Automation Framework Strictness
+### 14. OWASP ZAP Automation Framework Strictness
 - **YAML Schema:** When modifying `.zap/af-plan.yaml` (e.g., for alert filters or replacer rules), you MUST adhere to ZAP's strict YAML schema. 
 - **Known Quirks:** Always use `replacementString` instead of `replacement` for replacer rules. For HTTP headers, ensure they are passed as proper arrays if required by the block. For alert filters, ensure `newRisk` exact casing is used (e.g., `"Info"`, `"False Positive"`). Do not guess the schema.

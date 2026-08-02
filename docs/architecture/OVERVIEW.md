@@ -8,7 +8,7 @@ Directly is a multi-platform social media management application that allows use
 
 - **Framework:** [Next.js](https://nextjs.org/) (App Router)
 - **Language:** TypeScript
-- **Authentication:** [Auth.js (NextAuth)](https://authjs.dev/)
+- **Authentication:** Supabase Auth
 - **Database:** PostgreSQL with [Prisma ORM](https://www.prisma.io/)
 - **Validation:** [Zod](https://zod.dev/) (Runtime & API validation)
 - **Rate Limiting:** [Upstash Redis](https://upstash.com/) (using dynamic, isolated regex-bucket strategy)

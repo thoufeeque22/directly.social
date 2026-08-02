@@ -6,7 +6,8 @@ Directly is a professional-grade multi-platform video distribution platform desi
 ## 2. Functional Requirements
 
 ### 2.1 Authentication & Account Management
-- **Multi-Platform OAuth**: Support for Google (YouTube), Facebook (Instagram/Facebook), and TikTok.
+- **Primary Auth**: Restricted to Google and Email (Magic Link + OTP) for the front-door login.
+- **Social Integrations**: Post-login dashboard for connecting Facebook (Instagram/Facebook) and TikTok accounts.
 - **Multi-Account Support**: Ability to connect multiple accounts per platform (e.g., two different YouTube channels).
 - **Native Bridge**: Full integration with Capacitor for mobile auth flows and native device access.
 - **Account Settings**: Toggle distribution on/off per account and disconnect accounts.
@@ -48,7 +49,7 @@ Directly is a professional-grade multi-platform video distribution platform desi
 - **Frontend**: Next.js 16.2.3 (App Router), React 19, Vanilla CSS (CSS Modules), Framer Motion.
 - **Backend**: Next.js Server Actions, Route Handlers.
 - **Database**: PostgreSQL (via Prisma ORM).
-- **Auth**: Auth.js (NextAuth) v5.
+- **Auth**: Supabase Auth
 - **Video Processing**: FFmpeg (via `fluent-ffmpeg`).
 - **Worker**: Persistent `tsx` process for scheduled tasks and asset purge.
 - **AI**: Google Generative AI (Gemini) with local LLM fallback support (Ollama).

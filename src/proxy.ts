@@ -37,11 +37,14 @@ export async function proxy(req: NextRequest) {
 
   // Retrieve user session (if any)
   let user = null;
-  if (process.env.NEXT_PUBLIC_E2E === 'true' && req.cookies.get('e2e-bypass')?.value === 'true') {
+  if (process.env.E2E_TEST_MODE === 'true' && req.cookies.get('e2e-bypass')?.value === 'true') {
     user = { id: 'e2e-test-user-id' };
   } else if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://mock.supabase.co') {
-    const { data } = await supabase.auth.getUser();
-    user = data.user;
+    const isProtected = ['/settings', '/activity', '/media', '/admin', '/app', '/schedule'].some(prefix => req.nextUrl.pathname.startsWith(prefix));
+    if (isProtected) {
+      const { data } = await supabase.auth.getUser();
+      user = data?.user;
+    }
   }
 
   const url = req.nextUrl;

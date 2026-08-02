@@ -1,9 +1,9 @@
 import { formatHandle } from "@/lib/utils/utils";
-import type { Account, PlatformId, UserPreference } from "@/lib/core/types";
+import type { Account, PlatformPreference } from "@/lib/core/types";
 
 export interface DistributionChannel {
   id: string;
-  platform: PlatformId;
+  platform: string;
   displayName: string;
 }
 
@@ -11,8 +11,8 @@ export interface DistributionChannel {
  * Expands connected accounts into individual distribution channels
  * (e.g., splitting a Facebook account into Facebook and Instagram channels).
  */
-export const getDistributionChannels = (accounts: Account[], preferences?: UserPreference[]): DistributionChannel[] => {
-    const isPlatformEnabled = (platformId: PlatformId) => {
+export const getDistributionChannels = (accounts: Account[], preferences?: PlatformPreference[]): DistributionChannel[] => {
+    const isPlatformEnabled = (platformId: string) => {
         const pref = (preferences || []).find((p) => p.platformId === platformId);
         return pref ? pref.isEnabled : true;
     };
@@ -31,7 +31,7 @@ export const getDistributionChannels = (accounts: Account[], preferences?: UserP
             });
         }
         else {
-            const platform = account.provider === 'google' ? 'youtube' : account.provider as PlatformId;
+            const platform = account.provider === 'google' ? 'youtube' : account.provider;
             items.push({
                 id: account.id,
                 platform: platform,

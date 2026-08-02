@@ -37,7 +37,7 @@ export const PrivacyContent = () => (
       <Box sx={{ ml: 2, mb: 2 }}>
         <Typography variant="subtitle1" sx={{ fontWeight: 700 }} gutterBottom>Google / YouTube API Services Data Handling</Typography>
         <Typography variant="body1" gutterBottom>
-          Our application uses Google API Services (specifically YouTube APIs) to allow you to upload videos directly to your YouTube channel. By using this feature, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">YouTube Terms of Service</a> and the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.
+          Our application uses Google API Services (specifically Google OpenID and YouTube APIs) for core authentication, user identity management, and to allow you to upload videos directly to your YouTube channel. By using this feature, you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">YouTube Terms of Service</a> and the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.
         </Typography>
         <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
           <strong>1. Data Access:</strong> We request access to your YouTube account solely to upload media files (videos) on your behalf and to read basic channel information necessary to confirm successful uploads.

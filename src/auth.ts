@@ -23,7 +23,7 @@ export interface Session {
 export async function auth(): Promise<Session | null> {
   const { cookies } = await import('next/headers');
   
-  if (process.env.NEXT_PUBLIC_E2E === 'true') {
+  if (process.env.E2E_TEST_MODE === 'true') {
     const cookieStore = await cookies();
     if (cookieStore.get('e2e-bypass')?.value === 'true') {
       return {
