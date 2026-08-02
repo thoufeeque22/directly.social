@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { markUpdateAsSeen, getUnseenUpdates } from '@/app/actions/whats-new';
 import { prisma } from '@/lib/core/prisma';
 import { auth } from '@/auth';
-import { Session } from 'next-auth';
+import { Session } from '@/auth';
 import { UpdateLog, UserSeenUpdate, User } from '@prisma/client';
 
 vi.mock('@/auth', () => ({

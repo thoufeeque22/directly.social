@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import styles from './Header.module.css';
 import { WhatsNewBadge } from '../WhatsNew/WhatsNewBadge';
 import { UserActions } from './UserActions';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack, Button, Typography, Box, useTheme } from '@mui/material';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession, signOut } from '@/lib/supabase/next-auth-react-shim';
 
 export const HeaderActions = () => {
   const theme = useTheme();

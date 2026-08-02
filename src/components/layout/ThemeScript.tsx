@@ -1,7 +1,6 @@
-'use client';
-
 export const ThemeScript = () => (
   <script
+    suppressHydrationWarning
     dangerouslySetInnerHTML={{
       __html: `
         (function() {

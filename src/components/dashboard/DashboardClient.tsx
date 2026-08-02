@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { BRAND } from '@/lib/core/brand';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import { useSearchParams } from 'next/navigation';
 import { useAccounts } from '@/hooks/useAccounts';
 import { useDraftFile } from '@/hooks/dashboard/useDraftFile';

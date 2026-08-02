@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import DashboardClient from '@/components/dashboard/DashboardClient';
-import { Session } from 'next-auth';
+import { Session } from '@/auth';
 
 // Mock Auth
 vi.mock('@/auth', () => ({

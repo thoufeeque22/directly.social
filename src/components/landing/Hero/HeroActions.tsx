@@ -4,7 +4,7 @@ import Link from 'next/link';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 
 export const HeroActions = () => {
   const { status } = useSession();

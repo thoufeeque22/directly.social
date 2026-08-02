@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import { Session } from 'next-auth';
-import { signOut } from 'next-auth/react';
+import { Session } from '@/auth';
+import { signOut } from '@/lib/supabase/next-auth-react-shim';
 import { Menu, MenuItem, Divider, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';

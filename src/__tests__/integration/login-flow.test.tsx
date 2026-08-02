@@ -1,10 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import LoginPage from '../../app/login/page';
-import { signIn } from 'next-auth/react';
+import { signIn } from '@/lib/supabase/next-auth-react-shim';
 
 // Use the mocks from setup.ts, but specifically import signIn to check calls
-vi.mock('next-auth/react', () => ({
+vi.mock('@/lib/supabase/next-auth-react-shim', () => ({
   signIn: vi.fn(),
 }));
 

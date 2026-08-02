@@ -2,13 +2,13 @@
 
 import React, { useState } from 'react';
 
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import Sidebar from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { AIChatbot } from "@/components/chat/AIChatbot";
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useAppRefresh } from '@/hooks/useAppRefresh';
-import { Session } from 'next-auth';
+import { Session } from '@/auth';
 
 export default function LayoutWrapper({ 
   children, 

@@ -6,9 +6,7 @@ test.describe('Settings Page - Destinations Tab', () => {
   });
 
   test('should display active and upcoming platforms in the destinations tab', async ({ page }) => {
-    // Ensure we are on the Destinations tab (default or by clicking)
-    await page.getByRole('tab', { name: 'Destinations', exact: true }).click();
-    
+    // We are on the Destinations tab by default when visiting /settings
     // Verify headers
     await expect(page.getByRole('heading', { name: 'Connected Platforms' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Roadmap / Coming Soon' })).toBeVisible();

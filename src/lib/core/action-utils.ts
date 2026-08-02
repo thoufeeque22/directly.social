@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { logger } from "./logger";
-import { Session } from "next-auth";
+import { Session } from '@/auth';
 
 /**
  * A wrapper for server actions that requires authentication.

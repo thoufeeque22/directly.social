@@ -1,6 +1,6 @@
 'use client';
 import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import { getNotifications, markNotificationAsRead, markAllNotificationsAsRead } from '@/app/actions/notifications';
 import { Notification } from '@/lib/schemas/notifications';
 import { NotificationContextType } from './types';

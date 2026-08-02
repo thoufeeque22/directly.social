@@ -7,7 +7,7 @@ import { UploadForm } from '@/components/dashboard/UploadForm';
 import { SidebarInfo } from '@/components/dashboard/SidebarInfo';
 import { StyleMode, AITier } from '@/lib/core/constants';
 import { AIWriteResult } from '@/lib/utils/ai-writer';
-import type { Session } from 'next-auth';
+import type { Session } from '@/auth';
 import { Account, PlatformPreference } from '@/lib/core/types';
 import { AIProvider } from '@/lib/core/ai';
 

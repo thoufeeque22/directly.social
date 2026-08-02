@@ -1,5 +1,5 @@
 import { useCallback, useRef, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import { useAccounts } from '@/hooks/useAccounts';
 import { useAiByok } from '@/hooks/useAiByok';
 import { stageVideoFile } from '@/lib/upload/upload-utils';

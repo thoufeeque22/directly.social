@@ -15,7 +15,7 @@ vi.mock('next-auth', () => ({
 }));
 
 // Mock Next-Auth React
-vi.mock('next-auth/react', () => ({
+vi.mock('@/lib/supabase/next-auth-react-shim', () => ({
   useSession: vi.fn(() => ({
     data: null,
     status: 'unauthenticated',

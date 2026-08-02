@@ -12,9 +12,10 @@ jobs:
   semgrep:
     name: Scan
     runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
     steps:
       - uses: actions/checkout@v4
       
-      - uses: returntocorp/semgrep-action@v1
-        with:
-          config: "p/default"
+      - name: Semgrep Scan
+        run: semgrep scan --config "p/default"

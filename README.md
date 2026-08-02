@@ -12,7 +12,7 @@
 
 - **Framework:** Next.js 16 (App Router)
 - **Language:** TypeScript
-- **Authentication:** Auth.js (NextAuth)
+- **Authentication:** Supabase Auth
 - **Database:** PostgreSQL with Prisma ORM
 - **Storage:** Cloudflare R2 (S3-compatible via AWS SDK)
 - **UI:** Material UI (MUI), Framer Motion
@@ -66,7 +66,11 @@ For detailed information on the Vercel branch preview routing and the rate limit
 
 ## Local Development
 
-Ensure your local `.env` has the correct Supabase and NextAuth secrets.
+Ensure your local `.env` has the correct Supabase secrets.
+
+## Authentication Strategy
+
+The primary front-door login is strictly restricted to **Google and Email (Magic Link/OTP)** to prevent account fragmentation. Other social platforms (Facebook, TikTok) are treated as post-authentication integrations and can be connected via the internal settings dashboard.
 
 ## API Documentation
 

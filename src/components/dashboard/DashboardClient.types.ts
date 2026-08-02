@@ -1,4 +1,4 @@
-import { Session } from 'next-auth';
+import { Session } from '@/auth';
 import { Account, PlatformPreference } from '@/lib/core/types';
 import { StyleMode, AITier } from '@/lib/core/constants';
 import { AIProvider } from '@/lib/core/ai';

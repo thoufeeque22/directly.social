@@ -22,31 +22,35 @@ interface LinkedInStatus {
 export const LinkedInSection: React.FC<LinkedInSectionProps> = ({ accounts, onDisconnect }) => {
   const [status, setStatus] = useState<LinkedInStatus>({ connected: false, accountName: null });
 
-  const fetchStatus = useCallback(async () => {
-    try {
-      const res = await fetch('/api/linkedin/status');
-      if (res.ok) {
-        const data = (await res.json()) as LinkedInStatus;
-        setStatus(data);
-      }
-    } catch {
-      // silently ignore — default to not connected
-    }
-  }, []);
-
   useEffect(() => {
-    void fetchStatus();
+    let mounted = true;
+    const fetchIt = async () => {
+      try {
+        const res = await fetch('/api/linkedin/status');
+        if (res.ok) {
+          const data = (await res.json()) as LinkedInStatus;
+          if (mounted) setStatus(data);
+        }
+      } catch {
+        // silently ignore
+      }
+    };
 
-    // Re-check if the page URL has linkedin_connected=true after OAuth redirect
+    fetchIt().catch(() => {});
+
     const params = new URLSearchParams(globalThis.location?.search ?? '');
     if (params.get('linkedin_connected') === 'true') {
-      void fetchStatus();
+      fetchIt().catch(() => {});
     }
 
-    const handleRefresh = () => void fetchStatus();
+    const handleRefresh = () => { fetchIt().catch(() => {}); };
     globalThis.addEventListener('app:refresh', handleRefresh);
-    return () => globalThis.removeEventListener('app:refresh', handleRefresh);
-  }, [fetchStatus]);
+    
+    return () => {
+      mounted = false;
+      globalThis.removeEventListener('app:refresh', handleRefresh);
+    };
+  }, []);
 
   const linkedInAccount = accounts.find((a) => a.provider === 'linkedin');
 

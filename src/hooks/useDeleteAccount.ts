@@ -19,7 +19,7 @@ export function useDeleteAccount(): UseDeleteAccountReturn {
         throw new Error('Failed to delete account');
       }
 
-      const { signOut } = await import('next-auth/react');
+      const { signOut } = await import('@/lib/supabase/next-auth-react-shim');
       await signOut({ callbackUrl: '/login' });
       return true;
     } catch (error: unknown) {

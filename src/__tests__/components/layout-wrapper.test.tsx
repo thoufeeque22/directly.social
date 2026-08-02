@@ -10,7 +10,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import LayoutWrapper from '@/components/layout/LayoutWrapper';
 import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/supabase/next-auth-react-shim';
 
 // Mock next/navigation specifically for control
 vi.mock('next/navigation', () => ({
@@ -31,7 +31,7 @@ vi.mock('@/components/chat/AIChatbot', () => ({
 }));
 
 // Mock NextAuth useSession to avoid errors in real components
-vi.mock('next-auth/react', () => ({
+vi.mock('@/lib/supabase/next-auth-react-shim', () => ({
   useSession: vi.fn(() => ({ data: null, status: 'unauthenticated' })),
 }));
 
