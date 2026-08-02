@@ -15,6 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - uses: returntocorp/semgrep-action@v1
+      - uses: semgrep/action@v1
         with:
           config: "p/default"
