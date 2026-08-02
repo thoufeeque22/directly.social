@@ -6,7 +6,6 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { LinkedInAuthBridgeModal } from './LinkedInAuthBridgeModal';
 
 interface LinkedInIntegrationCardProps {
-  userId: string;
   isConnected: boolean;
   accountName?: string | null;
   onDisconnect: () => void;
@@ -18,7 +17,6 @@ interface LinkedInIntegrationCardProps {
  * before redirecting to LinkedIn OAuth (blueprint §4 Frontend).
  */
 export const LinkedInIntegrationCard: React.FC<LinkedInIntegrationCardProps> = ({
-  userId: _userId,
   isConnected,
   accountName,
   onDisconnect,

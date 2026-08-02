@@ -23,8 +23,14 @@ export async function getUserAccounts() {
         accountName: true,
         isDistributionEnabled: true,
       }
+    }).then(accounts => {
+      console.log('[getUserAccounts] userId:', userId, '→ providers:', accounts.map(a => a.provider));
+      return accounts;
     });
-  }).catch(() => []); // Graceful fallback to empty list
+  }).catch((err: unknown) => {
+    console.error('[getUserAccounts] CATCH:', err instanceof Error ? err.message : String(err));
+    return [];
+  }); // Graceful fallback to empty list
 }
 
 /**
