@@ -32,8 +32,18 @@ export function LoginContent({ referrerName }: { referrerName?: string | null })
                      Capacitor.getPlatform() !== 'web' &&
                      (Capacitor.isNativePlatform() || navigator.userAgent.includes(APP_CONFIG.userAgent));
 
-    const callbackUrl = searchParams.get('callbackUrl') || '/login';
-    const redirectUrl = `${window.location.origin}/auth/v1/callback?next=${callbackUrl}`;
+    const callbackUrl = searchParams.get('callbackUrl') || '/';
+    
+    // Force the callback to hit the app subdomain to ensure secure server cookies are set correctly
+    const currentHost = window.location.hostname;
+    const isLocal = currentHost === 'localhost' || currentHost.endsWith('.localhost');
+    const isStaging = currentHost.includes('staging.');
+    const appHostname = isLocal ? window.location.hostname : window.location.hostname.replace('staging.', 'app.staging.').replace(/^directly\.social$/, 'app.directly.social');
+    const protocol = isLocal ? 'http' : 'https';
+    
+    const redirectUrl = isLocal 
+      ? `http://${appHostname}:${window.location.port || 3000}/auth/v1/callback?next=${callbackUrl}`
+      : `${protocol}://${appHostname}/auth/v1/callback?next=${callbackUrl}`;
 
     if (isNative) {
       const baseUrl = typeof window !== 'undefined' ? window.location.origin : APP_CONFIG.urls.production;
@@ -51,8 +61,17 @@ export function LoginContent({ referrerName }: { referrerName?: string | null })
 
   const handleEmailLogin = async (email: string) => {
     setEmailMsg(null);
-    const callbackUrl = searchParams.get('callbackUrl') || '/login';
-    const redirectUrl = `${window.location.origin}/auth/v1/callback?next=${callbackUrl}`;
+    const callbackUrl = searchParams.get('callbackUrl') || '/';
+
+    const currentHost = window.location.hostname;
+    const isLocal = currentHost === 'localhost' || currentHost.endsWith('.localhost');
+    const isStaging = currentHost.includes('staging.');
+    const appHostname = isLocal ? window.location.hostname : window.location.hostname.replace('staging.', 'app.staging.').replace(/^directly\.social$/, 'app.directly.social');
+    const protocol = isLocal ? 'http' : 'https';
+    
+    const redirectUrl = isLocal 
+      ? `http://${appHostname}:${window.location.port || 3000}/auth/v1/callback?next=${callbackUrl}`
+      : `${protocol}://${appHostname}/auth/v1/callback?next=${callbackUrl}`;
     
     const { error } = await supabase.auth.signInWithOtp({
       email,

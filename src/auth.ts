@@ -49,9 +49,27 @@ export async function auth(): Promise<Session | null> {
 
   // NextAuth was configured with PrismaAdapter, meaning the DB 
   // users table is still the source of truth for app metadata.
-  const user = await prisma.user.findUnique({
-    where: { id: authUser.id }
+  // We must look up by both ID (new users) and Email (migrated NextAuth users)
+  let user = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { id: authUser.id },
+        { email: authUser.email ?? undefined }
+      ]
+    }
   });
+
+  // Auto-sync new Supabase users to Prisma if they don't exist yet
+  if (!user && authUser.email) {
+    user = await prisma.user.create({
+      data: {
+        id: authUser.id, // Use Supabase UUID for new Prisma users
+        email: authUser.email,
+        name: authUser.user_metadata?.full_name || authUser.user_metadata?.name || null,
+        image: authUser.user_metadata?.avatar_url || authUser.user_metadata?.picture || null,
+      }
+    });
+  }
 
   if (!user) return null;
 

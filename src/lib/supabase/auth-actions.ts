@@ -53,14 +53,23 @@ export async function signIn(provider: string, options?: Record<string, unknown>
 export async function signOut(options?: Record<string, unknown>) {
   if (process.env.NEXT_PUBLIC_E2E === 'true') {
     document.cookie = "e2e-bypass=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    if (options?.callbackUrl && typeof options.callbackUrl === 'string') {
+      window.location.href = options.callbackUrl;
+    } else {
+      window.location.href = '/login';
+    }
   } else {
+    // Clear client-side state
     const supabase = createClient();
     await supabase.auth.signOut();
-  }
-  
-  if (options?.callbackUrl && typeof options.callbackUrl === 'string') {
-    window.location.href = options.callbackUrl;
-  } else {
-    window.location.href = '/login';
+    
+    // Redirect through the server logout route to guarantee HttpOnly cookies are cleared
+    let redirectUrl = '/auth/v1/logout';
+    if (options?.callbackUrl && typeof options.callbackUrl === 'string') {
+      redirectUrl += `?next=${encodeURIComponent(options.callbackUrl)}`;
+    } else {
+      redirectUrl += `?next=/login?loggedOut=true`;
+    }
+    window.location.href = redirectUrl;
   }
 }
