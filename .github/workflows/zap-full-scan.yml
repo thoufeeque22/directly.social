@@ -2,9 +2,10 @@ name: "ZAP Full DAST Scan (Staging)"
 
 on:
 
-  # Weekly scan every Monday at 2am UTC (ensures we catch drift even without deploys)
+  # Weekly scan every Friday at 16:00 UTC (18:00 Poland time in Summer)
+  # Ensures the report is fresh right before the weekend development sessions begin.
   schedule:
-    - cron: "0 2 * * 1"
+    - cron: "0 16 * * 5"
 
   # Allow manual trigger (e.g. after config changes or infrastructure updates)
   workflow_dispatch:
