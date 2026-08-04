@@ -7,15 +7,15 @@ describe('Theme Logic', () => {
     it('returns correct palette for light mode', () => {
       const palette = getPalette('light');
       expect(palette.mode).toBe('light');
-      expect(palette.background?.default).toBe('hsl(250, 40%, 98%)');
-      expect(palette.text?.primary).toBe('hsl(250, 40%, 10%)');
+      expect(palette.background?.default).toBe('hsl(35, 30%, 98%)');
+      expect(palette.text?.primary).toBe('hsl(20, 40%, 10%)');
     });
 
     it('returns correct palette for dark mode', () => {
       const palette = getPalette('dark');
       expect(palette.mode).toBe('dark');
-      expect(palette.background?.default).toBe('hsl(250, 40%, 5%)');
-      expect(palette.text?.primary).toBe('hsl(250, 10%, 95%)');
+      expect(palette.background?.default).toBe('hsl(20, 20%, 6%)');
+      expect(palette.text?.primary).toBe('hsl(20, 10%, 95%)');
     });
   });
 
@@ -35,7 +35,7 @@ describe('Theme Logic', () => {
 
       const darkTheme = getTheme('dark');
       expect(darkTheme.components?.MuiPaper?.styleOverrides?.root)
-        .toMatchObject({ border: '1px solid hsla(250, 30%, 25%, 0.2)' });
+        .toMatchObject({ border: '1px solid hsla(20, 30%, 25%, 0.2)' });
     });
   });
 });
