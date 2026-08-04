@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { applyRateLimit } from '@/lib/core/rate-limit-middleware';
+import { getCookieDomain } from '@/lib/supabase/utils';
 
 /**
  * Unified Middleware for Authentication, Rate Limiting, and Routing.
@@ -27,9 +28,13 @@ export async function proxy(req: NextRequest) {
           supabaseResponse = NextResponse.next({
             request: req,
           });
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value, options }) => {
+            const domain = getCookieDomain();
+            if (domain) {
+              options.domain = domain;
+            }
             supabaseResponse.cookies.set(name, value, options)
-          );
+          });
         },
       },
     }
@@ -76,6 +81,15 @@ export async function proxy(req: NextRequest) {
       ? `app.localhost:${url.port || 3000}` 
       : hostname.startsWith('staging.') ? `app.staging.directly.social` : `app.directly.social`;
     return NextResponse.redirect(new URL(pathname + url.search, `http${hostname.includes('localhost') ? '' : 's'}://${appHostname}`));
+  }
+
+  // Catch stray Supabase OAuth fallbacks hitting the marketing root
+  if (isMarketing && pathname === "/" && url.searchParams.has('code')) {
+    const appHostname = hostname.includes('localhost') 
+      ? `app.localhost:${url.port || 3000}` 
+      : hostname.startsWith('staging.') ? `app.staging.directly.social` : `app.directly.social`;
+    // Forward the code to the actual callback handler
+    return NextResponse.redirect(new URL(`/auth/v1/callback${url.search}`, `http${hostname.includes('localhost') ? '' : 's'}://${appHostname}`));
   }
 
   // If we are on the app subdomain, allow /login and /auth to proceed normally

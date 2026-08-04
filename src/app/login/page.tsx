@@ -16,7 +16,7 @@ export default async function LoginPage(props: { searchParams: Promise<{ [key: s
   
   const session = await auth();
   if (session) {
-    redirect('/activity');
+    redirect('/');
   }
   
   if (!refCode) {
