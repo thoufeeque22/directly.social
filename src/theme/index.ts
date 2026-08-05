@@ -15,7 +15,7 @@ export const getTheme = (mode: 'light' | 'dark') => createTheme({
           borderRadius: '0.75rem',
           border: mode === 'light' 
             ? '1px solid rgba(0, 0, 0, 0.12)' 
-            : '1px solid hsla(250, 30%, 25%, 0.2)',
+            : '1px solid hsla(20, 30%, 25%, 0.2)',
         }
       }
     },
