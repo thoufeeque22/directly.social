@@ -28,7 +28,7 @@ export const VideoPlayerPreview: React.FC = () => {
       </div>
       <VideoPlayerView {...player} />
       <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ fontSize: '0.8rem', color: 'hsl(var(--muted-foreground))' }}>Format: <strong>{videoFormat === 'short' ? 'Short-Form' : 'Long-Form'}</strong>{videoDuration && ` • ${formatDuration(videoDuration)}`}</div>
+        <div style={{ fontSize: '0.8rem', color: 'hsl(var(--muted-foreground))' }}>Format: <strong>{videoFormat === 'short' ? 'Short-Form' : 'Long-Form'}</strong>{videoDuration !== null && ` • ${formatDuration(videoDuration)}`}</div>
         {(videoFormat === 'short' && videoDuration && videoDuration > 90) && <div style={{ color: 'hsl(var(--destructive))', fontSize: '0.8rem', fontWeight: 600 }}>Warning: Exceeds 90s short limit</div>}
       </div>
       {player.thumbnailUrl && (

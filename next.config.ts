@@ -75,7 +75,7 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             // Baseline Next.js CSP. Allows inline scripts/styles for React/MUI to function correctly.
             // Tightened to remove https: wildcards and explicitly define form-action/base-uri.
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://eu-assets.i.posthog.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: lh3.googleusercontent.com avatars.githubusercontent.com; font-src 'self' data:; connect-src 'self' https://eu-assets.i.posthog.com https://eu.i.posthog.com; form-action 'self'; base-uri 'self'; frame-ancestors 'none'; worker-src 'self' blob:;",
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://eu-assets.i.posthog.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: lh3.googleusercontent.com avatars.githubusercontent.com; font-src 'self' data:; connect-src 'self' https://eu-assets.i.posthog.com https://eu.i.posthog.com; form-action 'self'; base-uri 'self'; frame-ancestors 'none'; worker-src 'self' blob:; media-src 'self' blob:;",
           },
         ],
       },
