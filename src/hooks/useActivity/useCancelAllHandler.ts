@@ -21,8 +21,10 @@ export function useCancelAllHandler(
     
     updateStagingStatus(activityId);
     setActiveResumingId(null);
-    if (activityId === 'optimistic-pending') {
+    if (isGhostMatch) {
       setPendingPost(null); clearPendingPost();
+    }
+    if (activityId === 'optimistic-pending') {
       return;
     }
     try {

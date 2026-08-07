@@ -47,8 +47,9 @@ async function main() {
   const legacyEmail = 'tester@directly.social';
   await prisma.user.upsert({
     where: { email: legacyEmail },
-    update: { role: 'USER' },
+    update: { role: 'USER', id: 'e2e-test-user-id' },
     create: {
+      id: 'e2e-test-user-id',
       email: legacyEmail,
       name: 'E2E Tester Legacy',
       role: 'USER',

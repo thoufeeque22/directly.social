@@ -30,12 +30,28 @@ export async function stageVideoFile({ file, onStatusUpdate, metadata, platforms
   const { url, publicUrl } = await presignRes.json();
 
   await new Promise<void>((resolve, reject) => {
+    let intentionallyAborted = false;
     const xhr = new XMLHttpRequest();
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Content-Type', file.type);
     
+    const checkAbortInterval = setInterval(() => {
+      if (checkGlobalAbort(uploadId)) {
+        clearInterval(checkAbortInterval);
+        intentionallyAborted = true;
+        xhr.abort();
+        reject(new Error("Upload cancelled"));
+      }
+    }, 500);
+    
     xhr.upload.onprogress = (event) => {
-      if (checkGlobalAbort(uploadId)) { xhr.abort(); return reject(new Error("Upload cancelled")); }
+      if (intentionallyAborted) return;
+      if (checkGlobalAbort(uploadId)) { 
+        clearInterval(checkAbortInterval);
+        intentionallyAborted = true; 
+        xhr.abort(); 
+        return reject(new Error("Upload cancelled")); 
+      }
       if (event.lengthComputable) {
         const percentage = Math.round((event.loaded / event.total) * 100);
         broadcastStatus(onStatusUpdate, uploadId, `Uploading: ${percentage}%`, percentage);
@@ -43,13 +59,25 @@ export async function stageVideoFile({ file, onStatusUpdate, metadata, platforms
     };
     
     xhr.onload = () => {
+      clearInterval(checkAbortInterval);
       if (xhr.status >= 200 && xhr.status < 300) resolve();
       else reject(new Error(`Upload failed with status ${xhr.status}`));
     };
-    xhr.onerror = () => reject(new Error("Upload network error"));
-    xhr.onabort = () => reject(new Error("Upload cancelled"));
+    xhr.onerror = () => {
+      clearInterval(checkAbortInterval);
+      if (!intentionallyAborted) reject(new Error("Upload network error"));
+    };
+    xhr.onabort = () => {
+      clearInterval(checkAbortInterval);
+      if (!intentionallyAborted) reject(new Error("Upload cancelled"));
+    };
     
-    if (signal) signal.addEventListener('abort', () => { xhr.abort(); reject(new Error("Upload cancelled")); });
+    if (signal) signal.addEventListener('abort', () => { 
+      clearInterval(checkAbortInterval);
+      intentionallyAborted = true; 
+      xhr.abort(); 
+      reject(new Error("Upload cancelled")); 
+    });
     
     xhr.send(file);
   });
