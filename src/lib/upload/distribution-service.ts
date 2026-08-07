@@ -32,9 +32,15 @@ export async function processPlatformUpload({ selectionId, platform, realAccount
     if (onAccountSuccess) onAccountSuccess(selectionId, result);
     return result;
   } catch (err: unknown) {
-    const error = err as Error & { name?: string; message?: string };
-    const isAborted = error.name === 'AbortError' || checkGlobalAbort(activityId);
-    const result = { accountId: selectionId, platform, accountName: account?.accountName || null, status: (isAborted ? 'cancelled' : 'failed') as 'failed' | 'cancelled', errorMessage: error.message || 'Upload failed' };
+    const error = err as any;
+    const isAborted = error?.name === 'AbortError' || checkGlobalAbort(activityId);
+    
+    let errorMessage = error?.message || error?.error || 'Upload failed';
+    if (errorMessage === 'invalid_grant') {
+      errorMessage = 'Account disconnected. Please reconnect your account in Settings.';
+    }
+
+    const result = { accountId: selectionId, platform, accountName: account?.accountName || null, status: (isAborted ? 'cancelled' : 'failed') as 'failed' | 'cancelled', errorMessage };
     if (onPlatformStatus) onPlatformStatus(selectionId, result.status, result.errorMessage);
     if (onAccountSuccess) onAccountSuccess(selectionId, result);
     return result;

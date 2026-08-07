@@ -15,7 +15,7 @@ export interface UploadLogicParams {
   onProgress?: (percent: number) => void;
 }
 
-type SupportedPlatform = 'youtube' | 'facebook' | 'instagram' | 'tiktok' | 'local';
+type SupportedPlatform = 'youtube' | 'facebook' | 'instagram' | 'tiktok' | 'local' | 'linkedin';
 
 interface HandlerParams {
   req: NextRequest;
@@ -81,8 +81,20 @@ export async function handlePlatformUploadRequest({ req, platform, uploadLogic }
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : String(error);
     logger.error(` [${platform}] Error:`, msg);
+    if (error instanceof Error && error.stack) {
+      fsSync.appendFileSync(process.cwd() + '/scratch/error.log', `[${new Date().toISOString()}] ${platform} Error: ${msg}\n${error.stack}\n\n`);
+    } else {
+      fsSync.appendFileSync(process.cwd() + '/scratch/error.log', `[${new Date().toISOString()}] ${platform} Error: ${msg}\n\n`);
+    }
 
-    if (msg.includes("invalid_grant") || msg.includes("Token has been expired or revoked")) {
+    if (fields.activityId && fields.accountId) {
+      await prisma.postPlatformResult.update({
+        where: { postActivityId_platform_accountId: { postActivityId: fields.activityId as string, platform, accountId: fields.accountId as string } },
+        data: { status: 'failed', errorMessage: msg.includes("invalid_grant") || msg.toLowerCase().includes("token has been revoked") || msg.includes("account not found or access token missing") ? 'Account disconnected. Please reconnect your account in Settings.' : msg }
+      }).catch(() => {});
+    }
+
+    if (msg.includes("invalid_grant") || msg.includes("Token has been expired or revoked") || msg.toLowerCase().includes("token has been revoked") || msg.includes("account not found or access token missing") || (error as Error)?.name === 'LinkedInTokenRevokedError') {
       if (fields.accountId) {
         await prisma.account.update({
           where: { id: fields.accountId as string },
