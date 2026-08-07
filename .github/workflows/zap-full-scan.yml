@@ -72,6 +72,7 @@ jobs:
             ZAP_AUTH_SECRET
             ZAP_AUTH_HEADER
             ZAP_AUTH_HEADER_VALUE
+            STAGING_HTTP_B64
 
       - name: Upload Full Scan Reports
         if: always()

@@ -61,6 +61,7 @@ jobs:
         method: POST
         headers:
           - "Content-Type: application/json"
+          - "Authorization: Basic ${STAGING_HTTP_B64}"
         data: '{"email":"zap@directly.social","zapSecret":"${ZAP_AUTH_SECRET}"}'
         responseCode: 200
 
