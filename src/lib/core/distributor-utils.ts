@@ -68,6 +68,20 @@ export function generatePermalink(platform: string, data: PlatformData): string 
       // but we can link to the user's profile or a generic search
       return publishId ? `https://www.tiktok.com/` : null;
     }
+    case 'linkedin': {
+      const publishId = data.id || data.publish_id;
+      if (!publishId) return null;
+      
+      // Text posts return a share URN which is cleanly routable
+      if (publishId.includes('urn:li:share:')) {
+        return `https://www.linkedin.com/feed/update/${publishId}/`;
+      }
+      
+      // Video posts return a ugcPost URN which LinkedIn's frontend actively blocks 
+      // from direct routing (404s). Since we cannot derive the wrapper Activity ID mathematically,
+      // the safest UX fallback is to direct them to the LinkedIn homepage where they can navigate to their profile.
+      return `https://www.linkedin.com/`;
+    }
     default:
       return null;
   }

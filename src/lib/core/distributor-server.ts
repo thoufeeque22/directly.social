@@ -83,6 +83,18 @@ export async function distributeSinglePlatform({
     });
   }
 
+  if (platform === 'linkedin') {
+    const { publishLinkedInVideo } = await import('@/lib/platforms/linkedin/video');
+    return await publishLinkedInVideo({
+      userId,
+      filePath,
+      description: finalCaption,
+      accountId,
+      title,
+      onProgress: progressCallback
+    });
+  }
+
   if (platform.startsWith('local')) {
     const { publishLocalReel } = await import('@/lib/platforms/local');
     return await publishLocalReel({
