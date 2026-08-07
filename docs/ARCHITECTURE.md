@@ -16,7 +16,7 @@ This document provides a high-level index of the Directly application architectu
 4.  **[Publishing Workflows](architecture/PUBLISHING_WORKFLOWS.md)**
     *   Post Distribution (Publishing)
     *   Durable Workflow Orchestration (Inngest)
-    *   Modular Distribution Layer
+    *   Modular Distribution Layer (`distributor-utils`, `distributor-permalinks`, `distributor-captions` adhering to 100-line rule)
     *   [Metadata Pipeline Architecture](architecture/METADATA_PIPELINE.md)
     *   Automated Token Refresh
     *   **[Developer Guide: Adding Platforms](architecture/DEVELOPER_GUIDE_PLATFORMS.md)**
@@ -30,7 +30,7 @@ This document provides a high-level index of the Directly application architectu
 6.  **[Security & RBAC](architecture/SECURITY.md)**
     *   7-Point AI Security Risk Checklist (SSTI, ReDoS, S3 Client-Side Secret Leakage, etc.)
     *   Role-Based Access Control
-    *   File System Security
+    *   File System Security & Stream Mitigations (SSRF and LFI protection)
 7.  **[Mobile Architecture](architecture/MOBILE.md)**
     *   Capacitor Wrapper
     *   Mobile UI/UX Standards (Safe Areas)

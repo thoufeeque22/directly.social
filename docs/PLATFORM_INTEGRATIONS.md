@@ -51,6 +51,21 @@ Used for TikTok video publishing.
 - **Redirect URIs**:
   - `https://directly-social.vercel.app/api/auth/callback/tiktok`
 
+### 4. LinkedIn
+Used for professional posts and video distribution.
+- **Platform**: [LinkedIn Developer Portal](https://developer.linkedin.com/)
+- **API Enabled**: Share on LinkedIn, Video API (`/rest/videos`, `/rest/posts`)
+- **Credentials**:
+  - `AUTH_LINKEDIN_ID`: Client ID
+  - `AUTH_LINKEDIN_SECRET`: Client Secret
+- **Required Scopes**:
+  - `openid`, `profile`, `email`: For OpenID Connect Identity.
+  - `w_member_social`: **Critical** for publishing text, images, and videos.
+- **Redirect URIs**:
+  - `https://directly-social.vercel.app/api/auth/callback/linkedin`
+  - `http://localhost:3000/api/auth/callback/linkedin` (Dev)
+- **Limits**: Video streams are strictly validated with SSRF/LFI protections and capped at 500MB.
+
 ---
 
 ## 🔄 Automated Token Refresh

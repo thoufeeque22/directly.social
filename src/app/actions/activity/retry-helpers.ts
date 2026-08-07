@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/core/prisma';
 import { logger } from '@/lib/core/logger';
-import { extractPlatformPostId, generatePermalink, PlatformData } from '@/lib/core/distributor-utils';
+import { extractPlatformPostId, PlatformData } from '@/lib/core/distributor-utils';
+import { generatePermalink } from '@/lib/core/distributor-permalinks';
 import { ResultWithActivity } from './prisma-helpers';
 
 interface RetryError {

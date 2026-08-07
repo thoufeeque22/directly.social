@@ -1,7 +1,8 @@
 "use strict";
 import { 
-  formatPlatformCaption 
-} from './distributor-utils';
+  constructPublicVideoUrl
+} from "./distributor-utils";
+import { formatPlatformCaption } from "./distributor-captions";
 import { logger } from '@/lib/core/logger';
 
 /**
@@ -80,6 +81,18 @@ export async function distributeSinglePlatform({
       filePath,
       title: finalCaption,
       accountId
+    });
+  }
+
+  if (platform === 'linkedin') {
+    const { publishLinkedInVideo } = await import('@/lib/platforms/linkedin/video');
+    return await publishLinkedInVideo({
+      userId,
+      filePath,
+      description: finalCaption,
+      accountId,
+      title,
+      onProgress: progressCallback
     });
   }
 
