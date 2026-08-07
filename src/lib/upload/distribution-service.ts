@@ -1,6 +1,7 @@
 import { checkGlobalAbort, broadcastStatus } from './abort-utils';
 import { sanitizeMetadata } from './metadata-utils';
-import { extractPlatformPostId, generatePermalink } from '@/lib/core/distributor-utils';
+import { extractPlatformPostId } from '@/lib/core/distributor-utils';
+import { generatePermalink } from '@/lib/core/distributor-permalinks';
 
 interface DistributionParams {
   selectionId: string; platform: string; realAccountId: string;

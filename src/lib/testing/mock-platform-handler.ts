@@ -11,7 +11,8 @@ export async function handleMockPlatformUpload(
   const mockResult = { id: `mock-post-${Date.now()}`, videoId: `mock-vid-${Date.now()}` };
   
   if (activityId) {
-    const { extractPlatformPostId, generatePermalink } = await import("@/lib/core/distributor-utils");
+    const { extractPlatformPostId } = await import("@/lib/core/distributor-utils");
+    const { generatePermalink } = await import("@/lib/core/distributor-permalinks");
     await prisma.postPlatformResult.update({ 
       where: { postActivityId_platform_accountId: { postActivityId: activityId, platform, accountId } }, 
       data: { 

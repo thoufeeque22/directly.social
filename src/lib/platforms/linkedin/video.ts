@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/core/prisma";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { Readable } from "node:stream";
 import { initializeVideoUpload, finalizeVideoUpload, finalizeAndPublishPost } from "./video-api";
 import { LinkedInTokenRevokedError } from "./types";
@@ -12,6 +14,29 @@ interface PublishLinkedInVideoParams {
   accountId?: string;
   title?: string;
   onProgress?: (percent: number) => void;
+}
+
+function validateUrl(urlPath: string) {
+  const url = new URL(urlPath);
+  if (url.protocol !== "https:") throw new Error("Only HTTPS URLs are allowed");
+  if (
+    url.hostname === "localhost" || 
+    url.hostname === "127.0.0.1" || 
+    url.hostname === "169.254.169.254" || 
+    url.hostname.startsWith("10.") || 
+    url.hostname.startsWith("192.168.")
+  ) {
+    throw new Error("Internal or metadata URLs are strictly prohibited");
+  }
+}
+
+function validateLocalPath(localPath: string) {
+  const resolved = path.resolve(localPath);
+  const tmpDir = path.resolve(os.tmpdir());
+  if (!resolved.startsWith(tmpDir)) {
+    throw new Error("Local File Inclusion attempt detected. File path must be within the system temporary directory.");
+  }
+  return resolved;
 }
 
 export async function publishLinkedInVideo({
@@ -35,13 +60,17 @@ export async function publishLinkedInVideo({
   const accessToken = decryptLinkedInToken(account.access_token);
   const personUrn = `urn:li:person:${account.providerAccountId}`;
 
-  // 0. Compute file size
+  // 0. Compute file size with strict validation
   let fileSizeBytes = 0;
   if (filePath.startsWith('http')) {
-    const headRes = await fetch(filePath, { method: 'HEAD' });
+    validateUrl(filePath);
+    const headRes = await fetch(filePath, { method: 'HEAD', signal: AbortSignal.timeout(10000) });
     fileSizeBytes = parseInt(headRes.headers.get('content-length') || '0', 10);
-    if (!fileSizeBytes) throw new Error("Could not determine file size from remote URL");
+    if (!fileSizeBytes || fileSizeBytes > 1024 * 1024 * 500) {
+      throw new Error("Invalid file size or exceeds 500MB limit for LinkedIn video");
+    }
   } else {
+    filePath = validateLocalPath(filePath);
     fileSizeBytes = fs.statSync(filePath).size;
   }
 
@@ -52,11 +81,10 @@ export async function publishLinkedInVideo({
   // 2. Upload Binary Video Data
   let bodyStream: BodyInit;
   if (filePath.startsWith("http")) {
-    const mediaRes = await fetch(filePath);
+    const mediaRes = await fetch(filePath, { signal: AbortSignal.timeout(300000) });
     if (!mediaRes.ok || !mediaRes.body) throw new Error("Failed to fetch remote media file for upload");
     bodyStream = mediaRes.body;
   } else {
-    // Correctly transform fs.ReadStream to a Web ReadableStream
     const nodeStream = fs.createReadStream(filePath);
     bodyStream = Readable.toWeb(nodeStream) as ReadableStream<Uint8Array>;
   }

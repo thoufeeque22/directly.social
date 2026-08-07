@@ -2,7 +2,8 @@ import { NextResponse, NextRequest } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/core/prisma";
 import fsSync from "node:fs";
-import { formatPlatformCaption, PlatformData } from "./distributor-utils";
+import { PlatformData } from "./distributor-utils";
+import { formatPlatformCaption } from "./distributor-captions";
 import { getOptimizedVideoPath } from "@/lib/video/transcode-manager";
 import { logger } from "@/lib/core/logger";
 import { downloadByosFile } from "@/lib/byos/downloader";
@@ -65,7 +66,8 @@ export async function handlePlatformUploadRequest({ req, platform, uploadLogic }
     const result = await uploadLogic({ userId: session.user.id, filePath: activePath, title: enriched.title, description: caption, videoFormat: (fields.videoFormat as string) || "short", accountId: fields.accountId as string, fields: fields as Record<string, string>, onProgress: await createProgressReporter(fields.activityId as string, platform, fields.accountId as string) });
     
     if (fields.activityId && fields.accountId) {
-      const { extractPlatformPostId, generatePermalink } = await import("./distributor-utils");
+      const { extractPlatformPostId } = await import("./distributor-utils");
+      const { generatePermalink } = await import("./distributor-permalinks");
       const platformData = result as PlatformData;
       await prisma.postPlatformResult.update({ 
         where: { postActivityId_platform_accountId: { postActivityId: fields.activityId as string, platform, accountId: fields.accountId as string } }, 

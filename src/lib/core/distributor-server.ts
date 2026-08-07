@@ -1,7 +1,8 @@
 "use strict";
 import { 
-  formatPlatformCaption 
-} from './distributor-utils';
+  constructPublicVideoUrl
+} from "./distributor-utils";
+import { formatPlatformCaption } from "./distributor-captions";
 import { logger } from '@/lib/core/logger';
 
 /**
