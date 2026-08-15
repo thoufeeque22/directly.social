@@ -22,7 +22,7 @@
 - **Manual Environment Management:** The User always manages the development server (`pnpm dev`), the E2E test server (`http://localhost:3000`), and network tunnels (e.g., `tailscale funnel`) manually. AI agents MUST NOT attempt to start, restart, check the connectivity of these services, or modify/enable any Playwright `webServer` configuration. ALL E2E tests are strictly bound to `http://localhost:3000`.
 - **Strict Sequential Workflow:** ALL tickets MUST follow the `PHASE_ORDER`.
 - **Guardrail Mandates (Terminal Violations):**
-  1. **Issue-First Protocol:** Before starting any work, the Orchestrator MUST ensure a corresponding GitHub issue exists. If the task is new or doesn't have an ID, the Orchestrator MUST invoke the `project-agent` to create the issue FIRST.
+  1. **Issue-First Protocol:** Before starting any work, the Orchestrator MUST ensure a corresponding GitHub issue exists. If the task is new or doesn't have an ID, the Orchestrator MUST invoke the `ds-project-agent` to create the issue FIRST.
   2. **No Direct Main Push:** AI agents are STRICTLY FORBIDDEN from merging into or pushing directly to the `MAIN_BRANCH`. ALL code changes MUST live on a dedicated feature branch (`FEATURE_BRANCH_PATTERN`).
   3. **PR-Only Handoff:** The final handoff to the user MUST be for **Pull Request creation**. The agent must never perform the final merge locally.
   4. **Artifact-First Protocol:** NEVER start a phase without first writing or updating an Artifact in `ARTIFACT_DIR` (see `VARIABLES.md`).
@@ -30,7 +30,7 @@
   1. **Atomic Phases:** An agent MUST NOT proceed to the next phase autonomously. It MUST write its final Artifact with `RequestFeedback: true`, set its **Verdict**, and return control to the Orchestrator.
   2. **Next Step Suggestion:** Upon completing a phase, the agent MUST explicitly suggest the next sub-agent in the sequence to the user.
   3. **Immediate Stop on Failure:** If any phase (especially `Audit` or `QA`) results in a **FAIL** verdict, the current round MUST terminate immediately.
-  4. **Round 2+ Entry Point:** If a round fails during `Audit` or `QA`, the next round MUST begin with `dev-agent`. The sequence restarts from `Development`.
+  4. **Round 2+ Entry Point:** If a round fails during `Audit` or `QA`, the next round MUST begin with `ds-dev-agent`. The sequence restarts from `Development`.
 - **Human-in-the-Loop Workflow (HARD STOP):** ALL transitions between agent phases MUST be mediated by the user. **The Orchestrator MUST immediately HALT execution and return control to the User after writing a phase Artifact. The Orchestrator is STRICTLY FORBIDDEN from automatically chaining to the next phase or running multiple sub-agents in a single turn without explicit user approval.**
   1. **Inquiry-First Protocol:** The initial turn of any planning agent (`Product`, `Discovery`) SHOULD focus on asking questions to resolve ambiguity. If the agent is in doubt, it MUST set its Verdict to **NEEDS-INFO** and present its questions to the user.
   2. **Artifact-First Protocol (Robust Updates):** Agents MUST write their final Artifact using `write_to_file` to `ARTIFACT_DIR` with `ArtifactMetadata.RequestFeedback: true` BEFORE terminating. This natively pauses the Orchestrator and presents a "Proceed" UI to the user.
@@ -46,9 +46,9 @@ To maintain speed and context efficiency, the project uses a tiered testing mode
 - **Full Suite:** The complete test directory, including long-running E2E and edge-case unit tests.
 
 ### Agent Test Mandates
-- **dev-agent:** MUST use `ARCHITECT_SKILL`. MUST run `SMOKE_TEST_CMD` and `LINT_CMD`. May skip `BUILD_CMD` on fast-iteration loops if already run for the current changeset.
-- **audit-agent:** READ-ONLY. Focus on Security, Privacy (PII, Cookie Policy, Terms & Conditions), and Performance (Web Vitals).
-- **qa-agent:** MUST run `REGRESSION_TEST_CMD`. May run targeted tests for high-impact features.
+- **ds-dev-agent:** MUST use `ARCHITECT_SKILL`. MUST run `SMOKE_TEST_CMD` and `LINT_CMD`. May skip `BUILD_CMD` on fast-iteration loops if already run for the current changeset.
+- **ds-audit-agent:** READ-ONLY. Focus on Security, Privacy (PII, Cookie Policy, Terms & Conditions), and Performance (Web Vitals).
+- **ds-qa-agent:** MUST run `REGRESSION_TEST_CMD`. May run targeted tests for high-impact features.
 - **Human-in-the-Loop:** The **User** SHOULD run the full suite (`pnpm test`) before final merge.
 
 > All command identifiers (`SMOKE_TEST_CMD`, `REGRESSION_TEST_CMD`, etc.) are defined in `VARIABLES.md`.
@@ -73,7 +73,7 @@ Required fields in every Artifact:
 
 ### Discovery (Architecture & Planning)
 - **Role:** Read-only consultant and rigorous interrogator. Create blueprints.
-- **Mandate:** MUST grill the user and ask deep and thorough questions to resolve all ambiguities before drafting blueprints. MUST evaluate if the proposed feature violates or requires updates to the Cookie Policy, Terms and Conditions, or other compliance policies. MUST provide an explicit **Socratic Log** (via `discovery-agent`) followed by a **Test Specification** block with high-level manual and automated test scenarios.
+- **Mandate:** MUST grill the user and ask deep and thorough questions to resolve all ambiguities before drafting blueprints. MUST evaluate if the proposed feature violates or requires updates to the Cookie Policy, Terms and Conditions, or other compliance policies. MUST provide an explicit **Socratic Log** (via `ds-discovery-agent`) followed by a **Test Specification** block with high-level manual and automated test scenarios.
 - **NotebookLM Synthesis:** For tickets involving complex integrations, legacy refactors, or deep architectural changes, the agent SHOULD recommend a NotebookLM synthesis step. Use `pnpm run notebook:package` to bundle context for high-fidelity research.
 - **Verdict:** Approved -> QA | Needs-Info -> Round 2 | Rejected -> Close.
 
@@ -89,7 +89,7 @@ Required fields in every Artifact:
 ### Development (Implementation)
 - **Role:** Staff Engineer. Clean, modular code.
 - **Mandate:** MUST execute all implementation via the `ARCHITECT_SKILL`. This ensures that every change is validated through mandatory **Object-Oriented Design**, **Clean Architecture**, and **API Design** review loops. MUST aggressively offload file edits and boilerplate to `cavecrew-builder` or local `ollama_chat`.
-- **Modularity Enforcement (Strict 100-Line Rule):** The `dev-agent` MUST NOT complete the Development phase or submit its work if any new or modified application files (excluding test files) exceed 100 lines of code. It MUST split new files or refactor/extract logic from any touched legacy files until every affected file is strictly under 100 lines.
+- **Modularity Enforcement (Strict 100-Line Rule):** The `ds-dev-agent` MUST NOT complete the Development phase or submit its work if any new or modified application files (excluding test files) exceed 100 lines of code. It MUST split new files or refactor/extract logic from any touched legacy files until every affected file is strictly under 100 lines.
 - **Blueprint Fulfillment (No Skipping):** The agent MUST verify that ALL commitments, configuration steps, and external infrastructure dependencies explicitly outlined in the Discovery Blueprint have been successfully executed or explicitly resolved with the user. The agent is STRICTLY FORBIDDEN from transitioning to the Audit or Documentation phase if any promises (e.g., "I will pause and ask you for keys", "I will run the CLI") remain unfulfilled.
 - **Verdict:** Success -> Audit | Blocked -> Discovery/Manual.
 - **Exhaustive Verification (Zero Defect Policy):** MUST run `BUILD_CMD`, `LINT_CMD` (e.g., `pnpm lint`), and `TYPE_CHECK_CMD` (e.g., `npx tsc --noEmit`) iteratively at the end of every workflow before finishing. **Additionally, the agent MUST run the automated E2E tests written during the QA phase (e.g., `npx playwright test`) iteratively to ensure the new features meet the specifications (Test-Driven Development).** After the QA tests pass, the agent MUST run regression tests (`REGRESSION_TEST_CMD`) AND native mobile tests (`NATIVE_TEST_CMD`). If regression or native tests fail due to the current changes, the agent MUST fix them so they pass. If the regression failures are pre-existing and NOT caused by the current changes, the agent MUST create a separate ticket detailing all failures (using the Project Agent or GitHub issue tool) rather than fixing them. **MANDATORY:** The agent MUST NOT transition out of the Development phase until the codebase strictly passes all linting, type checks, QA tests, and relevant regression tests with **0 warnings and 0 errors**. When encountering bulk lint or build errors, the agent MUST use the `triage-lint` skill to fix them in manageable batches rather than overwhelming the context window.
@@ -114,7 +114,7 @@ Required fields in every Artifact:
      - Log under **Learnings Integrated** in the phase Artifact.
   3. **Documentation Audit & Update:** You MUST audit the current feature implementation against the existing documentation (`docs/`, `README.md`). If the source code has advanced past the documentation, you MUST update the documentation files to ensure they stay perfectly in sync with the actual codebase reality.
   4. **Incidental Check:** Read `OBSERVATIONS_FILE`.
-     - If **Observations exist**: Suggest invoking `project-agent` to resolve them.
+     - If **Observations exist**: Suggest invoking `ds-project-agent` to resolve them.
      - If **No Observations exist**: Suggest the **User** for final PR creation.
 - **Verdict**: [COMPLETE].
 
@@ -135,7 +135,7 @@ Required fields in every Artifact:
   ```json
   {
     "id": "OBS-<timestamp>",
-    "discovery_agent": "dev-agent",
+    "discovery_agent": "ds-dev-agent",
     "observation": "Brief description of the issue",
     "file": "path/to/file:line",
     "severity": "low/medium/high"

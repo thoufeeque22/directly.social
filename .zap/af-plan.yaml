@@ -56,13 +56,13 @@ jobs:
   - type: replacer
     parameters:
       deleteAllRules: false
-      rules:
-        - description: "Staging nginx HTTP Basic Auth"
-          matchType: "REQ_HEADER"
-          matchString: "Authorization"
-          replacement: "Basic ${STAGING_HTTP_B64}"
-          initiators: []   # Empty = apply to ALL request types (spider, active scan, etc.)
-          enabled: true
+    rules:
+      - description: "Staging nginx HTTP Basic Auth"
+        matchType: "REQ_HEADER"
+        matchString: "Authorization"
+        replacementString: "Basic ${STAGING_HTTP_B64}"
+        initiators: []   # Empty = apply to ALL request types (spider, active scan, etc.)
+        enabled: true
 
   # ── 1. Requestor: Log in to directly.social, capture NextAuth cookie ───────
   # Calls the staging-only /api/zap/auth endpoint.

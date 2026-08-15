@@ -117,3 +117,7 @@ For any significant feature or codebase audit, the following 7 vulnerabilities m
 ### 14. OWASP ZAP Automation Framework Strictness
 - **YAML Schema:** When modifying `.zap/af-plan.yaml` (e.g., for alert filters or replacer rules), you MUST adhere to ZAP's strict YAML schema. 
 - **Known Quirks:** Always use `replacementString` instead of `replacement` for replacer rules. For HTTP headers, ensure they are passed as proper arrays if required by the block. For alert filters, ensure `newRisk` exact casing is used (e.g., `"Info"`, `"False Positive"`). Do not guess the schema.
+
+### 15. Form Hydration & Large Media Mocking
+- **Hydration Crash Rule:** `localStorage` must NEVER be accessed inside `useMemo` or directly in a component body during SSR. It must be initialized with a stable default (`false`/`null`) and hydrated inside a `useEffect`.
+- **Large Media OOM Hazard:** When mocking large media files for client-side forms (e.g., Demo Videos), NEVER use `await res.blob()` to load the data into a new File object in main memory. Use a 0-byte payload (`new File([], 'name', { type: 'video/mp4' })`) and rely on URL mapping for previews/exports to prevent Out Of Memory (OOM) crashes on mobile devices.

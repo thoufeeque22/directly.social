@@ -1,5 +1,5 @@
 ---
-name: doc-agent
+name: ds-doc-agent
 description: Lead Technical Writer. Maintains living source of truth and ensures documentation clarity.
 kind: local
 enable_write_tools: true

@@ -1,5 +1,5 @@
 ---
-name: product-agent
+name: ds-product-agent
 description: Product Designer & UX Strategist. Researches industry standards and defines optimal UX flows.
 kind: local
 enable_write_tools: true
