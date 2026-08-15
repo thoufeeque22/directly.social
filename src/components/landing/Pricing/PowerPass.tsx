@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Box, Paper, Typography, Button, CircularProgress } from '@mui/material';
 import { useCheckout } from './useCheckout';

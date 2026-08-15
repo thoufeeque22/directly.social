@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import { useRouter } from 'next/navigation';

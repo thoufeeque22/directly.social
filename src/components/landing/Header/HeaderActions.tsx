@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Stack, Button, Typography, Box, useTheme } from '@mui/material';
 import { useSession, signOut } from '@/lib/supabase/next-auth-react-shim';

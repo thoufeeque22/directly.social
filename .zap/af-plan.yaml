@@ -49,6 +49,21 @@ env:
     progressToStdout: true
 
 jobs:
+  # ── 0. Replacer: Inject nginx HTTP Basic Auth globally ─────────────────────
+  # MUST run first so every subsequent request (including the auth requestor
+  # call below) already carries the Authorization header that nginx requires.
+  # STAGING_HTTP_B64 env var is set by the GitHub Actions workflow step.
+  - type: replacer
+    parameters:
+      deleteAllRules: false
+      rules:
+        - description: "Staging nginx HTTP Basic Auth"
+          matchType: "REQ_HEADER"
+          matchString: "Authorization"
+          replacement: "Basic ${STAGING_HTTP_B64}"
+          initiators: []   # Empty = apply to ALL request types (spider, active scan, etc.)
+          enabled: true
+
   # ── 1. Requestor: Log in to directly.social, capture NextAuth cookie ───────
   # Calls the staging-only /api/zap/auth endpoint.
   # ZAP captures the Set-Cookie response header (authjs.session-token)
@@ -61,7 +76,6 @@ jobs:
         method: POST
         headers:
           - "Content-Type: application/json"
-          - "Authorization: Basic ${STAGING_HTTP_B64}"
         data: '{"email":"zap@directly.social","zapSecret":"${ZAP_AUTH_SECRET}"}'
         responseCode: 200
 

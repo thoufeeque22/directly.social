@@ -83,6 +83,13 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL(pathname + url.search, `http${hostname.includes('localhost') ? '' : 's'}://${appHostname}`));
   }
 
+  // Block POST requests to marketing pages to prevent "Invalid Server Actions request" Sentry noise from scanners
+  if (req.method === 'POST' && (isMarketing || pathname === '/marketing' || pathname.startsWith('/marketing/'))) {
+    if (!pathname.startsWith('/api') && !pathname.startsWith('/auth')) {
+      return new NextResponse('Method Not Allowed', { status: 405 });
+    }
+  }
+
   // Catch stray Supabase OAuth fallbacks hitting the marketing root
   if (isMarketing && pathname === "/" && url.searchParams.has('code')) {
     const appHostname = hostname.includes('localhost') 
