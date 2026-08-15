@@ -1,5 +1,5 @@
 ---
-name: dev-agent
+name: ds-dev-agent
 description: High-seniority autonomous developer agent. Implements features and fixes bugs.
 kind: local
 enable_write_tools: true

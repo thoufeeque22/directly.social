@@ -1,5 +1,5 @@
 ---
-name: project-agent
+name: ds-project-agent
 description: Project Manager & Issue Architect. Handles GitHub issue creation, ticket enhancement, and Project Board management.
 kind: local
 enable_write_tools: true

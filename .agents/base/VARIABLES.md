@@ -25,7 +25,7 @@ This file centralizes all global constants, patterns, and strings used in the pr
   - `review`: Peer Code Review
   - `audit`: Security, Performance & Quality Audit
   - `doc`: Documentation & Orchestration Audit
-  - `pm`: Project Management (project-agent)
+  - `pm`: Project Management (ds-project-agent)
 
 ## ✅ Verdicts & Statuses
 - **GLOBAL_VERDICTS**: `SUCCESS`, `FAIL`, `BLOCKED`, `NEEDS-INFO`

@@ -9,6 +9,10 @@ export function useVideoPlayer(draftFile: File | null) {
 
   useEffect(() => {
     if (draftFile) {
+      if (draftFile.name === 'demo-video.mp4') {
+        setVideoUrl('/dummy.mp4');
+        return;
+      }
       const url = URL.createObjectURL(draftFile);
       setVideoUrl(url);
       return () => URL.revokeObjectURL(url);
