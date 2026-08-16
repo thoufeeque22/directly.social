@@ -61,6 +61,7 @@ jobs:
         matchType: "REQ_HEADER"
         matchString: "Authorization"
         replacementString: "Basic ${STAGING_HTTP_B64}"
+        tokenProcessing: true
         initiators: []   # Empty = apply to ALL request types (spider, active scan, etc.)
 
   # ── 1. Requestor: Log in to directly.social, capture NextAuth cookie ───────
