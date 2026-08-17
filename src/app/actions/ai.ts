@@ -9,32 +9,7 @@ import { aiRateLimit } from "@/lib/core/ratelimit-config";
 import { logger } from "@/lib/core/logger";
 import { AIProvider } from "@/lib/core/ai";
 
-const AIPreviewSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  tier: z.enum(['Manual', 'Enrich', 'Generate']),
-  mode: z.enum(['Smart', 'Gen-Z', 'SEO', 'Story', 'Custom']),
-  platforms: z.array(z.string()).min(1, "At least one platform is required"),
-  visualData: z.array(z.string()).optional(),
-  customStyleText: z.string().optional(),
-  aiProvider: z.string().optional(),
-});
-
-/**
- * Parameters for generating AI previews.
- * (API-002): Parameter object to avoid long positional argument lists.
- */
-export interface MultiPlatformAIPreviewParams {
-  title: string;
-  description: string;
-  tier: AITier;
-  mode: StyleMode;
-  platforms: string[];
-  visualData?: string[];
-  customStyleText?: string;
-  byokConfigs?: Record<string, { apiKey: string; modelId: string }>;
-  aiProvider?: AIProvider;
-}
+import { AIPreviewSchema, MultiPlatformAIPreviewParams } from "@/lib/schemas/ai-preview";
 
 /**
  * GENERATES PREVIEWS FOR ALL SELECTED PLATFORMS.
@@ -53,7 +28,11 @@ export async function getMultiPlatformAIPreviews(params: MultiPlatformAIPreviewP
     aiProvider,
   } = params;
 
-  return protectedAction(async function generatePreviews(userId) {
+  return protectedAction(async function generatePreviews(userId, session) {
+    if (!session.user.aiProcessingConsent) {
+      throw new Error("Forbidden: You must consent to AI processing before generating content.");
+    }
+
     // 1. Runtime Validation
     const validated = AIPreviewSchema.parse({ 
       title, 

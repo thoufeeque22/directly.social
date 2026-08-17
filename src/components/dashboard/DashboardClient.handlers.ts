@@ -23,6 +23,12 @@ export const useDashboardHandlers = (
 ) => {
   const onSubmit = async (fd: FormData) => {
     try {
+      if (fd.get('aiConsent') === 'true') {
+        const { updateAiConsent } = await import('@/app/actions/consent');
+        await updateAiConsent();
+        await updateSession({ aiProcessingConsent: true });
+      }
+
       const platforms = mapPlatforms(selectedAccountIds, devAccounts, fd);
       if (platforms.length === 0) return setUploadStatus(' No platforms selected.');
       await handleSubmission({

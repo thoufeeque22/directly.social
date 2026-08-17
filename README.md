@@ -73,6 +73,10 @@ Ensure your local `.env` has the correct Supabase secrets.
 
 The primary front-door login is strictly restricted to **Google and Email (Magic Link/OTP)** to prevent account fragmentation. Other social platforms (Facebook, TikTok) are treated as post-authentication integrations and can be connected via the internal settings dashboard.
 
+## Data & Privacy
+
+- **AI Processing Consent**: Users must explicitly opt-in to AI processing (via the `aiProcessingConsent` boolean in the database) before their data is sent to external AI providers. A bypass flag `NEXT_PUBLIC_E2E=true` is available to skip the consent block during automated testing.
+
 ## API Documentation
 
 **directly.social** features a centralized API documentation system powered by Swagger/OpenAPI.

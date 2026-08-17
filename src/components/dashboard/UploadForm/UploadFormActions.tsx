@@ -14,10 +14,12 @@ import { checkCacheValidity } from './UploadFormContext.utils';
 export const UploadFormActions: React.FC = () => {
   const { 
     isUploading, aiTier, contentMode, hasCachedPreviews, onResumeReview, onTierChange,
-    title, description, selectedPlatforms, draftFileName
+    title, description, selectedPlatforms, draftFileName, aiProcessingConsent
   } = useUploadFormContext();
 
   const [isCacheValid, setIsCacheValid] = React.useState(false);
+  const [localConsent, setLocalConsent] = React.useState(false);
+  const needsConsent = !aiProcessingConsent && aiTier !== 'Manual';
 
   React.useEffect(() => {
     if (!hasCachedPreviews) {
@@ -58,6 +60,22 @@ export const UploadFormActions: React.FC = () => {
           <span><strong>Heads up:</strong> If you proceed to publish, this demo video will actually be posted to your connected social media platforms!</span>
         </div>
       )}
+      {needsConsent && (
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', padding: '1rem', background: 'hsla(var(--foreground) / 0.05)', borderRadius: '0.5rem', marginTop: '0.5rem' }}>
+          <input 
+            type="checkbox" 
+            id="ai-consent" 
+            name="aiConsent"
+            value="true"
+            checked={localConsent} 
+            onChange={(e) => setLocalConsent(e.target.checked)} 
+            style={{ width: '1.25rem', height: '1.25rem', accentColor: 'hsl(var(--primary))' }} 
+          />
+          <label htmlFor="ai-consent" style={{ fontSize: '0.9rem', color: 'hsl(var(--foreground) / 0.8)', cursor: 'pointer', userSelect: 'none' }}>
+            I consent to having my video processed by third-party AI providers in accordance with the <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'hsl(var(--primary))', textDecoration: 'underline' }}>Privacy Policy</a>.
+          </label>
+        </div>
+      )}
       <div style={{ display: 'flex', gap: '1rem' }}>
         {isCacheValid && !isUploading && (
           <button type="button" onClick={onResumeReview} style={secondaryButtonStyle}>
@@ -69,16 +87,21 @@ export const UploadFormActions: React.FC = () => {
             <AutoAwesomeIcon sx={{ fontSize: 18 }} /> Polish with AI
           </button>
         )}
-        <button type="submit" disabled={isUploading} style={{ 
+        <button type="submit" disabled={isUploading || (needsConsent && !localConsent)} style={{ 
           ...primaryButtonStyle, flex: (isCacheValid || (aiTier === 'Manual' && !isUploading)) ? 1.2 : 1,
-          cursor: isUploading ? 'not-allowed' : 'pointer',
+          cursor: isUploading || (needsConsent && !localConsent) ? 'not-allowed' : 'pointer',
+          opacity: isUploading || (needsConsent && !localConsent) ? 0.6 : 1,
         }}>
           {isUploading ? <UploadIcon className="animate-pulse" /> : (aiTier !== 'Manual' ? (isCacheValid ? <RefreshIcon /> : <AutoAwesomeIcon />) : <RocketLaunchIcon />)}
           {isUploading ? 'Launching...' : (aiTier !== 'Manual' ? (isCacheValid ? 'Regenerate Strategy' : 'Review AI Strategy') : 'Post Video')}
         </button>
       </div>
       {aiTier !== 'Manual' && !isUploading && (
-        <button type="button" onClick={handleSkipReview} style={skipReviewButtonStyle}>
+        <button type="button" onClick={handleSkipReview} disabled={needsConsent && !localConsent} style={{
+          ...skipReviewButtonStyle,
+          cursor: (needsConsent && !localConsent) ? 'not-allowed' : 'pointer',
+          opacity: (needsConsent && !localConsent) ? 0.6 : 1,
+        }}>
           <RocketLaunchIcon sx={{ fontSize: 16 }} /> Skip Review & Post Directly
         </button>
       )}
