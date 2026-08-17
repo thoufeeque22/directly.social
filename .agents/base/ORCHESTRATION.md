@@ -97,6 +97,7 @@ Required fields in every Artifact:
 - **Database Schema Synchronization:** Whenever `schema.prisma` is modified, the agent MUST run `npx prisma generate` AND explicitly synchronize the database using `npx prisma db push` (for local dev) or create a migration before considering the implementation complete. Failing to push schema changes will cause runtime crashes (`PrismaClientKnownRequestError`).
 - **Aesthetic Validation:** MUST verify MUI component prop compliance (e.g., using `sx` for styling) to prevent React attribute warnings.
 - **No Markdown in TSX:** When writing React components, NEVER use markdown syntax like `**bold**` or `*italic*` inside text nodes or `<Typography>` components. Always use native HTML tags like `<strong>` and `<em>`.
+- **Final Compile Mandate (Zero Exception Rule):** The Orchestrator MUST execute `pnpm run build` or `npx tsc --noEmit` locally *immediately* after making any code edits (even "minor" markdown or syntax fixes) during the Audit or Documentation phases. No phase can be considered [COMPLETE] unless the final filesystem state compiles perfectly.
 
 ### Audit (Security & Performance Audit)
 - **Role:** Senior Auditor. **READ-ONLY**.

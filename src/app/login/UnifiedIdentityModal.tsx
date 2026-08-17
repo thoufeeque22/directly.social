@@ -29,10 +29,9 @@ export function UnifiedIdentityModal({
         </div>
         <div className={styles.modalContent}>
           <h2 className={styles.modalTitle}>Unified Identity Check</h2>
-          <Typography variant="body1" sx={{ mt: 2, mb: 3 }}>
-            To keep all your social platforms in <strong>one unified dashboard</strong>, we recommend using your primary Google account. 
-          </Typography><br />
           <p className={styles.modalText}>
+            To keep all your social platforms in <strong>one unified dashboard</strong>, we recommend using your primary Google account. 
+            <br /><br />
             Logging in with {pendingProvider} might create a separate, empty account if it uses a different email.
           </p>
         </div>

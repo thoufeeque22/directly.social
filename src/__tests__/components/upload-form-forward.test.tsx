@@ -42,6 +42,7 @@ describe('UploadForm Props Forwarding', () => {
     aiProvider: 'gemini',
     videoFormat: 'short',
     videoDuration: 45,
+    aiProcessingConsent: true,
     draftFileName: 'test.mp4',
     draftFile: null,
     onVisualScan: vi.fn(),
