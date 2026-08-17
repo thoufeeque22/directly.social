@@ -7,6 +7,7 @@ export interface Session {
     id: string;
     role?: Role;
     aiCredits?: number;
+    aiProcessingConsent?: boolean;
     name?: string | null;
     email?: string | null;
     image?: string | null;
@@ -78,6 +79,7 @@ export async function auth(): Promise<Session | null> {
       id: user.id,
       role: user.role,
       aiCredits: user.aiCredits ?? undefined,
+      aiProcessingConsent: user.aiProcessingConsent ?? false,
       name: user.name,
       email: user.email,
       image: user.image,

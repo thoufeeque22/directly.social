@@ -35,4 +35,5 @@
   - **Hooks:** camelCase starting with `use` (e.g., `useUploadStatus.ts`).
   - **Utilities:** camelCase (e.g., `formatCurrency.ts`).
 - **Resource Management:** Always clean up side effects in `useEffect` return functions.
+- **TSX Markdown Rule**: Do not use **bold** markdown in React TSX text nodes. Instead, use HTML `<strong>` tags for bold text formatting to ensure proper JSX rendering.
 - **API/Action Safety:** Use `try-catch` for all async operations; log via Sentry; handle gracefully in UI.

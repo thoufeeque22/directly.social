@@ -56,7 +56,7 @@ model ByosConfig {
   keepFiles       Boolean      @default(true)
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model GalleryAsset {
@@ -77,8 +77,6 @@ model GalleryAsset {
   @@index([expiresAt])
   @@index([userId])
 }
-
-
 
 model MetadataTemplate {
   id        String   @id @default(cuid())
@@ -118,39 +116,37 @@ model PostActivity {
 }
 
 model PostPlatformResult {
-  id              String      @id @default(cuid())
-  postActivityId   String
-  platform        String
-  accountName     String?
-  accountId       String?
-  platformPostId  String?
-  permalink       String?
-  status          String      @default("success")
-  errorMessage    String?
-  resumableUrl    String?
-  videoId         String?
-  creationId      String?
-  lastOffset      Int         @default(0)
-  retryCount      Int         @default(0)
-  lastRetryAt     DateTime?
-  createdAt       DateTime    @default(now())
-  optimizedFileId String?
-  transcodeStatus String?     @default("skipped")
-  currentStep     String?     @default("init")
-  metadata        Json?
-  metadataHash    String?
-  progress        Int         @default(0)
+  id                  String       @id @default(cuid())
+  postActivityId      String
+  platform            String
+  accountName         String?
+  accountId           String?
+  platformPostId      String?
+  permalink           String?
+  status              String       @default("success")
+  errorMessage        String?
+  resumableUrl        String?
+  videoId             String?
+  creationId          String?
+  lastOffset          Int          @default(0)
+  retryCount          Int          @default(0)
+  lastRetryAt         DateTime?
+  createdAt           DateTime     @default(now())
+  optimizedFileId     String?
+  transcodeStatus     String?      @default("skipped")
+  currentStep         String?      @default("init")
+  metadata            Json?
+  metadataHash        String?
+  progress            Int          @default(0)
   overrideTitle       String?
   overrideDescription String?
   hashtags            String?
   firstCommentText    String?
   scheduledAt         DateTime?
-  postActivity     PostActivity @relation(fields: [postActivityId], references: [id], onDelete: Cascade)
+  postActivity        PostActivity @relation(fields: [postActivityId], references: [id], onDelete: Cascade)
 
   @@unique([postActivityId, platform, accountId], name: "postActivityId_platform_accountId")
 }
-
-
 
 model Session {
   id           String   @id @default(cuid())
@@ -203,73 +199,75 @@ model TokenAuditLog {
 }
 
 model UpdateLog {
-  id             String           @id @default(cuid())
-  version        String
-  title          String
-  description    String
-  createdAt      DateTime         @default(now())
-  seenBy UserSeenUpdate[]
+  id          String           @id @default(cuid())
+  version     String
+  title       String
+  description String
+  createdAt   DateTime         @default(now())
+  seenBy      UserSeenUpdate[]
 
   @@index([createdAt])
 }
 
 model User {
-  id                   String               @id @default(cuid())
-  name                 String?
-  email                String?              @unique
-  emailVerified        DateTime?
-  image                String?
-  preferredVideoFormat String               @default("short")
-  preferredAIStyle     String               @default("Manual")
-  preferredAIStyleMode String               @default("Smart")
-  preferredAIProvider  String               @default("gemini")
-  role                 Role                 @default(USER)
-  preferredTheme       Theme                @default(SYSTEM)
-  aiCredits            Int                  @default(100)
-  referralCode         String?              @unique
-  referredById         String?
-  referredBy           User?                @relation("UserReferrals", fields: [referredById], references: [id], onDelete: SetNull)
-  referrals            User[]               @relation("UserReferrals")
-  extraPostsQuota      Int                  @default(0)
-  lifetimeUnlock       Boolean              @default(false)
-  earnedFreeMonths     Int                  @default(0)
+  id                    String               @id @default(cuid())
+  name                  String?
+  email                 String?              @unique
+  emailVerified         DateTime?
+  image                 String?
+  preferredVideoFormat  String               @default("short")
+  preferredAIStyle      String               @default("Manual")
+  preferredAIStyleMode  String               @default("Smart")
+  preferredAIProvider   String               @default("gemini")
+  role                  Role                 @default(USER)
+  preferredTheme        Theme                @default(SYSTEM)
+  aiCredits             Int                  @default(100)
+  referralCode          String?              @unique
+  referredById          String?
+  referredBy            User?                @relation("UserReferrals", fields: [referredById], references: [id], onDelete: SetNull)
+  referrals             User[]               @relation("UserReferrals")
+  extraPostsQuota       Int                  @default(0)
+  lifetimeUnlock        Boolean              @default(false)
+  earnedFreeMonths      Int                  @default(0)
   referralRewardClaimed Boolean              @default(false)
   purchaseRewardClaimed Boolean              @default(false)
+  aiProcessingConsent   Boolean              @default(false)
   billingProfile        BillingProfile?
   accounts              Account[]
   byokCredentials       ByokCredential[]
-  byosConfig           ByosConfig?
+  byosConfig            ByosConfig?
   galleryAssets         GalleryAsset[]
   metadataTemplates     MetadataTemplate[]
   platformPreferences   PlatformPreference[]
-  postActivities          PostActivity[]
+  postActivities        PostActivity[]
   sessions              Session[]
   tokenAuditLogs        TokenAuditLog[]
-  seenUpdates       UserSeenUpdate[]
-  notifications     Notification[]
-  supportRequests   SupportRequest[]
+  seenUpdates           UserSeenUpdate[]
+  notifications         Notification[]
+  supportRequests       SupportRequest[]
 }
+
 model UserSeenUpdate {
-  id        String    @id @default(cuid())
-  userId    String
-  updateId  String
-  seenAt    DateTime  @default(now())
-  update    UpdateLog @relation(fields: [updateId], references: [id], onDelete: Cascade)
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id       String    @id @default(cuid())
+  userId   String
+  updateId String
+  seenAt   DateTime  @default(now())
+  update   UpdateLog @relation(fields: [updateId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, updateId])
   @@index([userId])
 }
 
 model Notification {
-  id        String   @id @default(cuid())
+  id        String           @id @default(cuid())
   userId    String
   type      NotificationType @default(INFO)
   message   String
-  isRead    Boolean  @default(false)
+  isRead    Boolean          @default(false)
   link      String?
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([createdAt])
@@ -329,15 +327,15 @@ enum SubscriptionStatus {
 }
 
 model BillingProfile {
-  id                   String             @id @default(cuid())
-  userId               String             @unique
-  provider             String             @default("stripe")
-  providerCustomerId   String             @unique
-  providerSubscriptionId String?          @unique
-  subscriptionTier     SubscriptionTier   @default(FREE_STARTER)
-  subscriptionStatus   SubscriptionStatus @default(ACTIVE)
-  subscriptionPeriodEnd DateTime?
-  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                     String             @id @default(cuid())
+  userId                 String             @unique
+  provider               String             @default("stripe")
+  providerCustomerId     String             @unique
+  providerSubscriptionId String?            @unique
+  subscriptionTier       SubscriptionTier   @default(FREE_STARTER)
+  subscriptionStatus     SubscriptionStatus @default(ACTIVE)
+  subscriptionPeriodEnd  DateTime?
+  user                   User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model SupportRequest {
