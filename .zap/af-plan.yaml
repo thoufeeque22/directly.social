@@ -66,7 +66,7 @@ jobs:
         headers:
           - "Content-Type: application/json"
           - "Authorization: Basic {{STAGING_HTTP_B64}}"
-        data: '{"email":"zap@directly.social","zapSecret":"${ZAP_AUTH_SECRET}"}'
+        data: '{"email":"zap@directly.social","zapSecret":"{{ZAP_AUTH_SECRET}}"}'
         responseCode: 200
 
   # ── 1.5 Alert Filters: Suppress known Next.js/MUI false positives ─────────

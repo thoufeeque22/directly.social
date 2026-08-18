@@ -44,8 +44,9 @@ jobs:
         run: |
           B64=$(echo -n "${{ secrets.STAGING_HTTP_USER }}:${{ secrets.STAGING_HTTP_PASS }}" | base64 -w 0)
           echo "STAGING_HTTP_B64=${B64}" >> "$GITHUB_ENV"
-          # Forcefully inject the token into the Requestor job headers to bypass ZAP's broken array variable parser
-          sed -i "s/{{STAGING_HTTP_B64}}/$B64/g" .zap/af-plan.yaml
+          # Forcefully inject tokens into the Requestor job to bypass ZAP's broken array variable parser
+          sed -i "s|{{STAGING_HTTP_B64}}|$B64|g" .zap/af-plan.yaml
+          sed -i "s|{{ZAP_AUTH_SECRET}}|${{ secrets.ZAP_AUTH_SECRET }}|g" .zap/af-plan.yaml
 
       - name: Ensure staging is reachable
         run: |
