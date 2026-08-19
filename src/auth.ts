@@ -38,6 +38,20 @@ export async function auth(): Promise<Session | null> {
     }
   }
 
+  if (process.env.ZAP_ENABLED === 'true') {
+    const cookieStore = await cookies();
+    if (cookieStore.get('zap-bypass')?.value === 'true') {
+      return {
+        user: {
+          id: "zap-test-user-id",
+          role: "USER",
+          name: "ZAP Tester",
+          email: "zap@directly.social",
+        }
+      };
+    }
+  }
+
   const supabase = await createClient();
   
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://mock.supabase.co') {

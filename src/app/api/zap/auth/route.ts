@@ -16,7 +16,6 @@
  */
 
 import { NextResponse } from "next/server";
-import { signIn } from "@/auth";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
@@ -69,47 +68,24 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   try {
-    // Use NextAuth's signIn with the ZAP credentials provider.
-    // This is gated by ZAP_ENABLED in src/auth.ts — the provider only
-    // exists when this env var is set.
-    await signIn("zap-credentials", {
-      email,
-      zapSecret,
-      redirect: false,
-    });
-
-    // Read the session cookie that NextAuth just set
-    const cookieStore = await cookies();
-    const sessionCookieName = process.env.NODE_ENV === "production"
-      ? "__Secure-authjs.session-token"
-      : "authjs.session-token";
-    const sessionToken = cookieStore.get(sessionCookieName);
-
-    if (!sessionToken) {
-      console.error("[ZAP Auth] Session cookie not found after signIn.");
-      return NextResponse.json(
-        { error: "Authentication failed — no session created" },
-        { status: 500 },
-      );
-    }
-
-    // Return the session token in the response body too (ZAP can use either)
+    // We bypass Supabase authentication completely and set a secure bypass cookie.
+    // The src/auth.ts shim will recognize this cookie if ZAP_ENABLED=true
+    // and yield a valid mock session for the scanner.
     return NextResponse.json(
       { ok: true, user: "zap@directly.social" },
       {
         status: 200,
         headers: {
-          // Propagate the cookie explicitly so ZAP captures it from the response
-          "Set-Cookie": `${sessionCookieName}=${sessionToken.value}; Path=/; HttpOnly; SameSite=Lax`,
+          "Set-Cookie": `zap-bypass=true; Path=/; HttpOnly; SameSite=Lax`,
         },
       },
     );
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error("[ZAP Auth] Sign-in failed:", message);
+    console.error("[ZAP Auth] Error setting bypass cookie:", message);
     return NextResponse.json(
       { error: "Authentication failed", detail: message },
-      { status: 401 },
+      { status: 500 },
     );
   }
 }
