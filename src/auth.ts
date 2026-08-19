@@ -62,28 +62,44 @@ export async function auth(): Promise<Session | null> {
 
   if (!authUser) return null;
 
-  // NextAuth was configured with PrismaAdapter, meaning the DB 
-  // users table is still the source of truth for app metadata.
-  // We must look up by both ID (new users) and Email (migrated NextAuth users)
-  let user = await prisma.user.findFirst({
-    where: {
-      OR: [
-        { id: authUser.id },
-        { email: authUser.email ?? undefined }
-      ]
-    }
-  });
+  let user;
+  try {
+    // NextAuth was configured with PrismaAdapter, meaning the DB 
+    // users table is still the source of truth for app metadata.
+    // We must look up by both ID (new users) and Email (migrated NextAuth users)
+    user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { id: authUser.id },
+          { email: authUser.email ?? undefined }
+        ]
+      }
+    });
 
-  // Auto-sync new Supabase users to Prisma if they don't exist yet
-  if (!user && authUser.email) {
-    user = await prisma.user.create({
-      data: {
-        id: authUser.id, // Use Supabase UUID for new Prisma users
+    // Auto-sync new Supabase users to Prisma if they don't exist yet
+    if (!user && authUser.email) {
+      user = await prisma.user.create({
+        data: {
+          id: authUser.id, // Use Supabase UUID for new Prisma users
+          email: authUser.email,
+          name: authUser.user_metadata?.full_name || authUser.user_metadata?.name || null,
+          image: authUser.user_metadata?.avatar_url || authUser.user_metadata?.picture || null,
+        }
+      });
+    }
+  } catch (error) {
+    // Graceful degradation: Log DB schema mismatches (e.g., missing columns during deployment)
+    // to Sentry without crashing the entire SSR process.
+    console.error('[Auth Error] Prisma DB sync failed:', error);
+    // Return a minimal session using just Supabase data so the user isn't completely locked out/crashed
+    return {
+      user: {
+        id: authUser.id,
         email: authUser.email,
         name: authUser.user_metadata?.full_name || authUser.user_metadata?.name || null,
         image: authUser.user_metadata?.avatar_url || authUser.user_metadata?.picture || null,
       }
-    });
+    };
   }
 
   if (!user) return null;
