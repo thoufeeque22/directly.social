@@ -5,5 +5,5 @@ import { Inngest } from "inngest";
  * Adheres to the Singleton pattern for the event bus.
  */
 export const inngest = new Inngest({ 
-  id: "social-studio-app"
+  id: "directly.social"
 });
