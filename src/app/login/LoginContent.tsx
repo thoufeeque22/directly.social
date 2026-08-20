@@ -38,7 +38,9 @@ export function LoginContent({ referrerName }: { referrerName?: string | null })
     const currentHost = window.location.hostname;
     const isLocal = currentHost === 'localhost' || currentHost.endsWith('.localhost');
     const isStaging = currentHost.includes('staging.');
-    const appHostname = isLocal ? window.location.hostname : window.location.hostname.replace('staging.', 'app.staging.').replace(/^directly\.social$/, 'app.directly.social');
+    const appHostname = isLocal 
+      ? window.location.hostname 
+      : window.location.hostname.replace(/^staging\.directly\.social$/, 'app.staging.directly.social').replace(/^directly\.social$/, 'app.directly.social');
     const protocol = isLocal ? 'http' : 'https';
     
     const redirectUrl = isLocal 
@@ -66,7 +68,9 @@ export function LoginContent({ referrerName }: { referrerName?: string | null })
     const currentHost = window.location.hostname;
     const isLocal = currentHost === 'localhost' || currentHost.endsWith('.localhost');
     const isStaging = currentHost.includes('staging.');
-    const appHostname = isLocal ? window.location.hostname : window.location.hostname.replace('staging.', 'app.staging.').replace(/^directly\.social$/, 'app.directly.social');
+    const appHostname = isLocal 
+      ? window.location.hostname 
+      : window.location.hostname.replace(/^staging\.directly\.social$/, 'app.staging.directly.social').replace(/^directly\.social$/, 'app.directly.social');
     const protocol = isLocal ? 'http' : 'https';
     
     const redirectUrl = isLocal 
