@@ -25,6 +25,10 @@ export async function updateUserPreferencesAction(data: {
 }) {
   return protectedAction(async function updateUserPrefs(userId) {
     try {
+      const user = await prisma.user.findUnique({ where: { id: userId } });
+      if (!user) {
+        return { success: false, error: 'User not found' };
+      }
       const preference = await prisma.userPreference.upsert({
         where: { userId },
         update: data,
