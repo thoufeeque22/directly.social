@@ -6,7 +6,7 @@ import { startPublishingWorker } from "../src/lib/worker/worker";
 Sentry.init({
   dsn: SENTRY_DSN,
   environment: process.env.NEXT_PUBLIC_APP_ENV || 'development',
-  tracesSampleRate: 1.0,
+  tracesSampleRate: process.env.NEXT_PUBLIC_APP_ENV === 'production' ? 0.05 : 1.0,
 });
 
 /**
