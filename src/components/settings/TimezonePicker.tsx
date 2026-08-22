@@ -2,23 +2,36 @@
 
 import React, { useMemo } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
+import ct from 'countries-and-timezones';
 
 interface TimezoneOption {
   value: string;
   label: string;
-  offset: string;
-  continent: string;
+  country: string;
+  searchText: string;
 }
 
 function buildTimezoneOptions(): TimezoneOption[] {
-  const zones = Intl.supportedValuesOf('timeZone');
-  return zones.map(tz => {
-    const formatter = new Intl.DateTimeFormat('en', { timeZone: tz, timeZoneName: 'longOffset' });
-    const parts = formatter.formatToParts(new Date());
-    const offset = parts.find(p => p.type === 'timeZoneName')?.value || 'GMT';
-    const continent = tz.includes('/') ? tz.split('/')[0] : 'Other';
-    return { value: tz, label: `(${offset}) ${tz.replace(/_/g, ' ')}`, offset, continent };
-  });
+  const countries = ct.getAllCountries();
+  const results: TimezoneOption[] = [];
+
+  for (const country of Object.values(countries)) {
+    for (const tz of country.timezones) {
+      const tzData = ct.getTimezone(tz);
+      if (!tzData || tzData.aliasOf) continue;
+      const city = tz.includes('/') ? tz.split('/').pop()?.replace(/_/g, ' ') : tz;
+      const offset = tzData.utcOffsetStr;
+      results.push({
+        value: tz,
+        label: `(GMT${offset}) ${city}`,
+        country: country.name,
+        searchText: `${country.name} ${city} GMT${offset} ${tz}`,
+      });
+    }
+  }
+
+  results.sort((a, b) => a.country.localeCompare(b.country) || a.label.localeCompare(b.label));
+  return results;
 }
 
 interface TimezonePickerProps {
@@ -33,15 +46,20 @@ export const TimezonePicker = ({ value, onChange }: TimezonePickerProps) => {
   return (
     <Autocomplete
       options={options}
-      groupBy={(option) => option.continent}
+      groupBy={(option) => option.country}
       getOptionLabel={(option) => option.label}
+      filterOptions={(opts, state) => {
+        const q = state.inputValue.toLowerCase();
+        if (!q) return opts;
+        return opts.filter(o => o.searchText.toLowerCase().includes(q));
+      }}
       value={selected}
       onChange={(_e, newValue) => {
         if (newValue) onChange(newValue.value);
       }}
       isOptionEqualToValue={(option, val) => option.value === val.value}
       renderInput={(params) => (
-        <TextField {...params} label="Timezone" placeholder="Search by city or offset..." />
+        <TextField {...params} label="Timezone" placeholder="Search by country, city, or offset..." />
       )}
       disableClearable
       fullWidth
