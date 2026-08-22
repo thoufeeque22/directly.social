@@ -8,6 +8,8 @@ export interface Session {
     role?: Role;
     aiCredits?: number;
     aiProcessingConsent?: boolean;
+    genAITermsAcceptedAt?: Date | null;
+    genAITermsVersion?: string | null;
     name?: string | null;
     email?: string | null;
     image?: string | null;
@@ -26,7 +28,28 @@ export async function auth(): Promise<Session | null> {
   
   if (process.env.E2E_TEST_MODE === 'true') {
     const cookieStore = await cookies();
-    if (cookieStore.get('e2e-bypass')?.value === 'true') {
+    const bypassVal = cookieStore.get('e2e-bypass')?.value;
+    if (bypassVal && bypassVal !== 'false') {
+      const email = bypassVal === 'true' ? 'tester@directly.social' : bypassVal;
+      try {
+        const user = await prisma.user.findFirst({ where: { email } });
+        if (user) {
+          return {
+            user: {
+              id: user.id,
+              role: user.role,
+              name: user.name,
+              email: user.email,
+              aiCredits: user.aiCredits ?? undefined,
+              aiProcessingConsent: user.aiProcessingConsent ?? false,
+              genAITermsAcceptedAt: user.genAITermsAcceptedAt,
+              genAITermsVersion: user.genAITermsVersion,
+            }
+          };
+        }
+      } catch (e) {
+        console.error('[Auth Error] Failed to resolve E2E user:', e);
+      }
       return {
         user: {
           id: "e2e-test-user-id",
@@ -110,6 +133,8 @@ export async function auth(): Promise<Session | null> {
       role: user.role,
       aiCredits: user.aiCredits ?? undefined,
       aiProcessingConsent: user.aiProcessingConsent ?? false,
+      genAITermsAcceptedAt: user.genAITermsAcceptedAt,
+      genAITermsVersion: user.genAITermsVersion,
       name: user.name,
       email: user.email,
       image: user.image,

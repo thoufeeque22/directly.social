@@ -43,8 +43,8 @@ export const UploadFormProvider: React.FC<{ children: React.ReactNode; props: Up
   const value = useMemo(() => ({
     ...props, ...uploadFormState, selectedPlatforms, 
     byosActive: byos.active, byosProvider: byos.provider, 
-    showGallery, setShowGallery, aiProcessingConsent: props.aiProcessingConsent
-  }), [props, uploadFormState, selectedPlatforms, byos.active, byos.provider, showGallery, props.aiProcessingConsent]);
+    showGallery, setShowGallery, genAITermsAccepted: props.genAITermsAccepted
+  }), [props, uploadFormState, selectedPlatforms, byos.active, byos.provider, showGallery, props.genAITermsAccepted]);
 
   return <UploadFormContext.Provider value={value}>{children}</UploadFormContext.Provider>;
 };
