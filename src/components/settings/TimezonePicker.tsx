@@ -40,8 +40,15 @@ interface TimezonePickerProps {
 }
 
 export const TimezonePicker = ({ value, onChange }: TimezonePickerProps) => {
-  const options = useMemo(() => buildTimezoneOptions(), []);
-  const selected = options.find(o => o.value === value) || undefined;
+  const options = useMemo(() => {
+    const built = buildTimezoneOptions();
+    const hasUtc = built.some(o => o.value === 'UTC');
+    if (!hasUtc) {
+      built.unshift({ value: 'UTC', label: '(GMT+00:00) UTC', country: 'Universal', searchText: 'Universal UTC GMT+00:00' });
+    }
+    return built;
+  }, []);
+  const selected = options.find(o => o.value === value) || options[0];
 
   return (
     <Autocomplete
