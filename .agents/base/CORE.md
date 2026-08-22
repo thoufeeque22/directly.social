@@ -3,6 +3,7 @@
 ## Project Architecture & Conventions
 - **Next.js 15 & React 19:** Follow strict rules in `.agents/AGENTS.md` (TypeScript, React, A11y, Code Quality).
 - **Zero-Any Policy:** Strict TypeScript enforcement across the entire codebase. Use `unknown` or explicit interfaces for dynamic data.
+- **User Bio Deprecation:** The `bio` field on the User model is deprecated and has been replaced by `personalNotes`. Always use `personalNotes` instead of `bio`.
 ## Centralized Schemas
 - All validation logic MUST reside in `src/lib/schemas`. Reuse these schemas for both Route Handlers and Server Actions.
 
