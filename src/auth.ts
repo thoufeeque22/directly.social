@@ -101,8 +101,10 @@ export async function auth(): Promise<Session | null> {
 
     // Auto-sync new Supabase users to Prisma if they don't exist yet
     if (!user && authUser.email) {
-      user = await prisma.user.create({
-        data: {
+      user = await prisma.user.upsert({
+        where: { id: authUser.id },
+        update: {},
+        create: {
           id: authUser.id, // Use Supabase UUID for new Prisma users
           email: authUser.email,
           name: authUser.user_metadata?.full_name || authUser.user_metadata?.name || null,
