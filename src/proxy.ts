@@ -3,134 +3,66 @@ import { createServerClient } from '@supabase/ssr';
 import { applyRateLimit } from '@/lib/core/rate-limit-middleware';
 import { getCookieDomain } from '@/lib/supabase/utils';
 
-/**
- * Unified Middleware for Authentication, Rate Limiting, and Routing.
- */
 export async function proxy(req: NextRequest) {
-  let supabaseResponse = NextResponse.next({
-    request: {
-      headers: req.headers,
-    },
-  });
-
+  let res = NextResponse.next({ request: { headers: req.headers } });
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://mock.supabase.co',
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'mock-anon-key',
     {
       cookies: {
-        getAll() {
-          return req.cookies.getAll();
-        },
+        getAll() { return req.cookies.getAll(); },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            req.cookies.set(name, value)
-          );
-          supabaseResponse = NextResponse.next({
-            request: req,
-          });
+          cookiesToSet.forEach(({ name, value }) => req.cookies.set(name, value));
+          res = NextResponse.next({ request: req });
           cookiesToSet.forEach(({ name, value, options }) => {
             const domain = getCookieDomain();
-            if (domain) {
-              options.domain = domain;
-            }
-            supabaseResponse.cookies.set(name, value, options)
+            if (domain) options.domain = domain;
+            res.cookies.set(name, value, options);
           });
         },
       },
     }
   );
 
-  // Retrieve user session (if any)
   let user = null;
   if (process.env.E2E_TEST_MODE === 'true' && req.cookies.get('e2e-bypass')?.value === 'true') {
     user = { id: 'e2e-test-user-id' };
   } else if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://mock.supabase.co') {
-    const isProtected = ['/settings', '/activity', '/media', '/admin', '/app', '/schedule'].some(prefix => req.nextUrl.pathname.startsWith(prefix));
-    if (isProtected) {
+    if (['/settings', '/activity', '/media', '/admin', '/app', '/schedule'].some(p => req.nextUrl.pathname.startsWith(p))) {
       const { data } = await supabase.auth.getUser();
       user = data?.user;
     }
   }
 
   const url = req.nextUrl;
-  const pathname = url.pathname;
-  const hostname = req.headers.get("host") || "";
-
-  // 1. Rate Limiting for API routes
-  const rateLimitResponse = await applyRateLimit(req, pathname, user?.id);
-  if (rateLimitResponse) return rateLimitResponse;
-
-  // 2. Exclude common static/api paths from rewrites
-  if (
-    pathname.startsWith("/api") ||
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/static") ||
-    pathname.startsWith("/monitoring")
-  ) {
-    return supabaseResponse;
-  }
-
-  // 3. Subdomain detection
-  const isApp = hostname.startsWith("app.") || hostname.startsWith("staging.app.") || hostname.startsWith("app.localhost");
+  const p = url.pathname;
+  const h = req.headers.get("host") || "";
+  const isApp = h.startsWith("app.") || h.startsWith("staging.app.") || h.startsWith("app.localhost");
   const isMarketing = !isApp;
-  const isVercelPreview = hostname.endsWith('.vercel.app');
+  const isVercelPreview = h.endsWith('.vercel.app');
+  const appH = h.includes('localhost') ? `app.localhost:${url.port || 3000}` : h.startsWith('staging.') ? `app.staging.directly.social` : `app.directly.social`;
+  const appOrigin = `http${h.includes('localhost') ? '' : 's'}://${appH}`;
 
-  // Force login and auth to happen on the app subdomain to prevent cookie fragmentation
-  if (isMarketing && (pathname.startsWith("/login") || pathname.startsWith("/auth"))) {
-    const appHostname = hostname.includes('localhost') 
-      ? `app.localhost:${url.port || 3000}` 
-      : hostname.startsWith('staging.') ? `app.staging.directly.social` : `app.directly.social`;
-    return NextResponse.redirect(new URL(pathname + url.search, `http${hostname.includes('localhost') ? '' : 's'}://${appHostname}`));
+  const rlRes = await applyRateLimit(req, p, user?.id);
+  if (rlRes) return rlRes;
+  if (p.startsWith("/api") || p.startsWith("/_next") || p.startsWith("/static") || p.startsWith("/monitoring")) return res;
+
+  if (isMarketing && (p.startsWith("/login") || p.startsWith("/auth"))) return NextResponse.redirect(new URL(p + url.search, appOrigin));
+  if (req.method === 'POST' && (isMarketing || p === '/marketing' || p.startsWith('/marketing/'))) {
+    if (!p.startsWith('/api') && !p.startsWith('/auth')) return new NextResponse('Method Not Allowed', { status: 405 });
   }
-
-  // Block POST requests to marketing pages to prevent "Invalid Server Actions request" Sentry noise from scanners
-  if (req.method === 'POST' && (isMarketing || pathname === '/marketing' || pathname.startsWith('/marketing/'))) {
-    if (!pathname.startsWith('/api') && !pathname.startsWith('/auth')) {
-      return new NextResponse('Method Not Allowed', { status: 405 });
-    }
-  }
-
-  // Catch stray Supabase OAuth fallbacks hitting the marketing root
-  if (isMarketing && pathname === "/" && url.searchParams.has('code')) {
-    const appHostname = hostname.includes('localhost') 
-      ? `app.localhost:${url.port || 3000}` 
-      : hostname.startsWith('staging.') ? `app.staging.directly.social` : `app.directly.social`;
-    // Forward the code to the actual callback handler
-    return NextResponse.redirect(new URL(`/auth/v1/callback${url.search}`, `http${hostname.includes('localhost') ? '' : 's'}://${appHostname}`));
-  }
-
-  // If we are on the app subdomain, allow /login and /auth to proceed normally
-  if (isApp && (pathname.startsWith("/login") || pathname.startsWith("/auth"))) {
-    return supabaseResponse;
-  }
-
-  // 4. CTA Routing
-  if ((isMarketing || (isVercelPreview && url.searchParams.get('site') === 'marketing')) && pathname === "/signup") {
-    const appHostname = hostname.includes('localhost') 
-      ? `app.localhost:${url.port || 3000}` 
-      : hostname.startsWith('staging.') ? `app.staging.directly.social` : `app.directly.social`;
-    return NextResponse.redirect(new URL("/login", `http${hostname.includes('localhost') ? '' : 's'}://${appHostname}`));
-  }
-
-  // Guard against infinite rewrite loops
-  if (pathname.startsWith('/app/') || pathname === '/app' || 
-      pathname.startsWith('/marketing/') || pathname === '/marketing') {
-    return supabaseResponse;
-  }
-
-  if (isApp || (isVercelPreview && url.searchParams.get('site') !== 'marketing')) {
-    return supabaseResponse;
-  }
-
+  if (isMarketing && p === "/" && url.searchParams.has('code')) return NextResponse.redirect(new URL(`/auth/v1/callback${url.search}`, appOrigin));
+  if (isApp && (p.startsWith("/login") || p.startsWith("/auth"))) return res;
+  if ((isMarketing || (isVercelPreview && url.searchParams.get('site') === 'marketing')) && p === "/signup") return NextResponse.redirect(new URL("/login", appOrigin));
+  if (p.startsWith('/app/') || p === '/app' || p.startsWith('/marketing/') || p === '/marketing') return res;
+  if (isApp || (isVercelPreview && url.searchParams.get('site') !== 'marketing')) return res;
   if (isMarketing || (isVercelPreview && url.searchParams.get('site') === 'marketing')) {
-    const rewriteUrl = req.nextUrl.clone();
-    rewriteUrl.pathname = pathname === '/' ? '/marketing' : `/marketing${pathname}`;
-    return NextResponse.rewrite(rewriteUrl);
+    const rUrl = req.nextUrl.clone();
+    rUrl.pathname = p === '/' ? '/marketing' : `/marketing${p}`;
+    return NextResponse.rewrite(rUrl);
   }
-
-  return supabaseResponse;
+  return res;
 }
 
-export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.png$).*)'],
-};
+export const config = { matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.png$).*)'] };
+

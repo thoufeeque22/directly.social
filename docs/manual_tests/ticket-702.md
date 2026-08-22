@@ -15,15 +15,13 @@
 4. Click on **Privacy**. Verify URL updates to `?tab=privacy`.
 5. Refresh the page on `?tab=privacy`. Verify the Privacy tab remains active.
 
-### 2. Happy Path: Profile & Preferences Persistence
-**Objective:** Verify updating `bio`, `timezone`, and notification toggles.
-1. Navigate to Settings -> **Profile**.
-2. Enter a new bio. Click "Save Profile". Verify a success toast appears.
-3. Navigate to Settings -> **Preferences**.
-4. Change the Timezone and toggle "Email Notifications" & "In-App Notifications".
-5. Click "Save Preferences" and verify the success toast.
-6. Perform a hard reload (Ctrl+Shift+R / Cmd+Shift+R).
-7. Verify the bio and preferences retain the newly saved values.
+### 2. Happy Path: Preferences Persistence
+**Objective:** Verify updating `timezone` and notification toggles.
+1. Navigate to Settings -> **Preferences**.
+2. Change the Timezone and toggle "Email Notifications" & "In-App Notifications".
+3. Click "Save Preferences" and verify the success toast.
+4. Perform a hard reload (Ctrl+Shift+R / Cmd+Shift+R).
+5. Verify the preferences retain the newly saved values.
 
 ### 3. Happy Path & Edge Case: Session Management
 **Objective:** Verify "Log Out of All Devices" functionality.
@@ -50,13 +48,7 @@
 3. Toggle a notification setting and click "Save".
 4. Verify the operation succeeds (no 500 error) and a new `UserPreference` record is created (upsert works).
 
-### 6. Negative Path: Input Validation
-**Objective:** Verify bio length validation.
-1. Navigate to Settings -> **Profile**.
-2. Paste a string longer than the allowed max limit (e.g., > 500 chars) into the bio field.
-3. Attempt to save. Verify a client-side error (e.g., "Bio must be less than 500 characters").
-
-### 7. Negative Path: Unauthorized Export API
+### 6. Negative Path: Unauthorized Export API
 **Objective:** Prevent unauthorized data exports.
 1. Log out of the application.
 2. Use an API client (e.g., Postman) to send a POST request to `/api/export-user-data`.

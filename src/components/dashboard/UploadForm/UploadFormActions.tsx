@@ -77,16 +77,8 @@ export const UploadFormActions: React.FC = () => {
         </div>
       )}
       <div style={{ display: 'flex', gap: '1rem' }}>
-        {isCacheValid && !isUploading && (
-          <button type="button" onClick={onResumeReview} style={secondaryButtonStyle}>
-            <SkipNextIcon sx={{ fontSize: 18 }} /> Resume Review
-          </button>
-        )}
-        {aiTier === 'Manual' && !isUploading && (
-          <button type="button" onClick={() => React.startTransition(() => { onTierChange('Enrich'); })} style={secondaryButtonStyle}>
-            <AutoAwesomeIcon sx={{ fontSize: 18 }} /> Polish with AI
-          </button>
-        )}
+        {isCacheValid && !isUploading && (<button type="button" onClick={onResumeReview} style={secondaryButtonStyle}><SkipNextIcon sx={{ fontSize: 18 }} /> Resume Review</button>)}
+        {aiTier === 'Manual' && !isUploading && (<button type="button" onClick={() => React.startTransition(() => { onTierChange('Enrich'); })} style={secondaryButtonStyle}><AutoAwesomeIcon sx={{ fontSize: 18 }} /> Polish with AI</button>)}
         <button type="submit" disabled={isUploading || (needsConsent && !localConsent)} style={{ 
           ...primaryButtonStyle, flex: (isCacheValid || (aiTier === 'Manual' && !isUploading)) ? 1.2 : 1,
           cursor: isUploading || (needsConsent && !localConsent) ? 'not-allowed' : 'pointer',

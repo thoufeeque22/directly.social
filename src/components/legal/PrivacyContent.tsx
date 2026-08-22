@@ -24,7 +24,7 @@ export const PrivacyContent = () => (
       </Typography>
       <ul>
         <li><Typography variant="body1">Name and email address.</Typography></li>
-        <li><Typography variant="body1">Profile information (e.g., avatar, bio).</Typography></li>
+        <li><Typography variant="body1">Profile information (e.g., avatar).</Typography></li>
         <li><Typography variant="body1">Billing information (processed securely by our payment provider, Stripe).</Typography></li>
         <li><Typography variant="body1">Social media account identifiers and authentication tokens (OAuth).</Typography></li>
         <li><Typography variant="body1">Content you upload (e.g., videos, titles, descriptions).</Typography></li>
@@ -47,7 +47,17 @@ export const PrivacyContent = () => (
     </section>
 
     <section>
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>5. Contact Us</Typography>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>5. Data Portability</Typography>
+      <Typography variant="body1" gutterBottom>
+        <strong>Right to Data Portability:</strong> In accordance with GDPR/CCPA compliance, you have the right to request a copy of your data in a structured, commonly used, and machine-readable format.
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        You can easily export your profile information, posts, templates, and connected destination settings by using the &quot;Export Data&quot; feature in the Privacy tab of your Account Settings. Upon request, we will process your data and deliver a secure, time-limited download link to your registered email address.
+      </Typography>
+    </section>
+
+    <section>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>6. Contact Us</Typography>
       <Typography variant="body1">If you have any questions, please contact us at:</Typography>
       <Typography variant="body1">
         Email:{' '}
