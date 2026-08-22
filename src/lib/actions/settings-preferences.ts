@@ -25,10 +25,6 @@ export async function updateUserPreferencesAction(data: {
 }) {
   return protectedAction(async function updateUserPrefs(userId) {
     try {
-      const user = await prisma.user.findUnique({ where: { id: userId } });
-      if (!user) {
-        return { success: false, error: 'User not found' };
-      }
       const preference = await prisma.userPreference.upsert({
         where: { userId },
         update: data,
@@ -39,7 +35,11 @@ export async function updateUserPreferencesAction(data: {
       });
       return { success: true, preference };
     } catch (err: unknown) {
-      return { success: false, error: err instanceof Error ? err.message : String(err) };
+      const message = err instanceof Error ? err.message : String(err);
+      if (message.includes('Foreign key constraint')) {
+        return { success: false, error: 'Your account is still syncing. Please refresh and try again.' };
+      }
+      return { success: false, error: message };
     }
   });
 }
