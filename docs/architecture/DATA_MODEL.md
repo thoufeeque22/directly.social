@@ -36,6 +36,8 @@ erDiagram
         string role
         string preferredTheme
         int aiCredits
+        datetime genAITermsAcceptedAt
+        int genAITermsVersion
     }
 
     MetadataTemplate {

@@ -17,7 +17,7 @@ export interface UploadFormProps {
   isScheduled: boolean;
   scheduledAt: string;
   customStyleText: string;
-  aiProcessingConsent: boolean;
+  genAITermsAccepted: boolean;
   hasCachedPreviews?: boolean;
   onVisualScan: (file: File) => Promise<void>;
   onTierChange: (tier: AITier) => void;

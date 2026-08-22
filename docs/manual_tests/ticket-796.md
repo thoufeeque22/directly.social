@@ -5,7 +5,7 @@ Verify that users are explicitly forced to consent to AI processing before uploa
 
 ## Prerequisites
 - A local running instance of the application (`pnpm dev`).
-- An account with `aiProcessingConsent` set to `false` in the database. (You can create a new account or use Prisma Studio to set an existing account's consent to `false`).
+- An account with `genAITermsAcceptedAt` set to `null` in the database. (You can create a new account or use Prisma Studio to set an existing account's consent to `null`).
 
 ## Test Cases
 
@@ -26,7 +26,7 @@ Verify that users are explicitly forced to consent to AI processing before uploa
 3. Click the primary action button to submit the form.
 4. **Expected Result:**
    - The video upload and AI processing flow begins normally.
-   - The user's `aiProcessingConsent` field in the database is now updated to `true`.
+   - The user's `genAITermsAcceptedAt` field in the database is now updated to the current timestamp.
 
 ### Test Case 3: Consent Persistence (No Repeated Check)
 1. After successfully completing Test Case 2, complete the flow or return to the main dashboard.

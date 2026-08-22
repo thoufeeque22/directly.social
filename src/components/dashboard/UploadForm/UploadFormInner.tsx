@@ -27,7 +27,7 @@ export const UploadFormInner: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(new FormData(e.currentTarget));
+    console.log("NATIVE FORM ONSUBMIT CALLED!"); onSubmit(new FormData(e.currentTarget));
   };
 
   return (
