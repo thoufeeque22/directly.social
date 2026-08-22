@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useSession } from '@/lib/supabase/next-auth-react-shim';
 import styles from './Sidebar.module.css';
 
@@ -15,35 +15,16 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import CloseIcon from '@mui/icons-material/Close';
 import InsightsIcon from '@mui/icons-material/Insights';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { Collapse } from '@mui/material';
 import { BRAND } from '@/lib/core/brand';
 
-const settingsSubItems = [
-  { id: 'destinations', label: 'Destinations' },
-  { id: 'snippets', label: 'Snippets' },
-  { id: 'ai', label: 'AI Providers' },
-  { id: 'storage', label: 'Storage (BYOS)' },
-  { id: 'account', label: 'Account' },
-  { id: 'support', label: 'Support' },
-];
-
 const Sidebar = ({ isOpen, onClose, isFreeTier = true, tierName = "Free Starter" }: { isOpen: boolean; onClose: () => void; isFreeTier?: boolean; tierName?: string }) => {
   const { data: session } = useSession();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const currentTab = searchParams?.get('tab') || 'destinations';
 
-  const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
   const [hasStatusAlert, setHasStatusAlert] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsSettingsExpanded(!!pathname?.startsWith('/settings'));
-  }, [pathname]);
 
   useEffect(() => {
     if (!session?.user) return;
@@ -109,51 +90,21 @@ const Sidebar = ({ isOpen, onClose, isFreeTier = true, tierName = "Free Starter"
 
       <nav className={styles.nav}>
         {menuItems.map((item) => {
-          const isSettings = item.name === 'Settings';
-          const isActive = pathname === item.path || (isSettings && pathname?.startsWith('/settings'));
+          const isActive = pathname === item.path || (item.name === 'Settings' && pathname?.startsWith('/settings'));
           
           return (
             <React.Fragment key={item.name}>
               <Link 
                 href={item.path} 
-                className={`${styles.navItem} ${isActive && !isSettings ? styles.active : ''}`}
-                onClick={(e) => {
-                  if (isSettings) {
-                    e.preventDefault(); // Just expand/collapse, do not navigate
-                    setIsSettingsExpanded(!isSettingsExpanded);
-                  } else {
-                    setIsSettingsExpanded(false); // Collapse settings when navigating elsewhere
-                    onClose();
-                  }
-                }}
+                className={`${styles.navItem} ${isActive ? styles.active : ''}`}
+                onClick={() => onClose()}
               >
                 <span className={styles.icon}>{item.icon}</span>
                 <span className={styles.name} style={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
                   {item.alert && <WarningAmberIcon color="error" sx={{ fontSize: 18 }} />}
                   {item.name}
                 </span>
-                {isSettings && (
-                  <span className={styles.chevron}>
-                    {isSettingsExpanded ? <ExpandMoreIcon sx={{ fontSize: 18 }} /> : <ChevronRightIcon sx={{ fontSize: 18 }} />}
-                  </span>
-                )}
               </Link>
-              {isSettings && (
-                <Collapse in={isSettingsExpanded} timeout="auto" unmountOnExit>
-                  <div className={styles.subnav}>
-                    {settingsSubItems.map(sub => (
-                      <Link
-                        key={sub.id}
-                        href={`/settings?tab=${sub.id}`}
-                        className={`${styles.subnavItem} ${currentTab === sub.id && isActive ? styles.subnavActive : ''}`}
-                        onClick={onClose}
-                      >
-                        {sub.label}
-                      </Link>
-                    ))}
-                  </div>
-                </Collapse>
-              )}
             </React.Fragment>
           );
         })}

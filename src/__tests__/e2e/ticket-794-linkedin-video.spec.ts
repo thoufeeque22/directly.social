@@ -8,6 +8,7 @@ test.describe('Ticket 794: LinkedIn Video Uploading', () => {
 
   test('successfully uploads a video to LinkedIn', async ({ page }) => {
     let linkedInApiCalled = false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let linkedInPayload: any = null;
 
     // Mock the backend LinkedIn route (not yet built) to verify it receives the correct payload

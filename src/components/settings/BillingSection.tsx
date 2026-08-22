@@ -1,23 +1,22 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Button, Snackbar, Alert } from '@mui/material';
+import useSWR from 'swr';
+import { Box, Typography, Button, Snackbar, Alert, CircularProgress } from '@mui/material';
 import { getSubscriptionTierAction } from '@/lib/actions/settings';
 
+const fetcher = async () => {
+  const result = await getSubscriptionTierAction();
+  if (!result.success) throw new Error('Failed to fetch tier');
+  return result.tier || 'FREE_STARTER';
+};
+
 export const BillingSection: React.FC = () => {
-  const [tier, setTier] = useState<string>('FREE_STARTER');
+  const { data: tier = 'FREE_STARTER', isLoading } = useSWR('subscriptionTier', fetcher);
   const [isManaging, setIsManaging] = useState(false);
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
-  useEffect(() => {
-    async function loadTier() {
-      const result = await getSubscriptionTierAction();
-      if (result.success && result.tier) {
-        setTier(result.tier);
-      }
-    }
-    loadTier();
-  }, []);
+  if (isLoading) return <CircularProgress />;
 
   const handleManage = async () => {
     setIsManaging(true);

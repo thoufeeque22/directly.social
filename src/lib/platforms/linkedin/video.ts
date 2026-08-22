@@ -39,24 +39,10 @@ function validateLocalPath(localPath: string) {
   return resolved;
 }
 
-export async function publishLinkedInVideo({
-  userId,
-  filePath,
-  description,
-  accountId,
-  title,
-  onProgress
-}: PublishLinkedInVideoParams) {
-  
+export async function publishLinkedInVideo({ userId, filePath, description, accountId, title, onProgress }: PublishLinkedInVideoParams) {
   if (!accountId) throw new Error("LinkedIn requires an account selection.");
-
-  const account = await prisma.account.findFirst({
-    where: { id: accountId, userId }
-  });
-  if (!account || !account.access_token || !account.providerAccountId) {
-    throw new LinkedInTokenRevokedError("LinkedIn account not found or access token missing");
-  }
-  
+  const account = await prisma.account.findFirst({ where: { id: accountId, userId } });
+  if (!account || !account.access_token || !account.providerAccountId) throw new LinkedInTokenRevokedError("LinkedIn account not found or access token missing");
   const accessToken = decryptLinkedInToken(account.access_token);
   const personUrn = `urn:li:person:${account.providerAccountId}`;
 
@@ -89,14 +75,7 @@ export async function publishLinkedInVideo({
     bodyStream = Readable.toWeb(nodeStream) as ReadableStream<Uint8Array>;
   }
 
-  const uploadRes = await fetch(uploadUrl, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/octet-stream"
-    },
-    body: bodyStream,
-    duplex: "half"
-  } as RequestInit);
+  const uploadRes = await fetch(uploadUrl, { method: "PUT", headers: { "Content-Type": "application/octet-stream" }, body: bodyStream, duplex: "half" } as RequestInit);
 
   if (!uploadRes.ok) throw new Error(`LinkedIn binary upload failed: ${await uploadRes.text()}`);
   

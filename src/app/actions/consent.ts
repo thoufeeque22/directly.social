@@ -19,8 +19,8 @@ export async function updateAiConsent() {
       },
     });
     return { success: true };
-  } catch (e: any) {
-    console.error("Error updating AI consent:", e.message);
+  } catch (e: unknown) {
+    console.error("Error updating AI consent:", e instanceof Error ? e.message : String(e));
     return { success: false, error: "An error occurred while updating consent." };
   }
 }

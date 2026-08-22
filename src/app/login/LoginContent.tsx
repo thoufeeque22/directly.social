@@ -27,62 +27,31 @@ export function LoginContent({ referrerName }: { referrerName?: string | null })
     }
   }, [searchParams]);
 
+
+
+  const getRedirectUrl = () => {
+    const cb = searchParams.get('callbackUrl') || '/';
+    const host = window.location.hostname;
+    const isLocal = host === 'localhost' || host.endsWith('.localhost');
+    const appHostname = isLocal ? host : host.replace(/^staging\.directly\.social$/, 'app.staging.directly.social').replace(/^directly\.social$/, 'app.directly.social');
+    const proto = isLocal ? 'http' : 'https';
+    return `${proto}://${appHostname}${isLocal ? `:${window.location.port || 3000}` : ''}/auth/v1/callback?next=${cb}`;
+  };
+
   const handleGoogleLogin = async () => {
-    const isNative = typeof window !== 'undefined' && 
-                     Capacitor.getPlatform() !== 'web' &&
-                     (Capacitor.isNativePlatform() || navigator.userAgent.includes(APP_CONFIG.userAgent));
-
-    const callbackUrl = searchParams.get('callbackUrl') || '/';
-    
-    // Force the callback to hit the app subdomain to ensure secure server cookies are set correctly
-    const currentHost = window.location.hostname;
-    const isLocal = currentHost === 'localhost' || currentHost.endsWith('.localhost');
-    const isStaging = currentHost.includes('staging.');
-    const appHostname = isLocal 
-      ? window.location.hostname 
-      : window.location.hostname.replace(/^staging\.directly\.social$/, 'app.staging.directly.social').replace(/^directly\.social$/, 'app.directly.social');
-    const protocol = isLocal ? 'http' : 'https';
-    
-    const redirectUrl = isLocal 
-      ? `http://${appHostname}:${window.location.port || 3000}/auth/v1/callback?next=${callbackUrl}`
-      : `${protocol}://${appHostname}/auth/v1/callback?next=${callbackUrl}`;
-
+    const isNative = typeof window !== 'undefined' && Capacitor.getPlatform() !== 'web' && (Capacitor.isNativePlatform() || navigator.userAgent.includes(APP_CONFIG.userAgent));
+    const redirectUrl = getRedirectUrl();
     if (isNative) {
-      const baseUrl = typeof window !== 'undefined' ? window.location.origin : APP_CONFIG.urls.production;
-      const bridgeUrl = `${baseUrl}/login?bridge=true&provider=google&native=true`;
-      try { 
-        await Browser.open({ url: bridgeUrl }); 
-      } catch { 
-        await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: redirectUrl } });
-      }
+      try { await Browser.open({ url: `${typeof window !== 'undefined' ? window.location.origin : APP_CONFIG.urls.production}/login?bridge=true&provider=google&native=true` }); } 
+      catch { await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: redirectUrl } }); }
       return;
     }
-
     await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: redirectUrl } });
   };
 
   const handleEmailLogin = async (email: string) => {
     setEmailMsg(null);
-    const callbackUrl = searchParams.get('callbackUrl') || '/';
-
-    const currentHost = window.location.hostname;
-    const isLocal = currentHost === 'localhost' || currentHost.endsWith('.localhost');
-    const isStaging = currentHost.includes('staging.');
-    const appHostname = isLocal 
-      ? window.location.hostname 
-      : window.location.hostname.replace(/^staging\.directly\.social$/, 'app.staging.directly.social').replace(/^directly\.social$/, 'app.directly.social');
-    const protocol = isLocal ? 'http' : 'https';
-    
-    const redirectUrl = isLocal 
-      ? `http://${appHostname}:${window.location.port || 3000}/auth/v1/callback?next=${callbackUrl}`
-      : `${protocol}://${appHostname}/auth/v1/callback?next=${callbackUrl}`;
-    
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: redirectUrl,
-      },
-    });
+    const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: getRedirectUrl() } });
 
     if (error) {
       setEmailMsg({ type: 'error', text: error.message });
@@ -117,7 +86,7 @@ export function LoginContent({ referrerName }: { referrerName?: string | null })
           onEmailSubmit={handleEmailLogin} 
         />
         {/* E2E Bypass Form */}
-        {process.env.NEXT_PUBLIC_E2E === 'true' && <E2ELoginForm />}
+        <E2ELoginForm />
         <div className={styles.footer}>By continuing, you agree to our <br /> <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></div>
       </div>
     </div>

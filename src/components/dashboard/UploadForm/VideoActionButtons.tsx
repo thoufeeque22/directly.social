@@ -4,7 +4,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 
-export const VideoActionButtons = ({ setShowGallery, isUploading, isDemoMode, setDemoMode }: any) => {
+export const VideoActionButtons = ({ setShowGallery, isUploading, isDemoMode, setDemoMode }: { setShowGallery: (v: boolean) => void, isUploading: boolean, isDemoMode: boolean, setDemoMode: (v: boolean) => void }) => {
   return (
     <div style={{ display: 'flex', gap: '0.5rem' }}>
       {!isUploading && !isDemoMode && (

@@ -212,6 +212,7 @@ model UpdateLog {
 model User {
   id                    String               @id @default(cuid())
   name                  String?
+  personalNotes         String?
   email                 String?              @unique
   emailVerified         DateTime?
   image                 String?
@@ -235,6 +236,7 @@ model User {
   genAITermsAcceptedAt  DateTime?
   genAITermsVersion     String?
   billingProfile        BillingProfile?
+  preference            UserPreference?
   accounts              Account[]
   byokCredentials       ByokCredential[]
   byosConfig            ByosConfig?
@@ -365,4 +367,14 @@ model ProcessedWebhook {
   id        String   @id // The Stripe event ID (e.g. evt_123)
   type      String
   createdAt DateTime @default(now())
+}
+
+model UserPreference {
+  id                 String  @id @default(cuid())
+  userId             String  @unique
+  timezone           String  @default("UTC")
+  emailNotifications Boolean @default(true)
+  inAppNotifications Boolean @default(true)
+  pushNotifications  Boolean @default(false)
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -33,10 +33,10 @@ export async function processPlatformUpload({ selectionId, platform, realAccount
     if (onAccountSuccess) onAccountSuccess(selectionId, result);
     return result;
   } catch (err: unknown) {
-    const error = err as any;
-    const isAborted = error?.name === 'AbortError' || checkGlobalAbort(activityId);
+    const error = err as Record<string, unknown>;
+    const isAborted = (error?.name === 'AbortError') || checkGlobalAbort(activityId);
     
-    let errorMessage = error?.message || error?.error || 'Upload failed';
+    let errorMessage = (error?.message as string) || (error?.error as string) || 'Upload failed';
     if (errorMessage === 'invalid_grant') {
       errorMessage = 'Account disconnected. Please reconnect your account in Settings.';
     }
