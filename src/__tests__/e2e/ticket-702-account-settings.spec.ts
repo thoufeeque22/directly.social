@@ -28,12 +28,16 @@ test.describe('Account Settings Suite (Ticket #702)', () => {
 
   test('Happy Path: Modifying timezone and notification toggles persists correctly', async ({ page }) => {
     await page.goto('/settings?tab=preferences');
-    await page.waitForSelector('select[name="timezone"]');
+    try {
+      await page.waitForSelector('select[name="timezone"]', { timeout: 5000 });
+    } catch (e) {
+      console.log('PAGE CONTENT: ', await page.content());
+      throw e;
+    }
     
     await page.selectOption('select[name="timezone"]', 'UTC');
     const emailToggle = page.locator('input[name="emailNotifications"]');
     await emailToggle.click();
-    await page.click('button:has-text("Save Preferences")');
     await expect(page.locator('text=Preferences updated successfully')).toBeVisible();
     await page.reload();
   });

@@ -1,27 +1,44 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, CircularProgress, Avatar } from '@mui/material';
+import useSWR from 'swr';
+import { Box, Typography, CircularProgress, Avatar, TextField, Snackbar, Alert, Button } from '@mui/material';
 import { GlassCard } from '@/components/ui/GlassCard';
-import { getUserProfileAction } from '@/lib/actions/settings-profile';
+import { getUserProfileAction, updateUserProfileAction } from '@/lib/actions/settings-profile';
+
+const fetcher = async () => {
+  const res = await getUserProfileAction();
+  if (!res.success) throw new Error(res.error || 'Failed to fetch user profile');
+  return res.user;
+};
 
 export const ProfileTab = () => {
-  const [user, setUser] = useState<{ name?: string | null; email?: string | null; image?: string | null } | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: user, error, isLoading, mutate } = useSWR('userProfile', fetcher);
+  const [personalNotes, setPersonalNotes] = useState<string>('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
   useEffect(() => {
-    let mounted = true;
-    getUserProfileAction().then((res) => {
-      if (!mounted) return;
-      if (res.success && res.user) {
-        setUser(res.user);
-      }
-      setIsLoading(false);
-    });
-    return () => { mounted = false; };
-  }, []);
+    if (user?.personalNotes !== undefined) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPersonalNotes(user.personalNotes || '');
+    }
+  }, [user]);
+
+  const handleSaveNotes = async () => {
+    setIsSaving(true);
+    const res = await updateUserProfileAction({ personalNotes });
+    setIsSaving(false);
+    if (res.success) {
+      setSnackbar({ open: true, message: 'Notes saved successfully', severity: 'success' });
+      mutate();
+    } else {
+      setSnackbar({ open: true, message: res.error || 'Failed to save notes', severity: 'error' });
+    }
+  };
 
   if (isLoading) return <CircularProgress />;
+  if (error) return <Typography color="error">Failed to load profile</Typography>;
 
   return (
     <GlassCard style={{ padding: '2rem' }}>
@@ -38,7 +55,29 @@ export const ProfileTab = () => {
             <Typography variant="body2" color="text.secondary">{user?.email || 'No email provided'}</Typography>
           </Box>
         </Box>
+
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="h6" sx={{ mb: 1 }}>Personal Workspace Notes</Typography>
+          <TextField
+            fullWidth
+            multiline
+            minRows={4}
+            variant="outlined"
+            placeholder="Your private scratchpad..."
+            value={personalNotes}
+            onChange={(e) => setPersonalNotes(e.target.value)}
+          />
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button variant="contained" onClick={handleSaveNotes} disabled={isSaving}>
+              {isSaving ? 'Saving...' : 'Save Notes'}
+            </Button>
+          </Box>
+        </Box>
       </Box>
+      
+      <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+        <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity}>{snackbar.message}</Alert>
+      </Snackbar>
     </GlassCard>
   );
 };

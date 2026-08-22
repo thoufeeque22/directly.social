@@ -8,7 +8,21 @@ export async function getUserProfileAction() {
     try {
       const user = await prisma.user.findUnique({
         where: { id: userId },
-        select: { name: true, email: true, image: true }
+        select: { name: true, email: true, image: true, personalNotes: true }
+      });
+      return { success: true, user };
+    } catch (err: unknown) {
+      return { success: false, error: err instanceof Error ? err.message : String(err) };
+    }
+  });
+}
+
+export async function updateUserProfileAction(data: { personalNotes: string }) {
+  return protectedAction(async function updateUserProfile(userId) {
+    try {
+      const user = await prisma.user.update({
+        where: { id: userId },
+        data: { personalNotes: data.personalNotes }
       });
       return { success: true, user };
     } catch (err: unknown) {
