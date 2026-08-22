@@ -8,6 +8,13 @@ import { SENTRY_DSN } from "./src/lib/core/sentry-constants";
 Sentry.init({
   dsn: SENTRY_DSN,
   environment: process.env.NEXT_PUBLIC_APP_ENV || 'development',
+  ignoreErrors: [
+    "Invalid Server Actions request.",
+    "Invariant: Expected RSC response, got text/plain",
+    "Unauthorized: anonymous",
+    "The router state header was sent but could not be parsed.",
+    "abortIncoming"
+  ],
 
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 1,
