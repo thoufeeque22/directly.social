@@ -7,38 +7,44 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { getUserProfileAction, updateUserProfileAction } from '@/lib/actions/settings-profile';
 
 const fetcher = async () => {
-  const res = await getUserProfileAction();
-  if (!res.success) throw new Error(res.error || 'Failed to fetch user profile');
-  return res.user;
+  try {
+    const res = await getUserProfileAction();
+    if (!res.success) return null;
+    return res.user;
+  } catch {
+    return null;
+  }
 };
 
 export const ProfileTab = () => {
-  const { data: user, error, isLoading, mutate } = useSWR('userProfile', fetcher);
+  const { data: user, isLoading, mutate } = useSWR('userProfile', fetcher);
   const [personalNotes, setPersonalNotes] = useState<string>('');
   const [isSaving, setIsSaving] = useState(false);
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
   useEffect(() => {
     if (user?.personalNotes !== undefined) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPersonalNotes(user.personalNotes || '');
     }
   }, [user]);
 
   const handleSaveNotes = async () => {
     setIsSaving(true);
-    const res = await updateUserProfileAction({ personalNotes });
-    setIsSaving(false);
-    if (res.success) {
-      setSnackbar({ open: true, message: 'Notes saved successfully', severity: 'success' });
-      mutate();
-    } else {
-      setSnackbar({ open: true, message: res.error || 'Failed to save notes', severity: 'error' });
+    try {
+      const res = await updateUserProfileAction({ personalNotes });
+      if (res.success) {
+        setSnackbar({ open: true, message: 'Notes saved successfully', severity: 'success' });
+        mutate();
+      } else {
+        setSnackbar({ open: true, message: res.error || 'Failed to save notes', severity: 'error' });
+      }
+    } catch {
+      setSnackbar({ open: true, message: 'Failed to save notes', severity: 'error' });
     }
+    setIsSaving(false);
   };
 
   if (isLoading) return <CircularProgress />;
-  if (error) return <Typography color="error">Failed to load profile</Typography>;
 
   return (
     <GlassCard style={{ padding: '2rem' }}>
