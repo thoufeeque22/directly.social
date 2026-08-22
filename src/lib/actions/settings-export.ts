@@ -30,7 +30,7 @@ export async function triggerDataExportAction() {
 
       return { success: true };
     } catch (err: unknown) {
-      return { success: false, error: err instanceof Error ? err.message : String(err) };
+      return { success: false, error: 'Failed to trigger data export.' };
     }
   });
 }

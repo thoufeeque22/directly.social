@@ -18,7 +18,7 @@ export async function getUserProfileAction() {
       });
       return { success: true, user };
     } catch (err: unknown) {
-      return { success: false, error: err instanceof Error ? err.message : String(err) };
+      return { success: false, error: 'Failed to load user profile.' };
     }
   });
 }
@@ -39,7 +39,7 @@ export async function updateUserProfileAction(data: { name?: string; personalNot
       if (err instanceof z.ZodError) {
         return { success: false, error: err.issues[0]?.message || 'Validation failed' };
       }
-      return { success: false, error: err instanceof Error ? err.message : String(err) };
+      return { success: false, error: 'Failed to update user profile.' };
     }
   });
 }

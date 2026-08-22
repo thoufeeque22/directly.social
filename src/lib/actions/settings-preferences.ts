@@ -2,6 +2,14 @@
 
 import { protectedAction } from '@/lib/core/action-utils';
 import { prisma } from '@/lib/core/prisma';
+import { z } from 'zod';
+
+const preferencesSchema = z.object({
+  timezone: z.string().min(1).max(100),
+  emailNotifications: z.boolean(),
+  inAppNotifications: z.boolean(),
+  pushNotifications: z.boolean(),
+});
 
 export async function getUserPreferencesAction() {
   return protectedAction(async function getUserPrefs(userId) {
@@ -11,8 +19,8 @@ export async function getUserPreferencesAction() {
         include: { preference: true }
       });
       return { success: true, preference: user?.preference || null };
-    } catch (err: unknown) {
-      return { success: false, error: err instanceof Error ? err.message : String(err) };
+    } catch {
+      return { success: false, error: 'Failed to load preferences.' };
     }
   });
 }
@@ -25,21 +33,22 @@ export async function updateUserPreferencesAction(data: {
 }) {
   return protectedAction(async function updateUserPrefs(userId) {
     try {
+      const validated = preferencesSchema.parse(data);
       const preference = await prisma.userPreference.upsert({
         where: { userId },
-        update: data,
-        create: {
-          userId,
-          ...data
-        }
+        update: validated,
+        create: { userId, ...validated }
       });
       return { success: true, preference };
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : String(err);
+      if (err instanceof z.ZodError) {
+        return { success: false, error: 'Invalid preferences data.' };
+      }
+      const message = err instanceof Error ? err.message : '';
       if (message.includes('Foreign key constraint')) {
         return { success: false, error: 'Your account is still syncing. Please refresh and try again.' };
       }
-      return { success: false, error: message };
+      return { success: false, error: 'Failed to update preferences.' };
     }
   });
 }
