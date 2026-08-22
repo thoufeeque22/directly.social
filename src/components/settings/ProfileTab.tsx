@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
-import { Box, Typography, CircularProgress, Avatar, TextField, Snackbar, Alert, Button, Divider } from '@mui/material';
+import { Box, Typography, CircularProgress, Avatar, TextField, Snackbar, Alert, Button, Divider, Tooltip, Badge } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { getUserProfileAction, updateUserProfileAction } from '@/lib/actions/settings-profile';
 
@@ -58,14 +59,16 @@ export const ProfileTab = () => {
       </Box>
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Avatar src={user?.image || undefined} alt={user?.name || 'User'} sx={{ width: 72, height: 72 }} />
-          <Box>
-            <Typography variant="body2" color="text.secondary">
-              Your avatar is synced from your login provider.
-            </Typography>
-          </Box>
-        </Box>
+        <Tooltip title="Custom avatar upload coming soon!" arrow placement="right">
+          <Badge
+            overlap="circular"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            badgeContent={<EditIcon sx={{ fontSize: 16, color: 'text.secondary' }} />}
+            sx={{ width: 'fit-content', cursor: 'pointer' }}
+          >
+            <Avatar src={user?.image || undefined} alt={user?.name || 'User'} sx={{ width: 72, height: 72 }} />
+          </Badge>
+        </Tooltip>
 
         <TextField
           label="Display Name"
@@ -74,14 +77,6 @@ export const ProfileTab = () => {
           fullWidth
           helperText="This is how your name appears across the app."
           slotProps={{ htmlInput: { maxLength: 100 } }}
-        />
-
-        <TextField
-          label="Email"
-          value={user?.email || ''}
-          fullWidth
-          disabled
-          helperText="Email is managed by your login provider and cannot be changed here."
         />
 
         <Divider />
