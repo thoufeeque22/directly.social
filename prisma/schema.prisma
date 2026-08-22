@@ -232,6 +232,8 @@ model User {
   referralRewardClaimed Boolean              @default(false)
   purchaseRewardClaimed Boolean              @default(false)
   aiProcessingConsent   Boolean              @default(false)
+  genAITermsAcceptedAt  DateTime?
+  genAITermsVersion     String?
   billingProfile        BillingProfile?
   accounts              Account[]
   byokCredentials       ByokCredential[]

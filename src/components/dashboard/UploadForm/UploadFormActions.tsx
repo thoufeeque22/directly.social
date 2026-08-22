@@ -14,12 +14,12 @@ import { checkCacheValidity } from './UploadFormContext.utils';
 export const UploadFormActions: React.FC = () => {
   const { 
     isUploading, aiTier, contentMode, hasCachedPreviews, onResumeReview, onTierChange,
-    title, description, selectedPlatforms, draftFileName, aiProcessingConsent
+    title, description, selectedPlatforms, draftFileName, genAITermsAccepted
   } = useUploadFormContext();
 
   const [isCacheValid, setIsCacheValid] = React.useState(false);
   const [localConsent, setLocalConsent] = React.useState(false);
-  const needsConsent = !aiProcessingConsent && aiTier !== 'Manual';
+  const needsConsent = !genAITermsAccepted && aiTier !== 'Manual';
 
   React.useEffect(() => {
     if (!hasCachedPreviews) {

@@ -59,7 +59,7 @@ export const DashboardView: React.FC<ViewProps> = (p) => (
           onVisualScan={p.onVisualScan} onTierChange={p.onTierChange} onProviderChange={p.onProviderChange} onModeChange={p.onModeChange} onToggleAccount={p.onToggleAccount}
           onFileChange={p.onFileChange} onGallerySelect={p.onGallerySelect} onSubmit={p.onSubmit} isScheduled={p.isScheduled} scheduledAt={p.scheduledAt} onSchedulingChange={p.onSchedulingChange}
           customStyleText={p.customStyleText} onCustomStyleChange={p.onCustomStyleChange} hasCachedPreviews={Object.keys(p.aiPreviews).length > 0} onResumeReview={p.onResumeReview}
-          initialByosConfig={p.initialByosConfig} aiProcessingConsent={p.session?.user?.aiProcessingConsent ?? false}
+          initialByosConfig={p.initialByosConfig} genAITermsAccepted={!!p.session?.user?.genAITermsAcceptedAt}
         />
       )}
       <SidebarInfo />

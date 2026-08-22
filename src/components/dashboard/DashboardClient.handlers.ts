@@ -21,11 +21,12 @@ export const useDashboardHandlers = (
   setGalleryFileName: (n: string | null) => void, updateSession: (data: Record<string, unknown>) => Promise<unknown>,
   router: AppRouterInstance
 ) => {
-  const onSubmit = async (fd: FormData) => {
+  const onSubmit = async (fd: FormData) => { console.log("HANDLER ONSUBMIT CALLED, aiConsent:", fd.get('aiConsent'));
     try {
       if (fd.get('aiConsent') === 'true') {
         const { updateAiConsent } = await import('@/app/actions/consent');
-        await updateAiConsent();
+        const res = await updateAiConsent(); 
+        if (res.error) throw new Error(res.error);
         await updateSession({ aiProcessingConsent: true });
       }
 
@@ -36,7 +37,7 @@ export const useDashboardHandlers = (
         galleryFileId, galleryFileName, draftFileName, isScheduled, scheduledAt, setUploadStatus, setAiPreviews,
         setReviewContext, setIsReviewing, updateSession, clearCache, router
       });
-    } catch (err: unknown) {
+    } catch (err: unknown) { console.log("UPLOAD_ERROR:", err);
       setUploadStatus(` Error: ${err instanceof Error ? err.message : String(err)}`);
     }
   };
@@ -56,7 +57,7 @@ export const useDashboardHandlers = (
         galleryFileId, galleryFileName, resumeActivityId: context.activityId,
       }));
       router.push('/activity?action=distribute');
-    } catch (err: unknown) {
+    } catch (err: unknown) { console.log("UPLOAD_ERROR:", err);
       setUploadStatus(` Error: ${err instanceof Error ? err.message : String(err)}`);
       setIsUploading(false);
     }
@@ -76,7 +77,7 @@ export const useDashboardHandlers = (
       await updateSession({ aiCredits: await getAiBalance() });
       setAiPreviews(previews);
       setIsReviewing(true);
-    } catch (err: unknown) {
+    } catch (err: unknown) { console.log("UPLOAD_ERROR:", err);
       setUploadStatus(` Error scanning: ${err instanceof Error ? err.message : String(err)}`);
     }
   };

@@ -47,3 +47,10 @@ Rate limiting is enforced at the **Middleware layer** (`src/proxy.ts`), ensuring
 - **Fail-Open Resilience:** The system includes fail-open logic to ensure application availability if the rate-limiting infrastructure (Redis) is unreachable or misconfigured.
 - **Test Optimization:** Rate limiting is automatically bypassed in E2E, CI, and test environments via `shouldBypassRateLimit()` to ensure fast and reliable testing.
 - **Standardized Feedback:** When a limit is hit, the API returns a standard `429 Too Many Requests` status with a `Retry-After` header.
+
+## 5. AI API Security & Compliance
+
+To protect the platform from misuse and ensure compliance with our AI terms of service, AI generation features involve strict backend enforcement:
+
+- **Strict Terms Enforcement:** All requests to AI generation backends (e.g., `src/app/actions/ai.ts`) verify that the user's session includes a valid `genAITermsAcceptedAt` timestamp. Legacy boolean consent mechanisms have been deprecated, closing vulnerabilities that allowed bypassed terms.
+- **Resource Exhaustion (DoS) Prevention:** The API validates payloads using strict Zod schemas with explicit maximum limits (e.g., max 2000 characters for text prompts, max 60 frames for visual data) to prevent malicious actors from overloading AI endpoints and consuming disproportionate resources.

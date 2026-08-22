@@ -61,7 +61,7 @@ describe('Project Management & UI Humanization', () => {
       aiProvider: 'gemini',
       videoFormat: 'short',
       videoDuration: 45,
-      aiProcessingConsent: true,
+      genAITermsAccepted: true,
       draftFileName: 'dance.mp4',
       draftFile: null,
       onVisualScan: vi.fn(),

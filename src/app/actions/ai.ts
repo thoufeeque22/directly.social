@@ -29,8 +29,8 @@ export async function getMultiPlatformAIPreviews(params: MultiPlatformAIPreviewP
   } = params;
 
   return protectedAction(async function generatePreviews(userId, session) {
-    if (!session.user.aiProcessingConsent) {
-      throw new Error("Forbidden: You must consent to AI processing before generating content.");
+    if (!session.user.genAITermsAcceptedAt) {
+      throw new Error("Forbidden: You must accept the latest GenAI Terms of Service before generating content.");
     }
 
     // 1. Runtime Validation
@@ -42,14 +42,21 @@ export async function getMultiPlatformAIPreviews(params: MultiPlatformAIPreviewP
       platforms, 
       visualData, 
       customStyleText,
-      aiProvider
+      aiProvider,
+      byokConfigs
     });
     
     // Use validated values to ensure type safety and correctness
     const { 
       tier: vTier, 
       platforms: vPlatforms, 
-      mode: vMode 
+      mode: vMode,
+      title: vTitle,
+      description: vDescription,
+      visualData: vVisualData,
+      customStyleText: vCustomStyleText,
+      byokConfigs: vByokConfigs,
+      aiProvider: vAiProvider
     } = validated;
 
     if (vTier === 'Manual') {
@@ -61,10 +68,10 @@ export async function getMultiPlatformAIPreviews(params: MultiPlatformAIPreviewP
 
     // 3. AI Credits
     const { consumeAiCredit } = await import("@/lib/core/credits");
-    const activeProvider = aiProvider || (process.env.ACTIVE_AI_PROVIDER as AIProvider) || 'gemini';
-    await consumeAiCredit(userId, activeProvider, byokConfigs);
+    const activeProvider = (vAiProvider as AIProvider) || (process.env.ACTIVE_AI_PROVIDER as AIProvider) || 'gemini';
+    await consumeAiCredit(userId, activeProvider, vByokConfigs);
 
-    logger.info(`Generating AI previews for user ${userId}`, { platforms: vPlatforms, tier: vTier, mode: vMode, provider: aiProvider });
+    logger.info(`Generating AI previews for user ${userId}`, { platforms: vPlatforms, tier: vTier, mode: vMode, provider: activeProvider });
 
     const results: { platform: string, result: AIWriteResult }[] = [];
 
@@ -73,13 +80,13 @@ export async function getMultiPlatformAIPreviews(params: MultiPlatformAIPreviewP
         const result = await generatePostContent(
           vTier,
           vMode,
-          title,
-          description,
+          vTitle,
+          vDescription,
           platform as Platform,
-          visualData,
-          customStyleText,
-          byokConfigs,
-          aiProvider
+          vVisualData,
+          vCustomStyleText,
+          vByokConfigs,
+          activeProvider
         );
         results.push({ platform, result });
       } catch (err: unknown) {
@@ -87,8 +94,8 @@ export async function getMultiPlatformAIPreviews(params: MultiPlatformAIPreviewP
         results.push({ 
           platform, 
           result: { 
-            title: title || "Strategy Placeholder", 
-            description: `AI Error: ${err instanceof Error ? err.message : 'Unknown error'}. Please try a manual prompt or a different video.`, 
+            title: vTitle || "Strategy Placeholder", 
+            description: `An error occurred while generating content from the AI provider. Please try a manual prompt or a different video.`, 
             hashtags: [] 
           } as AIWriteResult 
         });
